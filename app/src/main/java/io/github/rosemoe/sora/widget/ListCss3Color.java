@@ -8,14 +8,16 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import org.antlr.v4.runtime.Token;
 
+
 public class ListCss3Color {
+  
   
 
   public static void getColor(
       Token token, int line, int column, TextAnalyzeResult result, int color) {
 
     try {
-      result.addIfNeeded(line, column, EditorColorScheme.ATTRIBUTE_VALUE);
+      result.addIfNeeded(line, column, TextStyle.makeStyle(EditorColorScheme.ATTRIBUTE_NAME,0,false,false,false,false,true));
       int wordLength = token.getText().length(); // طول کلمه‌ی به رنگ قرمز
       int endOfRed = column + wordLength;
       // test
