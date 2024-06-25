@@ -1,0 +1,50 @@
+<resources>
+    <style name="Theme.ThemeEngine.BlueDark" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">@color/bluedark_theme_primary</item>
+        <item name="colorOnPrimary">@color/bluedark_theme_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/bluedark_theme_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/bluedark_theme_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/bluedark_theme_secondary</item>
+        <item name="colorOnSecondary">@color/bluedark_theme_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/bluedark_theme_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/bluedark_theme_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/bluedark_theme_tertiary</item>
+        <item name="colorOnTertiary">@color/bluedark_theme_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/bluedark_theme_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/bluedark_theme_onTertiaryContainer</item>
+        <item name="colorError">@color/bluedark_theme_error</item>
+        <item name="colorOnError">@color/bluedark_theme_onError</item>
+        <item name="colorErrorContainer">@color/bluedark_theme_errorContainer</item>
+        <item name="colorOnErrorContainer">@color/bluedark_theme_onErrorContainer</item>
+        <item name="android:colorBackground">@color/bluedark_theme_background</item>
+        <item name="colorOnBackground">@color/bluedark_theme_onBackground</item>
+        <item name="colorSurface">@color/bluedark_theme_surface</item>
+        <item name="colorOnSurface">@color/bluedark_theme_onSurface</item>
+        <item name="colorSurfaceVariant">@color/bluedark_theme_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/bluedark_theme_onSurfaceVariant</item>
+        <item name="colorOutline">@color/bluedark_theme_outline</item>
+        <item name="colorOutlineVariant">@color/bluedark_theme_outlineVariant</item>
+        <item name="colorSurfaceInverse">@color/bluedark_theme_inverseSurface</item>
+        <item name="colorOnSurfaceInverse">@color/bluedark_theme_inverseOnSurface</item>
+        <item name="colorPrimaryInverse">@color/bluedark_theme_inversePrimary</item>
+        <item name="colorPrimaryFixed">@color/bluedark_theme_primaryFixed</item>
+        <item name="colorOnPrimaryFixed">@color/bluedark_theme_onPrimaryFixed</item>
+        <item name="colorPrimaryFixedDim">@color/bluedark_theme_primaryFixedDim</item>
+        <item name="colorOnPrimaryFixedVariant">@color/bluedark_theme_onPrimaryFixedVariant</item>
+        <item name="colorSecondaryFixed">@color/bluedark_theme_secondaryFixed</item>
+        <item name="colorOnSecondaryFixed">@color/bluedark_theme_onSecondaryFixed</item>
+        <item name="colorSecondaryFixedDim">@color/bluedark_theme_secondaryFixedDim</item>
+        <item name="colorOnSecondaryFixedVariant">@color/bluedark_theme_onSecondaryFixedVariant</item>
+        <item name="colorTertiaryFixed">@color/bluedark_theme_tertiaryFixed</item>
+        <item name="colorOnTertiaryFixed">@color/bluedark_theme_onTertiaryFixed</item>
+        <item name="colorTertiaryFixedDim">@color/bluedark_theme_tertiaryFixedDim</item>
+        <item name="colorOnTertiaryFixedVariant">@color/bluedark_theme_onTertiaryFixedVariant</item>
+        <item name="colorSurfaceDim">@color/bluedark_theme_surfaceDim</item>
+        <item name="colorSurfaceBright">@color/bluedark_theme_surfaceBright</item>
+        <item name="colorSurfaceContainerLowest">@color/bluedark_theme_surfaceContainerLowest</item>
+        <item name="colorSurfaceContainerLow">@color/bluedark_theme_surfaceContainerLow</item>
+        <item name="colorSurfaceContainer">@color/bluedark_theme_surfaceContainer</item>
+        <item name="colorSurfaceContainerHigh">@color/bluedark_theme_surfaceContainerHigh</item>
+        <item name="colorSurfaceContainerHighest">@color/bluedark_theme_surfaceContainerHighest</item>
+    </style>
+</resources>

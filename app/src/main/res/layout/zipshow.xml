@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:id="@+id/_coordinator">
+
+    <com.google.android.material.appbar.AppBarLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            android:id="@+id/_app_bar">
+
+        <androidx.appcompat.widget.Toolbar
+                android:layout_height="?attr/actionBarSize"
+                android:layout_width="match_parent"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                android:id="@+id/_toolbar"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:orientation="vertical">
+
+        <LinearLayout
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:id="@+id/linear1">
+
+            <LinearLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:gravity="right|center_vertical"
+                    android:padding="8dp"
+                    android:orientation="horizontal"
+                    android:id="@+id/linear2"
+                    android:layout_gravity="center_horizontal|center_vertical">
+
+                <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:padding="8dp"
+                        android:textSize="20sp"
+                        android:textColor="#FFDCBD"
+                        android:id="@+id/textview1"
+                        android:text="ZipViewer"/>
+
+                <ImageView
+                        android:layout_height="30dp"
+                        android:layout_width="30dp"
+                        android:src="@drawable/arrowr"
+                        android:scaleType="centerInside"
+                        android:translationY="2.0dp"
+                        android:id="@+id/imageview1"/>
+
+            </LinearLayout>
+
+            <ListView
+                    android:layout_height="0dp"
+                    android:layout_width="0dp"
+                    android:divider="@null"
+                    android:padding="8dp"
+                    android:choiceMode="none"
+                    android:id="@+id/listView"
+                    android:dividerHeight="0dp">
+
+            </ListView>
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:id="@+id/rv_zip"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Ninja.coder.Ghostemane.code.model.LayoutPlus
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:background="#ff0000"
+            android:layout_gravity="bottom"
+            android:id="@+id/layoutPlus"/>
+
+    <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_gravity="right|bottom">
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

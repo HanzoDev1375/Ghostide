@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="vertical">
+
+    <com.google.android.material.divider.MaterialDivider
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            app:dividerInsetEnd="1dp"
+            app:dividerColor="?attr/colorPrimary"
+            app:dividerInsetStart="1dp"/>
+
+    <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/linear1">
+
+        <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:gravity="center_horizontal|center_vertical"
+                android:orientation="vertical"
+                android:id="@+id/linear3">
+
+            <com.google.android.material.textfield.TextInputLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_marginBottom="5dp"
+                    app:shapeAppearance="@style/Cut"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/input">
+
+                <com.google.android.material.textfield.TextInputEditText
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:hint="Search"
+                        android:padding="8dp"
+                        android:textColorHint="?attr/colorPrimary"
+                        android:textSize="16sp"
+                        android:textColor="?attr/colorPrimary"
+                        android:id="@+id/ed_filter"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ProgressBar
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:indeterminate="true"
+                    android:padding="8dp"
+                    style="?android:progressBarStyleHorizontal"
+                    android:focusable="false"
+                    android:id="@+id/bar"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

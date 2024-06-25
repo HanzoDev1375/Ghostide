@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical">
+    <LinearLayout android:id="@+id/staticLayout" android:layout_width="match_parent"
+                  android:layout_height="wrap_content" android:padding="8dp" android:orientation="vertical">
+        <ScrollView android:id="@+id/vscroll1" android:layout_width="match_parent" android:layout_height="match_parent"
+                    android:layout_marginTop="4dp" android:layout_marginBottom="4dp">
+            <com.google.android.material.textfield.TextInputLayout android:id="@+id/input"
+                                                                   android:layout_width="match_parent"
+                                                                   android:layout_height="wrap_content"
+                                                                   android:orientation="vertical"
+                                                                   style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                                                   app:shapeAppearance="@style/Cut">
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/result"
+                                                                         android:layout_width="match_parent"
+                                                                         android:layout_height="wrap_content"
+                                                                         android:padding="8dp" android:textSize="16sp"
+                                                                         android:textColor="#F5F5F5"
+                                                                         android:hint="Result"
+                                                                         android:textColorHint="#FDB69A"/>
+            </com.google.android.material.textfield.TextInputLayout>
+        </ScrollView>
+        <LinearLayout android:id="@+id/main" android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:padding="8dp" android:orientation="horizontal">
+            <Spinner android:id="@+id/sp1" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                     android:padding="8dp" android:spinnerMode="dropdown" android:layout_weight="1"/>
+            <Spinner android:id="@+id/sp2" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                     android:padding="8dp" android:spinnerMode="dropdown" android:layout_weight="1"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

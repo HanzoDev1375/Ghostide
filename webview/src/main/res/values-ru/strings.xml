@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="webview_no_internet_connection">Отсутствует Интернет подключение</string>
+    <string name="webview_refresh">Обновить</string>
+    <string name="webview_language">Язык</string>
+    <string name="webview_invalid_url">Неверная ссылка, попробуйте позже</string>
+</resources>

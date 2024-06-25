@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:id="@+id/_coordinator">
+
+    <com.google.android.material.appbar.AppBarLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            app:statusBarForeground="?attr/colorSurface"
+            app:liftOnScroll="false"
+            android:fitsSystemWindows="true"
+            android:id="@+id/_app_bar">
+
+        <com.google.android.material.appbar.MaterialToolbar
+                android:layout_height="56dp"
+                android:layout_width="match_parent"
+                android:id="@+id/iconmode_toolbar"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:orientation="vertical">
+
+        <androidx.core.widget.NestedScrollView
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:id="@+id/linear1">
+
+            <LinearLayout
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:id="@+id/linear3">
+
+                <com.google.android.material.textfield.TextInputLayout
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:id="@+id/input_iconmode">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:id="@+id/et_iconmode"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ProgressBar
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:indeterminate="true"
+                        android:padding="8dp"
+                        style="?android:progressBarStyleHorizontal"
+                        android:id="@+id/progressbar1"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:padding="8dp"
+                        android:id="@+id/recyclerview1"/>
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:rotation="90"
+            android:layout_margin="16dp"
+            android:id="@+id/_fab"
+            android:layout_gravity="right|bottom"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

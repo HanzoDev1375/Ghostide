@@ -1,0 +1,1439 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:fitsSystemWindows="true"
+    android:id="@+id/_coordinator"
+    
+>
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:fitsSystemWindows="true"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:id="@+id/_app_bar"
+        
+    >
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
+            android:layout_width="match_parent"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            style="?attr/collapsingToolbarLayoutLargeStyle"
+            
+        >
+
+            <androidx.appcompat.widget.Toolbar
+                android:layout_height="?attr/actionBarSize"
+                android:layout_width="match_parent"
+                android:elevation="0dp"
+                app:title="Settings"
+                app:layout_collapseMode="pin"
+                app:titleTextColor="?@attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                android:id="@+id/_toolbar"
+                
+            />
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:orientation="vertical"
+        
+    >
+
+        <Ninja.coder.Ghostemane.code.widget.component.fastscrollcompat.FastScrollNestedScrollView
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:fillViewport="true"
+            android:clipToPadding="false"
+            android:id="@+id/bar"
+            
+        >
+
+            <Ninja.coder.Ghostemane.code.widget.PraramnetLayoutNinja
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:gravity="right"
+                android:orientation="vertical"
+                android:id="@+id/linear1"
+                
+            >
+
+                <LinearLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:gravity="right"
+                    android:orientation="vertical"
+                    android:id="@+id/linear2"
+                    
+                >
+
+                    <LinearLayout
+                        android:layout_height="0dp"
+                        android:layout_width="0dp"
+                        android:gravity="right|center_vertical"
+                        android:padding="8dp"
+                        android:orientation="horizontal"
+                        android:id="@+id/linear10"
+                        
+                    >
+
+                        <TextView
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:padding="8dp"
+                            android:textSize="25sp"
+                            android:textColor="#FFDCBD"
+                            android:layout_weight="1"
+                            android:id="@+id/textview9"
+                            android:text="@string/Settings"
+                            android:textStyle="bold"
+                            
+                        />
+
+                        <ImageView
+                            android:layout_height="40dp"
+                            android:layout_width="40dp"
+                            android:src="@drawable/arrowr"
+                            android:scaleType="centerInside"
+                            android:padding="3dp"
+                            android:id="@+id/imageview1"
+                            
+                        />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:gravity="right|center_vertical"
+                        android:padding="8dp"
+                        android:orientation="horizontal"
+                        android:id="@+id/linear11"
+                        
+                    >
+
+                        <ImageView
+                            android:layout_height="30dp"
+                            android:layout_width="30dp"
+                            android:src="@drawable/arrow_down"
+                            android:scaleType="centerInside"
+                            android:rotation="180"
+                            android:id="@+id/arrow05"
+                            
+                        />
+
+                        <TextView
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:padding="8dp"
+                            android:textSize="18sp"
+                            android:textColor="#FFDCBD"
+                            android:layout_weight="1"
+                            android:id="@+id/textview10"
+                            android:text="@string/theme"
+                            
+                        />
+
+                        <ImageView
+                            android:layout_height="30dp"
+                            android:layout_width="30dp"
+                            android:src="@drawable/color"
+                            android:scaleType="centerInside"
+                            android:id="@+id/imageview7"
+                            
+                        />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:gravity="right|center_vertical"
+                        android:padding="8dp"
+                        android:orientation="horizontal"
+                        android:id="@+id/themes"
+                        
+                    >
+
+                        <TextView
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:gravity="right"
+                            android:padding="8dp"
+                            android:textSize="16sp"
+                            android:translationX="-15.0dp"
+                            android:textColor="#D5C3B5"
+                            android:layout_weight="1"
+                            android:id="@+id/tvtheme"
+                            android:text="@string/Themes_manager"
+                            
+                        />
+
+                        <ImageView
+                            android:layout_height="25dp"
+                            android:layout_width="25dp"
+                            android:src="@drawable/color"
+                            android:scaleType="centerInside"
+                            android:translationX="-15.0dp"
+                            android:id="@+id/imgtheme"
+                            
+                        />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:gravity="right|center_vertical"
+                        android:padding="8dp"
+                        android:orientation="horizontal"
+                        android:id="@+id/stingkeyboard"
+                        
+                    >
+
+                        <ImageView
+                            android:layout_height="30dp"
+                            android:layout_width="30dp"
+                            android:src="@drawable/arrow_down"
+                            android:scaleType="centerInside"
+                            android:rotation="180"
+                            android:id="@+id/arrow04"
+                            
+                        />
+
+                        <TextView
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:padding="8dp"
+                            android:textSize="16sp"
+                            android:textColor="#FFDCBD"
+                            android:layout_weight="1"
+                            android:id="@+id/textview13"
+                            android:text="@string/Keyboard_settings"
+                            
+                        />
+
+                        <ImageView
+                            android:layout_height="30dp"
+                            android:layout_width="30dp"
+                            android:src="@drawable/keyboard"
+                            android:scaleType="centerInside"
+                            android:id="@+id/imageview8"
+                            
+                        />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:gravity="right|center_vertical"
+                        android:padding="8dp"
+                        android:orientation="horizontal"
+                        android:id="@+id/keyboard"
+                        
+                    >
+
+                        <TextView
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:padding="8dp"
+                            android:textSize="16sp"
+                            android:translationX="-15.0dp"
+                            android:textColor="#D5C3B5"
+                            android:id="@+id/textview14"
+                            android:text="@string/Keyboard_features"
+                            
+                        />
+
+                        <ImageView
+                            android:layout_height="25dp"
+                            android:layout_width="25dp"
+                            android:src="@drawable/keyboard"
+                            android:scaleType="centerInside"
+                            android:translationX="-15.0dp"
+                            android:id="@+id/imageview3"
+                            
+                        />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:gravity="right|center_vertical"
+                        android:padding="8dp"
+                        android:orientation="horizontal"
+                        android:id="@+id/linear21"
+                        
+                    >
+
+                        <ImageView
+                            android:layout_height="30dp"
+                            android:layout_width="30dp"
+                            android:src="@drawable/arrow_down"
+                            android:scaleType="centerInside"
+                            android:rotation="180"
+                            android:id="@+id/arrow03"
+                            
+                        />
+
+                        <TextView
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:padding="8dp"
+                            android:textSize="20sp"
+                            android:textColor="#FFDCBD"
+                            android:layout_weight="1"
+                            android:id="@+id/textview1"
+                            android:text="@string/General"
+                            
+                        />
+
+                        <ImageView
+                            android:layout_height="30dp"
+                            android:layout_width="30dp"
+                            android:src="@drawable/okeye"
+                            android:scaleType="centerInside"
+                            android:id="@+id/imageview9"
+                            
+                        />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_height="0dp"
+                    android:layout_width="0dp"
+                    android:gravity="right|center_vertical"
+                    android:padding="8dp"
+                    android:orientation="horizontal"
+                    android:id="@+id/linear3"
+                    
+                >
+
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:padding="8dp"
+                        android:textSize="16sp"
+                        android:textColor="#E0E0E0"
+                        android:id="@+id/tvword"
+                        android:text="ثابت کردن متن "
+                        
+                    />
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:button="@drawable/geticon"
+                        android:padding="8dp"
+                        android:textSize="12sp"
+                        android:textColor="#000000"
+                        android:id="@+id/checkbox1"
+                        
+                    />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:gravity="right"
+                    android:orientation="vertical"
+                    android:id="@+id/pubilc"
+                    
+                >
+
+                    <LinearLayout
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:id="@+id/datapost"
+                        
+                    >
+
+                        <LinearLayout
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:orientation="vertical"
+                            android:id="@+id/linear32"
+                            
+                        >
+
+                            <LinearLayout
+                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:gravity="center_vertical"
+                                android:padding="4dp"
+                                android:orientation="horizontal"
+                                android:id="@+id/linear33"
+                                
+                            >
+
+                                <com.google.android.material.materialswitch.MaterialSwitch
+                                    android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:background="@android:color/transparent"
+                                    android:gravity="left|center_vertical"
+                                    android:textSize="14sp"
+                                    android:textColor="#000000"
+                                    android:layout_weight="1"
+                                    android:id="@+id/addsabet"
+                                    android:text="@string/Fixing_countin_numbers"
+                                    
+                                />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:orientation="vertical"
+                            android:id="@+id/linear37"
+                            
+                        >
+
+                            <LinearLayout
+                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:gravity="left|center_vertical"
+                                android:padding="4dp"
+                                android:orientation="horizontal"
+                                android:id="@+id/linear38"
+                                
+                            >
+
+                                <com.google.android.material.materialswitch.MaterialSwitch
+                                    android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:background="@android:color/transparent"
+                                    android:gravity="left|center_vertical"
+                                    android:textSize="14sp"
+                                    android:textColor="#000000"
+                                    android:layout_weight="1"
+                                    android:id="@+id/vibreh"
+                                    android:text="@string/Turn_off_photo_and_video_size"
+                                    
+                                />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:gravity="right|center_vertical"
+                    android:orientation="vertical"
+                    android:id="@+id/linear22"
+                    
+                >
+
+                    <LinearLayout
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:id="@+id/add"
+                        
+                    >
+
+                        <LinearLayout
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:gravity="right|center_vertical"
+                            android:padding="8dp"
+                            android:orientation="horizontal"
+                            android:id="@+id/linear25"
+                            
+                        >
+
+                            <ImageView
+                                android:layout_height="30dp"
+                                android:layout_width="30dp"
+                                android:src="@drawable/arrow_down"
+                                android:scaleType="centerInside"
+                                android:rotation="180"
+                                android:id="@+id/arrow02"
+                                
+                            />
+
+                            <TextView
+                                android:layout_height="wrap_content"
+                                android:layout_width="wrap_content"
+                                android:padding="8dp"
+                                android:textSize="20sp"
+                                android:textColor="#FFDCBD"
+                                android:layout_weight="1"
+                                android:id="@+id/textview20"
+                                android:text="@string/Filemanager"
+                                
+                            />
+
+                            <ImageView
+                                android:layout_height="30dp"
+                                android:layout_width="30dp"
+                                android:src="@drawable/folder3"
+                                android:scaleType="centerInside"
+                                android:id="@+id/imageview11"
+                                
+                            />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:orientation="vertical"
+                            android:id="@+id/size"
+                            
+                        >
+
+                            <LinearLayout
+                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:id="@+id/linear29"
+                                
+                            >
+
+                                <LinearLayout
+                                    android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:padding="4dp"
+                                    android:orientation="horizontal"
+                                    android:layout_weight="1"
+                                    android:id="@+id/linear28"
+                                    
+                                >
+
+                                    <com.google.android.material.materialswitch.MaterialSwitch
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="wrap_content"
+                                        android:background="@android:color/transparent"
+                                        android:gravity="left|center_vertical"
+                                        android:padding="4dp"
+                                        android:textSize="14sp"
+                                        android:textColor="#000000"
+                                        android:layout_weight="1"
+                                        android:id="@+id/sw"
+                                        android:text="@string/Turnoffmedialengthwidth"
+                                        
+                                    />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:orientation="vertical"
+                                android:id="@+id/linear67"
+                                
+                            >
+
+                                <LinearLayout
+                                    android:layout_height="wrap_content"
+                                    android:layout_width="match_parent"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal"
+                                    android:id="@+id/linear68"
+                                    
+                                >
+
+                                    <LinearLayout
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="wrap_content"
+                                        android:padding="4dp"
+                                        android:orientation="horizontal"
+                                        android:layout_weight="1"
+                                        android:id="@+id/linear70"
+                                        
+                                    >
+
+                                        <com.google.android.material.materialswitch.MaterialSwitch
+                                            android:layout_height="wrap_content"
+                                            android:layout_width="wrap_content"
+                                            android:background="@android:color/transparent"
+                                            android:gravity="left|center_vertical"
+                                            android:textSize="14sp"
+                                            android:textColor="#000000"
+                                            android:layout_weight="1"
+                                            android:id="@+id/molaq"
+                                            android:text="@string/Enablehoverpage"
+                                            
+                                        />
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:id="@+id/linear93"
+                                
+                            >
+
+                                <LinearLayout
+                                    android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:padding="4dp"
+                                    android:orientation="horizontal"
+                                    android:layout_weight="1"
+                                    android:id="@+id/linear95"
+                                    
+                                >
+
+                                    <com.google.android.material.materialswitch.MaterialSwitch
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="wrap_content"
+                                        android:background="@android:color/transparent"
+                                        android:gravity="left|center_vertical"
+                                        android:textSize="14sp"
+                                        android:textColor="#000000"
+                                        android:layout_weight="1"
+                                        android:id="@+id/switchobtical"
+                                        android:text="لرزش گیر پس زمینه"
+                                        
+                                    />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:id="@+id/reminderadditem"
+                        
+                    >
+
+                        <LinearLayout
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:gravity="right|center_vertical"
+                            android:padding="8dp"
+                            android:orientation="horizontal"
+                            android:id="@+id/linear27"
+                            
+                        >
+
+                            <ImageView
+                                android:layout_height="30dp"
+                                android:layout_width="30dp"
+                                android:src="@drawable/arrow_down"
+                                android:scaleType="centerInside"
+                                android:rotation="180"
+                                android:id="@+id/arrow01"
+                                
+                            />
+
+                            <TextView
+                                android:layout_height="wrap_content"
+                                android:layout_width="wrap_content"
+                                android:padding="8dp"
+                                android:textSize="20sp"
+                                android:textColor="#FFDCBD"
+                                android:layout_weight="1"
+                                android:id="@+id/textview6"
+                                android:text="@string/mEditor"
+                                
+                            />
+
+                            <ImageView
+                                android:layout_height="30dp"
+                                android:layout_width="30dp"
+                                android:src="@drawable/codeformat"
+                                android:scaleType="centerInside"
+                                android:id="@+id/imageview10"
+                                
+                            />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:gravity="right"
+                            android:orientation="vertical"
+                            android:id="@+id/autotext"
+                            
+                        >
+
+                            <LinearLayout
+                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:padding="8dp"
+                                android:orientation="vertical"
+                                android:id="@+id/rose"
+                                
+                            >
+
+                                <LinearLayout
+                                    android:layout_height="wrap_content"
+                                    android:layout_width="match_parent"
+                                    android:orientation="vertical"
+                                    android:id="@+id/linear42"
+                                    
+                                >
+
+                                    <LinearLayout
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="match_parent"
+                                        android:gravity="center_vertical"
+                                        android:orientation="horizontal"
+                                        android:id="@+id/linear43"
+                                        
+                                    >
+
+                                        <LinearLayout
+                                            android:layout_height="wrap_content"
+                                            android:layout_width="wrap_content"
+                                            android:padding="4dp"
+                                            android:orientation="horizontal"
+                                            android:layout_weight="1"
+                                            android:id="@+id/linear45"
+                                            
+                                        >
+
+                                            <com.google.android.material.materialswitch.MaterialSwitch
+                                                android:layout_height="wrap_content"
+                                                android:layout_width="wrap_content"
+                                                android:background="@android:color/transparent"
+                                                android:gravity="left|center_vertical"
+                                                android:textSize="14sp"
+                                                android:textColor="#000000"
+                                                android:layout_weight="1"
+                                                android:id="@+id/autotextComple"
+                                                android:text="@string/Manuallycompletetext"
+                                                
+                                            />
+
+                                        </LinearLayout>
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_height="0dp"
+                                    android:layout_width="0dp"
+                                    android:orientation="vertical"
+                                    android:id="@+id/linear47"
+                                    
+                                >
+
+                                    <LinearLayout
+                                        android:layout_height="0dp"
+                                        android:layout_width="0dp"
+                                        android:gravity="center_vertical"
+                                        android:orientation="horizontal"
+                                        android:id="@+id/linear48"
+                                        
+                                    >
+
+                                        <LinearLayout
+                                            android:layout_height="0dp"
+                                            android:layout_width="0dp"
+                                            android:padding="8dp"
+                                            android:orientation="horizontal"
+                                            android:layout_weight="20"
+                                            android:id="@+id/linear49"
+                                            
+                                        >
+
+                                            <TextView
+                                                android:layout_height="wrap_content"
+                                                android:layout_width="wrap_content"
+                                                android:padding="8dp"
+                                                android:textSize="14sp"
+                                                android:textColor="#D5C3B5"
+                                                android:id="@+id/textview25"
+                                                android:text="@string/Customize_tab_icons"
+                                                
+                                            />
+
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_height="0dp"
+                                            android:layout_width="0dp"
+                                            android:gravity="center_horizontal|center_vertical"
+                                            android:padding="8dp"
+                                            android:orientation="horizontal"
+                                            android:layout_weight="1"
+                                            android:id="@+id/linear50"
+                                            
+                                        >
+
+                                            <LinearLayout
+                                                android:layout_height="35dp"
+                                                android:layout_width="wrap_content"
+                                                android:gravity="center_horizontal|center_vertical"
+                                                android:orientation="vertical"
+                                                android:id="@+id/backtab"
+                                                
+                                            >
+
+                                                <Ninja.coder.Ghostemane.code.widget.SwitchCompatX
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_width="wrap_content"
+                                                    android:background="@android:color/transparent"
+                                                    android:textSize="12sp"
+                                                    android:textColor="#000000"
+                                                    android:id="@+id/tab"
+                                                    
+                                                />
+
+                                            </LinearLayout>
+
+                                        </LinearLayout>
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_height="wrap_content"
+                                    android:layout_width="match_parent"
+                                    android:orientation="vertical"
+                                    android:id="@+id/linear52"
+                                    
+                                >
+
+                                    <LinearLayout
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="match_parent"
+                                        android:gravity="center_vertical"
+                                        android:orientation="horizontal"
+                                        android:id="@+id/linear53"
+                                        
+                                    >
+
+                                        <LinearLayout
+                                            android:layout_height="wrap_content"
+                                            android:layout_width="wrap_content"
+                                            android:padding="4dp"
+                                            android:orientation="horizontal"
+                                            android:layout_weight="1"
+                                            android:id="@+id/linear55"
+                                            
+                                        >
+
+                                            <com.google.android.material.materialswitch.MaterialSwitch
+                                                android:layout_height="wrap_content"
+                                                android:layout_width="wrap_content"
+                                                android:background="@android:color/transparent"
+                                                android:gravity="left|center_vertical"
+                                                android:textSize="14sp"
+                                                android:textColor="#000000"
+                                                android:layout_weight="1"
+                                                android:id="@+id/lineeditor"
+                                                android:text="@string/Manually_edit_lines_of_code"
+                                                
+                                            />
+
+                                        </LinearLayout>
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_height="wrap_content"
+                                    android:layout_width="match_parent"
+                                    android:orientation="vertical"
+                                    android:id="@+id/linear57"
+                                    
+                                >
+
+                                    <LinearLayout
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="match_parent"
+                                        android:gravity="center_vertical"
+                                        android:orientation="horizontal"
+                                        android:id="@+id/linear58"
+                                        
+                                    >
+
+                                        <LinearLayout
+                                            android:layout_height="wrap_content"
+                                            android:layout_width="wrap_content"
+                                            android:padding="4dp"
+                                            android:orientation="horizontal"
+                                            android:layout_weight="1"
+                                            android:id="@+id/linear60"
+                                            
+                                        >
+
+                                            <com.google.android.material.materialswitch.MaterialSwitch
+                                                android:layout_height="wrap_content"
+                                                android:layout_width="wrap_content"
+                                                android:background="@android:color/transparent"
+                                                android:gravity="left|center_vertical"
+                                                android:textSize="14sp"
+                                                android:textColor="#000000"
+                                                android:layout_weight="1"
+                                                android:id="@+id/themesabet"
+                                                android:text="@string/Activate_default_theme"
+                                                
+                                            />
+
+                                        </LinearLayout>
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_height="wrap_content"
+                                    android:layout_width="match_parent"
+                                    android:orientation="vertical"
+                                    android:id="@+id/linear71"
+                                    
+                                >
+
+                                    <LinearLayout
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="match_parent"
+                                        android:gravity="center_vertical"
+                                        android:orientation="horizontal"
+                                        android:id="@+id/linear72"
+                                        
+                                    >
+
+                                        <LinearLayout
+                                            android:layout_height="wrap_content"
+                                            android:layout_width="wrap_content"
+                                            android:padding="4dp"
+                                            android:orientation="horizontal"
+                                            android:layout_weight="1"
+                                            android:id="@+id/linear74"
+                                            
+                                        >
+
+                                            <com.google.android.material.materialswitch.MaterialSwitch
+                                                android:layout_height="wrap_content"
+                                                android:layout_width="wrap_content"
+                                                android:background="@android:color/transparent"
+                                                android:gravity="left|center_vertical"
+                                                android:textSize="14sp"
+                                                android:textColor="#000000"
+                                                android:layout_weight="1"
+                                                android:id="@+id/msaveandexit"
+                                                android:text="@string/saveandexit"
+                                                
+                                            />
+
+                                        </LinearLayout>
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_height="wrap_content"
+                                    android:layout_width="match_parent"
+                                    android:orientation="vertical"
+                                    android:id="@+id/linear75"
+                                    
+                                >
+
+                                    <LinearLayout
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="match_parent"
+                                        android:gravity="center_vertical"
+                                        android:orientation="horizontal"
+                                        android:id="@+id/linear76"
+                                        
+                                    >
+
+                                        <LinearLayout
+                                            android:layout_height="wrap_content"
+                                            android:layout_width="wrap_content"
+                                            android:padding="4dp"
+                                            android:orientation="horizontal"
+                                            android:layout_weight="1"
+                                            android:id="@+id/linear78"
+                                            
+                                        >
+
+                                            <com.google.android.material.materialswitch.MaterialSwitch
+                                                android:layout_height="wrap_content"
+                                                android:layout_width="wrap_content"
+                                                android:background="@android:color/transparent"
+                                                android:gravity="left|center_vertical"
+                                                android:textSize="14sp"
+                                                android:textColor="#000000"
+                                                android:layout_weight="1"
+                                                android:id="@+id/dirfilesswitch"
+                                                android:text="@string/dirfiles"
+                                                
+                                            />
+
+                                        </LinearLayout>
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_height="wrap_content"
+                                    android:layout_width="match_parent"
+                                    android:orientation="vertical"
+                                    android:id="@+id/linear79"
+                                    
+                                >
+
+                                    <LinearLayout
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="match_parent"
+                                        android:gravity="center_vertical"
+                                        android:orientation="horizontal"
+                                        android:id="@+id/linear80"
+                                        
+                                    >
+
+                                        <LinearLayout
+                                            android:layout_height="wrap_content"
+                                            android:layout_width="wrap_content"
+                                            android:gravity="center_horizontal|center_vertical"
+                                            android:padding="4dp"
+                                            android:orientation="horizontal"
+                                            android:layout_weight="1"
+                                            android:id="@+id/linear82"
+                                            
+                                        >
+
+                                            <com.google.android.material.materialswitch.MaterialSwitch
+                                                android:layout_height="wrap_content"
+                                                android:layout_width="wrap_content"
+                                                android:background="@android:color/transparent"
+                                                android:gravity="left|center_vertical"
+                                                android:textSize="14sp"
+                                                android:textColor="#000000"
+                                                android:layout_weight="1"
+                                                android:id="@+id/themeinstall"
+                                                android:text="@string/posttheme"
+                                                
+                                            />
+
+                                        </LinearLayout>
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_height="0dp"
+                                    android:layout_width="0dp"
+                                    android:gravity="center_vertical"
+                                    android:padding="8dp"
+                                    android:orientation="horizontal"
+                                    android:id="@+id/linear83"
+                                    
+                                >
+
+                                    <TextView
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="wrap_content"
+                                        android:padding="8dp"
+                                        android:textSize="16sp"
+                                        android:textColor="#D5C3B5"
+                                        android:layout_weight="1"
+                                        android:id="@+id/textview33"
+                                        android:text="Blur Mode"
+                                        
+                                    />
+
+                                    <ImageView
+                                        android:layout_height="30dp"
+                                        android:layout_width="30dp"
+                                        android:src="@drawable/img_blur_settings"
+                                        android:scaleType="fitXY"
+                                        android:translationX="-12.0dp"
+                                        android:id="@+id/imageview12"
+                                        
+                                    />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_height="wrap_content"
+                                    android:layout_width="match_parent"
+                                    android:orientation="vertical"
+                                    android:id="@+id/linear84"
+                                    
+                                >
+
+                                    <LinearLayout
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="match_parent"
+                                        android:gravity="center_vertical"
+                                        android:orientation="horizontal"
+                                        android:id="@+id/linear85"
+                                        
+                                    >
+
+                                        <LinearLayout
+                                            android:layout_height="wrap_content"
+                                            android:layout_width="wrap_content"
+                                            android:padding="4dp"
+                                            android:orientation="horizontal"
+                                            android:layout_weight="1"
+                                            android:id="@+id/linear87"
+                                            
+                                        >
+
+                                            <com.google.android.material.materialswitch.MaterialSwitch
+                                                android:layout_height="wrap_content"
+                                                android:layout_width="wrap_content"
+                                                android:background="@android:color/transparent"
+                                                android:gravity="left|center_vertical"
+                                                android:textSize="14sp"
+                                                android:textColor="#000000"
+                                                android:layout_weight="1"
+                                                android:id="@+id/switchac"
+                                                android:text="@string/acset"
+                                                
+                                            />
+
+                                        </LinearLayout>
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_height="wrap_content"
+                                    android:layout_width="match_parent"
+                                    android:orientation="vertical"
+                                    android:id="@+id/linear88"
+                                    
+                                >
+
+                                    <LinearLayout
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="match_parent"
+                                        android:gravity="center_vertical"
+                                        android:orientation="horizontal"
+                                        android:id="@+id/linear89"
+                                        
+                                    >
+
+                                        <LinearLayout
+                                            android:layout_height="wrap_content"
+                                            android:layout_width="wrap_content"
+                                            android:padding="4dp"
+                                            android:orientation="horizontal"
+                                            android:layout_weight="1"
+                                            android:id="@+id/linear91"
+                                            
+                                        >
+
+                                            <com.google.android.material.materialswitch.MaterialSwitch
+                                                android:layout_height="match_parent"
+                                                android:layout_width="match_parent"
+                                                android:background="@android:color/transparent"
+                                                android:gravity="left|center_vertical"
+                                                android:textSize="14sp"
+                                                android:textColor="#000000"
+                                                android:id="@+id/switchmaterialYou"
+                                                android:text="@string/MaterialYou"
+                                                
+                                            />
+
+                                        </LinearLayout>
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="match_parent"
+                                        android:gravity="center_vertical"
+                                        android:orientation="horizontal"
+                                        
+                                    >
+
+                                        <LinearLayout
+                                            android:layout_height="wrap_content"
+                                            android:layout_width="wrap_content"
+                                            android:padding="4dp"
+                                            android:orientation="horizontal"
+                                            android:layout_weight="1"
+                                            
+                                        >
+
+                                            <com.google.android.material.materialswitch.MaterialSwitch
+                                                android:layout_height="match_parent"
+                                                android:layout_width="match_parent"
+                                                android:background="@android:color/transparent"
+                                                android:gravity="left|center_vertical"
+                                                android:textSize="14sp"
+                                                android:textColor="?@attr/colorPrimary"
+                                                android:id="@+id/treecolors"
+                                                android:text="@string/color_tree"
+                                                
+                                            />
+
+                                        </LinearLayout>
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="match_parent"
+                                        android:gravity="center_vertical"
+                                        android:orientation="horizontal"
+                                        
+                                    >
+
+                                        <LinearLayout
+                                            android:layout_height="wrap_content"
+                                            android:layout_width="wrap_content"
+                                            android:padding="4dp"
+                                            android:orientation="horizontal"
+                                            android:layout_weight="1"
+                                            
+                                        >
+
+                                            <com.google.android.material.materialswitch.MaterialSwitch
+                                                android:layout_height="match_parent"
+                                                android:layout_width="match_parent"
+                                                android:background="@android:color/transparent"
+                                                android:gravity="left|center_vertical"
+                                                android:textSize="14sp"
+                                                android:textColor="?@attr/colorPrimary"
+                                                android:id="@+id/terminalColors"
+                                                android:text="Terminal Colors"
+                                                
+                                            />
+
+                                        </LinearLayout>
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="match_parent"
+                                        android:gravity="center_vertical"
+                                        android:orientation="horizontal"
+                                        
+                                    >
+
+                                        <LinearLayout
+                                            android:layout_height="wrap_content"
+                                            android:layout_width="wrap_content"
+                                            android:padding="4dp"
+                                            android:orientation="horizontal"
+                                            android:layout_weight="1"
+                                            
+                                        >
+
+                                            <com.google.android.material.materialswitch.MaterialSwitch
+                                                android:layout_height="match_parent"
+                                                android:layout_width="match_parent"
+                                                android:background="@android:color/transparent"
+                                                android:gravity="left|center_vertical"
+                                                android:textSize="14sp"
+                                                android:textColor="?@attr/colorPrimary"
+                                                android:id="@+id/grmode"
+                                                android:text="@string/gridmode"
+                                                
+                                            />
+
+                                        </LinearLayout>
+
+                                    </LinearLayout>
+
+
+                                    <LinearLayout
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="match_parent"
+                                        android:gravity="center_vertical"
+                                        android:orientation="horizontal"
+                                        
+                                    >
+
+                                        <LinearLayout
+                                            android:layout_height="wrap_content"
+                                            android:layout_width="wrap_content"
+                                            android:padding="4dp"
+                                            android:orientation="horizontal"
+                                            android:layout_weight="1"
+                                            
+                                        >
+
+                                            <com.google.android.material.materialswitch.MaterialSwitch
+                                                android:layout_height="match_parent"
+                                                android:layout_width="match_parent"
+                                                android:background="@android:color/transparent"
+                                                android:gravity="left|center_vertical"
+                                                android:textSize="14sp"
+                                                android:textColor="?@attr/colorPrimary"
+                                                android:id="@+id/wallmodes"
+                                                android:text="@string/wallmode"
+                                                
+                                            />
+
+                                        </LinearLayout>
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_height="wrap_content"
+                                    android:layout_width="match_parent"
+                                    android:padding="8dp"
+                                    android:orientation="horizontal"
+                                    android:id="@+id/getThemeUtils"
+                                    
+                                >
+
+                                    <TextView
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="wrap_content"
+                                        android:padding="8dp"
+                                        android:textSize="16sp"
+                                        android:translationX="5.0dp"
+                                        android:textColor="#000000"
+                                        android:id="@+id/customTheme"
+                                        android:text="@string/customtheme"
+                                        
+                                    />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_height="wrap_content"
+                                    android:layout_width="match_parent"
+                                    android:padding="8dp"
+                                    android:orientation="horizontal"
+                                    android:id="@+id/atctm"
+                                    
+                                >
+
+                                    <TextView
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="wrap_content"
+                                        android:padding="8dp"
+                                        android:textSize="16sp"
+                                        android:textColor="#000000"
+                                        android:id="@+id/textview36"
+                                        android:text="@string/customwindows"
+                                        
+                                    />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_height="wrap_content"
+                                    android:layout_width="match_parent"
+                                    android:padding="8dp"
+                                    android:orientation="horizontal"
+                                    android:id="@+id/linear92"
+                                    
+                                >
+
+                                    <TextView
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="wrap_content"
+                                        android:padding="8dp"
+                                        android:textSize="16sp"
+                                        android:textColor="#000000"
+                                        android:id="@+id/textview37"
+                                        android:text="@string/bl_size"
+                                        
+                                    />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:padding="8dp"
+                                android:id="@+id/recyclerview2"
+                                
+                            />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_height="0dp"
+                    android:layout_width="0dp"
+                    android:padding="8dp"
+                    android:orientation="horizontal"
+                    android:id="@+id/linear14"
+                    
+                >
+
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:gravity="right"
+                        android:padding="8dp"
+                        android:textSize="14sp"
+                        android:textColor="#E0E0E0"
+                        android:layout_weight="1"
+                        android:id="@+id/textview15"
+                        android:text="دیالوگ یا باتوم شیت جستجو گر متن"
+                        
+                    />
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:button="@drawable/geticon"
+                        android:padding="8dp"
+                        android:textSize="12sp"
+                        android:textColor="#000000"
+                        android:id="@+id/checkbox9"
+                        
+                    />
+
+                </LinearLayout>
+
+            </Ninja.coder.Ghostemane.code.widget.PraramnetLayoutNinja>
+
+        </Ninja.coder.Ghostemane.code.widget.component.fastscrollcompat.FastScrollNestedScrollView>
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

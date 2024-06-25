@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <bool name="true_black">false</bool>
+    <bool name="dynamic_theme">true</bool>
+    <integer name="theme_mode">0</integer>
+    <integer name="static_theme">0</integer>
+</resources>

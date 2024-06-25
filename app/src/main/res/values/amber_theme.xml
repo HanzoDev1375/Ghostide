@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style
+        name="Theme.ThemeEngine.Amber"
+        parent="Theme.Material3.Dark.NoActionBar"
+        >
+        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.App.BottomSheetDialog</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialAlertDialog</item>
+        <item name="popupMenuBackground">@drawable/menucustom</item>
+        <item name="textAppearanceLargePopupMenu">@style/TextAppearance.App.BodyLarge</item>
+        <item name="textAppearanceSmallPopupMenu">@style/TextAppearance.App.BodyLarge</item>
+        <item name="colorPrimary">@color/amber_theme_primary</item>
+        <item name="colorOnPrimary">@color/amber_theme_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/amber_theme_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/amber_theme_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/amber_theme_secondary</item>
+        <item name="colorOnSecondary">@color/amber_theme_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/amber_theme_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/amber_theme_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/amber_theme_tertiary</item>
+        <item name="colorOnTertiary">@color/amber_theme_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/amber_theme_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/amber_theme_onTertiaryContainer</item>
+        <item name="colorError">@color/amber_theme_error</item>
+        <item name="colorOnError">@color/amber_theme_onError</item>
+        <item name="colorErrorContainer">@color/amber_theme_errorContainer</item>
+        <item name="colorOnErrorContainer">@color/amber_theme_onErrorContainer</item>
+        <item name="android:colorBackground">@color/amber_theme_background</item>
+        <item name="colorOnBackground">@color/amber_theme_onBackground</item>
+        <item name="colorSurface">@color/amber_theme_surface</item>
+        <item name="colorOnSurface">@color/amber_theme_onSurface</item>
+        <item name="colorSurfaceVariant">@color/amber_theme_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/amber_theme_onSurfaceVariant</item>
+        <item name="colorOutline">@color/amber_theme_outline</item>
+        <item name="colorOutlineVariant">@color/amber_theme_outlineVariant</item>
+        <item name="colorSurfaceInverse">@color/amber_theme_inverseSurface</item>
+        <item name="colorOnSurfaceInverse">@color/amber_theme_inverseOnSurface</item>
+        <item name="colorPrimaryInverse">@color/amber_theme_inversePrimary</item>
+        <item name="colorPrimaryFixed">@color/amber_theme_primaryFixed</item>
+        <item name="colorOnPrimaryFixed">@color/amber_theme_onPrimaryFixed</item>
+        <item name="colorPrimaryFixedDim">@color/amber_theme_primaryFixedDim</item>
+        <item name="colorOnPrimaryFixedVariant">@color/amber_theme_onPrimaryFixedVariant</item>
+        <item name="colorSecondaryFixed">@color/amber_theme_secondaryFixed</item>
+        <item name="colorOnSecondaryFixed">@color/amber_theme_onSecondaryFixed</item>
+        <item name="colorSecondaryFixedDim">@color/amber_theme_secondaryFixedDim</item>
+        <item name="colorOnSecondaryFixedVariant">@color/amber_theme_onSecondaryFixedVariant</item>
+        <item name="colorTertiaryFixed">@color/amber_theme_tertiaryFixed</item>
+        <item name="colorOnTertiaryFixed">@color/amber_theme_onTertiaryFixed</item>
+        <item name="colorTertiaryFixedDim">@color/amber_theme_tertiaryFixedDim</item>
+        <item name="colorOnTertiaryFixedVariant">@color/amber_theme_onTertiaryFixedVariant</item>
+        <item name="colorSurfaceDim">@color/amber_theme_surfaceDim</item>
+        <item name="colorSurfaceBright">@color/amber_theme_surfaceBright</item>
+        <item name="colorSurfaceContainerLowest">@color/amber_theme_surfaceContainerLowest</item>
+        <item name="colorSurfaceContainerLow">@color/amber_theme_surfaceContainerLow</item>
+        <item name="colorSurfaceContainer">@color/amber_theme_surfaceContainer</item>
+        <item name="colorSurfaceContainerHigh">@color/amber_theme_surfaceContainerHigh</item>
+        <item name="colorSurfaceContainerHighest">@color/amber_theme_surfaceContainerHighest</item>
+    </style>
+</resources>

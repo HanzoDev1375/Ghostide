@@ -1,0 +1,27 @@
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            style="@style/Widget.Material3.TextInputLayout.FilledBox">
+        <EditText
+                android:id="@+id/editor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="2000"
+                android:textSize="16sp"
+                android:textColor="#FDA893"
+                android:hint="type number at (ms)"
+                android:textColorHint="#FDA893"
+                android:inputType="numberSigned|numberDecimal"
+                android:focusable="true"
+
+        />
+    </com.google.android.material.textfield.TextInputLayout>
+</LinearLayout>

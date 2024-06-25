@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <LinearLayout
+            android:id="@+id/linear1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <LinearLayout
+                android:id="@+id/linear4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal|left|start"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+            <ProgressBar
+                    android:id="@+id/bar"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="8dp"/>
+
+            <TextView
+                    android:id="@+id/result"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:padding="8dp"
+                    android:text="TaskRuning..."
+                    android:textColor="#fffdb69a"
+                    android:textSize="14sp"
+                    android:textStyle="bold"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/linear5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|center|center_horizontal"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+            <ProgressBar
+                    android:id="@+id/joni"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            <ImageView
+                    android:id="@+id/imageComponet"
+                    android:layout_width="250dp"
+                    android:layout_height="250dp"
+                    android:focusable="false"
+                    android:scaleType="centerInside"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

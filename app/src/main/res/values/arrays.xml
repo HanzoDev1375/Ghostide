@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string-array name="SetKeyboard">
+        <item>فارسی</item>
+        <item>انتخاب بر اساس آخرین حالت کیبورد</item>
+        <item>انگلیسی</item>
+    </string-array>
+    <string-array name="SetKeyboardr">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    <string-array name="Swip">
+        <item>عکس العملی انجام نشود</item>
+        <item>نقطه</item>
+        <item>خط بعدی (اینتر)</item>
+        <item>فاصله</item>
+        <item>پاک کردن آخرین کاراکتر</item>
+        <item>بستن صفحه کلید</item>
+        <item>علامت سوال</item>
+        <item>تغییر زبان</item>
+    </string-array>
+    <string-array name="Swipr">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+    </string-array>
+    <string-array name="Font">
+        <item>فونت دستگاه</item>
+        <item>فونت کودک</item>
+        <item>فونت یکان</item>
+        <item>فونت دست نویس</item>
+        <item>فونت سنس</item>
+        <item>فونت نسخ</item>
+        <item>فونت تبسم</item>
+        <item>فونت جت برینز</item>
+    </string-array>
+    <string-array name="Fontr">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+    </string-array>
+</resources>

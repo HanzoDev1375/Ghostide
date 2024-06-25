@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+            android:id="@+id/reload"
+            android:title="reload"
+
+    />
+    <item
+            android:id="@+id/back_to_home"
+            android:title="back"
+
+    />
+
+
+</menu>

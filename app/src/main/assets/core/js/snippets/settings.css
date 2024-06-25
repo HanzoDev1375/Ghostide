@@ -1,0 +1,95 @@
+.popupScreenCss {
+	z-index: 99999999;
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	left: 0;
+	top: 0;
+	background: rgba(0, 0, 0, 0.28);
+	overflow: hidden;
+}
+
+.popupCss {
+	width: 80%;
+	height: auto;
+	padding: 0px;
+	background: #fff;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20vh;
+	border-radius: 4px;
+	overflow: hidden !important;
+}
+
+.popupHeader {
+	width: 100%;
+	padding: 12px;
+	border-bottom: solid 1px #f0f0f0;
+	color: #727272;
+	font-family: 'Courier New', Courier, monospace;
+	font-weight: bold;
+	margin: -1;
+}
+
+.popupBody {
+	width: 100%;
+	overflow: hidden !important;
+}
+
+.itemCss {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	/* width: 100%; */
+	padding: 10px 16px;
+	margin: -1;
+	border-bottom: solid 1px #f1f1f1;
+	color: #999;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.itemTextCss {
+	font-size: 14px;
+}
+.itemOptionCss {
+	overflow: hidden;
+	padding: 0 3px;
+}
+
+#fontSize {
+    display: inline-flex;
+    justify-content: center;
+	border: 1px solid #ededed;
+	border-radius: 2px;
+	width: 40px;
+    text-align: center;
+    max-lines: 1;
+}
+
+.popupFooter {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	width: 100%;
+	margin-top: 16px;
+	padding: 12px;
+	overflow: hidden;
+	box-sizing: border-box;
+}
+
+.popupFooter > button {
+	border: none;
+	background-color: transparent;
+	color: #999;
+	font-size: 12px;
+	font-family: 'Courier New', Courier, monospace;
+	font-weight: bold;
+}
+
+.popupFooter #save {
+	color: #080;
+}
+
+.popupFooter > button:focus {
+	outline: none;
+}

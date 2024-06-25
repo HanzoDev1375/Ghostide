@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="webview_no_internet_connection">No internet connection</string>
+    <string name="webview_refresh">Update</string>
+    <string name="webview_language">Language</string>
+    <string name="webview_invalid_url">Invalid url, please try again later</string>
+</resources>

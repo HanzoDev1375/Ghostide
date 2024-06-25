@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Keyboard xmlns:android="http://schemas.android.com/apk/res/android" android:keyWidth="10.000002%p"
+          android:keyHeight="53.0sp" android:horizontalGap="0.0px" android:verticalGap="0.0px">
+    <Row>
+        <Key android:keyLabel="1"/>
+        <Key android:keyLabel="2"/>
+        <Key android:keyLabel="3"/>
+        <Key android:keyLabel="4"/>
+        <Key android:keyLabel="5"/>
+        <Key android:keyLabel="6"/>
+        <Key android:keyLabel="7"/>
+        <Key android:keyLabel="8"/>
+        <Key android:keyLabel="9"/>
+        <Key android:keyLabel="0"/>
+    </Row>
+    <Row>
+        <Key android:isSticky="true" android:keyLabel="`"/>
+        <Key android:isSticky="true" android:keyLabel="~"/>
+        <Key android:isSticky="true" android:keyLabel="\\"/>
+        <Key android:isSticky="true" android:keyLabel="|"/>
+        <Key android:isSticky="true" android:keyLabel="&lt;"/>
+        <Key android:isSticky="true" android:keyLabel=">"/>
+        <Key android:isSticky="true" android:keyLabel="{"/>
+        <Key android:isSticky="true" android:keyLabel="}"/>
+        <Key android:isSticky="true" android:keyLabel="["/>
+        <Key android:isSticky="true" android:keyLabel="]"/>
+    </Row>
+    <Row>
+        <Key android:isSticky="true" android:keyLabel="°"/>
+        <Key android:isSticky="true" android:keyLabel="•"/>
+        <Key android:isSticky="true" android:keyLabel="○"/>
+        <Key android:isSticky="true" android:keyLabel="●"/>
+        <Key android:isSticky="true" android:keyLabel="□"/>
+        <Key android:isSticky="true" android:keyLabel="■"/>
+        <Key android:isSticky="true" android:keyLabel="♤"/>
+        <Key android:isSticky="true" android:keyLabel="♡"/>
+        <Key android:isSticky="true" android:keyLabel="◇"/>
+        <Key android:isSticky="true" android:keyLabel="♧"/>
+    </Row>
+    <Row>
+        <Key android:keyWidth="13.600004%p" android:codes="-1005" android:isModifier="true"
+             android:keyIcon="@drawable/key_shift"/>
+        <Key android:horizontalGap="1.4000058%p" android:isSticky="true" android:keyLabel="☆"/>
+        <Key android:isSticky="true" android:keyLabel="▪"/>
+        <Key android:isSticky="true" android:keyLabel="¤"/>
+        <Key android:isSticky="true" android:keyLabel="《"/>
+        <Key android:isSticky="true" android:keyLabel="》"/>
+        <Key android:isSticky="true" android:keyLabel="¡"/>
+        <Key android:isSticky="true" android:keyLabel="¿"/>
+        <Key android:keyWidth="13.600004%p" android:horizontalGap="1.4000058%p" android:codes="-5"
+             android:isModifier="true" android:isRepeatable="true" android:keyIcon="@drawable/key_del"/>
+    </Row>
+    <Row>
+        <Key android:keyWidth="14.999998%p" android:codes="-1382" android:isModifier="true"
+             android:keyIcon="@drawable/key_abc"/>
+        <Key android:keyWidth="10.000002%p" android:codes="1401" android:isSticky="true"
+             android:keyIcon="@drawable/paste_white"/>
+        <Key android:keyWidth="50.0%p" android:codes="32" android:isSticky="true"
+             android:keyIcon="@drawable/key_space"/>
+        <Key android:keyWidth="10.000002%p" android:codes="46" android:popupKeyboard="@xml/n_en" android:isSticky="true"
+             android:keyIcon="@drawable/key_noghteh"/>
+        <Key android:keyWidth="14.999998%p" android:codes="10" android:isModifier="true"
+             android:keyIcon="@drawable/key_enter"/>
+    </Row>
+</Keyboard>

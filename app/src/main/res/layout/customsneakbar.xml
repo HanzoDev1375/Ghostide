@@ -1,0 +1,42 @@
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+    <Ninja.coder.Ghostemane.code.layoutmanager.CardKshow
+            android:id="@+id/card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            android:background="#111111">
+        <LinearLayout
+                android:id="@+id/linear1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:background="#1F1B1C"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+            <TextView
+                    android:id="@+id/tv1"
+                    android:focusable="false"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="Saved!"
+                    android:textSize="14sp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/ghostfont"
+
+                    android:textColor="?@attr/colorSecondary"/>
+            <ImageView
+                    android:id="@+id/imageview1"
+                    android:focusable="false"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="8dp"
+                    android:src="@drawable/save"
+                    android:scaleType="centerInside"/>
+        </LinearLayout>
+    </Ninja.coder.Ghostemane.code.layoutmanager.CardKshow>
+</LinearLayout>

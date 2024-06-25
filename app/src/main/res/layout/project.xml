@@ -1,0 +1,33 @@
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+    <LinearLayout
+            android:id="@+id/linear1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+        <EditText
+                android:id="@+id/gg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:background="@android:color/transparent"
+                android:textSize="14sp"
+                android:textColor="#FDA893"
+                android:hint="OutputProject"
+                android:textColorHint="#FDA893"
+                android:layout_weight="1"
+                android:focusable="true"/>
+        <Button
+                android:id="@+id/dir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="setDir"
+                android:textSize="12sp"
+                android:textColor="#000000"/>
+    </LinearLayout>
+</LinearLayout>

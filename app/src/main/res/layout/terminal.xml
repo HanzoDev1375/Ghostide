@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Ninja.coder.Ghostemane.code.terminal.TermuxActivityRootView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    android:id="@+id/rootPos"
+    >
+
+    <com.termux.view.TerminalView
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:defaultFocusHighlightEnabled="false"
+        android:focusableInTouchMode="true"
+        android:layout_weight="1"
+        android:importantForAutofill="no"
+        android:autofillHints="password"
+        android:id="@+id/term"
+        />
+
+    <Ninja.coder.Ghostemane.code.terminal.key.VirtualKeysView
+        android:layout_height="75dp"
+        android:layout_width="match_parent"
+        android:layout_gravity="right|bottom"
+        android:id="@+id/keysterm"
+        />
+
+</Ninja.coder.Ghostemane.code.terminal.TermuxActivityRootView>

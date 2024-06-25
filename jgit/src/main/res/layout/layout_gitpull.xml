@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:padding="8dp"
+    android:orientation="vertical"
+    >
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="3dp"
+        android:hint="Type UserName"
+        android:layout_marginTop="3dp"
+        android:id="@+id/userName"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="3dp"
+        android:hint="Type Your Remote"
+        android:layout_marginTop="3dp"
+        android:id="@+id/remote"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:hint="Type Your Token"
+        android:layout_marginTop="3dp"
+        android:id="@+id/token"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:layout_width="match_parent"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+</LinearLayout>

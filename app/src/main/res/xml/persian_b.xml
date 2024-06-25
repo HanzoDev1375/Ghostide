@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Keyboard xmlns:android="http://schemas.android.com/apk/res/android" android:keyWidth="10.000002%p"
+          android:keyHeight="53.0sp" android:horizontalGap="0.0px" android:verticalGap="0.0px">
+    <Row>
+        <Key android:popupKeyboard="@xml/popup" android:popupCharacters="ض" android:isSticky="true"
+             android:keyLabel="ص"/>
+        <Key android:popupKeyboard="@xml/popup" android:popupCharacters="ً" android:isSticky="true"
+             android:keyLabel="ث"/>
+        <Key android:isSticky="true" android:keyLabel="ق"/>
+        <Key android:isSticky="true" android:keyLabel="ف"/>
+        <Key android:popupKeyboard="@xml/popup" android:popupCharacters="غ" android:isSticky="true"
+             android:keyLabel="ع"/>
+        <Key android:codes="1607" android:isSticky="true" android:keyLabel="ھ"/>
+        <Key android:isSticky="true" android:keyLabel="خ"/>
+        <Key android:isSticky="true" android:keyLabel="ح"/>
+        <Key android:isSticky="true" android:keyLabel="ج"/>
+        <Key android:isSticky="true" android:keyLabel="چ"/>
+    </Row>
+    <Row>
+        <Key android:popupKeyboard="@xml/popup" android:popupCharacters="َ" android:isSticky="true"
+             android:keyLabel="ش"/>
+        <Key android:popupKeyboard="@xml/popup" android:popupCharacters="ُ" android:isSticky="true"
+             android:keyLabel="س"/>
+        <Key android:popupKeyboard="@xml/popup" android:popupCharacters="ئ" android:isSticky="true"
+             android:keyLabel="ی"/>
+        <Key android:popupKeyboard="@xml/popup" android:popupCharacters="ّ" android:isSticky="true"
+             android:keyLabel="ب"/>
+        <Key android:popupKeyboard="@xml/popup" android:popupCharacters="ِ" android:isSticky="true"
+             android:keyLabel="ل"/>
+        <Key android:popupKeyboard="@xml/popup" android:popupCharacters="آ" android:isSticky="true"
+             android:keyLabel="ا"/>
+        <Key android:isSticky="true" android:keyLabel="ت"/>
+        <Key android:isSticky="true" android:keyLabel="ن"/>
+        <Key android:isSticky="true" android:keyLabel="م"/>
+        <Key android:isSticky="true" android:keyLabel="پ"/>
+    </Row>
+    <Row>
+        <Key android:keyWidth="13.600004%p" android:codes="1005" android:isModifier="true"
+             android:keyIcon="@drawable/key_shift"/>
+        <Key android:horizontalGap="1.4000058%p" android:popupKeyboard="@xml/popup" android:popupCharacters="ظ"
+             android:isSticky="true" android:keyLabel="ط"/>
+        <Key android:popupKeyboard="@xml/popup" android:popupCharacters="ژ" android:isSticky="true"
+             android:keyLabel="ز"/>
+        <Key android:isSticky="true" android:keyLabel="ر"/>
+        <Key android:popupKeyboard="@xml/popup" android:popupCharacters="ذ" android:isSticky="true"
+             android:keyLabel="د"/>
+        <Key android:isSticky="true" android:keyLabel="و"/>
+        <Key android:isSticky="true" android:keyLabel="ک"/>
+        <Key android:popupKeyboard="@xml/popup" android:popupCharacters="ء" android:isSticky="true"
+             android:keyLabel="گ"/>
+        <Key android:keyWidth="13.600004%p" android:horizontalGap="1.4000058%p" android:codes="-5"
+             android:isModifier="true" android:isRepeatable="true" android:keyIcon="@drawable/key_del"/>
+    </Row>
+    <Row>
+        <Key android:keyWidth="14.999998%p" android:codes="1382" android:isModifier="true"
+             android:keyIcon="@drawable/key_symbol"/>
+        <Key android:keyWidth="10.000002%p" android:codes="-1382" android:isSticky="true"
+             android:keyIcon="@drawable/key_plant"/>
+        <Key android:keyWidth="50.0%p" android:codes="32" android:isSticky="true"
+             android:keyIcon="@drawable/key_space"/>
+        <Key android:keyWidth="10.000002%p" android:codes="46" android:popupKeyboard="@xml/n_fa" android:isSticky="true"
+             android:keyIcon="@drawable/key_noghteh"/>
+        <Key android:keyWidth="14.999998%p" android:codes="10" android:isModifier="true"
+             android:keyIcon="@drawable/key_enter"/>
+    </Row>
+</Keyboard>

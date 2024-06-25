@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical">
+
+    <LinearLayout
+            android:layout_height="300dp"
+            android:layout_width="match_parent"
+            android:background="@android:color/transparent"
+            android:gravity="bottom"
+            android:padding="10dp"
+            android:orientation="vertical"
+            android:id="@+id/linear1">
+
+        <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:padding="8dp"
+                android:orientation="horizontal"
+                android:id="@+id/linear2">
+
+            <AnalogClock
+                    android:layout_height="60dp"
+                    android:layout_width="60dp"
+                    android:padding="8dp"
+                    android:id="@+id/analogclock1"/>
+
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="?attr/colorOnPrimary"
+                app:contentPadding="8dp"
+                app:cardCornerRadius="25dp"
+                android:id="@+id/mcardClick"
+                android:layout_gravity="right">
+
+            <ImageView
+                    android:layout_height="60dp"
+                    android:layout_width="60dp"
+                    android:src="@drawable/ghostery"
+                    android:scaleType="centerInside"
+                    android:padding="4dp"
+                    android:tint="?@attr/colorPrimary"
+                    android:focusable="false"
+                    android:id="@+id/imageview2"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="25sp"
+                android:textColor="?@attr/colorPrimary"
+                android:focusable="false"
+                android:id="@+id/textview1"
+                android:text="Ghost web"
+                android:textStyle="bold"/>
+
+        <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="14sp"
+                android:textColor="?@attr/colorPrimary"
+                android:focusable="false"
+                android:id="@+id/textview2"
+                android:text="best ide web"/>
+
+    </LinearLayout>
+
+</LinearLayout>

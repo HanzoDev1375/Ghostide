@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical">
+
+    <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/rootlayout">
+
+        <com.google.android.material.card.MaterialCardView
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center">
+
+            <LinearLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="vertical">
+
+                <ImageView
+                        android:layout_height="80dp"
+                        android:layout_width="80dp"
+                        android:src="@drawable/app_icon"
+                        android:scaleType="fitXY"
+                        android:layout_marginTop="5dp"
+                        android:id="@+id/icon_glide_about"/>
+
+                <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:padding="8dp"
+                        android:textSize="16sp"
+                        android:textColor="?@attr/colorOnSurface"
+                        android:layout_marginTop="6dp"
+                        android:id="@+id/tv_about_name"
+                        android:text="Ghost  ide "/>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:textSize="18dp"
+                    android:textColor="?@attr/colorOnSurface"
+                    android:text="Ghost ide free ide \n version : 1.6.0-rc"/>
+
+        </LinearLayout>
+
+        <com.google.android.material.card.MaterialCardView
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                app:strokeWidth="1dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginLeft="4dp"
+                android:layout_gravity="center">
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_marginEnd="10dp"
+                    android:padding="2dp"
+                    android:id="@+id/rv_about_dev"/>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,0 +1,762 @@
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    
+>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.DELETE_PACKAGES" />
+    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER_HINTS" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER_COMPONENT" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
+    <uses-permission android:name="android.permission.READ_WALLPAPER_INTERNAL" />
+
+    <application
+        android:allowBackup="true"
+        tools:replace="android:allowBackup,android:supportsRtl"
+        android:icon="@mipmap/ghosticon"
+        android:label="@string/app_name"
+        android:name=".ApplicationLoader"
+        android:requestLegacyExternalStorage="true"
+        android:usesCleartextTraffic="true"
+        android:supportsRtl="false"
+        android:resizeableActivity="true"
+        tools:targetApi="tiramisu"
+        android:enableOnBackInvokedCallback="true"
+        android:theme="@style/AppTheme"
+        android:largeHeap="true"
+        
+    >
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:supportsPictureInPicture="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"
+            android:label="@string/gos"
+            android:exported="true"
+            
+        >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.FileDirActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:supportsPictureInPicture="true"
+            
+        />
+        <activity
+            android:name=".activities.CodeEditorActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:supportsPictureInPicture="true"
+            
+        />
+        <activity
+            android:name=".activities.HtmlRunerActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:supportsPictureInPicture="true"
+            
+        />
+        <activity
+            android:name=".activities.JsRunerActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:supportsPictureInPicture="true"
+            
+        />
+        <activity
+            android:name=".activities.InjectorColorActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:supportsPictureInPicture="true"
+            
+        />
+        <activity
+            android:name=".activities.SettingAppActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:supportsPictureInPicture="true"
+            
+        />
+        <activity
+            android:name=".activities.ErrorManagerActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:supportsPictureInPicture="true"
+            
+        />
+        <activity
+            android:name=".activities.AboutActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:supportsPictureInPicture="true"
+            
+        />
+        <activity
+            android:name=".activities.ShellCodeActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:supportsPictureInPicture="true"
+            
+        />
+        <activity
+            android:name=".terminal.TerminalActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize|density|screenLayout|keyboard|keyboardHidden|navigation"
+            android:launchMode="singleTask"
+            android:label="ghostweb terminal "
+            android:resizeableActivity="true"
+            
+        />
+        <activity
+            android:name=".activities.JsonViewerActivity"
+            android:configChanges="orientation|screenSize"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize"
+            
+        />
+        <activity
+            android:name=".activities.MdCodeViewActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:supportsPictureInPicture="true"
+            
+        />
+        <activity
+            android:name=".activities.JavaManagerLayoutActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:supportsPictureInPicture="true"
+            
+        />
+        <activity
+            android:name=".activities.VideoViewsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:supportsPictureInPicture="true"
+            android:screenOrientation="portrait"
+            
+        >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="rtmp" />
+                <data android:scheme="rtmpe" />
+                <data android:scheme="rtmps" />
+                <data android:scheme="rtp" />
+                <data android:scheme="rtsp" />
+                <data android:scheme="mms" />
+                <data android:scheme="mmsh" />
+                <data android:scheme="icyx" />
+                <data android:scheme="httplive" />
+                <data android:scheme="udp" />
+            </intent-filter>
+            <!-- This filter captures protocols with type info -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:mimeType="video/*" />
+                <data android:mimeType="audio/*" />
+                <data android:scheme="rtmp" />
+                <data android:scheme="rtmpe" />
+                <data android:scheme="rtmps" />
+                <data android:scheme="rtp" />
+                <data android:scheme="rtsp" />
+                <data android:scheme="mms" />
+                <data android:scheme="mmsh" />
+                <data android:scheme="icyx" />
+                <data android:scheme="httplive" />
+                <data android:scheme="udp" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:mimeType="video/*" />
+                <data android:mimeType="*/rmvb" />
+                <data android:mimeType="*/avi" />
+                <data android:mimeType="*/mkv" />
+                <data android:mimeType="application/3gpp*" />
+                <data android:mimeType="application/mp4" />
+                <data android:mimeType="application/mpeg*" />
+                <data android:mimeType="application/ogg" />
+                <data android:mimeType="application/sdp" />
+                <data android:mimeType="application/vnd.3gp*" />
+                <data android:mimeType="application/vnd.apple.mpegurl" />
+                <data android:mimeType="application/vnd.dvd*" />
+                <data android:mimeType="application/vnd.dolby*" />
+                <data android:mimeType="application/vnd.rn-realmedia*" />
+                <data android:mimeType="application/x-extension-mp4" />
+                <data android:mimeType="application/x-flac" />
+                <data android:mimeType="application/x-matroska" />
+                <data android:mimeType="application/x-mpegURL" />
+                <data android:mimeType="application/x-ogg" />
+                <data android:mimeType="application/x-quicktimeplayer" />
+                <data android:mimeType="application/x-shockwave-flash" />
+                <data android:mimeType="application/xspf+xml" />
+                <data android:mimeType="misc/ultravox" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="" />
+                <data android:scheme="file" />
+                <data android:scheme="ftp" />
+                <data android:scheme="content" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="*" />
+
+                <!-- video -->
+
+                <data android:pathPattern=".*\\.3g2" />
+                <data android:pathPattern=".*\\.3gp" />
+                <data android:pathPattern=".*\\.3gp2" />
+                <data android:pathPattern=".*\\.3gpp" />
+                <data android:pathPattern=".*\\.amv" />
+                <data android:pathPattern=".*\\.asf" />
+                <data android:pathPattern=".*\\.avi" />
+                <data android:pathPattern=".*\\.divx" />
+                <data android:pathPattern=".*\\.drc" />
+                <data android:pathPattern=".*\\.dv" />
+                <data android:pathPattern=".*\\.f4v" />
+                <data android:pathPattern=".*\\.flv" />
+                <data android:pathPattern=".*\\.gvi" />
+                <data android:pathPattern=".*\\.gxf" />
+                <data android:pathPattern=".*\\.iso" />
+                <data android:pathPattern=".*\\.m1v" />
+                <data android:pathPattern=".*\\.m2v" />
+                <data android:pathPattern=".*\\.m2t" />
+                <data android:pathPattern=".*\\.m2ts" />
+                <!-- <data android:pathPattern=".*\\.m3u" /> -->
+                <data android:pathPattern=".*\\.m3u8" />
+                <data android:pathPattern=".*\\.mkv" />
+                <data android:pathPattern=".*\\.mov" />
+                <data android:pathPattern=".*\\.mp2" />
+                <data android:pathPattern=".*\\.mp2v" />
+                <data android:pathPattern=".*\\.mp4" />
+                <data android:pathPattern=".*\\.mp4v" />
+                <data android:pathPattern=".*\\.mpe" />
+                <data android:pathPattern=".*\\.mpeg" />
+                <data android:pathPattern=".*\\.mpeg1" />
+                <data android:pathPattern=".*\\.mpeg2" />
+                <data android:pathPattern=".*\\.mpeg4" />
+                <data android:pathPattern=".*\\.mpg" />
+                <data android:pathPattern=".*\\.mpv2" />
+                <data android:pathPattern=".*\\.mts" />
+                <data android:pathPattern=".*\\.mtv" />
+                <data android:pathPattern=".*\\.mxf" />
+                <data android:pathPattern=".*\\.mxg" />
+                <data android:pathPattern=".*\\.nsv" />
+                <data android:pathPattern=".*\\.nuv" />
+                <data android:pathPattern=".*\\.ogm" />
+                <data android:pathPattern=".*\\.ogv" />
+                <data android:pathPattern=".*\\.ogx" />
+                <data android:pathPattern=".*\\.ps" />
+                <data android:pathPattern=".*\\.rec" />
+                <data android:pathPattern=".*\\.rm" />
+                <data android:pathPattern=".*\\.rmvb" />
+                <data android:pathPattern=".*\\.tod" />
+                <data android:pathPattern=".*\\.ts" />
+                <data android:pathPattern=".*\\.tts" />
+                <data android:pathPattern=".*\\.vob" />
+                <data android:pathPattern=".*\\.vro" />
+                <data android:pathPattern=".*\\.webm" />
+                <data android:pathPattern=".*\\.wm" />
+                <data android:pathPattern=".*\\.wmv" />
+                <data android:pathPattern=".*\\.wtv" />
+                <data android:pathPattern=".*\\.xesc" />
+                <data android:pathPattern=".*\\.3G2" />
+                <data android:pathPattern=".*\\.3GP" />
+                <data android:pathPattern=".*\\.3GP2" />
+                <data android:pathPattern=".*\\.3GPP" />
+                <data android:pathPattern=".*\\.AMV" />
+                <data android:pathPattern=".*\\.ASF" />
+                <data android:pathPattern=".*\\.AVI" />
+                <data android:pathPattern=".*\\.DIVX" />
+                <data android:pathPattern=".*\\.DRC" />
+                <data android:pathPattern=".*\\.DV" />
+                <data android:pathPattern=".*\\.F4V" />
+                <data android:pathPattern=".*\\.FLV" />
+                <data android:pathPattern=".*\\.GVI" />
+                <data android:pathPattern=".*\\.GXF" />
+                <data android:pathPattern=".*\\.ISO" />
+                <data android:pathPattern=".*\\.M1V" />
+                <data android:pathPattern=".*\\.M2V" />
+                <data android:pathPattern=".*\\.M2T" />
+                <data android:pathPattern=".*\\.M2TS" />
+                <!-- <data android:pathPattern=".*\\.M3U" /> -->
+                <data android:pathPattern=".*\\.M3U8" />
+                <data android:pathPattern=".*\\.MKV" />
+                <data android:pathPattern=".*\\.MOV" />
+                <data android:pathPattern=".*\\.MP2" />
+                <data android:pathPattern=".*\\.MP2V" />
+                <data android:pathPattern=".*\\.MP4" />
+                <data android:pathPattern=".*\\.MP4V" />
+                <data android:pathPattern=".*\\.MPE" />
+                <data android:pathPattern=".*\\.MPEG" />
+                <data android:pathPattern=".*\\.MPEG1" />
+                <data android:pathPattern=".*\\.MPEG2" />
+                <data android:pathPattern=".*\\.MPEG4" />
+                <data android:pathPattern=".*\\.MPG" />
+                <data android:pathPattern=".*\\.MPV2" />
+                <data android:pathPattern=".*\\.MTS" />
+                <data android:pathPattern=".*\\.MTV" />
+                <data android:pathPattern=".*\\.MXF" />
+                <data android:pathPattern=".*\\.MXG" />
+                <data android:pathPattern=".*\\.NSV" />
+                <data android:pathPattern=".*\\.NUV" />
+                <data android:pathPattern=".*\\.OGM" />
+                <data android:pathPattern=".*\\.OGV" />
+                <data android:pathPattern=".*\\.OGX" />
+                <data android:pathPattern=".*\\.PS" />
+                <data android:pathPattern=".*\\.REC" />
+                <data android:pathPattern=".*\\.RM" />
+                <data android:pathPattern=".*\\.RMVB" />
+                <data android:pathPattern=".*\\.TOD" />
+                <data android:pathPattern=".*\\.TS" />
+                <data android:pathPattern=".*\\.TTS" />
+                <data android:pathPattern=".*\\.VOB" />
+                <data android:pathPattern=".*\\.VRO" />
+                <data android:pathPattern=".*\\.WEBM" />
+                <data android:pathPattern=".*\\.WM" />
+                <data android:pathPattern=".*\\.WMV" />
+                <data android:pathPattern=".*\\.WTV" />
+                <data android:pathPattern=".*\\.XESC" />
+
+
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.PdfViewActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:supportsPictureInPicture="true"
+            
+        >
+
+        </activity>
+        <activity
+            android:name=".activities.GouidHtmlActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:supportsPictureInPicture="true"
+            
+        />
+        <activity
+            android:name=".activities.ResultActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:supportsPictureInPicture="true"
+            
+        />
+        <activity
+            android:name=".activities.MianbarActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:supportsPictureInPicture="true"
+            android:screenOrientation="portrait"
+            
+        />
+        <activity
+            android:name=".activities.FontViewActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:supportsPictureInPicture="true"
+            
+        />
+        <activity
+            android:name=".activities.LogCatViewActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:supportsPictureInPicture="true"
+            
+        />
+        <activity
+            android:name=".activities.LeranPdfActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:supportsPictureInPicture="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"
+            
+        />
+        <activity
+            android:name=".activities.IconModActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:supportsPictureInPicture="true"
+            
+        />
+        <activity
+            android:name=".activities.MusicPlayerActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:supportsPictureInPicture="true"
+            
+        />
+        <activity
+            android:name=".activities.FontChakerActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:supportsPictureInPicture="true"
+            
+        />
+        <activity
+            android:name=".activities.StreamSoftAppActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:supportsPictureInPicture="true"
+            
+        />
+            <activity
+                android:name=".activities.BrowserActivity"
+                android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+                android:hardwareAccelerated="true"
+                android:label="Ghost web Browers"
+                android:supportsPictureInPicture="true"
+                
+            >
+                <intent-filter>
+                    <action android:name="android.intent.action.VIEW" />
+                    <category android:name="android.intent.category.DEFAULT" />
+                    <category android:name="android.intent.category.BROWSABLE" />
+                    <data android:scheme="http" />
+                    <data android:scheme="https" />
+                    <data android:scheme="about" />
+                    <data android:scheme="javascript" />
+                </intent-filter>
+                <intent-filter>
+                    <action android:name="android.intent.action.VIEW" />
+                    <category android:name="android.intent.category.BROWSABLE" />
+                    <category android:name="android.intent.category.DEFAULT" />
+                    <data android:scheme="http" />
+                    <data android:scheme="https" />
+                    <data android:scheme="file" />
+                    <data android:scheme="content" />
+                    <data android:scheme="inline" />
+                    <data android:mimeType="text/html" />
+                    <data android:mimeType="text/plain" />
+                    <data android:mimeType="application/xhtml+xml" />
+                    <data android:mimeType="application/vnd.wap.xhtml+xml" />
+                </intent-filter>
+                <intent-filter>
+                    <action android:name="android.intent.action.VIEW" />
+                    <category android:name="android.intent.category.BROWSABLE" />
+                    <category android:name="android.intent.category.DEFAULT" />
+                    <data android:scheme="http" />
+                    <data android:scheme="https" />
+                    <data android:scheme="file" />
+                    <data android:scheme="content" />
+                    <data android:mimeType="application/x-webarchive-xml" />
+                </intent-filter>
+                <intent-filter>
+                    <action android:name="android.speech.action.VOICE_SEARCH_RESULTS" />
+                    <category android:name="android.intent.category.DEFAULT" />
+                </intent-filter>
+                <intent-filter>
+                    <action android:name="android.intent.action.WEB_SEARCH" />
+                    <category android:name="android.intent.category.DEFAULT" />
+                </intent-filter>
+                <intent-filter>
+                    <action android:name="android.intent.action.MEDIA_SEARCH" />
+                    <category android:name="android.intent.category.DEFAULT" />
+                </intent-filter>
+                <intent-filter>
+                    <action android:name="android.intent.action.SEARCH" />
+                    <category android:name="android.intent.category.DEFAULT" />
+                </intent-filter>
+            </activity>
+        <activity
+            android:name=".activities.PdfViewNewActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:label="Ghost web pdf view"
+            android:supportsPictureInPicture="true"
+            android:screenOrientation="portrait"
+            
+        >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:mimeType="application/pdf" />
+                <data android:mimeType="application/x-pdf" />
+                <data android:mimeType="image/djvu" />
+                <data android:mimeType="image/vnd.djvu" />
+                <data android:mimeType="image/x-djvu" />
+                <data android:mimeType="application/vnd.ms-xpsdocument" />
+                <data android:mimeType="application/oxps" />
+                <data android:mimeType="application/x-cbz" />
+                <data android:mimeType="application/x-cbr" />
+                <data android:mimeType="application/x-fb2" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:host="*" />
+                <data android:scheme="file" />
+                <data android:scheme="smb" />
+                <data android:scheme="content" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:mimeType="*/*" />
+                <data android:pathPattern=".*\\.pdf" />
+                <data android:pathPattern=".*\\.djvu" />
+                <data android:pathPattern=".*\\.djv" />
+                <data android:pathPattern=".*\\.xps" />
+                <data android:pathPattern=".*\\.oxps" />
+                <data android:pathPattern=".*\\.cbz" />
+                <data android:pathPattern=".*\\.cbr" />
+                <data android:pathPattern=".*\\.fb2" />
+                <data android:pathPattern=".*\\.fb2\\.zip" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activities.PluginManagerActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:supportsPictureInPicture="true"
+            android:screenOrientation="portrait"
+            
+        />
+        <activity
+            android:name=".activities.PhpActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:supportsPictureInPicture="true"
+            android:screenOrientation="portrait"
+            
+        />
+        <activity
+            android:name=".activities.FileBookmarkActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:supportsPictureInPicture="true"
+            android:screenOrientation="portrait"
+            
+        />
+        <activity
+            android:name=".activities.SetHomeWallpActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:supportsPictureInPicture="true"
+            android:screenOrientation="portrait"
+            
+        />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="Ninja.coder.Ghostemane.code.provider"
+            android:exported="false"
+            android:grantUriPermissions="true"
+            
+        >
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider"
+                
+            />
+        </provider>
+        <activity
+            android:theme="@style/Apple"
+            android:exported="false"
+            android:name="Ninja.coder.Ghostemane.code.keyboard.Setting"
+            
+        >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="Ninja.coder.Ghostemane.code.keyboard.Theme" />
+        <activity
+            android:name="Ninja.coder.Ghostemane.code.keyboard.Background" />
+        <activity
+            android:name="Ninja.coder.Ghostemane.code.keyboard.Save" />
+        <activity
+            android:name="Ninja.coder.Ghostemane.code.keyboard.Reset" />
+
+        <service
+            android:label="GhostWebIdeKeyboardv1"
+            android:exported="false"
+            android:name="Ninja.coder.Ghostemane.code.keyboard.KeyboardSamsung"
+            android:permission="android.permission.BIND_INPUT_METHOD"
+            
+        >
+            <meta-data
+                android:name="android.view.im"
+                android:resource="@xml/method"
+                
+            />
+            <intent-filter>
+                <action android:name="android.view.InputMethod" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="Ninja.coder.Ghostemane.code.PHPProcess"
+            android:process=":PHPWebServerService"
+            
+        />
+
+        <activity-alias
+            android:name=".MainActivityred"
+            android:label="@string/app_name"
+            android:icon="@drawable/ghosticonred"
+            android:enabled="false"
+            android:targetActivity=".MainActivity"
+            
+        >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".MainActivityyellow"
+            android:label="@string/app_name"
+            android:icon="@drawable/ghosticonyellow"
+            android:enabled="false"
+            android:targetActivity=".MainActivity"
+            
+        >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".MainActivityblue"
+            android:label="@string/app_name"
+            android:icon="@drawable/ghosticonblue"
+            android:enabled="false"
+            android:targetActivity=".MainActivity"
+            
+        >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".MainActivityblack"
+            android:label="@string/app_name"
+            android:icon="@drawable/ghosticonblack"
+            android:enabled="false"
+            android:targetActivity=".MainActivity"
+            
+        >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".MainActivitypap"
+            android:label="@string/app_name"
+            android:roundIcon="@drawable/ghosticonpapermod"
+            android:icon="@drawable/ghosticonpapermod"
+            android:enabled="false"
+            android:targetActivity=".MainActivity"
+            
+        >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".MainActivitygreenhell"
+            android:label="@string/app_name"
+            android:roundIcon="@drawable/ghosticongreenhell"
+            android:icon="@drawable/ghosticongreenhell"
+            android:enabled="false"
+            android:targetActivity=".MainActivity"
+            
+        >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".MainActivitybluesky"
+            android:label="@string/app_name"
+            android:roundIcon="@drawable/ghosticonbluemod"
+            android:icon="@drawable/ghosticonbluemod"
+            android:enabled="false"
+            android:targetActivity=".MainActivity"
+            
+        >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <service
+            android:name=".services.MediaListenerService"
+            android:enabled="true"
+            android:exported="false"
+            
+        />
+        <service
+            android:name=".services.FileEventUser"
+            android:enabled="true"
+            android:exported="false"
+            
+        />
+        <receiver
+            android:name="Ninja.coder.Ghostemane.code.NetworkChangeReceiver"
+            android:enabled="true"
+            android:exported="true"
+            
+        >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+        <activity
+            android:name=".activities.ApkViewActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:supportsPictureInPicture="true"
+            
+        />
+
+        <receiver android:name="Ninja.coder.Ghostemane.code.PluginManager.FilePostBroadcastReceiver">
+            <intent-filter>
+                <action android:name="Ninja.coder.code.Ghostemane.SEND_FILE_PATH" />
+            </intent-filter>
+        </receiver>
+    </application>
+</manifest>

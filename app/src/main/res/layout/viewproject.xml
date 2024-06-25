@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:orientation="vertical">
+
+    <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:gravity="center_horizontal"
+            android:padding="8dp"
+            android:orientation="vertical"
+            android:id="@+id/root_layout_project">
+
+        <ImageView
+                android:layout_height="100dp"
+                android:layout_width="150dp"
+                android:src="@drawable/projecthtml"
+                android:scaleType="centerInside"
+                android:focusable="false"
+                android:id="@+id/icon_project_name"/>
+
+        <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:padding="8dp"
+                android:textSize="16sp"
+                android:textColor="#FDA893"
+                android:focusable="false"
+                android:id="@+id/tv_model_item_project"
+                android:text="WebProject"/>
+
+    </LinearLayout>
+
+</LinearLayout>

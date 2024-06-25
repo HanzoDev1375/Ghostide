@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="app_name">Ghost web ide</string>
+    <string name="dkplayer_replay">replay</string>
+    <string name="dkplayer_lock_tip">locktop！</string>
+    <string name="dkplayer_unlocked">unlokced</string>
+    <string name="dkplayer_locked">locked</string>
+    <string name="dkplayer_error_message">Error</string>
+    <string name="dkplayer_retry">retry</string>
+    <string name="dkplayer_continue_play">contine to play</string>
+    <string name="dkplayer_wifi_tip">not found wifi</string>
+    <string name="word_separators">.,;:!?\10()[]*&amp;@{}/&lt;&gt;_+=|</string>
+    <item
+        name="paste"
+        type="string"
+        
+    >Paste</item>
+    <item
+        name="copy"
+        type="string"
+        
+    >Copy</item>
+    <item
+        name="selectAll"
+        type="string"
+        formatted="true"
+        
+    >Select All</item>
+    <item
+        name="saveToProject"
+        type="string"
+        translatable="false"
+        
+    >Project</item>
+    <item
+        name="cut"
+        type="string"
+        
+    >Cut</item>
+    <item
+        name="last"
+        type="string"
+        
+    >Last</item>
+    <item
+        name="next"
+        type="string"
+        
+    >Next</item>
+    <item
+        name="replace"
+        type="string"
+        
+    >Replace</item>
+    <item
+        name="replaceAll"
+        type="string"
+        
+    >Replace All</item>
+    <item
+        name="replacement"
+        type="string"
+        
+    >Replacement</item>
+    <item
+        name="cancel"
+        type="string"
+        
+    >Cancel</item>
+    <item
+        name="text_to_search"
+        type="string"
+        
+    >Text to search</item>
+    <item
+        name="more"
+        type="string"
+        translatable="false"
+        
+    >More</item>
+    <string name="sting">App setting</string>
+    <string name="java">java codes</string>
+    <string name="googleplay">Add star to my app to myket</string>
+    <string name="ter">terminal</string>
+    <string name="sdcard1">sdcard</string>
+    <string name="sdcard2">home</string>
+    <string name="about">About the app</string>
+    <string name="htmlle">training</string>
+    <string name="keyboard">Keyboard App</string>
+    <string name="up">Breakdown app update</string>
+    <string name="themebackoup">BackUp in theme app</string>
+    <string name="logcater">Log cater</string>
+    <string name="exitapp">exit in app</string>
+    <string name="geticonmod">Icon Pack</string>
+    <string name="exitappmsg">Can you Exit in app??</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="Settings">Settings</string>
+    <string name="theme">App Theme</string>
+    <string name="Themes_manager">Themes manager</string>
+    <string name="Keyboard_settings">Keyboard settings</string>
+    <string name="Keyboard_features">Keyboard feature</string>
+    <string name="General">General</string>
+    <string name="Fixing_countin_numbers">Fixing counting numbers</string>
+    <string name="Turn_off_photo_and_video_size">Turn off photo and video size</string>
+    <string name="Filemanager">File manager</string>
+    <string name="Turnoffmedialengthwidth">Turn off media length and width</string>
+    <string name="Enablehoverpage">Enable the hover page</string>
+    <string name="Manuallycompletetext">Manually complete the text</string>
+    <string name="Customize_tab_icons">Customize tab icons</string>
+    <string name="Manually_edit_lines_of_code">Manually edit lines of code</string>
+    <string name="Activate_default_theme">Activate default theme</string>
+    <string name="Manual_tab_size">Manual tab size</string>
+    <string name="Customize_font">Customize font</string>
+    <string name="mEditor">CodeEditor</string>
+    <string name="saveandexit">Auto Save</string>
+    <string name="gos">GWI</string>
+    <string name="dirfiles">Display the list of dictator Activities</string>
+    <string name="paste_text">Paste</string>
+    <string name="copy_text">Copy</string>
+    <string name="text_selection_more">More…</string>
+    <string name="posttheme">Enabel TransParanet Theme Editor</string>
+    <string name="pvr">PM</string>
+    <string name="acset">Select a old activity</string>
+    <string name="bl_size">Select Blur Size 1~25</string>
+    <string name="setting">Settings</string>
+    <string name="javacodes">Java codes</string>
+    <string name="myket">Add Star to Myket</string>
+    <string name="terminal">Terminal</string>
+    <string name="sd">Sdcard</string>
+    <string name="themebackup">Back up theme</string>
+    <string name="logcat">Log cat</string>
+    <string name="icon">Icon store</string>
+    <string name="newversion">Program update</string>
+    <string name="exitapps">Exit App</string>
+    <string name="leran">Leran</string>
+    <string name="dev">Developer</string>
+    <string name="color_tree">Text Color Tree</string>
+    <string name="MaterialYou">MaterialYou</string>
+    <string name="customtheme">Custom Theme</string>
+    <string name="customwindows">Mode Custom Windows</string>
+    <string name="resource">Resource</string>
+    <string name="resource_manager">Resource Manager</string>
+    <string name="debug">Debug</string>
+    <string name="component_tree">Component Tree</string>
+    <string name="raw_xml">Raw XML</string>
+    <string name="ok">ok</string>
+    <string name="run">Run</string>
+    <string name="mode">Mode</string>
+    <string name="design_surface">Design surface</string>
+    <string name="view">View</string>
+    <string name="design">Design</string>
+    <string name="blueprint">Blueprint</string>
+    <string name="gridmode">GridView</string>
+    <string name="wallmode">Wallpaper System mode</string>
+    <string name="apkwar">Warning!!</string>
+    <string name="apkversionError">Sorry, it is not possible to share the program on your Android. You can share the .apk file with the program in the download folder and the apk folder.</string>
+
+</resources>

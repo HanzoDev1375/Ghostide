@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg
+	version="1.1"
+	xmlns="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	x="0%" y="0%"
+	width="100%" height="100%"
+	viewBox="0 0 24.0 24.0"
+	enable-background="new 0 0 24.0 24.0"
+	xml:space="preserve">
+<defs>
+	<linearGradient id="fillGrad6" x1="-0.980%" y1="177.038%" x2="101.803%" y2="-70.333%">
+   		<stop offset="0.000%" style="stop-color:rgb(0,49,146);stop-opacity:1.000" />
+		<stop offset="14.286%" style="stop-color:rgb(19,110,255);stop-opacity:1.000" />
+		<stop offset="28.571%" style="stop-color:rgb(0,90,191);stop-opacity:1.000" />
+		<stop offset="42.857%" style="stop-color:rgb(0,63,171);stop-opacity:1.000" />
+		<stop offset="57.143%" style="stop-color:rgb(71,0,121);stop-opacity:1.000" />
+		<stop offset="71.429%" style="stop-color:rgb(75,0,222);stop-opacity:1.000" />
+		<stop offset="85.714%" style="stop-color:rgb(0,50,56);stop-opacity:1.000" />
+		<stop offset="100.000%" style="stop-color:rgb(0,51,222);stop-opacity:1.000" />
+	</linearGradient>
+
+	<linearGradient id="fillGrad33" x1="-0.980%" y1="177.038%" x2="101.803%" y2="-70.333%">
+   		<stop offset="0.000%" style="stop-color:rgb(0,49,146);stop-opacity:1.000" />
+		<stop offset="14.286%" style="stop-color:rgb(19,110,255);stop-opacity:1.000" />
+		<stop offset="28.571%" style="stop-color:rgb(0,90,191);stop-opacity:1.000" />
+		<stop offset="42.857%" style="stop-color:rgb(0,63,171);stop-opacity:1.000" />
+		<stop offset="57.143%" style="stop-color:rgb(71,0,121);stop-opacity:1.000" />
+		<stop offset="71.429%" style="stop-color:rgb(75,0,222);stop-opacity:1.000" />
+		<stop offset="85.714%" style="stop-color:rgb(0,50,56);stop-opacity:1.000" />
+		<stop offset="100.000%" style="stop-color:rgb(0,51,222);stop-opacity:1.000" />
+	</linearGradient>
+
+</defs>
+	<path
+		transform = "rotate(-0.00 11.31 14.26)"
+		fill="url(#fillGrad6)"
+		stroke="#FFFFFF"
+		fill-opacity="1.0"
+		stroke-opacity="0.004"
+		fill-rule="nonzero"
+		stroke-width="0.047999997"
+		stroke-linejoin="round"
+		stroke-linecap="square"
+		d="M21.38,9.82L1.23,9.82L3.87,18.71L21.39,18.71L21.38,9.82z"/>
+	<path
+		transform = "rotate(-0.00 12.63 7.43)"
+		fill="url(#fillGrad33)"
+		stroke="#FFFFFF"
+		fill-opacity="1.0"
+		stroke-opacity="0.020"
+		fill-rule="nonzero"
+		stroke-width="0.0"
+		stroke-linejoin="bevel"
+		stroke-linecap="square"
+		d="M12.09,7.04L3.88,7.06L3.88,9.87L5.45,9.87L5.45,8.50L20.54,8.40L21.38,10.74L21.38,4.13L13.55,4.12L12.09,7.04L14.10,7.13L14.90,5.58L19.88,5.58L19.88,7.05L12.09,7.04z"/>
+</svg>

@@ -1,0 +1,142 @@
+[
+    {
+        "key": "False",
+        "description": null
+    },
+    {
+        "key": "None",
+        "description": null
+    },
+    {
+        "key": "True",
+        "description": null
+    },
+    {
+        "key": "and",
+        "description": null
+    },
+    {
+        "key": "as",
+        "description": null
+    },
+    {
+        "key": "assert",
+        "description": null
+    },
+    {
+        "key": "async",
+        "description": null
+    },
+    {
+        "key": "await",
+        "description": null
+    },
+    {
+        "key": "break",
+        "description": null
+    },
+    {
+        "key": "class",
+        "description": null
+    },
+    {
+        "key": "continue",
+        "description": null
+    },
+    {
+        "key": "def",
+        "description": null
+    },
+    {
+        "key": "del",
+        "description": null
+    },
+    {
+        "key": "elif",
+        "description": null
+    },
+    {
+        "key": "else",
+        "description": null
+    },
+    {
+        "key": "except",
+        "description": null
+    },
+    {
+        "key": "finally",
+        "description": null
+    },
+    {
+        "key": "for",
+        "description": null
+    },
+    {
+        "key": "from",
+        "description": null
+    },
+    {
+        "key": "global",
+        "description": null
+    },
+    {
+        "key": "if",
+        "description": null
+    },
+    {
+        "key": "import",
+        "description": null
+    },
+    {
+        "key": "in",
+        "description": null
+    },
+    {
+        "key": "is",
+        "description": null
+    },
+    {
+        "key": "lambda",
+        "description": null
+    },
+    {
+        "key": "nonlocal",
+        "description": null
+    },
+    {
+        "key": "not",
+        "description": null
+    },
+    {
+        "key": "or",
+        "description": null
+    },
+    {
+        "key": "pass",
+        "description": null
+    },
+    {
+        "key": "raise",
+        "description": null
+    },
+    {
+        "key": "return",
+        "description": null
+    },
+    {
+        "key": "try",
+        "description": null
+    },
+    {
+        "key": "while",
+        "description": null
+    },
+    {
+        "key": "with",
+        "description": null
+    },
+    {
+        "key": "yield",
+        "description": null
+    }
+]

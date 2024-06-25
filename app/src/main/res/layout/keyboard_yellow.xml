@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+    <Ninja.coder.Ghostemane.code.keyboard.Keyboard_View
+            android:id="@+id/KeyboardView"
+            android:background="@color/Background_yellow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:keyBackground="@drawable/yellow"
+            android:shadowColor="#00000000"
+            android:keyTextColor="#ff000000"
+            android:keyPreviewLayout="@layout/preview_yellow"
+            android:popupLayout="@layout/popup_yellow"/>
+
+</LinearLayout>
+

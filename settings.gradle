@@ -1,0 +1,34 @@
+pluginManagement {
+  repositories {
+    gradlePluginPortal()
+    google()
+    mavenCentral()
+    jcenter()
+    
+  }
+}
+
+dependencyResolutionManagement {
+  repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+  repositories {
+    google()
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+    jcenter()
+    maven { url 'https://oss.jfrog.org/artifactory/oss-snapshot-local' }
+  }
+}
+
+rootProject.name = "GhostWeb IDE"
+
+include(":app")
+include 'eclipse-standalone'
+include(":android-tools")
+include(":Plugin")
+include(":pl-codecomment")	
+include(":jgit")
+include (':jaxp:jaxp-internal')
+include (':jaxp:xml')
+include(':ui-designer')
+include(':vectormaster')
+include(':webview')

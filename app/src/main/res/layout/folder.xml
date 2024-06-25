@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical">
+
+    <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:id="@+id/mcard">
+
+        <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:id="@+id/linear2">
+
+            <LinearLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:padding="3dp"
+                    android:orientation="horizontal"
+                    android:id="@+id/linear4">
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                        android:layout_height="0dp"
+                        android:layout_width="0dp"
+                        android:button="@drawable/seeicon"
+                        android:padding="8dp"
+                        android:textSize="12sp"
+                        android:textColor="#000000"
+                        android:focusable="false"
+                        android:id="@+id/checkbox1"/>
+
+                <ProgressBar
+                        android:layout_height="0dp"
+                        android:layout_width="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:indeterminate="false"
+                        android:padding="8dp"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginRight="3dp"
+                        style="?android:progressBarStyle"
+                        android:layout_marginTop="5dp"
+                        android:focusable="false"
+                        android:id="@+id/progressbar1"/>
+
+                <RelativeLayout
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:gravity="center_vertical"
+                        android:padding="8dp"
+                        android:translationX="6.0dp"
+                        android:id="@+id/layoutLading">
+
+                    <ProgressBar
+                            android:layout_height="70dp"
+                            android:layout_width="70dp"
+                            android:layout_centerInParent="true"
+                            android:indeterminate="false"
+                            style="?android:progressBarStyle"
+                            android:focusable="false"
+                            android:id="@+id/mhsi"/>
+
+                    <ImageView
+                            android:layout_height="50dp"
+                            android:layout_width="50dp"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/folder"
+                            android:scaleType="fitCenter"
+                            android:padding="9dp"
+                            android:focusable="false"
+                            android:id="@+id/imageview1"/>
+
+                </RelativeLayout>
+
+                <ProgressBar
+                        android:layout_height="0dp"
+                        android:layout_width="0dp"
+                        android:indeterminate="false"
+                        android:padding="8dp"
+                        style="?android:progressBarStyle"
+                        android:focusable="false"
+                        android:id="@+id/progressbar3"/>
+
+                <ProgressBar
+                        android:layout_height="0dp"
+                        android:layout_width="0dp"
+                        android:indeterminate="false"
+                        android:padding="8dp"
+                        style="?android:progressBarStyle"
+                        android:focusable="false"
+                        android:id="@+id/prograssTask"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:id="@+id/linear3">
+
+                <LinearLayout
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:id="@+id/linear6">
+
+                    <TextView
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:padding="8dp"
+                            android:textSize="14sp"
+                            android:singleLine="true"
+                            android:textColor="?@attr/colorSecondary"
+                            android:enabled="false"
+                            android:focusable="false"
+                            android:background="@android:color/transparent"
+                            android:fontFamily="@font/ghostfont"
+                            android:layout_weight="1"
+                            android:id="@+id/textview1"
+                            android:text="TextView"/>
+
+                    <ImageView
+                            android:layout_height="30dp"
+                            android:layout_width="30dp"
+                            android:src="@drawable/play"
+                            android:scaleType="fitXY"
+                            android:focusable="false"
+                            android:id="@+id/runhtml"/>
+
+                    <ImageView
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:src="@drawable/ic_more_vert_white"
+                            android:scaleType="centerInside"
+                            android:translationX="-5.0dp"
+                            android:focusable="false"
+                            android:id="@+id/more"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:id="@+id/linear7">
+
+                    <TextView
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:padding="8dp"
+                            android:textSize="12sp"
+                            android:fontFamily="@font/ghostfont"
+                            android:textColor="?@attr/colorSecondary"
+                            android:focusable="false"
+                            android:id="@+id/sizefolderandfile"
+                            android:text="TextView"/>
+
+                    <TextView
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:padding="8dp"
+                            android:textSize="12sp"
+                            android:fontFamily="@font/ghostfont"
+                            android:textColor="?@attr/colorSecondary"
+                            android:focusable="false"
+                            android:id="@+id/textview2"
+                            android:text="TextView"/>
+
+                    <TextView
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:padding="8dp"
+                            android:textSize="11sp"
+                            android:fontFamily="@font/ghostfont"
+                            android:textColor="?@attr/colorSecondary"
+                            android:focusable="false"
+                            android:id="@+id/videoSize"
+                            android:text="TextView"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <com.google.android.material.divider.MaterialDivider
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            app:dividerInsetEnd="19dp"
+            app:dividerInsetStart="19dp"
+            app:dividerColor="?@attr/colorSecondary"
+            android:id="@+id/linear5"/>
+
+</LinearLayout>

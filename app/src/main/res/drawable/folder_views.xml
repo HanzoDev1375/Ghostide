@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Created by Apktool M – https://maximoff.su/apktool -->
+<vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="32dp"
+    android:height="32dp"
+    android:viewportWidth="32"
+    android:viewportHeight="32">
+    <path
+        android:fillColor="#ff7043"
+        android:pathData="M13.84376,7.53645l-1.28749-1.0729A2,2,0,0,0,11.27591,6H4A2,2,0,0,0,2,8V24a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2H15.12412A2,2,0,0,1,13.84376,7.53645Z"/>
+    <path
+        android:fillColor="#ffccbc"
+        android:pathData="M14,12l2,16,7,2,7-2,2-16Zm8,5.899L18.66028,20,22,22.10187V24L16.76532,20.614V19.387L22,16Zm7.23474,2.72833L24,24V22.10187L27.36334,20,24,17.89905V16l5.23474,3.37262Z"/>
+</vector>

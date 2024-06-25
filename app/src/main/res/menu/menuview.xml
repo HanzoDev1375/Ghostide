@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+            android:id="@+id/toggle_edit"
+            android:orderInCategory="0"
+            android:title="@string/mode"
+            app:actionProviderClass="coyamo.visualxml.ui.menu.CheckBoxActionProvider"
+            app:showAsAction="always"/>
+
+    <item
+            android:id="@+id/debug"
+            android:icon="@drawable/ic_debug"
+            android:orderInCategory="1"
+            android:title="@string/debug"
+            app:showAsAction="always"/>
+    <item
+            android:id="@+id/component_tree"
+            android:icon="@drawable/ic_component_tree"
+            android:orderInCategory="2"
+            android:title="@string/component_tree"
+            app:showAsAction="always"/>
+    <item
+            android:id="@+id/change"
+            android:icon="@drawable/ic_view_mode"
+            android:orderInCategory="3"
+            android:title="@string/design_surface"
+            app:showAsAction="always">
+        <menu>
+            <group android:checkableBehavior="none">
+                <item
+                        android:id="@+id/display_view"
+                        android:title="@string/view"/>
+                <item
+                        android:id="@+id/display_design"
+                        android:title="@string/design"/>
+                <item
+                        android:id="@+id/display_blueprint"
+                        android:title="@string/blueprint"/>
+            </group>
+        </menu>
+    </item>
+
+
+</menu>

@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical">
+
+    <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/roots">
+
+        <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:gravity="center_horizontal|center_vertical"
+                android:padding="8dp"
+                android:orientation="horizontal"
+                android:id="@+id/linear6">
+
+            <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:padding="8dp"
+                    android:textSize="18sp"
+                    android:textColor="?@attr/colorPrimary"
+                    android:focusable="false"
+                    android:id="@+id/textview7"
+                    android:text="Layout Helper"/>
+
+        </LinearLayout>
+
+        <com.google.android.material.divider.MaterialDivider
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                app:dividerInsetEnd="19dp"
+                app:dividerInsetStart="19dp"
+                app:dividerColor="?@attr/colorSecondary"
+                android:id="@+id/linear5"/>
+
+        <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:padding="8dp"
+                android:orientation="horizontal"
+                android:id="@+id/makefolder">
+
+            <ImageView
+                    android:layout_height="40dp"
+                    android:layout_width="40dp"
+                    android:src="@drawable/folders_0_5"
+                    android:scaleType="centerInside"
+                    android:padding="3dp"
+                    android:tint="?@attr/colorPrimary"
+                    android:focusable="false"
+                    android:id="@+id/imageview1"/>
+
+            <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:padding="8dp"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="2dp"
+                    android:textColor="?@attr/colorSecondary"
+                    android:focusable="false"
+                    android:id="@+id/textview1"
+                    android:text="Folder maker"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:padding="8dp"
+                android:orientation="horizontal"
+                android:id="@+id/makefile">
+
+            <ImageView
+                    android:layout_height="40dp"
+                    android:layout_width="40dp"
+                    android:src="@drawable/file"
+                    android:scaleType="centerInside"
+                    android:padding="3dp"
+                    android:tint="?@attr/colorPrimary"
+                    android:focusable="false"
+                    android:id="@+id/imageview2"/>
+
+            <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:padding="8dp"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="2dp"
+                    android:textColor="?@attr/colorSecondary"
+                    android:focusable="false"
+                    android:id="@+id/textview2"
+                    android:text="File maker"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:padding="8dp"
+                android:orientation="horizontal"
+                android:id="@+id/project">
+
+            <ImageView
+                    android:layout_height="40dp"
+                    android:layout_width="40dp"
+                    android:src="@drawable/txtfile"
+                    android:scaleType="centerInside"
+                    android:padding="3dp"
+                    android:tint="?@attr/colorPrimary"
+                    android:focusable="false"
+                    android:id="@+id/imageview3"/>
+
+            <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:padding="8dp"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="2dp"
+                    android:textColor="?@attr/colorSecondary"
+                    android:focusable="false"
+                    android:id="@+id/textview3"
+                    android:text="Add new project"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:padding="8dp"
+                android:orientation="horizontal"
+                android:id="@+id/github">
+
+            <ImageView
+                    android:layout_height="40dp"
+                    android:layout_width="40dp"
+                    android:src="@drawable/github"
+                    android:scaleType="centerInside"
+                    android:padding="3dp"
+                    android:tint="?@attr/colorPrimary"
+                    android:focusable="false"
+                    android:id="@+id/imageview4"/>
+
+            <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:padding="8dp"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="2dp"
+                    android:textColor="?@attr/colorSecondary"
+                    android:focusable="false"
+                    android:id="@+id/textview4"
+                    android:text="Github Library Downloder"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:padding="8dp"
+                android:orientation="horizontal"
+                android:id="@+id/ftpdow">
+
+            <ImageView
+                    android:layout_height="40dp"
+                    android:layout_width="40dp"
+                    android:src="@drawable/iconmode"
+                    android:scaleType="centerInside"
+                    android:padding="3dp"
+                    android:tint="?@attr/colorPrimary"
+                    android:focusable="false"
+                    android:id="@+id/imageview5"/>
+
+            <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:padding="8dp"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="2dp"
+                    android:textColor="?@attr/colorSecondary"
+                    android:focusable="false"
+                    android:id="@+id/textview5"
+                    android:text="Ftp Downloder"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:padding="8dp"
+                android:orientation="horizontal"
+                android:id="@+id/search">
+
+            <ImageView
+                    android:layout_height="40dp"
+                    android:layout_width="40dp"
+                    android:src="@drawable/mobilemod"
+                    android:scaleType="centerInside"
+                    android:padding="3dp"
+                    android:tint="?@attr/colorPrimary"
+                    android:focusable="false"
+                    android:id="@+id/imageview6"/>
+
+            <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:padding="8dp"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="2dp"
+                    android:textColor="?@attr/colorSecondary"
+                    android:focusable="false"
+                    android:id="@+id/textview6"
+                    android:text="Search File"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:padding="8dp"
+                android:orientation="horizontal"
+                android:id="@+id/folderTree">
+
+            <ImageView
+                    android:layout_height="40dp"
+                    android:layout_width="40dp"
+                    android:src="@drawable/foldermultipleplus"
+                    android:scaleType="centerInside"
+                    android:padding="3dp"
+                    android:tint="?@attr/colorPrimary"
+                    android:focusable="false"
+                    android:id="@+id/imageview7"/>
+
+            <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:padding="8dp"
+                    android:textSize="14sp"
+                    android:textColor="?@attr/colorSecondary"
+                    android:focusable="false"
+                    android:id="@+id/textview8"
+                    android:text="Folder Tree"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:padding="8dp"
+                android:orientation="horizontal"
+                android:id="@+id/fileTree">
+
+            <ImageView
+                    android:layout_height="40dp"
+                    android:layout_width="40dp"
+                    android:src="@drawable/filemultiple"
+                    android:scaleType="centerInside"
+                    android:padding="3dp"
+                    android:tint="?@attr/colorPrimary"
+                    android:focusable="false"
+                    android:id="@+id/imageview8"/>
+
+            <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:padding="8dp"
+                    android:textSize="14sp"
+                    android:textColor="?@attr/colorSecondary"
+                    android:focusable="false"
+                    android:id="@+id/textview9"
+                    android:text="File Tree"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:padding="8dp"
+                android:orientation="horizontal"
+                android:id="@+id/gits">
+
+            <ImageView
+                    android:layout_height="40dp"
+                    android:layout_width="40dp"
+                    android:src="@drawable/git"
+                    android:scaleType="centerInside"
+                    android:padding="3dp"
+                    android:tint="?@attr/colorPrimary"
+                    android:focusable="false"
+                    android:id="@+id/imageview9"/>
+
+            <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:padding="8dp"
+                    android:textSize="14sp"
+                    android:textColor="?@attr/colorSecondary"
+                    android:focusable="false"
+                    android:id="@+id/textview10"
+                    android:text="Git Clone"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
