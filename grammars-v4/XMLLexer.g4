@@ -25,69 +25,136 @@
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-
 /** XML lexer derived from ANTLR v4 ref guide book example */
-
 // $antlr-format alignTrailingComments true, columnLimit 150, maxEmptyLinesToKeep 1, reflowComments false, useTab false
+
 // $antlr-format allowShortRulesOnASingleLine true, allowShortBlocksOnASingleLine true, minEmptyLines 0, alignSemicolons ownLine
+
 // $antlr-format alignColons trailing, singleLineOverrulesHangingColon true, alignLexerCommands true, alignLabels true, alignTrailers true
 
 lexer grammar XMLLexer;
-
 // Default "mode": Everything OUTSIDE of a tag
-COMMENT : '<!--' .*? '-->';
-CDATA   : '<![CDATA[' .*? ']]>';
+
+COMMENT
+   : '<!--' .*? '-->'
+   ;
+
+CDATA
+   : '<![CDATA[' .*? ']]>'
+   ;
+
 /** Scarf all DTD stuff, Entity Declarations like <!ENTITY ...>,
  *  and Notation Declarations <!NOTATION ...>
- */
-DTD       : '<!' .*? '>' -> skip;
-EntityRef : '&' Name ';';
-CharRef   : '&#' DIGIT+ ';' | '&#x' HEXDIGIT+ ';';
-SEA_WS    : (' ' | '\t' | '\r'? '\n')+;
+ */ DTD
+   : '<!' .*? '>' -> skip
+   ;
 
-OPEN         : '<'       -> pushMode(INSIDE);
-XMLDeclOpen  : '<?xml' S -> pushMode(INSIDE);
-SPECIAL_OPEN : '<?' Name -> more, pushMode(PROC_INSTR);
+EntityRef
+   : '&' Name ';'
+   ;
 
-TEXT: ~[<&]+; // match any 16 bit char other than < and &
+CharRef
+   : '&#' DIGIT+ ';'
+   | '&#x' HEXDIGIT+ ';'
+   | '&#x' HEXDIGIT+
+   //test from show Hex Color
+   | CLOSE '&#x' HEXDIGIT+ SLASH_CLOSE
+   ;
 
-// ----------------- Everything INSIDE of a tag ---------------------
+SEA_WS
+   : (' ' | '\t' | '\r'? '\n')+
+   ;
+
+OPEN
+   : '<' -> pushMode (INSIDE)
+   ;
+
+XMLDeclOpen
+   : '<?xml' S -> pushMode (INSIDE)
+   ;
+
+SPECIAL_OPEN
+   : '<?' Name -> more , pushMode (PROC_INSTR)
+   ;
+
+TEXT
+   : ~ [<&]+
+   ; // match any 16 bit char other than < and &
+   
+   // ----------------- Everything INSIDE of a tag ---------------------
+   
 mode INSIDE;
+CLOSE
+   : '>' -> popMode
+   ;
 
-CLOSE         : '>'  -> popMode;
-SPECIAL_CLOSE : '?>' -> popMode; // close <?xml...?>
-SLASH_CLOSE   : '/>' -> popMode;
-SLASH         : '/';
-EQUALS        : '=';
-STRING        : '"' ~[<"]* '"' | '\'' ~[<']* '\'';
-Name          : NameStartChar NameChar*;
-S             : [ \t\r\n] -> skip;
+SPECIAL_CLOSE
+   : '?>' -> popMode
+   ; // close <?xml...?>
+   
+SLASH_CLOSE
+   : '/>' -> popMode
+   ;
 
-fragment HEXDIGIT: [a-fA-F0-9];
+SLASH
+   : '/'
+   ;
 
-fragment DIGIT: [0-9];
+EQUALS
+   : '='
+   ;
 
-fragment NameChar:
-    NameStartChar
-    | '-'
-    | '.'
-    | DIGIT
-    | '\u00B7'
-    | '\u0300' ..'\u036F'
-    | '\u203F' ..'\u2040'
-;
+STRING
+   : '"' ~ [<"]* '"'
+   | '\'' ~ [<']* '\''
+   ;
 
-fragment NameStartChar:
-    [_:a-zA-Z]
-    | '\u2070' ..'\u218F'
-    | '\u2C00' ..'\u2FEF'
-    | '\u3001' ..'\uD7FF'
-    | '\uF900' ..'\uFDCF'
-    | '\uFDF0' ..'\uFFFD'
-;
+Name
+   : NameStartChar NameChar*
+   ;
 
-// ----------------- Handle <? ... ?> ---------------------
+S
+   : [ \t\r\n] -> skip
+   ;
+
+fragment HEXDIGIT
+   : [a-fA-F0-9]
+   ;
+
+fragment DIGIT
+   : [0-9]
+   ;
+
+fragment NameChar
+   : NameStartChar
+   | '-'
+   | '.'
+   | DIGIT
+   | '\u00B7'
+   | '\u0300' .. '\u036F'
+   | '\u203F' .. '\u2040'
+   ;
+
+fragment NameStartChar
+   : [_:a-zA-Z]
+   | '\u2070' .. '\u218F'
+   | '\u2C00' .. '\u2FEF'
+   | '\u3001' .. '\uD7FF'
+   | '\uF900' .. '\uFDCF'
+   | '\uFDF0' .. '\uFFFD'
+   ;
+   // ----------------- Handle <? ... ?> ---------------------
+   
 mode PROC_INSTR;
+PI
+   : '?>' -> popMode
+   ; // close <?...?>
+   
+IGNORE
+   : . -> more
+   ;
 
-PI     : '?>' -> popMode; // close <?...?>
-IGNORE : .    -> more;
+HASH
+   : '#'
+   ;
+

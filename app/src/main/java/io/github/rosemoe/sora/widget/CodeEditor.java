@@ -1615,10 +1615,9 @@ public class CodeEditor extends View
         } else {
           mPaint.setTextSkewX(0);
         }
-
-        if (TextStyle.isShadowLine(span.style)) {
-          mPaintOther.setShadowLayer(7, 7, 7, EditorColorScheme.LITERAL);
-          mPaintOther.setColor(Color.parseColor(TextStyle.getHexColor()));
+        if (TextStyle.isShadowLine(styleBits)) {
+          
+          mPaintOther.setColor(span.backgroundColorMy);
           canvas.drawRect(
               paintingOffset,
               getRowTop(row),
@@ -1626,8 +1625,6 @@ public class CodeEditor extends View
               getRowTop(row) + getRowHeight(),
               mPaintOther);
         }
-
-        
 
         lastStyle = styleBits;
       }
@@ -1673,8 +1670,8 @@ public class CodeEditor extends View
 
       // Draw underline
       if (span.underlineColor != 0) {
-        mRect.bottom = getRowBottom(row) - mDpUnit * 1;
-        mRect.top = mRect.bottom - getRowHeight() * 0.08f;
+        mRect.bottom = getRowBottom(row) - mDpUnit * 2;
+        mRect.top =  getRowHeight() * 2;
         mRect.left = paintingOffset;
         mRect.right = paintingOffset + width;
         drawColor(canvas, span.underlineColor, mRect);
@@ -2023,9 +2020,9 @@ public class CodeEditor extends View
             } else {
               mPaint.setTextSkewX(0);
             }
-            if (TextStyle.isShadowLine(span.style)) {
-              mPaintOther.setShadowLayer(7, 7, 7, EditorColorScheme.LITERAL);
-              mPaintOther.setColor(Color.parseColor(TextStyle.getHexColor()));
+            if (TextStyle.isShadowLine(styleBits)) {
+
+              mPaintOther.setColor(span.backgroundColorMy);
               canvas.drawRect(
                   paintingOffset,
                   getRowTop(row),
@@ -2033,7 +2030,6 @@ public class CodeEditor extends View
                   getRowTop(row) + getRowHeight(),
                   mPaintOther);
             }
-            
 
             lastStyle = styleBits;
           }
@@ -2079,13 +2075,12 @@ public class CodeEditor extends View
 
           // Draw underline
           if (span.underlineColor != 0) {
-            mRect.bottom = getRowBottom(row) - mDpUnit * 1;
-            mRect.top = mRect.bottom - getRowHeight() * 0.08f;
+            mRect.bottom = getRowBottom(row) - mDpUnit * 2;
+            mRect.top = getRowHeight() * 2;
             mRect.left = paintingOffset;
             mRect.right = paintingOffset + width;
             drawColor(canvas, span.underlineColor, mRect);
           }
-
           // Draw issue curly underline
           if (span.problemFlags > 0
               && Integer.highestOneBit(span.problemFlags) != Span.FLAG_DEPRECATED) {
@@ -3426,6 +3421,7 @@ public class CodeEditor extends View
   protected void drawColor(Canvas canvas, int color, RectF rect) {
     if (color != 0) {
       mPaint.setColor(color);
+
       canvas.drawRect(rect, mPaint);
     }
   }
@@ -3440,6 +3436,7 @@ public class CodeEditor extends View
   protected void drawColor(Canvas canvas, int color, Rect rect) {
     if (color != 0) {
       mPaint.setColor(color);
+
       canvas.drawRect(rect, mPaint);
     }
   }

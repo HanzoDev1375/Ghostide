@@ -72,6 +72,7 @@ public class Span {
   public int column;
   public long style;
   public int underlineColor;
+  public int backgroundColorMy;
 
   /**
    * Set this value to draw curly lines for this span to indicates code problems.
@@ -149,13 +150,14 @@ public class Span {
   public Span copy() {
     Span copy = obtain(column, style);
     copy.setUnderlineColor(underlineColor);
+    copy.setBackgroundColorMy(backgroundColorMy);
     copy.problemFlags = problemFlags;
     copy.renderer = renderer;
     return copy;
   }
 
   public boolean recycle() {
-    problemFlags = column = underlineColor = 0;
+    problemFlags = column = underlineColor = backgroundColorMy = 0;
     style = 0;
     renderer = null;
     return cacheQueue.offer(this);
@@ -182,6 +184,7 @@ public class Span {
         && style == span.style
         && underlineColor == span.underlineColor
         && problemFlags == span.problemFlags
+        && backgroundColorMy == span.backgroundColorMy
         && Objects.equals(renderer, span.renderer);
   }
 
@@ -190,6 +193,7 @@ public class Span {
     int hash = 31 * column;
     hash = 31 * hash + Long.hashCode(style);
     hash = 31 * hash + underlineColor;
+    hash = 31 * hash + backgroundColorMy;
     hash = 31 * hash + problemFlags;
     hash = 31 * hash + (renderer == null ? 0 : renderer.hashCode());
     return hash;
@@ -205,10 +209,20 @@ public class Span {
         + style
         + ", underlineColor="
         + underlineColor
+        + ", backgroundColorMy"
+        + backgroundColorMy
         + ", problemFlags="
         + problemFlags
         + ", renderer="
         + renderer
         + "}";
+  }
+
+  public int getBackgroundColorMy() {
+    return this.backgroundColorMy;
+  }
+
+  public void setBackgroundColorMy(int backgroundColorMy) {
+    this.backgroundColorMy = backgroundColorMy;
   }
 }

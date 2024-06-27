@@ -1,6 +1,7 @@
 package io.github.rosemoe.sora.langs.html;
 
 import android.graphics.Color;
+import androidx.core.graphics.ColorUtils;
 import io.github.rosemoe.sora.data.Span;
 import android.util.Log;
 import io.github.rosemoe.sora.langs.xml.analyzer.BasicSyntaxPullAnalyzer;
@@ -122,32 +123,55 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
           case HTMLLexer.FLOAT_LITERAL:
           case HTMLLexer.HEX_FLOAT_LITERAL:
           case HTMLLexer.BOOL_LITERAL:
-          case HTMLLexer.CHAR_LITERAL:
           case HTMLLexer.NULL_LITERAL:
             result.addIfNeeded(line, column, EditorColorScheme.LITERAL);
             break;
-          case HTMLLexer.STRING_LITERAL:
+          case HTMLLexer.STRING:
+          case HTMLLexer.CHATREF:
             {
               if (text1.startsWith("\"#")) {
+                var colors = result;
                 try {
-
                   int color = Color.parseColor(text1.substring(1, text1.length() - 1));
-                  result.addIfNeeded(line, column, forString());
+                  colors.addIfNeeded(line, column, EditorColorScheme.LITERAL);
+                  if (ColorUtils.calculateLuminance(color) > 0.5) {
+                    Span span =
+                        Span.obtain(
+                            column + 1,
+                            TextStyle.makeStyle(
+                                EditorColorScheme.black, 0, false, false, false, false, true));
+                    if (span != null) {
+                      span.setBackgroundColorMy(color);
+                      colors.add(line, span);
+                    }
+                  } else if (ColorUtils.calculateLuminance(color) <= 0.5) {
+                    Span span =
+                        Span.obtain(
+                            column + 1,
+                            TextStyle.makeStyle(
+                                EditorColorScheme.TEXT_NORMAL,
+                                0,
+                                false,
+                                false,
+                                false,
+                                false,
+                                true));
+                    if (span != null) {
+                      span.setBackgroundColorMy(color);
+                      colors.add(line, span);
+                    }
+                  }
 
-                  Span span = Span.obtain(column + 1, forString());
-                  span.setUnderlineColor(color);
-                  result.add(line, span);
-
-                  Span middle = Span.obtain(column + text1.length() - 1, forString());
-                  middle.setUnderlineColor(Color.TRANSPARENT);
-                  result.add(line, middle);
+                  Span middle = Span.obtain(column + text1.length() - 1, EditorColorScheme.LITERAL);
+                  middle.setBackgroundColorMy(Color.TRANSPARENT);
+                  colors.add(line, middle);
 
                   Span end =
                       Span.obtain(
                           column + text1.length(),
                           TextStyle.makeStyle(EditorColorScheme.TEXT_NORMAL));
-                  end.setUnderlineColor(Color.TRANSPARENT);
-                  result.add(line, end);
+                  end.setBackgroundColorMy(Color.TRANSPARENT);
+                  colors.add(line, end);
                   break;
                 } catch (Exception ignore) {
                   ignore.printStackTrace();
@@ -262,7 +286,6 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
                   || previous == HTMLLexer.FUNCTION
                   || previous == HTMLLexer.COLONCOLON) {
                 colorid = EditorColorScheme.ATTRIBUTE_NAME;
-                ListCss3Color.initColor(token, line, column, result, false);
               }
               if (previous == HTMLLexer.VOID || previous == HTMLLexer.EXTENDS) {
                 colorid = EditorColorScheme.COLOR_WARNING;
@@ -281,7 +304,6 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
               if (previous == HTMLLexer.LT) {
                 colorid = EditorColorScheme.KEYWORD;
               }
-             ListCss3Color.getHexColor(token, line, column, result);
               ListCss3Color.initColor(token, line, column, result, true);
               result.addIfNeeded(line, column, colorid);
               break;
@@ -328,6 +350,14 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
               }
               break;
             }
+          case HTMLLexer.COLORSSS:
+            result.addIfNeeded(
+                line,
+                column,
+                TextStyle.makeStyle(
+                    EditorColorScheme.ATTRIBUTE_NAME, 0, false, false, false, false, true));
+
+            break;
           default:
             result.addIfNeeded(line, column, EditorColorScheme.TEXT_NORMAL);
 
@@ -335,19 +365,14 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
         }
 
         /** test */
-        if (preToken != null) {
-          prePreToken = preToken;
-        }
         if (token.getType() != HTMLLexer.WS) {
           preToken = token;
         }
-
-        //        if (type != HTMLLexer.WS) {
-        //          previous = type;
-        //        }
+        if (type != HTMLLexer.WS) {
+          previous = type;
+        }
 
         first = false;
-        //        htmlCodeAnalyzer.analyze(text, result, delegate);
       }
       result.determine(lastLine);
 
@@ -358,7 +383,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
   }
 
   public long withoutCompletion(int id) {
-    return TextStyle.makeStyle(id, 0, true, false, false);
+    return TextStyle.makeStyle(id, 0, true, false, false, false, true);
   }
 
   public long forString() {

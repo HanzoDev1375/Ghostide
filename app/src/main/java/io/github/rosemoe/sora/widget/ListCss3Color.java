@@ -1,6 +1,7 @@
 package io.github.rosemoe.sora.widget;
 
 import android.graphics.Color;
+import androidx.core.graphics.ColorUtils;
 import io.github.rosemoe.sora.text.TextStyle;
 import io.github.rosemoe.sora.data.Span;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
@@ -8,49 +9,54 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import org.antlr.v4.runtime.Token;
 
-
 public class ListCss3Color {
-  
-  
 
   public static void getColor(
       Token token, int line, int column, TextAnalyzeResult result, int color) {
 
     try {
-      result.addIfNeeded(line, column, TextStyle.makeStyle(EditorColorScheme.ATTRIBUTE_NAME,0,false,false,false,false,true));
+      result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
       int wordLength = token.getText().length(); // طول کلمه‌ی به رنگ قرمز
       int endOfRed = column + wordLength;
       // test
-      Span span = Span.obtain(column, EditorColorScheme.ATTRIBUTE_VALUE);
-      if (span != null) {
-        span.setUnderlineColor(color);
-        result.add(line, span);
+      if (ColorUtils.calculateLuminance(color) > 0.5) {
+        Span span =
+            Span.obtain(
+                column,
+                TextStyle.makeStyle(EditorColorScheme.black, 0, false, false, false, false, true));
+        if (span != null) {
+          span.setUnderlineColor(color);
+          span.setBackgroundColorMy(color);
+          result.add(line, span);
+        }
+      } else if (ColorUtils.calculateLuminance(color) <= 0.5) {
+        Span span =
+            Span.obtain(
+                column,
+                TextStyle.makeStyle(
+                    EditorColorScheme.TEXT_NORMAL, 0, false, false, false, false, true));
+        if (span != null) {
+          span.setUnderlineColor(color);
+          span.setBackgroundColorMy(color);
+          result.add(line, span);
+        }
       }
 
       Span middle = Span.obtain(endOfRed, EditorColorScheme.LITERAL);
       middle.setUnderlineColor(Color.TRANSPARENT);
+      middle.setBackgroundColorMy(Color.TRANSPARENT);
       result.add(line, middle);
 
       Span end = Span.obtain(endOfRed, TextStyle.makeStyle(EditorColorScheme.TEXT_NORMAL));
       end.setUnderlineColor(Color.TRANSPARENT);
+      end.setBackgroundColorMy(Color.TRANSPARENT);
       result.add(line, end);
-
-      // break;
     } catch (Exception ignore) {
       result.addIfNeeded(line, column, EditorColorScheme.ATTRIBUTE_VALUE);
     }
   }
 
-  public static void getHexColor(Token token, int line, int column, TextAnalyzeResult result) {
-    String regex = "#([a-fA-F0-9]{3,6})\\b";
-    Pattern pattern = Pattern.compile(regex);
-    // بررسی مطابقت
-    Matcher matcher = pattern.matcher(token.getText());
-    while (matcher.find()) {
-      getColor(token, line, column, result, Color.parseColor(matcher.group()));
-    }
-    
-  }
+  public static void getHexColor(Token token, int line, int column, TextAnalyzeResult result) {}
 
   public static void initColor(
       Token token, int line, int column, TextAnalyzeResult result, boolean using) {
@@ -344,5 +350,13 @@ public class ListCss3Color {
         getColor(token, line, column, result, Color.parseColor("#f00000"));
       }
     }
+  }
+
+  public static long withoutCompletion(int id) {
+    return TextStyle.makeStyle(id, 0, true, false, false, false, true);
+  }
+
+  public static long forString() {
+    return TextStyle.makeStyle(EditorColorScheme.LITERAL, 0, true, false, false);
   }
 }

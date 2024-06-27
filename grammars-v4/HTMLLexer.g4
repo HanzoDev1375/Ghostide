@@ -796,12 +796,17 @@ BOOL_LITERAL
    | 'false'
    ;
 
-CHAR_LITERAL
-   : '\'' (~ ['\\\r\n] | EscapeSequence) '\''
-   ;
+//CHAR_LITERAL
+//   : '\'' (~ ['\\\r\n] | EscapeSequence) '\''
+ //  ;
 
-STRING_LITERAL
-   : '"' (~ ["\\\r\n] | EscapeSequence)* '"'
+//STRING_LITERAL
+//   : '"' (~ ["\\\r\n] | EscapeSequence)* '"'
+ //  ;
+
+STRING
+   : '"' ~ [<"]* '"'
+   | '\'' ~ [<']* '\''
    ;
 
 NULL_LITERAL
@@ -1034,7 +1039,7 @@ fragment HexDigits
    ;
 
 fragment HexDigit
-   : [0-9a-fA-F]
+   :  [a-fA-F0-9]
    ;
 
 fragment Digits
@@ -1058,11 +1063,87 @@ fragment Letter
    
    
 SLASH_CLOSE
-   : '/>' -> popMode
+   : '/>'
    ;
 
 DOLLAR
    : '$'
    ;
 
+COLORSSS
+   : 'aliceblue'
+   | 'antiquewhite'
+   | 'aquamarine'
+   | 'azure'
+   | 'beige'
+   | 'bisque'
+   | 'black'
+   | 'blanchedalmond'
+   | 'blue'
+   | 'blueviolet'
+   | 'brown'
+   | 'burlywood'
+   | 'cadetblue'
+   | 'chartreuse'
+   | 'chocolate'
+   | 'coral'
+   | 'cornflowerblue'
+   | 'cornsilk'
+   | 'crimson'
+   | 'cyan'
+   | 'darkblue'
+   | 'darkcyan'
+   | 'darkgoldenrod'
+   | 'darkgrey'
+   | 'darkgreen'
+   | 'darkkhaki'
+   | 'darkmagenta'
+   | 'darkolivegreen'
+   | 'darkorange'
+   | 'darkorchid'
+   | 'darkred'
+   | 'darksalmon'
+   | 'darkseagreen'
+   | 'darkslateblue'
+   | 'darkslategray'
+   | 'darkturquoise'
+   | 'darkviolet'
+   | 'deeppink'
+   | 'deepskyblue'
+   | 'dimgray'
+   | 'dodgerblue'
+   | 'firebrick'
+   | 'floralwhite'
+   | 'forestgreen'
+   | 'fuchsia'
+   | 'gainsboro'
+   | 'ghostwhite'
+   | 'gold'
+   | 'goldenrod'
+   | 'grey'
+   | 'green'
+   | 'greenyellow'
+   | 'cornflowerblue'
+   | 'honeydew'
+   | 'hotpink'
+   | 'indianred'
+   | 'indigo'
+   | 'ivory'
+   | 'khaki'
+   | 'lavender'
+   | 'lavenderblush'
+   | 'lawngreen'
+   | 'lemonchiffon'
+   | 'lightblue'
+   | 'lightcoral'
+   | 'lightcyan'
+   | 'lightgoldenrodyellow'
+   | 'lightgray'
+   ;
+
+CHATREF
+   : '&#x' HexDigit+
+   | '&#x' HexDigit+ ';'
+   | '&#' Digits+ ';'
+   ;
 

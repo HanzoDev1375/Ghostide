@@ -321,8 +321,8 @@ public class EditorColorScheme {
     public static final int tomato = 27382;
     public static final int turquoise = 238293;
     public static final int violet = 67292;
-    public static final int wheat = 2491027;
-    public static final int white = 2483929;
+    public static final int wheat = 24027;
+    public static final int white = 197;
     public static final int whitesmoke = 2472829;
     public static final int yellow = 34838;
     public static final int yellowgreen = 23392371;

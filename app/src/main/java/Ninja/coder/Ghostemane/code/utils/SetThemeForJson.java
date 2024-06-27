@@ -94,6 +94,7 @@ public class SetThemeForJson {
     editor.getColorScheme().setColor(EditorColorScheme.blue, ColorCompat.BLUE);
     editor.getColorScheme().setColor(EditorColorScheme.blueviolet, ColorCompat.BLUEVIOLET);
     editor.getColorScheme().setColor(EditorColorScheme.brown, ColorCompat.BROWN);
+    editor.getColorScheme().setColor(EditorColorScheme.white,ColorCompat.WHITE);
 
     // install color log
     editor.getColorScheme().setColor(EditorColorScheme.COLOR_DEBUG, Color.BLUE);
@@ -101,6 +102,7 @@ public class SetThemeForJson {
     editor.getColorScheme().setColor(EditorColorScheme.COLOR_WARNING, Color.YELLOW);
     editor.getColorScheme().setColor(EditorColorScheme.COLOR_LOG, Color.GREEN);
     editor.getColorScheme().setColor(EditorColorScheme.COLOR_TIP, Color.CYAN);
+    
     return this;
   }
 

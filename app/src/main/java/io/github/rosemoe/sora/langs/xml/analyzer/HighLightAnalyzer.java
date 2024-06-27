@@ -2,6 +2,7 @@ package io.github.rosemoe.sora.langs.xml.analyzer;
 
 import android.graphics.Color;
 import android.os.Handler;
+import androidx.core.graphics.ColorUtils;
 import io.github.rosemoe.sora.data.BlockLine;
 import io.github.rosemoe.sora.data.Span;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
@@ -49,7 +50,8 @@ public class HighLightAnalyzer implements CodeAnalyzer {
       Token token, preToken = null, prePreToken = null;
       boolean first = true;
       lastLine = 1;
-      int line, column;
+      int line, column, prev = 0;
+
       Stack<BlockLine> stack = new Stack<>();
       while (delegate.shouldAnalyze()) {
         token = lexer.nextToken();
@@ -78,27 +80,50 @@ public class HighLightAnalyzer implements CodeAnalyzer {
             // colors.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
             // break;
           case XMLLexer.STRING:
+          case XMLLexer.CharRef:
             {
-              auto.setEn(true);
               String text = token.getText();
               if (text.startsWith("\"#")) {
                 try {
                   int color = Color.parseColor(text.substring(1, text.length() - 1));
                   colors.addIfNeeded(line, column, EditorColorScheme.LITERAL);
-
-                  Span span = Span.obtain(column + 1, EditorColorScheme.LITERAL);
-                  span.setUnderlineColor(color);
-                  colors.add(line, span);
+                  if (ColorUtils.calculateLuminance(color) > 0.5) {
+                    Span span =
+                        Span.obtain(
+                            column + 1,
+                            TextStyle.makeStyle(
+                                EditorColorScheme.black, 0, false, false, false, false, true));
+                    if (span != null) {
+                      span.setBackgroundColorMy(color);
+                      colors.add(line, span);
+                    }
+                  } else if (ColorUtils.calculateLuminance(color) <= 0.5) {
+                    Span span =
+                        Span.obtain(
+                            column + 1,
+                            TextStyle.makeStyle(
+                                EditorColorScheme.TEXT_NORMAL,
+                                0,
+                                false,
+                                false,
+                                false,
+                                false,
+                                true));
+                    if (span != null) {
+                      span.setBackgroundColorMy(color);
+                      colors.add(line, span);
+                    }
+                  }
 
                   Span middle = Span.obtain(column + text.length() - 1, EditorColorScheme.LITERAL);
-                  middle.setUnderlineColor(Color.TRANSPARENT);
+                  middle.setBackgroundColorMy(Color.TRANSPARENT);
                   colors.add(line, middle);
 
                   Span end =
                       Span.obtain(
                           column + text.length(),
                           TextStyle.makeStyle(EditorColorScheme.TEXT_NORMAL));
-                  end.setUnderlineColor(Color.TRANSPARENT);
+                  end.setBackgroundColorMy(Color.TRANSPARENT);
                   colors.add(line, end);
                   break;
                 } catch (Exception ignore) {
@@ -183,38 +208,7 @@ public class HighLightAnalyzer implements CodeAnalyzer {
               break;
             }
           case XMLLexer.CLOSE:
-            String text1 = token.getText();
-            String regex = "(\\#[a-fA-F0-9]{6})|(\\#[a-fA-F0-9]{8})";
-            Pattern pattern = Pattern.compile(regex);
-            Matcher matcher = pattern.matcher(text1);
-            if (text1 != null) {
-
-              while (matcher.find()) {
-                try {
-                  int color = Color.parseColor(matcher.group());
-                  colors.addIfNeeded(line, column, EditorColorScheme.LITERAL);
-
-                  Span span = Span.obtain(column + matcher.start(1), EditorColorScheme.LITERAL);
-                  span.setUnderlineColor(color);
-                  colors.add(line, span);
-
-                  Span middle =
-                      Span.obtain(column + matcher.start(2), EditorColorScheme.LITERAL);
-                  middle.setUnderlineColor(Color.TRANSPARENT);
-                  colors.add(line, middle);
-
-                  Span end =
-                      Span.obtain(
-                          column + matcher.end(1),
-                          TextStyle.makeStyle(EditorColorScheme.TEXT_NORMAL));
-                  end.setUnderlineColor(Color.TRANSPARENT);
-                  colors.add(line, end);
-                  break;
-                } catch (Exception ignore) {
-                  ignore.printStackTrace();
-                }
-              }
-            }
+            
             colors.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
             break;
           default:
@@ -265,26 +259,3 @@ public class HighLightAnalyzer implements CodeAnalyzer {
     }
   }
 }
-/*
-case XMLLexer.CLOSE:
-    String text = token.getText();
-    String regex = "(\\#[a-fA-F0-9]{6})|(\\#[a-fA-F0-9]{8})";
-    Pattern pattern = Pattern.compile(regex);
-    Matcher matcher = pattern.matcher(text);
-    
-    while (matcher.find()) {
-        try {
-            int color = Color.parseColor(matcher.group());
-            colors.addIfNeeded(line, column, EditorColorScheme.LITERAL);
-
-            Span span = Span.obtain(column + matcher.start(1), EditorColorScheme.LITERAL); // شروع رنگ زیر خط را تنظیم می کند
-            span.setUnderlineColor(color);
-            colors.add(line, span);
-
-            Span middle = Span.obtain(column + matcher.end(1), EditorColorScheme.LITERAL); // یک رنگ زیر خط وسطی را تنظیم می کند
-            middle.setUnderlineColor(Color.TRANSPARENT);
-            colors.add(line, middle);
-
-            Span end = Span.obtain(column + matcher.end(2), TextStyle.makeStyle(EditorColorScheme.TEXT_NORMAL)); //
-
-*/
