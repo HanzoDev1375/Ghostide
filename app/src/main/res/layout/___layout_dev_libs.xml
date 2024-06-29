@@ -1,31 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:clickable="true"
-        android:padding="3dp"
-        android:orientation="vertical"
-        android:id="@+id/root2001">
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_height="wrap_content"
+     android:layout_width="wrap_content"
+     android:gravity="center_horizontal"
+     android:clickable="true"
+     android:padding="3dp"
+     android:orientation="vertical"
+     android:id="@+id/root2001">
 
-    <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:layout_marginBottom="3dp"
-            android:layout_marginVertical="2dp"
-            android:ellipsize="end"
-            android:textSize="20dp"
-            android:textColor="?@attr/colorOnSurface"
-            android:text="hello"
-            android:id="@+id/dev_user"/>
-
-    <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:ellipsize="end"
-            android:textSize="14dp"
-            android:textColor="?@attr/colorOnSurface"
-            android:text="hello"
-            android:id="@+id/dev_gouid"/>
+    <ImageView
+         android:layout_height="100dp"
+         android:layout_width="100dp"
+         android:layout_marginBottom="3dp"
+         android:layout_marginVertical="2dp"
+         android:src="@drawable/ic_material_cpp"
+         android:layout_gravity="center_horizontal"
+         android:id="@+id/dev_user" />
 
 </LinearLayout>

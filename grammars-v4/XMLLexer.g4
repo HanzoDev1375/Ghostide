@@ -49,6 +49,10 @@ CDATA
    : '<!' .*? '>' -> skip
    ;
 
+OPEN_SLASH
+   : '</' -> pushMode (INSIDE)
+   ;
+
 EntityRef
    : '&' Name ';'
    ;

@@ -1,5 +1,6 @@
 package Ninja.coder.Ghostemane.code;
 
+import Ninja.coder.Ghostemane.code.config.LOG;
 import Ninja.coder.Ghostemane.code.interfaces.CallBackErrorManager;
 import Ninja.coder.Ghostemane.code.marco.CommentList;
 import Ninja.coder.Ghostemane.code.marco.editorface.IEditor;
@@ -16,6 +17,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.*;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
@@ -26,6 +28,12 @@ import com.google.android.material.shape.MaterialShapeDrawable;
 import com.google.android.material.shape.ShapeAppearanceModel;
 import io.github.rosemoe.sora.event.ContentChangeEvent;
 import io.github.rosemoe.sora.interfaces.EditorLanguage;
+import io.github.rosemoe.sora.langs.xml.XMLLanguage;
+import io.github.rosemoe.sora.langs.xml.XMLLexer;
+import java.io.StringReader;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.Token;
+import java.util.ArrayList;
 import io.github.rosemoe.sora.text.FormatThread;
 import io.github.rosemoe.sora.util.KeyboardUtils;
 import io.github.rosemoe.sora.widget.CodeEditor;
@@ -46,7 +54,6 @@ public class IdeEditor extends CodeEditor implements IEditor {
   private boolean isSoftKbdEnabled;
   private CommentList listitem;
   private ToolTipHelper toolTipHelper;
-  
 
   // for test
   private Pattern URL_PATTERN =
@@ -80,61 +87,12 @@ public class IdeEditor extends CodeEditor implements IEditor {
     setLineInfoTextSize(18f);
     setScalable(true);
     setCursorWidth(4.0f);
-    
 
-    
     setNonPrintablePaintingFlags(
         FLAG_DRAW_WHITESPACE_LEADING
             | FLAG_DRAW_WHITESPACE_INNER
             | FLAG_DRAW_WHITESPACE_FOR_EMPTY_LINE);
-
-    // getTextAnalyzeResult
-    subscribeEvent(
-        ContentChangeEvent.class,
-        (event, subscribe) -> {
-          /// Code for saving file
-          if (!(event.getAction() == ContentChangeEvent.ACTION_SET_NEW_TEXT)) {
-            if (accumulatedText.contains(listitem.stopSearch)) {
-              getSearcher().stopSearch();
-              accumulatedText = "";
-            } else if (accumulatedText.contains(listitem.showPopWindows)) {
-              getTextActionWindow().show();
-              accumulatedText = "";
-            } else if (accumulatedText.contains(listitem.showColorPi)) {
-              ColorPickerDialogBuilder.with(getContext())
-                  .setTitle("SetColor")
-                  .density(20)
-                  .showColorEdit(true)
-                  .setOnColorSelectedListener(
-                      new OnColorSelectedListener() {
-                        @Override
-                        public void onColorSelected(int selectedColor) {}
-                      })
-                  .setPositiveButton(
-                      "Ok",
-                      new ColorPickerClickListener() {
-                        @Override
-                        public void onClick(
-                            DialogInterface dialog, int selectedColor, Integer[] allColors) {
-                          String rgs = Integer.toHexString(selectedColor);
-                          SymbolChannel sys = createNewSymbolChannel();
-                          sys.insertSymbol("#" + rgs.replace("####", "#"), 1);
-                        }
-                      })
-                  .setNegativeButton(
-                      "No",
-                      new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {}
-                      })
-                  .build()
-                  .show();
-              accumulatedText = "";
-            } else {
-
-            }
-          }
-        });
+    subscribeEvent(ContentChangeEvent.class, ((event, unsubscribe) -> handleContentChange(event)));
 
     return this;
   }
@@ -221,16 +179,6 @@ public class IdeEditor extends CodeEditor implements IEditor {
                 }
               });
     }
-  }
-
-  public void TEXT(TextView textView, String data, Result result, View fab) {
-    subscribeEvent(
-        ContentChangeEvent.class,
-        (event, subscribe) -> {
-          /// Code for saving file
-
-          result.onTextEnd(data);
-        });
   }
 
   public String code() {
@@ -393,6 +341,72 @@ public class IdeEditor extends CodeEditor implements IEditor {
             DOUBLE_CLICK_INTERVAL);
         isBusy = false;
       }
+    }
+  }
+
+  private void handleContentChange(@NonNull ContentChangeEvent event) {
+
+    if (event.getAction() == ContentChangeEvent.ACTION_INSERT) {
+      final var editor = event.getEditor();
+      final var content = event.getChangedText();
+      final var endLine = event.getChangeEnd().line;
+      final var endColumn = event.getChangeEnd().column;
+      if (getEditorLanguage() instanceof XMLLanguage) {
+        boolean isOpen = false;
+        try {
+          isOpen = editor.getText().charAt(editor.getCursor().getLeft() - 2) == '<';
+        } catch (Throwable th) {
+        }
+
+        if (isOpen && "/".contentEquals(content)) {
+          closeCurrentTag(editor.getText().toString(), endLine, endColumn);
+        }
+      }
+    }
+  }
+
+  private void closeCurrentTag(String text, int line, int col) {
+    try {
+      XMLLexer lexer = new XMLLexer(CharStreams.fromReader(new StringReader(text)));
+      Token token;
+      boolean wasSlash = false, wasOpen = false;
+      ArrayList<String> currentNames = new ArrayList<>();
+      while (((token = lexer.nextToken()) != null && token.getType() != token.EOF)) {
+        final int type = token.getType();
+        if (type == XMLLexer.OPEN) {
+          wasOpen = true;
+        } else if (type == XMLLexer.Name) {
+          if (wasOpen && wasSlash && currentNames.size() > 0) {
+            currentNames.remove(0);
+          } else if (wasOpen) {
+            currentNames.add(0, token.getText());
+            wasOpen = false;
+          }
+
+        } else if (type == XMLLexer.OPEN_SLASH) {
+          int l = token.getLine() - 1;
+          int c = token.getCharPositionInLine();
+          if (l == line && c == col) {
+            break;
+          } else if (currentNames.size() > 0) {
+            currentNames.remove(0);
+          }
+        } else if (type == XMLLexer.SLASH_CLOSE || type == XMLLexer.SPECIAL_CLOSE) {
+          if (currentNames.size() > 0 && token.getText().trim().endsWith("/>")) {
+            currentNames.remove(0);
+          }
+        } else if (type == XMLLexer.SLASH) {
+          wasSlash = true;
+        } else {
+          wasOpen = wasSlash = false;
+        }
+      }
+
+      if (currentNames.size() > 0) {
+        getText().insert(line, col + 2, currentNames.get(0));
+      }
+    } catch (Throwable th) {
+      LOG.error("Unable to close current tag", th.getLocalizedMessage());
     }
   }
 }

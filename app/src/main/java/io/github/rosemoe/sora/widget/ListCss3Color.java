@@ -1,6 +1,8 @@
 package io.github.rosemoe.sora.widget;
 
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.RectF;
 import androidx.core.graphics.ColorUtils;
 import io.github.rosemoe.sora.text.TextStyle;
 import io.github.rosemoe.sora.data.Span;
@@ -358,5 +360,8 @@ public class ListCss3Color {
 
   public static long forString() {
     return TextStyle.makeStyle(EditorColorScheme.LITERAL, 0, true, false, false);
+  }
+  void test(Canvas c){
+    
   }
 }

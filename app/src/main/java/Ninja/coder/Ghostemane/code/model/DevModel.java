@@ -1,27 +1,17 @@
 package Ninja.coder.Ghostemane.code.model;
 
 public class DevModel {
-    protected String name;
-    protected String user;
+  public String devIcon;
 
-    public DevModel(String name, String user) {
-        this.name = name;
-        this.user = user;
-    }
+  public DevModel(String devIcon) {
+    this.devIcon = devIcon;
+  }
 
-    public String getName() {
-        return this.name;
-    }
+  public String getDevIcon() {
+    return this.devIcon;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getUser() {
-        return this.user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
+  public void setDevIcon(String devIcon) {
+    this.devIcon = devIcon;
+  }
 }

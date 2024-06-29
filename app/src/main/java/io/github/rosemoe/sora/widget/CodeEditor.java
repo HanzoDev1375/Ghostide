@@ -24,6 +24,7 @@
 package io.github.rosemoe.sora.widget;
 
 import Ninja.coder.Ghostemane.code.utils.DiagnosticsListener;
+import androidx.core.graphics.ColorUtils;
 import java.io.File;
 import Ninja.coder.Ghostemane.code.databin.DiagnosticWrapper;
 import android.util.TypedValue;
@@ -311,7 +312,7 @@ public class CodeEditor extends View
   private Cursor mCursor;
   private Content mText;
   private TextAnalyzer mSpanner;
-  private Paint mPaint;
+  private Paint mPaint, mPaint2;
   private Paint mPaintOther;
   private Paint mPaintGraph;
   private ContentLine mBuffer;
@@ -657,6 +658,7 @@ public class CodeEditor extends View
     mDividerMargin = mDpUnit * 6;
     mDrawPoints = new BufferedDrawPoints();
     mPaint = new Paint();
+    mPaint2 = new Paint();
     mPaintOther = new Paint();
     mPaintGraph = new Paint();
     mMatrix = new Matrix();
@@ -1349,7 +1351,9 @@ public class CodeEditor extends View
         mRect.top = mRect.bottom - (float) mCursorAnimator.animatorBackground.getAnimatedValue();
         mRect.left = 0;
         mRect.right = (int) (textOffset - mDividerMargin);
-        drawColor(canvas, currentLineBgColor, mRect);
+//        drawColor(canvas, currentLineBgColor, mRect);
+        mPaint.setColor(currentLineBgColor);
+        canvas.drawRoundRect(mRect,10,10,mPaint);
       }
       for (int i = 0; i < postDrawCurrentLines.size(); i++) {
         drawRowBackground(
@@ -1435,7 +1439,8 @@ public class CodeEditor extends View
         mRect.top = mRect.bottom - (float) mCursorAnimator.animatorBackground.getAnimatedValue();
         mRect.left = 0;
         mRect.right = (int) (textOffset - mDividerMargin);
-        drawColor(canvas, currentLineBgColor, mRect);
+        mPaint.setColor(currentLineBgColor);
+        canvas.drawRoundRect(mRect,10,10,mPaint);
       }
       for (int i = 0; i < postDrawCurrentLines.size(); i++) {
         drawRowBackground(
@@ -1616,7 +1621,7 @@ public class CodeEditor extends View
           mPaint.setTextSkewX(0);
         }
         if (TextStyle.isShadowLine(styleBits)) {
-          
+
           mPaintOther.setColor(span.backgroundColorMy);
           canvas.drawRect(
               paintingOffset,
@@ -1671,7 +1676,7 @@ public class CodeEditor extends View
       // Draw underline
       if (span.underlineColor != 0) {
         mRect.bottom = getRowBottom(row) - mDpUnit * 2;
-        mRect.top =  getRowHeight() * 2;
+        mRect.top = getRowHeight() * 2;
         mRect.left = paintingOffset;
         mRect.right = paintingOffset + width;
         drawColor(canvas, span.underlineColor, mRect);
@@ -3426,6 +3431,14 @@ public class CodeEditor extends View
     }
   }
 
+  protected void drawColor2(Canvas canvas, int color, RectF rect) {
+    if (color != 0) {
+      mPaint2.setColor(color);
+
+      canvas.drawRect(rect, mPaint2);
+    }
+  }
+
   /**
    * Draw rect on screen Will not do anything if color is zero
    *
@@ -3438,6 +3451,14 @@ public class CodeEditor extends View
       mPaint.setColor(color);
 
       canvas.drawRect(rect, mPaint);
+    }
+  }
+
+  protected void drawColor2(Canvas canvas, int color, Rect rect) {
+    if (color != 0) {
+      mPaint2.setColor(color);
+
+      canvas.drawRect(rect, mPaint2);
     }
   }
 

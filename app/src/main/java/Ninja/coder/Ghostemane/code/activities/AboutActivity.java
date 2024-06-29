@@ -10,29 +10,29 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class AboutActivity extends BaseCompat implements DevAd.OnItemClick {
+public class AboutActivity extends BaseCompat {
   protected TextView tv_about_name;
   protected RecyclerView rv_about_dev;
   protected DevAd devAd;
   protected List<DevModel> listModel = new ArrayList<>();
-  private RequestNetwork sazndeh;
-  private RequestNetwork.RequestListener _sazndeh_request_listener;
+  private RequestNetwork sazndeh, DevSazandeh;
+  private RequestNetwork.RequestListener devCallBack, DevUser;
   private ImageView appicon;
   public static String ApiURL = "https://api.github.com/users/HanzoDev1375";
+  public static String DevList = "https://api.github.com/repos/HanzoDev1375/Ghostide/contributors";
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
@@ -46,25 +46,33 @@ public class AboutActivity extends BaseCompat implements DevAd.OnItemClick {
     appicon = findViewById(R.id.icon_glide_about);
     tv_about_name = findViewById(R.id.tv_about_name);
     rv_about_dev = findViewById(R.id.rv_about_dev);
-
-    listModel.add(new DevModel("Appt2 ", "main"));
-    listModel.add(new DevModel("BlueWhaleYT", "main"));
-    listModel.add(new DevModel("Mohammad Taha", "main"));
-    listModel.add(new DevModel("Ban Doroid", "marco"));
-    listModel.add(new DevModel("Mister Java", "macro"));
-    listModel.add(new DevModel("Psi", "Help to adding python"));
-    listModel.add(new DevModel("EUP", "marco"));
-    listModel.add(new DevModel("timscriptov", "Tanks for Library layout preview"));
     GlideCompat.GlideNormal(appicon, R.mipmap.ghosticon);
-    devAd = new DevAd(listModel, this);
-    rv_about_dev.setAdapter(devAd);
-    rv_about_dev.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+
     sazndeh = new RequestNetwork(this);
-    _sazndeh_request_listener =
+    DevSazandeh = new RequestNetwork(this);
+    DevUser =
+        new RequestNetwork.RequestListener() {
+          @Override
+          public void onResponse(String _param1, String respanse, HashMap<String, Object> _param3) {
+
+            listModel.add(new DevModel(getIconDev(respanse)));
+            devAd = new DevAd(listModel, (v, c) -> {});
+
+            rv_about_dev.setAdapter(devAd);
+            rv_about_dev.setLayoutManager(
+                new LinearLayoutManager(AboutActivity.this, RecyclerView.VERTICAL, false));
+          }
+
+          @Override
+          public void onErrorResponse(String _param1, String _param2) {}
+        };
+
+    devCallBack =
         new RequestNetwork.RequestListener() {
           @Override
           public void onResponse(String _param1, String respanse, HashMap<String, Object> _param3) {
             getElementUser(respanse);
+            // listModel.add(new DevModel(getIconDev(respanse)));
           }
 
           @Override
@@ -87,33 +95,8 @@ public class AboutActivity extends BaseCompat implements DevAd.OnItemClick {
   }
 
   private void runview() {
-    sazndeh.startRequestNetwork(
-        RequestNetworkController.GET, ApiURL, "b", _sazndeh_request_listener);
-  }
-
-  @Override
-  public void onItemChange(View v, int pos) {
-    switch (pos) {
-      case 0:
-        openUrl("https://github.com/appt2");
-        break;
-      case 1:
-        openUrl("https://github.com/BlueWhaleYT");
-        break;
-      case 2, 4, 6:
-        Toast.makeText(getApplicationContext(), "User not found Github page", Toast.LENGTH_SHORT)
-            .show();
-        break;
-      case 3:
-        openUrl("https://github.com/BanDroid");
-        break;
-      case 5:
-        openUrl("https://github.com/PsiCodes");
-        break;
-      case 7:
-        openUrl("https://github.com/timscriptov");
-        break;
-    }
+    sazndeh.startRequestNetwork(RequestNetworkController.GET, ApiURL, "b", devCallBack);
+    DevSazandeh.startRequestNetwork(RequestNetworkController.GET, DevList, "B", DevUser);
   }
 
   void openUrl(String link) {
@@ -134,5 +117,18 @@ public class AboutActivity extends BaseCompat implements DevAd.OnItemClick {
     } catch (JSONException err) {
 
     }
+  }
+
+  public String getIconDev(String input) {
+    try {
+      JSONArray aar = new JSONArray(input);
+      if (aar.length() > 0) {
+        JSONObject object = aar.getJSONObject(0);
+        return object.getString("avatar_url");
+      }
+    } catch (JSONException err) {
+
+    }
+    return null;
   }
 }

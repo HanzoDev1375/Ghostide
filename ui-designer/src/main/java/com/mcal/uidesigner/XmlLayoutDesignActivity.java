@@ -99,7 +99,7 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
   private Toolbar toolbar;
 
   public static void show(
-      Activity parent, String language, String filePath, boolean isDemo, boolean isStandalone) {
+      Activity parent, String language, String filePath, boolean isDemo, boolean isStandalone,OnViewChange view) {
     Intent intent = new Intent(parent, XmlLayoutDesignActivity.class);
     intent.putExtra(EXTRA_FILE, filePath);
     intent.putExtra(EXTRA_LANGUAGE, language);
@@ -107,6 +107,11 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
     intent.putExtra(EXTRA_STANDALONE, isStandalone);
     intent.putExtra(EXTRA_TRAINER, false);
     parent.startActivity(intent);
+    view.reset();
+  }
+
+  public interface OnViewChange {
+    void reset();
   }
 
   public static void showTrainer(
@@ -168,16 +173,16 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     this.initialized = false;
     AndroidHelper.switchLanguage(this, getIntent().getStringExtra(EXTRA_LANGUAGE));
-//    switch (getViewType()) {
-//      case LIGHT_SMALL:
-//      case LIGHT:
-//        setTheme(R.style.ActivityThemeDesignerLight);
-//        break;
-//      case DARK_SMALL:
-//      case DARK:
-//        setTheme(R.style.ActivityThemeDesignerDark);
-//        break;
-//    }
+    //    switch (getViewType()) {
+    //      case LIGHT_SMALL:
+    //      case LIGHT:
+    //        setTheme(R.style.ActivityThemeDesignerLight);
+    //        break;
+    //      case DARK_SMALL:
+    //      case DARK:
+    //        setTheme(R.style.ActivityThemeDesignerDark);
+    //        break;
+    //    }
     getWindow().setSoftInputMode(2);
     AndroidHelper.forceOptionsMenuButton(this);
     super.onCreate(savedInstanceState);
@@ -192,7 +197,7 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
     if (isTrainer() && AndroidHelper.isAndroidTV(this)) {
       getSupportActionBar().hide();
     }
-   // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     getSupportActionBar().setHomeButtonEnabled(true);
     if (isTrainer()) {
       TrainerLogo.set(
@@ -777,13 +782,13 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
         ImageView imageView = view.findViewById(R.id.designerViewlistEntryImage);
         if (entry.view.canAddInside()) {
           i = R.drawable.ic_category;
-          ColorMaterial.unserLineTextView(tv,entry.view.getNodeName());
+          ColorMaterial.unserLineTextView(tv, entry.view.getNodeName());
         } else {
           i = R.drawable.ic_widgets;
           tv.setText(entry.view.getNodeName());
         }
         imageView.setImageResource(i);
-        ColorMaterial.init(imageView,tv);
+        ColorMaterial.init(imageView, tv);
       } else if (entry.file != null) {
         viewLayout.setVisibility(View.GONE);
         fileLayout.setVisibility(View.VISIBLE);

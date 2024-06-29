@@ -15,6 +15,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PictureDrawable;
 import android.graphics.pdf.PdfRenderer;
 import android.media.MediaMetadataRetriever;
+import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
 import android.widget.ImageView;
@@ -67,6 +68,8 @@ public class GlideCompat {
         .transform(new RoundedCornersTransformation(RenderSize()))
         .into(imageView);
   }
+  
+    
 
   public static void GlideNormals(ImageView imageView, String path) {
     Glide.with(imageView.getContext())
