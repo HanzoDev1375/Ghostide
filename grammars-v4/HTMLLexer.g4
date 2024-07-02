@@ -795,15 +795,18 @@ BOOL_LITERAL
    : 'true'
    | 'false'
    ;
-
-//CHAR_LITERAL
-//   : '\'' (~ ['\\\r\n] | EscapeSequence) '\''
- //  ;
-
-//STRING_LITERAL
-//   : '"' (~ ["\\\r\n] | EscapeSequence)* '"'
- //  ;
-
+   //CHAR_LITERAL
+   
+   //   : '\'' (~ ['\\\r\n] | EscapeSequence) '\''
+   
+   //  ;
+   
+   //STRING_LITERAL
+   
+   //   : '"' (~ ["\\\r\n] | EscapeSequence)* '"'
+   
+   //  ;
+   
 STRING
    : '"' ~ [<"]* '"'
    | '\'' ~ [<']* '\''
@@ -1039,7 +1042,7 @@ fragment HexDigits
    ;
 
 fragment HexDigit
-   :  [a-fA-F0-9]
+   : [a-fA-F0-9]
    ;
 
 fragment Digits
@@ -1064,6 +1067,10 @@ fragment Letter
    
 SLASH_CLOSE
    : '/>'
+   ;
+
+OPEN_SLASH
+   : '</'
    ;
 
 DOLLAR

@@ -250,24 +250,32 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
             result.addIfNeeded(line, column, EditorColorScheme.HTML_TAG);
             break;
           case HTMLLexer.GT:
+            result.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
+            break;
           case HTMLLexer.LT:
-            {
+            { 
               result.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
+              var block = result.obtainNewBlock();
+              block.startLine = line;
+              block.startColumn = column;
+              stack.push(block);
+              
               break;
             }
-
+            //// '/>'
           case HTMLLexer.SLASH_CLOSE:
+            result.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
+            break;
+
+            /// '</'
+          case HTMLLexer.OPEN_SLASH:
             {
               result.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
-              if (!stack.isEmpty()) {
-                BlockLine block = stack.pop();
+              final var block = stack.pop();
                 block.endLine = line;
                 block.endColumn = column;
-                if (block.startLine != block.endLine) {
-                  if (preToken.getLine() == token.getLine()) block.toBottomOfEndLine = true;
-                  result.addBlockLine(block);
-                }
-              }
+                result.addBlockLine(block);
+
               break;
             }
           case HTMLLexer.IDENTIFIER:
@@ -301,15 +309,14 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
               if (previous == HTMLLexer.CASE || previous == HTMLLexer.FINAL) {
                 colorid = EditorColorScheme.ATTRIBUTE_NAME;
               }
+              // show '<'
               if (previous == HTMLLexer.LT) {
-                colorid = EditorColorScheme.KEYWORD;
-                BlockLine block = new BlockLine();
-                block.startLine = preToken.getLine() - 1;
-                block.startColumn = preToken.getCharPositionInLine(); // -1 for '<'
-                stack.push(block);
+                colorid = EditorColorScheme.OPERATOR;
               }
-              if (previous == HTMLLexer.DIV) {
-                colorid = EditorColorScheme.KEYWORD;
+              // end '</'
+              if (previous == HTMLLexer.OPEN_SLASH) {
+                colorid = EditorColorScheme.OPERATOR;
+                
               }
 
               ListCss3Color.initColor(token, line, column, result, true);
@@ -344,18 +351,6 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
           case HTMLLexer.DIV:
             {
               result.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
-              if (previous == HTMLLexer.LT) {
-                if (!stack.isEmpty()) {
-                  BlockLine blocks = stack.pop();
-                  blocks.endLine = preToken.getLine() - 1;
-                  blocks.endColumn = preToken.getCharPositionInLine();
-                  if (blocks.startLine != blocks.endLine) {
-                    if (prePreToken.getLine() == preToken.getLine())
-                      blocks.toBottomOfEndLine = true;
-                    result.addBlockLine(blocks);
-                  }
-                }
-              }
               break;
             }
           case HTMLLexer.COLORSSS:
