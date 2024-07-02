@@ -17,6 +17,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.*;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.flask.colorpicker.OnColorSelectedListener;
@@ -26,6 +27,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.shape.CornerFamily;
 import com.google.android.material.shape.MaterialShapeDrawable;
 import com.google.android.material.shape.ShapeAppearanceModel;
+import io.github.rosemoe.sora.event.ClickEvent;
 import io.github.rosemoe.sora.event.ContentChangeEvent;
 import io.github.rosemoe.sora.interfaces.EditorLanguage;
 import io.github.rosemoe.sora.langs.xml.XMLLanguage;
@@ -93,6 +95,11 @@ public class IdeEditor extends CodeEditor implements IEditor {
             | FLAG_DRAW_WHITESPACE_INNER
             | FLAG_DRAW_WHITESPACE_FOR_EMPTY_LINE);
     subscribeEvent(ContentChangeEvent.class, ((event, unsubscribe) -> handleContentChange(event)));
+    //  subscribeEvent(
+    //   ClickEvent.class,
+    //   ((ed, bb) -> {
+    // Toast.makeText(getContext(), ed.getEditor().getText().toString(), 2).show();
+    ///     }));
 
     return this;
   }

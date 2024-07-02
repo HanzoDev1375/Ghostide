@@ -4,6 +4,7 @@ import Ninja.coder.Ghostemane.code.IdeEditor;
 import Ninja.coder.Ghostemane.code.databin.DiagnosticWrapper;
 import Ninja.coder.Ghostemane.code.marco.RegexUtilCompat;
 import android.graphics.Color;
+import androidx.core.graphics.ColorUtils;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.EnumDeclaration;
@@ -169,7 +170,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             result.addIfNeeded(
                 line,
                 column,
-                TextStyle.makeStyle(EditorColorScheme.KEYWORD, 0, true, false, false,false));
+                TextStyle.makeStyle(EditorColorScheme.KEYWORD, 0, true, false, false, false));
             break;
           case JavaLexer.DECIMAL_LITERAL:
           case JavaLexer.HEX_LITERAL:
@@ -185,25 +186,48 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           case JavaLexer.STRING_LITERAL:
             {
               if (text1.startsWith("\"#")) {
+                var colors = result;
                 try {
-
                   int color = Color.parseColor(text1.substring(1, text1.length() - 1));
-                  result.addIfNeeded(line, column, forString());
+                  colors.addIfNeeded(line, column, EditorColorScheme.LITERAL);
+                  if (ColorUtils.calculateLuminance(color) > 0.5) {
+                    Span span =
+                        Span.obtain(
+                            column + 1,
+                            TextStyle.makeStyle(
+                                EditorColorScheme.black, 0, false, false, false, false, true));
+                    if (span != null) {
+                      span.setBackgroundColorMy(color);
+                      colors.add(line, span);
+                    }
+                  } else if (ColorUtils.calculateLuminance(color) <= 0.5) {
+                    Span span =
+                        Span.obtain(
+                            column + 1,
+                            TextStyle.makeStyle(
+                                EditorColorScheme.TEXT_NORMAL,
+                                0,
+                                false,
+                                false,
+                                false,
+                                false,
+                                true));
+                    if (span != null) {
+                      span.setBackgroundColorMy(color);
+                      colors.add(line, span);
+                    }
+                  }
 
-                  Span span = Span.obtain(column + 1, forString());
-                  span.setUnderlineColor(color);
-                  result.add(line, span);
-
-                  Span middle = Span.obtain(column + text1.length() - 1, forString());
-                  middle.setUnderlineColor(Color.TRANSPARENT);
-                  result.add(line, middle);
+                  Span middle = Span.obtain(column + text1.length() - 1, EditorColorScheme.LITERAL);
+                  middle.setBackgroundColorMy(Color.TRANSPARENT);
+                  colors.add(line, middle);
 
                   Span end =
                       Span.obtain(
                           column + text1.length(),
                           TextStyle.makeStyle(EditorColorScheme.TEXT_NORMAL));
-                  end.setUnderlineColor(Color.TRANSPARENT);
-                  result.add(line, end);
+                  end.setBackgroundColorMy(Color.TRANSPARENT);
+                  colors.add(line, end);
                   break;
                 } catch (Exception ignore) {
                   ignore.printStackTrace();

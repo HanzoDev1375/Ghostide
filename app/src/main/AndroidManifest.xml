@@ -437,64 +437,74 @@
             android:supportsPictureInPicture="true"
             
         />
-            <activity
-                android:name=".activities.BrowserActivity"
-                android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
-                android:hardwareAccelerated="true"
-                android:label="Ghost web Browers"
-                android:supportsPictureInPicture="true"
-                
-            >
-                <intent-filter>
-                    <action android:name="android.intent.action.VIEW" />
-                    <category android:name="android.intent.category.DEFAULT" />
-                    <category android:name="android.intent.category.BROWSABLE" />
-                    <data android:scheme="http" />
-                    <data android:scheme="https" />
-                    <data android:scheme="about" />
-                    <data android:scheme="javascript" />
-                </intent-filter>
-                <intent-filter>
-                    <action android:name="android.intent.action.VIEW" />
-                    <category android:name="android.intent.category.BROWSABLE" />
-                    <category android:name="android.intent.category.DEFAULT" />
-                    <data android:scheme="http" />
-                    <data android:scheme="https" />
-                    <data android:scheme="file" />
-                    <data android:scheme="content" />
-                    <data android:scheme="inline" />
-                    <data android:mimeType="text/html" />
-                    <data android:mimeType="text/plain" />
-                    <data android:mimeType="application/xhtml+xml" />
-                    <data android:mimeType="application/vnd.wap.xhtml+xml" />
-                </intent-filter>
-                <intent-filter>
-                    <action android:name="android.intent.action.VIEW" />
-                    <category android:name="android.intent.category.BROWSABLE" />
-                    <category android:name="android.intent.category.DEFAULT" />
-                    <data android:scheme="http" />
-                    <data android:scheme="https" />
-                    <data android:scheme="file" />
-                    <data android:scheme="content" />
-                    <data android:mimeType="application/x-webarchive-xml" />
-                </intent-filter>
-                <intent-filter>
-                    <action android:name="android.speech.action.VOICE_SEARCH_RESULTS" />
-                    <category android:name="android.intent.category.DEFAULT" />
-                </intent-filter>
-                <intent-filter>
-                    <action android:name="android.intent.action.WEB_SEARCH" />
-                    <category android:name="android.intent.category.DEFAULT" />
-                </intent-filter>
-                <intent-filter>
-                    <action android:name="android.intent.action.MEDIA_SEARCH" />
-                    <category android:name="android.intent.category.DEFAULT" />
-                </intent-filter>
-                <intent-filter>
-                    <action android:name="android.intent.action.SEARCH" />
-                    <category android:name="android.intent.category.DEFAULT" />
-                </intent-filter>
-            </activity>
+        <activity
+            android:name=".activities.BrowserActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:label="Ghost web Browers"
+            android:supportsPictureInPicture="true"
+            
+        >
+
+        </activity>
+        <activity-alias
+            android:name=".activities.BrowserActivitys"
+            android:label="web"
+            android:targetActivity=".activities.BrowserActivity"
+            
+        >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:scheme="about" />
+                <data android:scheme="javascript" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:scheme="inline" />
+                <data android:mimeType="text/html" />
+                <data android:mimeType="text/plain" />
+                <data android:mimeType="application/xhtml+xml" />
+                <data android:mimeType="application/vnd.wap.xhtml+xml" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:mimeType="application/x-webarchive-xml" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.speech.action.VOICE_SEARCH_RESULTS" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.WEB_SEARCH" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_SEARCH" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+        </activity-alias>
+
         <activity
             android:name=".activities.PdfViewNewActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"

@@ -15,7 +15,6 @@ public class TermuxUtils extends Plugin implements PluginFactory {
     this.context = context;
     setCallBack(this);
     setName("TermixUtils");
-    
   }
 
   public void setTermuxPackage(SharedPreferences sh, SwitchMaterial swi, String key) {

@@ -1,6 +1,7 @@
 package Ninja.coder.Ghostemane.code.utils;
 
 import Ninja.coder.Ghostemane.code.ApplicationLoader;
+import Ninja.coder.Ghostemane.code.IdeEditor;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
@@ -31,6 +32,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.shape.CornerFamily;
 import com.google.android.material.shape.MaterialShapeDrawable;
 import com.google.android.material.shape.ShapeAppearanceModel;
+import io.github.rosemoe.sora.widget.EditorColorScheme;
 
 public class ColorAndroid12 {
   public static boolean Android12 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S;
@@ -68,9 +70,7 @@ public class ColorAndroid12 {
 
   public static void setToolbarinit(Toolbar toolbar) {
     if (ApplicationLoader.getThememanagersoft().contains("thememanagersoft")) {
-      
-      
-      
+
       toolbar.setBackgroundColor(0);
       toolbar.setTitleTextColor(MaterialColors.getColor(toolbar, TvColor));
       toolbar.setSubtitleTextColor(MaterialColors.getColor(toolbar, SubTitle));
@@ -322,5 +322,65 @@ public class ColorAndroid12 {
 
   public static int getColors(int color) {
     return MaterialColors.getColor(ApplicationLoader.getContext(), color, 0);
+  }
+
+  static int get(int color, IdeEditor editor) {
+    return MaterialColors.getColor(editor, color);
+  }
+
+  public static void tryToRunThemeMaterial(IdeEditor editor) {
+    int colorPrimary = R.attr.colorPrimary;
+    int colorOnPrimary = R.attr.colorOnPrimary;
+    int colorPrimaryContainer = R.attr.colorPrimaryContainer;
+    int colorPrimaryFixed = R.attr.colorPrimaryFixed;
+    int colorPrimaryFixedDim = R.attr.colorPrimaryFixedDim;
+    int colorSecondary = R.attr.colorSecondary;
+    int colorOnSecondary = R.attr.colorOnSecondary;
+    int colorSecondaryFixed = R.attr.colorSecondaryFixed;
+    int colorSecondaryFixedDim = R.attr.colorSecondaryFixedDim;
+    int colorTertiary = R.attr.colorTertiary;
+    int colorOnTertiaryContainer = R.attr.colorOnTertiaryContainer;
+    int colorOnTertiaryFixedVariant = R.attr.colorOnTertiaryFixedVariant;
+    int colorTertiaryFixedDim = R.attr.colorTertiaryFixedDim;
+
+    editor.getColorScheme().setColor(EditorColorScheme.TEXT_NORMAL, get(colorPrimary, editor));
+    editor
+        .getColorScheme()
+        .setColor(EditorColorScheme.AUTO_COMP_PANEL_BG, get(colorOnPrimary, editor));
+    editor
+        .getColorScheme()
+        .setColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER, get(colorPrimary, editor));
+    editor
+        .getColorScheme()
+        .setColor(EditorColorScheme.HTML_TAG, get(colorPrimaryContainer, editor));
+
+    editor
+        .getColorScheme()
+        .setColor(EditorColorScheme.ATTRIBUTE_VALUE, get(colorPrimaryFixed, editor));
+    editor
+        .getColorScheme()
+        .setColor(EditorColorScheme.ATTRIBUTE_NAME, get(colorPrimaryFixedDim, editor));
+    editor
+        .getColorScheme()
+        .setColor(EditorColorScheme.IDENTIFIER_NAME, get(colorSecondary, editor));
+    editor.getColorScheme().setColor(EditorColorScheme.IDENTIFIER_VAR, get(colorSecondary, editor));
+    editor.getColorScheme().setColor(EditorColorScheme.LITERAL, get(colorOnSecondary, editor));
+    editor.getColorScheme().setColor(EditorColorScheme.OPERATOR, get(colorSecondaryFixed, editor));
+    editor
+        .getColorScheme()
+        .setColor(EditorColorScheme.KEYWORD, get(colorSecondaryFixedDim, editor));
+    editor.getColorScheme().setColor(EditorColorScheme.BLOCK_LINE, get(colorTertiary, editor));
+    editor
+        .getColorScheme()
+        .setColor(EditorColorScheme.BLOCK_LINE_CURRENT, get(colorOnTertiaryContainer, editor));
+    editor.getColorScheme().setColor(EditorColorScheme.WHOLE_BACKGROUND, get(Back, editor));
+    editor.getColorScheme().setColor(EditorColorScheme.CURRENT_LINE, 0);
+    editor.getColorScheme().setColor(EditorColorScheme.LINE_NUMBER, get(colorPrimary, editor));
+    editor.getColorScheme().setColor(EditorColorScheme.LINE_DIVIDER, 0);
+    editor
+        .getColorScheme()
+        .setColor(EditorColorScheme.Ninja, get(colorOnTertiaryFixedVariant, editor));
+    editor.getColorScheme().setColor(EditorColorScheme.print, get(colorTertiaryFixedDim, editor));
+    editor.getColorScheme().setColor(EditorColorScheme.LINE_NUMBER_BACKGROUND, 0);
   }
 }

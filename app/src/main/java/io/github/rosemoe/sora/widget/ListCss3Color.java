@@ -27,7 +27,7 @@ public class ListCss3Color {
                 column,
                 TextStyle.makeStyle(EditorColorScheme.black, 0, false, false, false, false, true));
         if (span != null) {
-          span.setUnderlineColor(color);
+          
           span.setBackgroundColorMy(color);
           result.add(line, span);
         }
@@ -38,19 +38,19 @@ public class ListCss3Color {
                 TextStyle.makeStyle(
                     EditorColorScheme.TEXT_NORMAL, 0, false, false, false, false, true));
         if (span != null) {
-          span.setUnderlineColor(color);
+          
           span.setBackgroundColorMy(color);
           result.add(line, span);
         }
       }
 
       Span middle = Span.obtain(endOfRed, EditorColorScheme.LITERAL);
-      middle.setUnderlineColor(Color.TRANSPARENT);
+      
       middle.setBackgroundColorMy(Color.TRANSPARENT);
       result.add(line, middle);
 
       Span end = Span.obtain(endOfRed, TextStyle.makeStyle(EditorColorScheme.TEXT_NORMAL));
-      end.setUnderlineColor(Color.TRANSPARENT);
+      
       end.setBackgroundColorMy(Color.TRANSPARENT);
       result.add(line, end);
     } catch (Exception ignore) {
@@ -58,7 +58,47 @@ public class ListCss3Color {
     }
   }
 
-  public static void getHexColor(Token token, int line, int column, TextAnalyzeResult result) {}
+  public static void getHexColor(Token token, int line, int column, TextAnalyzeResult result) {
+    var text1 = token.getText();
+    var colors = result;
+    try {
+      int color = Color.parseColor("\"" + text1 + "\"");
+      colors.addIfNeeded(line, column, EditorColorScheme.LITERAL);
+      if (ColorUtils.calculateLuminance(color) > 0.5) {
+        Span span =
+            Span.obtain(
+                column + 1,
+                TextStyle.makeStyle(EditorColorScheme.black, 0, false, false, false, false, true));
+        if (span != null) {
+          span.setBackgroundColorMy(color);
+          colors.add(line, span);
+        }
+      } else if (ColorUtils.calculateLuminance(color) <= 0.5) {
+        Span span =
+            Span.obtain(
+                column + 1,
+                TextStyle.makeStyle(
+                    EditorColorScheme.TEXT_NORMAL, 0, false, false, false, false, true));
+        if (span != null) {
+          span.setBackgroundColorMy(color);
+          colors.add(line, span);
+        }
+      }
+
+      Span middle = Span.obtain(column + text1.length() - 1, EditorColorScheme.LITERAL);
+      middle.setBackgroundColorMy(Color.TRANSPARENT);
+      colors.add(line, middle);
+
+      Span end =
+          Span.obtain(column + text1.length(), TextStyle.makeStyle(EditorColorScheme.TEXT_NORMAL));
+      end.setBackgroundColorMy(Color.TRANSPARENT);
+      colors.add(line, end);
+      
+
+    } catch (Exception ignore) {
+      ignore.printStackTrace();
+    }
+  }
 
   public static void initColor(
       Token token, int line, int column, TextAnalyzeResult result, boolean using) {
@@ -361,7 +401,6 @@ public class ListCss3Color {
   public static long forString() {
     return TextStyle.makeStyle(EditorColorScheme.LITERAL, 0, true, false, false);
   }
-  void test(Canvas c){
-    
-  }
+
+  void test(Canvas c) {}
 }

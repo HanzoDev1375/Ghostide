@@ -99,7 +99,7 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
   private Toolbar toolbar;
 
   public static void show(
-      Activity parent, String language, String filePath, boolean isDemo, boolean isStandalone,OnViewChange view) {
+      Activity parent, String language, String filePath, boolean isDemo, boolean isStandalone) {
     Intent intent = new Intent(parent, XmlLayoutDesignActivity.class);
     intent.putExtra(EXTRA_FILE, filePath);
     intent.putExtra(EXTRA_LANGUAGE, language);
@@ -107,11 +107,6 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
     intent.putExtra(EXTRA_STANDALONE, isStandalone);
     intent.putExtra(EXTRA_TRAINER, false);
     parent.startActivity(intent);
-    view.reset();
-  }
-
-  public interface OnViewChange {
-    void reset();
   }
 
   public static void showTrainer(

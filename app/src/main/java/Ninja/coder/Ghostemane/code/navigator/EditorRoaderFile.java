@@ -41,7 +41,10 @@ public class EditorRoaderFile {
       editor.setEditorLanguage(new PythonLang());
       ReadFileCompat(editor, _path, bar);
       _fab.postDelayed(_fab::show, 400);
-    } else if (_path.endsWith(".cpp")) {
+    } else if (_path.endsWith(".cpp")
+        || _path.endsWith(".cxx")
+        || _path.endsWith(".cc")
+        || _path.endsWith(".h")) {
       editor.setEditorLanguage(new io.github.rosemoe.sora.langs.cpp.CppLanguage());
       _fab.postDelayed(_fab::show, 400);
       ReadFileCompat(editor, _path, bar);

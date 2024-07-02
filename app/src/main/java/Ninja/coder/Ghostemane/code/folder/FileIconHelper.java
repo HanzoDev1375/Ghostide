@@ -160,7 +160,8 @@ public class FileIconHelper {
     else if (is("as")) fileIconRes = R.drawable.ic_material_actionscript;
     else if (is("bat")) fileIconRes = R.drawable.ic_material_console;
     else if (is("c")) fileIconRes = R.drawable.ic_material_c;
-    else if (is("cpp")) fileIconRes = R.drawable.ic_material_cpp;
+    else if (is("cpp") || is("cc") || is("h") || is("cxx"))
+      fileIconRes = R.drawable.ic_material_cpp;
     else if (is("csharp")) fileIconRes = R.drawable.ic_material_csharp;
     else if (is("class")) fileIconRes = R.drawable.ic_material_javaclass;
     else if (is("css")) fileIconRes = R.drawable.ic_material_css;
@@ -217,7 +218,7 @@ public class FileIconHelper {
     else if (fileEnvHelper.git().isGitIgnoreFile()) fileIconRes = R.drawable.ic_material_git;
     else if (fileEnvHelper.isLicenseFile()) fileIconRes = R.drawable.ic_material_certificate;
     else if (FileUtil.isFileHidden(filePath)) fileIconRes = R.drawable.ic_material_lock;
-    else if (is("g1") || is("g2")|| is("g3") || is("g4")) fileIconRes = R.drawable.antlr4_24dp;
+    else if (is("g1") || is("g2") || is("g3") || is("g4")) fileIconRes = R.drawable.antlr4_24dp;
   }
 
   private boolean is(String str) {

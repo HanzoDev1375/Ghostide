@@ -136,6 +136,7 @@ public class HighLightAnalyzer implements CodeAnalyzer {
 
             // />
           case XMLLexer.SLASH_CLOSE:
+          case XMLLexer.OPEN_SLASH:
             colors.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
             // set block line end position
             if (!stack.isEmpty()) {

@@ -1351,9 +1351,9 @@ public class CodeEditor extends View
         mRect.top = mRect.bottom - (float) mCursorAnimator.animatorBackground.getAnimatedValue();
         mRect.left = 0;
         mRect.right = (int) (textOffset - mDividerMargin);
-//        drawColor(canvas, currentLineBgColor, mRect);
+        //        drawColor(canvas, currentLineBgColor, mRect);
         mPaint.setColor(currentLineBgColor);
-        canvas.drawRoundRect(mRect,10,10,mPaint);
+        canvas.drawRoundRect(mRect, 10, 10, mPaint);
       }
       for (int i = 0; i < postDrawCurrentLines.size(); i++) {
         drawRowBackground(
@@ -1440,7 +1440,7 @@ public class CodeEditor extends View
         mRect.left = 0;
         mRect.right = (int) (textOffset - mDividerMargin);
         mPaint.setColor(currentLineBgColor);
-        canvas.drawRoundRect(mRect,10,10,mPaint);
+        canvas.drawRoundRect(mRect, 10, 10, mPaint);
       }
       for (int i = 0; i < postDrawCurrentLines.size(); i++) {
         drawRowBackground(
@@ -1620,16 +1620,7 @@ public class CodeEditor extends View
         } else {
           mPaint.setTextSkewX(0);
         }
-        if (TextStyle.isShadowLine(styleBits)) {
-
-          mPaintOther.setColor(span.backgroundColorMy);
-          canvas.drawRect(
-              paintingOffset,
-              getRowTop(row),
-              paintingOffset + width,
-              getRowTop(row) + getRowHeight(),
-              mPaintOther);
-        }
+        if (TextStyle.isShadowLine(styleBits)) {}
 
         lastStyle = styleBits;
       }
@@ -1646,6 +1637,20 @@ public class CodeEditor extends View
             paintEnd,
             mColors.getColor(backgroundColorId),
             line);
+      }
+
+      if (span.backgroundColorMy != 0) {
+        mPaintOther.setColor(span.backgroundColorMy);
+        float cornerRadius = 20; // تعیین شعاع گوشه‌ها
+        canvas.drawRoundRect(
+            new RectF(
+                paintingOffset,
+                getRowTop(row),
+                paintingOffset + width,
+                getRowTop(row) + getRowHeight()),
+            cornerRadius, // شعاع گوشه‌ها
+            cornerRadius, // شعاع گوشه‌ها
+            mPaintOther);
       }
 
       // Draw text
@@ -2027,13 +2032,13 @@ public class CodeEditor extends View
             }
             if (TextStyle.isShadowLine(styleBits)) {
 
-              mPaintOther.setColor(span.backgroundColorMy);
-              canvas.drawRect(
-                  paintingOffset,
-                  getRowTop(row),
-                  paintingOffset + width,
-                  getRowTop(row) + getRowHeight(),
-                  mPaintOther);
+              //              mPaintOther.setColor(span.backgroundColorMy);
+              //              canvas.drawRect(
+              //                  paintingOffset,
+              //                  getRowTop(row),
+              //                  paintingOffset + width,
+              //                  getRowTop(row) + getRowHeight(),
+              //                  mPaintOther);
             }
 
             lastStyle = styleBits;
@@ -2051,6 +2056,20 @@ public class CodeEditor extends View
                 paintEnd,
                 mColors.getColor(backgroundColorId),
                 line);
+          }
+
+          if (span.backgroundColorMy != 0) {
+            mPaintOther.setColor(span.backgroundColorMy);
+            float cornerRadius = 20; // تعیین شعاع گوشه‌ها
+            canvas.drawRoundRect(
+                new RectF(
+                    paintingOffset,
+                    getRowTop(row),
+                    paintingOffset + width,
+                    getRowTop(row) + getRowHeight()),
+                cornerRadius, // شعاع گوشه‌ها
+                cornerRadius, // شعاع گوشه‌ها
+                mPaintOther);
           }
 
           // Draw text

@@ -43,14 +43,14 @@ CDATA
    : '<![CDATA[' .*? ']]>'
    ;
 
+OPEN_SLASH
+   : '</' -> pushMode (INSIDE)
+   ;
+
 /** Scarf all DTD stuff, Entity Declarations like <!ENTITY ...>,
  *  and Notation Declarations <!NOTATION ...>
  */ DTD
    : '<!' .*? '>' -> skip
-   ;
-
-OPEN_SLASH
-   : '</' -> pushMode (INSIDE)
    ;
 
 EntityRef
@@ -62,7 +62,7 @@ CharRef
    | '&#x' HEXDIGIT+ ';'
    | '&#x' HEXDIGIT+
    //test from show Hex Color
-   | CLOSE '&#x' HEXDIGIT+ SLASH_CLOSE
+   | '>' '&#x' HEXDIGIT+ '<'
    ;
 
 SEA_WS
@@ -160,5 +160,9 @@ IGNORE
 
 HASH
    : '#'
+   ;
+
+HEXCOLOR
+   : STRING HASH HEXDIGIT* STRING
    ;
 

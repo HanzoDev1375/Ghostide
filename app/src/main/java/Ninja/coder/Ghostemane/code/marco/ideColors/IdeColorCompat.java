@@ -92,3 +92,16 @@ public class IdeColorCompat {
     }
   }
 }
+/*
+{
+android.graphics.drawable.GradientDrawable SketchUi = new android.graphics.drawable.GradientDrawable();
+int d = (int) getApplicationContext().getResources().getDisplayMetrics().density;
+SketchUi.setColor(0x07FF8679);
+SketchUi.setCornerRadius(d*360);
+SketchUi.setStroke(d*8,0xFF9C27B0);
+view.setElevation(d*5);
+android.graphics.drawable.RippleDrawable SketchUi_RD = new android.graphics.drawable.RippleDrawable(new android.content.res.ColorStateList(new int[][]{new int[]{}}, new int[]{0xFFF44336}), SketchUi, null);
+view.setBackground(SketchUi_RD);
+view.setClickable(true);
+}
+*/

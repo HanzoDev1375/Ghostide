@@ -87,6 +87,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hzy.lib7z.Z7Extractor;
+import com.ninjacoder.jgit.GsonToClass;
 import com.skydoves.powermenu.PowerMenu;
 import java.util.stream.Collectors;
 import ninjacoder.ghostide.androidtools.r8.android.R8Tools;
@@ -2105,8 +2106,9 @@ public class FileDirActivity extends BaseCompat
     sh.addItem("FileTree", R.drawable.filemultiple);
     sh.addItem("Git Clone", R.drawable.git);
     sh.addItem("Android module", R.drawable.mdapk);
-    if (fileHelper.getfileEnvHelper().git().isGitDirectory())
-      sh.addItem("Git Tools", R.drawable.git);
+    sh.addItem("Git Tools", R.drawable.git);
+
+    sh.addItem("Gson to Class", R.drawable.ic_material_folder_json);
     sh.setOnItemClickLabe(
         (pos333) -> {
           switch (pos333) {
@@ -2241,6 +2243,19 @@ public class FileDirActivity extends BaseCompat
             case 9:
               {
                 GitListSheet task = new GitListSheet(new File(Folder), FileDirActivity.this);
+                sh.getDismiss(true);
+                break;
+              }
+            case 10:
+              {
+                var jsonToJava =
+                    new GsonToClass(
+                        FileDirActivity.this,
+                        Folder,
+                        () -> {
+                          reLoadFile();
+                        });
+                jsonToJava.run();
                 sh.getDismiss(true);
                 break;
               }

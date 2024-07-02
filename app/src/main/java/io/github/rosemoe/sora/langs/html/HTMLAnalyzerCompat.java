@@ -303,7 +303,15 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
               }
               if (previous == HTMLLexer.LT) {
                 colorid = EditorColorScheme.KEYWORD;
+                BlockLine block = new BlockLine();
+                block.startLine = preToken.getLine() - 1;
+                block.startColumn = preToken.getCharPositionInLine(); // -1 for '<'
+                stack.push(block);
               }
+              if (previous == HTMLLexer.DIV) {
+                colorid = EditorColorScheme.KEYWORD;
+              }
+
               ListCss3Color.initColor(token, line, column, result, true);
               result.addIfNeeded(line, column, colorid);
               break;
@@ -336,7 +344,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
           case HTMLLexer.DIV:
             {
               result.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
-              if (preToken != null && preToken.getType() == HTMLLexer.LT) {
+              if (previous == HTMLLexer.LT) {
                 if (!stack.isEmpty()) {
                   BlockLine blocks = stack.pop();
                   blocks.endLine = preToken.getLine() - 1;
