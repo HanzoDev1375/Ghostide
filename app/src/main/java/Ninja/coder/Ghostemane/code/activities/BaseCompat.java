@@ -2,7 +2,9 @@ package Ninja.coder.Ghostemane.code.activities;
 
 import Ninja.coder.Ghostemane.code.marco.WallpaperParallaxEffect;
 import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import Ninja.coder.Ghostemane.code.utils.ReSizeApp;
+import Ninja.coder.Ghostemane.code.utils.SetThemeForJson;
 import android.animation.ObjectAnimator;
 import android.app.WallpaperManager;
 import android.content.Intent;
@@ -17,6 +19,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.*;
@@ -52,6 +55,7 @@ public class BaseCompat extends AppCompatActivity {
   protected GradientDrawable gb = new GradientDrawable();
   private SharedPreferences thememanagersoft;
   private WallpaperParallaxEffect effect;
+  private static String ThemePath = "/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost";
 
   @Nullable
   @Override
@@ -429,5 +433,16 @@ public class BaseCompat extends AppCompatActivity {
 
   public int colors() {
     return MaterialColors.getColor(getWindow().getDecorView(), ColorAndroid12.Back, 0);
+  }
+
+  public void ThemeChaker() {
+    try {
+      if (!FileUtil.isExistFile(ThemePath)) {
+        SetThemeForJson.winterToPath();
+        Toast.makeText(getApplicationContext(), "Theme the Maket in " + ThemePath.trim(), 2).show();
+      }
+    } catch (Exception err) {
+      Log.e("Error Theme not Setup ", err.getLocalizedMessage());
+    }
   }
 }

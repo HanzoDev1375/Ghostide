@@ -293,6 +293,7 @@ public class FileDirActivity extends BaseCompat
     } else {
       setViewType(ViewType.ROW);
     }
+    ThemeChaker();
 
     var helper =
         new RecyclerViewHelper(

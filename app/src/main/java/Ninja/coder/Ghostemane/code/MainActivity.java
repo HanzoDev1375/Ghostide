@@ -48,7 +48,6 @@ public class MainActivity extends BaseCompat {
     tv_main = findViewById(R.id.tv_main_unzip);
     layout_main = findViewById(R.id.layout_vis_main);
     prograssBar = findViewById(R.id.prograssBar_Main_UnZip);
-    
 
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
             == PackageManager.PERMISSION_DENIED
@@ -80,8 +79,7 @@ public class MainActivity extends BaseCompat {
 
   private void initialize(Bundle _savedInstanceState) {
     setac = getSharedPreferences("setac", Activity.MODE_PRIVATE);
-
-    getWindow().getDecorView().setBackgroundColor(0);
+    ThemeChaker();
   }
 
   private void initializeLogic() {
@@ -90,30 +88,27 @@ public class MainActivity extends BaseCompat {
     if (!FileUtil.isExistFile(mypath)) {
       nameFile("databins.7z");
 
-    } else {
-      startApp();
-    }
-
-    // run install python files
-    if (!FileUtil.isExistFile(
+    } else if (!FileUtil.isExistFile(
         getFilesDir().getAbsolutePath() + File.separator + "files" + File.separator + "env.sh")) {
       nameFile("python.7z");
       // start
-    } else if (!FileUtil.isExistFile(
+    } else {
+      startApp();
+    }
+    if (!FileUtil.isExistFile(
         getFilesDir().getAbsolutePath() + File.separator + "lib" + File.separator + "libx265.so")) {
       nameFile("lib.7z");
-    } else startApp();
-
-    /// startApp();
-
+    } else {
+      startApp();
+    }
     if (!FileUtil.isExistFile("/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost")) {
       SetThemeForJson.winterToPath();
     } else {
       Log.e("File is ExistFile", "");
+      startApp();
     }
 
     if (!FileUtil.isExistFile("/storage/emulated/0/GhostWebIDE/android/android.jar")) {
-
       var asster = getAssets();
       Z7Extractor.extractAsset(
           asster,
@@ -139,7 +134,7 @@ public class MainActivity extends BaseCompat {
             }
           });
     } else {
-
+      
     }
 
     if (!FileUtil.isExistFile(getFilesDir().getAbsolutePath() + File.separator + "php.ini")) {
@@ -226,7 +221,7 @@ public class MainActivity extends BaseCompat {
 
                     @Override
                     public void onSucceed() {
-                      startApp();
+                      Log.i("TAG", "all file unziped");
                     }
                   });
             })

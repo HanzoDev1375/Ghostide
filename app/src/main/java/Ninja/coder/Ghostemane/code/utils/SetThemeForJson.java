@@ -11,6 +11,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.blankj.utilcode.util.FileIOUtils;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -51,34 +52,45 @@ public class SetThemeForJson {
 
   public SetThemeForJson setThemeCodeEditor(
       CodeEditor editor, HashMap<String, Object> imap, boolean chackHashMap, Activity x) {
-    
-   ///app theme
-    getColor(imap, editor, "BLOCK_LINE", EditorColorScheme.BLOCK_LINE,"#ff28ffae");
-    getColor(imap, editor, "OPERATOR", EditorColorScheme.OPERATOR,"#ff43ffd5");
-    getColor(imap, editor, "BLOCK_LINE_CURRENT", EditorColorScheme.BLOCK_LINE_CURRENT,"#ff28ffae");
-    getColor(imap, editor, "NON_PRINTABLE_CHAR", EditorColorScheme.NON_PRINTABLE_CHAR,"#ffa10370");
-    getColor(imap, editor, "CURRENT_LINE", EditorColorScheme.CURRENT_LINE,"#ff6b90ff");
-    getColor(imap, editor, "SELECTION_HANDLE", EditorColorScheme.SELECTION_HANDLE,"#ff2a6373");
-    getColor(imap, editor, "LINE_NUMBER", EditorColorScheme.LINE_NUMBER,"#ffff0017");
-    getColor(imap, editor, "LINE_DIVIDER", EditorColorScheme.LINE_DIVIDER,"#1d000000");
-    getColor(imap, editor, "ATTRIBUTE_VALUE", EditorColorScheme.ATTRIBUTE_VALUE,"#ffa6ffa1");
-    getColor(imap, editor, "ATTRIBUTE_NAME", EditorColorScheme.ATTRIBUTE_NAME,"#ffff1723");
-    getColor(imap, editor, "TEXT_NORMAL", EditorColorScheme.TEXT_NORMAL,"#ffffffff");
-    getColor(imap, editor, "IDENTIFIER_NAME", EditorColorScheme.IDENTIFIER_NAME,"#501910");
-    getColor(imap, editor, "COMMENT", EditorColorScheme.COMMENT,"#424242");
-    getColor(imap, editor, "KEYWORD", EditorColorScheme.KEYWORD,"#ff1081");
-    getColor(imap, editor, "print", EditorColorScheme.print,"#ffa801");
-    getColor(imap, editor, "Ninja", EditorColorScheme.Ninja,"#ffe200");
-    getColor(imap, editor, "AUTO_COMP_PANEL_BG", EditorColorScheme.AUTO_COMP_PANEL_BG,"#ff000000");
-    getColor(imap, editor, "AUTO_COMP_PANEL_CORNER", EditorColorScheme.AUTO_COMP_PANEL_CORNER,"#fffffffd");
-    getColor(imap, editor, "LINE_NUMBER_BACKGROUND", EditorColorScheme.LINE_NUMBER_BACKGROUND,"#fff00000");
-    getColor(imap, editor, "WHOLE_BACKGROUND", EditorColorScheme.WHOLE_BACKGROUND,"#02FFFFFF");
-    getColor(imap, editor, "HTML_TAG", EditorColorScheme.HTML_TAG,"#ffc84100");
-    getColor(imap,editor,"LITERAL",EditorColorScheme.LITERAL,"#ff2017");
-    //new theme color editor bind in SCROLLBAR
-    getColor(imap,editor,"print",EditorColorScheme.SCROLL_BAR_THUMB,"#ff3500");
-    getColor(imap,editor,"ninja",EditorColorScheme.SCROLL_BAR_THUMB_PRESSED,"#ffacd9");
-    getColor(imap,editor,"AUTO_COMP_PANEL_CORNER",EditorColorScheme.SCROLL_BAR_TRACK,"#ffee3201");
+
+    /// app theme
+    getColor(imap, editor, "BLOCK_LINE", EditorColorScheme.BLOCK_LINE, "#ff28ffae");
+    getColor(imap, editor, "OPERATOR", EditorColorScheme.OPERATOR, "#ff43ffd5");
+    getColor(imap, editor, "BLOCK_LINE_CURRENT", EditorColorScheme.BLOCK_LINE_CURRENT, "#ff28ffae");
+    getColor(imap, editor, "NON_PRINTABLE_CHAR", EditorColorScheme.NON_PRINTABLE_CHAR, "#ffa10370");
+    getColor(imap, editor, "CURRENT_LINE", EditorColorScheme.CURRENT_LINE, "#ff6b90ff");
+    getColor(imap, editor, "SELECTION_HANDLE", EditorColorScheme.SELECTION_HANDLE, "#ff2a6373");
+    getColor(imap, editor, "LINE_NUMBER", EditorColorScheme.LINE_NUMBER, "#ffff0017");
+    getColor(imap, editor, "LINE_DIVIDER", EditorColorScheme.LINE_DIVIDER, "#1d000000");
+    getColor(imap, editor, "ATTRIBUTE_VALUE", EditorColorScheme.ATTRIBUTE_VALUE, "#ffa6ffa1");
+    getColor(imap, editor, "ATTRIBUTE_NAME", EditorColorScheme.ATTRIBUTE_NAME, "#ffff1723");
+    getColor(imap, editor, "TEXT_NORMAL", EditorColorScheme.TEXT_NORMAL, "#ffffffff");
+    getColor(imap, editor, "IDENTIFIER_NAME", EditorColorScheme.IDENTIFIER_NAME, "#501910");
+    getColor(imap, editor, "COMMENT", EditorColorScheme.COMMENT, "#424242");
+    getColor(imap, editor, "KEYWORD", EditorColorScheme.KEYWORD, "#ff1081");
+    getColor(imap, editor, "print", EditorColorScheme.print, "#ffa801");
+    getColor(imap, editor, "Ninja", EditorColorScheme.Ninja, "#ffe200");
+    getColor(imap, editor, "AUTO_COMP_PANEL_BG", EditorColorScheme.AUTO_COMP_PANEL_BG, "#ff000000");
+    getColor(
+        imap,
+        editor,
+        "AUTO_COMP_PANEL_CORNER",
+        EditorColorScheme.AUTO_COMP_PANEL_CORNER,
+        "#fffffffd");
+    getColor(
+        imap,
+        editor,
+        "LINE_NUMBER_BACKGROUND",
+        EditorColorScheme.LINE_NUMBER_BACKGROUND,
+        "#fff00000");
+    getColor(imap, editor, "WHOLE_BACKGROUND", EditorColorScheme.WHOLE_BACKGROUND, "#02FFFFFF");
+    getColor(imap, editor, "HTML_TAG", EditorColorScheme.HTML_TAG, "#ffc84100");
+    getColor(imap, editor, "LITERAL", EditorColorScheme.LITERAL, "#ff2017");
+    // new theme color editor bind in SCROLLBAR
+    getColor(imap, editor, "print", EditorColorScheme.SCROLL_BAR_THUMB, "#ff3500");
+    getColor(imap, editor, "ninja", EditorColorScheme.SCROLL_BAR_THUMB_PRESSED, "#ffacd9");
+    getColor(
+        imap, editor, "AUTO_COMP_PANEL_CORNER", EditorColorScheme.SCROLL_BAR_TRACK, "#ffee3201");
     // css colors
     editor.getColorScheme().setColor(EditorColorScheme.red, ColorCompat.RED);
     editor.getColorScheme().setColor(EditorColorScheme.aliceblue, ColorCompat.ALICEBLUE);
@@ -94,7 +106,7 @@ public class SetThemeForJson {
     editor.getColorScheme().setColor(EditorColorScheme.blue, ColorCompat.BLUE);
     editor.getColorScheme().setColor(EditorColorScheme.blueviolet, ColorCompat.BLUEVIOLET);
     editor.getColorScheme().setColor(EditorColorScheme.brown, ColorCompat.BROWN);
-    editor.getColorScheme().setColor(EditorColorScheme.white,ColorCompat.WHITE);
+    editor.getColorScheme().setColor(EditorColorScheme.white, ColorCompat.WHITE);
 
     // install color log
     editor.getColorScheme().setColor(EditorColorScheme.COLOR_DEBUG, Color.BLUE);
@@ -102,12 +114,16 @@ public class SetThemeForJson {
     editor.getColorScheme().setColor(EditorColorScheme.COLOR_WARNING, Color.YELLOW);
     editor.getColorScheme().setColor(EditorColorScheme.COLOR_LOG, Color.GREEN);
     editor.getColorScheme().setColor(EditorColorScheme.COLOR_TIP, Color.CYAN);
-    
+
     return this;
   }
 
   protected void getColor(
-      HashMap<String, Object> imap, CodeEditor editor, String key, int colorValue,String colorNull) {
+      HashMap<String, Object> imap,
+      CodeEditor editor,
+      String key,
+      int colorValue,
+      String colorNull) {
     editor
         .getColorScheme()
         .setColor(
@@ -263,6 +279,7 @@ public class SetThemeForJson {
             + "GhostThemeapp.ghost";
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
     TreeMap<String, String> sortedMap = new TreeMap<>(map);
-    FileUtil.writeFile(path, gson.toJson(sortedMap));
+    FileIOUtils.writeFileFromString(path, gson.toJson(sortedMap));
+    // FileUtil.writeFile(path, gson.toJson(sortedMap));
   }
 }
