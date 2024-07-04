@@ -64,7 +64,7 @@ public class MainActivity extends BaseCompat {
           },
           1000);
     } else {
-      initializeLogic();
+      tryToRunApp();
     }
   }
 
@@ -73,75 +73,16 @@ public class MainActivity extends BaseCompat {
       int requestCode, String[] permissions, int[] grantResults) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     if (requestCode == 1000) {
-      initializeLogic();
+      tryToRunApp();
     }
   }
 
   private void initialize(Bundle _savedInstanceState) {
     setac = getSharedPreferences("setac", Activity.MODE_PRIVATE);
-    ThemeChaker();
   }
 
-  private void initializeLogic() {
-    var mypath = getFilesDir().getAbsolutePath() + "/" + "databins";
-
-    if (!FileUtil.isExistFile(mypath)) {
-      nameFile("databins.7z");
-
-    } else if (!FileUtil.isExistFile(
-        getFilesDir().getAbsolutePath() + File.separator + "files" + File.separator + "env.sh")) {
-      nameFile("python.7z");
-      // start
-    } else {
-      startApp();
-    }
-    if (!FileUtil.isExistFile(
-        getFilesDir().getAbsolutePath() + File.separator + "lib" + File.separator + "libx265.so")) {
-      nameFile("lib.7z");
-    } else {
-      startApp();
-    }
-    if (!FileUtil.isExistFile("/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost")) {
-      SetThemeForJson.winterToPath();
-    } else {
-      Log.e("File is ExistFile", "");
-      startApp();
-    }
-
-    if (!FileUtil.isExistFile("/storage/emulated/0/GhostWebIDE/android/android.jar")) {
-      var asster = getAssets();
-      Z7Extractor.extractAsset(
-          asster,
-          "android.7z",
-          "/storage/emulated/0/GhostWebIDE/android/",
-          new IExtractCallback() {
-
-            @Override
-            public void onError(int arg0, String arg1) {}
-
-            @Override
-            public void onGetFileNum(int arg0) {}
-
-            @Override
-            public void onProgress(String arg0, long arg1) {}
-
-            @Override
-            public void onStart() {}
-
-            @Override
-            public void onSucceed() {
-              Toast.makeText(MainActivity.this, "done", Toast.LENGTH_SHORT).show();
-            }
-          });
-    } else {
-      
-    }
-
-    if (!FileUtil.isExistFile(getFilesDir().getAbsolutePath() + File.separator + "php.ini")) {
-      var softApi = new AssetsSoft();
-      softApi.copyOneFileFromAssets("php.ini", getFilesDir().getAbsolutePath() + "/", this);
-    } else Log.e("File Copyed", AssetsSoft.class.getSimpleName());
-
+  private void tryToRunApp() {
+    ThemeChaker();
     FileUtil.makeDir("/storage/emulated/0/GhostWebIDE/");
     FileUtil.makeDir("/storage/emulated/0/GhostWebIDE/.icon");
     FileUtil.makeDir("/storage/emulated/0/GhostWebIDE/android");
@@ -151,6 +92,90 @@ public class MainActivity extends BaseCompat {
     FileUtil.makeDir("/storage/emulated/0/ghostweb/icon/svg");
     FileUtil.makeDir("/storage/emulated/0/GhostWebIDE/font");
     FileUtil.makeDir("/storage/emulated/0/GhostWebIDE/apk");
+    var mypath = getFilesDir().getAbsolutePath() + "/" + "databins";
+
+    try {
+      if (!FileUtil.isExistFile(mypath)) {
+        nameFile("databins.7z");
+
+      } else if (!FileUtil.isExistFile(
+          getFilesDir().getAbsolutePath() + File.separator + "files" + File.separator + "env.sh")) {
+        nameFile("python.7z");
+        // start
+      } else {
+        startApp();
+      }
+    } catch (Exception err) {
+      Log.e("Error", err.getLocalizedMessage());
+      startApp();
+    }
+
+    try {
+      if (!FileUtil.isExistFile(
+          getFilesDir().getAbsolutePath()
+              + File.separator
+              + "lib"
+              + File.separator
+              + "libx265.so")) {
+        nameFile("lib.7z");
+      } else {
+        startApp();
+      }
+    } catch (Exception err) {
+      Log.e("Error ", err.getLocalizedMessage());
+      startApp();
+    }
+
+    try {
+      if (!FileUtil.isExistFile("/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost")) {
+        SetThemeForJson.winterToPath();
+      } else {
+        Log.e("File is ExistFile", "");
+        startApp();
+      }
+    } catch (Exception err) {
+      Log.e("Error ", err.getLocalizedMessage());
+      startApp();
+    }
+
+    try {
+      if (!FileUtil.isExistFile("/storage/emulated/0/GhostWebIDE/android/android.jar")) {
+        var asster = getAssets();
+        Z7Extractor.extractAsset(
+            asster,
+            "android.7z",
+            "/storage/emulated/0/GhostWebIDE/android/",
+            new IExtractCallback() {
+
+              @Override
+              public void onError(int arg0, String arg1) {}
+
+              @Override
+              public void onGetFileNum(int arg0) {}
+
+              @Override
+              public void onProgress(String arg0, long arg1) {}
+
+              @Override
+              public void onStart() {}
+
+              @Override
+              public void onSucceed() {
+                Toast.makeText(MainActivity.this, "done", Toast.LENGTH_SHORT).show();
+              }
+            });
+      } else {
+        startApp();
+      }
+    } catch (Exception err) {
+      Log.e("Error ", err.getLocalizedMessage());
+      startApp();
+    }
+
+    if (!FileUtil.isExistFile(getFilesDir().getAbsolutePath() + File.separator + "php.ini")) {
+      var softApi = new AssetsSoft();
+      softApi.copyOneFileFromAssets("php.ini", getFilesDir().getAbsolutePath() + "/", this);
+    } else Log.e("File Copyed", AssetsSoft.class.getSimpleName());
   }
 
   void startApp() {
@@ -195,7 +220,7 @@ public class MainActivity extends BaseCompat {
 
                     @Override
                     public void onError(int arg0, String arg1) {
-                      startApp();
+                      runOnUiThread(() -> startApp());
                     }
 
                     @Override

@@ -2015,13 +2015,7 @@ public class CodeEditorActivity extends AppCompatActivity {
       return _data.size();
     }
 
-    boolean isSize() {
-      for (int i = _data.size() - 1; i >= 0; i--) {
-        return true;
-      }
-      return false;
-    }
-
+   
     public class ViewHolder extends RecyclerView.ViewHolder {
       public ViewHolder(View v) {
         super(v);
