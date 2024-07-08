@@ -5,6 +5,7 @@ import Ninja.coder.Ghostemane.code.IdeEditor;
 import Ninja.coder.Ghostemane.code.PluginManager.flashbar.FlashBarUtils;
 import Ninja.coder.Ghostemane.code.R;
 import Ninja.coder.Ghostemane.code.RequestNetwork;
+import Ninja.coder.Ghostemane.code.activities.BaseCompat;
 import Ninja.coder.Ghostemane.code.adapter.SyspiarAdapter;
 import Ninja.coder.Ghostemane.code.adapter.ToolbarListFileAdapter;
 import Ninja.coder.Ghostemane.code.config.CommonFactoryData;
@@ -15,7 +16,9 @@ import Ninja.coder.Ghostemane.code.marco.GhostWebEditorSearch;
 import Ninja.coder.Ghostemane.code.marco.NinjaMacroFileUtil;
 import Ninja.coder.Ghostemane.code.marco.WallpaperParallaxEffect;
 import Ninja.coder.Ghostemane.code.marco.ideColors.IdeColorCompat;
+import Ninja.coder.Ghostemane.code.model.EditorViewModel;
 import Ninja.coder.Ghostemane.code.navigator.EditorHelperColor;
+import Ninja.coder.Ghostemane.code.navigator.EditorRoaderFile;
 import Ninja.coder.Ghostemane.code.project.JavaCompilerBeta;
 import Ninja.coder.Ghostemane.code.project.ProjectManager;
 import Ninja.coder.Ghostemane.code.tasks.app.SassForAndroid;
@@ -64,6 +67,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.allenliu.badgeview.BadgeView;
@@ -102,11 +106,6 @@ import java.util.regex.Pattern;
 public class CodeEditorActivity extends AppCompatActivity {
 
   public static String POSTMANPATH = "";
-
-  private static final String EDITOR_LEFT_LINE_KEY = "line";
-  private static final String EDITOR_LEFT_COLUMN_KEY = "column";
-  private static final String EDITOR_RIGHT_LINE_KEY = "rightLine";
-  private static final String EDITOR_RIGHT_COLUMN_KEY = "rightColumn";
   public final int REQ_CD_SETPASZAMINE = 101;
   protected Sound sound;
   protected EditorAutoCompleteWindow window;
@@ -228,6 +227,7 @@ public class CodeEditorActivity extends AppCompatActivity {
   private FragmentManager LiveviewebDialogFragmentActivityFM;
   private GhostWebEditorSearch ghost_searchs;
   private int tabPos = -1;
+  private EditorViewModel modelEditor;
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
@@ -344,7 +344,8 @@ public class CodeEditorActivity extends AppCompatActivity {
     t = getSharedPreferences("t", Activity.MODE_PRIVATE);
     thememanagersoft = getSharedPreferences("thememanagersoft", Activity.MODE_PRIVATE);
     sf = getSharedPreferences("sf", Activity.MODE_PRIVATE);
-
+    modelEditor = new ViewModelProvider(this).get(EditorViewModel.class);
+    editor.restoreState(_savedInstanceState);
     recyclerview1.addOnScrollListener(
         new RecyclerView.OnScrollListener() {
           @Override
@@ -370,6 +371,8 @@ public class CodeEditorActivity extends AppCompatActivity {
             }
           }
         });
+    var data = thememanagersoft.contains("br") ? thememanagersoft.getFloat("br", 2) : 3;
+    BlurImage.setBlurInWallpaperMobile(this, data, getWindow().getDecorView());
     ghost_searchs.bindEditor(editor);
     ghost_searchs.setCallBack(
         new GhostWebEditorSearch.onViewChange() {
@@ -463,7 +466,7 @@ public class CodeEditorActivity extends AppCompatActivity {
   private void initializeLogic() {
     proanjctor.setVisibility(View.GONE);
     barSymoble.setVisibility(View.VISIBLE);
-    _vi();
+    setWallpaperParallaxEffect();
     POSTMANPATH = shp.getString("pos_path", "");
     _fab.shrink();
     Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.ab);
@@ -486,6 +489,7 @@ public class CodeEditorActivity extends AppCompatActivity {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       editor.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO);
     }
+    editor.setText(modelEditor.getText());
 
     var editorHelperColor = new EditorHelperColor(editor, badgeview3);
     var size =
@@ -494,7 +498,6 @@ public class CodeEditorActivity extends AppCompatActivity {
             2,
             getApplicationContext().getResources().getDisplayMetrics());
     editor.setDividerWidth(size);
-
     editor.setKeyboardOperation(
         new CodeEditor.OnKeyboardOperation() {
           @Override
@@ -542,6 +545,14 @@ public class CodeEditorActivity extends AppCompatActivity {
 
     var projectz = new ProjectManager();
     projectz.setProjectName(getIntent().getStringExtra("root"));
+    editor.subscribeEvent(
+        ContentChangeEvent.class,
+        (event, subscribe) -> {
+          modelEditor.setText(event.getEditor().getText().toString());
+          var cu = event.getEditor().getCursor();
+          modelEditor.setCursor(cu.getLeftLine() + cu.getLeftColumn());
+        });
+
     if (sve.contains("getAutoSave")) {
       if (sve.getString("getAutoSave", "").equals("true")) {
         editor.subscribeEvent(
@@ -554,26 +565,11 @@ public class CodeEditorActivity extends AppCompatActivity {
 
       }
     }
-    if (FileUtil.isExistFile(pss.getString("getWallpaparSazen1000", ""))) {
-      BlurImage.Start(
-          getWindow().getDecorView(),
-          CodeEditorActivity.this,
-          pss.getString("getWallpaparSazen1000", ""),
-          thememanagersoft.contains("br") ? thememanagersoft.getFloat("br", 2) : 3);
-    } else {
-      if (imap.containsKey("BackgroundColorLinear")) {
-        getWindow()
-            .getDecorView()
-            .setBackgroundColor(Color.parseColor(imap.get("BackgroundColorLinear").toString()));
-      } else {
-        getWindow().getDecorView().setBackgroundColor(0xFF2B2120);
-      }
-    }
     Symbloinit();
     ReloadFileInPos();
     if (shp.contains("pos_path")) {
       if (!shp.getString("pos_path", "").equals("")) {
-        _codeEditor(shp.getString("pos_path", ""));
+        setCodeEditorFileReader(shp.getString("pos_path", ""));
       }
     }
     FileUtil.writeFile(
@@ -583,7 +579,9 @@ public class CodeEditorActivity extends AppCompatActivity {
 
     badgeview3.setBadgeBackground(Color.TRANSPARENT);
     badgeview3.setBadgeCount("");
-    _EditorSummery();
+    if (re.getString("f380", "").equals("true")) {
+      editor.setNonPrintablePaintingFlags(CodeEditor.FLAG_DRAW_LINE_SEPARATOR);
+    }
     imap = new HashMap<>();
 
     if (FileUtil.isExistFile(thememanagersoft.getString("themes", ""))) {
@@ -620,7 +618,6 @@ public class CodeEditorActivity extends AppCompatActivity {
         .setSoftInputMode(
             WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
                 | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-    _coderuner();
 
     editor.setLineNumberAlign(Paint.Align.CENTER);
 
@@ -753,163 +750,49 @@ public class CodeEditorActivity extends AppCompatActivity {
       if (imap.containsKey("BackgroundColorLinear")) {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
           Window ninjacoder = this.getWindow();
-          ninjacoder.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-          ninjacoder.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
           ninjacoder.setStatusBarColor(
               Color.parseColor(imap.get("BackgroundColorLinear").toString()));
           ninjacoder.setNavigationBarColor(
               Color.parseColor(imap.get("BackgroundColorLinear").toString()));
+          ninjacoder.setStatusBarContrastEnforced(true);
         }
       } else {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
           Window ninjacoder = this.getWindow();
-          ninjacoder.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-          ninjacoder.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
           ninjacoder.setStatusBarColor(Color.parseColor("#FF2B2122"));
           ninjacoder.setNavigationBarColor(Color.parseColor("#FF2B2122"));
+          ninjacoder.setStatusBarContrastEnforced(true);
         }
       }
     }
-  }
-
-  @Override
-  protected void onActivityResult(int _requestCode, int _resultCode, Intent _data) {
-    super.onActivityResult(_requestCode, _resultCode, _data);
-
-    switch (_requestCode) {
-      case REQ_CD_SETPASZAMINE:
-        if (_resultCode == Activity.RESULT_OK) {
-          ArrayList<String> _filePath = new ArrayList<>();
-          if (_data != null) {
-            if (_data.getClipData() != null) {
-              for (int _index = 0; _index < _data.getClipData().getItemCount(); _index++) {
-                ClipData.Item _item = _data.getClipData().getItemAt(_index);
-                _filePath.add(
-                    FileUtil.convertUriToFilePath(getApplicationContext(), _item.getUri()));
-              }
-            } else {
-              _filePath.add(
-                  FileUtil.convertUriToFilePath(getApplicationContext(), _data.getData()));
-            }
-          }
-          if (_filePath.get(0).endsWith(".jpeg")
-              || (_filePath.get(0).endsWith(".jpg")
-                  || (_filePath.get(0).endsWith(".png")
-                      || (_filePath.get(0).endsWith(".webp")
-                          || _filePath.get(0).endsWith(".mp4"))))) {
-            pss.edit().putString("getWallpaparSazen1000", _filePath.get(0)).apply();
-            BlurImage.Start(
-                getWindow().getDecorView(),
-                CodeEditorActivity.this,
-                pss.getString("getWallpaparSazen1000", ""),
-                thememanagersoft.contains("br") ? thememanagersoft.getFloat("br", 2) : 3);
-          } else {
-            var dialogpost = new MaterialAlertDialogBuilder(CodeEditorActivity.this);
-            dialogpost.setTitle("Error!");
-            dialogpost.setMessage("Please Set in Format(png,jpeg,jpg)");
-            dialogpost.setPositiveButton("ok", (mp1, md2) -> {});
-            androidx.appcompat.app.AlertDialog dialogJanator = dialogpost.show();
-            final View setview = dialogJanator.getWindow().getDecorView();
-            setview.setScaleX(0f);
-            setview.setScaleY(0f);
-            final ObjectAnimator alertAnim = new ObjectAnimator();
-            final ObjectAnimator alertAnim1 = new ObjectAnimator();
-            alertAnim.setTarget(setview);
-            alertAnim.setPropertyName("scaleX");
-            alertAnim.setFloatValues((float) (1));
-            alertAnim.setDuration(250);
-            alertAnim.start();
-            alertAnim1.setTarget(setview);
-            alertAnim1.setPropertyName("scaleY");
-            alertAnim1.setFloatValues((float) (1));
-            alertAnim1.setDuration(250);
-            alertAnim1.start();
-            dialogJanator.show();
-          }
-        } else {
-          var di = new GhostWebMaterialDialog(CodeEditorActivity.this);
-          di.setTitle("Error");
-          di.setMessage("Not Image Set From Wallpaper ");
-          di.setNeutralButton("ok", (p, d) -> {});
-
-          di.show();
-        }
-        break;
-      default:
-        break;
-    }
-  }
-
-  private void restoreState(@NonNull Bundle savedInstanceState) {
-    int leftLine = savedInstanceState.getInt(EDITOR_LEFT_LINE_KEY, 0);
-    int leftColumn = savedInstanceState.getInt(EDITOR_LEFT_COLUMN_KEY, 0);
-    int rightLine = savedInstanceState.getInt(EDITOR_RIGHT_LINE_KEY, 0);
-    int rightColumn = savedInstanceState.getInt(EDITOR_RIGHT_COLUMN_KEY, 0);
-
-    Content text = editor.getText();
-    if (leftLine > text.getLineCount() || rightLine > text.getLineCount()) {
-      return;
-    }
-    if (leftLine != rightLine && leftColumn != rightColumn) {
-      editor.setSelectionRegion(leftLine, leftColumn, rightLine, rightColumn, true);
-    } else {
-      editor.setSelection(leftLine, leftColumn);
-    }
-  }
-
-  @Override
-  protected void onRestoreInstanceState(Bundle arg0) {
-    super.onRestoreInstanceState(arg0);
-    // TODO: Implement this method
-    restoreState(arg0);
   }
 
   @Override
   public void onSaveInstanceState(@NonNull Bundle outState) {
     super.onSaveInstanceState(outState);
-
-    Cursor cursor = editor.getCursor();
-    outState.putInt(EDITOR_LEFT_LINE_KEY, cursor.getLeftLine());
-    outState.putInt(EDITOR_LEFT_COLUMN_KEY, cursor.getLeftColumn());
-    outState.putInt(EDITOR_RIGHT_LINE_KEY, cursor.getRightLine());
-    outState.putInt(EDITOR_RIGHT_COLUMN_KEY, cursor.getRightColumn());
-  }
-
-  public void _coderuner() {
-    editor.setColorScheme(new io.github.rosemoe.sora.widget.EditorColorScheme());
-
-    if (shp.getString("path", "").contains(".html")) {
-      _fab.show();
-    } else {
-      if (shp.getString("path", "").contains(".py")) {
-        _fab.hide();
-      } else {
-        if (shp.getString("path", "").contains(".js")) {
-          _fab.show();
-        } else {
-          if (shp.getString("path", "").contains(".css")) {
-            _fab.hide();
-          } else {
-
-          }
-        }
+    try {
+      if (outState != null) {
+        Cursor cursor = editor.getCursor();
+        outState.putInt(IdeEditor.EDITOR_LEFT_LINE_KEY, cursor.getLeftLine());
+        outState.putInt(IdeEditor.EDITOR_LEFT_COLUMN_KEY, cursor.getLeftColumn());
+        outState.putInt(IdeEditor.EDITOR_RIGHT_LINE_KEY, cursor.getRightLine());
+        outState.putInt(IdeEditor.EDITOR_RIGHT_COLUMN_KEY, cursor.getRightColumn());
       }
+    } catch (Exception err) {
+
     }
   }
 
   public void _managerpanel(final View _view) {
     pvr =
         new PowerMenu.Builder(CodeEditorActivity.this)
-            .addItem(new PowerMenuItem("جستجو", false, R.drawable.textsearch))
-            .addItem(new PowerMenuItem("رنگ", false, R.drawable.color))
+            .addItem(new PowerMenuItem("Search Text", true, R.drawable.textsearch))
+            .addItem(new PowerMenuItem("Color", false, R.drawable.color))
             .addItem(new PowerMenuItem("Log cat", false, R.drawable.codeformat))
-            .addItem(new PowerMenuItem("ذخیره", false, R.drawable.save))
-            .addItem(new PowerMenuItem("ذخیره همه", false, R.drawable.setsavefileall))
+            .addItem(new PowerMenuItem("Save", false, R.drawable.save))
+            .addItem(new PowerMenuItem("Save All (Beta)", false, R.drawable.setsavefileall))
             .addItem(new PowerMenuItem("Code nave", false, R.drawable.setsavefileall))
-            .addItem(new PowerMenuItem("Test"))
-            .addItem(new PowerMenuItem("پس زمینه", false, R.drawable.keyboardlisnertalluserpost_3))
+            .addItem(new PowerMenuItem("File List"))
             .build();
     pvr.setSelectedMenuColor(0xFFFDA893);
     pvr.setIconPadding(8);
@@ -1031,7 +914,7 @@ public class CodeEditorActivity extends AppCompatActivity {
                 }
               case 4:
                 {
-                  _AllSaveFile(_coordinator);
+                  setAllSaveFile(_coordinator);
                   var bar = new FlashBarUtils(CodeEditorActivity.this);
                   bar.setCustomMassges("All File saved by " + shp.getString("pos_path", ""));
                   break;
@@ -1050,15 +933,6 @@ public class CodeEditorActivity extends AppCompatActivity {
                   test.setlistFile(file.getParentFile().toString());
                   Toast.makeText(CodeEditorActivity.this, file.getParentFile().toString(), 2)
                       .show();
-                  break;
-                }
-              case 7:
-                {
-                  Intent myintent =
-                      new Intent(
-                          Intent.ACTION_PICK,
-                          android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                  startActivityForResult(myintent, REQ_CD_SETPASZAMINE);
                   break;
                 }
             }
@@ -1088,14 +962,13 @@ public class CodeEditorActivity extends AppCompatActivity {
     _view.setBackground(ripdr);
   }
 
-  public void _codeEditor(final String _path) {
-    Ninja.coder.Ghostemane.code.navigator.EditorRoaderFile.RuningTask(
-        editor, _fab, _path, proanjctor);
+  public void setCodeEditorFileReader(final String _path) {
+    EditorRoaderFile.RuningTask(editor, _fab, _path, proanjctor);
   }
 
-  public void _close_tab(final double _position, final ArrayList<HashMap<String, Object>> _data) {
-    if (FileUtil.isExistFile(_data.get((int) _position).get("path").toString())) {
-      _data.remove((int) (_position));
+  public void setClosetab(int _position, final ArrayList<HashMap<String, Object>> _data) {
+    if (FileUtil.isExistFile(_data.get(_position).get("path").toString())) {
+      _data.remove((_position));
       if (_data.isEmpty()) {
         editor.setText("");
         _data.clear();
@@ -1105,28 +978,26 @@ public class CodeEditorActivity extends AppCompatActivity {
         finish();
       } else {
         if ((_position == 0) && (_data.size() > 1)) {
-          shp.edit()
-              .putString("pos_path", _data.get((int) _position + 1).get("path").toString())
-              .apply();
+          shp.edit().putString("pos_path", _data.get(_position + 1).get("path").toString()).apply();
           shp.edit().putString("positionTabs", String.valueOf((long) (_position + 1))).apply();
-          _codeEditor(_data.get((int) _position + 1).get("path").toString());
+          setCodeEditorFileReader(_data.get(_position + 1).get("path").toString());
         } else {
           if ((_position == 0) && (_data.size() == 1)) {
             shp.edit().putString("pos_path", _data.get(0).get("path").toString()).apply();
-            _codeEditor(_data.get(0).get("path").toString());
+            setCodeEditorFileReader(_data.get(0).get("path").toString());
             editor.setText("");
           } else {
             shp.edit()
-                .putString("pos_path", _data.get((int) _position - 1).get("path").toString())
+                .putString("pos_path", _data.get(_position - 1).get("path").toString())
                 .apply();
             shp.edit().putString("positionTabs", String.valueOf((long) (_position - 1))).apply();
-            _codeEditor(_data.get((int) _position - 1).get("path").toString());
+            setCodeEditorFileReader(_data.get(_position - 1).get("path").toString());
           }
         }
       }
       shp.edit().putString("path", new Gson().toJson(_data)).apply();
     } else {
-      _data.remove((int) (_position));
+      _data.remove(_position);
       if (_data.isEmpty()) {
         _data.clear();
         shp.edit().remove("pos_path").apply();
@@ -1134,16 +1005,14 @@ public class CodeEditorActivity extends AppCompatActivity {
         finish();
       } else {
         if ((_position == 0) && (_data.size() > 1)) {
-          shp.edit()
-              .putString("pos_path", _data.get((int) _position + 1).get("path").toString())
-              .apply();
+          shp.edit().putString("pos_path", _data.get(_position + 1).get("path").toString()).apply();
           shp.edit().putString("positionTabs", String.valueOf((long) (_position + 1))).apply();
         } else {
           if ((_position == 0) && (_data.size() == 1)) {
             shp.edit().putString("pos_path", _data.get(0).get("path").toString()).apply();
           } else {
             shp.edit()
-                .putString("pos_path", _data.get((int) _position - 1).get("path").toString())
+                .putString("pos_path", _data.get(_position - 1).get("path").toString())
                 .apply();
             shp.edit().putString("positionTabs", String.valueOf((long) (_position - 1))).apply();
           }
@@ -1153,10 +1022,10 @@ public class CodeEditorActivity extends AppCompatActivity {
     }
   }
 
-  public void _Anim(final View _codeEditor) {
+  public void _Anim(final View setCodeEditorFileReader) {
     android.view.animation.Animation animation = new android.view.animation.AlphaAnimation(0, 1);
     animation.setDuration(300);
-    _codeEditor.setAnimation(animation);
+    setCodeEditorFileReader.setAnimation(animation);
   }
 
   public void _Bounce(final View _view) {
@@ -1196,13 +1065,6 @@ public class CodeEditorActivity extends AppCompatActivity {
     view.startAnimation(fade_in);
   }
 
-  public void _EditorSummery() {
-
-    if (re.getString("f380", "").equals("true")) {
-      editor.setNonPrintablePaintingFlags(CodeEditor.FLAG_DRAW_LINE_SEPARATOR);
-    }
-  }
-
   public void ReloadFileInPos() {
     if (shp.contains("path")) {
       if (!shp.getString("path", "").equals("")) {
@@ -1217,7 +1079,7 @@ public class CodeEditorActivity extends AppCompatActivity {
       }
     }
     if (FileUtil.isExistFile(shp.getString("pos_path", ""))) {
-      _codeEditor(shp.getString("pos_path", ""));
+      setCodeEditorFileReader(shp.getString("pos_path", ""));
       ((LinearLayoutManager) recyclerview1.getLayoutManager())
           .scrollToPositionWithOffset(
               (int) Math.floor(Double.parseDouble(shp.getString("positionTabs", ""))), 0);
@@ -1274,7 +1136,7 @@ public class CodeEditorActivity extends AppCompatActivity {
     }
   }
 
-  public void _closeall() {
+  public void setCloseall() {
     tabs_listmap.clear();
     shp.edit().remove("pos_path").apply();
     shp.edit().remove("positionTabs").apply();
@@ -1284,7 +1146,7 @@ public class CodeEditorActivity extends AppCompatActivity {
     finish();
   }
 
-  public void _closeother() {
+  public void setCloseother() {
     tabs_listmap.clear();
     {
       HashMap<String, Object> _item = new HashMap<>();
@@ -1300,7 +1162,7 @@ public class CodeEditorActivity extends AppCompatActivity {
   }
 
   public void _powerMenuLisner(
-      final View _v, final ArrayList<HashMap<String, Object>> _map, final double _pos) {
+      final View _v, final ArrayList<HashMap<String, Object>> _map, int _pos) {
     itemPosRemoved = _pos;
     mmenuitempos =
         new PowerMenu.Builder(CodeEditorActivity.this)
@@ -1347,31 +1209,31 @@ public class CodeEditorActivity extends AppCompatActivity {
             switch (position) {
               case ((int) 0):
                 {
-                  _close_tab(_pos, _map);
+                  setClosetab(_pos, _map);
                   recyclerview1.getAdapter().notifyDataSetChanged();
                   click2var = 0;
                   n = 0;
-                  _distreeview();
+                  setDistreeView();
                   tabPos = 0;
                   mmenuitempos.dismiss();
                   break;
                 }
               case ((int) 1):
                 {
-                  _closeother();
+                  setCloseother();
                   recyclerview1.getAdapter().notifyItemRemoved((int) itemPosRemoved);
                   click2var = 0;
-                  _distreeview();
+                  setDistreeView();
                   tabPos = 0;
                   mmenuitempos.dismiss();
                   break;
                 }
               case ((int) 2):
                 {
-                  _closeall();
+                  setCloseall();
                   recyclerview1.getAdapter().notifyItemRemoved((int) itemPosRemoved);
                   click2var = 0;
-                  _distreeview();
+                  setDistreeView();
                   tabPos = 0;
                   mmenuitempos.dismiss();
                   break;
@@ -1395,14 +1257,14 @@ public class CodeEditorActivity extends AppCompatActivity {
         && filteredItems.get(1).equals("emulated")
         && filteredItems.get(2).equals("0")) {
       List<String> combinedItems = new ArrayList<>();
-      combinedItems.add("Src");
+      combinedItems.add("Home");
       combinedItems.addAll(filteredItems.subList(3, filteredItems.size()));
       return combinedItems;
     }
     return filteredItems;
   }
 
-  public void _distreeview() {
+  public void setDistreeView() {
     List<String> pospath = spiltIntoBreadcrumbItems(shp.getString("pos_path", ""));
 
     var adps =
@@ -1427,35 +1289,6 @@ public class CodeEditorActivity extends AppCompatActivity {
     dir.smoothScrollToPosition(pospath.size());
   }
 
-  public void _winterFileinpath(final String _path, final String _dir) {
-    NinjaMacroFileUtil.createFile(
-        _path,
-        _dir,
-        new NinjaMacroFileUtil.OnFileOperationListener() {
-          @Override
-          public void onSuccess(String content) {
-            // محتوای فایل با موفقیت خوانده شد
-            Toast.makeText(getApplicationContext(), content, Toast.LENGTH_SHORT).show();
-          }
-
-          @Override
-          public void onError(String e) {
-            // خطایی در هنگام خواندن فایل رخ داده است
-            Toast.makeText(getApplicationContext(), e, Toast.LENGTH_SHORT).show();
-          }
-        });
-  }
-
-  public void _save() {
-    if (shp.contains("pos_path")) {
-      if (!shp.getString("pos_path", "").equals("")) {
-        _winterFileinpath(shp.getString("pos_path", ""), editor.getText().toString());
-      } else {
-
-      }
-    }
-  }
-
   public void FabFileRuner() {
     try {
       try {
@@ -1471,11 +1304,11 @@ public class CodeEditorActivity extends AppCompatActivity {
       } catch (Exception e) {
         DataUtil.showMessage(getApplicationContext(), e.toString());
       }
+
       if (shp.getString("pos_path", "").contains(".html")) {
         if (moalaqfragment.contains("mpost")) {
           _fragmentdatapost();
         } else {
-
           htmlrus.setClass(getApplicationContext(), HtmlRunerActivity.class);
           htmlrus.putExtra("run", shp.getString("pos_path", ""));
           htmlrus.putExtra("runs", Uri.parse(shp.getString("pos_path", "")).getLastPathSegment());
@@ -1493,6 +1326,7 @@ public class CodeEditorActivity extends AppCompatActivity {
           jsonview.setClass(getApplicationContext(), JsonViewerActivity.class);
           jsonview.putExtra("g", editor.getText().toString());
           startActivity(jsonview);
+
         } else {
           if (shp.getString("pos_path", "").contains(".js")) {
             getmd.setClass(getApplicationContext(), JsRunerActivity.class);
@@ -1525,7 +1359,7 @@ public class CodeEditorActivity extends AppCompatActivity {
                       startActivity(getmd);
                     } else {
                       if (shp.getString("pos_path", "").contains(".g4")) {
-                        _g4compiler();
+                        setAntlr4Compiler();
 
                       } else {
                         if (shp.getString("pos_path", "").contains(".php")) {
@@ -1534,11 +1368,7 @@ public class CodeEditorActivity extends AppCompatActivity {
                           startActivity(getmd);
                         } else if (shp.getString("pos_path", "").contains(".scss")
                             || shp.getString("pos_path", "").contains(".sass")) {
-                          //                          getmd.setClass(getApplicationContext(),
-                          // TerminalActivity.class);
-                          //                          getmd.putExtra("sass",
-                          // shp.getString("pos_path", ""));
-                          //                          startActivity(getmd);
+
                           SassForAndroid.run(
                               CodeEditorActivity.this,
                               shp.getString("pos_path", ""),
@@ -1549,38 +1379,16 @@ public class CodeEditorActivity extends AppCompatActivity {
                           JavaCompilerBeta.run(
                               CodeEditorActivity.this, editor.getText().toString());
                         } else if (shp.getString("pos_path", "").contains(".xml")) {
-
-                          if (editor.getText().toString().startsWith("<vector")) {
-                            var vectorShow = new VectorMasterView(CodeEditorActivity.this);
-                            var file = new File(shp.getString("pos_path", ""));
-                            var par =
-                                new LinearLayout.LayoutParams(
-                                    LinearLayout.LayoutParams.MATCH_PARENT,
-                                    LinearLayout.LayoutParams.MATCH_PARENT);
-                            vectorShow.setLayoutParams(par);
-                            if (vectorShow.isVector()) {
-                              vectorShow.setVectorFile(file);
-                            }
-                            var sheet = new BottomSheetDialog(CodeEditorActivity.this);
-                            sheet.setContentView(vectorShow);
-                            if (sheet != null) {
-                              sheet.show();
-                            }
-                          } else if (editor.getText().toString().startsWith("<?xml")) {
-                            XmlLayoutDesignActivity.show(
-                                CodeEditorActivity.this,
-                                "xml",
-                                shp.getString("pos_path", ""),
-                                false,
-                                false);
-                          } else {
-                            XmlLayoutDesignActivity.show(
-                                CodeEditorActivity.this,
-                                "xml",
-                                shp.getString("pos_path", ""),
-                                false,
-                                false);
-                          }
+                          XmlLayoutDesignActivity.show(
+                              CodeEditorActivity.this,
+                              "xml",
+                              shp.getString("pos_path", ""),
+                              false,
+                              false);
+                        } else if (shp.getString("pos_path", "").contains(".cpp")) {
+                          getmd.setClass(getApplicationContext(), TerminalActivity.class);
+                          getmd.putExtra("cpp", shp.getString("pos_path", ""));
+                          startActivity(getmd);
                         }
                       }
                     }
@@ -1592,56 +1400,16 @@ public class CodeEditorActivity extends AppCompatActivity {
         }
       }
     } catch (Exception ex) {
-      final AlertDialog.Builder malterDialog = new AlertDialog.Builder(CodeEditorActivity.this);
-      StringBuffer sb = new StringBuffer(500);
-      StackTraceElement[] st = ex.getStackTrace();
-      sb.append(ex.getClass().getName() + ": " + ex.getMessage() + "\n");
-      for (int iii = 0; iii < st.length; iii++) {
-        sb.append("\t at ⟶" + st[iii].toString() + "\n");
-      }
-
-      final LinearLayout lin = new LinearLayout(getApplicationContext());
-
-      lin.setPadding(8, 8, 8, 8);
-
-      final TextView txt = new TextView(getApplicationContext());
-
-      txt.setPadding(8, 8, 8, 8);
-
-      txt.setTextIsSelectable(true);
-
-      lin.addView(txt);
-
-      txt.setText(sb.toString());
-
-      {
-        SpannableString spannableString = new SpannableString(txt.getText().toString());
-        Matcher matcher = Pattern.compile("(^(.*)|(?<=:)\\d+)").matcher(txt.getText().toString());
-
-        while (matcher.find()) {
-
-          spannableString.setSpan(
-              new ForegroundColorSpan(0xFFB71C1C),
-              matcher.start(),
-              matcher.end(),
-              Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-          spannableString.setSpan(new StyleSpan(1), matcher.start(), matcher.end(), 33);
-        }
-
-        txt.setText(spannableString);
-      }
-      malterDialog.setView(lin);
-      malterDialog.show();
     }
   }
 
-  public void _AllSaveFile(final View _v) {
+  public void setAllSaveFile(final View _v) {
 
     try {
       if ((_v instanceof ViewGroup viewGroup)) {
         for (int i = 0; i < viewGroup.getChildCount(); i++) {
           View child = viewGroup.getChildAt(i);
-          _AllSaveFile(child);
+          setAllSaveFile(child);
         }
       } else {
         if ((_v instanceof CodeEditor)) {
@@ -1651,20 +1419,6 @@ public class CodeEditorActivity extends AppCompatActivity {
                 if (!shp.getString("pos_path", "").equals("")) {
                   FileUtil.writeFile(
                       shp.getString("pos_path", ""), ((CodeEditor) _v).getText().toString());
-                  if (imap.containsKey("MenuBackground")) {
-                    //	alert.setAlertBackgroundColor(Color.parseColor(imap.get("MenuBackground").toString()));
-                  } else {
-                    //	alert.setAlertBackgroundColor(Color.BLUE);
-                  }
-                  if (imap.containsKey("TabTextColor")) {
-                    //	alert.getText().setTextColor(Color.parseColor(imap.get("TabTextColor").toString()));
-                    // alert.getTitle().setTextColor(Color.parseColor(imap.get("TabTextColor").toString()));
-                  } else {
-                    // alert.getTitle().setTextColor(Color.YELLOW);
-                    //	alert.getText().setTextColor(Color.RED);
-                  }
-                  //	alert.getTitle().setTypeface(Typeface.createFromAsset(getAssets(),"fonts/ghostfont.ttf"), 0);
-                  //	alert.getText().setTypeface(Typeface.createFromAsset(getAssets(),"fonts/ghostfont.ttf"), 0);
                 } else {
                   DataUtil.showMessage(getApplicationContext(), "Error not File saved!");
                 }
@@ -1683,7 +1437,7 @@ public class CodeEditorActivity extends AppCompatActivity {
     }
   }
 
-  public void _g4compiler() {
+  public void setAntlr4Compiler() {
     final var bottomSheetDialog = new BottomSheetDialog(this);
 
     Antcomp8lerBinding bind = Antcomp8lerBinding.inflate(getLayoutInflater());
@@ -1701,7 +1455,7 @@ public class CodeEditorActivity extends AppCompatActivity {
     bottomSheetDialog.show();
   }
 
-  public void _vi() {
+  public void setWallpaperParallaxEffect() {
 
     effect = new WallpaperParallaxEffect(this);
     effect.setCallback(
@@ -1837,7 +1591,7 @@ public class CodeEditorActivity extends AppCompatActivity {
         if (_data.get(_position).get("path").toString().equals(shp.getString("pos_path", ""))) {
 
           selector.setVisibility(View.VISIBLE);
-          _distreeview();
+          setDistreeView();
           ClickItemChildAnimation(editor);
           n = 0;
           if (imap.containsKey("TabTextColor")) {
@@ -1857,7 +1611,7 @@ public class CodeEditorActivity extends AppCompatActivity {
         } else {
           selector.setVisibility(View.GONE);
           n = 0;
-          _distreeview();
+          setDistreeView();
           ClickItemChildAnimation(editor);
           if (imap.containsKey("DisplayTextColorTab")) {
             textview1.setTextColor(Color.parseColor(imap.get("DisplayTextColorTab").toString()));
@@ -1886,7 +1640,7 @@ public class CodeEditorActivity extends AppCompatActivity {
 
                       // Single tap here.
                       if (FileUtil.isExistFile(_data.get(_position).get("path").toString())) {
-                        _codeEditor(_data.get(_position).get("path").toString());
+                        setCodeEditorFileReader(_data.get(_position).get("path").toString());
                         shp.edit()
                             .putString("positionTabs", String.valueOf((long) (_position)))
                             .apply();
@@ -1894,10 +1648,10 @@ public class CodeEditorActivity extends AppCompatActivity {
                             .putString("pos_path", _data.get(_position).get("path").toString())
                             .apply();
                         ClickItemChildAnimation(editor);
-                        _distreeview();
+                        setDistreeView();
                         notifyDataSetChanged();
                         if (FileUtil.isExistFile(_data.get(_position).get("path").toString())) {
-                          _codeEditor(_data.get(_position).get("path").toString());
+                          setCodeEditorFileReader(_data.get(_position).get("path").toString());
                           if (_data
                               .get(_position)
                               .get("path")
@@ -1921,7 +1675,7 @@ public class CodeEditorActivity extends AppCompatActivity {
                             }
                             selector.setVisibility(View.VISIBLE);
                             n = 0;
-                            _distreeview();
+                            setDistreeView();
                           } else {
                             selector.setVisibility(View.GONE);
                             if (imap.containsKey("DisplayTextColorTab")) {
@@ -1942,7 +1696,7 @@ public class CodeEditorActivity extends AppCompatActivity {
                             }
 
                             ClickItemChildAnimation(editor);
-                            _distreeview();
+                            setDistreeView();
                             n = 0;
                           }
                         } else {
@@ -1955,8 +1709,8 @@ public class CodeEditorActivity extends AppCompatActivity {
                         di.setNeutralButton(
                             "Romved!",
                             (p, d) -> {
-                              _close_tab(_position, _data);
-                              _distreeview();
+                              setClosetab(_position, _data);
+                              setDistreeView();
                               notifyItemRemoved(_position);
                             });
                         di.show();
@@ -2015,7 +1769,6 @@ public class CodeEditorActivity extends AppCompatActivity {
       return _data.size();
     }
 
-   
     public class ViewHolder extends RecyclerView.ViewHolder {
       public ViewHolder(View v) {
         super(v);

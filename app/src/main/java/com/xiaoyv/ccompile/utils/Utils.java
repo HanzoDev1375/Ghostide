@@ -302,24 +302,6 @@ public final class Utils {
         }
     }
 
-    public interface Callback<T> {
-        void onCall(T data);
-    }
-
-    ///////////////////////////////////////////////////////////////////////////
-    // interface
-    ///////////////////////////////////////////////////////////////////////////
-
-    public interface OnAppStatusChangedListener {
-        void onForeground();
-
-        void onBackground();
-    }
-
-    public interface OnActivityDestroyedListener {
-        void onActivityDestroyed(Activity activity);
-    }
-
     static class ActivityLifecycleImpl implements ActivityLifecycleCallbacks {
 
         final LinkedList<Activity> mActivityList = new LinkedList<>();
@@ -406,18 +388,6 @@ public final class Utils {
             return topActivityByReflect;
         }
 
-        private void setTopActivity(final Activity activity) {
-            if (PERMISSION_ACTIVITY_CLASS_NAME.equals(activity.getClass().getName())) return;
-            if (mActivityList.contains(activity)) {
-                if (!mActivityList.getLast().equals(activity)) {
-                    mActivityList.remove(activity);
-                    mActivityList.addLast(activity);
-                }
-            } else {
-                mActivityList.addLast(activity);
-            }
-        }
-
         void addOnAppStatusChangedListener(final Object object,
                                            final OnAppStatusChangedListener listener) {
             mStatusListenerMap.put(object, listener);
@@ -481,6 +451,18 @@ public final class Utils {
             }
         }
 
+        private void setTopActivity(final Activity activity) {
+            if (PERMISSION_ACTIVITY_CLASS_NAME.equals(activity.getClass().getName())) return;
+            if (mActivityList.contains(activity)) {
+                if (!mActivityList.getLast().equals(activity)) {
+                    mActivityList.remove(activity);
+                    mActivityList.addLast(activity);
+                }
+            } else {
+                mActivityList.addLast(activity);
+            }
+        }
+
         private void consumeOnActivityDestroyedListener(Activity activity) {
             Iterator<Map.Entry<Activity, Set<OnActivityDestroyedListener>>> iterator
                     = mDestroyedListenerMap.entrySet().iterator();
@@ -522,6 +504,10 @@ public final class Utils {
         }
     }
 
+    ///////////////////////////////////////////////////////////////////////////
+    // interface
+    ///////////////////////////////////////////////////////////////////////////
+
     public abstract static class Task<Result> implements Runnable {
 
         private static final int NEW = 0;
@@ -530,13 +516,14 @@ public final class Utils {
         private static final int EXCEPTIONAL = 3;
 
         private volatile int state = NEW;
+
+        abstract Result doInBackground();
+
         private Callback<Result> mCallback;
 
         public Task(final Callback<Result> callback) {
             mCallback = callback;
         }
-
-        abstract Result doInBackground();
 
         @Override
         public void run() {
@@ -568,5 +555,19 @@ public final class Utils {
         public boolean isCanceled() {
             return state == CANCELLED;
         }
+    }
+
+    public interface Callback<T> {
+        void onCall(T data);
+    }
+
+    public interface OnAppStatusChangedListener {
+        void onForeground();
+
+        void onBackground();
+    }
+
+    public interface OnActivityDestroyedListener {
+        void onActivityDestroyed(Activity activity);
     }
 }

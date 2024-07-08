@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,7 +21,7 @@ import androidx.core.content.ContextCompat;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.hzy.lib7z.IExtractCallback;
 import com.hzy.lib7z.Z7Extractor;
-
+import com.xiaoyv.ccompile.CCppEngine;
 import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -39,6 +38,7 @@ public class MainActivity extends BaseCompat {
   private TextView tv_main;
   protected LinearProgressIndicator prograssBar;
   protected LinearLayout layout_main;
+  private static final String C_COMPILER_DIR = "c_compiler";
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
@@ -107,6 +107,25 @@ public class MainActivity extends BaseCompat {
       }
     } catch (Exception err) {
       Log.e("Error", err.getLocalizedMessage());
+      startApp();
+    }
+    try {
+      if (!CCppEngine.checkGcc(this)) {
+        CCppEngine.installGcc(
+            this,
+            new File("/storage/emulated/0/GhostWebIDE/gcc.zip"),
+            new CCppEngine.OnInstallListener() {
+
+              @Override
+              public void onError(String error) {}
+
+              @Override
+              public void onSuccess() {
+                startApp();
+              }
+            });
+      }
+    } catch (Exception err) {
       startApp();
     }
 

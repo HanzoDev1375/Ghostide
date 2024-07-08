@@ -4,6 +4,7 @@ import Ninja.coder.Ghostemane.code.R;
 import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -37,6 +38,7 @@ public class VodControlView extends FrameLayout
   private ImageView speed;
   private ImageView proportion;
   private boolean mIsDragging;
+  private SharedPreferences prf;
 
   private boolean mIsShowBottomProgress = true;
 
@@ -69,6 +71,7 @@ public class VodControlView extends FrameLayout
     if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
       mVideoProgress.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
     }
+    prf = getContext().getSharedPreferences("prf", Context.MODE_PRIVATE);
   }
 
   public VodControlView(@NonNull Context context) {
@@ -87,7 +90,12 @@ public class VodControlView extends FrameLayout
     return R.layout.dkplayer_layout_vod_control_view;
   }
 
-  /** 是否显示底部进度条，默认显示 */
+  public void MatchToOnBack() {
+    if (!(prf.getInt("prf", 0) == 0)) {
+      mVideoProgress.setProgress(prf.getInt("prf", 0));
+    }
+  }
+
   public void showBottomProgress(boolean isShow) {
     mIsShowBottomProgress = isShow;
   }
@@ -174,7 +182,7 @@ public class VodControlView extends FrameLayout
   public void onPlayerStateChanged(int playerState) {
     switch (playerState) {
       case VideoView.PLAYER_NORMAL:
-        mFullScreen.setSelected(false);
+        /*test*/ mFullScreen.setSelected(true /*last false*/);
         speed.setVisibility(GONE);
         proportion.setVisibility(GONE);
         break;
@@ -279,7 +287,7 @@ public class VodControlView extends FrameLayout
     if (!fromUser) {
       return;
     }
-
+    prf.edit().putInt("prf", progress).apply();
     long duration = mControlWrapper.getDuration();
     long newPosition = (duration * progress) / mVideoProgress.getMax();
     if (mCurrTime != null) mCurrTime.setText(stringForTime((int) newPosition));

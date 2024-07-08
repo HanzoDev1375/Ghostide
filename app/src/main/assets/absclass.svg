@@ -1,47 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
-<svg
-	version="1.1"
-	xmlns="http://www.w3.org/2000/svg"
-	xmlns:xlink="http://www.w3.org/1999/xlink"
-	x="0%" y="0%"
-	width="100%" height="100%"
-	viewBox="0 0 24.0 24.0"
-	enable-background="new 0 0 24.0 24.0"
-	xml:space="preserve">
-	<path
-		fill="#1E0042"
-		stroke="#000000"
-		fill-opacity="1.000"
-		stroke-opacity="0.075"
-		fill-rule="nonzero"
-		stroke-width="0.25798064"
-		stroke-linejoin="miter"
-		stroke-linecap="square"
-		d="M12.00,2.00C17.49,2.00,21.94,6.48,21.94,12.00C21.94,17.52,17.49,22.00,12.00,22.00C6.51,22.00,2.06,17.52,2.06,12.00C2.06,6.48,6.51,2.00,12.00,2.00z"/>
-
-	<text 
-		font-size="14.235377"
-		font-family="default"
-		stroke-width="0.25789008"
-		stroke="#000000"
-		stroke-opacity="0.075"
-		fill-opacity="0"
-		text-anchor="start"
-		font-weight="bold"
-   		transform="rotate(-0.0 11.732187 11.76638) scale(1.0845221 1.0)" >
-		<tspan x="6.1743402" y="17.21638">A</tspan>
-	</text> 
-
-	<text 
-		font-size="14.235377"
-		font-family="default"
-		fill="#DDE2FF"
-		stroke-width="0"
-		fill-opacity="1.000"
-		text-anchor="start"
-		font-weight="bold"
-   		transform="rotate(-0.0 11.732187 11.76638) scale(1.0845221 1.0)" >
-
-		<tspan x="6.1743402" y="17.21638">A</tspan>
-	</text>
+<!--Copyright 2000-2022 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.-->
+<svg xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 16 16"
+    fill="none">
+    <path
+        d="M12.95 3.05a7 7 0 1 1-9.9 9.9 7 7 0 0 1 9.9-9.9"
+        fill="#25324D" />
+    <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="m14.914 6.905-.988.155a5.97 5.97 0 0 0-1.683-3.303A5.97 5.97 0 0 0 8.94 2.074l.155-.988A6.97 6.97 0 0 1 12.95 3.05a6.97 6.97 0 0 1 1.964 3.855m-8.01-5.82.156.989c-1.209.19-2.37.75-3.303 1.683A5.97 5.97 0 0 0 2.073 7.06l-.987-.155A6.97 6.97 0 0 1 3.05 3.05a6.97 6.97 0 0 1 3.855-1.964m-5.818 8.01A6.97 6.97 0 0 0 3.05 12.95a6.97 6.97 0 0 0 3.855 1.964l.155-.987a5.97 5.97 0 0 1-3.303-1.684A5.97 5.97 0 0 1 2.073 8.94zm8.01 5.82-.156-.988a5.97 5.97 0 0 0 3.303-1.684 5.97 5.97 0 0 0 1.683-3.303l.988.155a6.97 6.97 0 0 1-1.964 3.855 6.97 6.97 0 0 1-3.855 1.964"
+        fill="#548AF7" />
+    <path
+        d="M8.133 11.5c1.48 0 2.75-.89 3.075-2.16h-.987c-.319.734-1.102 1.266-2.088 1.266-1.354 0-2.33-1.088-2.33-2.606s.976-2.606 2.33-2.606c.986 0 1.77.532 2.088 1.267h.986C10.885 5.39 9.612 4.5 8.134 4.5c-1.914 0-3.34 1.494-3.34 3.5s1.426 3.5 3.34 3.5"
+        fill="#548AF7" />
 </svg>

@@ -11,6 +11,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
@@ -58,6 +59,8 @@ public class VideoViewsActivity extends BaseCompat {
   private String proportion = "";
   private LinearLayout viewvideo;
   private MaterialToolbar toolbar;
+  private SharedPreferences prf;
+  private VodControlView vodControlView;
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
@@ -65,6 +68,7 @@ public class VideoViewsActivity extends BaseCompat {
     setContentView(R.layout.videoviews);
     initialize(_savedInstanceState);
     initializeLogic();
+    prf = getSharedPreferences("prf", MODE_PRIVATE);
   }
 
   private void initialize(Bundle _savedInstanceState) {
@@ -109,7 +113,7 @@ public class VideoViewsActivity extends BaseCompat {
     mController.addControlComponent(new ErrorView(this));
     mController.addControlComponent(new PrepareView(this));
     mController.addControlComponent(new GestureView(this));
-    VodControlView vodControlView = new VodControlView(this);
+    vodControlView = new VodControlView(this);
 
     vodControlView.setCallBack(
         new VodControlView.OnClick() {
@@ -221,6 +225,10 @@ public class VideoViewsActivity extends BaseCompat {
   public void onBackPressed() {
     if (!mVideoView.onBackPressed()) {
       super.onBackPressed();
+      if (vodControlView != null) {
+        vodControlView.MatchToOnBack();
+        finish();
+      }
     }
   }
 

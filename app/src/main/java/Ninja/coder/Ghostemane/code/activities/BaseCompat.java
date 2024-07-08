@@ -5,6 +5,7 @@ import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import Ninja.coder.Ghostemane.code.utils.ReSizeApp;
 import Ninja.coder.Ghostemane.code.utils.SetThemeForJson;
+import Ninja.coder.Ghostemane.code.widget.BlurImage;
 import android.animation.ObjectAnimator;
 import android.app.WallpaperManager;
 import android.content.Intent;
@@ -373,17 +374,17 @@ public class BaseCompat extends AppCompatActivity {
   }
 
   public void Wall() {
-    var draw = WallpaperManager.getInstance(this).getDrawable();
-    getWindow().getDecorView().setBackground(draw);
+    var data = thememanagersoft.contains("br") ? thememanagersoft.getFloat("br", 2) : 3;
+    BlurImage.setBlurInWallpaperMobile(this, data, getWindow().getDecorView());
     if (Build.VERSION.SDK_INT >= 21) getWindow().setNavigationBarColor(0);
     if (Build.VERSION.SDK_INT >= 21) getWindow().setStatusBarColor(0);
   }
 
   public void NoWall() {
     try {
-      var d = WallpaperManager.getInstance(this);
-      d.clear(0);
-      getWindow().getDecorView().setBackgroundColor(colors());
+      getWindow()
+          .getDecorView()
+          .setBackgroundColor(MaterialColors.getColor(this, ColorAndroid12.Back, 0));
       if (Build.VERSION.SDK_INT >= 21)
         getWindow().setNavigationBarColor(MaterialColors.getColor(this, ColorAndroid12.Back, 0));
       if (Build.VERSION.SDK_INT >= 21)

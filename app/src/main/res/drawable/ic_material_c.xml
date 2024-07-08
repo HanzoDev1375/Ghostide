@@ -1,13 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Created by Apktool M – https://maximoff.su/apktool -->
 <vector
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:name="vector"
-        android:width="24dp"
-        android:height="24dp"
-        android:viewportWidth="24"
-        android:viewportHeight="24">
-    <path
-            android:name="path"
-            android:pathData="M 16.45 15.97 L 16.87 18.41 C 16.61 18.55 16.19 18.68 15.63 18.8 C 15.06 18.93 14.39 19 13.62 19 C 11.41 18.96 9.75 18.3 8.64 17.04 C 7.5 15.77 6.96 14.16 6.96 12.21 C 7 9.9 7.68 8.13 9 6.89 C 10.28 5.64 11.92 5 13.9 5 C 14.65 5 15.3 5.07 15.84 5.19 C 16.38 5.31 16.78 5.44 17.04 5.59 L 16.44 8.08 L 15.4 7.74 C 15 7.64 14.53 7.59 14 7.59 C 12.85 7.58 11.89 7.95 11.14 8.69 C 10.38 9.42 10 10.54 9.96 12.03 C 9.97 13.39 10.33 14.45 11.04 15.23 C 11.75 16 12.74 16.4 14.03 16.41 L 15.36 16.29 C 15.79 16.21 16.15 16.1 16.45 15.97 Z"
-            android:fillColor="#0277bd"
-            android:strokeWidth="1"/>
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:width="32dp"
+	android:height="32dp"
+	android:viewportWidth="16"
+	android:viewportHeight="16">
+	<path
+		android:fillColor="#2F2936"
+		android:strokeColor="#B589EC"
+		android:pathData="M14.5 5.16v5.68a1.5 1.5 0 0 1-.756 1.302l-5 2.857a1.5 1.5 0 0 1-1.488 0l-5-2.857a1.5 1.5 0 0 1-.756-1.303V5.161a1.5 1.5 0 0 1 .756-1.303l5-2.857a1.5 1.5 0 0 1 1.488 0l5 2.857a1.5 1.5 0 0 1 .756 1.303Z" />
+	<path
+		android:fillColor="#B589EC"
+		android:pathData="M8.135 11.5c1.49 0 2.765-.9 3.08-2.175H10.2c-.315.73-1.093 1.252-2.065 1.252C6.796 10.577 5.83 9.503 5.83 8s.967-2.577 2.306-2.577c.972 0 1.75.522 2.065 1.252h1.015C10.9 5.4 9.625 4.5 8.135 4.5 6.216 4.5 4.79 5.994 4.79 8s1.426 3.5 3.345 3.5" />
 </vector>

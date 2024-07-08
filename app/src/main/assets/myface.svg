@@ -1,47 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
-<svg
-	version="1.1"
-	xmlns="http://www.w3.org/2000/svg"
-	xmlns:xlink="http://www.w3.org/1999/xlink"
-	x="0%" y="0%"
-	width="100%" height="100%"
-	viewBox="0 0 24.0 24.0"
-	enable-background="new 0 0 24.0 24.0"
-	xml:space="preserve">
-	<path
-		fill="#042400"
-		stroke="#000000"
-		fill-opacity="1.000"
-		stroke-opacity="0.075"
-		fill-rule="nonzero"
-		stroke-width="0.25798064"
-		stroke-linejoin="miter"
-		stroke-linecap="square"
-		d="M12.00,2.00C17.49,2.00,21.94,6.48,21.94,12.00C21.94,17.52,17.49,22.00,12.00,22.00C6.51,22.00,2.06,17.52,2.06,12.00C2.06,6.48,6.51,2.00,12.00,2.00z"/>
-
-	<text 
-		font-size="16.0"
-		font-family="default"
-		stroke-width="0.2579806"
-		stroke="#000000"
-		stroke-opacity="0.075"
-		fill-opacity="0"
-		text-anchor="start"
-		font-weight="bold"
-   		transform="rotate(-0.0 12.0 12.0) scale(1.1307101 1.0)" >
-		<tspan x="6.1908" y="18.125">F</tspan>
-	</text> 
-
-	<text 
-		font-size="16.0"
-		font-family="default"
-		fill="#E1FFDD"
-		stroke-width="0"
-		fill-opacity="1.000"
-		text-anchor="start"
-		font-weight="bold"
-   		transform="rotate(-0.0 12.0 12.0) scale(1.1307101 1.0)" >
-
-		<tspan x="6.1908" y="18.125">F</tspan>
-	</text>
+<!--Copyright 2000-2022 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.-->
+<svg xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 16 16"
+    fill="none">
+    <circle
+        cx="8"
+        cy="8"
+        r="6.5"
+        fill="#254D36"
+        stroke="#54F7AC" />
+    <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M10 4.5v1H8.5v5H10v1H6v-1h1.5v-5H6v-1z"
+        fill="#54F7AC" />
 </svg>

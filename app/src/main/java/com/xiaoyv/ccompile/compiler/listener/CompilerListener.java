@@ -22,8 +22,7 @@ public abstract class CompilerListener {
 
     /**
      * 编译进度
-     *
-     * @param task     任务名
+     * @param task 任务名
      * @param progress 进度
      */
     public void onProgress(String task, int progress) {

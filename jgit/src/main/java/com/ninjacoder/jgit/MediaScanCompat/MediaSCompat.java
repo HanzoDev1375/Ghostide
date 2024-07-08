@@ -10,11 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 public class MediaSCompat {
-  
-  
+
   protected static final List<String> allMedia = new ArrayList<>();
 
   public static void trytoUsingCustom(String path, AppCompatActivity app) {
@@ -103,5 +100,4 @@ public class MediaSCompat {
     }
     return null;
   }
-  
 }

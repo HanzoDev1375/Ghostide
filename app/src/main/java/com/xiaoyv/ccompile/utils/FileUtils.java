@@ -34,8 +34,6 @@ import javax.net.ssl.HttpsURLConnection;
 public final class FileUtils {
 
     private static final String LINE_SEP = System.getProperty("line.separator");
-    private static final char[] HEX_DIGITS =
-            {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
     private FileUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
@@ -1202,10 +1200,6 @@ public final class FileUtils {
         Utils.getApp().sendBroadcast(intent);
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // interface
-    ///////////////////////////////////////////////////////////////////////////
-
     /**
      * Notify system to scan the file.
      *
@@ -1216,8 +1210,19 @@ public final class FileUtils {
     }
 
     ///////////////////////////////////////////////////////////////////////////
+    // interface
+    ///////////////////////////////////////////////////////////////////////////
+
+    public interface OnReplaceListener {
+        boolean onReplace();
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
     // other utils methods
     ///////////////////////////////////////////////////////////////////////////
+
+    private static final char[] HEX_DIGITS =
+            {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
     private static String bytes2HexString(final byte[] bytes) {
         if (bytes == null) return "";
@@ -1283,9 +1288,5 @@ public final class FileUtils {
                 e.printStackTrace();
             }
         }
-    }
-
-    public interface OnReplaceListener {
-        boolean onReplace();
     }
 }

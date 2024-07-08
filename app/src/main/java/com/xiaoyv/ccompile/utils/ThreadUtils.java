@@ -77,7 +77,7 @@ public final class ThreadUtils {
      * @return a fixed thread pool
      */
     public static ExecutorService getFixedPool(final int size,
-                                               final int priority) {
+                                                final int priority) {
         return getPoolByTypeAndPriority(size, priority);
     }
 
@@ -100,7 +100,7 @@ public final class ThreadUtils {
      * @param priority The priority of thread in the poll.
      * @return a single thread pool
      */
-    public static ExecutorService getSinglePool(final int priority) {
+    public static ExecutorService getSinglePool( final int priority) {
         return getPoolByTypeAndPriority(TYPE_SINGLE, priority);
     }
 
@@ -123,7 +123,7 @@ public final class ThreadUtils {
      * @param priority The priority of thread in the poll.
      * @return a cached thread pool
      */
-    public static ExecutorService getCachedPool(final int priority) {
+    public static ExecutorService getCachedPool( final int priority) {
         return getPoolByTypeAndPriority(TYPE_CACHED, priority);
     }
 
@@ -144,7 +144,7 @@ public final class ThreadUtils {
      * @param priority The priority of thread in the poll.
      * @return a IO thread pool
      */
-    public static ExecutorService getIoPool(final int priority) {
+    public static ExecutorService getIoPool( final int priority) {
         return getPoolByTypeAndPriority(TYPE_IO, priority);
     }
 
@@ -167,7 +167,7 @@ public final class ThreadUtils {
      * @param priority The priority of thread in the poll.
      * @return a cpu thread pool for
      */
-    public static ExecutorService getCpuPool(final int priority) {
+    public static ExecutorService getCpuPool( final int priority) {
         return getPoolByTypeAndPriority(TYPE_CPU, priority);
     }
 
@@ -192,7 +192,7 @@ public final class ThreadUtils {
      */
     public static <T> void executeByFixed(final int size,
                                           final Task<T> task,
-                                          final int priority) {
+                                           final int priority) {
         execute(getPoolByTypeAndPriority(size, priority), task);
     }
 
@@ -226,7 +226,7 @@ public final class ThreadUtils {
                                                    final Task<T> task,
                                                    final long delay,
                                                    final TimeUnit unit,
-                                                   final int priority) {
+                                                    final int priority) {
         executeWithDelay(getPoolByTypeAndPriority(size, priority), task, delay, unit);
     }
 
@@ -298,7 +298,7 @@ public final class ThreadUtils {
                                                    long initialDelay,
                                                    final long period,
                                                    final TimeUnit unit,
-                                                   final int priority) {
+                                                    final int priority) {
         executeAtFixedRate(getPoolByTypeAndPriority(size, priority), task, initialDelay, period, unit);
     }
 
@@ -320,7 +320,7 @@ public final class ThreadUtils {
      * @param <T>      The type of the task's result.
      */
     public static <T> void executeBySingle(final Task<T> task,
-                                           final int priority) {
+                                            final int priority) {
         execute(getPoolByTypeAndPriority(TYPE_SINGLE, priority), task);
     }
 
@@ -350,7 +350,7 @@ public final class ThreadUtils {
     public static <T> void executeBySingleWithDelay(final Task<T> task,
                                                     final long delay,
                                                     final TimeUnit unit,
-                                                    final int priority) {
+                                                     final int priority) {
         executeWithDelay(getPoolByTypeAndPriority(TYPE_SINGLE, priority), task, delay, unit);
     }
 
@@ -380,7 +380,7 @@ public final class ThreadUtils {
     public static <T> void executeBySingleAtFixRate(final Task<T> task,
                                                     final long period,
                                                     final TimeUnit unit,
-                                                    final int priority) {
+                                                     final int priority) {
         executeAtFixedRate(getPoolByTypeAndPriority(TYPE_SINGLE, priority), task, 0, period, unit);
     }
 
@@ -414,7 +414,7 @@ public final class ThreadUtils {
                                                     long initialDelay,
                                                     final long period,
                                                     final TimeUnit unit,
-                                                    final int priority) {
+                                                     final int priority) {
         executeAtFixedRate(
                 getPoolByTypeAndPriority(TYPE_SINGLE, priority), task, initialDelay, period, unit
         );
@@ -438,7 +438,7 @@ public final class ThreadUtils {
      * @param <T>      The type of the task's result.
      */
     public static <T> void executeByCached(final Task<T> task,
-                                           final int priority) {
+                                            final int priority) {
         execute(getPoolByTypeAndPriority(TYPE_CACHED, priority), task);
     }
 
@@ -468,7 +468,7 @@ public final class ThreadUtils {
     public static <T> void executeByCachedWithDelay(final Task<T> task,
                                                     final long delay,
                                                     final TimeUnit unit,
-                                                    final int priority) {
+                                                     final int priority) {
         executeWithDelay(getPoolByTypeAndPriority(TYPE_CACHED, priority), task, delay, unit);
     }
 
@@ -498,7 +498,7 @@ public final class ThreadUtils {
     public static <T> void executeByCachedAtFixRate(final Task<T> task,
                                                     final long period,
                                                     final TimeUnit unit,
-                                                    final int priority) {
+                                                     final int priority) {
         executeAtFixedRate(getPoolByTypeAndPriority(TYPE_CACHED, priority), task, 0, period, unit);
     }
 
@@ -532,7 +532,7 @@ public final class ThreadUtils {
                                                     long initialDelay,
                                                     final long period,
                                                     final TimeUnit unit,
-                                                    final int priority) {
+                                                     final int priority) {
         executeAtFixedRate(
                 getPoolByTypeAndPriority(TYPE_CACHED, priority), task, initialDelay, period, unit
         );
@@ -556,7 +556,7 @@ public final class ThreadUtils {
      * @param <T>      The type of the task's result.
      */
     public static <T> void executeByIo(final Task<T> task,
-                                       final int priority) {
+                                        final int priority) {
         execute(getPoolByTypeAndPriority(TYPE_IO, priority), task);
     }
 
@@ -586,7 +586,7 @@ public final class ThreadUtils {
     public static <T> void executeByIoWithDelay(final Task<T> task,
                                                 final long delay,
                                                 final TimeUnit unit,
-                                                final int priority) {
+                                                 final int priority) {
         executeWithDelay(getPoolByTypeAndPriority(TYPE_IO, priority), task, delay, unit);
     }
 
@@ -616,7 +616,7 @@ public final class ThreadUtils {
     public static <T> void executeByIoAtFixRate(final Task<T> task,
                                                 final long period,
                                                 final TimeUnit unit,
-                                                final int priority) {
+                                                 final int priority) {
         executeAtFixedRate(getPoolByTypeAndPriority(TYPE_IO, priority), task, 0, period, unit);
     }
 
@@ -650,7 +650,7 @@ public final class ThreadUtils {
                                                 long initialDelay,
                                                 final long period,
                                                 final TimeUnit unit,
-                                                final int priority) {
+                                                 final int priority) {
         executeAtFixedRate(
                 getPoolByTypeAndPriority(TYPE_IO, priority), task, initialDelay, period, unit
         );
@@ -674,7 +674,7 @@ public final class ThreadUtils {
      * @param <T>      The type of the task's result.
      */
     public static <T> void executeByCpu(final Task<T> task,
-                                        final int priority) {
+                                         final int priority) {
         execute(getPoolByTypeAndPriority(TYPE_CPU, priority), task);
     }
 
@@ -704,7 +704,7 @@ public final class ThreadUtils {
     public static <T> void executeByCpuWithDelay(final Task<T> task,
                                                  final long delay,
                                                  final TimeUnit unit,
-                                                 final int priority) {
+                                                  final int priority) {
         executeWithDelay(getPoolByTypeAndPriority(TYPE_CPU, priority), task, delay, unit);
     }
 
@@ -734,7 +734,7 @@ public final class ThreadUtils {
     public static <T> void executeByCpuAtFixRate(final Task<T> task,
                                                  final long period,
                                                  final TimeUnit unit,
-                                                 final int priority) {
+                                                  final int priority) {
         executeAtFixedRate(getPoolByTypeAndPriority(TYPE_CPU, priority), task, 0, period, unit);
     }
 
@@ -768,7 +768,7 @@ public final class ThreadUtils {
                                                  long initialDelay,
                                                  final long period,
                                                  final TimeUnit unit,
-                                                 final int priority) {
+                                                  final int priority) {
         executeAtFixedRate(
                 getPoolByTypeAndPriority(TYPE_CPU, priority), task, initialDelay, period, unit
         );
@@ -977,37 +977,7 @@ public final class ThreadUtils {
         }
     }
 
-    private static Executor getGlobalDeliver() {
-        if (sDeliver == null) {
-            sDeliver = new Executor() {
-                private final Handler mHandler = new Handler(Looper.getMainLooper());
-
-                @Override
-                public void execute(@NonNull Runnable command) {
-                    mHandler.post(command);
-                }
-            };
-        }
-        return sDeliver;
-    }
-
     static final class ThreadPoolExecutor4Util extends ThreadPoolExecutor {
-
-        private final AtomicInteger mSubmittedCount = new AtomicInteger();
-        private LinkedBlockingQueue4Util mWorkQueue;
-
-        ThreadPoolExecutor4Util(int corePoolSize, int maximumPoolSize,
-                                long keepAliveTime, TimeUnit unit,
-                                LinkedBlockingQueue4Util workQueue,
-                                ThreadFactory threadFactory) {
-            super(corePoolSize, maximumPoolSize,
-                    keepAliveTime, unit,
-                    workQueue,
-                    threadFactory
-            );
-            workQueue.mPool = this;
-            mWorkQueue = workQueue;
-        }
 
         private static ExecutorService createPool(final int type, final int priority) {
             switch (type) {
@@ -1042,6 +1012,23 @@ public final class ThreadUtils {
                             new UtilsThreadFactory("fixed(" + type + ")", priority)
                     );
             }
+        }
+
+        private final AtomicInteger mSubmittedCount = new AtomicInteger();
+
+        private LinkedBlockingQueue4Util mWorkQueue;
+
+        ThreadPoolExecutor4Util(int corePoolSize, int maximumPoolSize,
+                                long keepAliveTime, TimeUnit unit,
+                                LinkedBlockingQueue4Util workQueue,
+                                ThreadFactory threadFactory) {
+            super(corePoolSize, maximumPoolSize,
+                    keepAliveTime, unit,
+                    workQueue,
+                    threadFactory
+            );
+            workQueue.mPool = this;
+            mWorkQueue = workQueue;
         }
 
         private int getSubmittedCount() {
@@ -1278,6 +1265,11 @@ public final class ThreadUtils {
             return state.get() > RUNNING;
         }
 
+        public Task<T> setDeliver(Executor deliver) {
+            this.deliver = deliver;
+            return this;
+        }
+
         public void setTimeout(final long timeoutMillis, final OnTimeoutListener listener) {
             mTimer = new Timer();
             mTimer.schedule(new TimerTask() {
@@ -1302,10 +1294,6 @@ public final class ThreadUtils {
             return deliver;
         }
 
-        public Task<T> setDeliver(Executor deliver) {
-            this.deliver = deliver;
-            return this;
-        }
 
         protected void onDone() {
             TASK_TASKINFO_MAP.remove(this);
@@ -1318,6 +1306,20 @@ public final class ThreadUtils {
         public interface OnTimeoutListener {
             void onTimeout();
         }
+    }
+
+    private static Executor getGlobalDeliver() {
+        if (sDeliver == null) {
+            sDeliver = new Executor() {
+                private final Handler mHandler = new Handler(Looper.getMainLooper());
+
+                @Override
+                public void execute(@NonNull Runnable command) {
+                    mHandler.post(command);
+                }
+            };
+        }
+        return sDeliver;
     }
 
     private static class TaskInfo {

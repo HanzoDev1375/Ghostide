@@ -280,7 +280,7 @@ public final class ShellUtils {
      * The result of command.
      */
     public static class CommandResult {
-        public int result;
+        public int    result;
         public String successMsg;
         public String errorMsg;
 

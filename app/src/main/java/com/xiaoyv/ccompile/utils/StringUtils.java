@@ -199,7 +199,7 @@ public final class StringUtils {
      * @param id The desired resource identifier.
      * @return the string value associated with a particular resource ID.
      */
-    public static String getString(int id) {
+    public static String getString( int id) {
         try {
             return Utils.getApp().getResources().getString(id);
         } catch (Resources.NotFoundException ignore) {
@@ -214,7 +214,7 @@ public final class StringUtils {
      * @param formatArgs The format arguments that will be used for substitution.
      * @return the string value associated with a particular resource ID.
      */
-    public static String getString(int id, Object... formatArgs) {
+    public static String getString( int id, Object... formatArgs) {
         try {
             return Utils.getApp().getString(id, formatArgs);
         } catch (Resources.NotFoundException ignore) {

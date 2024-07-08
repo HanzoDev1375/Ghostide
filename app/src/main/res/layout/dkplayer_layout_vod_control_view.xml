@@ -1,108 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    >
 
     <LinearLayout
-            android:layout_height="@dimen/dkplayer_controller_height"
-            android:layout_width="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:id="@+id/bottom_container"
-            android:layout_gravity="bottom">
+        android:layout_height="@dimen/dkplayer_controller_height"
+        android:layout_width="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:id="@+id/bottom_container"
+        android:layout_gravity="bottom"
+        >
 
         <ImageView
-                android:layout_height="@dimen/dkplayer_controller_height"
-                android:layout_width="@dimen/dkplayer_controller_height"
-                android:src="@drawable/dkplayer_selector_play_button"
-                android:padding="@dimen/dkplayer_controller_icon_padding"
-                android:id="@+id/iv_play"/>
+            android:layout_height="@dimen/dkplayer_controller_height"
+            android:layout_width="@dimen/dkplayer_controller_height"
+            android:src="@drawable/dkplayer_selector_play_button"
+            android:padding="@dimen/dkplayer_controller_icon_padding"
+            android:id="@+id/iv_play"
+            />
 
         <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:textSize="@dimen/dkplayer_controller_time_text_size"
-                android:textColor="@android:color/white"
-                tools:text="00:00"
-                android:id="@+id/curr_time"/>
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="@dimen/dkplayer_controller_time_text_size"
+            android:textColor="@android:color/white"
+            tools:text="00:00"
+            android:id="@+id/curr_time"
+            />
 
         <SeekBar
-                android:layout_height="40dp"
-                android:layout_width="0dp"
-                android:layout_marginEnd="10dp"
-                android:max="1000"
-                android:thumb="@drawable/dkplayer_seekbar_thumb"
-                android:paddingStart="0dp"
-                android:layout_marginStart="10dp"
-                android:layout_gravity="center_vertical"
-                android:maxHeight="2dp"
-                android:paddingEnd="0dp"
-                android:thumbOffset="0dp"
-                android:background="@null"
-                android:minHeight="2dp"
-                android:layout_weight="1"
-                android:progressDrawable="@drawable/dkplayer_layer_progress_bar"
-                android:id="@+id/seekBar"/>
+            android:layout_height="40dp"
+            android:layout_width="0dp"
+            android:layout_marginEnd="10dp"
+            android:max="1000"
+            android:thumb="@drawable/dkplayer_seekbar_thumb"
+            android:paddingStart="0dp"
+            android:layout_marginStart="10dp"
+            android:layout_gravity="center_vertical"
+            android:maxHeight="2dp"
+            android:paddingEnd="0dp"
+            android:thumbOffset="0dp"
+            android:background="@null"
+            android:minHeight="2dp"
+            android:layout_weight="1"
+            android:progressDrawable="@drawable/dkplayer_layer_progress_bar"
+            android:id="@+id/seekBar"
+            />
 
         <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:textSize="@dimen/dkplayer_controller_time_text_size"
-                android:textColor="@android:color/white"
-                tools:text="00:00"
-                android:id="@+id/total_time"/>
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="@dimen/dkplayer_controller_time_text_size"
+            android:textColor="@android:color/white"
+            tools:text="00:00"
+            android:id="@+id/total_time"
+            />
 
         <ImageView
-                android:layout_height="40dp"
-                android:layout_width="40dp"
-                android:layout_marginBottom="20dp"
-                android:src="@drawable/dkplayer_ic_action_portion"
-                android:background="@drawable/dkplayer_shape_back_bg"
-                android:padding="@dimen/dkplayer_default_spacing"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="20dp"
-                android:id="@+id/proportion"
-                android:layout_gravity="center"/>
+            android:layout_height="40dp"
+            android:layout_width="40dp"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/dkplayer_ic_action_portion"
+            android:background="@drawable/dkplayer_shape_back_bg"
+            android:padding="@dimen/dkplayer_default_spacing"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:id="@+id/proportion"
+            android:layout_gravity="center"
+            />
 
         <ImageView
-                android:layout_height="40dp"
-                android:layout_width="40dp"
-                android:layout_marginBottom="20dp"
-                android:src="@drawable/dkplayer_ic_action_speed"
-                android:background="@drawable/dkplayer_shape_back_bg"
-                android:padding="@dimen/dkplayer_default_spacing"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="20dp"
-                android:id="@+id/speed"
-                android:layout_gravity="center"/>
+            android:layout_height="40dp"
+            android:layout_width="40dp"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/dkplayer_ic_action_speed"
+            android:background="@drawable/dkplayer_shape_back_bg"
+            android:padding="@dimen/dkplayer_default_spacing"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:id="@+id/speed"
+            android:layout_gravity="center"
+            />
 
         <ImageView
-                android:layout_height="40dp"
-                android:layout_width="40dp"
-                android:layout_marginBottom="20dp"
-                android:src="@drawable/dkplayer_selector_full_screen_button"
-                android:background="@drawable/dkplayer_shape_back_bg"
-                android:padding="@dimen/dkplayer_default_spacing"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="20dp"
-                android:id="@+id/fullscreen"
-                android:layout_gravity="center"/>
+            android:layout_height="40dp"
+            android:layout_width="40dp"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/dkplayer_selector_full_screen_button"
+            android:background="@drawable/dkplayer_shape_back_bg"
+            android:padding="@dimen/dkplayer_default_spacing"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:id="@+id/fullscreen"
+            android:layout_gravity="center"
+            />
 
     </LinearLayout>
 
     <ProgressBar
-            android:layout_height="1dp"
-            android:layout_width="match_parent"
-            android:visibility="gone"
-            android:max="1000"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:progressDrawable="@drawable/dkplayer_layer_progress_bar"
-            android:id="@+id/bottom_progress"
-            android:layout_gravity="bottom"/>
+        android:layout_height="1dp"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:max="1000"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:progressDrawable="@drawable/dkplayer_layer_progress_bar"
+        android:id="@+id/bottom_progress"
+        android:layout_gravity="bottom"
+        />
 
 </FrameLayout>

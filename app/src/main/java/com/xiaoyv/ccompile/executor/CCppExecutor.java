@@ -19,30 +19,12 @@ import java.io.PrintStream;
  * @since 2020/5/14
  */
 public class CCppExecutor {
+    private Process currentProcess;
     private static boolean OutFinishFlag = true;
     private static boolean ErrFinishFlag = true;
     private static boolean WaitFinishFlag = true;
     private static int waitFor = -1;
     private static int exitValue = -1;
-    private Process currentProcess;
-
-    private static void reSetFlag() {
-        OutFinishFlag = false;
-        ErrFinishFlag = false;
-        WaitFinishFlag = false;
-        waitFor = -1;
-        exitValue = -1;
-    }
-
-    private static boolean checkFinish() {
-        return OutFinishFlag && ErrFinishFlag && WaitFinishFlag;
-    }
-
-    private static void checkFinish(ExecuteListener executeListener) {
-        if (checkFinish()) {
-            executeListener.onExecuteFinish(waitFor, exitValue);
-        }
-    }
 
     /**
      * 运行二进制文件
@@ -88,6 +70,15 @@ public class CCppExecutor {
         }).start();
     }
 
+    private static void reSetFlag() {
+        OutFinishFlag = false;
+        ErrFinishFlag = false;
+        WaitFinishFlag = false;
+        waitFor = -1;
+        exitValue = -1;
+    }
+
+
     /**
      * 向进程输入
      *
@@ -99,6 +90,7 @@ public class CCppExecutor {
         }
         new Thread(new CCppExecutor.InputRunnable(currentProcess, stdin)).start();
     }
+
 
     /**
      * 进程输入线程
@@ -178,6 +170,17 @@ public class CCppExecutor {
             Log.e("错误", "完成");
             ErrFinishFlag = true;
             checkFinish(executeListener);
+        }
+    }
+
+    private static boolean checkFinish() {
+        return OutFinishFlag && ErrFinishFlag && WaitFinishFlag;
+    }
+
+
+    private static void checkFinish(ExecuteListener executeListener) {
+        if (checkFinish()) {
+            executeListener.onExecuteFinish(waitFor, exitValue);
         }
     }
 }

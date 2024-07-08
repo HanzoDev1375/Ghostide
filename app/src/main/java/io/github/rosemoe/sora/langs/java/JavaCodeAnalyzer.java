@@ -7,6 +7,8 @@ import android.graphics.Color;
 import androidx.core.graphics.ColorUtils;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
@@ -350,7 +352,6 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               if (previous == JavaLexer.COMMA || previous == JavaLexer.ASSIGN) {
                 colorid = EditorColorScheme.OPERATOR;
               }
-
               result.addIfNeeded(line, column, colorid);
               break;
             }

@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceManager;
 import com.quickersilver.themeengine.ThemeEngine;
 import com.quickersilver.themeengine.ThemeMode;
+import com.xiaoyv.ccompile.CCppEngine;
 import de.larsgrefer.sass.embedded.SassCompiler;
 import de.larsgrefer.sass.embedded.android.AndroidSassCompilerFactory;
 
@@ -142,6 +143,7 @@ public class ApplicationLoader extends Application {
     } catch (PackageManager.NameNotFoundException err) {
 
     }
+    CCppEngine.install(this);
 
     super.onCreate();
   }
