@@ -16,11 +16,7 @@
 	
 </div>     
 
-### Install from mykett
 
-<p align="center">
-<a href="https://myket.ir/app/Ninja.coder.Ghostemane.code?utm_source=search-ads-gift&utm_medium=cpc"><img src="https://myket.ir/core/images/logo/get-en.png" width="200"/> </a>
-</p>
 
 #### Telegram Group 
 
