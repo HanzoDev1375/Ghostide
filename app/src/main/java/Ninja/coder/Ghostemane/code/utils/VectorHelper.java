@@ -3,7 +3,6 @@ package Ninja.coder.Ghostemane.code.utils;
 import Ninja.coder.Ghostemane.code.ApplicationLoader;
 import Ninja.coder.Ghostemane.code.R;
 import Ninja.coder.Ghostemane.code.glidecompat.GlideCompat;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
 import Ninja.coder.Ghostemane.code.widget.GhostWebMaterialDialog;
 import android.app.Activity;
 import android.content.pm.PackageInfo;
@@ -30,6 +29,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -166,7 +167,7 @@ public class VectorHelper {
     try {
       DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
       Document document = documentBuilder.parse(svgPath);
-      NodeList nodeList = document.getElementsByTagName("path");
+      NodeList nodeList = document.getElementsByTagName("*"); // Get all elements
 
       StringBuilder vectorContent = new StringBuilder();
       vectorContent
@@ -192,35 +193,105 @@ public class VectorHelper {
       }
 
       vectorContent.append(">\n");
-
       for (int i = 0; i < nodeList.getLength(); i++) {
         Element element = (Element) nodeList.item(i);
-        String pathData = element.getAttribute("d");
-        String fillColor = element.getAttribute("fill");
+        String tagName = element.getTagName();
+        boolean processed = false;
 
-        if (fillColor.isEmpty()) {
-          String style = element.getAttribute("style");
-          if (style.contains("fill:")) {
-            String newFillColor = style.substring(style.indexOf("fill:") + "fill:".length());
-            newFillColor = newFillColor.trim();
-            if (newFillColor.contains(";")) {
-              newFillColor = newFillColor.substring(0, newFillColor.indexOf(";"));
+        if (tagName.equals("g")) {
+          // Process <g> element attributes
+          vectorContent.append("  <group\n");
+          NamedNodeMap attributes = element.getAttributes();
+          for (int j = 0; j < attributes.getLength(); j++) {
+            Node attribute = attributes.item(j);
+            String attributeName = attribute.getNodeName();
+            String attributeValue = attribute.getNodeValue();
+
+            // Convert SVG attribute to Android vector attribute
+            String androidAttributeName = getAndroidAttributeName(attributeName);
+            if (androidAttributeName != null) {
+              vectorContent
+                  .append("      ")
+                  .append(androidAttributeName)
+                  .append("=\"")
+                  .append(attributeValue)
+                  .append("\"\n");
             }
-            fillColor = newFillColor;
           }
+          vectorContent.append(">\n"); // Open the <group> element
+
+          // Recursively process child elements of <g>
+          NodeList childNodes = element.getChildNodes();
+          for (int k = 0; k < childNodes.getLength(); k++) {
+            Node childNode = childNodes.item(k);
+            if (childNode instanceof Element) {
+              Element childElement = (Element) childNode;
+              String childTagName = childElement.getTagName();
+
+              if (childTagName.equals("path")) {
+                // Process <path> element attributes
+                String pathData = childElement.getAttribute("d");
+                vectorContent
+                    .append("    <path\n")
+                    .append("        android:pathData=\"")
+                    .append(pathData)
+                    .append("\"\n");
+
+                NamedNodeMap childAttributes = childElement.getAttributes();
+                for (int l = 0; l < childAttributes.getLength(); l++) {
+                  Node childAttribute = childAttributes.item(l);
+                  String childAttributeName = childAttribute.getNodeName();
+                  String childAttributeValue = childAttribute.getNodeValue();
+
+                  // Convert SVG attribute to Android vector attribute
+                  String androidChildAttributeName = getAndroidAttributeName(childAttributeName);
+                  if (androidChildAttributeName != null) {
+                    vectorContent
+                        .append("        ")
+                        .append(androidChildAttributeName)
+                        .append("=\"")
+                        .append(childAttributeValue)
+                        .append("\"\n");
+                  }
+                }
+
+                vectorContent.append("    />\n");
+                processed = true; // Mark as processed
+              }
+            }
+          }
+          vectorContent.append("  </group>\n"); // Close the <group> element
         }
 
-        vectorContent
-            .append("  <path\n")
-            .append("      android:pathData=\"")
-            .append(pathData)
-            .append("\"\n");
+        if (tagName.equals("path") && !processed) {
+          // Process <path> element attributes
+          String pathData = element.getAttribute("d");
+          vectorContent
+              .append("  <path\n")
+              .append("      android:pathData=\"")
+              .append(pathData)
+              .append("\"\n");
 
-        if (!fillColor.isEmpty()) {
-          vectorContent.append("      android:fillColor=\"").append(fillColor).append("\"\n");
+          NamedNodeMap attributes = element.getAttributes();
+          for (int j = 0; j < attributes.getLength(); j++) {
+            Node attribute = attributes.item(j);
+            String attributeName = attribute.getNodeName();
+            String attributeValue = attribute.getNodeValue();
+
+            // Convert SVG attribute to Android vector attribute
+            String androidAttributeName = getAndroidAttributeName(attributeName);
+            if (androidAttributeName != null) {
+              vectorContent
+                  .append("      ")
+                  .append(androidAttributeName)
+                  .append("=\"")
+                  .append(attributeValue)
+                  .append("\"\n");
+            }
+          }
+
+          vectorContent.append("  />\n");
         }
-
-        vectorContent.append("  />\n");
       }
 
       vectorContent.append("</vector>\n");
@@ -325,5 +396,21 @@ public class VectorHelper {
 
     }
     return "32";
+  }
+
+  private static String getAndroidAttributeName(String svgAttributeName) {
+    switch (svgAttributeName) {
+      case "fill":
+        return "android:fillColor";
+      case "stroke":
+        return "android:strokeColor";
+      case "stroke-linecap":
+        return "android:strokeLineCap";
+      case "stroke-linejoin":
+        return "android:strokeLineJoin";
+        // Add more mappings as needed
+      default:
+        return null;
+    }
   }
 }
