@@ -446,7 +446,7 @@ public class FileDirActivity extends BaseCompat
                 | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     CheckNewVersion.startRequestNetwork(
         RequestNetworkController.GET,
-        "https://raw.githubusercontent.com/appt2/appt2/main/log.json",
+        "https://raw.githubusercontent.com/HanzoDev1375/HanzoDev1375/main/log.json",
         "",
         UpdateCheck);
     if (war.contains("val")) {}
@@ -1967,7 +1967,7 @@ public class FileDirActivity extends BaseCompat
                 if (DataUtil.isConnected(getApplicationContext())) {
                   CheckNewVersion.startRequestNetwork(
                       RequestNetworkController.GET,
-                      "https://raw.githubusercontent.com/appt2/appt2/main/log.json",
+                      "https://raw.githubusercontent.com/HanzoDev1375/HanzoDev1375/main/log.json",
                       "v",
                       UpdateCheck);
                 } else {

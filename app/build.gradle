@@ -11,8 +11,8 @@ android {
         applicationId "Ninja.coder.Ghostemane.code"
         minSdk 26
         targetSdk 30
-        versionCode 26
-        versionName "1.6.2"
+        versionCode 27
+        versionName "1.6.3"
         vectorDrawables {
             useSupportLibrary true
         }
