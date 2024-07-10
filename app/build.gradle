@@ -6,21 +6,31 @@ plugins {
 android {
     namespace "Ninja.coder.Ghostemane.code"
     compileSdk 34
-
+    
     defaultConfig {
         applicationId "Ninja.coder.Ghostemane.code"
-        minSdk 26
+        minSdk 21
         targetSdk 30
-        versionCode 27
-        versionName "1.6.3"
+        versionCode 28
+        versionName "1.6.4"
         vectorDrawables {
             useSupportLibrary true
         }
     }
+    signingConfigs {
+        release {
+            storeFile file("./HanzoDev.jks")
+            storePassword "HanzoDev"
+            keyAlias "HanzoDev"
+            keyPassword "HanzoDev"
+        }
+    }
+    
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
@@ -46,11 +56,10 @@ android {
     buildFeatures {
         viewBinding true
     }
+    
 }
-
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
-    //make class java 
     implementation project(path: ":eclipse-standalone")
     implementation project(path: ":android-tools")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.2")
@@ -105,10 +114,8 @@ dependencies {
     implementation "com.github.douglasjunior:android-simple-tooltip:1.1.0"
     implementation("io.getstream:photoview:1.0.1")
     implementation("androidx.palette:palette:1.0.0")
-    //using api 21 to run app 
     implementation("de.larsgrefer.sass:sass-embedded-android:3.6.0")
     implementation("io.reactivex.rxjava3:rxjava:3.1.8")
-    //ui 
     implementation project(path: ":Plugin")
   	implementation project(path: ":pl-codecomment") 	
   	implementation project(path: ":jgit") 	

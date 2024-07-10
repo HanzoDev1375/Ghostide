@@ -149,6 +149,7 @@
             android:name=".activities.VideoViewsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
             android:hardwareAccelerated="true"
+            android:exported="true"
             android:supportsPictureInPicture="true"
             android:screenOrientation="portrait"
             
@@ -510,6 +511,7 @@
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
             android:hardwareAccelerated="true"
             android:label="Ghost web pdf view"
+            android:exported="true"
             android:supportsPictureInPicture="true"
             android:screenOrientation="portrait"
             
@@ -600,13 +602,9 @@
         </provider>
         <activity
             android:theme="@style/Apple"
-            android:exported="false"
             android:name="Ninja.coder.Ghostemane.code.keyboard.Setting"
             
         >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
         </activity>
         <activity
             android:name="Ninja.coder.Ghostemane.code.keyboard.Theme" />
@@ -742,7 +740,7 @@
         <service
             android:name=".services.FileEventUser"
             android:enabled="true"
-            android:exported="false"
+            android:exported="true"
             
         />
         <receiver
@@ -763,7 +761,11 @@
             
         />
 
-        <receiver android:name="Ninja.coder.Ghostemane.code.PluginManager.FilePostBroadcastReceiver">
+        <receiver
+            android:name="Ninja.coder.Ghostemane.code.PluginManager.FilePostBroadcastReceiver"
+            android:exported="false"
+            
+        >
             <intent-filter>
                 <action android:name="Ninja.coder.code.Ghostemane.SEND_FILE_PATH" />
             </intent-filter>
