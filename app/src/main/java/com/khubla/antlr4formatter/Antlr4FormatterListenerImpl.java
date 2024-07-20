@@ -27,317 +27,312 @@ import org.antlr.v4.runtime.tree.*;
 import com.khubla.antlr4formatter.listener.*;
 
 public class Antlr4FormatterListenerImpl implements FormatterListener {
-	/**
-	 * tabs or space. vi or emacs.
-	 *
-	 * @author tom
-	 */
-	public static enum IndentType {
-		tab, space
-	}
+  /**
+   * tabs or space. vi or emacs.
+   *
+   * @author tom
+   */
+  public static enum IndentType {
+    tab,
+    space
+  }
 
-	/**
-	 * 
-	 */
-	/**
-	 * tokens that do not need a space before them
-	 */
-	public static final Set<String> noSpacingBeforeTokens = new HashSet<>(Arrays.asList(new String[] { "?", "*", ";", ")", "+" }));
-	/**
-	 * tokens that do not need a space after them
-	 */
-	public static final Set<String> noSpacingAfterTokens = new HashSet<>(Arrays.asList(new String[] { "(" }));
-	/**
-	 * rules which need a NL after the rule
-	 */
-	public static final Set<Class<?>> newlineAfterRules = new HashSet<Class<?>>(Arrays.asList(new Class<?>[] { GrammarDeclContext.class, ParserRuleSpecContext.class, LexerRuleSpecContext.class }));
-	/**
-	 * rules which colon on new line
-	 */
-	public static final Set<Class<?>> colonOnNewlineRules = new HashSet<Class<?>>(Arrays.asList(new Class<?>[] { ParserRuleSpecContext.class, LexerRuleSpecContext.class }));
-	/**
-	 * rules which need a NL before the rule
-	 */
-	public static final Set<Class<?>> newlineBeforeRules = new HashSet<Class<?>>(Arrays.asList(new Class<?>[] { PrequelConstructContext.class, GrammarDeclContext.class, ParserRuleSpecContext.class,
-			LexerRuleSpecContext.class, OptionsSpecContext.class, ModeSpecContext.class, ActionBlockContext.class }));
-	/**
-	 * rules which need an indent
-	 */
-	public static final Set<Class<?>> indentedeRules = new HashSet<Class<?>>(Arrays.asList(new Class<?>[] { ParserRuleSpecContext.class, LexerRuleSpecContext.class }));
-	/**
-	 * tokens which need a newline before them
-	 */
-	public static final Set<String> newlineBeforeTokens = new HashSet<String>(Arrays.asList(new String[] { ":", "|" }));
-	/**
-	 * rules which are interpreted as literal
-	 */
-	public static final Set<Class<?>> interpretAsLiteralRules = new HashSet<Class<?>>(Arrays.asList(new Class<?>[] { ArgActionBlockContext.class, ActionBlockContext.class }));
-	/**
-	 * default indent size
-	 */
-	private static final int DEFAULT_INDENT_SIZE = 3;
-	/**
-	 * default indent type
-	 */
-	private static final IndentType DEFAULT_INDENT_TYPE = IndentType.space;
-	/**
-	 * debug
-	 */
-	public static final boolean DEBUG = false;
-	/**
-	 * indent size
-	 */
-	public int indent = 0;
-	/**
-	 * newline
-	 */
-	private boolean newline = true;
-	/**
-	 * PrintStream
-	 */
-	private final Writer writer;
-	/**
-	 * previous token
-	 */
-	private String previousToken = "";
-	/**
-	 * indent size
-	 */
-	private int indentSize;
-	/**
-	 * indent type
-	 */
-	public IndentType indentType;
-	/**
-	 * parenth count
-	 */
-	private int parenthCount = 0;
-	/**
-	 * started output? rules in 'newlineBeforeRules' output a NL before they output the rule. This is
-	 * done to ensure they're on a new line. However, if they are the first rule, this results in
-	 * empty NL's at the top of the file. This prevents that.
-	 */
-	private boolean outputStarted = false;
+  /** */
+  /** tokens that do not need a space before them */
+  public static final Set<String> noSpacingBeforeTokens =
+      new HashSet<>(Arrays.asList(new String[] {"?", "*", ";", ")", "+"}));
 
-	/**
-	 * ctor
-	 */
-	public Antlr4FormatterListenerImpl(Writer writer) {
-		this.writer = writer;
-		indentSize = DEFAULT_INDENT_SIZE;
-		indentType = DEFAULT_INDENT_TYPE;
-	}
+  /** tokens that do not need a space after them */
+  public static final Set<String> noSpacingAfterTokens =
+      new HashSet<>(Arrays.asList(new String[] {"("}));
 
-	/**
-	 * build indent
-	 */
-	private String buildIndent(int indent) {
-		final StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < (indent * indentSize); i++) {
-			if (indentType == IndentType.space) {
-				sb.append(" ");
-			} else {
-				sb.append("/t");
-			}
-		}
-		return sb.toString();
-	}
+  /** rules which need a NL after the rule */
+  public static final Set<Class<?>> newlineAfterRules =
+      new HashSet<Class<?>>(
+          Arrays.asList(
+              new Class<?>[] {
+                GrammarDeclContext.class, ParserRuleSpecContext.class, LexerRuleSpecContext.class
+              }));
 
-	@Override
-	public void enterEveryRule(ParserRuleContext ctx) {
-		
-		if (DEBUG) {
-			System.out.println("enter rule: " + ctx.getClass().getSimpleName());
-		}
-		if (newlineBeforeRules.contains(ctx.getClass())) {
-			writeCR();
-		}
-		if (indentedeRules.contains(ctx.getClass())) {
-			indent++;
-		}
-	}
+  /** rules which colon on new line */
+  public static final Set<Class<?>> colonOnNewlineRules =
+      new HashSet<Class<?>>(
+          Arrays.asList(new Class<?>[] {ParserRuleSpecContext.class, LexerRuleSpecContext.class}));
 
-	@Override
-	public void exitEveryRule(ParserRuleContext ctx) {
-		
-		if (DEBUG) {
-			System.out.println("exit rule: " + ctx.getClass().getSimpleName());
-		}
-		if (indentedeRules.contains(ctx.getClass())) {
-			indent--;
-		}
-		if (newlineAfterRules.contains(ctx.getClass())) {
-			if (false == newline) {
-				writeCR();
-			}
-		}
-	}
+  /** rules which need a NL before the rule */
+  public static final Set<Class<?>> newlineBeforeRules =
+      new HashSet<Class<?>>(
+          Arrays.asList(
+              new Class<?>[] {
+                PrequelConstructContext.class,
+                GrammarDeclContext.class,
+                ParserRuleSpecContext.class,
+                LexerRuleSpecContext.class,
+                OptionsSpecContext.class,
+                ModeSpecContext.class,
+                ActionBlockContext.class
+              }));
 
-	public int getIndentSize() {
-		return indentSize;
-	}
+  /** rules which need an indent */
+  public static final Set<Class<?>> indentedeRules =
+      new HashSet<Class<?>>(
+          Arrays.asList(new Class<?>[] {ParserRuleSpecContext.class, LexerRuleSpecContext.class}));
 
-	public IndentType getIndentType() {
-		return indentType;
-	}
+  /** tokens which need a newline before them */
+  public static final Set<String> newlineBeforeTokens =
+      new HashSet<String>(Arrays.asList(new String[] {":", "|"}));
 
-	/**
-	 * are we currently in a parenth?
-	 */
-	protected boolean isInParenth() {
-		return (parenthCount == 0) ? false : true;
-	}
+  /** rules which are interpreted as literal */
+  public static final Set<Class<?>> interpretAsLiteralRules =
+      new HashSet<Class<?>>(
+          Arrays.asList(new Class<?>[] {ArgActionBlockContext.class, ActionBlockContext.class}));
 
-	public void setIndentSize(int indentSize) {
-		this.indentSize = indentSize;
-	}
+  /** default indent size */
+  private static final int DEFAULT_INDENT_SIZE = 3;
 
-	public void setIndentType(IndentType indentType) {
-		this.indentType = indentType;
-	}
+  /** default indent type */
+  private static final IndentType DEFAULT_INDENT_TYPE = IndentType.space;
 
-	@Override
-	public void visitComment(Token token, boolean left, CommentType commentType, boolean nl) {
-		if ((false == newline) && (false == nl)) {
-			write(" ");
-		}
-		if (nl) {
-			if (commentType == CommentType.line) {
-				writeCR();
-			} else {
-				writeSimple("\n");
-			}
-		}
-		/*
-		 * write the comment
-		 */
-		writeSimple(token.getText());
-		/*
-		 * block comments need a CR or comments to the left of the current token
-		 */
-		if ((commentType == CommentType.block) || (left)) {
-			writeCR();
-		}
-		if ((commentType == CommentType.line) || (!left)) {
-			writeCR();
-		}
-	}
+  /** debug */
+  public static final boolean DEBUG = false;
 
-	@Override
-	public void visitErrorNode(ErrorNode node) {
-		System.out.println("Error: " + node.getText());
-	}
+  /** indent size */
+  public int indent = 0;
 
-	@Override
-	public void visitTerminal(TerminalNode node) {
-		/*
-		 * eof
-		 */
-		if (node.getSymbol().getType() != Recognizer.EOF) {
-			/*
-			 * count parenths
-			 */
-			if (false == interpretAsLiteralRules.contains(node.getParent().getClass())) {
-				if (node.toString().compareTo("(") == 0) {
-					parenthCount++;
-				} else if (node.toString().compareTo(")") == 0) {
-					parenthCount--;
-				}
-			}
-			/*
-			 * tokens which require a newline before the token, like '|' and ':'
-			 */
-			if (newlineBeforeTokens.contains(node.toString())) {
-				if (false == newline) {
-					if (false == interpretAsLiteralRules.contains(node.getParent().getClass())) {
-						if (false == isInParenth()) {
-							writeCR();
-						}
-					}
-				}
-			}
-			/*
-			 * some rules want the ';' on a new line (like ParserRuleSpecContext, LexerRuleSpecContext)
-			 */
-			if (node.toString().compareTo(";") == 0) {
-				if (colonOnNewlineRules.contains(node.getParent().getClass())) {
-					writeCR();
-				}
-			}
-			/*
-			 * write the node
-			 */
-			write(node);
-		} else {
-			writeCR();
-		}
-	}
+  /** newline */
+  private boolean newline = true;
 
-	/**
-	 * write to the output stream
-	 */
-	protected void write(String str) {
-		/*
-		 * print token
-		 */
-		writeSimple(str);
-		if (true == newline) {
-			newline = false;
-		}
-		/*
-		 * save the previous
-		 */
-		previousToken = str;
-	}
+  /** PrintStream */
+  private final Writer writer;
 
-	/**
-	 * write to the output stream
-	 */
-	private void write(TerminalNode node) {
-		
-		/*
-		 * space before the output
-		 */
-		if ((false == newline) && (false == noSpacingAfterTokens.contains(previousToken)) && (false == noSpacingBeforeTokens.contains(node.getText()))) {
-			if (false == interpretAsLiteralRules.contains(node.getParent().getClass())) {
-				writeSimple(" ");
-			}
-		}
-		/*
-		 * print token
-		 */
-		writeSimple(node.getText());
-		if (true == newline) {
-			newline = false;
-		}
-		/*
-		 * save the previous
-		 */
-		previousToken = node.getText();
-	}
+  /** previous token */
+  private String previousToken = "";
 
-	/**
-	 * write a CR
-	 */
-	private void writeCR() {
-		if (true == outputStarted) {
-			writeSimple("\n");
-			writeSimple(buildIndent(indent));
-			newline = true;
-		}
-	}
+  /** indent size */
+  private int indentSize;
 
-	private void writeSimple(String string) {
-		try {
-			if (DEBUG) {
-				System.out.print(string);
-			}
-			writer.write(string);
-			if ((string.trim().length() > 0) && (outputStarted == false)) {
-				outputStarted = true;
-			}
-		} catch (final IOException e) {
-			
-		}
-	}
+  /** indent type */
+  public IndentType indentType;
+
+  /** parenth count */
+  private int parenthCount = 0;
+
+  /**
+   * started output? rules in 'newlineBeforeRules' output a NL before they output the rule. This is
+   * done to ensure they're on a new line. However, if they are the first rule, this results in
+   * empty NL's at the top of the file. This prevents that.
+   */
+  private boolean outputStarted = false;
+
+  /** ctor */
+  public Antlr4FormatterListenerImpl(Writer writer) {
+    this.writer = writer;
+    indentSize = DEFAULT_INDENT_SIZE;
+    indentType = DEFAULT_INDENT_TYPE;
+  }
+
+  /** build indent */
+  private String buildIndent(int indent) {
+    final StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < (indent * indentSize); i++) {
+      if (indentType == IndentType.space) {
+        sb.append(" ");
+      } else {
+        sb.append("/t");
+      }
+    }
+    return sb.toString();
+  }
+
+  @Override
+  public void enterEveryRule(ParserRuleContext ctx) {
+
+    if (DEBUG) {
+      System.out.println("enter rule: " + ctx.getClass().getSimpleName());
+    }
+    if (newlineBeforeRules.contains(ctx.getClass())) {
+      writeCR();
+    }
+    if (indentedeRules.contains(ctx.getClass())) {
+      indent++;
+    }
+  }
+
+  @Override
+  public void exitEveryRule(ParserRuleContext ctx) {
+
+    if (DEBUG) {
+      System.out.println("exit rule: " + ctx.getClass().getSimpleName());
+    }
+    if (indentedeRules.contains(ctx.getClass())) {
+      indent--;
+    }
+    if (newlineAfterRules.contains(ctx.getClass())) {
+      if (false == newline) {
+        writeCR();
+      }
+    }
+  }
+
+  public int getIndentSize() {
+    return indentSize;
+  }
+
+  public IndentType getIndentType() {
+    return indentType;
+  }
+
+  /** are we currently in a parenth? */
+  protected boolean isInParenth() {
+    return (parenthCount == 0) ? false : true;
+  }
+
+  public void setIndentSize(int indentSize) {
+    this.indentSize = indentSize;
+  }
+
+  public void setIndentType(IndentType indentType) {
+    this.indentType = indentType;
+  }
+
+  @Override
+  public void visitComment(Token token, boolean left, CommentType commentType, boolean nl) {
+    if ((false == newline) && (false == nl)) {
+      write(" ");
+    }
+    if (nl) {
+      if (commentType == CommentType.line) {
+        writeCR();
+      } else {
+        writeSimple("\n");
+      }
+    }
+    /*
+     * write the comment
+     */
+    writeSimple(token.getText());
+    /*
+     * block comments need a CR or comments to the left of the current token
+     */
+    if ((commentType == CommentType.block) || (left)) {
+      writeCR();
+    }
+    if ((commentType == CommentType.line) || (!left)) {
+      writeCR();
+    }
+  }
+
+  @Override
+  public void visitErrorNode(ErrorNode node) {
+    System.out.println("Error: " + node.getText());
+  }
+
+  @Override
+  public void visitTerminal(TerminalNode node) {
+    /*
+     * eof
+     */
+    if (node.getSymbol().getType() != Recognizer.EOF) {
+      /*
+       * count parenths
+       */
+      if (false == interpretAsLiteralRules.contains(node.getParent().getClass())) {
+        if (node.toString().compareTo("(") == 0) {
+          parenthCount++;
+        } else if (node.toString().compareTo(")") == 0) {
+          parenthCount--;
+        }
+      }
+      /*
+       * tokens which require a newline before the token, like '|' and ':'
+       */
+      if (newlineBeforeTokens.contains(node.toString())) {
+        if (false == newline) {
+          if (false == interpretAsLiteralRules.contains(node.getParent().getClass())) {
+            if (false == isInParenth()) {
+              writeCR();
+            }
+          }
+        }
+      }
+      /*
+       * some rules want the ';' on a new line (like ParserRuleSpecContext, LexerRuleSpecContext)
+       */
+      if (node.toString().compareTo(";") == 0) {
+        if (colonOnNewlineRules.contains(node.getParent().getClass())) {
+          writeCR();
+        }
+      }
+      /*
+       * write the node
+       */
+      write(node);
+    } else {
+      writeCR();
+    }
+  }
+
+  /** write to the output stream */
+  protected void write(String str) {
+    /*
+     * print token
+     */
+    writeSimple(str);
+    if (true == newline) {
+      newline = false;
+    }
+    /*
+     * save the previous
+     */
+    previousToken = str;
+  }
+
+  /** write to the output stream */
+  private void write(TerminalNode node) {
+
+    /*
+     * space before the output
+     */
+    if ((false == newline)
+        && (false == noSpacingAfterTokens.contains(previousToken))
+        && (false == noSpacingBeforeTokens.contains(node.getText()))) {
+      if (false == interpretAsLiteralRules.contains(node.getParent().getClass())) {
+        writeSimple(" ");
+      }
+    }
+    /*
+     * print token
+     */
+    writeSimple(node.getText());
+    if (true == newline) {
+      newline = false;
+    }
+    /*
+     * save the previous
+     */
+    previousToken = node.getText();
+  }
+
+  /** write a CR */
+  private void writeCR() {
+    if (true == outputStarted) {
+      writeSimple("\n");
+      writeSimple(buildIndent(indent));
+      newline = true;
+    }
+  }
+
+  private void writeSimple(String string) {
+    try {
+      if (DEBUG) {
+        System.out.print(string);
+      }
+      writer.write(string);
+      if ((string.trim().length() > 0) && (outputStarted == false)) {
+        outputStarted = true;
+      }
+    } catch (final IOException e) {
+
+    }
+  }
 }

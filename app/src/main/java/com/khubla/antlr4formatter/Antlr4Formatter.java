@@ -17,6 +17,8 @@
  */
 package com.khubla.antlr4formatter;
 
+import io.github.rosemoe.sora.langs.javascript.JavaScriptLexer;
+import io.github.rosemoe.sora.langs.javascript.JavaScriptParser;
 import java.io.*;
 import java.nio.charset.*;
 import java.nio.file.*;
@@ -48,12 +50,38 @@ public class Antlr4Formatter {
       throw new Antlr4FormatterException("Exception reading and parsing file", e);
     }
   }
+  
+  public static String formatJs(String string) throws Antlr4FormatterException {
+    try {
+      if (null != string) {
+        final StringWriter writer = new StringWriter();
+        final CodePointCharStream input = CharStreams.fromString(string);
+        jsFormat(input, writer);
+        return writer.toString();
+      } else {
+        return "";
+      }
+    } catch (final Exception e) {
+      throw new Antlr4FormatterException("Exception reading and parsing file", e);
+    }
+  }
 
   private static void formatGrammar(CharStream input, Writer output) {
     final ANTLRv4Lexer lexer = new ANTLRv4Lexer(input);
     final CommonTokenStream commonTokenStream = new CommonTokenStream(lexer);
     final ANTLRv4Parser parser = new ANTLRv4Parser(commonTokenStream);
     final GrammarSpecContext grammarSpecContext = parser.grammarSpec();
+    ParseTreeWalker.DEFAULT.walk(
+        new FormatterParseTreeListenerImpl(
+            new Antlr4FormatterListenerImpl(output), commonTokenStream),
+        grammarSpecContext);
+  }
+
+  private static void jsFormat(CharStream input, Writer output) {
+    var lexer = new JavaScriptLexer(input);
+    var commonTokenStream = new CommonTokenStream(lexer);
+    var parser = new JavaScriptParser(commonTokenStream);
+    var grammarSpecContext = parser.program();
     ParseTreeWalker.DEFAULT.walk(
         new FormatterParseTreeListenerImpl(
             new Antlr4FormatterListenerImpl(output), commonTokenStream),

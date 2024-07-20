@@ -1,5 +1,6 @@
 package Ninja.coder.Ghostemane.code;
 
+import Ninja.coder.Ghostemane.code.Welcome.SplashWord;
 import Ninja.coder.Ghostemane.code.activities.BaseCompat;
 import Ninja.coder.Ghostemane.code.activities.FileDirActivity;
 import Ninja.coder.Ghostemane.code.activities.StreamSoftAppActivity;
@@ -7,7 +8,6 @@ import Ninja.coder.Ghostemane.code.utils.AssetsSoft;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import Ninja.coder.Ghostemane.code.utils.SetThemeForJson;
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -21,7 +21,6 @@ import androidx.core.content.ContextCompat;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.hzy.lib7z.IExtractCallback;
 import com.hzy.lib7z.Z7Extractor;
-import com.xiaoyv.ccompile.CCppEngine;
 import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -78,11 +77,12 @@ public class MainActivity extends BaseCompat {
   }
 
   private void initialize(Bundle _savedInstanceState) {
-    setac = getSharedPreferences("setac", Activity.MODE_PRIVATE);
+    setac = getSharedPreferences("setac", MODE_PRIVATE);
   }
 
   private void tryToRunApp() {
     ThemeChaker();
+
     FileUtil.makeDir("/storage/emulated/0/GhostWebIDE/");
     FileUtil.makeDir("/storage/emulated/0/GhostWebIDE/.icon");
     FileUtil.makeDir("/storage/emulated/0/GhostWebIDE/android");
@@ -93,69 +93,11 @@ public class MainActivity extends BaseCompat {
     FileUtil.makeDir("/storage/emulated/0/GhostWebIDE/font");
     FileUtil.makeDir("/storage/emulated/0/GhostWebIDE/apk");
     var mypath = getFilesDir().getAbsolutePath() + "/" + "databins";
-
-    try {
-      if (!FileUtil.isExistFile(mypath)) {
-        nameFile("databins.7z");
-
-      } else if (!FileUtil.isExistFile(
-          getFilesDir().getAbsolutePath() + File.separator + "files" + File.separator + "env.sh")) {
-        nameFile("python.7z");
-        // start
-      } else {
-        startApp();
-      }
-    } catch (Exception err) {
-      Log.e("Error", err.getLocalizedMessage());
-      startApp();
-    }
-    try {
-      if (!CCppEngine.checkGcc(this)) {
-        CCppEngine.installGcc(
-            this,
-            new File("/storage/emulated/0/GhostWebIDE/gcc.zip"),
-            new CCppEngine.OnInstallListener() {
-
-              @Override
-              public void onError(String error) {}
-
-              @Override
-              public void onSuccess() {
-                startApp();
-              }
-            });
-      }
-    } catch (Exception err) {
-      startApp();
-    }
-
-    try {
-      if (!FileUtil.isExistFile(
-          getFilesDir().getAbsolutePath()
-              + File.separator
-              + "lib"
-              + File.separator
-              + "libx265.so")) {
-        nameFile("lib.7z");
-      } else {
-        startApp();
-      }
-    } catch (Exception err) {
-      Log.e("Error ", err.getLocalizedMessage());
-      startApp();
-    }
-
-    try {
-      if (!FileUtil.isExistFile("/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost")) {
-        SetThemeForJson.winterToPath();
-      } else {
-        Log.e("File is ExistFile", "");
-        startApp();
-      }
-    } catch (Exception err) {
-      Log.e("Error ", err.getLocalizedMessage());
-      startApp();
-    }
+    var pythonPath =
+        getFilesDir().getAbsolutePath() + File.separator + "files" + File.separator + "env.sh";
+    var phpPath =
+        getFilesDir().getAbsolutePath() + File.separator + "lib" + File.separator + "libx265.so";
+    var ghostPath = "/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost";
 
     try {
       if (!FileUtil.isExistFile("/storage/emulated/0/GhostWebIDE/android/android.jar")) {
@@ -198,25 +140,38 @@ public class MainActivity extends BaseCompat {
   }
 
   void startApp() {
+    var mypath = getFilesDir().getAbsolutePath() + "/" + "databins";
+    var pythonPath =
+        getFilesDir().getAbsolutePath() + File.separator + "files" + File.separator + "env.sh";
+    var phpPath =
+        getFilesDir().getAbsolutePath() + File.separator + "lib" + File.separator + "libx265.so";
+    var ghostPath = "/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost";
     ask =
         new TimerTask() {
           @Override
           public void run() {
             runOnUiThread(
                 () -> {
-                  if (setac.getString("ac", "").equals("true")) {
-                    gotopage.setClass(getApplicationContext(), FileDirActivity.class);
-                    gotopage.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    startActivity(gotopage);
+                  if (!FileUtil.isExistFile(pythonPath)
+                      || !FileUtil.isExistFile(phpPath)
+                      || !FileUtil.isExistFile(mypath)
+                      || !FileUtil.isExistFile(ghostPath)) {
+                    startActivity(new Intent(getApplication(), SplashWord.class));
                   } else {
-                    if (setac.getString("ac", "").equals("false")) {
-                      gotopage.setClass(getApplicationContext(), StreamSoftAppActivity.class);
+                    if (setac.getString("ac", "").equals("true")) {
+                      gotopage.setClass(getApplicationContext(), FileDirActivity.class);
                       gotopage.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                       startActivity(gotopage);
                     } else {
-                      gotopage.setClass(getApplicationContext(), StreamSoftAppActivity.class);
-                      gotopage.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                      startActivity(gotopage);
+                      if (setac.getString("ac", "").equals("false")) {
+                        gotopage.setClass(getApplicationContext(), StreamSoftAppActivity.class);
+                        gotopage.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(gotopage);
+                      } else {
+                        gotopage.setClass(getApplicationContext(), StreamSoftAppActivity.class);
+                        gotopage.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(gotopage);
+                      }
                     }
                   }
                 });
@@ -224,51 +179,5 @@ public class MainActivity extends BaseCompat {
         };
 
     _timer.schedule(ask, 3000);
-  }
-
-  void nameFile(String name) {
-    layout_main.setVisibility(View.VISIBLE);
-    new Thread(
-            () -> {
-              AssetManager manager = getAssets();
-              Z7Extractor.extractAsset(
-                  manager,
-                  name,
-                  getFilesDir().getAbsolutePath(),
-                  new IExtractCallback() {
-
-                    @Override
-                    public void onError(int arg0, String arg1) {
-                      runOnUiThread(() -> startApp());
-                    }
-
-                    @Override
-                    public void onGetFileNum(int arg0) {}
-
-                    @Override
-                    public void onProgress(String s, long tr) {
-                      runOnUiThread(
-                          () -> {
-                            tv_main.setText(s);
-
-                            prograssBar.setProgressCompat((int) tr, true);
-                          });
-                    }
-
-                    @Override
-                    public void onStart() {
-                      runOnUiThread(
-                          () -> {
-                            tv_main.setText("Start...");
-                          });
-                    }
-
-                    @Override
-                    public void onSucceed() {
-                      Log.i("TAG", "all file unziped");
-                    }
-                  });
-            })
-        .start();
   }
 }

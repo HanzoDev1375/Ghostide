@@ -127,4 +127,6 @@ dependencies {
     implementation project(':ui-designer')
     implementation project(':webview')
     implementation project(':vectormaster')   
+    implementation 'com.github.AppIntro:AppIntro:6.3.1'
+    implementation 'com.airbnb.android:lottie:6.4.1'
 }

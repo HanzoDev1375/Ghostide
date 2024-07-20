@@ -26,14 +26,12 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /** XML lexer derived from ANTLR v4 ref guide book example */
-// $antlr-format alignTrailingComments true, columnLimit 150, maxEmptyLinesToKeep 1, reflowComments false, useTab false
-
-// $antlr-format allowShortRulesOnASingleLine true, allowShortBlocksOnASingleLine true, minEmptyLines 0, alignSemicolons ownLine
-
-// $antlr-format alignColons trailing, singleLineOverrulesHangingColon true, alignLexerCommands true, alignLabels true, alignTrailers true
-
 lexer grammar XMLLexer;
 // Default "mode": Everything OUTSIDE of a tag
+
+COLON
+   : ':'
+   ;
 
 COMMENT
    : '<!--' .*? '-->'
@@ -41,10 +39,6 @@ COMMENT
 
 CDATA
    : '<![CDATA[' .*? ']]>'
-   ;
-
-OPEN_SLASH
-   : '</' -> pushMode (INSIDE)
    ;
 
 /** Scarf all DTD stuff, Entity Declarations like <!ENTITY ...>,
@@ -61,8 +55,6 @@ CharRef
    : '&#' DIGIT+ ';'
    | '&#x' HEXDIGIT+ ';'
    | '&#x' HEXDIGIT+
-   //test from show Hex Color
-   | '>' '&#x' HEXDIGIT+ '<'
    ;
 
 SEA_WS
@@ -71,6 +63,10 @@ SEA_WS
 
 OPEN
    : '<' -> pushMode (INSIDE)
+   ;
+
+OPEN_SLASH
+   : '</' -> pushMode (INSIDE)
    ;
 
 XMLDeclOpen
@@ -132,6 +128,7 @@ fragment DIGIT
 fragment NameChar
    : NameStartChar
    | '-'
+   | '_'
    | '.'
    | DIGIT
    | '\u00B7'
@@ -140,7 +137,7 @@ fragment NameChar
    ;
 
 fragment NameStartChar
-   : [_:a-zA-Z]
+   : [:a-zA-Z]
    | '\u2070' .. '\u218F'
    | '\u2C00' .. '\u2FEF'
    | '\u3001' .. '\uD7FF'
@@ -156,13 +153,5 @@ PI
    
 IGNORE
    : . -> more
-   ;
-
-HASH
-   : '#'
-   ;
-
-HEXCOLOR
-   : STRING HASH HEXDIGIT* STRING
    ;
 

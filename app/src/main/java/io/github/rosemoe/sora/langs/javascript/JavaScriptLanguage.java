@@ -2,6 +2,7 @@ package io.github.rosemoe.sora.langs.javascript;
 
 import Ninja.coder.Ghostemane.code.ApplicationLoader;
 import android.widget.Toast;
+import com.khubla.antlr4formatter.Antlr4Formatter;
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
 import io.github.rosemoe.sora.interfaces.NewlineHandler;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
@@ -132,7 +133,12 @@ public class JavaScriptLanguage implements EditorLanguage {
 
   @Override
   public CharSequence format(CharSequence text) {
-    return javaFormat(text.toString());
+    try {
+      return Antlr4Formatter.formatJs(text.toString());
+    } catch (Exception err) {
+      return text;
+    }
+    // return javaFormat(text.toString());
   }
 
   @Override

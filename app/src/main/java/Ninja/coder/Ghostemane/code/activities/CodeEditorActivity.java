@@ -38,6 +38,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
@@ -112,7 +113,7 @@ public class CodeEditorActivity extends AppCompatActivity {
   protected ExrtaFab _fab; // /By ninja coder big man main
   private final Timer _timer = new Timer();
   private WallpaperParallaxEffect effect;
-  private CoordinatorLayout _coordinator;
+  private CoordinatorLayout Coordinator;
   private String currentWord = "";
   private HashMap<String, Object> imap = new HashMap<>();
   private double n = 0;
@@ -146,7 +147,7 @@ public class CodeEditorActivity extends AppCompatActivity {
   private final ArrayList<String> folderList = new ArrayList<>();
   private final ArrayList<String> fileList = new ArrayList<>();
   private final ArrayList<HashMap<String, Object>> files = new ArrayList<>();
-  private PraramnetLayoutNinja Mainlinear;
+
   private LinearLayout multytab;
   private FrameLayout FrameLayout01;
   private LinearLayout newLayoutSymbolBar;
@@ -217,7 +218,7 @@ public class CodeEditorActivity extends AppCompatActivity {
   private SoundPool soundPool;
   private SharedPreferences getinitdir;
   private SharedPreferences mthemepost;
-
+  private ImageView ghostIcon;
   private SharedPreferences shSizePx;
   private PowerMenu jelper;
   private SharedPreferences t;
@@ -279,10 +280,9 @@ public class CodeEditorActivity extends AppCompatActivity {
 
   private void initialize(Bundle _savedInstanceState) {
 
-    _coordinator = findViewById(R.id._coordinator);
+    Coordinator = findViewById(R.id.Coordinator);
     _fab = findViewById(R.id._fab);
-    _coordinator = findViewById(R.id._coordinator);
-    Mainlinear = findViewById(R.id.Mainlinear);
+    Coordinator = findViewById(R.id.Coordinator);
     multytab = findViewById(R.id.multytab);
     FrameLayout01 = findViewById(R.id.FrameLayout01);
     newLayoutSymbolBar = findViewById(R.id.newLayoutSymbolBar);
@@ -344,6 +344,7 @@ public class CodeEditorActivity extends AppCompatActivity {
     t = getSharedPreferences("t", Activity.MODE_PRIVATE);
     thememanagersoft = getSharedPreferences("thememanagersoft", Activity.MODE_PRIVATE);
     sf = getSharedPreferences("sf", Activity.MODE_PRIVATE);
+
     modelEditor = new ViewModelProvider(this).get(EditorViewModel.class);
     editor.restoreState(_savedInstanceState);
     recyclerview1.addOnScrollListener(
@@ -371,8 +372,57 @@ public class CodeEditorActivity extends AppCompatActivity {
             }
           }
         });
-    var data = thememanagersoft.contains("br") ? thememanagersoft.getFloat("br", 2) : 3;
-    BlurImage.setBlurInWallpaperMobile(this, data, getWindow().getDecorView());
+    ghostIcon = findViewById(R.id.icon_backgroundghost);
+
+    var mRootView = getWindow().getDecorView();
+    mRootView
+        .getViewTreeObserver()
+        .addOnGlobalLayoutListener(
+            new ViewTreeObserver.OnGlobalLayoutListener() {
+              @Override
+              public void onGlobalLayout() {
+                Rect r = new Rect();
+                mRootView.getWindowVisibleDisplayFrame(r);
+                int screenHeight = mRootView.getRootView().getHeight();
+                int keypadHeight = screenHeight - r.bottom;
+
+                // Define the animation duration
+                final float scale = getResources().getDisplayMetrics().density;
+
+                int shortAnimationDuration =
+                    getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+                if (keypadHeight > screenHeight * 0.15) {
+                  // Increase the scale
+                  var max = 1.4f;
+                  ghostIcon
+                      .animate()
+                      .scaleX(Math.max(max, 1))
+                      .scaleY(Math.max(max, 1))
+                      .translationX(max / 2)
+                      .translationY(max * max - 1)
+                      .x(Math.max(max / 5, 6))
+                      .y(Math.min(max * max, 6))
+                      .setDuration(1000)
+                      .start();
+
+                } else {
+                  // Decrease the scale
+                  float minScale = 1.0f;
+                  ghostIcon
+                      .animate()
+                      .scaleX(minScale)
+                      .scaleY(minScale)
+                      .translationX(minScale)
+                      .translationY(minScale)
+                      .x(minScale)
+                      .y(minScale)
+                      .setDuration(1000)
+                      .start();
+                }
+              }
+            });
+
     ghost_searchs.bindEditor(editor);
     ghost_searchs.setCallBack(
         new GhostWebEditorSearch.onViewChange() {
@@ -629,7 +679,6 @@ public class CodeEditorActivity extends AppCompatActivity {
         typeVl, "SyombolBarTextColor", Color.parseColor("#FFFFA0FB"), this, imap);
     themeForJson2.AddthemetoSattos(this, imap);
     themeForJson2.addBackground(this, imap, "ToolbarColor", CustomToolbar, 0xFF281B26);
-    themeForJson2.addBackground(this, imap, "BackgroundColorLinear", Mainlinear, 0xFF281B26);
     themeForJson2.addBackground(this, imap, "TabImageColorFilter", divar, Color.RED);
     themeForJson2.addBackground(this, imap, "TabImageColorFilter", divardown, Color.RED);
     // divardown
@@ -650,7 +699,7 @@ public class CodeEditorActivity extends AppCompatActivity {
       ///   MapObjectData.setMatetialThemeCodeEditor(editor);
       ColorAndroid12.tryToRunThemeMaterial(editor);
       CustomToolbar.setBackgroundColor(0xFF201B16);
-      Mainlinear.setBackgroundColor(0xFF201B16);
+
       redo.setColorFilter(0xFFFFDCBD, PorterDuff.Mode.MULTIPLY);
       undo.setColorFilter(0xFFFFDCBD, PorterDuff.Mode.MULTIPLY);
       menupopnew.setColorFilter(0xFFEEEEEE, PorterDuff.Mode.MULTIPLY);
@@ -712,6 +761,15 @@ public class CodeEditorActivity extends AppCompatActivity {
       typeVl.setTypeface(
           Typeface.createFromAsset(getAssets(), "fonts/ghostfont.ttf"), Typeface.NORMAL);
     }
+    var data = thememanagersoft.contains("br") ? thememanagersoft.getFloat("br", 2) : 3;
+    BlurImage.setBlurInWallpaperMobile(this, data, ghostIcon);
+    var layout = findViewById(R.id.getColorPass);
+    layout.setBackgroundColor(Color.parseColor(imap.get("BackgroundColorLinear").toString()));
+    var i = layout.getBackground();
+    ColorDrawable colorDrawable = (ColorDrawable) i;
+    int color = colorDrawable.getColor();
+    getWindow().setNavigationBarColor(color);
+    getWindow().setStatusBarColor(color);
     editor.setAutoCompletionEnabled(!auto.contains("mauto"));
     _fab.setIconResource(R.drawable.play);
     home = true;
@@ -747,23 +805,6 @@ public class CodeEditorActivity extends AppCompatActivity {
     if (mthemepost.getString("mytheme", "").equals("true")) {
       EdgeToEdge.enable(this);
     } else {
-      if (imap.containsKey("BackgroundColorLinear")) {
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-          Window ninjacoder = this.getWindow();
-          ninjacoder.setStatusBarColor(
-              Color.parseColor(imap.get("BackgroundColorLinear").toString()));
-          ninjacoder.setNavigationBarColor(
-              Color.parseColor(imap.get("BackgroundColorLinear").toString()));
-          ninjacoder.setStatusBarContrastEnforced(true);
-        }
-      } else {
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-          Window ninjacoder = this.getWindow();
-          ninjacoder.setStatusBarColor(Color.parseColor("#FF2B2122"));
-          ninjacoder.setNavigationBarColor(Color.parseColor("#FF2B2122"));
-          ninjacoder.setStatusBarContrastEnforced(true);
-        }
-      }
     }
   }
 
@@ -914,7 +955,7 @@ public class CodeEditorActivity extends AppCompatActivity {
                 }
               case 4:
                 {
-                  setAllSaveFile(_coordinator);
+                  setAllSaveFile(Coordinator);
                   var bar = new FlashBarUtils(CodeEditorActivity.this);
                   bar.setCustomMassges("All File saved by " + shp.getString("pos_path", ""));
                   break;
@@ -1463,8 +1504,8 @@ public class CodeEditorActivity extends AppCompatActivity {
           @Override
           public void onOffsetsChanged(int offsetX, int offsetY, float angle) {
             float progress = 1.0f;
-            _coordinator.setTranslationX(offsetX * progress);
-            _coordinator.setTranslationY(offsetY * progress);
+            Coordinator.setTranslationX(offsetX * progress);
+            Coordinator.setTranslationY(offsetY * progress);
           }
         });
 

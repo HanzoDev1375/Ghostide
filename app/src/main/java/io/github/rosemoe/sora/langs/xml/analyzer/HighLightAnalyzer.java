@@ -199,6 +199,12 @@ public class HighLightAnalyzer implements CodeAnalyzer {
                   colors.addIfNeeded(line, column + index + 1, EditorColorScheme.ATTRIBUTE_NAME);
               }
             }
+            if (preToken != null
+                && preToken.getType() == XMLLexer.SLASH_CLOSE
+                && preToken != null
+                && preToken.getType() == XMLLexer.OPEN_SLASH) {
+              colors.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
+            }
             break;
           case XMLLexer.COMMENT:
             colors.addIfNeeded(line, column, EditorColorScheme.COMMENT);
@@ -209,7 +215,6 @@ public class HighLightAnalyzer implements CodeAnalyzer {
               break;
             }
           case XMLLexer.CLOSE:
-            
             colors.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
             break;
           default:

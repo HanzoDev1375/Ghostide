@@ -5,11 +5,18 @@
      android:layout_height="match_parent"
      android:layout_width="match_parent"
      android:fitsSystemWindows="false"
-     android:id="@+id/_coordinator">
+     android:id="@+id/Coordinator">
+
+    <ImageView
+         android:layout_height="match_parent"
+         android:layout_width="match_parent"
+         android:scaleType="centerCrop"
+         android:id="@+id/icon_backgroundghost" />
 
     <LinearLayout
          android:layout_height="match_parent"
          android:layout_width="match_parent"
+         android:id="@+id/getColorPass"
          app:layout_behavior="@string/appbar_scrolling_view_behavior"
          android:orientation="vertical">
 

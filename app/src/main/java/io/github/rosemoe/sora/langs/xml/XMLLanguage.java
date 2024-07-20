@@ -1,6 +1,5 @@
 package io.github.rosemoe.sora.langs.xml;
 
-import Ninja.coder.Ghostemane.code.config.JacksonFormatter;
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 import io.github.rosemoe.sora.interfaces.EditorLanguage;
@@ -13,50 +12,13 @@ import org.antlr.v4.runtime.Token;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.parser.Parser;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.IOException;
 import java.io.StringReader;
-import java.io.StringWriter;
 
 public class XMLLanguage implements EditorLanguage {
     private final XMLAnalyzer analyzer = new XMLAnalyzer();
     private int tabSize = 4;
 
-    public static String formatXMLString(String unformattedXml) {
-        try {
-
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            org.w3c.dom.Document document = builder.parse(new InputSource(new StringReader(unformattedXml)));
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-            transformer.setOutputProperty(OutputKeys.CDATA_SECTION_ELEMENTS, "yes");
-            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
-
-            StringWriter writer = new StringWriter();
-            transformer.transform(new DOMSource(document), new StreamResult(writer));
-
-            return writer.toString();
-        } catch (IOException | ParserConfigurationException | SAXException | TransformerException e) {
-            e.printStackTrace();
-            return "Error occurred: " + e.getMessage();
-        }
-    }
 
     @Override
     public CodeAnalyzer getAnalyzer() {
@@ -117,18 +79,7 @@ public class XMLLanguage implements EditorLanguage {
 
     @Override
     public CharSequence format(CharSequence ch) {
-        var item = ch.toString();
-        JacksonFormatter jformat = new JacksonFormatter();
-
-//    if (item.contains("<vector xmlns:android")) {
-//      return formatXMLString(ch.toString());
-//    } else if (item.contains("<?xml version")) {
-//      Log.e("AndroidXml", "Android Xml not Format code");
-//      return jformat.formatXml(item);
-//    } else {
-//
-//    }
-        return jformat.formatXml(ch.toString());
+        return formatXml(ch.toString());
     }
 
     private String formatXml(String xml) {

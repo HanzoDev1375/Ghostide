@@ -770,5 +770,6 @@
                 <action android:name="Ninja.coder.code.Ghostemane.SEND_FILE_PATH" />
             </intent-filter>
         </receiver>
+        <activity android:name=".Welcome.SplashWord" />
     </application>
 </manifest>
