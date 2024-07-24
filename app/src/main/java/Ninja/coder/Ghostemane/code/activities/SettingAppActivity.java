@@ -2,33 +2,24 @@ package Ninja.coder.Ghostemane.code.activities;
 
 import Ninja.coder.Ghostemane.code.ApplicationLoader;
 import Ninja.coder.Ghostemane.code.R;
-import Ninja.coder.Ghostemane.code.activities.SettingAppActivity;
 import Ninja.coder.Ghostemane.code.adapter.ListAppIconAd;
 import Ninja.coder.Ghostemane.code.config.AppIconManager;
-import Ninja.coder.Ghostemane.code.model.LoadTheme;
+import Ninja.coder.Ghostemane.code.config.SwitchMaterialPrf;
 import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
 import Ninja.coder.Ghostemane.code.utils.DataUtil;
-import Ninja.coder.Ghostemane.code.utils.ViewUtils;
 import Ninja.coder.Ghostemane.code.widget.GhostWebMaterialDialog;
-import Ninja.coder.Ghostemane.code.widget.PraramnetLayoutNinja;
-import Ninja.coder.Ghostemane.code.widget.SwitchCompatX;
 import Ninja.coder.Ghostemane.code.widget.component.fastscrollcompat.FastScrollNestedScrollView;
 import Ninja.coder.Ghostemane.code.widget.component.fastscrollcompat.FastScrollerBuilder;
-import android.Manifest;
 import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.app.Activity;
 
 import android.app.WallpaperManager;
 import android.content.*;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -38,21 +29,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.animation.LinearInterpolator;
 import android.widget.*;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.checkbox.MaterialCheckBox;
-import com.google.android.material.color.DynamicColors;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.materialswitch.MaterialSwitch;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.quickersilver.themeengine.ThemeChooserDialogBuilder;
@@ -82,119 +67,9 @@ public class SettingAppActivity extends BaseCompat {
   private ArrayList<HashMap<String, Object>> c2 = new ArrayList<>();
   private List<HashMap<String, Object>> map = new ArrayList<>();
   private FastScrollNestedScrollView bar;
-  private PraramnetLayoutNinja linear1;
-  private LinearLayout linear2;
-  private LinearLayout linear3;
-  private LinearLayout pubilc;
-  private LinearLayout linear22;
-  private LinearLayout linear14;
-  private LinearLayout linear10;
-  private LinearLayout linear11;
-  private LinearLayout themes;
-  private LinearLayout stingkeyboard;
-  private LinearLayout keyboard;
-  private LinearLayout linear21;
-  private TextView textview9;
-  private ImageView imageview1;
-  private ImageView arrow05;
-  private TextView textview10;
-  private ImageView imageview7;
-  private TextView tvtheme;
-  private ImageView imgtheme;
-  private ImageView arrow04;
-  private TextView textview13;
-  private ImageView imageview8;
-  private TextView textview14;
-  private ImageView imageview3;
-  private ImageView arrow03;
-  private TextView textview1;
-  private ImageView imageview9;
-  private TextView tvword;
-  private MaterialCheckBox checkbox1;
-  private LinearLayout datapost;
-  private LinearLayout linear32;
-  private LinearLayout linear37;
-  private LinearLayout linear33;
-  private MaterialSwitch addsabet;
-  private LinearLayout linear38;
-  private MaterialSwitch vibreh;
-  private LinearLayout add;
-  private LinearLayout reminderadditem;
-  private LinearLayout linear25;
-  private LinearLayout size;
-  private ImageView arrow02;
-  private TextView textview20;
-  private ImageView imageview11;
-  private LinearLayout linear29;
-  private LinearLayout linear67;
-  private LinearLayout linear93;
-  private LinearLayout linear28;
-  private MaterialSwitch sw;
-  private LinearLayout linear68;
-  private LinearLayout linear70;
-  private MaterialSwitch molaq;
-  private LinearLayout linear95;
-  private MaterialSwitch switchobtical;
-  private LinearLayout linear27;
-  private LinearLayout autotext;
-  private ImageView arrow01;
-  private TextView textview6;
-  private ImageView imageview10;
-  private LinearLayout rose;
-  private RecyclerView recyclerview2;
-  private LinearLayout linear42;
-  private LinearLayout linear47;
-  private LinearLayout linear52;
-  private LinearLayout linear57;
-  private LinearLayout linear71;
-  private LinearLayout linear75;
-  private LinearLayout linear79;
-  private LinearLayout linear83;
-  private LinearLayout linear84;
-  private LinearLayout linear88;
-  private LinearLayout getThemeUtils;
-  private LinearLayout atctm;
-  private LinearLayout linear92;
-  private LinearLayout linear43;
-  private LinearLayout linear45;
-  private MaterialSwitch autotextComple, terminalColors, wallmodes;
-  private LinearLayout linear48;
-  private LinearLayout linear49;
-  private LinearLayout linear50;
-  private TextView textview25;
-  private LinearLayout backtab;
-  private SwitchCompatX tab;
-  private LinearLayout linear53;
-  private LinearLayout linear55;
-  private MaterialSwitch lineeditor;
-  private LinearLayout linear58;
-  private LinearLayout linear60;
-  private MaterialSwitch themesabet;
-  private LinearLayout linear72;
-  private LinearLayout linear74;
-  private MaterialSwitch msaveandexit;
-  private LinearLayout linear76;
-  private LinearLayout linear78;
-  private MaterialSwitch dirfilesswitch, treecolors, grmode;
-  private LinearLayout linear80;
-  private LinearLayout linear82;
-  private MaterialSwitch themeinstall;
-  private TextView textview33;
-  private ImageView imageview12;
-  private LinearLayout linear85;
-  private LinearLayout linear87;
-  private MaterialSwitch switchac;
-  private LinearLayout linear89;
-  private LinearLayout linear91;
-  private MaterialSwitch switchmaterialYou;
-  private TextView customTheme;
-  private TextView textview36;
-  private TextView textview37;
-  private TextView textview15;
-  private MaterialCheckBox checkbox9;
-
+  private RecyclerView rvsetting;
   private Intent intent = new Intent();
-
+  private SwitchMaterialPrf materialYous, effect, grids, walpapersystem, deftheme, autoSaveText;
   private ObjectAnimator mdownObjectAnimator = new ObjectAnimator();
   private SharedPreferences mt300;
   private TimerTask timer;
@@ -206,7 +81,6 @@ public class SettingAppActivity extends BaseCompat {
       getDark,
       re,
       war,
-      kos,
       tab100,
       setfont,
       atx,
@@ -231,23 +105,6 @@ public class SettingAppActivity extends BaseCompat {
     super.onCreate(_savedInstanceState);
     setContentView(R.layout.settingapp);
     initialize(_savedInstanceState);
-
-    if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-        == PackageManager.PERMISSION_DENIED) {
-      ActivityCompat.requestPermissions(
-          this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, 1000);
-    } else {
-      StartLuncherApp();
-    }
-  }
-
-  @Override
-  public void onRequestPermissionsResult(
-      int requestCode, String[] permissions, int[] grantResults) {
-    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    if (requestCode == 1000) {
-      StartLuncherApp();
-    }
   }
 
   public int colors() {
@@ -273,119 +130,7 @@ public class SettingAppActivity extends BaseCompat {
     themeEngine.setThemeMode(ThemeMode.DARK);
     themeEngine.applyToActivity(this);
     bar = findViewById(R.id.bar);
-    linear1 = findViewById(R.id.linear1);
-    linear2 = findViewById(R.id.linear2);
-    linear3 = findViewById(R.id.linear3);
-    grmode = findViewById(R.id.grmode);
-    pubilc = findViewById(R.id.pubilc);
-    linear22 = findViewById(R.id.linear22);
-    linear14 = findViewById(R.id.linear14);
-    linear10 = findViewById(R.id.linear10);
-    linear11 = findViewById(R.id.linear11);
-    themes = findViewById(R.id.themes);
-    stingkeyboard = findViewById(R.id.stingkeyboard);
-    keyboard = findViewById(R.id.keyboard);
-    linear21 = findViewById(R.id.linear21);
-    textview9 = findViewById(R.id.textview9);
-    imageview1 = findViewById(R.id.imageview1);
-    arrow05 = findViewById(R.id.arrow05);
-    textview10 = findViewById(R.id.textview10);
-    imageview7 = findViewById(R.id.imageview7);
-    tvtheme = findViewById(R.id.tvtheme);
-    imgtheme = findViewById(R.id.imgtheme);
-    arrow04 = findViewById(R.id.arrow04);
-    textview13 = findViewById(R.id.textview13);
-    imageview8 = findViewById(R.id.imageview8);
-    textview14 = findViewById(R.id.textview14);
-    imageview3 = findViewById(R.id.imageview3);
-    arrow03 = findViewById(R.id.arrow03);
-    textview1 = findViewById(R.id.textview1);
-    imageview9 = findViewById(R.id.imageview9);
-    tvword = findViewById(R.id.tvword);
-    checkbox1 = findViewById(R.id.checkbox1);
-    datapost = findViewById(R.id.datapost);
-    linear32 = findViewById(R.id.linear32);
-    linear37 = findViewById(R.id.linear37);
-    linear33 = findViewById(R.id.linear33);
-    addsabet = findViewById(R.id.addsabet);
-    linear38 = findViewById(R.id.linear38);
-    vibreh = findViewById(R.id.vibreh);
-    add = findViewById(R.id.add);
-    reminderadditem = findViewById(R.id.reminderadditem);
-    linear25 = findViewById(R.id.linear25);
-    size = findViewById(R.id.size);
-    arrow02 = findViewById(R.id.arrow02);
-    textview20 = findViewById(R.id.textview20);
-    imageview11 = findViewById(R.id.imageview11);
-    linear29 = findViewById(R.id.linear29);
-    linear67 = findViewById(R.id.linear67);
-    linear93 = findViewById(R.id.linear93);
-    linear28 = findViewById(R.id.linear28);
-    sw = findViewById(R.id.sw);
-    linear68 = findViewById(R.id.linear68);
-    linear70 = findViewById(R.id.linear70);
-    molaq = findViewById(R.id.molaq);
-    linear95 = findViewById(R.id.linear95);
-    switchobtical = findViewById(R.id.switchobtical);
-    linear27 = findViewById(R.id.linear27);
-    autotext = findViewById(R.id.autotext);
-    arrow01 = findViewById(R.id.arrow01);
-    textview6 = findViewById(R.id.textview6);
-    imageview10 = findViewById(R.id.imageview10);
-    rose = findViewById(R.id.rose);
-    recyclerview2 = findViewById(R.id.recyclerview2);
-    linear42 = findViewById(R.id.linear42);
-    linear47 = findViewById(R.id.linear47);
-    linear52 = findViewById(R.id.linear52);
-    linear57 = findViewById(R.id.linear57);
-    linear71 = findViewById(R.id.linear71);
-    linear75 = findViewById(R.id.linear75);
-    linear79 = findViewById(R.id.linear79);
-    linear83 = findViewById(R.id.linear83);
-    linear84 = findViewById(R.id.linear84);
-    linear88 = findViewById(R.id.linear88);
-    getThemeUtils = findViewById(R.id.getThemeUtils);
-    atctm = findViewById(R.id.atctm);
-    linear92 = findViewById(R.id.linear92);
-    linear43 = findViewById(R.id.linear43);
-    linear45 = findViewById(R.id.linear45);
-    autotextComple = findViewById(R.id.autotextComple);
-    linear48 = findViewById(R.id.linear48);
-    linear49 = findViewById(R.id.linear49);
-    linear50 = findViewById(R.id.linear50);
-    textview25 = findViewById(R.id.textview25);
-    backtab = findViewById(R.id.backtab);
-    tab = findViewById(R.id.tab);
-    linear53 = findViewById(R.id.linear53);
-    linear55 = findViewById(R.id.linear55);
-    lineeditor = findViewById(R.id.lineeditor);
-    linear58 = findViewById(R.id.linear58);
-    linear60 = findViewById(R.id.linear60);
-    themesabet = findViewById(R.id.themesabet);
-    linear72 = findViewById(R.id.linear72);
-    linear74 = findViewById(R.id.linear74);
-    msaveandexit = findViewById(R.id.msaveandexit);
-    linear76 = findViewById(R.id.linear76);
-    linear78 = findViewById(R.id.linear78);
-    dirfilesswitch = findViewById(R.id.dirfilesswitch);
-    linear80 = findViewById(R.id.linear80);
-    linear82 = findViewById(R.id.linear82);
-    themeinstall = findViewById(R.id.themeinstall);
-    textview33 = findViewById(R.id.textview33);
-    imageview12 = findViewById(R.id.imageview12);
-    linear85 = findViewById(R.id.linear85);
-    linear87 = findViewById(R.id.linear87);
-    switchac = findViewById(R.id.switchac);
-    linear89 = findViewById(R.id.linear89);
-    linear91 = findViewById(R.id.linear91);
-    switchmaterialYou = findViewById(R.id.switchmaterialYou);
-    customTheme = findViewById(R.id.customTheme);
-    textview36 = findViewById(R.id.textview36);
-    textview37 = findViewById(R.id.textview37);
-    textview15 = findViewById(R.id.textview15);
-    checkbox9 = findViewById(R.id.checkbox9);
-    treecolors = findViewById(R.id.treecolors);
-    wallmodes = findViewById(R.id.wallmodes);
+
     word = getSharedPreferences("word", Activity.MODE_PRIVATE);
     line = getSharedPreferences("line", Activity.MODE_PRIVATE);
     mfs = getSharedPreferences("mfs", Activity.MODE_PRIVATE);
@@ -393,7 +138,6 @@ public class SettingAppActivity extends BaseCompat {
     getDrak = getSharedPreferences("getDrak", Activity.MODE_PRIVATE);
     re = getSharedPreferences("re", Activity.MODE_PRIVATE);
     war = getSharedPreferences("war", Activity.MODE_PRIVATE);
-    kos = getSharedPreferences("kos", Activity.MODE_PRIVATE);
     tab100 = getSharedPreferences("tab100", Activity.MODE_PRIVATE);
     setfont = getSharedPreferences("setfont", Activity.MODE_PRIVATE);
     atx = getSharedPreferences("atx", Activity.MODE_PRIVATE);
@@ -413,92 +157,44 @@ public class SettingAppActivity extends BaseCompat {
     thememanagersoft = getSharedPreferences("thememanagersoft", Activity.MODE_PRIVATE);
     sf = getSharedPreferences("sf", Activity.MODE_PRIVATE);
     gridMode = getSharedPreferences("gride", Activity.MODE_PRIVATE);
-    terminalColors = findViewById(R.id.terminalColors);
-    themes.setOnClickListener(
-        (v) -> {
-          //          intent.setClass(getApplicationContext(), AnjctorcolorActivity.class);
-          //          startActivity(intent);
-          var theme = new LoadTheme();
-          theme.runinSheet(v.getContext());
-        });
+    materialYous = findViewById(R.id.MaterialYou);
+    grids = findViewById(R.id.gridmod);
+    effect = findViewById(R.id.effect);
+    walpapersystem = findViewById(R.id.walpapers);
+    deftheme = findViewById(R.id.deftheme);
+    autoSaveText = findViewById(R.id.autoSaveText);
+    rvsetting = findViewById(R.id.rvsetting);
+    materialYous.setTitle("MaterialYou");
+    materialYous.setDescription("Enable dynamic colors automatically and use beautiful design ");
+    effect.setTitle("Beautiful effect");
+    effect.setDescription("By activating this option, the background will have a small vibration");
+    grids.setTitle("grid mode ");
+    grids.setDescription(
+        "This option is for those who are tired of the normal mode and want to have a better experience ");
+    walpapersystem.setTitle("Get system background ");
+    walpapersystem.setDescription("With this option, you can get the system background");
+    deftheme.setTitle("Default theme ");
+    deftheme.setDescription(
+        "By activating this option, the program theme is not read from Json by default");
 
-    keyboard.setOnClickListener(
-        (c) -> {
-          intent.setClass(getApplicationContext(), ResultActivity.class);
-          startActivity(intent);
-        });
+    autoSaveText.setTitle("Auto Save");
+    autoSaveText.setDescription(
+        "You do not need to click the save button with the auto save activation.");
 
-    imageview1.setOnClickListener(
-        (c) -> {
-          finish();
-        });
+    findViewById(R.id.customtheme)
+        .setOnClickListener(
+            (v) -> {
+              intent.setClass(getApplicationContext(), InjectorColorActivity.class);
+              intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+              startActivity(intent);
+            });
 
-    arrow05.setOnClickListener(
-        (v) -> {
-          ViewUtils.installLazy(themes);
-          if (!mbool01) {
-            mbool01 = true;
-            arrow05.animate().rotation((float) 0).setDuration((int) 300);
-          } else {
-            mbool01 = false;
-            arrow05.animate().rotation((float) -180).setDuration((int) 300);
-          }
-        });
-
-    tvtheme.setOnClickListener(
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View _view) {
-            intent.setClass(getApplicationContext(), InjectorColorActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(intent);
-          }
-        });
-
-    arrow04.setOnClickListener(
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View _view) {
-            if (!mbool02) {
-              mbool02 = true;
-              arrow04.animate().rotation((float) 0).setDuration((int) 300);
-            } else {
-              mbool02 = false;
-
-              arrow04.animate().rotation((float) -180).setDuration((int) 300);
-            }
-            ViewUtils.installLazy(keyboard);
-          }
-        });
-
-    arrow03.setOnClickListener(
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View _view) {
-            if (!mbool03) {
-              mbool03 = true;
-              arrow03.animate().rotation((float) 0).setDuration((int) 300);
-            } else {
-              mbool03 = false;
-              arrow03.animate().rotation((float) -180).setDuration((int) 300);
-            }
-            ViewUtils.installLazy(datapost);
-          }
-        });
-
-    checkbox1.setOnCheckedChangeListener(
-        new CompoundButton.OnCheckedChangeListener() {
-          @Override
-          public void onCheckedChanged(CompoundButton _param1, boolean _param2) {
-            final boolean _isChecked = _param2;
-            if (_isChecked) {
-              word.edit().putString("getword", "true").apply();
-
-            } else {
-              word.edit().putString("getword", "false").apply();
-            }
-          }
-        });
+    findViewById(R.id.keyboardsettings)
+        .setOnClickListener(
+            (c) -> {
+              intent.setClass(getApplicationContext(), ResultActivity.class);
+              startActivity(intent);
+            });
 
     thememanagersoft.registerOnSharedPreferenceChangeListener(
         new SharedPreferences.OnSharedPreferenceChangeListener() {
@@ -525,7 +221,7 @@ public class SettingAppActivity extends BaseCompat {
             }
           }
         });
-    wallmodes.setOnCheckedChangeListener(
+    walpapersystem.setSwitchChangedListener(
         (btn, is) -> {
           if (is) {
             thememanagersoft.edit().putString("thememanagersoft", "ok").apply();
@@ -534,509 +230,249 @@ public class SettingAppActivity extends BaseCompat {
           }
         });
 
-    addsabet.setOnCheckedChangeListener(
-        new CompoundButton.OnCheckedChangeListener() {
-          @Override
-          public void onCheckedChanged(CompoundButton _param1, boolean _param2) {
-            final boolean _isChecked = _param2;
-            /// ثابت کردن عدد
-            if (_isChecked) {
-              line.edit().putString("getline", "true").apply();
-            } else {
-              line.edit().remove("getline").apply();
-            }
-          }
-        });
-    terminalColors.setOnCheckedChangeListener(
-        (btn, _isChecked) -> {
-          if (_isChecked) {
-            getvb.edit().putString("wall", "true").apply();
+    grids.setSwitchChangedListener(
+        (cc, is) -> {
+          if (is) {
+            gridMode.edit().putString("gride", "true").apply();
           } else {
-            getvb.edit().remove("wall").apply();
+            gridMode.edit().remove("gride").apply();
           }
         });
-    treecolors.setOnCheckedChangeListener(
-        new CompoundButton.OnCheckedChangeListener() {
-          @Override
-          public void onCheckedChanged(CompoundButton _param1, boolean _param2) {
-            final boolean _isChecked = _param2;
-            /// لرزش
-            if (_isChecked) {
-              getvb.edit().putString("HsiGamer", "true").apply();
-            } else {
-              getvb.edit().remove("HsiGamer").apply();
-            }
+    effect.setSwitchChangedListener(
+        (vv, is) -> {
+          if (is) {
+            thememanagersoft.edit().putString("effect", "true").apply();
+          } else {
+            thememanagersoft.edit().remove("effect").apply();
           }
         });
-    grmode.setOnCheckedChangeListener(
-        new CompoundButton.OnCheckedChangeListener() {
-          @Override
-          public void onCheckedChanged(CompoundButton _param1, boolean _param2) {
-            final boolean _isChecked = _param2;
-            if (_isChecked) {
-              gridMode.edit().putString("gride", "true").apply();
-            } else {
-              gridMode.edit().remove("gride").apply();
-            }
+    findViewById(R.id.blursize)
+        .setOnClickListener(
+            c -> {
+              _blursize();
+            });
+
+    findViewById(R.id.themefile)
+        .setOnClickListener(
+            new View.OnClickListener() {
+              @Override
+              public void onClick(View _view) {
+                androidx.appcompat.app.AlertDialog dialog =
+                    new GhostWebMaterialDialog(SettingAppActivity.this)
+                        .setView(R.layout.fontsetlector)
+                        .setTitle("Custom Theme")
+                        .setMessage("Select Theme in format .ghost")
+                        .setCancelable(true)
+                        .setPositiveButton("ok", null)
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .setNeutralButton("پیشفرض", null)
+                        .create();
+                dialog.setOnShowListener(
+                    (var) -> {
+                      Button positive = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                      Button np = dialog.getButton(android.content.DialogInterface.BUTTON_NEUTRAL);
+                      com.google.android.material.textfield.TextInputLayout input =
+                          dialog.findViewById(R.id.input);
+
+                      EditText edit = dialog.findViewById(R.id.edit);
+
+                      final Handler handler = new Handler();
+                      handler.postDelayed(
+                          new Runnable() {
+                            @Override
+                            public void run() {
+                              if (thememanagersoft.contains("themes")
+                                  && !thememanagersoft.getString("themes", "").equals("")) {
+                                edit.setText(thememanagersoft.getString("themes", ""));
+                              }
+                            }
+                          },
+                          100);
+                      edit.setHint("Set .ghost file");
+                      ColorAndroid12.setTextColor(edit);
+                      if (edit.getText().toString().isEmpty()) {
+                        positive.setEnabled(false);
+                      } else {
+                        positive.setEnabled(true);
+                      }
+                      positive.setOnClickListener(
+                          (vftrororocjj) -> {
+                            thememanagersoft
+                                .edit()
+                                .putString("themes", edit.getText().toString())
+                                .commit();
+                            dialog.dismiss();
+                            Toast.makeText(
+                                    getApplicationContext(),
+                                    "Theme : "
+                                        .concat(
+                                            edit.getText().toString().trim().concat(" اعمال شد")),
+                                    2)
+                                .show();
+                          });
+                      edit.addTextChangedListener(
+                          new android.text.TextWatcher() {
+                            @Override
+                            public void onTextChanged(
+                                CharSequence _param1, int _param2, int _param3, int _param4) {
+                              final String _charSeq = _param1.toString();
+
+                              if (edit.getText().toString().isEmpty()
+                                  && edit.getText().toString().endsWith("")) {
+                                positive.setEnabled(false);
+                              } else {
+                                positive.setEnabled(true);
+                              }
+                            }
+
+                            @Override
+                            public void beforeTextChanged(
+                                CharSequence _param1, int _param2, int _param3, int _param4) {}
+
+                            @Override
+                            public void afterTextChanged(android.text.Editable _param1) {}
+                          });
+                      np.setOnClickListener(
+                          (vftrororocjj) -> {
+                            thememanagersoft.edit().remove("themes").commit();
+                            DataUtil.showMessage(getApplicationContext(), "تم پیشفرض اعمال شد");
+                            dialog.dismiss();
+                          });
+                      if (thememanagersoft.contains("themes")
+                          && thememanagersoft.getString("themes", "").equals("")) {
+                        edit.setText(thememanagersoft.getString("themes", ""));
+                      }
+                    });
+                final View view = dialog.getWindow().getDecorView();
+                dialog
+                    .getWindow()
+                    .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+                view.setScaleX(0f);
+                view.setScaleY(0f);
+                final ObjectAnimator alertAnim = new ObjectAnimator();
+                final ObjectAnimator alertAnim1 = new ObjectAnimator();
+                alertAnim.setTarget(view);
+                alertAnim.setPropertyName("scaleX");
+                alertAnim.setFloatValues((float) (1));
+                alertAnim.setDuration((int) (250));
+                alertAnim.start();
+                alertAnim1.setTarget(view);
+                alertAnim1.setPropertyName("scaleY");
+                alertAnim1.setFloatValues((float) (1));
+                alertAnim1.setDuration((int) (250));
+                alertAnim1.start();
+                dialog.show();
+              }
+            });
+
+    findViewById(R.id.customwindows)
+        .setOnClickListener(
+            new View.OnClickListener() {
+              @Override
+              public void onClick(View _view) {
+                var di = new GhostWebMaterialDialog(SettingAppActivity.this);
+                ViewGroup viewGroup = findViewById(android.R.id.content);
+                View dialogview = getLayoutInflater().inflate(R.layout.lifesacel, viewGroup, false);
+                RadioButton r1 = dialogview.findViewById(R.id.r1);
+                RadioButton r2 = dialogview.findViewById(R.id.r2);
+                RadioButton r3 = dialogview.findViewById(R.id.r3);
+                di.setPositiveButton(
+                    "OK",
+                    (p1, d2) -> {
+                      int selectedValue = 1;
+                      r1.setOnCheckedChangeListener(
+                          (cdmnull, isCh) -> {
+                            if (sf.getInt("sd100", 1) == 1) {
+                              sf.edit().putInt("sd100", 1).apply();
+
+                            } else {
+                              sf.edit().remove("sd100");
+                            }
+                          });
+                      r2.setOnCheckedChangeListener(
+                          (cdmnull, isCh) -> {
+                            if (sf.getInt("sd100", 1) == 2) {
+                              sf.edit().putInt("sd100", 2).apply();
+
+                            } else {
+                              sf.edit().remove("sd100");
+                            }
+                          });
+                      r3.setOnCheckedChangeListener(
+                          (cdmnull, isCh) -> {
+                            if (sf.getInt("sd100", 1) == 3) {
+                              sf.edit().putInt("sd100", 3).apply();
+
+                            } else {
+                              sf.edit().remove("sd100");
+                            }
+                          });
+
+                      if (r1.isChecked()) {
+                        selectedValue = 1;
+                      } else if (r2.isChecked()) {
+                        selectedValue = 2;
+                      } else if (r3.isChecked()) {
+                        selectedValue = 3;
+                      }
+
+                      sf.edit().putInt("sd100", selectedValue).apply();
+                    });
+                if (sf.getInt("sd100", 1) == 1) {
+                  r1.setChecked(true);
+                  r2.setChecked(false);
+                  r3.setChecked(false);
+                } else if (sf.getInt("sd100", 1) == 2) {
+                  r2.setChecked(true);
+                  r1.setChecked(false);
+                  r3.setChecked(false);
+                } else if (sf.getInt("sd100", 1) == 3) {
+                  r3.setChecked(true);
+                  r1.setChecked(false);
+                  r2.setChecked(false);
+                } else {
+                  r2.setChecked(false);
+                  r1.setChecked(false);
+                  r3.setChecked(false);
+                }
+                di.setView(dialogview);
+                di.show();
+              }
+            });
+    deftheme.setSwitchChangedListener(
+        (vv, is) -> {
+          if (is) {
+            ru.edit().putString("rup", "true").commit();
+          } else {
+            ru.edit().remove("rup").commit();
           }
         });
-
-    vibreh.setOnCheckedChangeListener(
-        new CompoundButton.OnCheckedChangeListener() {
-          @Override
-          public void onCheckedChanged(CompoundButton _param1, boolean _param2) {
-            final boolean _isChecked = _param2;
-            /// لرزش
-            if (_isChecked) {
-              getvb.edit().putString("HsiGamer", "true").apply();
-            } else {
-              getvb.edit().remove("HsiGamer").apply();
-            }
-          }
-        });
-
-    arrow02.setOnClickListener(
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View _view) {
-            if (!mbool04) {
-              mbool04 = true;
-              arrow02.animate().rotation((float) 0).setDuration((int) 300);
-            } else {
-              mbool04 = false;
-              arrow02.animate().rotation((float) -180).setDuration((int) 300);
-            }
-            ViewUtils.installLazy(size);
-          }
-        });
-
-    sw.setOnCheckedChangeListener(
-        new CompoundButton.OnCheckedChangeListener() {
-          @Override
-          public void onCheckedChanged(CompoundButton _param1, boolean _param2) {
-            final boolean _isChecked = _param2;
-            if (_isChecked) {
-              tmp.edit().putString("settmp", "true").apply();
-            } else {
-              tmp.edit().remove("settmp").apply();
-            }
-          }
-        });
-
-    molaq.setOnCheckedChangeListener(
-        new CompoundButton.OnCheckedChangeListener() {
-          @Override
-          public void onCheckedChanged(CompoundButton _param1, boolean _param2) {
-            final boolean _isChecked = _param2;
-            if (_isChecked) {
-              moalaqfragment.edit().putString("mpost", "true").apply();
-            } else {
-              moalaqfragment.edit().remove("mpost").apply();
-            }
-          }
-        });
-
-    switchobtical.setOnCheckedChangeListener(
-        new CompoundButton.OnCheckedChangeListener() {
-          @Override
-          public void onCheckedChanged(CompoundButton _param1, boolean _param2) {
-            final boolean _isChecked = _param2;
-            if (_isChecked) {
-              thememanagersoft.edit().putString("effect", "true").apply();
-            } else {
-              thememanagersoft.edit().remove("effect").apply();
-            }
-          }
-        });
-
-    arrow01.setOnClickListener(
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View _view) {
-            if (!boolea) {
-              boolea = true;
-              arrow01.animate().rotation((float) 0).setDuration((int) 300);
-            } else {
-              boolea = false;
-              arrow01.animate().rotation((float) -180).setDuration((int) 300);
-            }
-            ViewUtils.installLazy(rose);
-            ViewUtils.installLazy(recyclerview2);
-          }
-        });
-
-    recyclerview2.addOnScrollListener(
-        new RecyclerView.OnScrollListener() {
-          @Override
-          public void onScrollStateChanged(RecyclerView recyclerView, int _scrollState) {
-            super.onScrollStateChanged(recyclerView, _scrollState);
-          }
-
-          @Override
-          public void onScrolled(RecyclerView recyclerView, int _offsetX, int _offsetY) {
-            super.onScrolled(recyclerView, _offsetX, _offsetY);
-          }
-        });
-
-    linear83.setOnClickListener(
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View _view) {
-            _blursize();
-          }
-        });
-
-    getThemeUtils.setOnClickListener(
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View _view) {
-            androidx.appcompat.app.AlertDialog dialog =
-                new GhostWebMaterialDialog(SettingAppActivity.this)
-                    .setView(R.layout.fontsetlector)
-                    .setTitle("Custom Theme")
-                    .setMessage("Select Theme in format .ghost")
-                    .setCancelable(true)
-                    .setPositiveButton("ok", null)
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .setNeutralButton("پیشفرض", null)
-                    .create();
-            dialog.setOnShowListener(
-                (var) -> {
-                  Button positive = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-                  Button np = dialog.getButton(android.content.DialogInterface.BUTTON_NEUTRAL);
-                  com.google.android.material.textfield.TextInputLayout input =
-                      dialog.findViewById(R.id.input);
-
-                  EditText edit = dialog.findViewById(R.id.edit);
-
-                  final Handler handler = new Handler();
-                  handler.postDelayed(
-                      new Runnable() {
-                        @Override
-                        public void run() {
-                          if (thememanagersoft.contains("themes")
-                              && !thememanagersoft.getString("themes", "").equals("")) {
-                            edit.setText(thememanagersoft.getString("themes", ""));
-                          }
-                        }
-                      },
-                      100);
-                  edit.setHint("Set .ghost file");
-                  ColorAndroid12.setTextColor(edit);
-                  if (edit.getText().toString().isEmpty()) {
-                    positive.setEnabled(false);
-                  } else {
-                    positive.setEnabled(true);
-                  }
-                  positive.setOnClickListener(
-                      (vftrororocjj) -> {
-                        thememanagersoft
-                            .edit()
-                            .putString("themes", edit.getText().toString())
-                            .commit();
-                        dialog.dismiss();
-                        Toast.makeText(
-                                getApplicationContext(),
-                                "Theme : "
-                                    .concat(edit.getText().toString().trim().concat(" اعمال شد")),
-                                2)
-                            .show();
-                      });
-                  edit.addTextChangedListener(
-                      new android.text.TextWatcher() {
-                        @Override
-                        public void onTextChanged(
-                            CharSequence _param1, int _param2, int _param3, int _param4) {
-                          final String _charSeq = _param1.toString();
-
-                          if (edit.getText().toString().isEmpty()
-                              && edit.getText().toString().endsWith("")) {
-                            positive.setEnabled(false);
-                          } else {
-                            positive.setEnabled(true);
-                          }
-                        }
-
-                        @Override
-                        public void beforeTextChanged(
-                            CharSequence _param1, int _param2, int _param3, int _param4) {}
-
-                        @Override
-                        public void afterTextChanged(android.text.Editable _param1) {}
-                      });
-                  np.setOnClickListener(
-                      (vftrororocjj) -> {
-                        thememanagersoft.edit().remove("themes").commit();
-                        DataUtil.showMessage(getApplicationContext(), "تم پیشفرض اعمال شد");
-                        dialog.dismiss();
-                      });
-                  if (thememanagersoft.contains("themes")
-                      && thememanagersoft.getString("themes", "").equals("")) {
-                    edit.setText(thememanagersoft.getString("themes", ""));
-                  }
-                });
-            final View view = dialog.getWindow().getDecorView();
-            dialog
-                .getWindow()
-                .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-            view.setScaleX(0f);
-            view.setScaleY(0f);
-            final ObjectAnimator alertAnim = new ObjectAnimator();
-            final ObjectAnimator alertAnim1 = new ObjectAnimator();
-            alertAnim.setTarget(view);
-            alertAnim.setPropertyName("scaleX");
-            alertAnim.setFloatValues((float) (1));
-            alertAnim.setDuration((int) (250));
-            alertAnim.start();
-            alertAnim1.setTarget(view);
-            alertAnim1.setPropertyName("scaleY");
-            alertAnim1.setFloatValues((float) (1));
-            alertAnim1.setDuration((int) (250));
-            alertAnim1.start();
-            dialog.show();
+    autoSaveText.setSwitchChangedListener(
+        (vv, cc) -> {
+          if (cc) {
+            sve.edit().putString("getAutoSave", "true").commit();
+          } else {
+            sve.edit().remove("getAutoSave").commit();
           }
         });
 
-    atctm.setOnClickListener(
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View _view) {
-            var di = new GhostWebMaterialDialog(SettingAppActivity.this);
-            ViewGroup viewGroup = findViewById(android.R.id.content);
-            View dialogview = getLayoutInflater().inflate(R.layout.lifesacel, viewGroup, false);
-            RadioButton r1 = dialogview.findViewById(R.id.r1);
-            RadioButton r2 = dialogview.findViewById(R.id.r2);
-            RadioButton r3 = dialogview.findViewById(R.id.r3);
-            di.setPositiveButton(
-                "OK",
-                (p1, d2) -> {
-                  int selectedValue = 1;
-                  r1.setOnCheckedChangeListener(
-                      (cdmnull, isCh) -> {
-                        if (sf.getInt("sd100", 1) == 1) {
-                          sf.edit().putInt("sd100", 1).apply();
+    materialYous.setSwitchChangedListener(
+        (bin, is) -> {
+          if (is) {
+            materialYou.edit().putString("materialYou", "true").apply();
+            themeEngine.setDynamicTheme(true);
 
-                        } else {
-                          sf.edit().remove("sd100");
-                        }
-                      });
-                  r2.setOnCheckedChangeListener(
-                      (cdmnull, isCh) -> {
-                        if (sf.getInt("sd100", 1) == 2) {
-                          sf.edit().putInt("sd100", 2).apply();
-
-                        } else {
-                          sf.edit().remove("sd100");
-                        }
-                      });
-                  r3.setOnCheckedChangeListener(
-                      (cdmnull, isCh) -> {
-                        if (sf.getInt("sd100", 1) == 3) {
-                          sf.edit().putInt("sd100", 3).apply();
-
-                        } else {
-                          sf.edit().remove("sd100");
-                        }
-                      });
-
-                  if (r1.isChecked()) {
-                    selectedValue = 1;
-                  } else if (r2.isChecked()) {
-                    selectedValue = 2;
-                  } else if (r3.isChecked()) {
-                    selectedValue = 3;
-                  }
-
-                  sf.edit().putInt("sd100", selectedValue).apply();
-                });
-            if (sf.getInt("sd100", 1) == 1) {
-              r1.setChecked(true);
-              r2.setChecked(false);
-              r3.setChecked(false);
-            } else if (sf.getInt("sd100", 1) == 2) {
-              r2.setChecked(true);
-              r1.setChecked(false);
-              r3.setChecked(false);
-            } else if (sf.getInt("sd100", 1) == 3) {
-              r3.setChecked(true);
-              r1.setChecked(false);
-              r2.setChecked(false);
-            } else {
-              r2.setChecked(false);
-              r1.setChecked(false);
-              r3.setChecked(false);
-            }
-            di.setView(dialogview);
-            di.show();
+          } else {
+            materialYou.edit().remove("materialYou").apply();
+            themeEngine.setDynamicTheme(false);
           }
         });
-
-    linear92.setOnClickListener(
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View _view) {
-            _blursize();
-          }
-        });
-
-    autotextComple.setOnCheckedChangeListener(
-        new CompoundButton.OnCheckedChangeListener() {
-          @Override
-          public void onCheckedChanged(CompoundButton _param1, boolean _param2) {
-            final boolean _isChecked = _param2;
-            if (_isChecked) {
-              auto.edit().putString("mauto", "true").commit();
-            } else {
-              auto.edit().remove("mauto").commit();
-            }
-          }
-        });
-
-    tab.setOnCheckedChangeListener(
-        new CompoundButton.OnCheckedChangeListener() {
-          @Override
-          public void onCheckedChanged(CompoundButton _param1, boolean _param2) {
-            final boolean _isChecked = _param2;
-            if (_isChecked) {
-              backtab.setBackground(
-                  new GradientDrawable() {
-                    public GradientDrawable getIns(int a, int b) {
-                      this.setCornerRadius(a);
-                      this.setColor(b);
-                      return this;
-                    }
-                  }.getIns((int) 100, 0xFFFFDCBD));
-              tabimageview.edit().putString("mtab", "true").commit();
-            } else {
-              tabimageview.edit().remove("mtab").commit();
-              backtab.setBackground(
-                  new GradientDrawable() {
-                    public GradientDrawable getIns(int a, int b, int c, int d) {
-                      this.setCornerRadius(a);
-                      this.setStroke(b, c);
-                      this.setColor(d);
-                      return this;
-                    }
-                  }.getIns((int) 100, (int) 2, 0xFFFFDCBD, 0xFF201B16));
-            }
-          }
-        });
-
-    lineeditor.setOnCheckedChangeListener(
-        new CompoundButton.OnCheckedChangeListener() {
-          @Override
-          public void onCheckedChanged(CompoundButton _param1, boolean _param2) {
-            final boolean _isChecked = _param2;
-            if (_isChecked) {
-              re.edit().putString("f380", "true").commit();
-            } else {
-              re.edit().remove("f380").commit();
-            }
-          }
-        });
-
-    themesabet.setOnCheckedChangeListener(
-        new CompoundButton.OnCheckedChangeListener() {
-          @Override
-          public void onCheckedChanged(CompoundButton _param1, boolean _param2) {
-            final boolean _isChecked = _param2;
-            if (_isChecked) {
-              ru.edit().putString("rup", "true").commit();
-            } else {
-              ru.edit().remove("rup").commit();
-            }
-          }
-        });
-
-    msaveandexit.setOnCheckedChangeListener(
-        new CompoundButton.OnCheckedChangeListener() {
-          @Override
-          public void onCheckedChanged(CompoundButton _param1, boolean _param2) {
-            final boolean _isChecked = _param2;
-            if (_isChecked) {
-              sve.edit().putString("getAutoSave", "true").commit();
-            } else {
-              sve.edit().remove("getAutoSave").commit();
-            }
-          }
-        });
-
-    dirfilesswitch.setOnCheckedChangeListener(
-        new CompoundButton.OnCheckedChangeListener() {
-          @Override
-          public void onCheckedChanged(CompoundButton _param1, boolean _param2) {
-            final boolean _isChecked = _param2;
-            if (_isChecked) {
-              getinitdir.edit().putString("mdir", "true").commit();
-            } else {
-              getinitdir.edit().remove("mdir").commit();
-            }
-          }
-        });
-
-    themeinstall.setOnCheckedChangeListener(
-        new CompoundButton.OnCheckedChangeListener() {
-          @Override
-          public void onCheckedChanged(CompoundButton _param1, boolean _param2) {
-            final boolean _isChecked = _param2;
-            if (_isChecked) {
-              mthemepost.edit().putString("mytheme", "true").commit();
-            } else {
-              mthemepost.edit().remove("mytheme").commit();
-            }
-          }
-        });
-
-    switchac.setOnCheckedChangeListener(
-        new CompoundButton.OnCheckedChangeListener() {
-          @Override
-          public void onCheckedChanged(CompoundButton _param1, boolean _param2) {
-            final boolean _isChecked = _param2;
-            if (_isChecked) {
-              setac.edit().putString("ac", "true").commit();
-            } else {
-              setac.edit().remove("ac").commit();
-            }
-          }
-        });
-
-    switchmaterialYou.setOnCheckedChangeListener(
-        new CompoundButton.OnCheckedChangeListener() {
-          @Override
-          public void onCheckedChanged(CompoundButton _param1, boolean _param2) {
-            final boolean _isChecked = _param2;
-            if (_isChecked) {
-              materialYou.edit().putString("materialYou", "true").apply();
-              themeEngine.setDynamicTheme(true);
-
-            } else {
-              materialYou.edit().remove("materialYou").apply();
-              themeEngine.setDynamicTheme(false);
-            }
-          }
-        });
-
-    checkbox9.setOnCheckedChangeListener(
-        new CompoundButton.OnCheckedChangeListener() {
-          @Override
-          public void onCheckedChanged(CompoundButton _param1, boolean _param2) {
-            final boolean _isChecked = _param2;
-            if (_isChecked) {
-
-              kos.edit().putString("vop", "true").commit();
-            } else {
-              kos.edit().putString("vop", "false").commit();
-            }
-          }
-        });
+        StartLuncherApp(); 
   }
 
   private void StartLuncherApp() {
     _seechackswich();
-    string.add("4");
-    string.add("6");
-    string.add("8");
-    string.add("16");
+
     var fastScrollerBuilder = new FastScrollerBuilder(bar);
     fastScrollerBuilder.useMd2Style();
     fastScrollerBuilder.setPadding(3, 3, 3, 3);
@@ -1049,18 +485,10 @@ public class SettingAppActivity extends BaseCompat {
         bar.setBackgroundDrawable(drawable);
       }
     }
-    setFitWindows(linear1);
 
-    ViewUtils.collapse(datapost);
-    ViewUtils.collapse(keyboard);
-    ViewUtils.collapse(size);
-    ViewUtils.collapse(rose);
-    ViewUtils.collapse(themes);
-    ViewUtils.collapse(recyclerview2);
     ColorList(getApplicationContext(), getWindow().getDecorView());
 
     _toolbar.setBackgroundColor(Color.TRANSPARENT);
-    ColorAndroid12.setTextColor(textview37);
   }
 
   protected void ColorList(Context context, View v) {
@@ -1102,78 +530,25 @@ public class SettingAppActivity extends BaseCompat {
   }
 
   public void _seechackswich() {
-    ColorAndroid12.setTextColor(customTheme);
-    if (getvb.contains("wall")) {
-      terminalColors.setChecked(true);
-    }
-    if (word.getString("getword", "").equals("true")) {
-      checkbox1.setChecked(true);
-    } else {
-      checkbox1.setChecked(false);
-    }
-    if (kos.getString("vop", "").equals("true")) {
-      checkbox9.setChecked(true);
-    } else {
-      checkbox9.setChecked(false);
-    }
-    if (tmp.contains("settmp")) {
-      sw.setChecked(true);
-    } else {
-      sw.setChecked(false);
-    }
-    if (line.contains("getline")) {
-      addsabet.setChecked(true);
-    } else {
-      addsabet.setChecked(false);
-    }
-    if (getvb.contains("HsiGamer")) {
-      vibreh.setChecked(true);
-      treecolors.setChecked(true);
-    } else {
-      vibreh.setChecked(false);
-      treecolors.setChecked(false);
-    }
-    if (moalaqfragment.contains("mpost")) {
-      molaq.setChecked(true);
-    }
-    if (auto.contains("mauto")) {
-      autotextComple.setChecked(true);
-    } else {
-      autotextComple.setChecked(false);
-    }
-    if (tabimageview.contains("mtab")) {
-      tab.setChecked(true);
-    }
-    if (re.contains("f380")) {
-      lineeditor.setChecked(true);
-    }
     if (ru.contains("rup")) {
-      themesabet.setChecked(true);
+      deftheme.setValue(true);
     }
     if (sve.contains("getAutoSave")) {
-      msaveandexit.setChecked(true);
+    autoSaveText.setValue(true);
     }
-    if (getinitdir.contains("mdir")) {
-      dirfilesswitch.setChecked(true);
-    }
-    if (mthemepost.contains("mytheme")) {
-      themeinstall.setChecked(true);
-    }
+    
     ColorAndroid12.setToolbarinit(_toolbar);
-    if (setac.contains("ac")) {
-      switchac.setChecked(true);
-    }
     if (materialYou.contains("materialYou")) {
-      switchmaterialYou.setChecked(true);
-    } else switchmaterialYou.setChecked(false);
+      materialYous.setValue(true);
+    } else materialYous.setValue(false);
 
     if (thememanagersoft.contains("effect")) {
-      switchobtical.setChecked(true);
+      effect.setValue(true);
     }
     if (thememanagersoft.getString("thememanagersoft", "").equals("ok")) {
-      wallmodes.setChecked(true);
+      walpapersystem.setValue(true);
     } else {
-      wallmodes.setChecked(false);
+      walpapersystem.setValue(false);
     }
 
     List<String> fb = new ArrayList<>();
@@ -1182,76 +557,9 @@ public class SettingAppActivity extends BaseCompat {
     fb.add("");
     fb.add("");
     fb.add("");
-    grmode.setChecked(gridMode.contains("gride"));
-    recyclerview2.setAdapter(new Recyclerview2Adapter(fb));
-    recyclerview2.setLayoutManager(new LinearLayoutManager(this));
-  }
-
-  public void _editortabsize(final String _post) {
-    if (_post.equals("4")) {
-      tab100.edit().putString("mpcnullgogo", "4").commit();
-    } else {
-      if (_post.equals("6")) {
-        tab100.edit().putString("mpcnullgogo", "6").commit();
-      } else {
-        if (_post.equals("8")) {
-          tab100.edit().putString("mpcnullgogo", "8").commit();
-        } else {
-          if (_post.equals("16")) {
-            tab100.edit().putString("mpcnullgogo", "16").commit();
-          }
-        }
-      }
-    }
-  }
-
-  public void _animdown(final ImageView _mimg) {
-    mdownObjectAnimator.setTarget(_mimg);
-    mdownObjectAnimator.setPropertyName("rotation");
-    mdownObjectAnimator.setFloatValues((float) (0));
-    mdownObjectAnimator.setFloatValues((float) (0), (float) (180));
-    mdownObjectAnimator.setRepeatMode(ValueAnimator.RESTART);
-    mdownObjectAnimator.start();
-  }
-
-  public void _animup(final View _mimg) {
-    mdownObjectAnimator.setTarget(_mimg);
-    mdownObjectAnimator.setPropertyName("rotation");
-    mdownObjectAnimator.setFloatValues((float) (180));
-    mdownObjectAnimator.setFloatValues((float) (180), (float) (0));
-    mdownObjectAnimator.setRepeatMode(ValueAnimator.RESTART);
-    mdownObjectAnimator.start();
-  }
-
-  public void _startAnim(final Switch _v) {
-    ObjectAnimator scaleX = new ObjectAnimator();
-    scaleX.setTarget(_v);
-    scaleX.setPropertyName("scaleX");
-    scaleX.setFloatValues((float) 1);
-    scaleX.setDuration((int) 5);
-    scaleX.start();
-    ObjectAnimator scaleY = new ObjectAnimator();
-    scaleY.setTarget(_v);
-    scaleY.setPropertyName("scaleY");
-    scaleY.setFloatValues((float) 1);
-    scaleY.setDuration((int) 5);
-    scaleY.start();
-  }
-
-  public void _endAnim(final Switch _v) {
-    ObjectAnimator scaleX = new ObjectAnimator();
-    scaleX.setTarget(_v);
-    scaleX.setPropertyName("scaleX");
-    scaleX.setFloatValues(0.7f);
-    scaleX.setDuration((int) 5);
-    scaleX.start();
-
-    ObjectAnimator scaleY = new ObjectAnimator();
-    scaleY.setTarget(_v);
-    scaleY.setPropertyName("scaleY");
-    scaleY.setFloatValues(0.7f);
-    scaleY.setDuration((int) 5);
-    scaleY.start();
+    grids.setValue(gridMode.contains("gride"));
+    rvsetting.setAdapter(new Recyclerview2Adapter(fb));
+    rvsetting.setLayoutManager(new LinearLayoutManager(this));
   }
 
   public void _blursize() {

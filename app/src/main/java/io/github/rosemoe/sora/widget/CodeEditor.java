@@ -253,7 +253,7 @@ public class CodeEditor extends View
   protected SymbolPairMatch mLanguageSymbolPairs;
   protected EditorTextActionWindow mTextActionWindow;
   protected List<Span> defSpans = new ArrayList<>(2);
-  Layout mLayout;
+ public Layout mLayout;
   int mStartedActionMode;
   EditorInputConnection mConnection;
   KeyMetaStates mKeyMetaStates = new KeyMetaStates(this);
@@ -754,6 +754,10 @@ public class CodeEditor extends View
         invalidate();
       }
     }
+  }
+
+  public void setCursorAnimator(CursorAnimator mCursorAnimator) {
+    this.mCursorAnimator = mCursorAnimator;
   }
 
   /**

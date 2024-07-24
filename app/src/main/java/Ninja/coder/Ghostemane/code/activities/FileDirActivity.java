@@ -1434,6 +1434,9 @@ public class FileDirActivity extends BaseCompat
     if (staticstring.endsWith(".properties")) {
       SendDataFromCodeEditor(newpos, "path", files, newlistmap);
     }
+    if (staticstring.endsWith(".sql")) {
+      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+    }
     if (staticstring.endsWith(".svg")) {
       loadsvg(newpos);
     }

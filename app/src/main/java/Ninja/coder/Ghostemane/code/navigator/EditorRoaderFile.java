@@ -5,6 +5,7 @@ import Ninja.coder.Ghostemane.code.utils.FileCompatApi28;
 import android.widget.ProgressBar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import io.github.rosemoe.sora.langs.antlrlang.ANTLRV4Lang;
+import io.github.rosemoe.sora.langs.css3.CSS3Language;
 import io.github.rosemoe.sora.langs.desc.*;
 import io.github.rosemoe.sora.langs.ghostthemelang.ghostlang.ghostlangs;
 import io.github.rosemoe.sora.langs.html.HTMLLanguage;
@@ -15,6 +16,7 @@ import io.github.rosemoe.sora.langs.properties.Propertieslangs;
 import io.github.rosemoe.sora.langs.python.PythonLang;
 import io.github.rosemoe.sora.langs.sass.SassLangCompat;
 import io.github.rosemoe.sora.langs.smali.SMLang;
+import io.github.rosemoe.sora.langs.sql.MySqlLang;
 import io.github.rosemoe.sora.langs.universal.UniversalLanguage;
 import io.github.rosemoe.sora.langs.xml.XMLLanguage;
 import io.github.rosemoe.sora.widget.CodeEditor;
@@ -34,8 +36,8 @@ public class EditorRoaderFile {
 
       // this html lexer using as html css3 js and sass and scass
 
-      var htmllang = new HTMLLanguage(editor);
-      editor.setEditorLanguage(htmllang);
+      var CSS = new CSS3Language();
+      editor.setEditorLanguage(CSS);
       ReadFileCompat(editor, _path, bar);
     } else if (_path.endsWith(".py")) {
       editor.setEditorLanguage(new PythonLang());
@@ -145,7 +147,11 @@ public class EditorRoaderFile {
       _fab.hide();
       ReadFileCompat(editor, _path, bar);
       editor.setEditorLanguage(new Propertieslangs());
-    } else _fab.hide();
+    } else if(_path.endsWith(".sql")){
+      _fab.hide();
+      ReadFileCompat(editor, _path, bar);
+      editor.setEditorLanguage(new MySqlLang());
+    }else _fab.hide();
   }
 
   protected static void ReadFileCompat(CodeEditor editor, String path, ProgressBar bar) {

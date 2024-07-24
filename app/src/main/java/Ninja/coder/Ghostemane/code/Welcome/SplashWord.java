@@ -1,8 +1,8 @@
 package Ninja.coder.Ghostemane.code.Welcome;
 
-import Ninja.coder.Ghostemane.code.MainActivity;
 import Ninja.coder.Ghostemane.code.activities.StreamSoftAppActivity;
 import Ninja.coder.Ghostemane.code.tasks.app.ProgressDialogCompat;
+import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import Ninja.coder.Ghostemane.code.utils.SetThemeForJson;
 import android.Manifest;
@@ -14,9 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 import androidx.fragment.app.Fragment;
-import com.github.appintro.AppIntro;
 import com.github.appintro.AppIntro2;
-import com.github.appintro.AppIntroFragment;
 import com.github.appintro.AppIntroPageTransformerType;
 import com.hzy.lib7z.IExtractCallback;
 import com.hzy.lib7z.Z7Extractor;
@@ -30,7 +28,9 @@ public class SplashWord extends AppIntro2 {
     super.onCreate(arg0);
     // TODO: Implement this method
     dialog = new ProgressDialogCompat(this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
-
+    ColorAndroid12.shapeViews(dialog.getWindow().getDecorView());
+    dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+    dialog.setTitle("Loading....");
     var mypath = getFilesDir().getAbsolutePath() + "/" + "databins";
     var pythonPath =
         getFilesDir().getAbsolutePath() + File.separator + "files" + File.separator + "env.sh";
@@ -89,17 +89,20 @@ public class SplashWord extends AppIntro2 {
     t4.setCallBack(
         () -> {
           try {
-            if (!FileUtil.isExistFile(mypath)) {
-              nameFile("databins.7z");
-            } else if (!FileUtil.isExistFile(pythonPath)) {
+            if (!FileUtil.isExistFile(pythonPath)) {
               nameFile("python.7z");
               // start
-
             }
           } catch (Exception err) {
             Log.e("Error", err.getLocalizedMessage());
           }
         });
+
+    if (!FileUtil.isExistFile(mypath)) {
+      nameFile("databins.7z");
+    } else {
+      Log.d("Done", "");
+    }
 
     addSlide(t4);
 
