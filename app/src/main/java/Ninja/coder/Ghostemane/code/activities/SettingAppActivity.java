@@ -40,6 +40,7 @@ import com.google.android.material.color.MaterialColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.ninjacoder.jgit.childer.LayoutChilder;
 import com.quickersilver.themeengine.ThemeChooserDialogBuilder;
 import com.quickersilver.themeengine.ThemeEngine;
 import com.quickersilver.themeengine.ThemeMode;
@@ -180,6 +181,8 @@ public class SettingAppActivity extends BaseCompat {
     autoSaveText.setTitle("Auto Save");
     autoSaveText.setDescription(
         "You do not need to click the save button with the auto save activation.");
+    
+    
 
     findViewById(R.id.customtheme)
         .setOnClickListener(
@@ -557,6 +560,7 @@ public class SettingAppActivity extends BaseCompat {
     fb.add("");
     fb.add("");
     fb.add("");
+    fb.add("");
     grids.setValue(gridMode.contains("gride"));
     rvsetting.setAdapter(new Recyclerview2Adapter(fb));
     rvsetting.setLayoutManager(new LinearLayoutManager(this));
@@ -802,6 +806,11 @@ public class SettingAppActivity extends BaseCompat {
               dialog.create().show();
             });
       }
+      if(_position == 5) {
+      	textview1.setText("Custom Char editor");
+          _view.setOnClickListener(v -> getCustomChar());
+        imageview1.setImageResource(0);
+      }
     }
 
     @Override
@@ -903,8 +912,8 @@ public class SettingAppActivity extends BaseCompat {
     AlertDialog dialog =
         new GhostWebMaterialDialog(SettingAppActivity.this)
             .setView(R.layout.fontsetlector)
-            .setTitle("Custom Python script")
-            .setMessage("Select Python script")
+             .setPositiveButton(android.R.string.ok, null)
+            .setNeutralButton(android.R.string.cancel, null)
             .setCancelable(true)
             .setPositiveButton("ok", null)
             .setNeutralButton("پیشفرض", null)
@@ -974,6 +983,85 @@ public class SettingAppActivity extends BaseCompat {
               });
           if (getvb.contains("Script") && getvb.getString("Script", "").equals("")) {
             edit.setText(getvb.getString("Script", ""));
+          }
+        });
+
+    dialog.show();
+  }
+  
+  void getCustomChar(){
+    AlertDialog dialog =
+        new GhostWebMaterialDialog(SettingAppActivity.this)
+            .setView(R.layout.fontsetlector)
+            .setTitle("Custom Char Editor")
+            .setMessage("Select Char ")
+            .setCancelable(true)
+            .setPositiveButton(android.R.string.ok, null)
+            .setNeutralButton(android.R.string.cancel, null)
+            .create();
+    dialog.setOnShowListener(
+        (var) -> {
+          Button positive = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+          Button np = dialog.getButton(DialogInterface.BUTTON_NEUTRAL);
+          TextInputLayout input = dialog.findViewById(R.id.input);
+          EditText edit = dialog.findViewById(R.id.edit);
+          final Handler handler = new Handler(Looper.getMainLooper());
+          handler.postDelayed(
+              new Runnable() {
+                @Override
+                public void run() {
+                  if (getvb.contains("chars") && !getvb.getString("chars", "").equals("")) {
+                    edit.setText(getvb.getString("chars", ""));
+                  }
+                }
+              },
+              100);
+          input.setHint("Select Char name Like 👻");
+          ColorAndroid12.setTextColor(edit);
+          if (edit.getText().toString().isEmpty()) {
+            positive.setEnabled(false);
+          } else {
+            positive.setEnabled(true);
+          }
+          positive.setOnClickListener(
+              (__) -> {
+                getvb.edit().putString("chars", edit.getText().toString()).apply();
+                dialog.dismiss();
+                Toast.makeText(
+                        getApplicationContext(),
+                        "chars : ".concat(edit.getText().toString().trim().concat(" اعمال شد")),
+                        2)
+                    .show();
+              });
+          edit.addTextChangedListener(
+              new TextWatcher() {
+                @Override
+                public void onTextChanged(
+                    CharSequence _param1, int _param2, int _param3, int _param4) {
+
+                  if (edit.getText().toString().isEmpty()
+                      && edit.getText().toString().endsWith("")) {
+                    positive.setEnabled(false);
+                  } else {
+                    positive.setEnabled(true);
+                  }
+                }
+
+                @Override
+                public void beforeTextChanged(
+                    CharSequence _param1, int _param2, int _param3, int _param4) {}
+
+                @Override
+                public void afterTextChanged(Editable p) {}
+              });
+          np.setOnClickListener(
+              (vftrororocjj) -> {
+                getvb.edit().remove("chars").apply();
+                DataUtil.showMessage(getApplicationContext(), "کاستوم کارکتر اعمال شد ");
+                dialog.dismiss();
+              });
+          if (getvb.contains("chars") && getvb.getString("chars", "").equals("")) {
+            edit.setText(getvb.getString("chars", ""));
           }
         });
 

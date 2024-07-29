@@ -1149,8 +1149,6 @@ COLORSSS
    ;
 
 CHATREF
-   : '&#x' HexDigit+
-   | '&#x' HexDigit+ ';'
-   | '&#' Digits+ ';'
+   : '#' HexDigit+
    ;
 

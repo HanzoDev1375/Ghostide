@@ -1,158 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    android:fitsSystemWindows="true"
-    android:id="@+id/_coordinator"
-    >
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     android:fitsSystemWindows="true"
+     android:id="@+id/_coordinator">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:fitsSystemWindows="true"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        android:id="@+id/_app_bar"
-        >
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:fitsSystemWindows="true"
+         android:theme="@style/AppTheme.AppBarOverlay"
+         android:id="@+id/_app_bar">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
-            android:layout_width="match_parent"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-            style="?attr/collapsingToolbarLayoutLargeStyle"
-            >
+             android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
+             android:layout_width="match_parent"
+             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+             style="?attr/collapsingToolbarLayoutLargeStyle">
 
             <androidx.appcompat.widget.Toolbar
-                android:layout_height="?attr/actionBarSize"
-                android:layout_width="match_parent"
-                android:elevation="0dp"
-                app:title="Settings"
-                app:layout_collapseMode="pin"
-                app:titleTextColor="?@attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay"
-                android:id="@+id/_toolbar"
-                />
+                 android:layout_height="?attr/actionBarSize"
+                 android:layout_width="match_parent"
+                 android:elevation="0dp"
+                 app:title="Settings"
+                 app:layout_collapseMode="pin"
+                 app:titleTextColor="?@attr/colorPrimary"
+                 app:popupTheme="@style/AppTheme.PopupOverlay"
+                 android:id="@+id/_toolbar" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:orientation="vertical"
-        >
+         android:layout_height="match_parent"
+         android:layout_width="match_parent"
+         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+         android:orientation="vertical">
 
         <Ninja.coder.Ghostemane.code.widget.component.fastscrollcompat.FastScrollNestedScrollView
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:fillViewport="true"
-            android:clipToPadding="false"
-            android:id="@+id/bar"
-            >
+             android:layout_height="match_parent"
+             android:layout_width="match_parent"
+             app:layout_behavior="@string/appbar_scrolling_view_behavior"
+             android:fillViewport="true"
+             android:clipToPadding="false"
+             android:id="@+id/bar">
 
             <LinearLayout
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:orientation="vertical"
-                >
-
-                <Ninja.coder.Ghostemane.code.config.SwitchMaterialPrf
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:id="@+id/MaterialYou"
-                    />
-
-                <Ninja.coder.Ghostemane.code.config.SwitchMaterialPrf
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:id="@+id/effect"
-                    />
-
-                <Ninja.coder.Ghostemane.code.config.SwitchMaterialPrf
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:id="@+id/gridmod"
-                    />
-
-                <Ninja.coder.Ghostemane.code.config.SwitchMaterialPrf
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:id="@+id/walpapers"
-                    />
-
-                <Ninja.coder.Ghostemane.code.config.SwitchMaterialPrf
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:id="@+id/deftheme"
-                    />
-
-                <Ninja.coder.Ghostemane.code.config.SwitchMaterialPrf
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:id="@+id/autoSaveText"
-                    />
+                 android:layout_height="match_parent"
+                 android:layout_width="match_parent"
+                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_height="match_parent"
-                    android:layout_width="match_parent"
-                    android:padding="3dp"
-                    android:orientation="vertical"
-                    >
+                     android:layout_height="match_parent"
+                     android:layout_width="match_parent"
+                     android:orientation="vertical"
+                     android:id="@+id/layoutChilderHelper">
 
-                    <TextView
-                        android:layout_height="wrap_content"
-                        android:layout_width="match_parent"
-                        android:layout_marginBottom="3dp"
-                        android:layout_marginTop="3dp"
-                        android:text="@string/theme"
-                        android:id="@+id/customtheme"
-                        />
+                    <Ninja.coder.Ghostemane.code.config.SwitchMaterialPrf
+                         android:layout_height="wrap_content"
+                         android:layout_width="match_parent"
+                         android:id="@+id/MaterialYou" />
 
-                    <TextView
-                        android:layout_height="wrap_content"
-                        android:layout_width="match_parent"
-                        android:layout_marginBottom="3dp"
-                        android:layout_marginTop="3dp"
-                        android:text="@string/customwindows"
-                        android:id="@+id/customwindows"
-                        />
+                    <Ninja.coder.Ghostemane.code.config.SwitchMaterialPrf
+                         android:layout_height="wrap_content"
+                         android:layout_width="match_parent"
+                         android:id="@+id/effect" />
 
-                    <TextView
-                        android:layout_height="wrap_content"
-                        android:layout_width="match_parent"
-                        android:layout_marginBottom="3dp"
-                        android:layout_marginTop="3dp"
-                        android:text="@string/bl_size"
-                        android:id="@+id/blursize"
-                        />
+                    <Ninja.coder.Ghostemane.code.config.SwitchMaterialPrf
+                         android:layout_height="wrap_content"
+                         android:layout_width="match_parent"
+                         android:id="@+id/gridmod" />
 
-                    <TextView
-                        android:layout_height="wrap_content"
-                        android:layout_width="match_parent"
-                        android:layout_marginBottom="3dp"
-                        android:layout_marginTop="3dp"
-                        android:text="@string/Keyboard_settings"
-                        android:id="@+id/keyboardsettings"
-                        />
+                    <Ninja.coder.Ghostemane.code.config.SwitchMaterialPrf
+                         android:layout_height="wrap_content"
+                         android:layout_width="match_parent"
+                         android:id="@+id/walpapers" />
 
-                    <TextView
-                        android:layout_height="wrap_content"
-                        android:layout_width="match_parent"
-                        android:layout_marginBottom="3dp"
-                        android:layout_marginTop="3dp"
-                        android:text="@string/customtheme"
-                        android:id="@+id/themefile"
-                        />
+                    <Ninja.coder.Ghostemane.code.config.SwitchMaterialPrf
+                         android:layout_height="wrap_content"
+                         android:layout_width="match_parent"
+                         android:id="@+id/deftheme" />
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:layout_height="wrap_content"
-                        android:layout_width="match_parent"
-                        android:id="@+id/rvsetting"
-                        />
+                    <Ninja.coder.Ghostemane.code.config.SwitchMaterialPrf
+                         android:layout_height="wrap_content"
+                         android:layout_width="match_parent"
+                         android:id="@+id/autoSaveText" />
+
+                    <LinearLayout
+                         android:layout_height="match_parent"
+                         android:layout_width="match_parent"
+                         android:padding="3dp"
+                         android:orientation="vertical">
+
+                        <TextView
+                             android:layout_height="wrap_content"
+                             android:layout_width="match_parent"
+                             android:layout_marginBottom="3dp"
+                             android:layout_marginTop="3dp"
+                             android:text="@string/theme"
+                             android:id="@+id/customtheme" />
+
+                        <TextView
+                             android:layout_height="wrap_content"
+                             android:layout_width="match_parent"
+                             android:layout_marginBottom="3dp"
+                             android:layout_marginTop="3dp"
+                             android:text="@string/customwindows"
+                             android:id="@+id/customwindows" />
+
+                        <TextView
+                             android:layout_height="wrap_content"
+                             android:layout_width="match_parent"
+                             android:layout_marginBottom="3dp"
+                             android:layout_marginTop="3dp"
+                             android:text="@string/bl_size"
+                             android:id="@+id/blursize" />
+
+                        <TextView
+                             android:layout_height="wrap_content"
+                             android:layout_width="match_parent"
+                             android:layout_marginBottom="3dp"
+                             android:layout_marginTop="3dp"
+                             android:text="@string/Keyboard_settings"
+                             android:id="@+id/keyboardsettings" />
+
+                        <TextView
+                             android:layout_height="wrap_content"
+                             android:layout_width="match_parent"
+                             android:layout_marginBottom="3dp"
+                             android:layout_marginTop="3dp"
+                             android:text="@string/customtheme"
+                             android:id="@+id/themefile" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                             android:layout_height="wrap_content"
+                             android:layout_width="match_parent"
+                             android:id="@+id/rvsetting" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 

@@ -1,18 +1,23 @@
 package Ninja.coder.Ghostemane.code.config;
 
+import Ninja.coder.Ghostemane.code.IdeEditor;
 import Ninja.coder.Ghostemane.code.R;
 import Ninja.coder.Ghostemane.code.glidecompat.GlideCompat;
 import Ninja.coder.Ghostemane.code.marco.RegexUtilCompat;
 import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import io.github.rosemoe.sora.event.ContentChangeEvent;
+import io.github.rosemoe.sora.langs.java.JavaLanguage;
+import org.jsoup.Jsoup;
 
 public class AmazonClassHelper {
-  
 
   public static void getKtClass(ImageView imageView, String file) {
     new Thread(
@@ -122,7 +127,23 @@ public class AmazonClassHelper {
         .start();
   }
 
-  void runImageViewSvg(String svgName,ImageView imageView) {
-    ColorAndroid12.runOnUiThread(() -> GlideCompat.LoadSvgInAsster(svgName, imageView));
+  public static void getAuthors(IdeEditor editor, ImageView img, TextView tv) {
+    
   }
+
+  public static boolean isHtml(String code) {
+    try {
+      var doc = Jsoup.parse(code);
+      return doc != null && doc.text().isEmpty();
+    } catch (Exception err) {
+      return false;
+    }
+  }
+
+  /**
+   * using like in comment
+   *
+   * @author Ninja
+   */
+  
 }

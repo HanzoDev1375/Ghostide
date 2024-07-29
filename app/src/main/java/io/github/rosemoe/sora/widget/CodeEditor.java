@@ -223,6 +223,8 @@ public class CodeEditor extends View
    */
   public static final int FLAG_DRAW_WHITESPACE_IN_SELECTION = 1 << 6;
 
+  public static final int FLAG_GHOSTWEB = 1 << 7;
+
   /** Adjust the completion window's position scheme according to the device's screen size. */
   public static final int WINDOW_POS_MODE_AUTO = 0;
 
@@ -253,7 +255,7 @@ public class CodeEditor extends View
   protected SymbolPairMatch mLanguageSymbolPairs;
   protected EditorTextActionWindow mTextActionWindow;
   protected List<Span> defSpans = new ArrayList<>(2);
- public Layout mLayout;
+  public Layout mLayout;
   int mStartedActionMode;
   EditorInputConnection mConnection;
   KeyMetaStates mKeyMetaStates = new KeyMetaStates(this);
@@ -357,6 +359,7 @@ public class CodeEditor extends View
   private File mCurrentFile;
   private final List<DiagnosticWrapper> mDiagnostics = new ArrayList<>();
   private boolean isBlockLineRpg;
+  private String charName = "";
 
   public List<DiagnosticWrapper> getDiagnostics() {
     return mDiagnostics;
@@ -714,7 +717,7 @@ public class CodeEditor extends View
     setAutoCompletionEnabled(true);
     setVerticalScrollBarEnabled(true);
     setHighlightCurrentBlock(true);
-    setHighlightSelectedText(true);
+    setHighlightSelectedText(false);
     setDisplayLnPanel(true);
     setOverScrollEnabled(false);
     setHorizontalScrollBarEnabled(true);
@@ -1645,7 +1648,7 @@ public class CodeEditor extends View
 
       if (span.backgroundColorMy != 0) {
         mPaintOther.setColor(span.backgroundColorMy);
-        float cornerRadius = 20; // تعیین شعاع گوشه‌ها
+        float cornerRadius = 10; // تعیین شعاع گوشه‌ها
         canvas.drawRoundRect(
             new RectF(
                 paintingOffset,
@@ -2064,7 +2067,7 @@ public class CodeEditor extends View
 
           if (span.backgroundColorMy != 0) {
             mPaintOther.setColor(span.backgroundColorMy);
-            float cornerRadius = 20; // تعیین شعاع گوشه‌ها
+            float cornerRadius = 10; // تعیین شعاع گوشه‌ها
             canvas.drawRoundRect(
                 new RectF(
                     paintingOffset,
@@ -2216,7 +2219,11 @@ public class CodeEditor extends View
       // Draw hard wrap
       if (lastVisibleChar == columnCount
           && (mNonPrintableOptions & FLAG_DRAW_LINE_SEPARATOR) != 0) {
-        drawMiniGraph(canvas, paintingOffset, row, "↵");
+        drawMiniGraph(canvas, paintingOffset, row, "⏎");
+      }
+
+      if ((mNonPrintableOptions & FLAG_GHOSTWEB) != 0) {
+        drawMiniGraph(canvas, paintingOffset, row, charName);
       }
 
       // Recover the offset
@@ -2397,7 +2404,8 @@ public class CodeEditor extends View
   /** Draw small characters as graph */
   protected void drawMiniGraph(Canvas canvas, float offset, int row, String graph) {
     // Draw
-    mPaintGraph.setColor(mColors.getColor(EditorColorScheme.NON_PRINTABLE_CHAR));
+    mPaintGraph.setColor(mColors.getColor(EditorColorScheme.KEYWORD));
+    mPaintGraph.setTypeface(getTypefaceText());
     float baseline = getRowBottom(row) - getOffsetY() - mGraphMetrics.descent;
     canvas.drawText(graph, 0, graph.length(), offset, baseline, mPaintGraph);
   }
@@ -2415,7 +2423,7 @@ public class CodeEditor extends View
       float circleRadius) {
     int paintStart = Math.max(rowStart, Math.min(rowEnd, min));
     int paintEnd = Math.max(rowStart, Math.min(rowEnd, max));
-    mPaintOther.setColor(mColors.getColor(EditorColorScheme.NON_PRINTABLE_CHAR));
+    mPaintOther.setColor(mColors.getColor(EditorColorScheme.KEYWORD));
 
     if (paintStart < paintEnd) {
       float spaceWidth = mPaint.getSpaceWidth();
@@ -2458,6 +2466,12 @@ public class CodeEditor extends View
         }
         paintStart++;
       }
+    }
+  }
+
+  public void setCustomCharName(String charName) {
+    if (charName != null) {
+      this.charName = charName;
     }
   }
 
@@ -2924,7 +2938,7 @@ public class CodeEditor extends View
       mRect.top = 30;
       mRect.bottom = getHeight();
 
-      float radius = 20; // مقدار گردی که می‌خواهید
+      float radius = 10f; // مقدار گردی که می‌خواهید
 
       // گوشه‌ها را گرد می‌کنیم
       Path path = new Path();
@@ -2964,7 +2978,7 @@ public class CodeEditor extends View
     mRect.bottom = topY + length;
 
     // Round the corners
-    float cornerRadius = 20f; // Adjust the radius as needed
+    float cornerRadius = 10f; // Adjust the radius as needed
     Path path = new Path();
     path.addRoundRect(new RectF(mRect), cornerRadius, cornerRadius, Path.Direction.CW);
     canvas.clipPath(path);

@@ -5,10 +5,7 @@ import Ninja.coder.Ghostemane.code.interfaces.CallBackErrorManager;
 import Ninja.coder.Ghostemane.code.marco.CommentList;
 import Ninja.coder.Ghostemane.code.marco.editorface.IEditor;
 import Ninja.coder.Ghostemane.code.widget.SymbolInputView;
-import Ninja.coder.Ghostemane.code.widget.component.fastscrollcompat.FastScrollerBuilder;
-import Ninja.coder.Ghostemane.code.widget.component.fastscrollcompat.Md2PopupBackground;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -19,18 +16,12 @@ import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.*;
-import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.flask.colorpicker.OnColorSelectedListener;
-import com.flask.colorpicker.builder.ColorPickerClickListener;
-import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.shape.CornerFamily;
 import com.google.android.material.shape.MaterialShapeDrawable;
 import com.google.android.material.shape.ShapeAppearanceModel;
-import io.github.rosemoe.sora.event.ClickEvent;
 import io.github.rosemoe.sora.event.ContentChangeEvent;
 import io.github.rosemoe.sora.interfaces.EditorLanguage;
 import io.github.rosemoe.sora.langs.xml.XMLLanguage;
@@ -100,6 +91,7 @@ public class IdeEditor extends CodeEditor implements IEditor {
     setNonPrintablePaintingFlags(
         FLAG_DRAW_WHITESPACE_LEADING
             | FLAG_DRAW_WHITESPACE_INNER
+            | FLAG_GHOSTWEB
             | FLAG_DRAW_WHITESPACE_FOR_EMPTY_LINE);
     subscribeEvent(ContentChangeEvent.class, ((event, unsubscribe) -> handleContentChange(event)));
     return this;
@@ -428,4 +420,5 @@ public class IdeEditor extends CodeEditor implements IEditor {
       Log.e("EditorBindError ", err.getLocalizedMessage());
     }
   }
+  
 }

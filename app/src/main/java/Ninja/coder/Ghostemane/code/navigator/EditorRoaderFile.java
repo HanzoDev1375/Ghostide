@@ -11,6 +11,7 @@ import io.github.rosemoe.sora.langs.ghostthemelang.ghostlang.ghostlangs;
 import io.github.rosemoe.sora.langs.html.HTMLLanguage;
 import io.github.rosemoe.sora.langs.java.JavaLanguage;
 import io.github.rosemoe.sora.langs.javascript.JavaScriptLanguage;
+import io.github.rosemoe.sora.langs.markdown.MarkDownLang;
 import io.github.rosemoe.sora.langs.ninjalang.NinjaLang;
 import io.github.rosemoe.sora.langs.properties.Propertieslangs;
 import io.github.rosemoe.sora.langs.python.PythonLang;
@@ -102,9 +103,7 @@ public class EditorRoaderFile {
     } else if (_path.endsWith(".md")) {
       ReadFileCompat(editor, _path, bar);
       _fab.postDelayed(_fab::show, 400);
-      var htmllang = new HTMLLanguage(editor);
-      editor.setEditorLanguage(htmllang);
-      editor.setAutoCompletionEnabled(false);
+      editor.setEditorLanguage(new MarkDownLang());
     } else if (_path.endsWith(".php")) {
       ReadFileCompat(editor, _path, bar);
       editor.setEditorLanguage(new io.github.rosemoe.sora.langs.php.PHPLanguage());

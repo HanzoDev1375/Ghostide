@@ -163,9 +163,6 @@ public class ListKeyword {
     "xmp"
   };
   protected HTMLConstants htmlconfig;
-
-  ;
-
   public ListKeyword() {
     htmlconfig = new HTMLConstants();
   }
