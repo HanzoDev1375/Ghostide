@@ -8,9 +8,11 @@ import Ninja.coder.Ghostemane.code.RequestNetwork;
 import Ninja.coder.Ghostemane.code.activities.BaseCompat;
 import Ninja.coder.Ghostemane.code.adapter.SyspiarAdapter;
 import Ninja.coder.Ghostemane.code.adapter.ToolbarListFileAdapter;
+import Ninja.coder.Ghostemane.code.config.AmazonClassHelper;
 import Ninja.coder.Ghostemane.code.config.CommonFactoryData;
 import Ninja.coder.Ghostemane.code.databinding.Antcomp8lerBinding;
 import Ninja.coder.Ghostemane.code.layoutmanager.LogCatBottomSheet;
+import Ninja.coder.Ghostemane.code.marco.CharUtil;
 import Ninja.coder.Ghostemane.code.marco.ColorView;
 import Ninja.coder.Ghostemane.code.marco.GhostWebEditorSearch;
 import Ninja.coder.Ghostemane.code.marco.NinjaMacroFileUtil;
@@ -157,15 +159,11 @@ public class CodeEditorActivity extends AppCompatActivity {
   private RecyclerView recyclerview1;
   private RecyclerView dir;
   private LinearLayout divar;
-  private LinearLayout linear1;
+
   private LinearLayout linear2;
   private BadgeView badgeview3;
-  private TextView tvtitle;
-  private TextView typeVl;
-  private ImageView image;
-  private ImageView redo;
-  private ImageView undo;
-  private ImageView menupopnew;
+  private TextView titleauthor;
+  private ImageView image, redo, undo, menupopnew, iconAuthor;
   private IdeEditor editor;
   private LinearLayout FrameLayout02;
   private LinearLayout linear3;
@@ -292,12 +290,9 @@ public class CodeEditorActivity extends AppCompatActivity {
     recyclerview1 = findViewById(R.id.recyclerview1);
     dir = findViewById(R.id.dir);
     divar = findViewById(R.id.divar);
-
-    linear1 = findViewById(R.id.linear1);
     linear2 = findViewById(R.id.linear2);
     badgeview3 = findViewById(R.id.badgeview3);
-    tvtitle = findViewById(R.id.tvtitle);
-    typeVl = findViewById(R.id.typeVl);
+    titleauthor = findViewById(R.id.titleauthor);
     image = findViewById(R.id.image);
     redo = findViewById(R.id.redo);
     undo = findViewById(R.id.undo);
@@ -344,7 +339,7 @@ public class CodeEditorActivity extends AppCompatActivity {
     t = getSharedPreferences("t", Activity.MODE_PRIVATE);
     thememanagersoft = getSharedPreferences("thememanagersoft", Activity.MODE_PRIVATE);
     sf = getSharedPreferences("sf", Activity.MODE_PRIVATE);
-
+    iconAuthor = findViewById(R.id.iconAuthor);
     modelEditor = new ViewModelProvider(this).get(EditorViewModel.class);
     editor.restoreState(_savedInstanceState);
     recyclerview1.addOnScrollListener(
@@ -429,14 +424,14 @@ public class CodeEditorActivity extends AppCompatActivity {
 
           @Override
           public void onViewShow() {
-            if (_fab.isShow()) {
+            if (_fab.getVisibility() == View.VISIBLE) {
               _fab.hide();
             }
           }
 
           @Override
           public void onViewHide() {
-            if (_fab.isHide()) {
+            if (_fab.getVisibility() == View.GONE) {
               _fab.show();
             }
           }
@@ -592,6 +587,9 @@ public class CodeEditorActivity extends AppCompatActivity {
     editor.setAutoCompletionOnComposing(false);
     editor.setLineInfoTextSize(20f);
     editor.setBlockLineEnabled(true);
+    if(getvb.contains("chars")){
+      editor.setCustomCharName(getvb.getString("chars",""));
+    }
 
     var projectz = new ProjectManager();
     projectz.setProjectName(getIntent().getStringExtra("root"));
@@ -601,6 +599,7 @@ public class CodeEditorActivity extends AppCompatActivity {
           modelEditor.setText(event.getEditor().getText().toString());
           var cu = event.getEditor().getCursor();
           modelEditor.setCursor(cu.getLeftLine() + cu.getLeftColumn());
+          var myChar= new CharUtil(editor.getText().toString(),titleauthor);
         });
 
     if (sve.contains("getAutoSave")) {
@@ -674,9 +673,7 @@ public class CodeEditorActivity extends AppCompatActivity {
     SetThemeForJson themeForJson2 = new SetThemeForJson();
     themeForJson2.setThemeCodeEditor(editor, imap, false, this);
     themeForJson2.addTextColor(
-        tvtitle, "SyombolBarTextColor", Color.parseColor("#FFFFA0FB"), this, imap);
-    themeForJson2.addTextColor(
-        typeVl, "SyombolBarTextColor", Color.parseColor("#FFFFA0FB"), this, imap);
+        titleauthor, "SyombolBarTextColor", Color.parseColor("#FFFFA0FB"), this, imap);
     themeForJson2.AddthemetoSattos(this, imap);
     themeForJson2.addBackground(this, imap, "ToolbarColor", CustomToolbar, 0xFF281B26);
     themeForJson2.addBackground(this, imap, "TabImageColorFilter", divar, Color.RED);
@@ -704,8 +701,8 @@ public class CodeEditorActivity extends AppCompatActivity {
       undo.setColorFilter(0xFFFFDCBD, PorterDuff.Mode.MULTIPLY);
       menupopnew.setColorFilter(0xFFEEEEEE, PorterDuff.Mode.MULTIPLY);
       image.setColorFilter(0xFFFFB689, PorterDuff.Mode.MULTIPLY);
-      tvtitle.setTextColor(0xFFFDA893);
-      typeVl.setTextColor(0xFFFDA893);
+      titleauthor.setTextColor(0xFFFDA893);
+      
       _fab.setBackgroundTintList(ColorStateList.valueOf(0xFF2B2122));
       _fab.setStrokeColor(ColorStateList.valueOf(0xFFFDB69A));
       _fab.setStrokeWidth(1);
@@ -723,7 +720,6 @@ public class CodeEditorActivity extends AppCompatActivity {
 
     }
     _sttingpp();
-    tvtitle.setText("GWI");
     _Animwork(_fab);
     _Anim01(editor);
     editor
@@ -743,22 +739,19 @@ public class CodeEditorActivity extends AppCompatActivity {
         editor.setTypefaceText(Typeface.createFromAsset(getAssets(), "ghostfont.ttf"));
         editor.setTypefaceLineNumber(Typeface.createFromAsset(getAssets(), "ghostfont.ttf"));
         DataUtil.showMessage(getApplicationContext(), "Custom Font Not Found");
-        tvtitle.setTypeface(
+        titleauthor.setTypeface(
             Typeface.createFromAsset(getAssets(), "fonts/ghostfont.ttf"), Typeface.NORMAL);
-        typeVl.setTypeface(
-            Typeface.createFromAsset(getAssets(), "fonts/ghostfont.ttf"), Typeface.NORMAL);
+        
 
       } else {
         _editorsetfontfromfile(setfont.getString("mfont", ""));
-        tvtitle.setTypeface(Typeface.createFromFile(new File(setfont.getString("mfont", ""))));
-        typeVl.setTypeface(Typeface.createFromFile(new File(setfont.getString("mfont", ""))));
+        titleauthor.setTypeface(Typeface.createFromFile(new File(setfont.getString("mfont", ""))));
+        
       }
     } else {
       editor.setTypefaceText(Typeface.createFromAsset(getAssets(), "ghostfont.ttf"));
       editor.setTypefaceLineNumber(Typeface.createFromAsset(getAssets(), "ghostfont.ttf"));
-      tvtitle.setTypeface(
-          Typeface.createFromAsset(getAssets(), "fonts/ghostfont.ttf"), Typeface.NORMAL);
-      typeVl.setTypeface(
+      titleauthor.setTypeface(
           Typeface.createFromAsset(getAssets(), "fonts/ghostfont.ttf"), Typeface.NORMAL);
     }
     var data = thememanagersoft.contains("br") ? thememanagersoft.getFloat("br", 2) : 3;
@@ -1083,18 +1076,6 @@ public class CodeEditorActivity extends AppCompatActivity {
 
   public void _Anim04(final View _view) {
     AnimUtils.Amin04(_view, this);
-  }
-
-  public void _viber() {
-    if (getvb.getString("HsiGamer", "").equals("true")) {
-      vb.vibrate(59);
-    } else {
-      if (getvb.getString("HsiGamer", "").equals("false")) {
-
-      } else {
-
-      }
-    }
   }
 
   public void ClickItemChildAnimation(View view) {

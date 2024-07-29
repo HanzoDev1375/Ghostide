@@ -1,5 +1,6 @@
 package io.github.rosemoe.sora.langs.html;
 
+import Ninja.coder.Ghostemane.code.marco.RegexUtilCompat;
 import android.graphics.Color;
 import androidx.core.graphics.ColorUtils;
 import io.github.rosemoe.sora.data.Span;
@@ -129,15 +130,17 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
           case HTMLLexer.STRING:
           case HTMLLexer.CHATREF:
             {
-              if (text1.startsWith("\"#")) {
+              
+              if (RegexUtilCompat.RegexSelect("(\\#[a-zA-F0-9]{8})|(\\#[a-zA-F0-9]{6})", text1)) {
+
                 var colors = result;
                 try {
-                  int color = Color.parseColor(text1.substring(1, text1.length() - 1));
+                  int color = Color.parseColor(text1);
                   colors.addIfNeeded(line, column, EditorColorScheme.LITERAL);
                   if (ColorUtils.calculateLuminance(color) > 0.5) {
                     Span span =
                         Span.obtain(
-                            column + 1,
+                            column ,
                             TextStyle.makeStyle(
                                 EditorColorScheme.black, 0, false, false, false, false, true));
                     if (span != null) {
@@ -147,7 +150,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
                   } else if (ColorUtils.calculateLuminance(color) <= 0.5) {
                     Span span =
                         Span.obtain(
-                            column + 1,
+                            column ,
                             TextStyle.makeStyle(
                                 EditorColorScheme.TEXT_NORMAL,
                                 0,
@@ -162,7 +165,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
                     }
                   }
 
-                  Span middle = Span.obtain(column + text1.length() - 1, EditorColorScheme.LITERAL);
+                  Span middle = Span.obtain(column + text1.length(), EditorColorScheme.LITERAL);
                   middle.setBackgroundColorMy(Color.TRANSPARENT);
                   colors.add(line, middle);
 
@@ -176,7 +179,10 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
                 } catch (Exception ignore) {
                   ignore.printStackTrace();
                 }
+              }else{
+                result.addIfNeeded(line, column, EditorColorScheme.LITERAL);
               }
+              
               result.addIfNeeded(line, column, forString());
               break;
             }
