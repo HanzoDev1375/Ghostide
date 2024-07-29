@@ -18,12 +18,14 @@ android {
         }
     }
     signingConfigs {
+        /*
         release {
             storeFile file("./HanzoDev.jks")
             storePassword "HanzoDev"
             keyAlias "HanzoDev"
             keyPassword "HanzoDev"
         }
+        */
     }
     
     buildTypes {
