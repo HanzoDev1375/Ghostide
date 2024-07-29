@@ -23,7 +23,7 @@ import io.github.rosemoe.sora.widget.EditorColorScheme;
 public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
   private int COMPLETE = 25;
   private int INCOMPLETE = 24;
-  private BasicSyntaxJavaScriptAnalyzer as = new BasicSyntaxJavaScriptAnalyzer();
+  private BasicSyntaxJavaScriptAnalyzer as ;
 
   @Override
   public void analyze(
@@ -31,6 +31,7 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
       TextAnalyzeResult result,
       TextAnalyzer.AnalyzeThread.Delegate delegate) {
     try {
+      as  = new BasicSyntaxJavaScriptAnalyzer();
       CodePointCharStream stream = CharStreams.fromReader(new StringReader(content.toString()));
       JavaScriptLexer lexer = new JavaScriptLexer(stream);
       var classNamePrevious = false;
@@ -314,6 +315,7 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
             prevIsTagName = false;
             classNamePrevious = false;
             break;
+          
         }
         if (type != JavaScriptLexer.WhiteSpaces) {
           previous = type;
@@ -324,7 +326,7 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
       result.determine(lastLine);
       identifiers.finish();
       result.setExtra(identifiers);
-      // as.analyze(content, result, delegate);
+       as.analyze(content, result, delegate);
     } catch (IOException e) {
       e.printStackTrace();
       Log.e("TAG", e.getMessage());

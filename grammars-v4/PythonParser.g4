@@ -40,6 +40,7 @@ file_input
 
 interactive
    : statement_newline
+   | expression32
    ;
 
 eval
@@ -71,6 +72,11 @@ statement_newline
    | simple_stmts
    | NEWLINE
    | EOF
+   ;
+   
+   
+expression32
+   : IDENTIFIER
    ;
 
 simple_stmts

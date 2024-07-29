@@ -21,6 +21,8 @@ import io.github.rosemoe.sora.text.TextAnalyzer;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
 
 public class PythonCodeAnalyzer implements CodeAnalyzer {
+  
+  private PythonErrorManager errors ;
 
   @Override
   public void analyze(
@@ -35,6 +37,7 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
       auto.setKeywords(PythonLang.keywords);
       var info = new PythonAutoComplete.Identifiers();
       info.begin();
+      errors = new PythonErrorManager();
       var classNamePrevious = false;
       Token token, preToken = null, prePreToken = null;
       boolean first = true;
@@ -126,20 +129,7 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
           case PythonLexer.DOT:
           case PythonLexer.ELLIPSIS:
           case PythonLexer.STAR:
-          case PythonLexer.OPEN_PAREN:
-          case PythonLexer.CLOSE_PAREN:
-          case PythonLexer.COMMA:
-          case PythonLexer.SEMI_COLON:
-          case PythonLexer.POWER:
-          case PythonLexer.ASSIGN:
-          case PythonLexer.OPEN_BRACK:
-          case PythonLexer.CLOSE_BRACK:
-          case PythonLexer.OR_OP:
-          case PythonLexer.XOR:
-          case PythonLexer.AND_OP:
-          case PythonLexer.LEFT_SHIFT:
-          case PythonLexer.RIGHT_SHIFT:
-          case PythonLexer.ADD:
+        
             result.addIfNeeded(
                 line,
                 column,
@@ -149,51 +139,11 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
           case PythonLexer.NUMBER:
           case PythonLexer.STRING:
           case PythonLexer.MINUS:
-          case PythonLexer.DIV:
-          case PythonLexer.MOD:
-          case PythonLexer.IDIV:
-          case PythonLexer.NOT_OP:
-          case PythonLexer.OPEN_BRACE:
-          case PythonLexer.CLOSE_BRACE:
-          case PythonLexer.LESS_THAN:
-          case PythonLexer.GREATER_THAN:
-          case PythonLexer.EQUALS:
-          case PythonLexer.GT_EQ:
-          case PythonLexer.LT_EQ:
-          case PythonLexer.NOT_EQ_1:
-          case PythonLexer.NOT_EQ_2:
-          case PythonLexer.AT:
-          case PythonLexer.ARROW:
-          case PythonLexer.ADD_ASSIGN:
-          case PythonLexer.SUB_ASSIGN:
-          case PythonLexer.MULT_ASSIGN:
-          case PythonLexer.AT_ASSIGN:
+          
             result.addIfNeeded(
                 line,
                 column,
                 TextStyle.makeStyle(EditorColorScheme.BLOCK_LINE, 0, true, false, false));
-            break;
-          case PythonLexer.DIV_ASSIGN:
-          case PythonLexer.MOD_ASSIGN:
-          case PythonLexer.AND_ASSIGN:
-          case PythonLexer.OR_ASSIGN:
-          case PythonLexer.XOR_ASSIGN:
-          case PythonLexer.LEFT_SHIFT_ASSIGN:
-          case PythonLexer.RIGHT_SHIFT_ASSIGN:
-          case PythonLexer.POWER_ASSIGN:
-          case PythonLexer.IDIV_ASSIGN:
-            result.addIfNeeded(
-                line, column, TextStyle.makeStyle(EditorColorScheme.LITERAL, 0, true, true, false));
-            classNamePrevious = false;
-
-            break;
-
-          case PythonLexer.UNKNOWN_CHAR:
-            result.addIfNeeded(
-                line, column, TextStyle.makeStyle(EditorColorScheme.red, 0, true, false, false));
-            break;
-          case PythonLexer.SKIP_:
-            result.addIfNeeded(line, column, EditorColorScheme.COMMENT);
             break;
           case PythonLexer.IDENTIFIER:
             {
@@ -208,12 +158,6 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
               }
               if (previous == PythonLexer.IF) {
                 colorid = EditorColorScheme.Ninja;
-                isBold = true;
-                isUnderLine = false;
-              }
-              if (previous == PythonLexer.OPEN_PAREN) {
-                colorid = EditorColorScheme.OPERATOR;
-
                 isBold = true;
                 isUnderLine = false;
               }
@@ -236,11 +180,7 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
                 isBold = true;
                 isUnderLine = false;
               }
-              if (previous == PythonLexer.ASSIGN) {
-                colorid = EditorColorScheme.SELECTION_INSERT;
-                isBold = false;
-                isUnderLine = false;
-              }
+              
                 result.addIfNeeded(
                     line,
                     column,
@@ -253,6 +193,7 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
             classNamePrevious = false;
             break;
         }
+        
 
         first = false;
         if (type != PythonLexer.NEWLINE) {
@@ -262,6 +203,7 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
       info.finish();
       result.setExtra(info);
       result.determine(lastLine);
+      errors.analyze(content,result,delegate);
       result.setSuppressSwitch(maxSwitch + 10);
       result.setNavigation(labels);
     } catch (IOException e) {
