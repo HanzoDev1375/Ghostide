@@ -79,7 +79,7 @@ jobs:
         uses: appleboy/telegram-action@master
         with:
           to: -1002213084840
-          token: ${{ secrets.TELEGRAM_TOKEN }}
+          token: 7179036675:AAGD9GwhvcgMI7L6hU3hjjLyex_ctIZxI8s
           format: markdown
           document: app-debug.apk
           disable_web_page_preview: false
@@ -87,6 +87,6 @@ jobs:
             *Build Success!*
             Repository: *${{ github.repository }}*
             Branch: *${{ github.ref_name }}*
-            App: Robok IDE
+            App: Ghost IDE
             Commit message: ${{ github.event.head_commit.message }}
             [Check the logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
