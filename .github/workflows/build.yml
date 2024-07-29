@@ -1,4 +1,4 @@
-name: ghostide Debug
+name: ghostide debug
 
 on:
   workflow_dispatch:
