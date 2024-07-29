@@ -1,0 +1,67 @@
+name: ghostide release
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/build.yml
+      - app/**
+      - build.gradle.kts
+      - gradle.properties
+      - gradlew
+      - gradlew.bat
+      - settings.gradle.kts
+  pull_request:
+    paths:
+      - .github/workflows/build.yml
+      - app/**
+      - build.gradle.kts
+      - gradle.properties
+      - gradlew
+      - gradlew.bat
+      - settings.gradle.kts
+
+jobs:
+  ghostide-release-apk:
+    name: Build ghostide Release APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+          cache: gradle
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Validate Gradle wrapper
+        uses: gradle/actions/wrapper-validation@v3
+      
+      - name: Build with Gradle
+        id: gradle_build_release
+        run: ./gradlew assembleRelease
+        
+      - name: Sign APK
+        id: sign_apk
+        uses: noriban/sign-android-release@v5
+        with:
+          releaseDirectory: app/build/outputs/apk/release
+          signingKeyBase64: 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
+          alias: HanzoDev
+          keyStorePassword: $ HanzoDev
+          keyPassword: HanzoDev
+        env:
+          BUILD_TOOLS_VERSION: "34.0.0"      
+
+      - name: Upload release apk
+        uses: actions/upload-artifact@v4
+        with:
+          name: ghostide-release
+          compression-level: 0
+          path: ${{steps.sign_apk.outputs.signedReleaseFile}}
