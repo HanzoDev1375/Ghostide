@@ -85,3 +85,5 @@ lint/tmp/
 #Android ide
 
 .androidide
+
+app/HanzoDev.jks
