@@ -56,11 +56,10 @@ public class HtmlRunerActivity extends BaseCompat {
     setContentView(bin.getRoot());
     findAndMatchIdInview();
     installToRun();
-    
   }
 
   private void findAndMatchIdInview() {
-    
+
     setSupportActionBar(bin.Toolbar);
 
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -72,7 +71,7 @@ public class HtmlRunerActivity extends BaseCompat {
     qo = getSharedPreferences("qo", Activity.MODE_PRIVATE);
     databind();
     reloadConsoleJs();
-  
+
     bin.web.setWebChromeClient(
         new WebChromeClient() {
           @Override
@@ -427,8 +426,19 @@ public class HtmlRunerActivity extends BaseCompat {
             + erudaPath
             + "';"
             + "document.body.appendChild(script);"
-            + "eruda.init();"
-            + "script.onload = function () { eruda.add({name: 'My Theme', init: function () { var bgColor = '#333'; var textColor = '#fff'; document.querySelector('.eruda-container').style.backgroundColor = bgColor; var consoleEls = document.querySelectorAll('.eruda-console-item, .eruda-header'); for (var i = 0; i < consoleEls.length; i++) { consoleEls[i].style.color = textColor; } }}); }"
+            + "eruda.init({"
+            + "\n"
+            + "    defaults: {"
+            + "\n"
+            + "displaySize: 77,"
+            + "\n"
+            + "transparency: 1,"
+            + "\n"
+            + "theme: 'Material Darker'"
+            + "\n"
+            + "}"
+            + "\n"
+            + "});"
             + "})();";
     bin.web.post(() -> bin.web.loadUrl("javascript:" + js));
   }

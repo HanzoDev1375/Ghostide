@@ -14,11 +14,10 @@ import java.util.List;
 
 public class ListAppIconAd extends BaseAdapter implements Adapter {
 
-  List<HashMap<String, Object>> data;
-  
+  private List<HashMap<String, Object>> data;
 
-  public ListAppIconAd(List<HashMap<String, Object>> arr) {
-    data = arr;
+  public ListAppIconAd(List<HashMap<String, Object>> data) {
+    this.data = data;
   }
 
   @Override
@@ -38,7 +37,7 @@ public class ListAppIconAd extends BaseAdapter implements Adapter {
 
   @Override
   public View getView(int position, View v, ViewGroup container) {
-    
+
     AppsBinding bin = AppsBinding.inflate(LayoutInflater.from(container.getContext()));
     ObjectAnimator animator =
         ObjectAnimator.ofFloat(bin.imageview1, "translationX", -10f, 10f, -5f, 5f, -2f, 2f, 0f);
@@ -49,7 +48,7 @@ public class ListAppIconAd extends BaseAdapter implements Adapter {
     animator.start();
 
     if (position == 0) {
-      
+
       bin.textview1.setText("پیشفرض");
       bin.imageview1.setImageResource(R.mipmap.ghosticon);
     }
@@ -81,8 +80,10 @@ public class ListAppIconAd extends BaseAdapter implements Adapter {
       bin.textview1.setText("ابی تیره ۲ رنگ");
       bin.imageview1.setImageResource(R.drawable.ghosticonbluemod);
     }
-    
-
+    if (position == 8) {
+      bin.textview1.setText("Ghost");
+      bin.imageview1.setImageResource(R.drawable.ghosticons);
+    }
     return bin.getRoot();
   }
 }

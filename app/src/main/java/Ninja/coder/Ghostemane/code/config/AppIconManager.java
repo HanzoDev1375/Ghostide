@@ -41,57 +41,62 @@ public class AppIconManager {
       case 7:
         blueSky();
         break;
+      case 8:
+        ghost();
+        break;
     }
   }
 
   // Methods to enable/disable specific components based on icon color
 
   void red() {
-    disableAllComponentsExcept("MainActivityred");
-    enableComponent("MainActivityred");
+    sub("MainActivityred");
     DataUtil.showMessage(appcompat, "ENABLED ICON - RED");
   }
 
   void yellow() {
-    disableAllComponentsExcept("MainActivityyellow");
-    enableComponent("MainActivityyellow");
+    sub("MainActivityyellow");
     DataUtil.showMessage(appcompat, "ENABLED ICON - YELLOW");
   }
 
   void pop() {
-    disableAllComponentsExcept("MainActivitypap");
-    enableComponent("MainActivitypap");
+    sub("MainActivitypap");
     DataUtil.showMessage(appcompat, "ENABLED ICON - POP");
   }
 
   void greenHell() {
-    disableAllComponentsExcept("MainActivitygreenhell");
-    enableComponent("MainActivitygreenhell");
+    sub("MainActivitygreenhell");
     DataUtil.showMessage(appcompat, "ENABLED ICON - GREENHELL");
   }
 
   void blueSky() {
-    disableAllComponentsExcept("MainActivitybluesky");
-    enableComponent("MainActivitybluesky");
+    sub("MainActivitybluesky");
     DataUtil.showMessage(appcompat, "ENABLED ICON - BLUE SKY MOD");
   }
 
   void normal() {
-    disableAllComponentsExcept("MainActivity");
-    enableComponent("MainActivity");
+    sub("MainActivity");
     DataUtil.showMessage(appcompat, "ENABLED ICON - DEFAULT");
   }
 
   void blue() {
-    disableAllComponentsExcept("MainActivityblue");
-    enableComponent("MainActivityblue");
+    sub("MainActivityblue");
     DataUtil.showMessage(appcompat, "ENABLED ICON - BLUE");
   }
 
   void black() {
-    disableAllComponentsExcept("MainActivityblack");
-    enableComponent("MainActivityblack");
+    sub("MainActivityblack");
     DataUtil.showMessage(appcompat, "ENABLED ICON - BLACK");
+  }
+
+  void ghost() {
+    sub("MainActivityghost");
+    DataUtil.showMessage(appcompat, "ENABLED ICON - GHOST");
+  }
+
+  void sub(String name) {
+    disableAllComponentsExcept(name);
+    enableComponent(name);
   }
 
   // Helper methods
@@ -99,8 +104,15 @@ public class AppIconManager {
   private void disableAllComponentsExcept(String componentNameToEnable) {
     PackageManager manager = appcompat.getPackageManager();
     String[] componentNames = {
-      "MainActivity", "MainActivityblue", "MainActivityblack", "MainActivityred",
-      "MainActivityyellow", "MainActivitypap", "MainActivitygreenhell", "MainActivitybluesky"
+      "MainActivity",
+      "MainActivityblue",
+      "MainActivityblack",
+      "MainActivityred",
+      "MainActivityyellow",
+      "MainActivitypap",
+      "MainActivitygreenhell",
+      "MainActivitybluesky",
+      "MainActivityghost"
     };
 
     for (String componentName : componentNames) {

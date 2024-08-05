@@ -731,6 +731,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
+
+        <activity-alias
+            android:name=".MainActivityghost"
+            android:label="@string/app_name"
+            android:icon="@drawable/ghosticons"
+            android:enabled="false"
+            android:targetActivity=".MainActivity"
+            
+        >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
         <service
             android:name=".services.MediaListenerService"
             android:enabled="true"

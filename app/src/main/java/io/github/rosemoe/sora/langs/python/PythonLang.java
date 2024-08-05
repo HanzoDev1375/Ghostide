@@ -1,5 +1,6 @@
 package io.github.rosemoe.sora.langs.python;
 
+import Ninja.coder.Ghostemane.code.IdeEditor;
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 import io.github.rosemoe.sora.interfaces.EditorLanguage;
@@ -13,6 +14,11 @@ import org.antlr.v4.runtime.CharStreams;
 import java.io.IOException;
 
 public class PythonLang implements EditorLanguage {
+  private IdeEditor editor;
+
+  public PythonLang(IdeEditor editor) {
+    this.editor = editor;
+  }
 
   private NewlineHandler[] newlineHandlers = new NewlineHandler[] {new ColonHandler()};
 
@@ -76,13 +82,13 @@ public class PythonLang implements EditorLanguage {
   @Override
   public AutoCompleteProvider getAutoCompleteProvider() {
     PythonAutoComplete py = new PythonAutoComplete();
-     py.setKeywords(keywords);
+    py.setKeywords(keywords);
     return py;
   }
 
   @Override
   public CodeAnalyzer getAnalyzer() {
-    return new PythonCodeAnalyzer();
+    return new PythonCodeAnalyzer(editor);
   }
 
   @Override

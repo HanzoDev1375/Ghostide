@@ -17,6 +17,7 @@ import io.github.rosemoe.sora.widget.EditorColorScheme;
 public class ANTLRV4CodeAnalyzer implements CodeAnalyzer {
   private int COMPLETE = 25;
   private int INCOMPLETE = 24;
+  private Antlr4Error error;
 
   @Override
   public void analyze(
@@ -32,6 +33,7 @@ public class ANTLRV4CodeAnalyzer implements CodeAnalyzer {
       com.setKeywords(ANTLRV4Lang.word);
       Antlr4AutoText.Identifiers identifiers = new Antlr4AutoText.Identifiers();
       identifiers.begin();
+      error = new Antlr4Error();
       boolean first = true;
       Stack<BlockLine> stack = new Stack<>();
       int type, currSwitch = 1, maxSwitch = 0, previous = -1;
@@ -70,22 +72,22 @@ public class ANTLRV4CodeAnalyzer implements CodeAnalyzer {
           case ANTLRv4Lexer.TOKEN_REF:
             {
               result.addIfNeeded(line, column, EditorColorScheme.HTML_TAG);
+              break;
             }
           case ANTLRv4Lexer.RULE_REF:
             {
               result.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
+              break;
             }
           case ANTLRv4Lexer.LEXER_CHAR_SET:
             {
               result.addIfNeeded(line, column, EditorColorScheme.LITERAL);
+              break;
             }
 
-          case ANTLRv4Lexer.POUND:
-          case ANTLRv4Lexer.NOT:
-          case ANTLRv4Lexer.ERRCHAR:
-          case ANTLRv4Lexer.END_ARGUMENT:
-          case ANTLRv4Lexer.UNTERMINATED_ARGUMENT:
-          case ANTLRv4Lexer.ARGUMENT_CONTENT:
+            //  case ANTLRv4Lexer.ERRCHAR:
+            //    case ANTLRv4Lexer.UNTERMINATED_ARGUMENT:
+            //  case ANTLRv4Lexer.ARGUMENT_CONTENT:
           case ANTLRv4Lexer.END_ACTION:
           case ANTLRv4Lexer.UNTERMINATED_ACTION:
           case ANTLRv4Lexer.ACTION_CONTENT:
@@ -95,7 +97,7 @@ public class ANTLRV4CodeAnalyzer implements CodeAnalyzer {
                 line,
                 column,
                 TextStyle.makeStyle(EditorColorScheme.COLOR_ERROR, 0, true, false, false));
-            identifiers.addIdentifier(token.getText());
+
             break;
 
           case ANTLRv4Lexer.PRIVATE:
@@ -123,6 +125,9 @@ public class ANTLRV4CodeAnalyzer implements CodeAnalyzer {
           case ANTLRv4Lexer.RANGE:
           case ANTLRv4Lexer.DOT:
           case ANTLRv4Lexer.AT:
+          case ANTLRv4Lexer.POUND:
+          case ANTLRv4Lexer.NOT:
+          case ANTLRv4Lexer.END_ARGUMENT:
             result.addIfNeeded(
                 line,
                 column,
@@ -170,6 +175,7 @@ public class ANTLRV4CodeAnalyzer implements CodeAnalyzer {
             break;
           case ANTLRv4Lexer.ID:
             {
+              identifiers.addIdentifier(token.getText());
               int color = EditorColorScheme.TEXT_NORMAL;
               boolean isBold = false, isItalic = false;
 
@@ -184,6 +190,12 @@ public class ANTLRV4CodeAnalyzer implements CodeAnalyzer {
               }
               if (previous == ANTLRv4Lexer.MODE) {
                 color = EditorColorScheme.KEYWORD;
+              }
+              if (previous == ANTLRv4Lexer.LEXER
+                  || previous == ANTLRv4Lexer.PARSER
+                  || previous == ANTLRv4Lexer.GRAMMAR) {
+                color = EditorColorScheme.OPERATOR;
+                isBold = true;
               }
 
               result.addIfNeeded(
@@ -207,6 +219,8 @@ public class ANTLRV4CodeAnalyzer implements CodeAnalyzer {
       result.determine(lastLine);
       identifiers.finish();
       result.setExtra(identifiers);
+      error.analyze(content, result, delegate);
+
     } catch (IOException e) {
       e.printStackTrace();
       Log.e("TAG", e.getMessage());

@@ -614,7 +614,7 @@ public class SettingAppActivity extends BaseCompat {
           }
         });
     map.clear();
-    for (int c = 0; c < (int) (8); c++) {
+    for (int c = 0; c < 9; c++) {
       {
         HashMap<String, Object> item = new HashMap<>();
         item.put("key", "");

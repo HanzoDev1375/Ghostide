@@ -57,6 +57,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -2447,5 +2448,57 @@ public class FileDirActivity extends BaseCompat
   @Override
   public void onLongClick(View view, int pos) {
     _newItemSheet(pos, view);
+  }
+
+  @Override
+  public boolean onKeyDown(int keyCode, KeyEvent event) {
+    if (event.isCtrlPressed()) {
+      switch (keyCode) {
+        case KeyEvent.KEYCODE_S:
+          // open settings
+          startActivity(new Intent(getApplicationContext(), SettingAppActivity.class));
+          return true;
+        case KeyEvent.KEYCODE_F:
+          /// open dialog make folder
+          FolderMaker();
+          return true;
+        case KeyEvent.KEYCODE_F1:
+          FileMaker();
+          return true;
+        case KeyEvent.KEYCODE_G:
+          // git
+          _dialoggits();
+          return true;
+        case KeyEvent.KEYCODE_D:
+          // open drawer
+          if (!_drawer.isOpen()) {
+            _drawer.open();
+          }
+          return true;
+        case KeyEvent.KEYCODE_J:
+          // open gson to java
+          var jsonToJava =
+              new GsonToClass(
+                  FileDirActivity.this,
+                  Folder,
+                  () -> {
+                    reLoadFile();
+                  });
+          jsonToJava.run();
+          return true;
+        case KeyEvent.KEYCODE_T:
+          // open terminal
+          startActivity(new Intent(getApplicationContext(), TerminalActivity.class));
+          return true;
+        case KeyEvent.KEYCODE_A:
+          // open apk manager;
+          startActivity(new Intent(getApplicationContext(), ApkViewActivity.class));
+          return true;
+        case KeyEvent.KEYCODE_ESCAPE:
+          BackPressed();
+          return true;
+      }
+    }
+    return super.onKeyDown(keyCode, event);
   }
 }

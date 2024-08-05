@@ -8,18 +8,27 @@
     <LinearLayout
          android:layout_height="wrap_content"
          android:layout_width="wrap_content"
-         android:orientation="vertical"
-         >
+         android:orientation="vertical">
 
-        <ListView
-             android:layout_height="wrap_content"
+        <androidx.recyclerview.widget.RecyclerView
+             android:layout_height="match_parent"
              android:layout_width="wrap_content"
              android:padding="8dp"
-             android:layout_weight="1"
-             android:id="@+id/rvEditor">
-
-        </ListView>
+             android:id="@+id/rvEditor" />
 
     </LinearLayout>
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:visibility="invisible"
+         android:gravity="center_vertical"
+         android:padding="3dp"
+         android:ellipsize="end"
+         android:textSize="16dp"
+         android:singleLine="true"
+         android:textColor="?colorOnPrimary"
+         android:text="Hello"
+         android:id="@+id/tooltiem" />
 
 </LinearLayout>

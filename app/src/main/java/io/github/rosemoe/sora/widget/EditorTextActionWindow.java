@@ -39,6 +39,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.os.*;
 import android.widget.*;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.color.MaterialColors;
 import androidx.annotation.NonNull;
 import android.view.inputmethod.InputMethodManager;
@@ -186,7 +188,7 @@ public class EditorTextActionWindow extends EditorPopupWindow
               }
             });
     bin.rvEditor.setAdapter(adptor);
-    bin.rvEditor.setClickable(true);
+    bin.rvEditor.setLayoutManager(new LinearLayoutManager(editor.getContext(),RecyclerView.HORIZONTAL,false));
     helpers = new helper(editor);
 
     MaterialShapeDrawable materialShapeDrawable =
@@ -202,7 +204,7 @@ public class EditorTextActionWindow extends EditorPopupWindow
     // cardview1.setBackground(materialShapeDrawable);
     setContentView(bin.getRoot());
     getPopup().setAnimationStyle(R.style.hso);
-    setSize(0, (int) (mEditor.getDpUnit() * 190));
+    setSize(0, (int) (mEditor.getDpUnit() * 50));
     
     getPopup().setBackgroundDrawable(post());
     editor.subscribeEvent(SelectionChangeEvent.class, this);
@@ -304,7 +306,7 @@ public class EditorTextActionWindow extends EditorPopupWindow
     bin.getRoot().measure(
         View.MeasureSpec.makeMeasureSpec(1000000, View.MeasureSpec.AT_MOST),
         View.MeasureSpec.makeMeasureSpec(100000, View.MeasureSpec.AT_MOST));
-    setSize(Math.min(bin.getRoot().getMeasuredWidth(), (int) (mEditor.getDpUnit() * 180)), getHeight());
+    setSize(Math.min(bin.getRoot().getMeasuredWidth(), (int) (mEditor.getDpUnit() * 230)), getHeight());
   }
 
   @Override
@@ -420,5 +422,12 @@ public class EditorTextActionWindow extends EditorPopupWindow
             cursor.getRightLine(),
             cursor.getRightColumn())
         .toString();
+  }
+  
+  public void setText(String text){
+    bin.tooltiem.setVisibility(View.VISIBLE);
+    bin.rvEditor.setVisibility(View.GONE);
+    bin.tooltiem.setText(text);
+    postDisplay();
   }
 }

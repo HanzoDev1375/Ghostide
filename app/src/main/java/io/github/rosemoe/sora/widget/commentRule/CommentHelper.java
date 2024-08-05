@@ -2,16 +2,6 @@ package io.github.rosemoe.sora.widget.commentRule;
 
 import Ninja.coder.Ghostemane.code.PluginManager.Plugin;
 import Ninja.coder.Ghostemane.code.PluginManager.PluginFactory;
-import io.github.rosemoe.sora.langs.css3.CSS3Language;
-import io.github.rosemoe.sora.langs.cpp.CppLanguage;
-import io.github.rosemoe.sora.langs.javascript.JavaScriptLanguage;
-import io.github.rosemoe.sora.langs.kotlin.KotlinLanguage;
-import io.github.rosemoe.sora.langs.antlrlang.ANTLRV4Lang;
-import io.github.rosemoe.sora.langs.dart.DartLang;
-import io.github.rosemoe.sora.langs.php.PHPLanguage;
-import io.github.rosemoe.sora.langs.python.PythonLanguage;
-import io.github.rosemoe.sora.langs.html.HTMLLanguage;
-import io.github.rosemoe.sora.langs.java.JavaLanguage;
 import io.github.rosemoe.sora.text.Content;
 import io.github.rosemoe.sora.text.Cursor;
 import io.github.rosemoe.sora.widget.CodeEditor;
@@ -80,34 +70,7 @@ public class CommentHelper implements PluginFactory {
   }
   @Deprecated
   public void AutoRun() {
-    pl.setEnabel(false);
-    if (pl.getEnabel()) {
-      if (editor.getEditorLanguage() instanceof HTMLLanguage) {
-        MakeCommentHtml();
-      } else if (editor.getEditorLanguage() instanceof JavaLanguage) {
-        MakeCommentJava();
-      } else if (editor.getEditorLanguage() instanceof CSS3Language) {
-        MakeCommentJava();
-      } else if (editor.getEditorLanguage() instanceof CppLanguage) {
-        MakeCommentJava();
-      } else if (editor.getEditorLanguage() instanceof JavaScriptLanguage) {
-        MakeCommentJava();
-      } else if (editor.getEditorLanguage() instanceof KotlinLanguage) {
-        MakeCommentJava();
-      } else if (editor.getEditorLanguage() instanceof ANTLRV4Lang) {
-        MakeCommentJava();
-      } else if (editor.getEditorLanguage() instanceof DartLang) {
-        MakeCommentJava();
-      } else if (editor.getEditorLanguage() instanceof PHPLanguage) {
-        MakeCommentJava();
-      } else if (editor.getEditorLanguage() instanceof PythonLanguage) {
-        String start = "\"\"\"";
-        String end = start;
-        CustomComment(start, end);
-      } else {
-
-      }
-    }
+    
   }
 
   public void unComment() {

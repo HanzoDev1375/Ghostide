@@ -19,9 +19,7 @@ import io.github.rosemoe.sora.langs.json.JsonLanguage;
 import io.github.rosemoe.sora.langs.kotlin.KotlinLanguage;
 import io.github.rosemoe.sora.langs.ninjalang.NinjaLang;
 import io.github.rosemoe.sora.langs.php.PHPLanguage;
-import io.github.rosemoe.sora.langs.properties.Propertieslangs;
 import io.github.rosemoe.sora.langs.python.PythonLang;
-import io.github.rosemoe.sora.langs.python.PythonLanguage;
 import io.github.rosemoe.sora.langs.sass.SassLangCompat;
 import io.github.rosemoe.sora.langs.smali.SMLang;
 import io.github.rosemoe.sora.langs.typescript.TsLang;
@@ -76,8 +74,7 @@ public class IdeColorCompat {
       DataColor(view,text, "#C8E6C9", "#81C784", "#388E3C"); 
     } else if (editor.getEditorLanguage() instanceof PHPLanguage) {
       DataColor(view,text, "#E0E0E0", "#9E9E9E", "#616161");
-    } else if (editor.getEditorLanguage() instanceof PythonLang
-        || editor.getEditorLanguage() instanceof PythonLanguage) {
+    } else if (editor.getEditorLanguage() instanceof PythonLang) {
       DataColor(view,text, "#FFD54F", "#FFA726", "#FF9800"); 
     } else if (editor.getEditorLanguage() instanceof SassLangCompat) {
       DataColor(view,text, "#F8BBD0", "#F06292", "#E91E63"); 

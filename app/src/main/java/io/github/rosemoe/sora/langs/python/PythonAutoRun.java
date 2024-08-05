@@ -13,11 +13,10 @@ import java.util.List;
 
 public class PythonAutoRun implements AutoCompleteProvider {
   private List<CompletionItem> items;
-  private PythonLang language;
   protected static String TAG = PythonAutoRun.class.getSimpleName();
 
   public PythonAutoRun() {
-    language = new PythonLang();
+    
   }
 
   @Override

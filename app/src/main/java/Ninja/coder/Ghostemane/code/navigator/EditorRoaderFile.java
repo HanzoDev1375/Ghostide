@@ -41,7 +41,7 @@ public class EditorRoaderFile {
       editor.setEditorLanguage(CSS);
       ReadFileCompat(editor, _path, bar);
     } else if (_path.endsWith(".py")) {
-      editor.setEditorLanguage(new PythonLang());
+      editor.setEditorLanguage(new PythonLang(editor));
       ReadFileCompat(editor, _path, bar);
       _fab.postDelayed(_fab::show, 400);
     } else if (_path.endsWith(".cpp")

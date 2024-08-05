@@ -1,19 +1,21 @@
-## Ghost web ide
+<div align = "center">
+ <h3>Ghost ide fast Editor Android</h3>
+
+</div>
 
 <p align="center">
   <img align="center" src="https://raw.githubusercontent.com/appt2/Ghost-web-ide/main/app/src/main/res/mipmap-xxxhdpi/ghosticon.png"/>
 </p>
 
-### Image App 
+### ImageApp 
 
 
 <div align = "center"> 
 
-	<img style="width: 25%; height: 80%; margin-bottom :2px; border-radius :9px; " src="https://raw.githubusercontent.com/appt2/Ghost-web-ide/main/images/img1.jpg">
+    <img style="width: 25%; height: 80%; margin-bottom :2px; border-radius :9px; " src="https://raw.githubusercontent.com/appt2/Ghost-web-ide/main/images/img1.jpg">
     <img style="width: 25%; height: 80%; margin-bottom :2px; border-radius :9px;  " src="https://raw.githubusercontent.com/appt2/Ghost-web-ide/main/images/img2.jpg">
     <img style="width: 25%; height: 80%; margin-bottom :2px; border-radius :9px; " src="https://raw.githubusercontent.com/appt2/Ghost-web-ide/main/images/img3.jpg">
     <img style="width: 25%; height: 80%; margin-bottom :2px; border-radius :9px; text-align :left; " src="https://raw.githubusercontent.com/appt2/Ghost-web-ide/main/images/img4.jpg">
-	
 </div>     
 
 
@@ -52,6 +54,8 @@
 - [ ] Java and Kt Compiler 
 
 - [ ] Ruby Compiler 
+
+- [x] Physical keyboard
 
 
 ### Supported Languages
@@ -144,3 +148,24 @@ I must say that you do not have the right to register the program under your own
 
 #### Note 
 You can put any name you like, but English and with small letters like Jason's example. In the future, all supported languages ​​of Ghost Web support this feature.
+
+### Physical keyboard
+
+Ghost Web supports physical keyboard
+Some physical keyboard support includes
+
+`Ctrl` and `F` -> `File creator`
+
+`Ctrl` and `G` -> `Git clone`
+
+`Ctrl` and `S` -> `Open Settring App`
+
+`Ctrl` and `F1` -> `Folder creator`
+
+`Ctrl` and `J` -> `Json to java`
+
+`Ctrl` and `D` -> `Open Drawer`
+
+`Ctrl` and `A` -> `Open ApkView`
+
+`Ctrl` and `T` -> `Open Terminal`

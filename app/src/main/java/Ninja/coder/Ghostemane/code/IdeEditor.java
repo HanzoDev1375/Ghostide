@@ -420,5 +420,14 @@ public class IdeEditor extends CodeEditor implements IEditor {
       Log.e("EditorBindError ", err.getLocalizedMessage());
     }
   }
+
+  public int getLineCountes() {
+    return getLineCount();
+  }
+
+  public String formatLine() {
+    return String.format("%s...%s", 1, getLineCount());
+  }
+
   
 }

@@ -3,6 +3,7 @@ package io.github.rosemoe.sora.langs.python;
 import org.antlr.v4.runtime.*;
 
 public abstract class PythonParserBase extends Parser {
+
     protected PythonParserBase(TokenStream input) {
         super(input);
     }
@@ -13,6 +14,7 @@ public abstract class PythonParserBase extends Parser {
     }
 
     public boolean isnotEqualToCurrentTokenText(String tokenText) {
-        return !this.isEqualToCurrentTokenText(tokenText); // for compatibility with the Python 'not' logical operator
+        // for compatibility with the Python 'not' logical operator
+        return !this.isEqualToCurrentTokenText(tokenText);
     }
 }

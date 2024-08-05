@@ -5,13 +5,14 @@ import Ninja.coder.Ghostemane.code.model.TextActionModel;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class TextActionAd extends BaseAdapter {
+public class TextActionAd extends RecyclerView.Adapter<TextActionAd.ViewHolder> {
 
   protected List<TextActionModel> listmodel;
   protected OnItemClick onItemClick;
@@ -21,36 +22,42 @@ public class TextActionAd extends BaseAdapter {
     this.onItemClick = onItemClick;
   }
 
+  @NonNull
   @Override
-  public int getCount() {
+  public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.helper, parent, false);
+    return new ViewHolder(view);
+  }
+
+  @Override
+  public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    TextActionModel model = listmodel.get(position);
+    holder.icon.setImageResource(model.getIcomName());
+    holder.tv.setVisibility(View.GONE);
+
+    if (onItemClick != null) {
+      holder.itemView.setOnClickListener(
+          v -> onItemClick.onItemClickChange(position, v, holder.icon));
+    }
+  }
+
+  @Override
+  public int getItemCount() {
     return listmodel.size();
   }
 
-  @Override
-  public Object getItem(int arg0) {
-    return listmodel.get(arg0);
-  }
+  public class ViewHolder extends RecyclerView.ViewHolder {
+    ImageView icon;
+    TextView tv;
 
-  @Override
-  public long getItemId(int arg0) {
-    return arg0;
-  }
-
-  @Override
-  public View getView(int pos, View view, ViewGroup parant) {
-    view = LayoutInflater.from(parant.getContext()).inflate(R.layout.helper, parant, false);
-    ImageView icon = view.findViewById(R.id.iconNameH);
-    TextView tv = view.findViewById(R.id.tvHelper);
-    TextActionModel model = listmodel.get(pos);
-    icon.setImageResource(model.getIcomName());
-    tv.setText(model.getName());
-    if (onItemClick != null) {
-      view.setOnClickListener(v -> onItemClick.onItemClickChange(pos, v, icon));
+    public ViewHolder(@NonNull View itemView) {
+      super(itemView);
+      icon = itemView.findViewById(R.id.iconNameH);
+      tv = itemView.findViewById(R.id.tvHelper);
     }
-    return view;
   }
 
   public interface OnItemClick {
-    public void onItemClickChange(int posNow, View myview, ImageView img);
+    void onItemClickChange(int posNow, View myview, ImageView img);
   }
 }

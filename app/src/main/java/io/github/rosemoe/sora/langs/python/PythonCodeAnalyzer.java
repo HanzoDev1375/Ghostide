@@ -1,5 +1,6 @@
 package io.github.rosemoe.sora.langs.python;
 
+import Ninja.coder.Ghostemane.code.IdeEditor;
 import android.graphics.Color;
 import android.util.Log;
 
@@ -21,8 +22,13 @@ import io.github.rosemoe.sora.text.TextAnalyzer;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
 
 public class PythonCodeAnalyzer implements CodeAnalyzer {
-  
-  private PythonErrorManager errors ;
+
+  private PythonErrorManager errors;
+  protected IdeEditor editor;
+
+  public PythonCodeAnalyzer(IdeEditor editor) {
+    this.editor = editor;
+  }
 
   @Override
   public void analyze(
@@ -37,7 +43,7 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
       auto.setKeywords(PythonLang.keywords);
       var info = new PythonAutoComplete.Identifiers();
       info.begin();
-      errors = new PythonErrorManager();
+      errors = new PythonErrorManager(editor);
       var classNamePrevious = false;
       Token token, preToken = null, prePreToken = null;
       boolean first = true;
@@ -64,63 +70,63 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
         }
 
         switch (type) {
-          case PythonLexer.NEWLINE:
+          case PythonLexer.WS:
+            //   case PythonLexer.NEWLINE:
             if (first) {
               result.addNormalIfNull();
             }
             break;
-          case PythonLexer.FALSE:
+          case PythonLexer.AND:
+          case PythonLexer.AS:
+          case PythonLexer.ASYNC:
           case PythonLexer.AWAIT:
-          case PythonLexer.ELSE:
-          case PythonLexer.IMPORT:
-          case PythonLexer.PASS:
-          case PythonLexer.NONE:
+          case PythonLexer.BREAK:
+          case PythonLexer.CLASS:
+          case PythonLexer.CONTINUE:
+          case PythonLexer.DEF:
             result.addIfNeeded(line, column, Italic());
             break;
 
-          case PythonLexer.BREAK:
+          case PythonLexer.DEL:
+          case PythonLexer.ELIF:
+          case PythonLexer.ELSE:
           case PythonLexer.EXCEPT:
+          case PythonLexer.FALSE:
+          case PythonLexer.FINALLY:
+          case PythonLexer.FOR:
+
+          case PythonLexer.GLOBAL:
+          case PythonLexer.IF:
+          case PythonLexer.IMPORT:
           case PythonLexer.IN:
-          case PythonLexer.RAISE:
-          case PythonLexer.TRUE:
-          case PythonLexer.CLASS:
-          case PythonLexer.DEF:
+          case PythonLexer.IS:
             result.addIfNeeded(
                 line,
                 column,
                 TextStyle.makeStyle(EditorColorScheme.LITERAL, 0, true, false, false));
             break;
-          case PythonLexer.COLON:
-            classNamePrevious = false;
-            result.addIfNeeded(line, column, EditorColorScheme.HTML_TAG);
-            break;
-          case PythonLexer.FINALLY:
-          case PythonLexer.IS:
+          case PythonLexer.RAISE:
           case PythonLexer.RETURN:
-          case PythonLexer.AND:
-          case PythonLexer.CONTINUE:
-          case PythonLexer.FOR:
-          case PythonLexer.LAMBDA:
+          case PythonLexer.TRUE:
           case PythonLexer.TRY:
-          case PythonLexer.AS:
+
+          case PythonLexer.WITH:
+          case PythonLexer.YIELD:
             result.addIfNeeded(line, column, Bold());
             break;
           case PythonLexer.FROM:
-          case PythonLexer.NONLOCAL:
           case PythonLexer.WHILE:
           case PythonLexer.ASSERT:
-          case PythonLexer.DEL:
             result.addIfNeeded(
                 line, column, TextStyle.makeStyle(EditorColorScheme.Ninja, 0, true, false, false));
             break;
-          case PythonLexer.GLOBAL:
+          case PythonLexer.LAMBDA:
+
+          case PythonLexer.NONE:
+          case PythonLexer.NONLOCAL:
           case PythonLexer.NOT:
-          case PythonLexer.WITH:
-          case PythonLexer.ASYNC:
-          case PythonLexer.ELIF:
-          case PythonLexer.IF:
           case PythonLexer.OR:
-          case PythonLexer.YIELD:
+          case PythonLexer.PASS:
             result.addIfNeeded(
                 line,
                 column,
@@ -129,32 +135,47 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
           case PythonLexer.DOT:
           case PythonLexer.ELLIPSIS:
           case PythonLexer.STAR:
-        
+          case PythonLexer.COMMA:
+          case PythonLexer.LBRACE:
+          case PythonLexer.RBRACE:
+          case PythonLexer.LPAR:
+          case PythonLexer.LSQB:
+          case PythonLexer.RPAR:
+          case PythonLexer.RSQB:
+          case PythonLexer.VBAR:
+          case PythonLexer.EQUAL:
             result.addIfNeeded(
                 line,
                 column,
                 TextStyle.makeStyle(EditorColorScheme.ATTRIBUTE_NAME, 0, true, false, false));
             break;
 
-          case PythonLexer.NUMBER:
           case PythonLexer.STRING:
-          case PythonLexer.MINUS:
-          
+            int colors = EditorColorScheme.BLOCK_LINE;
+            if (previous == PythonLexer.LBRACE || previous == PythonLexer.RBRACE) {
+              colors = EditorColorScheme.KEYWORD;
+            }
+            result.addIfNeeded(line, column, TextStyle.makeStyle(colors, 0, true, false, false));
+            break;
+          case PythonLexer.NUMBER:
             result.addIfNeeded(
                 line,
                 column,
                 TextStyle.makeStyle(EditorColorScheme.BLOCK_LINE, 0, true, false, false));
             break;
-          case PythonLexer.IDENTIFIER:
+          case PythonLexer.NAME:
             {
               int colorid = EditorColorScheme.TEXT_NORMAL;
               boolean isBold = false;
               boolean isUnderLine = false;
               info.addIdentifier(token.getText());
-              if (previous == PythonLexer.CLASS || previous == PythonLexer.DEF) {
+              if (previous == PythonLexer.CLASS) {
                 colorid = EditorColorScheme.ATTRIBUTE_VALUE;
                 isBold = true;
                 isUnderLine = false;
+              }
+              if (previous == PythonLexer.DEF) {
+                colorid = EditorColorScheme.KEYWORD;
               }
               if (previous == PythonLexer.IF) {
                 colorid = EditorColorScheme.Ninja;
@@ -171,6 +192,11 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
                 isBold = false;
                 isUnderLine = false;
               }
+              if (previous == PythonLexer.EQUAL) {
+                colorid = EditorColorScheme.LITERAL;
+                isUnderLine = false;
+                isBold = true;
+              }
               if (previous == PythonLexer.OR
                   || previous == PythonLexer.DOT
                   || previous == PythonLexer.RETURN
@@ -180,30 +206,33 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
                 isBold = true;
                 isUnderLine = false;
               }
-              
-                result.addIfNeeded(
-                    line,
-                    column,
-                    TextStyle.makeStyle(colorid, 0, isBold, false, false, isUnderLine));
+
+              result.addIfNeeded(
+                  line, column, TextStyle.makeStyle(colorid, 0, isBold, false, false, isUnderLine));
               break;
             }
+
+          case PythonLexer.COMMENT:
+            result.addIfNeeded(line, column, EditorColorScheme.COMMENT);
+            break;
+
           default:
             result.addIfNeeded(line, column, EditorColorScheme.TEXT_NORMAL);
             prevIsTagName = false;
             classNamePrevious = false;
             break;
         }
-        
 
         first = false;
-        if (type != PythonLexer.NEWLINE) {
+        if (type != PythonLexer.WS) {
           previous = type;
         }
       }
       info.finish();
       result.setExtra(info);
       result.determine(lastLine);
-      errors.analyze(content,result,delegate);
+      // error manager not work
+      errors.analyze(content, result, delegate);
       result.setSuppressSwitch(maxSwitch + 10);
       result.setNavigation(labels);
     } catch (IOException e) {

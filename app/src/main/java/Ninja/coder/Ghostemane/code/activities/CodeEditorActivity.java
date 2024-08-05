@@ -587,8 +587,8 @@ public class CodeEditorActivity extends AppCompatActivity {
     editor.setAutoCompletionOnComposing(false);
     editor.setLineInfoTextSize(20f);
     editor.setBlockLineEnabled(true);
-    if(getvb.contains("chars")){
-      editor.setCustomCharName(getvb.getString("chars",""));
+    if (getvb.contains("chars")) {
+      editor.setCustomCharName(getvb.getString("chars", ""));
     }
 
     var projectz = new ProjectManager();
@@ -599,7 +599,7 @@ public class CodeEditorActivity extends AppCompatActivity {
           modelEditor.setText(event.getEditor().getText().toString());
           var cu = event.getEditor().getCursor();
           modelEditor.setCursor(cu.getLeftLine() + cu.getLeftColumn());
-          var myChar= new CharUtil(editor.getText().toString(),titleauthor);
+          var myChar = new CharUtil(editor.getText().toString(), titleauthor);
         });
 
     if (sve.contains("getAutoSave")) {
@@ -702,7 +702,7 @@ public class CodeEditorActivity extends AppCompatActivity {
       menupopnew.setColorFilter(0xFFEEEEEE, PorterDuff.Mode.MULTIPLY);
       image.setColorFilter(0xFFFFB689, PorterDuff.Mode.MULTIPLY);
       titleauthor.setTextColor(0xFFFDA893);
-      
+
       _fab.setBackgroundTintList(ColorStateList.valueOf(0xFF2B2122));
       _fab.setStrokeColor(ColorStateList.valueOf(0xFFFDB69A));
       _fab.setStrokeWidth(1);
@@ -741,12 +741,10 @@ public class CodeEditorActivity extends AppCompatActivity {
         DataUtil.showMessage(getApplicationContext(), "Custom Font Not Found");
         titleauthor.setTypeface(
             Typeface.createFromAsset(getAssets(), "fonts/ghostfont.ttf"), Typeface.NORMAL);
-        
 
       } else {
         _editorsetfontfromfile(setfont.getString("mfont", ""));
         titleauthor.setTypeface(Typeface.createFromFile(new File(setfont.getString("mfont", ""))));
-        
       }
     } else {
       editor.setTypefaceText(Typeface.createFromAsset(getAssets(), "ghostfont.ttf"));
@@ -827,6 +825,7 @@ public class CodeEditorActivity extends AppCompatActivity {
             .addItem(new PowerMenuItem("Save All (Beta)", false, R.drawable.setsavefileall))
             .addItem(new PowerMenuItem("Code nave", false, R.drawable.setsavefileall))
             .addItem(new PowerMenuItem("File List"))
+            .addItem(new PowerMenuItem("Test"))
             .build();
     pvr.setSelectedMenuColor(0xFFFDA893);
     pvr.setIconPadding(8);
@@ -967,6 +966,11 @@ public class CodeEditorActivity extends AppCompatActivity {
                   test.setlistFile(file.getParentFile().toString());
                   Toast.makeText(CodeEditorActivity.this, file.getParentFile().toString(), 2)
                       .show();
+                  break;
+                }
+              case 7:
+                {
+                  editor.setDuplicateLine();
                   break;
                 }
             }

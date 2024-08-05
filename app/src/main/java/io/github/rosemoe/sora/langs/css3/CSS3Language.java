@@ -544,7 +544,11 @@ public class CSS3Language implements EditorLanguage {
 
   @Override
   public CharSequence format(CharSequence text) {
-    return Css3Format.format(text.toString());
+    try {
+      return Css3Format.format(text.toString());
+    } catch (Exception err) {
+      return text;
+    }
   }
 
   @Override

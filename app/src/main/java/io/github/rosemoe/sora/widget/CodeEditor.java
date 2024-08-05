@@ -994,6 +994,52 @@ public class CodeEditor extends View
     invalidate();
   }
 
+  public void setDuplicateLine() {
+    final var cursor = getCursor();
+    if (cursor.isSelected()) {
+      duplicateSelection();
+      return;
+    }
+
+    final var left = cursor.left();
+    setSelectionRegion(left.line, 0, left.line, getText().getColumnCount(left.line), true);
+    duplicateSelection("\n", false);
+  }
+
+  public void duplicateSelection(String prefix, boolean selectDuplicate) {
+    final var cursor = getCursor();
+    if (!cursor.isSelected()) {
+      return;
+    }
+
+    final var left = cursor.left();
+    final var right = cursor.right().fromThis();
+    final var sub = getText().subContent(left.line, left.column, right.line, right.column);
+
+    setSelection(right.line, right.column);
+    commitText(prefix + sub, false);
+
+    if (selectDuplicate) {
+      final var r = cursor.right();
+      setSelectionRegion(right.line, right.column, r.line, r.column);
+    }
+  }
+
+  public void duplicateSelection(boolean selectDuplicate) {
+    duplicateSelection("", selectDuplicate);
+  }
+
+  public void duplicateSelection() {
+    duplicateSelection(true);
+  }
+
+  public void commitText(String txt, boolean v) {
+    var cur = getCursor();
+    if (cur != null) {
+      cur.onCommitText(txt, v);
+    }
+  }
+
   /**
    * @see CodeEditor#setHighlightCurrentLine(boolean)
    */
@@ -5436,6 +5482,9 @@ public class CodeEditor extends View
           pasteText();
         }
         return true;
+      case KeyEvent.KEYCODE_F:
+        formatCodeAsync();
+        return true;
       case KeyEvent.KEYCODE_COPY:
         copyText();
         return true;
@@ -5477,6 +5526,11 @@ public class CodeEditor extends View
                 redo();
               }
               return true;
+            case KeyEvent.KEYCODE_D:
+              if (isEditable()) {
+                setDuplicateLine();
+              }
+              break;
           }
         } else if (!event.isCtrlPressed() && !event.isAltPressed()) {
           if (event.isPrintingKey() && isEditable()) {
