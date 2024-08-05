@@ -11,11 +11,10 @@
 
 
 <div align = "center"> 
-
-    <img style="width: 25%; height: 80%; margin-bottom :2px; border-radius :9px; " src="https://raw.githubusercontent.com/appt2/Ghost-web-ide/main/images/img1.jpg">
-    <img style="width: 25%; height: 80%; margin-bottom :2px; border-radius :9px;  " src="https://raw.githubusercontent.com/appt2/Ghost-web-ide/main/images/img2.jpg">
-    <img style="width: 25%; height: 80%; margin-bottom :2px; border-radius :9px; " src="https://raw.githubusercontent.com/appt2/Ghost-web-ide/main/images/img3.jpg">
-    <img style="width: 25%; height: 80%; margin-bottom :2px; border-radius :9px; text-align :left; " src="https://raw.githubusercontent.com/appt2/Ghost-web-ide/main/images/img4.jpg">
+    <img style="width: 25%; height: 80%; margin-bottom :2px; border-radius :9px; " src="https://raw.githubusercontent.com/appt2/Ghost-web-ide/main/images/img1.jpg"/>
+    <img style="width: 25%; height: 80%; margin-bottom :2px; border-radius :9px;  " src="https://raw.githubusercontent.com/appt2/Ghost-web-ide/main/images/img2.jpg"/>
+    <img style="width: 25%; height: 80%; margin-bottom :2px; border-radius :9px; " src="https://raw.githubusercontent.com/appt2/Ghost-web-ide/main/images/img3.jpg"/>
+    <img style="width: 25%; height: 80%; margin-bottom :2px; border-radius :9px; text-align :left; " src="https://raw.githubusercontent.com/appt2/Ghost-web-ide/main/images/img4.jpg"/>
 </div>     
 
 
