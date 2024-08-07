@@ -56,6 +56,24 @@ android {
     buildFeatures {
         viewBinding true
     }
+    flavorDimensions "abi"
+
+    productFlavors {
+        arm32 {
+            dimension "abi"
+            versionNameSuffix = 'arm32'
+            ndk {
+                abiFilters "armeabi-v8a", "armeabi-v7a", "x86_64", "x86"
+            }
+        }
+        arm64 {
+            dimension "abi"
+            versionNameSuffix = 'arm64'
+            ndk {
+                abiFilters "armeabi-v8a", "x86_64", "x86"
+            }
+        }
+    }
     
 }
 task cleanUnusedXml {
