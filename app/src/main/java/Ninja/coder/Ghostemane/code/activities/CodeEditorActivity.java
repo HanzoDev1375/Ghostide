@@ -2,7 +2,7 @@ package Ninja.coder.Ghostemane.code.activities;
 
 import Ninja.coder.Ghostemane.code.G4Compiler;
 import Ninja.coder.Ghostemane.code.IdeEditor;
-import Ninja.coder.Ghostemane.code.PluginManager.flashbar.FlashBarUtils;
+
 import Ninja.coder.Ghostemane.code.R;
 import Ninja.coder.Ghostemane.code.RequestNetwork;
 import Ninja.coder.Ghostemane.code.activities.BaseCompat;
@@ -931,8 +931,7 @@ public class CodeEditorActivity extends AppCompatActivity {
               case 4:
                 {
                   setAllSaveFile(Coordinator);
-                  var bar = new FlashBarUtils(CodeEditorActivity.this);
-                  bar.setCustomMassges("All File saved by " + shp.getString("pos_path", ""));
+                
                   break;
                 }
               case 5:
@@ -964,8 +963,7 @@ public class CodeEditorActivity extends AppCompatActivity {
         if (shp.contains("pos_path")) {
           if (!shp.getString("pos_path", "").equals("")) {
             FileUtil.writeFile(shp.getString("pos_path", ""), editor.getText().toString());
-            var bar = new FlashBarUtils(CodeEditorActivity.this);
-            bar.setCustomMassges("File saved by " + shp.getString("pos_path", ""));
+           
           } else {
             DataUtil.showMessage(getApplicationContext(), "Error not File saved!");
           }
@@ -1320,8 +1318,7 @@ public class CodeEditorActivity extends AppCompatActivity {
         if (shp.contains("pos_path")) {
           if (!shp.getString("pos_path", "").equals("")) {
             FileUtil.writeFile(shp.getString("pos_path", ""), editor.getText().toString());
-            var bar = new FlashBarUtils(this);
-            bar.setCustomMassges("File saved by " + shp.getString("pos_path", ""));
+           
           } else {
 
           }
