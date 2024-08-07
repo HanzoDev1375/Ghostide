@@ -119,7 +119,6 @@ dependencies {
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-properties:2.14.2'
     implementation("com.squareup:javapoet:1.13.0")
     implementation("com.android.tools:r8:8.3.37")
-
     implementation("com.jsibbold:zoomage:1.3.1")
     implementation 'com.github.li-xiaojun:XPopup:2.10.0'
     implementation("net.lingala.zip4j:zip4j:2.11.5")
@@ -129,8 +128,6 @@ dependencies {
     implementation("com.github.bumptech.glide:recyclerview-integration:4.16.0")
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("com.blankj:utilcodex:1.31.1")
-
-    implementation("com.allenliu.badgeview:library:1.1.1")
     implementation("androidx.webkit:webkit:1.10.0")
     implementation("org.eclipse.jgit:org.eclipse.jgit:6.8.0.202311291450-r")
     implementation("com.google.code.gson:gson:2.10.1")
@@ -140,7 +137,6 @@ dependencies {
     implementation("com.google.android.material:material:1.12.0")
     implementation("com.github.angads25:filepicker:1.1.0")
     implementation("com.github.junrar:junrar:7.5.5")
-    implementation("com.tapadoo.android:alerter:3.0.2")
     implementation("org.nanohttpd:nanohttpd-webserver:2.3.1")
     implementation("org.benf:cfr:0.152")
     implementation("io.github.beyka:Android-TiffBitmapFactory:0.9.9.1")
