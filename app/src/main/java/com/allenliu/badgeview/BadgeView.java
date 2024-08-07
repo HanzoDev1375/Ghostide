@@ -55,13 +55,6 @@ public class BadgeView extends View {
     super(context, attrs, defStyleAttr);
     init(context);
   }
-
-  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-  public BadgeView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-    super(context, attrs, defStyleAttr, defStylees);
-    init(context);
-  }
-
   private void init(Context context) {
     defaultTextSize = dip2px(context, 1);
     numberPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
