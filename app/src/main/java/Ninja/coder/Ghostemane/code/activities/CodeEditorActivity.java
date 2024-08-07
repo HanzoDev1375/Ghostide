@@ -825,7 +825,7 @@ public class CodeEditorActivity extends AppCompatActivity {
             .addItem(new PowerMenuItem("Save All (Beta)", false, R.drawable.setsavefileall))
             .addItem(new PowerMenuItem("Code nave", false, R.drawable.setsavefileall))
             .addItem(new PowerMenuItem("File List"))
-            .addItem(new PowerMenuItem("Test"))
+            .setIsMaterial(true)
             .build();
     pvr.setSelectedMenuColor(0xFFFDA893);
     pvr.setIconPadding(8);
@@ -925,24 +925,7 @@ public class CodeEditorActivity extends AppCompatActivity {
                 }
               case 3:
                 {
-                  if (editor.getText().toString().isEmpty()) {
-                    DataUtil.showMessage(getApplicationContext(), "خطا متن خالی نمیشود ذخیره شود");
-                  } else {
-                    try {
-                      if (shp.contains("pos_path")) {
-                        if (!shp.getString("pos_path", "").equals("")) {
-                          FileUtil.writeFile(
-                              shp.getString("pos_path", ""), editor.getText().toString());
-                          var bar = new FlashBarUtils(CodeEditorActivity.this);
-                          bar.setCustomMassges("File saved by " + shp.getString("pos_path", ""));
-                        } else {
-                          DataUtil.showMessage(getApplicationContext(), "Error not File saved!");
-                        }
-                      }
-                    } catch (Exception e) {
-                      DataUtil.showMessage(getApplicationContext(), "Error not File saved!");
-                    }
-                  }
+                  saveFileByIo();
                   break;
                 }
               case 4:
@@ -968,14 +951,29 @@ public class CodeEditorActivity extends AppCompatActivity {
                       .show();
                   break;
                 }
-              case 7:
-                {
-                  editor.setDuplicateLine();
-                  break;
-                }
             }
           }
         });
+  }
+
+  void saveFileByIo() {
+    if (editor.getText().toString().isEmpty()) {
+      DataUtil.showMessage(getApplicationContext(), "خطا متن خالی نمیشود ذخیره شود");
+    } else {
+      try {
+        if (shp.contains("pos_path")) {
+          if (!shp.getString("pos_path", "").equals("")) {
+            FileUtil.writeFile(shp.getString("pos_path", ""), editor.getText().toString());
+            var bar = new FlashBarUtils(CodeEditorActivity.this);
+            bar.setCustomMassges("File saved by " + shp.getString("pos_path", ""));
+          } else {
+            DataUtil.showMessage(getApplicationContext(), "Error not File saved!");
+          }
+        }
+      } catch (Exception e) {
+        DataUtil.showMessage(getApplicationContext(), "Error not File saved!");
+      }
+    }
   }
 
   public void _sttingpp() {
@@ -1195,6 +1193,7 @@ public class CodeEditorActivity extends AppCompatActivity {
             .addItem(new PowerMenuItem("close this"))
             .addItem(new PowerMenuItem("close other"))
             .addItem(new PowerMenuItem("close all"))
+            .setIsMaterial(true)
             .build();
     mmenuitempos.setAnimation(MenuAnimation.ELASTIC_CENTER);
     mmenuitempos.setMenuRadius(30f);
@@ -1497,67 +1496,10 @@ public class CodeEditorActivity extends AppCompatActivity {
     effect.setEnabled(thememanagersoft.contains("effect"));
   }
 
-  public interface DoubleClickListener {
-    void onSingleClick(final View view);
-
-    void onDoubleClick(final View view);
-  }
-
-  public static class DoubleClick implements View.OnClickListener {
-
-    private final Handler mHandler = new Handler();
-    private final DoubleClickListener doubleClickListener;
-    private long DOUBLE_CLICK_INTERVAL;
-    private int clicks;
-    private boolean isBusy = false;
-
-    public DoubleClick(final DoubleClickListener doubleClickListener) {
-      this(doubleClickListener, 200L);
-      DOUBLE_CLICK_INTERVAL = 200L; // default time to wait the second click.
-    }
-
-    public DoubleClick(
-        final DoubleClickListener doubleClickListener, final long DOUBLE_CLICK_INTERVAL) {
-      this.doubleClickListener = doubleClickListener;
-      this.DOUBLE_CLICK_INTERVAL =
-          DOUBLE_CLICK_INTERVAL; // developer specified time to wait the second click.
-    }
-
-    @Override
-    public void onClick(final View view) {
-
-      if (!isBusy) {
-        //  Prevent multiple click in this short time
-        isBusy = true;
-
-        // Increase clicks count
-        clicks++;
-
-        mHandler.postDelayed(
-            new Runnable() {
-              public void run() {
-
-                if (clicks >= 2) { // Double tap.
-                  doubleClickListener.onDoubleClick(view);
-                }
-
-                if (clicks == 1) { // Single tap
-                  doubleClickListener.onSingleClick(view);
-                }
-
-                // we need to  restore clicks count
-                clicks = 0;
-              }
-            },
-            DOUBLE_CLICK_INTERVAL);
-        isBusy = false;
-      }
-    }
-  }
-
   public class Recyclerview1Adapter extends RecyclerView.Adapter<Recyclerview1Adapter.ViewHolder> {
 
     ArrayList<HashMap<String, Object>> _data;
+    int currentTabIndex = -1;
 
     public Recyclerview1Adapter(ArrayList<HashMap<String, Object>> _arr) {
       _data = _arr;
@@ -1578,24 +1520,18 @@ public class CodeEditorActivity extends AppCompatActivity {
     public void onBindViewHolder(
         ViewHolder _holder, @SuppressLint("RecyclerView") final int _position) {
       View _view = _holder.itemView;
-
       final LinearLayout linear1 = _view.findViewById(R.id.linear1);
       final LinearLayout linear5 = _view.findViewById(R.id.linear5);
       final LinearLayout selector = _view.findViewById(R.id.selector);
       final ImageView imageview2 = _view.findViewById(R.id.imageview2);
       final TextView textview1 = _view.findViewById(R.id.textview1);
-
       pos10 = _position;
       RecyclerView.LayoutParams _lp =
           new RecyclerView.LayoutParams(
               ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
       _view.setLayoutParams(_lp);
-      if (tabimageview.contains("mtab")) {
-        imageview2.setVisibility(View.GONE);
-      }
-
+      imageview2.setVisibility(View.GONE);
       if (_data.isEmpty()) {
-
       } else {
         var ideColors = new IdeColorCompat(editor);
         ideColors.Colors(selector, textview1);
@@ -1620,174 +1556,58 @@ public class CodeEditorActivity extends AppCompatActivity {
           setDistreeView();
           ClickItemChildAnimation(editor);
           n = 0;
-          if (imap.containsKey("TabTextColor")) {
-            textview1.setTextColor(Color.parseColor(imap.get("TabTextColor").toString()));
-          } else {
-            textview1.setTextColor(Color.parseColor("#f4ffc6bc"));
-          }
-          if (ru.contains("rup")) {
-            textview1.setTextColor(0xFFFDA893);
-          } else {
-            if (imap.containsKey("TabTextColor")) {
-              textview1.setTextColor(Color.parseColor(imap.get("TabTextColor").toString()));
-            } else {
-              textview1.setTextColor(Color.parseColor("#f4ffc6bc"));
-            }
-          }
         } else {
           selector.setVisibility(View.GONE);
           n = 0;
           setDistreeView();
           ClickItemChildAnimation(editor);
-          if (imap.containsKey("DisplayTextColorTab")) {
-            textview1.setTextColor(Color.parseColor(imap.get("DisplayTextColorTab").toString()));
-          } else {
-            textview1.setTextColor(Color.parseColor("#ffc9fff2"));
-          }
-          if (ru.contains("rup")) {
-            textview1.setTextColor(0xFFEEEEEE);
-          } else {
-            if (imap.containsKey("DisplayTextColorTab")) {
-              textview1.setTextColor(Color.parseColor(imap.get("DisplayTextColorTab").toString()));
-            } else {
-              textview1.setTextColor(Color.parseColor("#ffc9fff2"));
-            }
-          }
         }
-        if (tabPos == _position) {
+        linear5.setOnClickListener(
+            v -> {
+              var dataInsert = _data.get(_position).get("path").toString();
 
-          _powerMenuLisner(linear5, _data, _position);
-        } else
-          linear5.setOnClickListener(
-              new DoubleClick(
-                  new DoubleClickListener() {
-                    @Override
-                    public void onSingleClick(View view) {
-
-                      // Single tap here.
-                      if (FileUtil.isExistFile(_data.get(_position).get("path").toString())) {
-                        setCodeEditorFileReader(_data.get(_position).get("path").toString());
-                        shp.edit()
-                            .putString("positionTabs", String.valueOf((long) (_position)))
-                            .apply();
-                        shp.edit()
-                            .putString("pos_path", _data.get(_position).get("path").toString())
-                            .apply();
-                        ClickItemChildAnimation(editor);
-                        setDistreeView();
-                        notifyDataSetChanged();
-                        if (FileUtil.isExistFile(_data.get(_position).get("path").toString())) {
-                          setCodeEditorFileReader(_data.get(_position).get("path").toString());
-                          if (_data
-                              .get(_position)
-                              .get("path")
-                              .toString()
-                              .equals(shp.getString("pos_path", ""))) {
-                            if (imap.containsKey("TabTextColor")) {
-                              textview1.setTextColor(
-                                  Color.parseColor(imap.get("TabTextColor").toString()));
-                            } else {
-                              textview1.setTextColor(Color.parseColor("#f4ffc6bc"));
-                            }
-                            if (ru.contains("rup")) {
-                              textview1.setTextColor(0xFFFDA893);
-                            } else {
-                              if (imap.containsKey("TabTextColor")) {
-                                textview1.setTextColor(
-                                    Color.parseColor(imap.get("TabTextColor").toString()));
-                              } else {
-                                textview1.setTextColor(Color.parseColor("#f4ffc6bc"));
-                              }
-                            }
-                            selector.setVisibility(View.VISIBLE);
-                            n = 0;
-                            setDistreeView();
-                          } else {
-                            selector.setVisibility(View.GONE);
-                            if (imap.containsKey("DisplayTextColorTab")) {
-                              textview1.setTextColor(
-                                  Color.parseColor(imap.get("DisplayTextColorTab").toString()));
-                            } else {
-                              textview1.setTextColor(Color.parseColor("#ffc9fff2"));
-                            }
-                            if (ru.contains("rup")) {
-                              textview1.setTextColor(0xFFEEEEEE);
-                            } else {
-                              if (imap.containsKey("DisplayTextColorTab")) {
-                                textview1.setTextColor(
-                                    Color.parseColor(imap.get("DisplayTextColorTab").toString()));
-                              } else {
-                                textview1.setTextColor(Color.parseColor("#ffc9fff2"));
-                              }
-                            }
-
-                            ClickItemChildAnimation(editor);
-                            setDistreeView();
-                            n = 0;
-                          }
-                        } else {
-                          selector.setVisibility(View.GONE);
-                        }
-                      } else {
-                        var di = new MaterialAlertDialogBuilder(CodeEditorActivity.this);
-                        di.setTitle("File not Found!");
-                        di.setCancelable(false);
-                        di.setNeutralButton(
-                            "Romved!",
-                            (p, d) -> {
-                              setClosetab(_position, _data);
-                              setDistreeView();
-                              notifyItemRemoved(_position);
-                            });
-                        di.show();
-                      }
-                    }
-
-                    @Override
-                    public void onDoubleClick(View view) {
-
-                      // Double tap here.
+              // Single tap here.
+              if (FileUtil.isExistFile(dataInsert)) {
+                setCodeEditorFileReader(dataInsert);
+                shp.edit().putString("positionTabs", String.valueOf((long) (_position))).apply();
+                shp.edit().putString("pos_path", dataInsert).apply();
+                setDistreeView();
+                notifyDataSetChanged();
+                if (FileUtil.isExistFile(dataInsert)) {
+                  setCodeEditorFileReader(dataInsert);
+                  if (dataInsert.equals(shp.getString("pos_path", ""))) {
+                    selector.setVisibility(View.VISIBLE);
+                    n = 0;
+                    if (currentTabIndex == _position) {
                       _powerMenuLisner(linear5, _data, _position);
+                    } else {
+                      currentTabIndex = _position;
                     }
-                  }));
-
-        linear5.setOnLongClickListener(
-            new View.OnLongClickListener() {
-              @Override
-              public boolean onLongClick(View _view) {
-                _powerMenuLisner(linear5, _data, _position);
-                return true;
+                  } else {
+                    selector.setVisibility(View.GONE);
+                    setDistreeView();
+                    n = 0;
+                  }
+                } else {
+                  selector.setVisibility(View.GONE);
+                }
+              } else {
+                var di = new MaterialAlertDialogBuilder(CodeEditorActivity.this);
+                di.setTitle("File not Found!");
+                di.setCancelable(false);
+                di.setNeutralButton(
+                    "Romved!",
+                    (p, d) -> {
+                      setClosetab(_position, _data);
+                      setDistreeView();
+                      notifyItemRemoved(_position);
+                    });
+                di.show();
               }
             });
-        if (imap.containsKey("TabBack")) {
-          _Ripple_Drawable(linear5, imap.get("TabBack").toString());
-        } else {
-          _Ripple_Drawable(linear5, "#ffd1aeff");
-        }
-        if (ru.contains("rup")) {
-          _Ripple_Drawable(linear5, "#ffd1aeff");
-        } else {
-          if (imap.containsKey("TabBack")) {
-            _Ripple_Drawable(linear5, imap.get("TabBack").toString());
-          } else {
-            _Ripple_Drawable(linear5, "#ffd1aeff");
-          }
-        }
         shp.edit().putString("path", new Gson().toJson(_data)).apply();
       }
       _Anim(selector);
-      if (setfont.contains("mfont")) {
-        if (!FileUtil.isFile(setfont.getString("mfont", ""))) {
-          DataUtil.showMessage(getApplicationContext(), "Custom Font Not Found");
-          textview1.setTypeface(
-              Typeface.createFromAsset(getAssets(), "fonts/ghostfont.ttf"), Typeface.NORMAL);
-        } else {
-          textview1.setTypeface(Typeface.createFromFile(new File(setfont.getString("mfont", ""))));
-        }
-      } else {
-        textview1.setTypeface(
-            Typeface.createFromAsset(getAssets(), "fonts/ghostfont.ttf"), Typeface.NORMAL);
-      }
     }
 
     @Override
@@ -1800,5 +1620,19 @@ public class CodeEditorActivity extends AppCompatActivity {
         super(v);
       }
     }
+  }
+
+  @Override
+  public boolean onKeyDown(int data, KeyEvent key) {
+    // TODO: Implement this method
+    if (key.isAltPressed() || key.isCtrlPressed()) {
+      switch (data) {
+        case KeyEvent.KEYCODE_S:
+          saveFileByIo();
+          return true;
+      }
+    }
+
+    return super.onKeyDown(data, key);
   }
 }

@@ -102,9 +102,9 @@ public class EditorTextActionWindow extends EditorPopupWindow
     model.add(new TextActionModel("copy", R.mipmap.mpcopy));
     model.add(new TextActionModel("cut", R.mipmap.mpcut));
     model.add(new TextActionModel("past", R.mipmap.mppaste));
-    model.add(new TextActionModel("search", R.drawable.textsearch));
+    model.add(new TextActionModel("Duplicate", R.drawable.dkplayer_ic_action_autorenew));
     model.add(new TextActionModel("delete", R.drawable.delete));
-    model.add(new TextActionModel("tools", R.drawable.textfile));
+    model.add(new TextActionModel("tools", R.drawable.cog));
     bin = TextComposePopupWindowBinding.inflate(LayoutInflater.from(editor.getContext()));
     adptor =
         new TextActionAd(
@@ -143,7 +143,7 @@ public class EditorTextActionWindow extends EditorPopupWindow
                     dismiss();
                     break;
                   case 5:
-                    EditorSearcherT.show((IdeEditor) editor, editor, editor.getSelectedText());
+                    editor.setDuplicateLine();
                     dismiss();
                     break;
                   case 6:

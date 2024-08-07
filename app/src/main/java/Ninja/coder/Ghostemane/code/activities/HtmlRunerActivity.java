@@ -215,16 +215,7 @@ public class HtmlRunerActivity extends BaseCompat {
           di.setNeutralButton(
               "host",
               (p, d) -> {
-                String path = getIntent().getStringExtra("run");
-                host =
-                    new ServerHost(
-                        8080,
-                        (String) path.subSequence(0, path.lastIndexOf("/")),
-                        path.substring(path.lastIndexOf("/") + 1));
-                host.startServer();
-                String initialUrl = host.getLocalIpAddress();
-                Intent openInBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse(initialUrl));
-                startActivity(openInBrowser);
+                hosts();
               });
           AlertDialog dialog = di.show();
           final View view = dialog.getWindow().getDecorView();
@@ -256,6 +247,19 @@ public class HtmlRunerActivity extends BaseCompat {
     if (getIntent().hasExtra("run")) {
       bin.web.loadUrl("file:///".concat(getIntent().getStringExtra("run")));
     }
+  }
+
+  void hosts() {
+    String path = getIntent().getStringExtra("run");
+    host =
+        new ServerHost(
+            8080,
+            (String) path.subSequence(0, path.lastIndexOf("/")),
+            path.substring(path.lastIndexOf("/") + 1));
+    host.startServer();
+    String initialUrl = host.getLocalIpAddress();
+    Intent openInBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse(initialUrl));
+    startActivity(openInBrowser);
   }
 
   @Override
@@ -546,5 +550,37 @@ public class HtmlRunerActivity extends BaseCompat {
     if (Build.VERSION.SDK_INT >= 21) {
       bin.web.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
     }
+  }
+
+  @Override
+  public boolean onKeyDown(int data, KeyEvent key) {
+    if (key.isAltPressed() || key.isCtrlPressed()) {
+      switch (data) {
+        case KeyEvent.KEYCODE_H:
+          hosts();
+          return true;
+        case KeyEvent.KEYCODE_S:
+          _searchData();
+          return true;
+        case KeyEvent.KEYCODE_R:
+          reloadConsoleJs();
+          return true;
+        case KeyEvent.KEYCODE_B:
+          if (bin.web.canGoBack()) {
+            bin.web.goBack();
+          } else {
+            Toasts("Can't go back...");
+          }
+          return true;
+        case KeyEvent.KEYCODE_F:
+          if (bin.web.canGoForward()) {
+            bin.web.goForward();
+          } else {
+            Toasts("Can't go Forward");
+          }
+          return true;
+      }
+    }
+    return super.onKeyDown(data, key);
   }
 }

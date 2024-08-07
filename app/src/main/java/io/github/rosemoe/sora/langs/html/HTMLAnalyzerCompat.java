@@ -1,11 +1,14 @@
 package io.github.rosemoe.sora.langs.html;
 
 import Ninja.coder.Ghostemane.code.marco.RegexUtilCompat;
+import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import android.graphics.Color;
 import androidx.core.graphics.ColorUtils;
 import io.github.rosemoe.sora.data.Span;
 import android.util.Log;
+import io.github.rosemoe.sora.langs.javascript.BasicSyntaxJavaScriptAnalyzer;
 import io.github.rosemoe.sora.langs.xml.analyzer.BasicSyntaxPullAnalyzer;
+import io.github.rosemoe.sora.langs.xml.analyzer.Utils;
 import io.github.rosemoe.sora.text.TextStyle;
 import io.github.rosemoe.sora.widget.ListCss3Color;
 import java.util.Stack;
@@ -19,6 +22,10 @@ import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.text.TextAnalyzer;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
+import org.jsoup.nodes.Document;
+import org.jsoup.Jsoup;
+import org.jsoup.select.Elements;
+import org.jsoup.nodes.Element;
 
 public class HTMLAnalyzerCompat implements CodeAnalyzer {
 
@@ -107,7 +114,18 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
           case HTMLLexer.VOID:
           case HTMLLexer.VOLATILE:
           case HTMLLexer.WHILE:
+            result.addIfNeeded(
+                line,
+                column,
+                TextStyle.makeStyle(EditorColorScheme.LITERAL, 0, true, false, false, false));
+            break;
           case HTMLLexer.VAR:
+            result.addIfNeeded(
+                line,
+                column,
+                TextStyle.makeStyle(EditorColorScheme.LITERAL, 0, true, false, false, false));
+
+            break;
           case HTMLLexer.FUNCTION:
           case HTMLLexer.LET:
           case HTMLLexer.DEBUGGER:
@@ -130,27 +148,37 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
           case HTMLLexer.STRING:
           case HTMLLexer.CHATREF:
             {
-              
-              if (RegexUtilCompat.RegexSelect("(\\#[a-zA-F0-9]{8})|(\\#[a-zA-F0-9]{6})", text1)) {
+              if (RegexUtilCompat.RegexSelect(
+                  "(\\#[a-zA-F0-9]{8})|(\\#[a-zA-F0-9]{6})|(\\#[a-zA-F0-9]{3})", text1)) {
 
                 var colors = result;
+                String colorString = text1;
+
+                // تبدیل رنگ سه رقمی به شش رقمی
+                if (colorString.length() == 4) { // اگر رنگ سه رقمی باشد
+                  String red = colorString.substring(1, 2);
+                  String green = colorString.substring(2, 3);
+                  String blue = colorString.substring(3, 4);
+                  colorString = "#" + red + red + green + green + blue + blue; // تبدیل به شش رقمی
+                }
+
                 try {
-                  int color = Color.parseColor(text1);
+                  int color = Color.parseColor(colorString);
                   colors.addIfNeeded(line, column, EditorColorScheme.LITERAL);
                   if (ColorUtils.calculateLuminance(color) > 0.5) {
                     Span span =
                         Span.obtain(
-                            column ,
+                            column,
                             TextStyle.makeStyle(
                                 EditorColorScheme.black, 0, false, false, false, false, true));
                     if (span != null) {
                       span.setBackgroundColorMy(color);
                       colors.add(line, span);
                     }
-                  } else if (ColorUtils.calculateLuminance(color) <= 0.5) {
+                  } else {
                     Span span =
                         Span.obtain(
-                            column ,
+                            column,
                             TextStyle.makeStyle(
                                 EditorColorScheme.TEXT_NORMAL,
                                 0,
@@ -179,10 +207,10 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
                 } catch (Exception ignore) {
                   ignore.printStackTrace();
                 }
-              }else{
+              } else {
                 result.addIfNeeded(line, column, EditorColorScheme.LITERAL);
               }
-              
+
               result.addIfNeeded(line, column, forString());
               break;
             }
@@ -194,7 +222,6 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
           case HTMLLexer.SEMI:
           case HTMLLexer.COMMA:
           case HTMLLexer.ASSIGN:
-
           case HTMLLexer.BANG:
           case HTMLLexer.TILDE:
           case HTMLLexer.QUESTION:
@@ -259,13 +286,20 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
             result.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
             break;
           case HTMLLexer.LT:
-            { 
+            {
               result.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
-              var block = result.obtainNewBlock();
+              if (stack.isEmpty()) {
+                if (currSwitch > maxSwitch) {
+                  maxSwitch = currSwitch;
+                }
+                currSwitch = 0;
+              }
+              currSwitch++;
+              BlockLine block = result.obtainNewBlock();
               block.startLine = line;
               block.startColumn = column;
               stack.push(block);
-              
+
               break;
             }
             //// '/>'
@@ -277,10 +311,14 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
           case HTMLLexer.OPEN_SLASH:
             {
               result.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
-              final var block = stack.pop();
-                block.endLine = line;
-                block.endColumn = column;
-                result.addBlockLine(block);
+              if (!stack.isEmpty()) {
+                BlockLine b = stack.pop();
+                b.endLine = line;
+                b.endColumn = column;
+                if (b.startLine != b.endLine) {
+                  result.addBlockLine(b);
+                }
+              }
 
               break;
             }
@@ -311,6 +349,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
                   || previous == HTMLLexer.LET
                   || previous == HTMLLexer.VAR) {
                 colorid = EditorColorScheme.LITERAL;
+                int[] err = Utils.setWaringSpan(result, line, column);
               }
               if (previous == HTMLLexer.CASE || previous == HTMLLexer.FINAL) {
                 colorid = EditorColorScheme.ATTRIBUTE_NAME;
@@ -322,7 +361,19 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
               // end '</'
               if (previous == HTMLLexer.OPEN_SLASH) {
                 colorid = EditorColorScheme.OPERATOR;
-                
+              }
+
+              try {
+                Document doc = Jsoup.parse(content.toString());
+                Elements jsElements = doc.select("script");
+                for (Element jsElement : jsElements) {
+                  String jsCode = jsElement.html();
+                  var jsError = new BasicSyntaxHtmlAnalyzerMod();
+                  jsError.run(jsCode,result);
+                  Log.w("LoaderJsoup", jsCode);
+                }
+              } catch (Exception err) {
+
               }
 
               ListCss3Color.initColor(token, line, column, result, true);
@@ -330,7 +381,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
               break;
             }
           case HTMLLexer.LBRACE:
-            result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
+            //  result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
             if (stack.isEmpty()) {
               if (currSwitch > maxSwitch) {
                 maxSwitch = currSwitch;
@@ -342,16 +393,58 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
             block.startLine = line;
             block.startColumn = column;
             stack.push(block);
+            int[] colorIdsArrays = {
+              EditorColorScheme.ATTRIBUTE_VALUE,
+              EditorColorScheme.KEYWORD,
+              EditorColorScheme.ATTRIBUTE_NAME,
+              EditorColorScheme.HTML_TAG,
+              EditorColorScheme.LITERAL,
+              EditorColorScheme.Ninja,
+              EditorColorScheme.LINE_BLOCK_LABEL,
+              EditorColorScheme.OPERATOR,
+              EditorColorScheme.blue
+            };
+
+            // تعیین رنگ بر اساس موقعیت در stack
+            int coloridss =
+                (stack.size() < colorIdsArrays.length)
+                    ? colorIdsArrays[stack.size()]
+                    : EditorColorScheme.OPERATOR;
+
+            result.addIfNeeded(line, column, coloridss);
             break;
           case HTMLLexer.RBRACE:
-            result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
             if (!stack.isEmpty()) {
               BlockLine b = stack.pop();
               b.endLine = line;
               b.endColumn = column;
+
               if (b.startLine != b.endLine) {
                 result.addBlockLine(b);
               }
+
+              // آرایه‌ای از رنگ‌ها
+              int[] colorIdsArray = {
+                EditorColorScheme.ATTRIBUTE_VALUE,
+                EditorColorScheme.KEYWORD,
+                EditorColorScheme.ATTRIBUTE_NAME,
+                EditorColorScheme.HTML_TAG,
+                EditorColorScheme.LITERAL,
+                EditorColorScheme.Ninja,
+                EditorColorScheme.LINE_BLOCK_LABEL,
+                EditorColorScheme.OPERATOR,
+                EditorColorScheme.blue
+              };
+
+              // تعیین رنگ بر اساس موقعیت در stack
+              int colorids =
+                  (stack.size() < colorIdsArray.length)
+                      ? colorIdsArray[stack.size()]
+                      : EditorColorScheme.OPERATOR;
+
+              result.addIfNeeded(line, column, colorids);
+            } else {
+              result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
             }
             break;
           case HTMLLexer.DIV:
@@ -373,6 +466,9 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
             break;
         }
 
+        if (preToken != null) {
+          prePreToken = preToken;
+        }
         /** test */
         if (token.getType() != HTMLLexer.WS) {
           preToken = token;
