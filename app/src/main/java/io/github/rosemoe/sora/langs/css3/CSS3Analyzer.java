@@ -140,7 +140,7 @@ public class CSS3Analyzer implements CodeAnalyzer {
                 TextStyle.makeStyle(
                     EditorColorScheme.AUTO_COMP_PANEL_CORNER, 0, false, true, false));
             break;
-            
+
           case css3Lexer.PrefixMatch:
           case css3Lexer.SuffixMatch:
           case css3Lexer.SubstringMatch:

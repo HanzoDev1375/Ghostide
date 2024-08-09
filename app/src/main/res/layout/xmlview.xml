@@ -1,125 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
->
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
 
 
     <com.google.android.material.appbar.AppBarLayout
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:theme="@style/AppTheme.AppBarOverlay"
-            android:id="@+id/_app_bar">
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:id="@+id/_app_bar">
 
         <androidx.appcompat.widget.Toolbar
-                android:layout_height="?attr/actionBarSize"
-                android:layout_width="match_parent"
-                android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay"
-                android:id="@+id/toolbarz"/>
+            android:layout_height="?attr/actionBarSize"
+            android:layout_width="match_parent"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            android:id="@+id/toolbarz" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <coyamo.visualxml.lib.ui.OutlineView
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:layout_margin="20dp"
-            android:padding="10dp"
-            android:id="@+id/outline_view"/>
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_margin="20dp"
+        android:padding="10dp"
+        android:id="@+id/outline_view" />
 
     <LinearLayout
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:background="#ffffff"
-            android:orientation="vertical"
-            android:id="@+id/drawer_sub"
-            android:layout_gravity="end">
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:background="#ffffff"
+        android:orientation="vertical"
+        android:id="@+id/drawer_sub"
+        android:layout_gravity="end">
 
         <LinearLayout
-                android:layout_height="48dp"
-                android:layout_width="match_parent"
-                android:background="@color/subBarColor"
-                android:gravity="center_vertical"
-                android:clickable="true"
-                android:orientation="horizontal"
-                android:focusable="true">
+            android:layout_height="48dp"
+            android:layout_width="match_parent"
+            android:background="@color/subBarColor"
+            android:gravity="center_vertical"
+            android:clickable="true"
+            android:orientation="horizontal"
+            android:focusable="true">
 
             <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_height="24dp"
-                    android:layout_width="24dp"
-                    android:padding="5dp"
-                    android:layout_marginStart="5dp"
-                    app:srcCompat="@drawable/ic_debug"/>
+                android:layout_height="24dp"
+                android:layout_width="24dp"
+                android:padding="5dp"
+                android:layout_marginStart="5dp"
+                app:srcCompat="@drawable/ic_debug" />
 
             <TextView
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:padding="5dp"
-                    android:textSize="18sp"
-                    android:textColor="@color/textColorPrimary"
-                    android:text="@string/debug"
-                    android:textStyle="bold"/>
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:padding="5dp"
+                android:textSize="18sp"
+                android:textColor="?colorPrimary"
+                android:text="@string/debug"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
         <View
-                android:layout_height="2px"
-                android:layout_width="match_parent"
-                android:background="@color/divider"/>
+            android:layout_height="2px"
+            android:layout_width="match_parent"
+            android:background="@color/divider" />
 
         <androidx.recyclerview.widget.RecyclerView
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:id="@+id/err_list"/>
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:id="@+id/err_list" />
 
     </LinearLayout>
 
     <LinearLayout
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:background="#ffffff"
-            android:orientation="vertical"
-            android:id="@+id/drawer_sub2"
-            android:layout_gravity="start">
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:background="#ffffff"
+        android:orientation="vertical"
+        android:id="@+id/drawer_sub2"
+        android:layout_gravity="start">
 
         <LinearLayout
-                android:layout_height="48dp"
-                android:layout_width="match_parent"
-                android:background="@color/subBarColor"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+            android:layout_height="48dp"
+            android:layout_width="match_parent"
+            android:background="@color/subBarColor"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_height="24dp"
-                    android:layout_width="24dp"
-                    android:clickable="true"
-                    android:padding="5dp"
-                    android:layout_marginStart="5dp"
-                    app:srcCompat="@drawable/ic_component_tree"
-                    android:focusable="true"/>
+                android:layout_height="24dp"
+                android:layout_width="24dp"
+                android:clickable="true"
+                android:padding="5dp"
+                android:layout_marginStart="5dp"
+                app:srcCompat="@drawable/ic_component_tree"
+                android:focusable="true" />
 
             <TextView
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:padding="5dp"
-                    android:textSize="18sp"
-                    android:textColor="@color/textColorPrimary"
-                    android:text="@string/component_tree"
-                    android:textStyle="bold"/>
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:padding="5dp"
+                android:textSize="18sp"
+                android:textColor="?colorPrimary"
+                android:text="@string/component_tree"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
         <View
-                android:layout_height="2px"
-                android:layout_width="match_parent"
-                android:background="@color/divider"/>
+            android:layout_height="2px"
+            android:layout_width="match_parent"
+            android:background="@color/divider" />
 
         <androidx.recyclerview.widget.RecyclerView
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:id="@+id/view_tree"/>
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:id="@+id/view_tree" />
 
     </LinearLayout>
 

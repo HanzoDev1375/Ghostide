@@ -11,6 +11,8 @@ import Ninja.coder.Ghostemane.code.adapter.ToolbarListFileAdapter;
 import Ninja.coder.Ghostemane.code.config.AmazonClassHelper;
 import Ninja.coder.Ghostemane.code.config.CommonFactoryData;
 import Ninja.coder.Ghostemane.code.databinding.Antcomp8lerBinding;
+import Ninja.coder.Ghostemane.code.folder.FileIconHelper;
+import Ninja.coder.Ghostemane.code.glidecompat.GlideCompat;
 import Ninja.coder.Ghostemane.code.layoutmanager.LogCatBottomSheet;
 import Ninja.coder.Ghostemane.code.marco.CharUtil;
 import Ninja.coder.Ghostemane.code.marco.ColorView;
@@ -170,7 +172,7 @@ public class CodeEditorActivity extends AppCompatActivity {
   private ProgressBar proanjctor;
   private LinearLayout barSymoble;
   private LinearLayout linear5;
-  private ImageView imageview1;
+  private ImageView imageview1, imageloadereditor;
   private LinearLayout linear6;
 
   private LinearLayout divardown;
@@ -227,6 +229,8 @@ public class CodeEditorActivity extends AppCompatActivity {
   private GhostWebEditorSearch ghost_searchs;
   private int tabPos = -1;
   private EditorViewModel modelEditor;
+  private String Paths;
+  private boolean isSvg = false;
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
@@ -340,6 +344,7 @@ public class CodeEditorActivity extends AppCompatActivity {
     thememanagersoft = getSharedPreferences("thememanagersoft", Activity.MODE_PRIVATE);
     sf = getSharedPreferences("sf", Activity.MODE_PRIVATE);
     iconAuthor = findViewById(R.id.iconAuthor);
+    imageloadereditor = findViewById(R.id.imageloadereditor);
     modelEditor = new ViewModelProvider(this).get(EditorViewModel.class);
     editor.restoreState(_savedInstanceState);
     recyclerview1.addOnScrollListener(
@@ -368,7 +373,6 @@ public class CodeEditorActivity extends AppCompatActivity {
           }
         });
     ghostIcon = findViewById(R.id.icon_backgroundghost);
-
     var mRootView = getWindow().getDecorView();
     mRootView
         .getViewTreeObserver()
@@ -931,7 +935,7 @@ public class CodeEditorActivity extends AppCompatActivity {
               case 4:
                 {
                   setAllSaveFile(Coordinator);
-                
+
                   break;
                 }
               case 5:
@@ -963,7 +967,7 @@ public class CodeEditorActivity extends AppCompatActivity {
         if (shp.contains("pos_path")) {
           if (!shp.getString("pos_path", "").equals("")) {
             FileUtil.writeFile(shp.getString("pos_path", ""), editor.getText().toString());
-           
+
           } else {
             DataUtil.showMessage(getApplicationContext(), "Error not File saved!");
           }
@@ -996,8 +1000,8 @@ public class CodeEditorActivity extends AppCompatActivity {
     _view.setBackground(ripdr);
   }
 
-  public void setCodeEditorFileReader(final String _path) {
-    EditorRoaderFile.RuningTask(editor, _fab, _path, proanjctor);
+  public void setCodeEditorFileReader(String _path) {
+    EditorRoaderFile.RuningTask(editor, _fab, _path, proanjctor, iconAuthor);
   }
 
   public void setClosetab(int _position, final ArrayList<HashMap<String, Object>> _data) {
@@ -1186,6 +1190,7 @@ public class CodeEditorActivity extends AppCompatActivity {
   public void _powerMenuLisner(
       final View _v, final ArrayList<HashMap<String, Object>> _map, int _pos) {
     itemPosRemoved = _pos;
+
     mmenuitempos =
         new PowerMenu.Builder(CodeEditorActivity.this)
             .addItem(new PowerMenuItem("close this"))
@@ -1230,7 +1235,7 @@ public class CodeEditorActivity extends AppCompatActivity {
           @Override
           public void onItemClick(int position, PowerMenuItem item) {
             switch (position) {
-              case ((int) 0):
+              case 0:
                 {
                   setClosetab(_pos, _map);
                   recyclerview1.getAdapter().notifyDataSetChanged();
@@ -1241,7 +1246,7 @@ public class CodeEditorActivity extends AppCompatActivity {
                   mmenuitempos.dismiss();
                   break;
                 }
-              case ((int) 1):
+              case 1:
                 {
                   setCloseother();
                   recyclerview1.getAdapter().notifyItemRemoved((int) itemPosRemoved);
@@ -1251,7 +1256,7 @@ public class CodeEditorActivity extends AppCompatActivity {
                   mmenuitempos.dismiss();
                   break;
                 }
-              case ((int) 2):
+              case 2:
                 {
                   setCloseall();
                   recyclerview1.getAdapter().notifyItemRemoved((int) itemPosRemoved);
@@ -1318,7 +1323,7 @@ public class CodeEditorActivity extends AppCompatActivity {
         if (shp.contains("pos_path")) {
           if (!shp.getString("pos_path", "").equals("")) {
             FileUtil.writeFile(shp.getString("pos_path", ""), editor.getText().toString());
-           
+
           } else {
 
           }
@@ -1527,7 +1532,11 @@ public class CodeEditorActivity extends AppCompatActivity {
           new RecyclerView.LayoutParams(
               ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
       _view.setLayoutParams(_lp);
-      imageview2.setVisibility(View.GONE);
+      var pathFileindir = _data.get(_position).get("path").toString();
+      var fileIconHelper = new FileIconHelper(pathFileindir);
+      fileIconHelper.bindIcon(imageview1);
+      imageview1.setImageResource(fileIconHelper.getFileIcon());
+
       if (_data.isEmpty()) {
       } else {
         var ideColors = new IdeColorCompat(editor);
@@ -1535,8 +1544,9 @@ public class CodeEditorActivity extends AppCompatActivity {
         datas = Uri.parse(_data.get(_position).get("path").toString()).getLastPathSegment();
         textview1.setText(
             Uri.parse(_data.get(_position).get("path").toString()).getLastPathSegment());
+        ideColors.setImageShow(imageloadereditor, pathFileindir);
 
-        if (FileUtil.isDirectory(_data.get(_position).get("path").toString())) {
+        if (FileUtil.isDirectory(pathFileindir)) {
 
           imageview2.setImageResource(R.drawable.file);
         } else if (FileUtil.isExistFile(_data.get(_position).get("path").toString())) {
@@ -1566,12 +1576,14 @@ public class CodeEditorActivity extends AppCompatActivity {
               // Single tap here.
               if (FileUtil.isExistFile(dataInsert)) {
                 setCodeEditorFileReader(dataInsert);
+                ideColors.setImageShow(imageloadereditor, dataInsert);
                 shp.edit().putString("positionTabs", String.valueOf((long) (_position))).apply();
                 shp.edit().putString("pos_path", dataInsert).apply();
                 setDistreeView();
                 notifyDataSetChanged();
                 if (FileUtil.isExistFile(dataInsert)) {
                   setCodeEditorFileReader(dataInsert);
+                  ideColors.setImageShow(imageloadereditor, dataInsert);
                   if (dataInsert.equals(shp.getString("pos_path", ""))) {
                     selector.setVisibility(View.VISIBLE);
                     n = 0;

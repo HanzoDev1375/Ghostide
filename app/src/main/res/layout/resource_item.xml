@@ -1,55 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="25dp"
-                android:padding="5dp">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="25dp"
+    android:padding="5dp"
+    >
 
     <ImageView
-            android:id="@+id/resource_item_icon"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_centerVertical="true"
-            android:contentDescription="@string/resource"/>
+        android:id="@+id/resource_item_icon"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/resource"
+        />
 
     <LinearLayout
-            android:id="@+id/resource_item_ll"
+        android:id="@+id/resource_item_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_toEndOf="@id/resource_item_icon"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:padding="2dp"
+            android:textColor="?colorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            />
+
+        <TextView
+            android:id="@+id/value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_toEndOf="@id/resource_item_icon"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
-
-        <TextView
-                android:id="@+id/name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="end"
-                android:padding="2dp"
-                android:textColor="@color/textColorPrimary"
-                android:textSize="16sp"
-                android:textStyle="bold"/>
-
-        <TextView
-                android:id="@+id/value"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:padding="2dp"
-                android:typeface="monospace"/>
+            android:gravity="start"
+            android:padding="2dp"
+            android:typeface="monospace"
+            />
     </LinearLayout>
 
     <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@id/resource_item_ll"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_toEndOf="@id/resource_item_icon"
-            android:background="@color/divider"/>
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/resource_item_ll"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_toEndOf="@id/resource_item_icon"
+        android:background="@color/divider"
+        />
 
 </RelativeLayout>

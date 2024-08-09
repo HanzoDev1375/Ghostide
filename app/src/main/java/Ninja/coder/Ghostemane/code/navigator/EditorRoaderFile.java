@@ -1,7 +1,11 @@
 package Ninja.coder.Ghostemane.code.navigator;
 
 import Ninja.coder.Ghostemane.code.IdeEditor;
+import Ninja.coder.Ghostemane.code.glidecompat.GlideCompat;
 import Ninja.coder.Ghostemane.code.utils.FileCompatApi28;
+import Ninja.coder.Ghostemane.code.utils.FileUtil;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import io.github.rosemoe.sora.langs.antlrlang.ANTLRV4Lang;
@@ -30,7 +34,11 @@ import io.github.rosemoe.sora.widget.CodeEditor;
 public class EditorRoaderFile {
 
   public static void RuningTask(
-      IdeEditor editor, ExtendedFloatingActionButton _fab, String _path, ProgressBar bar) {
+      IdeEditor editor,
+      ExtendedFloatingActionButton _fab,
+      String _path,
+      ProgressBar bar,
+      ImageView ic) {
     _fab.shrink();
     _fab.hide();
     if (_path.endsWith(".css")) {
@@ -97,6 +105,8 @@ public class EditorRoaderFile {
       editor.setEditorLanguage(new UniversalLanguage(new ShellDescription()));
     } else if (_path.endsWith(".svg")) {
       ReadFileCompat(editor, _path, bar);
+      ic.setVisibility(View.VISIBLE);
+      GlideCompat.LoadSvg(_path, ic);
       _fab.postDelayed(_fab::show, 400);
       var htmllang = new HTMLLanguage(editor);
       editor.setEditorLanguage(htmllang);
@@ -146,11 +156,14 @@ public class EditorRoaderFile {
       _fab.hide();
       ReadFileCompat(editor, _path, bar);
       editor.setEditorLanguage(new Propertieslangs());
-    } else if(_path.endsWith(".sql")){
+    } else if (_path.endsWith(".sql")) {
       _fab.hide();
       ReadFileCompat(editor, _path, bar);
       editor.setEditorLanguage(new MySqlLang());
-    }else _fab.hide();
+    } else {
+      ic.setVisibility(View.GONE);
+      _fab.hide();
+    }
   }
 
   protected static void ReadFileCompat(CodeEditor editor, String path, ProgressBar bar) {

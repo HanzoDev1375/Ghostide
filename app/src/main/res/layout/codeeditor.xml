@@ -83,10 +83,10 @@
                                 <ImageView
                                     android:layout_height="30dp"
                                     android:layout_width="30dp"
+                                    android:visibility="invisible"
                                     android:src="@drawable/default_image"
                                     android:scaleType="centerInside"
                                     android:layout_marginLeft="3dp"
-                                    android:visibility="invisible"
                                     android:id="@+id/iconAuthor"
                                     />
 
@@ -196,9 +196,14 @@
                         android:layout_width="match_parent"
                         android:gravity="left|top"
                         android:padding="8dp"
-                        android:orientation="horizontal"
                         android:id="@+id/editor"
                         />
+                    <ImageView
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:id="@+id/imageloadereditor"
+                        android:scaleType="centerInside"
+                    />
 
                     <LinearLayout
                         android:layout_height="wrap_content"
