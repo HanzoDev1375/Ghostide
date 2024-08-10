@@ -58,7 +58,7 @@
                  android:textSize="16sp"
                  android:textColor="?@attr/colorOnSurface"
                  android:id="@+id/sw"
-                 android:text="پیش نمایش نویسه(Preview)" />
+                 android:text="@string/settings_char_preview" />
 
             <com.google.android.material.materialswitch.MaterialSwitch
                  android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
                  android:textSize="16sp"
                  android:textColor="?@attr/colorOnSurface"
                  android:id="@+id/numbers"
-                 android:text="نمایش ردیف اعداد" />
+                 android:text="@string/settings_display_row" />
 
             <com.google.android.material.materialswitch.MaterialSwitch
                  android:layout_height="wrap_content"
@@ -78,7 +78,7 @@
                  android:textSize="16sp"
                  android:textColor="?@attr/colorOnSurface"
                  android:id="@+id/keyboardheghit"
-                 android:text="ارتفاع کیبورد" />
+                 android:text="@string/settings_keyboard_height" />
 
             <com.google.android.material.materialswitch.MaterialSwitch
                  android:layout_height="wrap_content"

@@ -363,14 +363,14 @@ public class FileDirActivity extends BaseCompat
               di.setMessage(upfile.get((int) 0).get("Massges").toString());
               di.setCancelable(false);
               di.setNeutralButton(
-                  "اپدیت",
+               "Update",
                   (p, d) -> {
                     void10.setAction(Intent.ACTION_VIEW);
                     void10.setData(Uri.parse(upfile.get((int) 0).get("Link").toString()));
                     startActivity(void10);
                     finishAffinity();
                   });
-              di.setPositiveButton("بعدا به من یادآوری کن", null);
+              di.setPositiveButton("Ask Later", null);
 
               di.show();
 
@@ -509,8 +509,8 @@ public class FileDirActivity extends BaseCompat
 
     AnimUtils.Worker(fabAdd);
 
-    fabAdd.setText("Add new Work");
-    fabAdd.setIconResource(R.drawable.cog);
+    fabAdd.setText("Create");
+    fabAdd.setIconResource(R.drawable.create);
     ColorAndroid12.setFab(fabAdd);
     fabAdd.setOnClickListener(
         v -> {
@@ -593,7 +593,7 @@ public class FileDirActivity extends BaseCompat
                       Chack = false;
                       isCopyAndMoved = false;
 
-                      new GhostWebMaterialDialog(FileDirActivity.this)
+                     /* new GhostWebMaterialDialog(FileDirActivity.this)
                           .setTitle(getResources().getString(R.string.exitapp))
                           .setMessage(getResources().getString(R.string.exitappmsg))
                           .setNeutralButton(
@@ -608,10 +608,11 @@ public class FileDirActivity extends BaseCompat
                                 gotoback = 0;
                               })
                           .setCancelable(false)
-                          .show();
+                          .show();*/ 
+                                finish();
 
                     } else {
-                      DataUtil.showMessage(getApplicationContext(), "برای خروج ۳ بار کلیک کنید");
+                     // DataUtil.showMessage(getApplicationContext(), "برای خروج ۳ بار کلیک کنید");
                     }
                   } else {
 
@@ -625,7 +626,7 @@ public class FileDirActivity extends BaseCompat
                       Chack = false;
                       isCopyAndMoved = false;
 
-                      new GhostWebMaterialDialog(FileDirActivity.this)
+                     /* new GhostWebMaterialDialog(FileDirActivity.this)
                           .setTitle(getResources().getString(R.string.exitapp))
                           .setMessage(getResources().getString(R.string.exitappmsg))
                           .setNeutralButton(
@@ -640,10 +641,11 @@ public class FileDirActivity extends BaseCompat
                                 gotoback = 0;
                               })
                           .setCancelable(false)
-                          .show();
+                          .show();*/
+                                finish();
 
                     } else {
-                      DataUtil.showMessage(getApplicationContext(), "برای خروج ۳ بار کلیک کنید");
+                      //DataUtil.showMessage(getApplicationContext(), "برای خروج ۳ بار کلیک کنید");
                     }
                   } else {
                     Folder = Folder.substring((int) (0), (int) (Folder.lastIndexOf("/")));
