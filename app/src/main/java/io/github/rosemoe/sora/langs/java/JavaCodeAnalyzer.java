@@ -2,16 +2,8 @@ package io.github.rosemoe.sora.langs.java;
 
 import Ninja.coder.Ghostemane.code.IdeEditor;
 import Ninja.coder.Ghostemane.code.databin.DiagnosticWrapper;
-import Ninja.coder.Ghostemane.code.marco.RegexUtilCompat;
 import android.graphics.Color;
 import androidx.core.graphics.ColorUtils;
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import io.github.rosemoe.sora.util.TrieTree;
 import java.util.ArrayList;
 import io.github.rosemoe.sora.text.CharPosition;
@@ -89,6 +81,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           content instanceof StringBuilder ? (StringBuilder) content : new StringBuilder(content);
       CodePointCharStream stream = CharStreams.fromReader(new StringReader(content.toString()));
       JavaLexer lexer = new JavaLexer(stream);
+
       var classNamePrevious = false;
       Token token, preToken = null, prePreToken = null;
       boolean first = true;
@@ -96,6 +89,16 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
       auto.setKeywords(JavaLanguage.keywords);
       JavaAutoComplete.Identifiers info = new JavaAutoComplete.Identifiers();
       info.begin();
+      int[] mcolors = {
+        EditorColorScheme.ATTRIBUTE_NAME,
+        EditorColorScheme.ATTRIBUTE_VALUE,
+        EditorColorScheme.OPERATOR,
+        EditorColorScheme.Ninja,
+        EditorColorScheme.KEYWORD
+      };
+      int lbraceCount = 0;
+      Stack<Integer> lbraceLevels = new Stack<>();
+
       Stack<BlockLine> stack = new Stack<>();
       TrieTree<Object> tree = new TrieTree<>();
       int type, currSwitch = 1, maxSwitch = 0, previous = 0;
@@ -352,39 +355,72 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               if (previous == JavaLexer.COMMA || previous == JavaLexer.ASSIGN) {
                 colorid = EditorColorScheme.OPERATOR;
               }
+
+              /// test
               result.addIfNeeded(line, column, colorid);
               break;
             }
-          case JavaLexer.LBRACE:
-            result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
-            if (stack.isEmpty()) {
-              if (currSwitch > maxSwitch) {
-                maxSwitch = currSwitch;
-              }
-              currSwitch = 0;
-            }
-            currSwitch++;
-            BlockLine block = result.obtainNewBlock();
-            block.startLine = line;
-            block.startColumn = column;
 
-            stack.push(block);
-            break;
           case JavaLexer.RBRACE:
-            result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
-            if (!stack.isEmpty()) {
-              BlockLine b = stack.pop();
-              b.endLine = line;
-              b.endColumn = column;
-              if (b.startLine != b.endLine) {
-                result.addBlockLine(b);
+            {
+              if (!stack.isEmpty()) {
+                BlockLine b = stack.pop();
+                b.endLine = line;
+                b.endColumn = column;
+                if (b.startLine != b.endLine) {
+                  result.addBlockLine(b); // اضافه کردن بلوک به نتایج
+                }
               }
+              var lists = result.getBlocks();
+              int colorid = EditorColorScheme.OPERATOR;
+              for (int i = 1; i < lists.size(); ++i) {
+                if (i == 1) {
+                  colorid = EditorColorScheme.OPERATOR;
+                } else if (i == 2) {
+                  colorid = EditorColorScheme.Ninja;
+                } else if (i == 3) {
+                  colorid = EditorColorScheme.HTML_TAG;
+                } else {
+                  continue;
+                }
+              }
+              result.addIfNeeded(line, column, colorid);
+              break;
             }
-            break;
+
+          case JavaLexer.LBRACE:
+            {
+              BlockLine block = result.obtainNewBlock();
+              block.startLine = line;
+              block.startColumn = column;
+              stack.push(block); // اضافه کردن بلوک به استک
+              var lists = result.getBlocks();
+              int colorid = EditorColorScheme.OPERATOR;
+              for (int i = 1; i < lists.size(); ++i) {
+                if (i == 1) {
+                  colorid = EditorColorScheme.OPERATOR;
+                } else if (i == 2) {
+                  colorid = EditorColorScheme.Ninja;
+                } else if (i == 3) {
+                  colorid = EditorColorScheme.HTML_TAG;
+                } else {
+                  continue;
+                }
+              }
+              result.addIfNeeded(line, column, colorid);
+              // بررسی maxSwitch
+              if (stack.isEmpty()) {
+                if (currSwitch > maxSwitch) {
+                  maxSwitch = currSwitch;
+                }
+                currSwitch = 0; // بازنشانی شمارش برای سطح بعدی
+              }
+              currSwitch++; // افزایش شمارنده برای سطح nesting فعلی
+              break;
+            }
 
           default:
             result.addIfNeeded(line, column, EditorColorScheme.TEXT_NORMAL);
-
             break;
         }
 
@@ -398,7 +434,6 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
         if (type != JavaLexer.WS) {
           previous = type;
         }
-
         first = false;
       }
       info.finish();

@@ -29,6 +29,32 @@
 lexer grammar JavaLexer;
 // Keywords
 
+@ lexer :: members
+{
+    private int braceCount = 0;  
+    private int rbraceCount = 0;
+	
+	 @Override
+    public Token nextToken() {
+        Token token = super.nextToken(); // دریافت توکن بعدی
+
+        if (token.getType() == JavaLexer.LBRACE) {
+            braceCount++; // افزایش شمارنده برای {
+        } else if (token.getType() == JavaLexer.RBRACE) {
+            rbraceCount++; // افزایش شمارنده برای }
+        }
+        return token; // بازگشت توکن
+    }
+	public int getBraceCount() {
+        return braceCount; // بازگشت شمارنده برای {
+    }
+	public int getRBraceCount() {
+        return rbraceCount; // بازگشت شمارنده برای }
+    }
+	
+}
+
+
 ABSTRACT
    : 'abstract'
    ;

@@ -141,6 +141,29 @@ public class JavaLexer extends Lexer {
 	}
 
 
+	    private int braceCount = 0;  
+	    private int rbraceCount = 0;
+		
+		 @Override
+	    public Token nextToken() {
+	        Token token = super.nextToken(); // دریافت توکن بعدی
+
+	        if (token.getType() == JavaLexer.LBRACE) {
+	            braceCount++; // افزایش شمارنده برای {
+	        } else if (token.getType() == JavaLexer.RBRACE) {
+	            rbraceCount++; // افزایش شمارنده برای }
+	        }
+	        return token; // بازگشت توکن
+	    }
+		public int getBraceCount() {
+	        return braceCount; // بازگشت شمارنده برای {
+	    }
+		public int getRBraceCount() {
+	        return rbraceCount; // بازگشت شمارنده برای }
+	    }
+		
+
+
 	public JavaLexer(CharStream input) {
 		super(input);
 		_interp = new LexerATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
