@@ -228,7 +228,7 @@ public class Transilt {
     protected static MaterialShapeDrawable shapeDrawable() {
         final MaterialShapeDrawable s =
                 new MaterialShapeDrawable(
-                        ShapeAppearanceModel.builder().setAllCorners(CornerFamily.CUT, 14f).build());
+                        ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 24f).build());
         s.setFillColor(ColorStateList.valueOf(Color.parseColor("#332A2C")));
         return s;
     }

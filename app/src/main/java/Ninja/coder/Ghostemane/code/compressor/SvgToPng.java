@@ -53,7 +53,7 @@ public class SvgToPng extends AsyncTaskCompat<Void, Void, Void> {
     protected void onPreExecute() {
         super.onPreExecute();
         MaterialShapeDrawable mshap = new MaterialShapeDrawable(
-                ShapeAppearanceModel.builder().setAllCorners(CornerFamily.CUT, 20f).build());
+                ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 20f).build());
         progressDialog = new ProgressDialogCompat(context, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
         progressDialog.setMessage("Converting SVG to PNG...");
         progressDialog.setCancelable(false);

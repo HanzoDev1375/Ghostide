@@ -24,7 +24,7 @@ public class GhostWebMaterialDialog extends MaterialAlertDialogBuilder {
     protected MaterialShapeDrawable getShap() {
         MaterialShapeDrawable shp =
                 new MaterialShapeDrawable(
-                        ShapeAppearanceModel.builder().setAllCorners(CornerFamily.CUT, 22f).build());
+                        ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 22f).build());
         shp.setFillColor(ColorStateList.valueOf(Color.parseColor("#2B2120")));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {

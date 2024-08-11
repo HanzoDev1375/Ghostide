@@ -83,7 +83,7 @@ public class EditorAutoCompleteWindow extends EditorPopupWindow {
         roots.setBackgroundColor(0);
         roots.setClickable(true);
         ShapeAppearanceModel.Builder builde = new ShapeAppearanceModel.Builder();
-        builde.setAllCorners(CornerFamily.CUT, 30f);
+        builde.setAllCorners(CornerFamily.ROUNDED, 30f);
         mcard.setShapeAppearanceModel(builde.build());
         imap = new HashMap<>();
         try {
@@ -397,7 +397,7 @@ public class EditorAutoCompleteWindow extends EditorPopupWindow {
     protected MaterialShapeDrawable colorAcsentDialog() {
         MaterialShapeDrawable materialShapeDrawable =
                 new MaterialShapeDrawable(
-                        ShapeAppearanceModel.builder().setAllCorners(CornerFamily.CUT, 20f).build());
+                        ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 20f).build());
 
         materialShapeDrawable.setFillColor(
                 ColorStateList.valueOf(getThemeColor(EditorColorScheme.AUTO_COMP_PANEL_BG)));

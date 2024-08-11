@@ -137,7 +137,7 @@ public class WebViewCompatGhostWeb extends FastScrollWebView {
         input.setOrientation(LinearLayout.VERTICAL);
         MaterialShapeDrawable shapeDrawable =
                 new MaterialShapeDrawable(
-                        ShapeAppearanceModel.builder().setAllCorners(CornerFamily.CUT, 13f).build());
+                        ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 23f).build());
         shapeDrawable.setFillColor(ColorStateList.valueOf(0xFFFFAF7A));
         input.setBackground(shapeDrawable);
         editor.setPadding(8, 8, 8, 8);

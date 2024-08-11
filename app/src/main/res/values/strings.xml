@@ -155,7 +155,10 @@
     <string name="wallmode">Wallpaper System mode</string>
     <string name="apkwar">Warning!!</string>
     <string name="apkversionError">Sorry, it is not possible to share the program on your Android. You can share the .apk file with the program in the download folder and the apk folder.</string>
-   <string name="settings_char_preview">Character Preview </string>
+    <string name="settings_char_preview">Character Preview </string>
     <string name="settings_display_row"> Display Row Of Numbers</string>
     <string name="settings_keyboard_height">Keyboard Height</string>
+    <string name="drawer_subtitles">The Everythings IDE</string>
+    <string name="drawer_title">Ghost IDE</string>
+
 </resources>

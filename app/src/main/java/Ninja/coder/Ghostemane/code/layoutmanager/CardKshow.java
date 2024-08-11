@@ -37,7 +37,7 @@ public class CardKshow extends MaterialCardView {
             setStrokeColor(ColorStateList.valueOf(Color.parseColor("#FFDCBD")));
         }
         var builder = new ShapeAppearanceModel.Builder();
-        builder.setAllCorners(CornerFamily.CUT, 30f);
+        builder.setAllCorners(CornerFamily.ROUNDED, 30f);
         setShapeAppearanceModel(builder.build());
 
     }

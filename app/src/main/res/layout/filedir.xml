@@ -98,7 +98,7 @@
          android:layout_height="match_parent"
          android:layout_width="300dp"
          android:scrollbars="none"
-         app:headerLayout="@layout/utils1"
+         app:headerLayout="@layout/header"
          android:id="@+id/navs"
          android:layout_gravity="start" />
 

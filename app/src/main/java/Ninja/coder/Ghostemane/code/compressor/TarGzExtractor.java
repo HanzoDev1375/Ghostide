@@ -52,7 +52,7 @@ public class TarGzExtractor {
         protected void onPreExecute() {
             super.onPreExecute();
             MaterialShapeDrawable shap = new MaterialShapeDrawable(
-                    ShapeAppearanceModel.builder().setAllCorners(CornerFamily.CUT, 17f).build());
+                    ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 17f).build());
             shap.setStrokeColor(ColorStateList.valueOf(Color.parseColor("#FFFCB07D")));
             shap.setStrokeWidth(2f);
             shap.setFillColor(ColorStateList.valueOf(Color.parseColor("#FF281D1B")));

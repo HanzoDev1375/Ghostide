@@ -182,7 +182,7 @@ public class IdeEditor extends CodeEditor implements IEditor {
   protected MaterialShapeDrawable colorAcsentDialog() {
     MaterialShapeDrawable materialShapeDrawable =
         new MaterialShapeDrawable(
-            ShapeAppearanceModel.builder().setAllCorners(CornerFamily.CUT, 20f).build());
+            ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 20f).build());
     EditorColorScheme editorColorScheme = getColorScheme();
     materialShapeDrawable.setFillColor(
         ColorStateList.valueOf(editorColorScheme.getColor(EditorColorScheme.AUTO_COMP_PANEL_BG)));

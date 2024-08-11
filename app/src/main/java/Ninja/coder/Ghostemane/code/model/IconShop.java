@@ -73,7 +73,7 @@ public class IconShop {
     serachIcon.setHint("Search Icon");
     serachIcon.setEndIconDrawable(R.drawable.closecompat);
     var shap = new ShapeAppearanceModel.Builder();
-    shap.setAllCorners(CornerFamily.CUT, 20f);
+    shap.setAllCorners(CornerFamily.ROUNDED, 20f);
     serachIcon.setShapeAppearanceModel(shap.build());
     serachIcon.setEndIconOnClickListener(
         c -> {

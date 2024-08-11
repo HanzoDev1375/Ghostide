@@ -516,24 +516,24 @@ public class FileDirActivity extends BaseCompat
         v -> {
           DialogItemSheet();
         });
-    navs.getMenu().add(0, 1, 0, "Setting").setIcon(R.drawable.cog);
-    navs.getMenu().add(0, 2, 0, "Java code").setIcon(R.drawable.javanull);
-    navs.getMenu().add(0, 3, 0, "Add Star to Myket").setIcon(R.drawable.googleplay);
-    navs.getMenu().add(0, 4, 0, "Terminal").setIcon(R.drawable.console);
-    navs.getMenu().add(0, 5, 0, "SdCard").setIcon(R.drawable.sdcard);
-    navs.getMenu().add(0, 6, 0, "info").setIcon(R.drawable.information);
-    navs.getMenu().add(0, 7, 0, "Lrean").setIcon(R.drawable.school);
-    navs.getMenu().add(0, 8, 0, "Keyboard").setIcon(R.drawable.keyboard);
-    navs.getMenu().add(0, 9, 0, "Update App").setIcon(R.drawable.keyboardlisnertalluserpost_1);
-    navs.getMenu().add(0, 10, 0, "BackUp Theme").setIcon(R.drawable.pms);
-    navs.getMenu().add(0, 11, 0, "Log View").setIcon(R.drawable.log);
-    navs.getMenu().add(0, 12, 0, "Icon Shop").setIcon(R.drawable.color);
-    navs.getMenu().add(0, 13, 0, "PL manager").setIcon(R.drawable.link);
-    navs.getMenu().add(0, 14, 0, "Book mark (Beta)").setIcon(R.drawable.ic_bookmark_white);
-    navs.getMenu().add(0, 15, 0, "Apk manager").setIcon(R.drawable.default_image);
-    navs.getMenu().add(0, 16, 0, "GitHub code ").setIcon(R.drawable.github);
-    navs.getMenu().add(0, 17, 0, "TelegramGroup").setIcon(R.drawable.tel);
-    navs.getMenu().add(0, 18, 0, "exit").setIcon(R.drawable.exit);
+    navs.getMenu().add(0, 1, 0, "SanDisk Card").setIcon(R.drawable.drawer_item12);
+    navs.getMenu().add(0, 2, 0, "Java code").setIcon(R.drawable.drawer_item14);
+    navs.getMenu().add(0, 3, 0, "Terminal").setIcon(R.drawable.drawer_item13);
+    navs.getMenu().add(0, 4, 0, "Settings").setIcon(R.drawable.drawer_item15);
+    navs.getMenu().add(0, 5, 0, "Keyboard").setIcon(R.drawable.drawer_item9);
+    navs.getMenu().add(0, 6, 0, "LogCat Reader").setIcon(R.drawable.drawer_item6);
+    navs.getMenu().add(0, 7, 0, "Icon Shop").setIcon(R.drawable.icshop);
+    navs.getMenu().add(0, 8, 0, "Learn").setIcon(R.drawable.drawer_item10);
+    navs.getMenu().add(0, 9, 0, "Update App").setIcon(R.drawable.drawer_item8);
+    navs.getMenu().add(0, 10, 0, "Plugins Manager").setIcon(R.drawable.drawer_item5);
+    navs.getMenu().add(0, 11, 0, "Backup Theme").setIcon(R.drawable.drawer_item7);
+    navs.getMenu().add(0, 12, 0, "Bookmarks (Beta)").setIcon(R.drawable.drawer_item4);
+    navs.getMenu().add(0, 13, 0, "Apk Manager").setIcon(R.drawable.drawer_item3);
+    navs.getMenu().add(0, 14, 0, "About").setIcon(R.drawable.drawer_item11);
+    navs.getMenu().add(0, 15, 0, "Leave").setIcon(R.drawable.drawer_item1);
+ // navs.getMenu().add(0, 3, 0, "Add Star to Myket").setIcon(R.drawable.googleplay);
+//  navs.getMenu().add(0, 21, 0, "GitHub Repository ").setIcon(R.drawable.github);
+//  navs.getMenu().add(0, 17, 0, "Telegram Group").setIcon(R.drawable.tel);
     DrowerHandler();
   }
 
@@ -1891,7 +1891,7 @@ public class FileDirActivity extends BaseCompat
         (item) -> {
           navs.setCheckedItem(item.getItemId());
           switch ((int) item.getItemId()) {
-            case ((int) 1):
+            case ((int) 4):
               {
                 intentgetSettings.setClass(getApplicationContext(), SettingAppActivity.class);
                 startActivity(intentgetSettings);
@@ -1905,20 +1905,20 @@ public class FileDirActivity extends BaseCompat
                 startActivity(getJavaLayoutManager);
                 break;
               }
-            case ((int) 3):
+           /* case ((int) 3):
               {
                 myketint.setAction(Intent.ACTION_VIEW);
                 myketint.setData(Uri.parse("myket://comment?id=Ninja.coder.Ghostemane.code"));
                 startActivity(myketint);
                 break;
-              }
-            case ((int) 4):
+              }*/
+            case ((int) 3):
               {
                 void10.setClass(getApplicationContext(), TerminalActivity.class);
                 startActivity(void10);
                 break;
               }
-            case ((int) 5):
+            case ((int) 1):
               {
                 runOnUiThread(
                     new Runnable() {
@@ -1949,13 +1949,13 @@ public class FileDirActivity extends BaseCompat
 
                 break;
               }
-            case ((int) 6):
+            case ((int) 14):
               {
                 getabout.setClass(getApplicationContext(), AboutActivity.class);
                 startActivity(getabout);
                 break;
               }
-            case ((int) 7):
+            case ((int) 8):
               {
                 var log = new Ninja.coder.Ghostemane.code.git.GitLog(FileDirActivity.this);
                 log.test();
@@ -1963,7 +1963,7 @@ public class FileDirActivity extends BaseCompat
                 //                startActivity(getabout);
                 break;
               }
-            case ((int) 8):
+            case ((int) 5):
               {
                 _lojiceinstallK();
                 break;
@@ -1981,35 +1981,35 @@ public class FileDirActivity extends BaseCompat
                 }
                 break;
               }
-            case ((int) 10):
+            case ((int) 11):
               {
                 _files1();
                 break;
               }
-            case ((int) 11):
+            case ((int) 6):
               {
                 intentgetLogCat.setClass(getApplicationContext(), LogCatViewActivity.class);
                 startActivity(intentgetLogCat);
                 break;
               }
-            case ((int) 12):
+            case ((int) 7):
               {
                 var icon = new IconShop(FileDirActivity.this);
                 break;
               }
-            case ((int) 13):
+            case ((int) 10):
               {
                 intentgetLogCat.setClass(getApplicationContext(), PluginManagerActivity.class);
                 startActivity(intentgetLogCat);
                 break;
               }
-            case ((int) 14):
+            case ((int) 12):
               {
                 intentgetLogCat.setClass(getApplicationContext(), FileBookmarkActivity.class);
                 startActivity(intentgetLogCat);
                 break;
               }
-            case ((int) 15):
+            case ((int) 13):
               {
                 var b = new Intent();
                 b.setClass(getApplicationContext(), ApkViewActivity.class);
@@ -2017,7 +2017,7 @@ public class FileDirActivity extends BaseCompat
 
                 break;
               }
-            case 16:
+          /*  case 16:
               {
                 getGitHub();
                 break;
@@ -2027,8 +2027,8 @@ public class FileDirActivity extends BaseCompat
                 setLink("https://t.me/ghost_web_ide");
 
                 break;
-              }
-            case 18:
+              }*/
+            case 15:
               {
                 finishAffinity();
                 break;

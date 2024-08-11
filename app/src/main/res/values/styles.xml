@@ -20,7 +20,7 @@
         name="fab_square"
         parent="ShapeAppearance.MaterialComponents.SmallComponent">
        <item name="cornerFamily">rounded</item>
-         <item name="cornerSize">16dp</item>
+         <item name="cornerSize">20dp</item>
     </style>
     <style
         name="Cut"
