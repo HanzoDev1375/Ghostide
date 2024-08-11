@@ -61,14 +61,12 @@ android {
     productFlavors {
         arm32 {
             dimension "abi"
-            versionNameSuffix = 'arm32'
             ndk {
                 abiFilters "armeabi-v7a", "x86"
             }
         }
         arm64 {
             dimension "abi"
-            versionNameSuffix = 'arm64'
             ndk {
                 abiFilters "armeabi-v8a", "x86_64","arm64-v8a"
             }
