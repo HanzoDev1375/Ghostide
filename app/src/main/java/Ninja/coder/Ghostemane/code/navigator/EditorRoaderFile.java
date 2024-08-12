@@ -5,9 +5,10 @@ import Ninja.coder.Ghostemane.code.glidecompat.GlideCompat;
 import Ninja.coder.Ghostemane.code.utils.FileCompatApi28;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import android.view.View;
-import android.widget.ImageView;
+//import android.widget.ImageView;
 import android.widget.ProgressBar;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.button.MaterialButton;
+//import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import io.github.rosemoe.sora.langs.antlrlang.ANTLRV4Lang;
 import io.github.rosemoe.sora.langs.css3.CSS3Language;
 import io.github.rosemoe.sora.langs.desc.*;
@@ -35,12 +36,10 @@ public class EditorRoaderFile {
 
   public static void RuningTask(
       IdeEditor editor,
-      ExtendedFloatingActionButton _fab,
+      MaterialButton _fab,
       String _path,
-      ProgressBar bar,
-      ImageView ic) {
-    _fab.shrink();
-    _fab.hide();
+      ProgressBar bar) {
+    
     if (_path.endsWith(".css")) {
 
       // this html lexer using as html css3 js and sass and scass
@@ -51,38 +50,38 @@ public class EditorRoaderFile {
     } else if (_path.endsWith(".py")) {
       editor.setEditorLanguage(new PythonLang(editor));
       ReadFileCompat(editor, _path, bar);
-      _fab.postDelayed(_fab::show, 400);
+      //_fab.postDelayed(_fab::show, 400);
     } else if (_path.endsWith(".cpp")
         || _path.endsWith(".cxx")
         || _path.endsWith(".cc")
         || _path.endsWith(".h")) {
       editor.setEditorLanguage(new io.github.rosemoe.sora.langs.cpp.CppLanguage());
-      _fab.postDelayed(_fab::show, 400);
+      //_fab.postDelayed(_fab::show, 400);
       ReadFileCompat(editor, _path, bar);
     } else if (_path.endsWith(".html")) {
       var htmllang = new HTMLLanguage(editor);
       editor.setEditorLanguage(htmllang);
       ReadFileCompat(editor, _path, bar);
-      _fab.postDelayed(_fab::show, 400);
+      //_fab.postDelayed(_fab::show, 400);
     } else if (_path.endsWith(".js")) {
       editor.setEditorLanguage(new JavaScriptLanguage());
       ReadFileCompat(editor, _path, bar);
-      _fab.postDelayed(_fab::show, 400);
+     // _fab.postDelayed(_fab::show, 400);
     } else if (_path.endsWith(".scss") || _path.endsWith(".sass")) {
       ReadFileCompat(editor, _path, bar);
       editor.setEditorLanguage(new SassLangCompat());
-      _fab.postDelayed(_fab::show, 300);
+    //  _fab.postDelayed(_fab::show, 300);
     } else if (_path.endsWith(".c")) {
       ReadFileCompat(editor, _path, bar);
       editor.setEditorLanguage(new UniversalLanguage(new CDescription()));
     } else if (_path.endsWith(".json")) {
       ReadFileCompat(editor, _path, bar);
       editor.setEditorLanguage(new io.github.rosemoe.sora.langs.json.JsonLanguage());
-      _fab.postDelayed(_fab::show, 400);
+     // _fab.postDelayed(_fab::show, 400);
     } else if (_path.endsWith(".java")) {
       ReadFileCompat(editor, _path, bar);
       editor.setEditorLanguage(new JavaLanguage(editor));
-      _fab.postDelayed(_fab::show, 400);
+     // _fab.postDelayed(_fab::show, 400);
     } else if (_path.endsWith(".cs")) {
       ReadFileCompat(editor, _path, bar);
       editor.setEditorLanguage(new UniversalLanguage(new sharpDescription()));
@@ -92,7 +91,7 @@ public class EditorRoaderFile {
       XMLLanguage xmlLanguage = new XMLLanguage();
       xmlLanguage.setSyntaxCheckEnable(true);
       editor.setEditorLanguage(xmlLanguage);
-      _fab.postDelayed(_fab::show, 400);
+     // _fab.postDelayed(_fab::show, 400);
     } else if (_path.endsWith(".ghost")) {
       ReadFileCompat(editor, _path, bar);
       editor.setEditorLanguage(new ghostlangs());
@@ -101,23 +100,23 @@ public class EditorRoaderFile {
       editor.setEditorLanguage(new NinjaLang());
     } else if (_path.endsWith(".sh")) {
       ReadFileCompat(editor, _path, bar);
-      _fab.postDelayed(_fab::show, 400);
+     // _fab.postDelayed(_fab::show, 400);
       editor.setEditorLanguage(new UniversalLanguage(new ShellDescription()));
     } else if (_path.endsWith(".svg")) {
       ReadFileCompat(editor, _path, bar);
-      ic.setVisibility(View.VISIBLE);
-      GlideCompat.LoadSvg(_path, ic);
-      _fab.postDelayed(_fab::show, 400);
+    //  ic.setVisibility(View.VISIBLE);
+    //  GlideCompat.LoadSvg(_path, ic);
+      //_fab.postDelayed(_fab::show, 400);
       var htmllang = new HTMLLanguage(editor);
       editor.setEditorLanguage(htmllang);
     } else if (_path.endsWith(".md")) {
       ReadFileCompat(editor, _path, bar);
-      _fab.postDelayed(_fab::show, 400);
+     // _fab.postDelayed(_fab::show, 400);
       editor.setEditorLanguage(new MarkDownLang());
     } else if (_path.endsWith(".php")) {
       ReadFileCompat(editor, _path, bar);
       editor.setEditorLanguage(new io.github.rosemoe.sora.langs.php.PHPLanguage());
-      _fab.postDelayed(_fab::show, 400);
+     // _fab.postDelayed(_fab::show, 400);
     } else if (_path.endsWith(".go")) {
       ReadFileCompat(editor, _path, bar);
       editor.setEditorLanguage(new UniversalLanguage(new GoDescription()));
@@ -134,7 +133,7 @@ public class EditorRoaderFile {
       editor.setEditorLanguage(new io.github.rosemoe.sora.langs.dart.DartLang());
     } else if (_path.endsWith(".kt")) {
       ReadFileCompat(editor, _path, bar);
-      _fab.postDelayed(_fab::show, 400);
+    //  _fab.postDelayed(_fab::show, 400);
       editor.setEditorLanguage(new io.github.rosemoe.sora.langs.kotlin.KotlinLanguage());
     } else if (_path.endsWith(".groovy") || _path.endsWith(".gradle")) {
       ReadFileCompat(editor, _path, bar);
@@ -148,21 +147,21 @@ public class EditorRoaderFile {
     } else if (_path.endsWith(".g4")) {
       ReadFileCompat(editor, _path, bar);
       editor.setEditorLanguage(new ANTLRV4Lang());
-      _fab.postDelayed(_fab::show, 400);
+     // _fab.postDelayed(_fab::show, 400);
     } else if (_path.endsWith(".ts")) {
       ReadFileCompat(editor, _path, bar);
       editor.setEditorLanguage(new io.github.rosemoe.sora.langs.typescript.TsLang(editor));
     } else if (_path.endsWith(".properties")) {
-      _fab.hide();
+     // _fab.hide();
       ReadFileCompat(editor, _path, bar);
       editor.setEditorLanguage(new Propertieslangs());
     } else if (_path.endsWith(".sql")) {
-      _fab.hide();
+      //_fab.hide();
       ReadFileCompat(editor, _path, bar);
       editor.setEditorLanguage(new MySqlLang());
     } else {
-      ic.setVisibility(View.GONE);
-      _fab.hide();
+     // ic.setVisibility(View.GONE);
+    //  _fab.hide();
     }
   }
 

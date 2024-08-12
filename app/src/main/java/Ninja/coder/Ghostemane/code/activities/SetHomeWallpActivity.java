@@ -43,7 +43,7 @@ public class SetHomeWallpActivity extends BaseCompat {
     // imageView.setImageBitmap(FileUtil.decodeSampleBitmapFromPath();
     fab.setText("Select to Walpaper?");
     var shap = new ShapeAppearanceModel.Builder();
-    shap.setAllCorners(CornerFamily.CUT, 30f);
+    shap.setAllCorners(CornerFamily.ROUNDED, 30f);
     fab.setShapeAppearanceModel(shap.build());
     toolbar.setBackgroundTintList(
         ColorStateList.valueOf(MaterialColors.getColor(toolbar, ColorAndroid12.Back)));

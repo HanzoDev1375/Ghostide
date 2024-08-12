@@ -19,20 +19,20 @@
     <style
         name="fab_square"
         parent="ShapeAppearance.MaterialComponents.SmallComponent">
-        <item name="cornerFamily">cut</item>
-        <item name="cornerSize">15dp</item>
+       <item name="cornerFamily">rounded</item>
+         <item name="cornerSize">20dp</item>
     </style>
     <style
         name="Cut"
         parent="ShapeAppearance.MaterialComponents.SmallComponent">
-        <item name="cornerFamily">cut</item>
-        <item name="cornerSize">13dp</item>
+       <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">20dp</item>
     </style>
     <style
         name="Ghostwebfabstyle"
         parent="">
-        <item name="cornerFamily">cut</item>
-        <item name="cornerSize">10dp</item>
+       <item name="cornerFamily">rounded</item>
+       <item name="cornerSize">50dp</item>
     </style>
     <style
         name="AppTheme.Theme.Transparent"
@@ -120,7 +120,8 @@
     </style>
     <style
         name="AppTheme.AppBarOverlay"
-        parent="ThemeOverlay.Material3.Dark.ActionBar" />
+        parent="ThemeOverlay.Material3.Dark.ActionBar">
+      <item name="android:color">@android:color/transparent</item></style>
     <style
         name="ThemeOverlay.App.BottomSheetDialog"
         parent="ThemeOverlay.Material3.BottomSheetDialog">
@@ -166,8 +167,8 @@
     <style
         name="ShapeAppearance.App.LargeComponent"
         parent="ShapeAppearance.Material3.LargeComponent">
-        <item name="cornerFamily">cut</item>
-        <item name="cornerSize">15dp</item>
+       <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">30dp</item>
     </style>
     <style
         name="ThemeOverlay.App.MaterialAlertDialog"
@@ -187,7 +188,7 @@
     <style
         name="ShapeAppearance.App.MediumComponent"
         parent="ShapeAppearance.Material3.MediumComponent">
-        <item name="cornerFamily">cut</item>
-        <item name="cornerSize">15dp</item>
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">20dp</item>
     </style>
 </resources>

@@ -16,7 +16,7 @@ import com.google.android.material.shape.MaterialShapeDrawable;
 import com.google.android.material.shape.ShapeAppearanceModel;
 
 public class NavigationViewCompnet extends NavigationView {
-    protected int Cut = CornerFamily.CUT;
+    protected int Cut = CornerFamily.ROUNDED;
 
     public NavigationViewCompnet(Context context) {
         super(context);
@@ -29,21 +29,21 @@ public class NavigationViewCompnet extends NavigationView {
 
     public NavigationViewCompnet init() {
 
-        setItemTextColor(ColorStateList.valueOf(MaterialColors.getColor(this, ColorAndroid12.TvColor)));
+       /* setItemTextColor(ColorStateList.valueOf(MaterialColors.getColor(this, ColorAndroid12.TvColor)));
         setItemIconTintList(
                 ColorStateList.valueOf(MaterialColors.getColor(this, ColorAndroid12.ColorFilter)));
         setItemMaxLines(1);
-        setItemIconSize(50);
+        setItemIconSize(50);*/
         setBackground(getBackground());
 
         setVerticalScrollBarEnabled(false);
         setHorizontalScrollBarEnabled(false);
-        getHeaderView(0)
+        /*getHeaderView(0)
                 .findViewById(R.id.mcardClick)
                 .setOnClickListener(
                         v -> {
                             Toast.makeText(getContext(), R.string.app_name, 3).show();
-                        });
+                        });*/
         disableNavScroll(this);
 
 

@@ -11,7 +11,8 @@
             android:layout_width="match_parent"
             android:fitsSystemWindows="true"
             android:theme="@style/AppTheme.AppBarOverlay"
-            android:id="@+id/_app_bar">
+            android:id="@+id/_app_bar"
+            android:background="@android:color/transparent">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_height="?attr/collapsingToolbarLayoutLargeSize"

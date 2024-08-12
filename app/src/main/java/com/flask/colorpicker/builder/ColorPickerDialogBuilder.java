@@ -318,7 +318,7 @@ public class ColorPickerDialogBuilder {
                     colorImage.setImageDrawable(new ColorDrawable(initialColor[i]));
                     MaterialShapeDrawable shapeDrawable =
                             new MaterialShapeDrawable(
-                                    ShapeAppearanceModel.builder().setAllCorners(CornerFamily.CUT, 23f).build());
+                                    ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 23f).build());
                     shapeDrawable.setFillColor(
                             ColorStateList.valueOf(MaterialColors.getColor(context, ColorAndroid12.Back, 0)));
                     shapeDrawable.setStroke(

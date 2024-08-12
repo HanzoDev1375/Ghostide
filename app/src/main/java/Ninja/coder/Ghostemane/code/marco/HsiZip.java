@@ -40,7 +40,7 @@ public class HsiZip extends AsyncTaskCompat<String, Object, Boolean> {
     super.onPreExecute();
     MaterialShapeDrawable shap =
         new MaterialShapeDrawable(
-            ShapeAppearanceModel.builder().setAllCorners(CornerFamily.CUT, 19f).build());
+            ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 19f).build());
     shap.setFillColor(
         ColorStateList.valueOf(MaterialColors.getColor(context, ColorAndroid12.Back, Color.BLACK)));
     shap.setStroke(1f, MaterialColors.getColor(context, ColorAndroid12.TvColor, Color.RED));

@@ -15,7 +15,7 @@ public class ExrtaFab extends ExtendedFloatingActionButton {
     super(c, v);
     shrink();
     ShapeAppearanceModel.Builder shap = new ShapeAppearanceModel.Builder();
-    shap.setAllCorners(CornerFamily.CUT, 34f);
+    shap.setAllCorners(CornerFamily.ROUNDED, 50f);
     setShapeAppearanceModel(shap.build());
   }
 

@@ -20,37 +20,13 @@
                 android:layout_width="match_parent"
                 android:padding="8dp"
                 android:orientation="horizontal"
-                android:id="@+id/linear2">
+                android:id="@+id/linear2"
+            android:background="@drawable/header">
 
-            <AnalogClock
-                    android:layout_height="60dp"
-                    android:layout_width="60dp"
-                    android:padding="8dp"
-                    android:id="@+id/analogclock1"/>
-
+            
         </LinearLayout>
 
-        <androidx.cardview.widget.CardView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                app:cardElevation="4dp"
-                app:cardBackgroundColor="?attr/colorOnPrimary"
-                app:contentPadding="8dp"
-                app:cardCornerRadius="25dp"
-                android:id="@+id/mcardClick"
-                android:layout_gravity="right">
-
-            <ImageView
-                    android:layout_height="60dp"
-                    android:layout_width="60dp"
-                    android:src="@drawable/ghostery"
-                    android:scaleType="centerInside"
-                    android:padding="4dp"
-                    android:tint="?@attr/colorPrimary"
-                    android:focusable="false"
-                    android:id="@+id/imageview2"/>
-
-        </androidx.cardview.widget.CardView>
+            
 
         <TextView
                 android:layout_height="wrap_content"
@@ -59,8 +35,9 @@
                 android:textColor="?@attr/colorPrimary"
                 android:focusable="false"
                 android:id="@+id/textview1"
-                android:text="Ghost web"
-                android:textStyle="bold"/>
+                android:text="@string/drawer_title"
+                android:textStyle="bold"
+            android:layout_margin="10dp"/>
 
         <TextView
                 android:layout_height="wrap_content"
@@ -69,7 +46,8 @@
                 android:textColor="?@attr/colorPrimary"
                 android:focusable="false"
                 android:id="@+id/textview2"
-                android:text="best ide web"/>
+                android:text="@string/drawer_subtitles"
+            android:layout_margin="10dp"/>
 
     </LinearLayout>
 

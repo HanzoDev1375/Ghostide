@@ -98,7 +98,7 @@ public class FactoryModelProject implements ProjectManagerAdapter.OnProjectClick
                     TextInputLayout packageName = dialog.findViewById(R.id.input_packagename);
                     var btn = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
                     var shap = new ShapeAppearanceModel.Builder();
-                    shap.setAllCorners(CornerFamily.CUT, 20f);
+                    shap.setAllCorners(CornerFamily.ROUNDED, 20f);
                     packageName.setShapeAppearanceModel(shap.build());
                     projectName.setShapeAppearanceModel(shap.build());
                     packageName

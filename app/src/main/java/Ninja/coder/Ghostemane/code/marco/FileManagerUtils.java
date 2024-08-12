@@ -107,7 +107,7 @@ public class FileManagerUtils {
   private MaterialShapeDrawable custom() {
     var myShap =
         new MaterialShapeDrawable(
-            ShapeAppearanceModel.builder().setAllCorners(CornerFamily.CUT, 20f).build());
+            ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 20f).build());
     myShap.setFillColor(
         ColorStateList.valueOf(MaterialColors.getColor(compat, ColorAndroid12.Back, 0)));
     myShap.setStroke(

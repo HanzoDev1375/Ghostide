@@ -97,7 +97,7 @@ public class helper {
 
     protected MaterialShapeDrawable shapeDrawable() {
         MaterialShapeDrawable materialShapeUtils = new MaterialShapeDrawable(
-                ShapeAppearanceModel.builder().setAllCorners(CornerFamily.CUT, 20f).build());
+                ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 20f).build());
         materialShapeUtils.setFillColor(ColorStateList.valueOf(Color.BLACK));
         materialShapeUtils.setStroke(1, Color.RED);
         return materialShapeUtils;

@@ -23,7 +23,7 @@ public class btnCompat extends MaterialButton {
     protected btnCompat init() {
         ShapeAppearanceModel.Builder builder = new ShapeAppearanceModel.Builder();
         if (builder != null) {
-            builder.setAllCorners(CornerFamily.CUT, 15f);
+            builder.setAllCorners(CornerFamily.ROUNDED, 25f);
         }
         setShapeAppearanceModel(builder.build());
         ShapeAppearanceModel s = new ShapeAppearanceModel();

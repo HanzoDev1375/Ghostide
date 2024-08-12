@@ -39,6 +39,7 @@ public class ColorAndroid12 {
   public static int Back = R.attr.colorSurface;
   public static int colorAccent = R.attr.colorAccent;
   public static int TvColor = R.attr.colorPrimary;
+  public static int SecColor = R.attr.colorPrimaryContainer;  
   public static int ColorNormal = R.attr.colorControlNormal;
   public static int ColorAConNormal = R.attr.colorControlActivated;
   public static int SubTitle = R.attr.colorPrimaryFixedDim;
@@ -71,7 +72,7 @@ public class ColorAndroid12 {
   public static void setToolbarinit(Toolbar toolbar) {
     if (ApplicationLoader.getThememanagersoft().contains("thememanagersoft")) {
 
-      toolbar.setBackgroundColor(0);
+      toolbar.setBackgroundColor(android.R.color.transparent);
       toolbar.setTitleTextColor(MaterialColors.getColor(toolbar, TvColor));
       toolbar.setSubtitleTextColor(MaterialColors.getColor(toolbar, SubTitle));
     } else {
@@ -127,7 +128,7 @@ public class ColorAndroid12 {
   public static MaterialShapeDrawable getColor(Context context, int size) {
     MaterialShapeDrawable shapeDrawable =
         new MaterialShapeDrawable(
-            ShapeAppearanceModel.builder().setAllCorners(CornerFamily.CUT, size).build());
+            ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, size).build());
 
     shapeDrawable.setFillColor(ColorStateList.valueOf(MaterialColors.getColor(context, Back, 0)));
     shapeDrawable.setStroke(
@@ -160,7 +161,7 @@ public class ColorAndroid12 {
 
     fb.setTextColor(MaterialColors.getColor(fb, TvColor));
     fb.setStrokeColor(ColorStateList.valueOf(MaterialColors.getColor(fb, ColorFilter)));
-    fb.setStrokeWidth(1);
+    fb.setStrokeWidth(0);
     fb.setBackgroundTintList(ColorStateList.valueOf(MaterialColors.getColor(fb, Back)));
     fb.setIconTint(ColorStateList.valueOf(MaterialColors.getColor(fb, TvColor)));
   }
@@ -169,9 +170,9 @@ public class ColorAndroid12 {
     if (button == null) return;
     if (Android12) {
       button.setBackgroundTintList(
-          ColorStateList.valueOf(MaterialColors.getColor(button, FabBack)));
+          ColorStateList.valueOf(MaterialColors.getColor(button, SecColor)));
     } else {
-      button.setBackgroundTintList(ColorStateList.valueOf(0xFF201B16));
+      button.setBackgroundTintList(ColorStateList.valueOf(0xFFEBE68D));
     }
     setColorFilter(button);
   }
@@ -203,7 +204,7 @@ public class ColorAndroid12 {
   public static void shap(View view, int colors) {
     var shaps =
         new MaterialShapeDrawable(
-            ShapeAppearanceModel.builder().setAllCorners(CornerFamily.CUT, 34f).build());
+            ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 34f).build());
 
     shaps.setFillColor(
         ColorStateList.valueOf(MaterialColors.getColor(view.getContext(), colors, 0)));
@@ -264,7 +265,7 @@ public class ColorAndroid12 {
   public static void shp(View v) {
     var shap =
         new MaterialShapeDrawable(
-            ShapeAppearanceModel.builder().setAllCorners(CornerFamily.CUT, 20f).build());
+            ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 20f).build());
     if (v != null) {
       shap.setStroke(1f, ColorStateList.valueOf(MaterialColors.getColor(v, TvColor)));
       shap.setFillColor(ColorStateList.valueOf(MaterialColors.getColor(v, Back)));

@@ -22,7 +22,7 @@ public class Android13Color {
 
     public static MaterialShapeDrawable getBackground() {
         MaterialShapeDrawable shapeDrawable = new MaterialShapeDrawable(
-                ShapeAppearanceModel.builder().setAllCorners(CornerFamily.CUT, 20f).build());
+                ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 20f).build());
         shapeDrawable.setFillColor(ColorStateList.valueOf(Color.parseColor(colorAc)));
         shapeDrawable.setStroke(2f, ColorStateList.valueOf(Color.parseColor(colorBc)));
         return shapeDrawable;

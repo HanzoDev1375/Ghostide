@@ -19,7 +19,7 @@ public class FabButton extends FloatingActionButton {
 
     private FabButton init() {
         ShapeAppearanceModel.Builder shapeAppearanceModel = new ShapeAppearanceModel.Builder();
-        shapeAppearanceModel.setAllCorners(CornerFamily.CUT, 20f);
+        shapeAppearanceModel.setAllCorners(CornerFamily.ROUNDED, 50f);
         setShapeAppearanceModel(shapeAppearanceModel.build());
         return this;
     }

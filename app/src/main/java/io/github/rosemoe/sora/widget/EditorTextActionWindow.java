@@ -193,7 +193,7 @@ public class EditorTextActionWindow extends EditorPopupWindow
 
     MaterialShapeDrawable materialShapeDrawable =
         new MaterialShapeDrawable(
-            ShapeAppearanceModel.builder().setAllCorners(CornerFamily.CUT, 20f).build());
+            ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 20f).build());
     EditorColorScheme editorColorScheme = editor.getColorScheme();
     materialShapeDrawable.setFillColor(
         ColorStateList.valueOf(editorColorScheme.getColor(EditorColorScheme.AUTO_COMP_PANEL_BG)));
@@ -355,7 +355,7 @@ public class EditorTextActionWindow extends EditorPopupWindow
   private MaterialShapeDrawable post() {
     MaterialShapeDrawable shap =
         new MaterialShapeDrawable(
-            ShapeAppearanceModel.builder().setAllCorners(CornerFamily.CUT, 20f).build());
+            ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 20f).build());
     shap.setFillColor(
         ColorStateList.valueOf(
             MaterialColors.getColor(mEditor.getContext(), ColorAndroid12.Back, 0)));

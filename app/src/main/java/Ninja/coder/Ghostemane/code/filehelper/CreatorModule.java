@@ -64,7 +64,7 @@ public class CreatorModule {
                   context, android.R.layout.simple_spinner_dropdown_item, str));
           ((ArrayAdapter) spinner.getAdapter()).notifyDataSetChanged();
           var myShap = new ShapeAppearanceModel.Builder();
-          myShap.setAllCorners(CornerFamily.CUT, 20f);
+          myShap.setAllCorners(CornerFamily.ROUNDED, 20f);
           inputLayout.setShapeAppearanceModel(myShap.build());
           input_pk.setShapeAppearanceModel(myShap.build());
           inputLayout.setHintEnabled(true);

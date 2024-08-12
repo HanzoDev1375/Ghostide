@@ -305,7 +305,7 @@ public class BaseCompat extends AppCompatActivity {
   public BaseCompat setShapeListSet(ListView fab) {
     MaterialShapeDrawable shapeDrawable =
         new MaterialShapeDrawable(
-            ShapeAppearanceModel.builder().setAllCorners(CornerFamily.CUT, 13f).build());
+            ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 13f).build());
     shapeDrawable.setFillColor(ColorStateList.valueOf(0xFFFCB07D));
     fab.setSelector(shapeDrawable);
     return this;
