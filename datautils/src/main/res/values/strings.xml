@@ -1,0 +1,4 @@
+<resources>
+     <string name="common_word_allow">Allow</string>
+     <string name="common_word_deny">Deny</string>
+</resources>

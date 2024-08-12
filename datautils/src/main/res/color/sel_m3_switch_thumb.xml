@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector 
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item 
+        android:color="?colorOnSurface" 
+        android:alpha="0.12" 
+        android:state_enabled="false" />
+    <item 
+        android:color="?colorOnPrimary" 
+        android:state_checked="true" />
+    <item 
+        android:color="?colorSurfaceVariant" />
+</selector>

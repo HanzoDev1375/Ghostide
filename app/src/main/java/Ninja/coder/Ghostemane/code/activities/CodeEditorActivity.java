@@ -429,14 +429,14 @@ public class CodeEditorActivity extends AppCompatActivity {
           @Override
           public void onViewShow() {
             if (_fab.getVisibility() == View.VISIBLE) {
-             // _fab.hide();
+              // _fab.hide();
             }
           }
 
           @Override
           public void onViewHide() {
             if (_fab.getVisibility() == View.GONE) {
-            //  _fab.show();
+              //  _fab.show();
             }
           }
         });
@@ -517,7 +517,7 @@ public class CodeEditorActivity extends AppCompatActivity {
     barSymoble.setVisibility(View.VISIBLE);
     setWallpaperParallaxEffect();
     POSTMANPATH = shp.getString("pos_path", "");
-   // _fab.shrink();
+    // _fab.shrink();
     Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.ab);
     animation.start();
     editor.setAnimation(animation);
@@ -689,8 +689,8 @@ public class CodeEditorActivity extends AppCompatActivity {
 
     themeForJson2.addImageColor(
         menupopnew, this, "ImageColor", imap, Color.parseColor("#ff94e7ff"));
-   // themeForJson2.mfabcolor(this, _fab, imap);
-    //themeForJson2.mfab2(this, _fab, imap);
+    // themeForJson2.mfabcolor(this, _fab, imap);
+    // themeForJson2.mfab2(this, _fab, imap);
     AnimUtils.ClickAnimation(menupopnew);
 
     AnimUtils.ClickAnimation(undo);
@@ -766,7 +766,7 @@ public class CodeEditorActivity extends AppCompatActivity {
     getWindow().setNavigationBarColor(color);
     getWindow().setStatusBarColor(color);
     editor.setAutoCompletionEnabled(!auto.contains("mauto"));
- //   _fab.setIconResource(R.drawable.play);
+    //   _fab.setIconResource(R.drawable.play);
     home = true;
     if (getinitdir.contains("mdir")) {
       if (getinitdir.getString("mdir", "").equals("true")) {
