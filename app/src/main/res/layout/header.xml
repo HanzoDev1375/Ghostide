@@ -16,18 +16,21 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        app:srcCompat="@mipmap/ghosticon" />
+        app:srcCompat="@mipmap/ghosticon" 
+        android:layout_gravity="center_horizontal" />
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:text="@string/drawer_title"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:layout_gravity="center_horizontal" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/drawer_subtitles" />
+        android:text="@string/drawer_subtitles"
+        android:layout_gravity="center_horizontal" />
 </LinearLayout>

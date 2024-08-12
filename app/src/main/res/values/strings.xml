@@ -78,7 +78,7 @@
         translatable="false"
         
     >More</item>
-    <string name="sting">App setting</string>
+    <string name="sting">App settings</string>
     <string name="java">java codes</string>
     <string name="googleplay">Add star to my app to myket</string>
     <string name="ter">terminal</string>
@@ -98,7 +98,8 @@
     <string name="Settings">Settings</string>
     <string name="theme">App Theme</string>
     <string name="Themes_manager">Themes manager</string>
-    <string name="Keyboard_settings">Keyboard settings</string>
+    <string name="Keyboard_settings">Keyboard Settings</string>
+    <string name="Keyboard_settingsdesc">Customize the app keyboard Themes and other Configs</string>
     <string name="Keyboard_features">Keyboard feature</string>
     <string name="General">General</string>
     <string name="Fixing_countin_numbers">Fixing counting numbers</string>
@@ -122,7 +123,8 @@
     <string name="posttheme">Enabel TransParanet Theme Editor</string>
     <string name="pvr">PM</string>
     <string name="acset">Select a old activity</string>
-    <string name="bl_size">Select Blur Size 1~25</string>
+    <string name="bl_size">Blur Size </string>
+    <string name="bl_sizedesc">When Get SystemWallpaper is Enabled you can actually set Blur size from 1 to 25</string>
     <string name="setting">Settings</string>
     <string name="javacodes">Java codes</string>
     <string name="myket">Add Star to Myket</string>
@@ -138,7 +140,9 @@
     <string name="color_tree">Text Color Tree</string>
     <string name="MaterialYou">MaterialYou</string>
     <string name="customtheme">Custom Theme</string>
-    <string name="customwindows">Mode Custom Windows</string>
+    <string name="customthemedesc">Import Your .ghost Theme to theme and enjoy your colored theme</string>
+    <string name="customwindows">Windowflags Mode</string>
+    <string name="customwindowsdesc">Ensure the right Window Mode for systembars for your device </string>
     <string name="resource">Resource</string>
     <string name="resource_manager">Resource Manager</string>
     <string name="debug">Debug</string>

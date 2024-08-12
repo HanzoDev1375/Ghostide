@@ -97,7 +97,7 @@ import io.github.rosemoe.sora.text.Cursor;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.EditorAutoCompleteWindow;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
-
+import com.google.android.material.button.MaterialButton;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -114,7 +114,7 @@ public class CodeEditorActivity extends AppCompatActivity {
   public final int REQ_CD_SETPASZAMINE = 101;
   protected Sound sound;
   protected EditorAutoCompleteWindow window;
-  protected ExrtaFab _fab; // /By ninja coder big man main
+  protected MaterialButton _fab; // /By ninja coder big man main
   private final Timer _timer = new Timer();
   private WallpaperParallaxEffect effect;
   private CoordinatorLayout Coordinator;
@@ -429,14 +429,14 @@ public class CodeEditorActivity extends AppCompatActivity {
           @Override
           public void onViewShow() {
             if (_fab.getVisibility() == View.VISIBLE) {
-              _fab.hide();
+             // _fab.hide();
             }
           }
 
           @Override
           public void onViewHide() {
             if (_fab.getVisibility() == View.GONE) {
-              _fab.show();
+            //  _fab.show();
             }
           }
         });
@@ -517,7 +517,7 @@ public class CodeEditorActivity extends AppCompatActivity {
     barSymoble.setVisibility(View.VISIBLE);
     setWallpaperParallaxEffect();
     POSTMANPATH = shp.getString("pos_path", "");
-    _fab.shrink();
+   // _fab.shrink();
     Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.ab);
     animation.start();
     editor.setAnimation(animation);
@@ -689,8 +689,8 @@ public class CodeEditorActivity extends AppCompatActivity {
 
     themeForJson2.addImageColor(
         menupopnew, this, "ImageColor", imap, Color.parseColor("#ff94e7ff"));
-    themeForJson2.mfabcolor(this, _fab, imap);
-    themeForJson2.mfab2(this, _fab, imap);
+   // themeForJson2.mfabcolor(this, _fab, imap);
+    //themeForJson2.mfab2(this, _fab, imap);
     AnimUtils.ClickAnimation(menupopnew);
 
     AnimUtils.ClickAnimation(undo);
@@ -707,10 +707,10 @@ public class CodeEditorActivity extends AppCompatActivity {
       image.setColorFilter(0xFFFFB689, PorterDuff.Mode.MULTIPLY);
       titleauthor.setTextColor(0xFFFDA893);
 
-      _fab.setBackgroundTintList(ColorStateList.valueOf(0xFF2B2122));
+      /*_fab.setBackgroundTintList(ColorStateList.valueOf(0xFF2B2122));
       _fab.setStrokeColor(ColorStateList.valueOf(0xFFFDB69A));
       _fab.setStrokeWidth(1);
-      _fab.setIconTint(ColorStateList.valueOf(0xFFFDB69A));
+      _fab.setIconTint(ColorStateList.valueOf(0xFFFDB69A));*/
       if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
         Window ninjacoder = this.getWindow();
         ninjacoder.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -766,7 +766,7 @@ public class CodeEditorActivity extends AppCompatActivity {
     getWindow().setNavigationBarColor(color);
     getWindow().setStatusBarColor(color);
     editor.setAutoCompletionEnabled(!auto.contains("mauto"));
-    _fab.setIconResource(R.drawable.play);
+ //   _fab.setIconResource(R.drawable.play);
     home = true;
     if (getinitdir.contains("mdir")) {
       if (getinitdir.getString("mdir", "").equals("true")) {
@@ -1001,7 +1001,7 @@ public class CodeEditorActivity extends AppCompatActivity {
   }
 
   public void setCodeEditorFileReader(String _path) {
-    EditorRoaderFile.RuningTask(editor, _fab, _path, proanjctor, iconAuthor);
+    EditorRoaderFile.RuningTask(editor, _fab, _path, proanjctor);
   }
 
   public void setClosetab(int _position, final ArrayList<HashMap<String, Object>> _data) {

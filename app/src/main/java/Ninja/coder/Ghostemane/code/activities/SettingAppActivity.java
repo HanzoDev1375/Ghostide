@@ -166,13 +166,13 @@ public class SettingAppActivity extends BaseCompat {
     autoSaveText = findViewById(R.id.autoSaveText);
     rvsetting = findViewById(R.id.rvsetting);
     materialYous.setTitle("MaterialYou");
-    materialYous.setDescription("Enable dynamic colors automatically and use beautiful design ");
+    materialYous.setDescription("Enable dynamic colors automatically and Try a Best Color expirence");
     effect.setTitle("Beautiful effect");
     effect.setDescription("By activating this option, the background will have a small vibration");
-    grids.setTitle("grid mode ");
+    grids.setTitle("Grid Mode ");
     grids.setDescription(
         "This option is for those who are tired of the normal mode and want to have a better experience ");
-    walpapersystem.setTitle("Get system background ");
+    walpapersystem.setTitle("Get SystemWallpaper ");
     walpapersystem.setDescription("With this option, you can get the system background");
     deftheme.setTitle("Default theme ");
     deftheme.setDescription(

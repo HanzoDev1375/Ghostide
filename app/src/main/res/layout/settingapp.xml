@@ -92,13 +92,19 @@
                          android:layout_width="match_parent"
                          android:id="@+id/autoSaveText" />
 
-                    <LinearLayout
-                         android:layout_height="match_parent"
+                   <dev.trindadedev.lib.ui.components.preference.PreferenceGroup
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:id="@+id/pref_group"
+                   app:preferenceGroupTitle="Settings" >
+        
+                    
+                        <!-- android:layout_height="match_parent"
                          android:layout_width="match_parent"
                          android:padding="3dp"
-                         android:orientation="vertical">
+                         android:orientation="vertical">-->
 
-                      <TextView
+                      <dev.trindadedev.lib.ui.components.preference.Preference
                              android:layout_height="wrap_content"
                              android:layout_width="match_parent"
                              android:layout_marginBottom="8dp"
@@ -106,37 +112,48 @@
                              android:text="@string/theme"
                              android:id="@+id/customtheme" />
 
-                        <TextView
+                        <dev.trindadedev.lib.ui.components.preference.Preference
                              android:layout_height="wrap_content"
                              android:layout_width="match_parent"
                              android:layout_marginBottom="3dp"
                              android:layout_marginTop="3dp"
-                             android:text="@string/customwindows"
-                             android:id="@+id/customwindows" />
+                             android:text=""
+                             android:id="@+id/customwindows" 
+                             app:preferenceTitle="@string/customwindows"
+                             app:preferenceDescription="@string/customwindowsdesc" />
 
-                        <TextView
+                        <dev.trindadedev.lib.ui.components.preference.Preference
                              android:layout_height="wrap_content"
                              android:layout_width="match_parent"
                              android:layout_marginBottom="3dp"
                              android:layout_marginTop="3dp"
                              android:text="@string/bl_size"
-                             android:id="@+id/blursize" />
+                             android:id="@+id/blursize"
+                             app:preferenceTitle="@string/bl_size"
+                             app:preferenceDescription="@string/bl_sizedesc" />
+           
 
-                        <TextView
+                        <dev.trindadedev.lib.ui.components.preference.Preference
                              android:layout_height="wrap_content"
                              android:layout_width="match_parent"
                              android:layout_marginBottom="3dp"
                              android:layout_marginTop="3dp"
                              android:text="@string/Keyboard_settings"
-                             android:id="@+id/keyboardsettings" />
+                             android:id="@+id/keyboardsettings"
+                             app:preferenceTitle="@string/Keyboard_settings"
+                             app:preferenceDescription="@string/Keyboard_settingsdesc" />
 
-                        <TextView
+                        <dev.trindadedev.lib.ui.components.preference.Preference
                              android:layout_height="wrap_content"
                              android:layout_width="match_parent"
                              android:layout_marginBottom="3dp"
                              android:layout_marginTop="3dp"
                              android:text="@string/customtheme"
-                             android:id="@+id/themefile" />
+                             android:id="@+id/themefile" 
+                             app:preferenceTitle="@string/customtheme"
+                             app:preferenceDescription="@string/customthemedesc" />
+                        </dev.trindadedev.lib.ui.components.preference.PreferenceGroup>
+          
 
                         <androidx.recyclerview.widget.RecyclerView
                              android:layout_height="wrap_content"
