@@ -42,10 +42,13 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ScrollView
+    <Ninja.coder.Ghostemane.code.widget.component.fastscrollcompat.FastScrollNestedScrollView
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:fillViewport="true"
+        android:clipToPadding="false"
+        android:id="@+id/bar"
         >
 
         <LinearLayout
@@ -152,25 +155,20 @@
 
             </LinearLayout>
 
-            <Ninja.coder.Ghostemane.code.widget.component.fastscrollcompat.FastScrollNestedScrollView
-                android:layout_height="match_parent"
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:fillViewport="true"
-                android:clipToPadding="false"
-                android:id="@+id/bar"
-                >
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:id="@+id/rvsetting"
-                    />
-
-            </Ninja.coder.Ghostemane.code.widget.component.fastscrollcompat.FastScrollNestedScrollView>
-
+                android:id="@+id/rvtools"
+                />
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:id="@+id/rvsetting"
+                />
 
         </LinearLayout>
 
-    </ScrollView>
+    </Ninja.coder.Ghostemane.code.widget.component.fastscrollcompat.FastScrollNestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

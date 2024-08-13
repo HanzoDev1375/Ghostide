@@ -44,6 +44,8 @@ import com.ninjacoder.jgit.childer.LayoutChilder;
 import com.quickersilver.themeengine.ThemeChooserDialogBuilder;
 import com.quickersilver.themeengine.ThemeEngine;
 import com.quickersilver.themeengine.ThemeMode;
+import dev.trindadedev.lib.ui.components.preference.adapter.ItemLayoutAdapterMod;
+import dev.trindadedev.lib.ui.components.preference.adapter.LayoutModel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -68,7 +70,7 @@ public class SettingAppActivity extends BaseCompat {
   private ArrayList<HashMap<String, Object>> c2 = new ArrayList<>();
   private List<HashMap<String, Object>> map = new ArrayList<>();
   private FastScrollNestedScrollView bar;
-  private RecyclerView rvsetting;
+  private RecyclerView rvsetting, rvtools;
   private Intent intent = new Intent();
   private SwitchMaterialPrf materialYous, effect, grids, walpapersystem, deftheme, autoSaveText;
   private ObjectAnimator mdownObjectAnimator = new ObjectAnimator();
@@ -165,8 +167,10 @@ public class SettingAppActivity extends BaseCompat {
     deftheme = findViewById(R.id.deftheme);
     autoSaveText = findViewById(R.id.autoSaveText);
     rvsetting = findViewById(R.id.rvsetting);
+    rvtools = findViewById(R.id.rvtools);
     materialYous.setTitle("MaterialYou");
-    materialYous.setDescription("Enable dynamic colors automatically and Try a Best Color expirence");
+    materialYous.setDescription(
+        "Enable dynamic colors automatically and Try a Best Color expirence");
     effect.setTitle("Beautiful effect");
     effect.setDescription("By activating this option, the background will have a small vibration");
     grids.setTitle("Grid Mode ");
@@ -181,16 +185,31 @@ public class SettingAppActivity extends BaseCompat {
     autoSaveText.setTitle("Auto Save");
     autoSaveText.setDescription(
         "You do not need to click the save button with the auto save activation.");
-    
-    
 
-    findViewById(R.id.customtheme)
-        .setOnClickListener(
-            (v) -> {
-              intent.setClass(getApplicationContext(), InjectorColorActivity.class);
-              intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-              startActivity(intent);
+    List<LayoutModel> layoutModel = new ArrayList<>();
+    
+    layoutModel.add(new LayoutModel(getString(R.string.theme), getString(R.string.theme)));
+    layoutModel.add(new LayoutModel(getString(R.string.customwindowsdesc), getString(R.string.customwindows)));
+    var it =
+        new ItemLayoutAdapterMod(
+            layoutModel,
+            new ItemLayoutAdapterMod.CallBackLabel() {
+
+              @Override
+              public void click(View v, int pos) {
+                switch (pos) {
+                  case 0:
+                    {
+                      intent.setClass(getApplicationContext(), InjectorColorActivity.class);
+                      intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                      startActivity(intent);
+                      break;
+                    }
+                }
+              }
             });
+    rvtools.setAdapter(it);
+    rvtools.setLayoutManager(new LinearLayoutManager(this));
 
     findViewById(R.id.keyboardsettings)
         .setOnClickListener(
@@ -470,7 +489,7 @@ public class SettingAppActivity extends BaseCompat {
             themeEngine.setDynamicTheme(false);
           }
         });
-        StartLuncherApp(); 
+    StartLuncherApp();
   }
 
   private void StartLuncherApp() {
@@ -537,9 +556,9 @@ public class SettingAppActivity extends BaseCompat {
       deftheme.setValue(true);
     }
     if (sve.contains("getAutoSave")) {
-    autoSaveText.setValue(true);
+      autoSaveText.setValue(true);
     }
-    
+
     ColorAndroid12.setToolbarinit(_toolbar);
     if (materialYou.contains("materialYou")) {
       materialYous.setValue(true);
@@ -806,9 +825,9 @@ public class SettingAppActivity extends BaseCompat {
               dialog.create().show();
             });
       }
-      if(_position == 5) {
-      	textview1.setText("Custom Char editor");
-          _view.setOnClickListener(v -> getCustomChar());
+      if (_position == 5) {
+        textview1.setText("Custom Char editor");
+        _view.setOnClickListener(v -> getCustomChar());
         imageview1.setImageResource(0);
       }
     }
@@ -912,7 +931,7 @@ public class SettingAppActivity extends BaseCompat {
     AlertDialog dialog =
         new GhostWebMaterialDialog(SettingAppActivity.this)
             .setView(R.layout.fontsetlector)
-             .setPositiveButton(android.R.string.ok, null)
+            .setPositiveButton(android.R.string.ok, null)
             .setNeutralButton(android.R.string.cancel, null)
             .setCancelable(true)
             .setPositiveButton("ok", null)
@@ -988,8 +1007,8 @@ public class SettingAppActivity extends BaseCompat {
 
     dialog.show();
   }
-  
-  void getCustomChar(){
+
+  void getCustomChar() {
     AlertDialog dialog =
         new GhostWebMaterialDialog(SettingAppActivity.this)
             .setView(R.layout.fontsetlector)

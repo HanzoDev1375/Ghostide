@@ -1,6 +1,9 @@
 package Ninja.coder.Ghostemane.code.utils;
 
 import Ninja.coder.Ghostemane.code.marco.ColorCompat;
+import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.SetThemeForJson;
+import Ninja.coder.Ghostemane.code.widget.ExrtaFab;
 import android.app.Activity;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -12,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.blankj.utilcode.util.FileIOUtils;
+import com.google.android.material.color.MaterialColors;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -192,33 +196,24 @@ public class SetThemeForJson {
     return this;
   }
 
-  public SetThemeForJson mfabcolor(
-      Activity c, ExtendedFloatingActionButton fab, HashMap<String, Object> map) {
-
-    fab.setStrokeColor(
-        ColorStateList.valueOf(
-            map.containsKey("FabColorStroker")
-                ? Color.parseColor(map.get("FabColorStroker").toString())
-                : Color.parseColor("#ffaebdff")));
-    fab.setStrokeWidth(1);
+  public SetThemeForJson setFabBackground(
+      ExtendedFloatingActionButton fab, HashMap<String, Object> map) {
     fab.setIconTint(
         ColorStateList.valueOf(
             map.containsKey("FabImageColor")
                 ? Color.parseColor(map.get("FabImageColor").toString())
-                : Color.parseColor("#ffc9f2ff")));
+                : MaterialColors.getColor(fab, ColorAndroid12.TvColor)));
     return this;
   }
 
-  public SetThemeForJson mfab2(
-      Activity c, ExtendedFloatingActionButton fab, HashMap<String, Object> imap) {
+  public SetThemeForJson setFabColorHint(
+      ExtendedFloatingActionButton fab, HashMap<String, Object> imap) {
+    fab.setBackgroundTintList(
+        ColorStateList.valueOf(
+            map.containsKey("FabBackgroundColorColor")
+                ? Color.parseColor(map.get("FabBackgroundColorColor").toString())
+                : MaterialColors.getColor(fab, ColorAndroid12.Back)));
 
-    if (imap.containsKey("FabBackgroundColorColor")) {
-      fab.setBackgroundTintList(
-          ColorStateList.valueOf(Color.parseColor(imap.get("FabBackgroundColorColor").toString())));
-
-    } else {
-      fab.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF2B2121")));
-    }
     return this;
   }
 

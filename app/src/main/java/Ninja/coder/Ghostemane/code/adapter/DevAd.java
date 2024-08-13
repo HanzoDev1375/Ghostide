@@ -13,13 +13,14 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import java.util.HashMap;
 import java.util.List;
 
 public class DevAd extends RecyclerView.Adapter<DevAd.VH> {
-  private List<DevModel> listDev;
+  private List<HashMap<String,Object>> listDev;
   private OnItemClick click;
 
-  public DevAd(List<DevModel> listDev, OnItemClick click) {
+  public DevAd(List<HashMap<String,Object>> listDev, OnItemClick click) {
     this.listDev = listDev;
     this.click = click;
   }
@@ -33,7 +34,7 @@ public class DevAd extends RecyclerView.Adapter<DevAd.VH> {
   public void onBindViewHolder(VH holder, int pos) {
     var model = listDev.get(pos);
     Glide.with(holder.imageView.getContext())
-        .load(Uri.parse(model.getDevIcon()))
+        .load(Uri.parse(listDev.get(pos).get("avatar_url").toString()))
         .circleCrop()
         .into(holder.imageView);
     holder.itemView.setOnClickListener(

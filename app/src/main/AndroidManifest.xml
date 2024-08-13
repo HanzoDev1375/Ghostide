@@ -99,7 +99,8 @@
         <activity
             android:name=".activities.VideoViewsActivity"
             android:hardwareAccelerated="true"
-            android:exported="false"
+            android:exported="true"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
             android:supportsPictureInPicture="true"
             
         >
@@ -413,7 +414,8 @@
             android:name=".activities.PdfViewNewActivity"
             android:hardwareAccelerated="true"
             android:label="Ghost web pdf view"
-            android:exported="false"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:exported="true"
             android:supportsPictureInPicture="true"
             
         >

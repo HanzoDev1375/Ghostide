@@ -16,6 +16,8 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,7 +29,7 @@ public class AboutActivity extends BaseCompat {
   protected TextView tv_about_name;
   protected RecyclerView rv_about_dev;
   protected DevAd devAd;
-  protected List<DevModel> listModel = new ArrayList<>();
+  protected List<HashMap<String,Object>> listModel = new ArrayList<>();
   private RequestNetwork sazndeh, DevSazandeh;
   private RequestNetwork.RequestListener devCallBack, DevUser;
   private ImageView appicon;
@@ -54,8 +56,7 @@ public class AboutActivity extends BaseCompat {
         new RequestNetwork.RequestListener() {
           @Override
           public void onResponse(String _param1, String respanse, HashMap<String, Object> _param3) {
-
-            listModel.add(new DevModel(getIconDev(respanse)));
+            listModel = new Gson().fromJson(respanse,new TypeToken<List<HashMap<String,Object>>>(){}.getType());
             devAd = new DevAd(listModel, (v, c) -> {});
 
             rv_about_dev.setAdapter(devAd);

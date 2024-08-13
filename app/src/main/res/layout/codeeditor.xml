@@ -300,26 +300,17 @@
 
     </LinearLayout>
 
-    <com.google.android.material.button.MaterialButton
-         android:layout_height="72dp"
-         android:layout_width="72dp"
+    <Ninja.coder.Ghostemane.code.widget.ExrtaFab
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
          android:layout_marginBottom="63dp"
+         app:backgroundTint="?colorPrimary"
+         android:padding="24dp"
+         app:iconTint="?colorSurface"
          android:layout_marginLeft="16dp"
          android:layout_marginRight="16dp"
          android:layout_marginTop="18dp"
          android:id="@+id/_fab"
-         android:layout_gravity="right|bottom"
-        app:icon="@drawable/ic_fab_play"
-        android:background="@drawable/compilerr" 
-        app:backgroundTint="@color/md_theme_primary"
-        app:iconGravity="textStart"
-        app:iconPadding="0dp"
-        app:iconSize="24dp"
-        app:iconTint="@color/md_theme_surface" 
-        android:insetLeft="0dp"
-        android:insetTop="0dp"
-        android:insetRight="0dp"
-        android:insetBottom="0dp"
-        android:padding="24dp" />
+         android:layout_gravity="right|bottom" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

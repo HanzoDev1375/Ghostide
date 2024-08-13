@@ -114,7 +114,7 @@ public class CodeEditorActivity extends AppCompatActivity {
   public final int REQ_CD_SETPASZAMINE = 101;
   protected Sound sound;
   protected EditorAutoCompleteWindow window;
-  protected MaterialButton _fab; // /By ninja coder big man main
+  protected ExrtaFab _fab; // /By ninja coder big man main
   private final Timer _timer = new Timer();
   private WallpaperParallaxEffect effect;
   private CoordinatorLayout Coordinator;
@@ -429,14 +429,14 @@ public class CodeEditorActivity extends AppCompatActivity {
           @Override
           public void onViewShow() {
             if (_fab.getVisibility() == View.VISIBLE) {
-              // _fab.hide();
+              _fab.hide();
             }
           }
 
           @Override
           public void onViewHide() {
             if (_fab.getVisibility() == View.GONE) {
-              //  _fab.show();
+              _fab.show();
             }
           }
         });
@@ -686,18 +686,15 @@ public class CodeEditorActivity extends AppCompatActivity {
     themeForJson2.addImageColor(undo, this, "ImageColor", imap, Color.parseColor("#ff94e7ff"));
     themeForJson2.addImageColor(redo, this, "ImageColor", imap, Color.parseColor("#ff94e7ff"));
     themeForJson2.addImageColor(image, this, "ImageColor", imap, Color.parseColor("#ff94e7ff"));
-
     themeForJson2.addImageColor(
         menupopnew, this, "ImageColor", imap, Color.parseColor("#ff94e7ff"));
-    // themeForJson2.mfabcolor(this, _fab, imap);
-    // themeForJson2.mfab2(this, _fab, imap);
+    themeForJson2.setFabBackground(_fab,imap);
+    themeForJson2.setFabColorHint(_fab,imap);
     AnimUtils.ClickAnimation(menupopnew);
 
     AnimUtils.ClickAnimation(undo);
     AnimUtils.ClickAnimation(redo);
     if (ru.contains("rup")) {
-
-      ///   MapObjectData.setMatetialThemeCodeEditor(editor);
       ColorAndroid12.tryToRunThemeMaterial(editor);
       CustomToolbar.setBackgroundColor(0xFF201B16);
 
@@ -706,11 +703,6 @@ public class CodeEditorActivity extends AppCompatActivity {
       menupopnew.setColorFilter(0xFFEEEEEE, PorterDuff.Mode.MULTIPLY);
       image.setColorFilter(0xFFFFB689, PorterDuff.Mode.MULTIPLY);
       titleauthor.setTextColor(0xFFFDA893);
-
-      /*_fab.setBackgroundTintList(ColorStateList.valueOf(0xFF2B2122));
-      _fab.setStrokeColor(ColorStateList.valueOf(0xFFFDB69A));
-      _fab.setStrokeWidth(1);
-      _fab.setIconTint(ColorStateList.valueOf(0xFFFDB69A));*/
       if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
         Window ninjacoder = this.getWindow();
         ninjacoder.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
