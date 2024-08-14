@@ -363,7 +363,7 @@ public class FileDirActivity extends BaseCompat
               di.setMessage(upfile.get((int) 0).get("Massges").toString());
               di.setCancelable(false);
               di.setNeutralButton(
-               "Update",
+                  "Update",
                   (p, d) -> {
                     void10.setAction(Intent.ACTION_VIEW);
                     void10.setData(Uri.parse(upfile.get((int) 0).get("Link").toString()));
@@ -531,9 +531,9 @@ public class FileDirActivity extends BaseCompat
     navs.getMenu().add(0, 13, 0, "Apk Manager").setIcon(R.drawable.drawer_item3);
     navs.getMenu().add(0, 14, 0, "About").setIcon(R.drawable.drawer_item11);
     navs.getMenu().add(0, 15, 0, "Leave").setIcon(R.drawable.drawer_item1);
- // navs.getMenu().add(0, 3, 0, "Add Star to Myket").setIcon(R.drawable.googleplay);
-//  navs.getMenu().add(0, 21, 0, "GitHub Repository ").setIcon(R.drawable.github);
-//  navs.getMenu().add(0, 17, 0, "Telegram Group").setIcon(R.drawable.tel);
+    // navs.getMenu().add(0, 3, 0, "Add Star to Myket").setIcon(R.drawable.googleplay);
+    //  navs.getMenu().add(0, 21, 0, "GitHub Repository ").setIcon(R.drawable.github);
+    //  navs.getMenu().add(0, 17, 0, "Telegram Group").setIcon(R.drawable.tel);
     DrowerHandler();
   }
 
@@ -593,26 +593,26 @@ public class FileDirActivity extends BaseCompat
                       Chack = false;
                       isCopyAndMoved = false;
 
-                     /* new GhostWebMaterialDialog(FileDirActivity.this)
-                          .setTitle(getResources().getString(R.string.exitapp))
-                          .setMessage(getResources().getString(R.string.exitappmsg))
-                          .setNeutralButton(
-                              getResources().getString(R.string.yes),
-                              (p, d) -> {
-                                gotoback = 0;
-                                finishAffinity();
-                              })
-                          .setPositiveButton(
-                              getResources().getString(R.string.no),
-                              (p1, d2) -> {
-                                gotoback = 0;
-                              })
-                          .setCancelable(false)
-                          .show();*/ 
-                                finish();
+                      /* new GhostWebMaterialDialog(FileDirActivity.this)
+                      .setTitle(getResources().getString(R.string.exitapp))
+                      .setMessage(getResources().getString(R.string.exitappmsg))
+                      .setNeutralButton(
+                          getResources().getString(R.string.yes),
+                          (p, d) -> {
+                            gotoback = 0;
+                            finishAffinity();
+                          })
+                      .setPositiveButton(
+                          getResources().getString(R.string.no),
+                          (p1, d2) -> {
+                            gotoback = 0;
+                          })
+                      .setCancelable(false)
+                      .show();*/
+                      finish();
 
                     } else {
-                     // DataUtil.showMessage(getApplicationContext(), "برای خروج ۳ بار کلیک کنید");
+                      // DataUtil.showMessage(getApplicationContext(), "برای خروج ۳ بار کلیک کنید");
                     }
                   } else {
 
@@ -626,26 +626,26 @@ public class FileDirActivity extends BaseCompat
                       Chack = false;
                       isCopyAndMoved = false;
 
-                     /* new GhostWebMaterialDialog(FileDirActivity.this)
-                          .setTitle(getResources().getString(R.string.exitapp))
-                          .setMessage(getResources().getString(R.string.exitappmsg))
-                          .setNeutralButton(
-                              getResources().getString(R.string.yes),
-                              (p, d) -> {
-                                gotoback = 0;
-                                finishAffinity();
-                              })
-                          .setPositiveButton(
-                              getResources().getString(R.string.no),
-                              (p1, d2) -> {
-                                gotoback = 0;
-                              })
-                          .setCancelable(false)
-                          .show();*/
-                                finish();
+                      /* new GhostWebMaterialDialog(FileDirActivity.this)
+                      .setTitle(getResources().getString(R.string.exitapp))
+                      .setMessage(getResources().getString(R.string.exitappmsg))
+                      .setNeutralButton(
+                          getResources().getString(R.string.yes),
+                          (p, d) -> {
+                            gotoback = 0;
+                            finishAffinity();
+                          })
+                      .setPositiveButton(
+                          getResources().getString(R.string.no),
+                          (p1, d2) -> {
+                            gotoback = 0;
+                          })
+                      .setCancelable(false)
+                      .show();*/
+                      finish();
 
                     } else {
-                      //DataUtil.showMessage(getApplicationContext(), "برای خروج ۳ بار کلیک کنید");
+                      // DataUtil.showMessage(getApplicationContext(), "برای خروج ۳ بار کلیک کنید");
                     }
                   } else {
                     Folder = Folder.substring((int) (0), (int) (Folder.lastIndexOf("/")));
@@ -1083,7 +1083,7 @@ public class FileDirActivity extends BaseCompat
     if (_list.get((int) _pos).get(_str).toString().endsWith(".aa")
         || _list.get((int) _pos).get(_str).toString().endsWith(".AA")) {
       if (FileUtil.isFile("/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost")) {
-        var di = new DialogUtil(FileDirActivity.this);
+        var di = new MaterialAlertDialogBuilder(FileDirActivity.this);
 
         di.setTitle("هشدار");
         di.setMessage("این فایل تم در حافظه شما موجود است آیا میخواهید این تم را جایگزین کنید؟");
@@ -1098,6 +1098,7 @@ public class FileDirActivity extends BaseCompat
               } catch (net.lingala.zip4j.exception.ZipException e) {
                 showMessage(e.toString());
               }
+
               reLoadFile();
               DataUtil.showMessage(getApplicationContext(), "انجام شد");
             });
@@ -1905,7 +1906,7 @@ public class FileDirActivity extends BaseCompat
                 startActivity(getJavaLayoutManager);
                 break;
               }
-           /* case ((int) 3):
+              /* case ((int) 3):
               {
                 myketint.setAction(Intent.ACTION_VIEW);
                 myketint.setData(Uri.parse("myket://comment?id=Ninja.coder.Ghostemane.code"));
@@ -2017,17 +2018,17 @@ public class FileDirActivity extends BaseCompat
 
                 break;
               }
-          /*  case 16:
-              {
-                getGitHub();
-                break;
-              }
-            case 17:
-              {
-                setLink("https://t.me/ghost_web_ide");
+              /*  case 16:
+                {
+                  getGitHub();
+                  break;
+                }
+              case 17:
+                {
+                  setLink("https://t.me/ghost_web_ide");
 
-                break;
-              }*/
+                  break;
+                }*/
             case 15:
               {
                 finishAffinity();
@@ -2048,16 +2049,28 @@ public class FileDirActivity extends BaseCompat
           (p, d) -> {
             try {
 
-              new net.lingala.zip4j.ZipFile(
-                      "/storage/emulated/0/GhostWebIDE/"
-                          .concat(
-                              String.valueOf((long) (DataUtil.getRandom((int) (0), (int) (99999))))
-                                  .concat("theme.AA")))
-                  .addFolder(new java.io.File("/storage/emulated/0/GhostWebIDE/theme/"));
+              net.lingala.zip4j.ZipFile zip4 =
+                  new net.lingala.zip4j.ZipFile(
+                      new File(
+                          "/storage/emulated/0/GhostWebIDE/"
+                              + DataUtil.getRandom(1, 200)
+                              + "theme.AA"));
+
+              ArrayList filesToAdd = new ArrayList<>();
+              var iconPath =
+                  getFilesDir().getAbsoluteFile()
+                      + File.separator
+                      + "files"
+                      + File.separator
+                      + "icon.png";
+              filesToAdd.add(new File(iconPath));
+              filesToAdd.add(new File("/sdcard/GhostWebIDE/theme/GhostThemeapp.ghost"));
+
+              zip4.addFiles(filesToAdd);
               DataUtil.showMessage(getApplicationContext(), "انجام شد در پوشه برنامه");
 
             } catch (net.lingala.zip4j.exception.ZipException e) {
-              showMessage(e.toString());
+
             }
           });
       di.setPositiveButton("خیر", (p1, d2) -> {});
@@ -2084,16 +2097,26 @@ public class FileDirActivity extends BaseCompat
     } else {
       try {
 
-        new net.lingala.zip4j.ZipFile(
-                "/storage/emulated/0/GhostWebIDE/"
-                    .concat(
-                        String.valueOf((long) (DataUtil.getRandom((int) (0), (int) (9999))))
-                            .concat("theme.AA")))
-            .addFolder(new java.io.File("/storage/emulated/0/GhostWebIDE/theme/"));
+        net.lingala.zip4j.ZipFile zip4 =
+            new net.lingala.zip4j.ZipFile(
+                new File(
+                    "/storage/emulated/0/GhostWebIDE/" + DataUtil.getRandom(1, 200) + "theme.AA"));
+
+        ArrayList filesToAdd = new ArrayList<>();
+        var iconPath =
+            getFilesDir().getAbsoluteFile()
+                + File.separator
+                + "files"
+                + File.separator
+                + "icon.png";
+        filesToAdd.add(new File(iconPath));
+        filesToAdd.add(new File("/sdcard/GhostWebIDE/theme/GhostThemeapp.ghost"));
+
+        zip4.addFiles(filesToAdd);
         DataUtil.showMessage(getApplicationContext(), "انجام شد در پوشه برنامه");
 
       } catch (net.lingala.zip4j.exception.ZipException e) {
-        showMessage(e.toString());
+
       }
     }
   }
@@ -2114,7 +2137,6 @@ public class FileDirActivity extends BaseCompat
     sh.addItem("Git Clone", R.drawable.git);
     sh.addItem("Android module", R.drawable.mdapk);
     sh.addItem("Git Tools", R.drawable.git);
-
     sh.addItem("Gson to Class", R.drawable.ic_material_folder_json);
     sh.setOnItemClickLabe(
         (pos333) -> {

@@ -347,6 +347,7 @@
             android:name=".activities.BrowserActivity"
             android:hardwareAccelerated="true"
             android:label="Ghost web Browers"
+            android:exported="true"
             android:supportsPictureInPicture="true"
             
         >
@@ -355,6 +356,7 @@
         <activity-alias
             android:name=".activities.BrowserActivitys"
             android:label="web"
+            android:exported="true"
             android:targetActivity=".activities.BrowserActivity"
             
         >
@@ -518,6 +520,7 @@
             android:label="@string/app_name"
             android:icon="@drawable/ghosticonred"
             android:enabled="false"
+            android:exported="true"
             android:targetActivity=".MainActivity"
             
         >
@@ -531,6 +534,7 @@
             android:label="@string/app_name"
             android:icon="@drawable/ghosticonyellow"
             android:enabled="false"
+            android:exported="true"
             android:targetActivity=".MainActivity"
             
         >
@@ -540,6 +544,7 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
+            android:exported="true"
             android:name=".MainActivityblue"
             android:label="@string/app_name"
             android:icon="@drawable/ghosticonblue"
@@ -557,6 +562,7 @@
             android:label="@string/app_name"
             android:icon="@drawable/ghosticonblack"
             android:enabled="false"
+            android:exported="true"
             android:targetActivity=".MainActivity"
             
         >
@@ -571,6 +577,7 @@
             android:roundIcon="@drawable/ghosticonpapermod"
             android:icon="@drawable/ghosticonpapermod"
             android:enabled="false"
+            android:exported="true"
             android:targetActivity=".MainActivity"
             
         >
@@ -585,6 +592,7 @@
             android:roundIcon="@drawable/ghosticongreenhell"
             android:icon="@drawable/ghosticongreenhell"
             android:enabled="false"
+            android:exported="true"
             android:targetActivity=".MainActivity"
             
         >
@@ -599,6 +607,7 @@
             android:roundIcon="@drawable/ghosticonbluemod"
             android:icon="@drawable/ghosticonbluemod"
             android:enabled="false"
+            android:exported="true"
             android:targetActivity=".MainActivity"
             
         >
@@ -613,6 +622,7 @@
             android:label="@string/app_name"
             android:icon="@drawable/ghosticons"
             android:enabled="false"
+            android:exported="true"
             android:targetActivity=".MainActivity"
             
         >
@@ -624,7 +634,7 @@
         <receiver
             android:name="Ninja.coder.Ghostemane.code.NetworkChangeReceiver"
             android:enabled="false"
-            android:exported="false"
+            android:exported="true"
             
         >
             <intent-filter>

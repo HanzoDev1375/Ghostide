@@ -284,6 +284,8 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
     return false;
   }
 
+  
+
   public void idTag(String tagsInput) {
     String api = "";
     List<String> validTags = new ArrayList<>();
@@ -417,7 +419,8 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
         for (String tag : validTags) {
           api = tag;
           for (int i = 1; i <= num; i++) { // از 1 شروع و تا عدد موجود تکرار می‌کنیم
-            openingTags.append("<" + api.replace("#", "") + " class=\"" + name + i + "\">"); // خروجی
+            openingTags.append(
+                "<" + api.replace("#", "") + " class=\"" + name + i + "\">"); // خروجی
             closingTags.insert(0, "</" + api.replace("#", "") + ">");
           }
         }

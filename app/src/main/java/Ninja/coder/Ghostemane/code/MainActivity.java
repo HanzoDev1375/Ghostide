@@ -98,6 +98,12 @@ public class MainActivity extends BaseCompat {
     var phpPath =
         getFilesDir().getAbsolutePath() + File.separator + "lib" + File.separator + "libx265.so";
     var ghostPath = "/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost";
+    var iconPath = getFilesDir().getAbsoluteFile() + File.separator + "files" + File.separator + "icon.png";
+    
+    if(!FileUtil.isExistFile(iconPath)) {
+    	AssetsSoft soft = new AssetsSoft();
+        soft.copyOneFileFromAssets("icon.png",iconPath,this);
+    }
 
     try {
       if (!FileUtil.isExistFile("/storage/emulated/0/GhostWebIDE/android/android.jar")) {
