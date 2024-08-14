@@ -37,17 +37,17 @@ public class IdeColorCompat {
   }
 
   void DataColor(View views, TextView tv, String color1, String color2, String color3) {
-    var gradientDrawable = new GradientDrawable();
+    /*var gradientDrawable = new GradientDrawable();
     int d = (int) views.getContext().getResources().getDisplayMetrics().density;
-    int colors[] = {Color.parseColor(color1), Color.parseColor(color2), Color.parseColor(color3)};
-    gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, colors);
-    gradientDrawable.setCornerRadii(
-        new float[] {d * 360, d * 360, d * 360, d * 360, d * 0, d * 0, d * 0, d * 0});
+    int colors[] = {Color.parseColor(color3)};
+   gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, colors);
+   gradientDrawable.setCornerRadii(
+       new float[] {d * 360, d * 360, d * 360, d * 360, d * 0, d * 0, d * 0, d * 0});
     views.setElevation(d * 5);
-    views.setBackground(gradientDrawable);
+    views.setBackground(Color.parseColor(color3));
     Shader shrder =
         new LinearGradient(0, 0, 0 + tv.getMeasuredWidth(), 0, colors, null, Shader.TileMode.CLAMP);
-    tv.getPaint().setShader(shrder);
+    tv.getPaint().setShader(shrder);*/
   }
 
   public void Colors(View view, TextView text) {

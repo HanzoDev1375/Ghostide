@@ -98,6 +98,7 @@ import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.EditorAutoCompleteWindow;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.tabs.TabLayout;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -107,6 +108,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.nio.file.Paths;
+
+public String getFilenameFromPath(String filePath) {
+    Path path = Paths.get(filePath);
+    return path.getFileName().toString();
+}
+
 
 public class CodeEditorActivity extends AppCompatActivity {
 
@@ -157,7 +165,7 @@ public class CodeEditorActivity extends AppCompatActivity {
   private LinearLayout newLayoutSymbolBar;
   private LinearLayout CustomToolbar;
   private ProgressBar progressbar1;
-
+  private TabLayout tab;
   private RecyclerView recyclerview1;
   private RecyclerView dir;
   private LinearLayout divar;
@@ -231,6 +239,7 @@ public class CodeEditorActivity extends AppCompatActivity {
   private EditorViewModel modelEditor;
   private String Paths;
   private boolean isSvg = false;
+  private String tabby ="";
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
@@ -304,6 +313,7 @@ public class CodeEditorActivity extends AppCompatActivity {
     menupopnew = findViewById(R.id.menupopnew);
     editor = findViewById(R.id.editor);
     FrameLayout02 = findViewById(R.id.FrameLayout02);
+        tab = findViewById(R.id.tab);
     linear3 = findViewById(R.id.linear3);
     proanjctor = findViewById(R.id.proanjctor);
     barSymoble = findViewById(R.id.barSymoble);
@@ -429,14 +439,14 @@ public class CodeEditorActivity extends AppCompatActivity {
           @Override
           public void onViewShow() {
             if (_fab.getVisibility() == View.VISIBLE) {
-              // _fab.hide();
+               _fab.setVisibility(View.GONE);
             }
           }
 
           @Override
           public void onViewHide() {
             if (_fab.getVisibility() == View.GONE) {
-              //  _fab.show();
+                _fab.setVisibility(View.VISIBLE);
             }
           }
         });
@@ -707,10 +717,10 @@ public class CodeEditorActivity extends AppCompatActivity {
       image.setColorFilter(0xFFFFB689, PorterDuff.Mode.MULTIPLY);
       titleauthor.setTextColor(0xFFFDA893);
 
-      /*_fab.setBackgroundTintList(ColorStateList.valueOf(0xFF2B2122));
-      _fab.setStrokeColor(ColorStateList.valueOf(0xFFFDB69A));
-      _fab.setStrokeWidth(1);
-      _fab.setIconTint(ColorStateList.valueOf(0xFFFDB69A));*/
+      _fab.setBackgroundTintList(ColorStateList.valueOf(0xFF2B2122));
+     // _fab.setStrokeColor(ColorStateList.valueOf(0xFFFDB69A));
+   //   _fab.setStrokeWidth(1);
+      _fab.setIconTint(ColorStateList.valueOf(0xFFFDB69A));
       if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
         Window ninjacoder = this.getWindow();
         ninjacoder.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -1091,6 +1101,12 @@ public class CodeEditorActivity extends AppCompatActivity {
     view.startAnimation(fade_in);
   }
 
+public String getFilenameFromPath() {
+    Path path = Paths.get(shp.getString("path",""));
+    return path.getFileName().toString();
+}
+
+
   public void ReloadFileInPos() {
     if (shp.contains("path")) {
       if (!shp.getString("path", "").equals("")) {
@@ -1102,6 +1118,8 @@ public class CodeEditorActivity extends AppCompatActivity {
         recyclerview1.setAdapter(new Recyclerview1Adapter(tabs_listmap));
         recyclerview1.setLayoutManager(
             new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+               // tab.addTab(tab.newTab().setText(tabby));
+                 tab.addTab(tab.newTab().setText(getFilenameFromPath()));
       }
     }
     if (FileUtil.isExistFile(shp.getString("pos_path", ""))) {

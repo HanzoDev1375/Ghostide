@@ -137,7 +137,14 @@
                          android:padding="8dp"
                          style="?android:progressBarStyleHorizontal"
                          android:id="@+id/progressbar1" />
-
+                    <com.google.android.material.tabs.TabLayout
+                      android:layout_height="wrap_content"
+                         android:layout_width="match_parent"
+                         android:padding="8dp"
+                         android:id="@+id/tab"
+                        android:background="@android:color/transparent"
+                        app:tabGravity="start"
+                        app:tabMode="scrollable"/>
                     <androidx.recyclerview.widget.RecyclerView
                          android:layout_height="wrap_content"
                          android:layout_width="match_parent"
@@ -311,11 +318,11 @@
          android:layout_gravity="right|bottom"
         app:icon="@drawable/ic_fab_play"
         android:background="@drawable/compilerr" 
-        app:backgroundTint="@color/md_theme_primary"
+        app:backgroundTint="?attr/colorPrimary"
         app:iconGravity="textStart"
         app:iconPadding="0dp"
         app:iconSize="24dp"
-        app:iconTint="@color/md_theme_surface" 
+        app:iconTint="?attr/colorSurface" 
         android:insetLeft="0dp"
         android:insetTop="0dp"
         android:insetRight="0dp"
