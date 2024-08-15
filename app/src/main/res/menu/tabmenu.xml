@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_option1"
+        android:name="Close This" />
+    <item 
+        android:id="@+id/action_option2"
+        android:name="Close Others"/>
+    <item
+        android:id="@+id/action_option3"
+        android:name=" Close All" />
+
+</menu>

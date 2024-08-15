@@ -137,14 +137,7 @@
                          android:padding="8dp"
                          style="?android:progressBarStyleHorizontal"
                          android:id="@+id/progressbar1" />
-                    <com.google.android.material.tabs.TabLayout
-                      android:layout_height="wrap_content"
-                         android:layout_width="match_parent"
-                         android:padding="8dp"
-                         android:id="@+id/tab"
-                        android:background="@android:color/transparent"
-                        app:tabGravity="start"
-                        app:tabMode="scrollable"/>
+                    
                     <androidx.recyclerview.widget.RecyclerView
                          android:layout_height="wrap_content"
                          android:layout_width="match_parent"

@@ -110,10 +110,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.nio.file.Paths;
 
-public String getFilenameFromPath(String filePath) {
-    Path path = Paths.get(filePath);
-    return path.getFileName().toString();
-}
+
 
 
 public class CodeEditorActivity extends AppCompatActivity {
@@ -165,7 +162,7 @@ public class CodeEditorActivity extends AppCompatActivity {
   private LinearLayout newLayoutSymbolBar;
   private LinearLayout CustomToolbar;
   private ProgressBar progressbar1;
-  private TabLayout tab;
+  
   private RecyclerView recyclerview1;
   private RecyclerView dir;
   private LinearLayout divar;
@@ -313,7 +310,7 @@ public class CodeEditorActivity extends AppCompatActivity {
     menupopnew = findViewById(R.id.menupopnew);
     editor = findViewById(R.id.editor);
     FrameLayout02 = findViewById(R.id.FrameLayout02);
-        tab = findViewById(R.id.tab);
+        
     linear3 = findViewById(R.id.linear3);
     proanjctor = findViewById(R.id.proanjctor);
     barSymoble = findViewById(R.id.barSymoble);
@@ -1101,10 +1098,10 @@ public class CodeEditorActivity extends AppCompatActivity {
     view.startAnimation(fade_in);
   }
 
-public String getFilenameFromPath() {
+/*public String getFilenameFromPath() {
     Path path = Paths.get(shp.getString("path",""));
-    return path.getFileName().toString();
-}
+    return path.getFileName().toString();*/
+
 
 
   public void ReloadFileInPos() {
@@ -1119,7 +1116,7 @@ public String getFilenameFromPath() {
         recyclerview1.setLayoutManager(
             new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
                // tab.addTab(tab.newTab().setText(tabby));
-                 tab.addTab(tab.newTab().setText(getFilenameFromPath()));
+                 //tab.addTab(tab.newTab().setText(getFilenameFromPath()));
       }
     }
     if (FileUtil.isExistFile(shp.getString("pos_path", ""))) {
