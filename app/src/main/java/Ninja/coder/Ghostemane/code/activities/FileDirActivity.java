@@ -591,28 +591,7 @@ public class FileDirActivity extends BaseCompat
                     gotoback++;
                     if (gotoback == 3) {
                       Chack = false;
-                      isCopyAndMoved = false;
-
-                      /* new GhostWebMaterialDialog(FileDirActivity.this)
-                      .setTitle(getResources().getString(R.string.exitapp))
-                      .setMessage(getResources().getString(R.string.exitappmsg))
-                      .setNeutralButton(
-                          getResources().getString(R.string.yes),
-                          (p, d) -> {
-                            gotoback = 0;
-                            finishAffinity();
-                          })
-                      .setPositiveButton(
-                          getResources().getString(R.string.no),
-                          (p1, d2) -> {
-                            gotoback = 0;
-                          })
-                      .setCancelable(false)
-                      .show();*/
                       finish();
-
-                    } else {
-                      // DataUtil.showMessage(getApplicationContext(), "برای خروج ۳ بار کلیک کنید");
                     }
                   } else {
 
@@ -624,32 +603,10 @@ public class FileDirActivity extends BaseCompat
                     gotoback++;
                     if (gotoback == 3) {
                       Chack = false;
-                      isCopyAndMoved = false;
-
-                      /* new GhostWebMaterialDialog(FileDirActivity.this)
-                      .setTitle(getResources().getString(R.string.exitapp))
-                      .setMessage(getResources().getString(R.string.exitappmsg))
-                      .setNeutralButton(
-                          getResources().getString(R.string.yes),
-                          (p, d) -> {
-                            gotoback = 0;
-                            finishAffinity();
-                          })
-                      .setPositiveButton(
-                          getResources().getString(R.string.no),
-                          (p1, d2) -> {
-                            gotoback = 0;
-                          })
-                      .setCancelable(false)
-                      .show();*/
                       finish();
-
-                    } else {
-                      // DataUtil.showMessage(getApplicationContext(), "برای خروج ۳ بار کلیک کنید");
-                    }
+                    } 
                   } else {
                     Folder = Folder.substring((int) (0), (int) (Folder.lastIndexOf("/")));
-
                     reLoadFile();
                   }
                 }
@@ -2057,12 +2014,7 @@ public class FileDirActivity extends BaseCompat
                               + "theme.AA"));
 
               ArrayList filesToAdd = new ArrayList<>();
-              var iconPath =
-                  getFilesDir().getAbsoluteFile()
-                      + File.separator
-                      + "files"
-                      + File.separator
-                      + "icon.png";
+              var iconPath = getFilesDir().getAbsoluteFile() + "/";
               filesToAdd.add(new File(iconPath));
               filesToAdd.add(new File("/sdcard/GhostWebIDE/theme/GhostThemeapp.ghost"));
 
@@ -2102,13 +2054,8 @@ public class FileDirActivity extends BaseCompat
                 new File(
                     "/storage/emulated/0/GhostWebIDE/" + DataUtil.getRandom(1, 200) + "theme.AA"));
 
-        ArrayList filesToAdd = new ArrayList<>();
-        var iconPath =
-            getFilesDir().getAbsoluteFile()
-                + File.separator
-                + "files"
-                + File.separator
-                + "icon.png";
+        List<File> filesToAdd = new ArrayList<>();
+        var iconPath = getFilesDir().getAbsoluteFile() + "/";
         filesToAdd.add(new File(iconPath));
         filesToAdd.add(new File("/sdcard/GhostWebIDE/theme/GhostThemeapp.ghost"));
 

@@ -209,7 +209,8 @@ public class VideoViewsActivity extends BaseCompat {
             VideoViewsActivity.this,
             requestCode,
             new Intent(ACTION_MEDIA_CONTROL).putExtra(EXTRA_CONTROL_TYPE, controlType),
-            PendingIntent.FLAG_MUTABLE);
+            PendingIntent.FLAG_IMMUTABLE);
+
     final Icon icon = Icon.createWithResource(VideoViewsActivity.this, iconId);
     actions.add(new RemoteAction(icon, title, title, intent));
 

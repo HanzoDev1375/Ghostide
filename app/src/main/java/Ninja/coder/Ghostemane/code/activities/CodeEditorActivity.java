@@ -688,8 +688,8 @@ public class CodeEditorActivity extends AppCompatActivity {
     themeForJson2.addImageColor(image, this, "ImageColor", imap, Color.parseColor("#ff94e7ff"));
     themeForJson2.addImageColor(
         menupopnew, this, "ImageColor", imap, Color.parseColor("#ff94e7ff"));
-    themeForJson2.setFabBackground(_fab,imap);
-    themeForJson2.setFabColorHint(_fab,imap);
+    themeForJson2.setFabBackground(_fab, imap);
+    themeForJson2.setFabColorHint(_fab, imap);
     AnimUtils.ClickAnimation(menupopnew);
 
     AnimUtils.ClickAnimation(undo);
@@ -1179,7 +1179,7 @@ public class CodeEditorActivity extends AppCompatActivity {
     recyclerview1.getAdapter().notifyDataSetChanged();
   }
 
-  public void _powerMenuLisner(
+  public void setPowerMenuCallBack(
       final View _v, final ArrayList<HashMap<String, Object>> _map, int _pos) {
     itemPosRemoved = _pos;
 
@@ -1492,8 +1492,9 @@ public class CodeEditorActivity extends AppCompatActivity {
 
   public class Recyclerview1Adapter extends RecyclerView.Adapter<Recyclerview1Adapter.ViewHolder> {
 
-    ArrayList<HashMap<String, Object>> _data;
-    int currentTabIndex = -1;
+    private ArrayList<HashMap<String, Object>> _data;
+    private int currentTabIndex = -1;
+    private String dataChange = "";
 
     public Recyclerview1Adapter(ArrayList<HashMap<String, Object>> _arr) {
       _data = _arr;
@@ -1525,17 +1526,14 @@ public class CodeEditorActivity extends AppCompatActivity {
               ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
       _view.setLayoutParams(_lp);
       var pathFileindir = _data.get(_position).get("path").toString();
-      var fileIconHelper = new FileIconHelper(pathFileindir);
-      fileIconHelper.bindIcon(imageview1);
-      imageview1.setImageResource(fileIconHelper.getFileIcon());
+      dataChange = Uri.parse(_data.get(_position).get("path").toString()).getLastPathSegment();
 
       if (_data.isEmpty()) {
       } else {
         var ideColors = new IdeColorCompat(editor);
         ideColors.Colors(selector, textview1);
-        datas = Uri.parse(_data.get(_position).get("path").toString()).getLastPathSegment();
-        textview1.setText(
-            Uri.parse(_data.get(_position).get("path").toString()).getLastPathSegment());
+
+        textview1.setText(dataChange);
         ideColors.setImageShow(imageloadereditor, pathFileindir);
 
         if (FileUtil.isDirectory(pathFileindir)) {
@@ -1580,7 +1578,7 @@ public class CodeEditorActivity extends AppCompatActivity {
                     selector.setVisibility(View.VISIBLE);
                     n = 0;
                     if (currentTabIndex == _position) {
-                      _powerMenuLisner(linear5, _data, _position);
+                      setPowerMenuCallBack(linear5, _data, _position);
                     } else {
                       currentTabIndex = _position;
                     }
@@ -1615,7 +1613,6 @@ public class CodeEditorActivity extends AppCompatActivity {
     public int getItemCount() {
       return _data.size();
     }
-
     public class ViewHolder extends RecyclerView.ViewHolder {
       public ViewHolder(View v) {
         super(v);

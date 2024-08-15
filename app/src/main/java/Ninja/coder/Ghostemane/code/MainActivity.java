@@ -98,7 +98,7 @@ public class MainActivity extends BaseCompat {
     var phpPath =
         getFilesDir().getAbsolutePath() + File.separator + "lib" + File.separator + "libx265.so";
     var ghostPath = "/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost";
-    var iconPath = getFilesDir().getAbsoluteFile() + File.separator + "files" + File.separator + "icon.png";
+    var iconPath = getFilesDir().getAbsoluteFile() + "/";
     
     if(!FileUtil.isExistFile(iconPath)) {
     	AssetsSoft soft = new AssetsSoft();
