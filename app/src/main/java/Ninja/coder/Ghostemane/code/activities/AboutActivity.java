@@ -13,6 +13,7 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.activity.OnBackPressedCallback;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
@@ -25,12 +26,12 @@ import java.util.List;
 
 public class AboutActivity extends BaseCompat {
   protected TextView tv_about_name;
-  protected RecyclerView rv_about_dev;
+//  protected RecyclerView rv_about_dev;
   protected DevAd devAd;
   protected List<DevModel> listModel = new ArrayList<>();
   private RequestNetwork sazndeh, DevSazandeh;
   private RequestNetwork.RequestListener devCallBack, DevUser;
-  private ImageView appicon;
+ // private ImageView appicon;
   public static String ApiURL = "https://api.github.com/users/HanzoDev1375";
   public static String DevList = "https://api.github.com/repos/HanzoDev1375/Ghostide/contributors";
 
@@ -43,10 +44,10 @@ public class AboutActivity extends BaseCompat {
 
   private void start() {
 
-    appicon = findViewById(R.id.icon_glide_about);
-    tv_about_name = findViewById(R.id.tv_about_name);
-    rv_about_dev = findViewById(R.id.rv_about_dev);
-    GlideCompat.GlideNormal(appicon, R.mipmap.ghosticon);
+    //appicon = findViewById(R.id.icon_glide_about);
+    //tv_about_name = findViewById(R.id.tv_about_name);
+   // rv_about_dev = findViewById(R.id.rv_about_dev);
+   // GlideCompat.GlideNormal(appicon, R.mipmap.ghosticon);
 
     sazndeh = new RequestNetwork(this);
     DevSazandeh = new RequestNetwork(this);
@@ -58,9 +59,9 @@ public class AboutActivity extends BaseCompat {
             listModel.add(new DevModel(getIconDev(respanse)));
             devAd = new DevAd(listModel, (v, c) -> {});
 
-            rv_about_dev.setAdapter(devAd);
-            rv_about_dev.setLayoutManager(
-                new LinearLayoutManager(AboutActivity.this, RecyclerView.VERTICAL, false));
+        //    rv_about_dev.setAdapter(devAd);
+        //    rv_about_dev.setLayoutManager(
+              //  new GridLayoutManager(AboutActivity.this, 3));
           }
 
           @Override
@@ -72,7 +73,7 @@ public class AboutActivity extends BaseCompat {
           @Override
           public void onResponse(String _param1, String respanse, HashMap<String, Object> _param3) {
             getElementUser(respanse);
-            // listModel.add(new DevModel(getIconDev(respanse)));
+            listModel.add(new DevModel(getIconDev(respanse)));
           }
 
           @Override
@@ -111,9 +112,9 @@ public class AboutActivity extends BaseCompat {
     try {
       JSONObject object = new JSONObject(input);
       String imageUrl = object.getString("avatar_url");
-      String userName = object.getString("login");
-      Glide.with(getApplicationContext()).load(Uri.parse(imageUrl)).circleCrop().into(appicon);
-      tv_about_name.setText(userName);
+      //String userName = object.getString("login");
+      //Glide.with(getApplicationContext()).load(Uri.parse(imageUrl)).circleCrop().into(appicon);
+ //     tv_about_name.setText(userName);
     } catch (JSONException err) {
 
     }

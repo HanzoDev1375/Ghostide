@@ -10,8 +10,8 @@
      android:id="@+id/root2001">
 
     <ImageView
-         android:layout_height="100dp"
-         android:layout_width="100dp"
+         android:layout_height="50dp"
+         android:layout_width="50dp"
          android:layout_marginBottom="3dp"
          android:layout_marginVertical="2dp"
          android:src="@drawable/ic_material_cpp"
