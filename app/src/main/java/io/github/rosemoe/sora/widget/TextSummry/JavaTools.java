@@ -2,20 +2,17 @@ package io.github.rosemoe.sora.widget.TextSummry;
 
 import Ninja.coder.Ghostemane.code.IdeEditor;
 import Ninja.coder.Ghostemane.code.config.CreatorComment;
+import Ninja.coder.Ghostemane.code.config.GetterSetterGenerator;
 import Ninja.coder.Ghostemane.code.databinding.MakefolderBinding;
 import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
-import Ninja.coder.Ghostemane.code.R;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import io.github.rosemoe.sora.langs.java.JavaLanguage;
 import io.github.rosemoe.sora.widget.SymbolChannel;
 import io.github.rosemoe.sora.widget.Transilt;
 import io.github.rosemoe.sora.widget.schemes.SchemeDarcula;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import android.view.LayoutInflater;
 import android.content.Context;
@@ -93,7 +90,7 @@ public class JavaTools {
           } else if (pos == 7) {
             Transilt.Start(editor);
           } else if (pos == 8) {
-            installDialogGetSet(editor, context);
+            GetterSetterGenerator.main(context,editor.getText().toString(),(IdeEditor)editor);
           } else if (pos == 9) {
             item.StringFog(editor);
           }else if(pos == 10){
@@ -178,81 +175,6 @@ public class JavaTools {
     } catch (Exception e) {
       e.printStackTrace();
     }
-  }
-
-  public String getterSetter(final ArrayList<HashMap<String, Object>> _data) {
-    try {
-      String head = "";
-      String body = "";
-      for (int xx = 0; xx < _data.size(); xx++) {
-        String type = _data.get(xx).get("type").toString();
-        String name = _data.get(xx).get("name").toString().toLowerCase().trim();
-        String besar = name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
-        head += "  private " + type + " " + name + ";\n";
-        if (_data.get(xx).get("type").toString().equals("boolean")) {
-          body +=
-              "  public void set"
-                  + besar
-                  + "("
-                  + type
-                  + " "
-                  + name
-                  + ") {\n   this."
-                  + name
-                  + " = "
-                  + name
-                  + ";\n  }\n\n  public "
-                  + type
-                  + " is"
-                  + besar
-                  + "() {\n   return this."
-                  + name
-                  + ";\n  }\n\n";
-        } else {
-          body +=
-              "  public void set"
-                  + besar
-                  + "("
-                  + type
-                  + " "
-                  + name
-                  + ") {\n   this."
-                  + name
-                  + " = "
-                  + name
-                  + ";\n  }\n\n  public "
-                  + type
-                  + " get"
-                  + besar
-                  + "() {\n   return this."
-                  + name
-                  + ";\n  }\n\n";
-        }
-      }
-      return (head + "\n" + body);
-    } catch (Exception e) {
-      // Handle the exception, or log it
-    }
-    return null;
-  }
-
-  public void installDialogGetSet(CodeEditor editor, Context context) {
-    var dialogs = new MaterialAlertDialogBuilder(context);
-    dialogs.setTitle("Type your value");
-    var v = LayoutInflater.from(context).inflate(R.layout.javatools_layout_getset, null, false);
-    dialogs.setView(v);
-    EditText type = v.findViewById(R.id.type);
-    EditText value = v.findViewById(R.id.value);
-    mmap = new HashMap<>();
-    mmap.put("type", type.getText().toString());
-    mmap.put("value", value.getText().toString());
-    dialogs.setPositiveButton(
-        "make",
-        (p, f) -> {
-          editor.setText(getterSetter(map));
-        });
-
-    dialogs.show();
   }
 
   public void makeComment(Context c, CodeEditor editors) {

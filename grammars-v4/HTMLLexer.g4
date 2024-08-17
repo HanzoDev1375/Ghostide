@@ -1145,3 +1145,7 @@ CHATREF
    : '#' HexDigit+
    ;
 
+LinkLiteral
+   : ('http' 's'? | 'ftp' | 'file') '://' [a-zA-Z0-9./?=]+
+   ;
+   

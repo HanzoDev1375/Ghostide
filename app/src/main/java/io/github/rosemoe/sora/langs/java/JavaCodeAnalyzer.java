@@ -1,5 +1,6 @@
 package io.github.rosemoe.sora.langs.java;
 
+
 import Ninja.coder.Ghostemane.code.IdeEditor;
 import Ninja.coder.Ghostemane.code.databin.DiagnosticWrapper;
 import android.graphics.Color;
@@ -437,7 +438,9 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
         first = false;
       }
       info.finish();
-      markDiagnostics(editor, mDiagnostics, result);
+      
+      JavaCodeA code = new JavaCodeA();
+      code.analyze(content,result,delegate);
       result.determine(lastLine);
       result.setExtra(info);
 
