@@ -24,8 +24,7 @@ public class PhpErrorManager implements CodeAnalyzer {
       TextAnalyzeResult colors,
       TextAnalyzer.AnalyzeThread.Delegate delegate) {
     try {
-      PhpLexer lexer =
-          new PhpLexer(CharStreams.fromReader(new StringReader(content.toString())));
+      PhpLexer lexer = new PhpLexer(CharStreams.fromReader(new StringReader(content.toString())));
       CommonTokenStream stream = new CommonTokenStream(lexer);
       PhpParser parser = new PhpParser(stream);
       ParseTree grammarSpecContext = parser.htmlDocument();
@@ -46,7 +45,23 @@ public class PhpErrorManager implements CodeAnalyzer {
             @Override
             public void visitTerminal(TerminalNode node) {
               // TODO: Implement this method
-              Log.d("Token Type", "Current Token Type: " + node.getSymbol().getType());
+              Log.d("Token Type", "Current Token Type: " + node.getSymbol().getText());
+            }
+
+            @Override
+            public void enterArrayItem(PhpParser.ArrayItemContext ctx) {
+              var node = ctx.Ampersand();
+              int line = node.getSymbol().getLine();
+              int col = node.getSymbol().getCharPositionInLine();
+              Utils.setSpanEFO(colors, line, col, EditorColorScheme.ATTRIBUTE_VALUE);
+              Log.w(
+                  "SpanEFO ",
+                  "Line : "
+                      + String.valueOf(line)
+                      + "Col : "
+                      + String.valueOf(col)
+                      + "Text : "
+                      + node.getText());
             }
           };
       ParseTreeWalker walker = new ParseTreeWalker();

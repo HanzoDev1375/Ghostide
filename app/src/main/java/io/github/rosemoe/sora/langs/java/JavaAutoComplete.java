@@ -1,6 +1,5 @@
 package io.github.rosemoe.sora.langs.java;
 
-
 import io.github.rosemoe.sora.data.CompletionItem;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
 
@@ -10,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
-import lsp4custom.com.ninjacoder.customhtmllsp.CodeSnippet;
 
 public class JavaAutoComplete implements AutoCompleteProvider {
 
@@ -47,9 +45,12 @@ public class JavaAutoComplete implements AutoCompleteProvider {
           words.add(new CompletionItem(word, "Identifier"));
         }
       }
+
       Collections.sort(words, CompletionItem.COMPARATOR_BY_NAME);
       keywords.addAll(words);
     }
+    
+
     return keywords;
   }
 

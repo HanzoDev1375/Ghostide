@@ -460,6 +460,9 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
                     EditorColorScheme.ATTRIBUTE_NAME, 0, false, false, false, false, true));
 
             break;
+          case HTMLLexer.LinkLiteral:
+          result.addIfNeeded(line,column,EditorColorScheme.Ninja);
+          break;
           default:
             result.addIfNeeded(line, column, EditorColorScheme.TEXT_NORMAL);
 

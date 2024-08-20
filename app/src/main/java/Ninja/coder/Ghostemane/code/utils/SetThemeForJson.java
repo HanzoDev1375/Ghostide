@@ -19,6 +19,8 @@ import com.google.android.material.color.MaterialColors;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import io.github.rosemoe.sora.text.TextStyle;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
 
@@ -273,8 +275,49 @@ public class SetThemeForJson {
             + File.separator
             + "GhostThemeapp.ghost";
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    TreeMap<String, String> sortedMap = new TreeMap<>(map);
-    FileIOUtils.writeFileFromString(path, gson.toJson(sortedMap));
+    FileIOUtils.writeFileFromString(path, gson.toJson(map));
     // FileUtil.writeFile(path, gson.toJson(sortedMap));
+    Map<String, Boolean> StyleText = new HashMap<>();
+    StyleText.put("isBold", true);
+    StyleText.put("isItalic", false);
+    StyleText.put("isStrike", false);
+    StyleText.put("isLine", false);
+    var customPath =
+        FileUtil.getExternalStorageDir()
+            + File.separator
+            + "GhostWebIDE"
+            + File.separator
+            + "theme"
+            + File.separator
+            + "style.ghost";
+    Gson styleGson = new GsonBuilder().setPrettyPrinting().create();
+    FileIOUtils.writeFileFromString(customPath, gson.toJson(StyleText));
+  }
+
+
+  public static void LoadStyle(Map<String, Boolean> map) {
+    map = new Gson().fromJson(setReloadStyle(), new TypeToken<Map<String, Boolean>>() {}.getType());
+  }
+
+  public static String setReloadTheme() {
+    return FileUtil.readFile(
+        FileUtil.getExternalStorageDir()
+            + File.separator
+            + "GhostWebIDE"
+            + File.separator
+            + "theme"
+            + File.separator
+            + "style.ghost");
+  }
+
+  public static String setReloadStyle() {
+    return FileUtil.readFile(
+        FileUtil.getExternalStorageDir()
+            + File.separator
+            + "GhostWebIDE"
+            + File.separator
+            + "theme"
+            + File.separator
+            + "style.ghost");
   }
 }

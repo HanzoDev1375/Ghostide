@@ -37,7 +37,7 @@ public class SplashWord extends AppIntro2 {
     var phpPath =
         getFilesDir().getAbsolutePath() + File.separator + "lib" + File.separator + "libx265.so";
     var ghostPath = "/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost";
-
+    var ghostStyle = "/storage/emulated/0/GhostWebIDE/theme/style.ghost";
     TestFragment t1 =
         TestFragment.newIns(
             "filePer.json", "به گوست وب خوش امدید لطفا مجوز فایل را بدهید", "مجوز فایل", false);
@@ -50,7 +50,10 @@ public class SplashWord extends AppIntro2 {
 
     TestFragment t2 =
         TestFragment.newIns(
-            "theme.json", "لطفا تم را نصب کنید", "تم", !FileUtil.isExistFile(ghostPath));
+            "theme.json",
+            "لطفا تم را نصب کنید",
+            "تم",
+            !FileUtil.isExistFile(ghostPath) || !FileUtil.isExistFile(ghostStyle));
     t2.setCallBack(
         () -> {
           try {

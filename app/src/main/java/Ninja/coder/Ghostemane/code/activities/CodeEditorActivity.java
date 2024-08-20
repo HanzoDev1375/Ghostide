@@ -1582,6 +1582,7 @@ public class CodeEditorActivity extends AppCompatActivity {
                     } else {
                       currentTabIndex = _position;
                     }
+
                   } else {
                     selector.setVisibility(View.GONE);
                     setDistreeView();
@@ -1613,6 +1614,7 @@ public class CodeEditorActivity extends AppCompatActivity {
     public int getItemCount() {
       return _data.size();
     }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
       public ViewHolder(View v) {
         super(v);

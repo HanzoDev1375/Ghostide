@@ -1,10 +1,12 @@
 package io.github.rosemoe.sora.langs.java;
 
-
 import Ninja.coder.Ghostemane.code.IdeEditor;
 import Ninja.coder.Ghostemane.code.databin.DiagnosticWrapper;
+import Ninja.coder.Ghostemane.code.utils.SetThemeForJson;
 import android.graphics.Color;
 import androidx.core.graphics.ColorUtils;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import io.github.rosemoe.sora.util.TrieTree;
 import java.util.ArrayList;
 import io.github.rosemoe.sora.text.CharPosition;
@@ -13,7 +15,9 @@ import io.github.rosemoe.sora.data.Span;
 import io.github.rosemoe.sora.text.Indexer;
 import io.github.rosemoe.sora.text.TextStyle;
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.HashSet;
@@ -36,6 +40,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
   private final List<DiagnosticWrapper> mDiagnostics;
   private static final Object OBJECT = new Object();
   private Set<Integer> usedColors = new HashSet<>();
+  private Map<String, Boolean> mapStyle;
 
   private static final int MAX_BRACE_COUNT = Integer.MAX_VALUE;
   private static final int[] BRACE_COLORS = {
@@ -74,6 +79,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
       TextAnalyzeResult result,
       TextAnalyzer.AnalyzeThread.Delegate delegate) {
     try {
+
       IdeEditor editor = mEditorReference.get();
       if (editor == null) {
         return;
@@ -173,10 +179,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           case JavaLexer.VOLATILE:
           case JavaLexer.WHILE:
           case JavaLexer.VAR:
-            result.addIfNeeded(
-                line,
-                column,
-                TextStyle.makeStyle(EditorColorScheme.KEYWORD, 0, true, false, false, false));
+          get(EditorColorScheme.KEYWORD,line,column,result);
             break;
           case JavaLexer.DECIMAL_LITERAL:
           case JavaLexer.HEX_LITERAL:
@@ -287,7 +290,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           case JavaLexer.COLONCOLON:
           case JavaLexer.ELLIPSIS:
           case JavaLexer.DOT:
-            result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
+            get(EditorColorScheme.OPERATOR, line, column, result);
             break;
           case JavaLexer.BOOLEAN:
           case JavaLexer.BYTE:
@@ -298,7 +301,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           case JavaLexer.INT:
           case JavaLexer.LONG:
           case JavaLexer.SHORT:
-            result.addIfNeeded(line, column, EditorColorScheme.ATTRIBUTE_VALUE);
+            get(EditorColorScheme.ATTRIBUTE_VALUE,line,column,result);
             break;
           case JavaLexer.BLOCK_COMMENT:
           case JavaLexer.LINE_COMMENT:
@@ -326,8 +329,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                   || previous == JavaLexer.IMPORT) {
                 colorid = EditorColorScheme.LITERAL;
               }
-              if (previous == JavaLexer.VOID
-                  || previous == JavaLexer.EXTENDS
+              if (previous == JavaLexer.EXTENDS
                   || previous == JavaLexer.FLOAT_LITERAL
                   || previous == JavaLexer.BOOLEAN) {
                 colorid = getRandomColor();
@@ -356,9 +358,9 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               if (previous == JavaLexer.COMMA || previous == JavaLexer.ASSIGN) {
                 colorid = EditorColorScheme.OPERATOR;
               }
-
               /// test
-              result.addIfNeeded(line, column, colorid);
+              
+                get(colorid,line,column,result);
               break;
             }
 
@@ -374,18 +376,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               }
               var lists = result.getBlocks();
               int colorid = EditorColorScheme.OPERATOR;
-              for (int i = 1; i < lists.size(); ++i) {
-                if (i == 1) {
-                  colorid = EditorColorScheme.OPERATOR;
-                } else if (i == 2) {
-                  colorid = EditorColorScheme.Ninja;
-                } else if (i == 3) {
-                  colorid = EditorColorScheme.HTML_TAG;
-                } else {
-                  continue;
-                }
-              }
-              result.addIfNeeded(line, column, colorid);
+            //   result.addIfNeeded(line, column, colorid);
               break;
             }
 
@@ -397,18 +388,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               stack.push(block); // اضافه کردن بلوک به استک
               var lists = result.getBlocks();
               int colorid = EditorColorScheme.OPERATOR;
-              for (int i = 1; i < lists.size(); ++i) {
-                if (i == 1) {
-                  colorid = EditorColorScheme.OPERATOR;
-                } else if (i == 2) {
-                  colorid = EditorColorScheme.Ninja;
-                } else if (i == 3) {
-                  colorid = EditorColorScheme.HTML_TAG;
-                } else {
-                  continue;
-                }
-              }
-              result.addIfNeeded(line, column, colorid);
+         //     result.addIfNeeded(line, column, colorid);
               // بررسی maxSwitch
               if (stack.isEmpty()) {
                 if (currSwitch > maxSwitch) {
@@ -438,9 +418,10 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
         first = false;
       }
       info.finish();
-      
+
       JavaCodeA code = new JavaCodeA();
-      code.analyze(content,result,delegate);
+      code.analyze(content, result, delegate);
+
       result.determine(lastLine);
       result.setExtra(info);
 
@@ -517,5 +498,25 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
     Random random = new Random();
     int color = colors[random.nextInt(colors.length)];
     return color;
+  }
+
+  private void get(int color, int line, int col, TextAnalyzeResult result) {
+    mapStyle = new HashMap<>();
+    mapStyle =
+        new Gson()
+            .fromJson(
+                SetThemeForJson.setReloadStyle(),
+                new TypeToken<Map<String, Boolean>>() {}.getType());
+
+    result.addIfNeeded(
+        line,
+        col,
+        TextStyle.makeStyle(
+            color,
+            0,
+            mapStyle.get("isBold").booleanValue(),
+            mapStyle.get("isItalic").booleanValue(),
+            mapStyle.get("isStrike").booleanValue(),
+            mapStyle.get("isLine").booleanValue()));
   }
 }

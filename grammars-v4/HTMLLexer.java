@@ -1,5 +1,5 @@
 // Generated from /storage/emulated/0/AndroidIDEProjects/Ghost-web-ide/grammars-v4/HTMLLexer.g4 by ANTLR 4.13.1
-package Ninja.coder.Ghostemane.code;
+package io.github.rosemoe.sora.langs.html;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
