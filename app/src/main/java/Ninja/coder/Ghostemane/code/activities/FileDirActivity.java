@@ -1810,31 +1810,9 @@ public class FileDirActivity extends BaseCompat
         });
     dialog.show();
   }
-
-  public void DrowerHandler() {
-
-    navs.getMenu().add(0, 1, 0, "SanDisk Card").setIcon(R.drawable.drawer_item12);
-    navs.getMenu().add(0, 2, 0, "Java code").setIcon(R.drawable.drawer_item14);
-    navs.getMenu().add(0, 3, 0, "Terminal").setIcon(R.drawable.drawer_item13);
-    navs.getMenu().add(0, 4, 0, "Settings").setIcon(R.drawable.drawer_item15);
-    navs.getMenu().add(0, 5, 0, "LogCat Reader").setIcon(R.drawable.drawer_item6);
-    navs.getMenu().add(0, 6, 0, "Icon Shop").setIcon(R.drawable.icshop);
-    navs.getMenu().add(0, 7, 0, "Update App").setIcon(R.drawable.drawer_item8);
-    navs.getMenu().add(0, 8, 0, "Plugins Manager").setIcon(R.drawable.drawer_item5);
-    navs.getMenu().add(0, 9, 0, "Backup Theme").setIcon(R.drawable.drawer_item7);
-    navs.getMenu().add(0, 10, 0, "Bookmarks (Beta)").setIcon(R.drawable.drawer_item4);
-    navs.getMenu().add(0, 11, 0, "Apk Manager").setIcon(R.drawable.drawer_item3);
-    navs.getMenu().add(0, 12, 0, "About").setIcon(R.drawable.drawer_item11);
-    navs.getMenu().add(0, 13, 0, "Leave").setIcon(R.drawable.drawer_item1);
-
-    navs.bringToFront();
-    navs.setClick(
-        (item) -> {
-          navs.setCheckedItem(item.getItemId());
-          switch ((int) item.getItemId()) {
-            case ((int) 1):
-              {
-                runOnUiThread(
+  
+  private void setSanDisk(){
+  runOnUiThread(
                     new Runnable() {
                       @Override
                       public void run() {
@@ -1860,11 +1838,21 @@ public class FileDirActivity extends BaseCompat
                         }
                       }
                     });
+  } 
 
+  public void DrowerHandler() {
+    navs.bringToFront();
+    navs.setClick(
+        (item) -> {
+          navs.setCheckedItem(item.getItemId());
+          switch ((int) item.getItemId()) {
+            case 1:
+              {
+                setSanDisk(); 
                 break;
               }
 
-            case ((int) 2):
+            case 2:
               {
                 getJavaLayoutManager.setClass(
                     getApplicationContext(), JavaManagerLayoutActivity.class);
@@ -1872,13 +1860,13 @@ public class FileDirActivity extends BaseCompat
                 startActivity(getJavaLayoutManager);
                 break;
               }
-            case ((int) 3):
+            case 3:
               {
                 void10.setClass(getApplicationContext(), TerminalActivity.class);
                 startActivity(void10);
                 break;
               }
-            case ((int) 4):
+            case 4:
               {
                 intentgetSettings.setClass(getApplicationContext(), SettingAppActivity.class);
                 startActivity(intentgetSettings);
@@ -1970,7 +1958,7 @@ public class FileDirActivity extends BaseCompat
                               + "theme.AA"));
 
               ArrayList filesToAdd = new ArrayList<>();
-              var iconPath = getFilesDir().getAbsoluteFile() + "/" + "files" + "/icon.png";
+              var iconPath = getFilesDir().getAbsoluteFile() + "/icon.png";
               filesToAdd.add(new File(iconPath));
               filesToAdd.add(new File("/sdcard/GhostWebIDE/theme/GhostThemeapp.ghost"));
 
@@ -1993,7 +1981,7 @@ public class FileDirActivity extends BaseCompat
                     "/storage/emulated/0/GhostWebIDE/" + DataUtil.getRandom(1, 200) + "theme.AA"));
 
         List<File> filesToAdd = new ArrayList<>();
-        var iconPath = getFilesDir().getAbsoluteFile() + "/" + "files" + "/icon.png";
+        var iconPath = getFilesDir().getAbsoluteFile() + "/icon.png";
         filesToAdd.add(new File(iconPath));
         filesToAdd.add(new File("/sdcard/GhostWebIDE/theme/GhostThemeapp.ghost"));
 

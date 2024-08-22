@@ -170,4 +170,19 @@
     <string name="customthemesub">You can using custom theme (.ghost ) file in All File Path</string>
     <string name="customblursizetitle">Blur size in Background</string>
     <string name="customblursizesubtitle">You can select Size Blur in background using 1 ~ 25</string>
+    <string name="codeaztitles">Code analyzer</string>
+    <string name="codeazsubtitle">Turn off this option if your memory is low or you do not have a good mobile</string>
+    <string name="materialyoutitle">Material You!</string>
+    <string name="materialyousubtitle">Enable dynamic colors automatically and Try a Best Color expirence</string>
+  
+    <string name="effect_title">Beautiful effect</string>
+    <string name="effect_description">By activating this option, the background will have a small vibration</string>
+    <string name="grids_title">Grid Mode</string>
+    <string name="grids_description">This option is for those who are tired of the normal mode and want to have a better experience</string>
+    <string name="walpapersystem_title">Get System Wallpaper</string>
+    <string name="walpapersystem_description">With this option, you can get the system background</string>
+    <string name="deftheme_title">Default Theme</string>
+    <string name="deftheme_description">By activating this option, the program theme is not read from Json by default</string>
+    <string name="autoSaveText_title">Auto Save</string>
+    <string name="autoSaveText_description">You do not need to click the save button with the auto save activation.</string>
 </resources>

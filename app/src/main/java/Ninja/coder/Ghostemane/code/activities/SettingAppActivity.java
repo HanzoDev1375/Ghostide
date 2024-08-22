@@ -80,30 +80,13 @@ public class SettingAppActivity extends BaseCompat {
       autoSaveText,
       codeAZ;
   private ObjectAnimator mdownObjectAnimator = new ObjectAnimator();
-  private SharedPreferences mt300;
   private TimerTask timer;
-  private SharedPreferences lb,
-      word,
-      line,
-      mfs,
-      getvb,
-      getDark,
-      re,
+  private SharedPreferences getvb,
       war,
-      tab100,
       setfont,
-      atx,
       ru,
-      tmp,
-      auto,
-      tabimageview,
       getDrak,
-      moalaqfragment,
       sve,
-      getinitdir,
-      mthemepost,
-      shSizePx,
-      setac,
       materialYou,
       thememanagersoft,
       sf,
@@ -140,29 +123,13 @@ public class SettingAppActivity extends BaseCompat {
     themeEngine.setThemeMode(ThemeMode.DARK);
     themeEngine.applyToActivity(this);
     bar = findViewById(R.id.bar);
-
-    word = getSharedPreferences("word", Activity.MODE_PRIVATE);
-    line = getSharedPreferences("line", Activity.MODE_PRIVATE);
-    mfs = getSharedPreferences("mfs", Activity.MODE_PRIVATE);
     getvb = getSharedPreferences("getvb", Activity.MODE_PRIVATE);
     getDrak = getSharedPreferences("getDrak", Activity.MODE_PRIVATE);
-    re = getSharedPreferences("re", Activity.MODE_PRIVATE);
     war = getSharedPreferences("war", Activity.MODE_PRIVATE);
-    tab100 = getSharedPreferences("tab100", Activity.MODE_PRIVATE);
     setfont = getSharedPreferences("setfont", Activity.MODE_PRIVATE);
-    atx = getSharedPreferences("atx", Activity.MODE_PRIVATE);
     ru = getSharedPreferences("ru", Activity.MODE_PRIVATE);
-    tmp = getSharedPreferences("tmp", Activity.MODE_PRIVATE);
-    auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
-    tabimageview = getSharedPreferences("tabimageview", Activity.MODE_PRIVATE);
-    moalaqfragment = getSharedPreferences("moalaqfragment", Activity.MODE_PRIVATE);
-    mt300 = getSharedPreferences("mt300", Activity.MODE_PRIVATE);
-    lb = getSharedPreferences("lb", Activity.MODE_PRIVATE);
     sve = getSharedPreferences("sve", Activity.MODE_PRIVATE);
-    getinitdir = getSharedPreferences("getinitdir", Activity.MODE_PRIVATE);
-    mthemepost = getSharedPreferences("mthemepost", Activity.MODE_PRIVATE);
-    shSizePx = getSharedPreferences("shSizePx", Activity.MODE_PRIVATE);
-    setac = getSharedPreferences("setac", Activity.MODE_PRIVATE);
+
     materialYou = getSharedPreferences("materialYou", Activity.MODE_PRIVATE);
     thememanagersoft = getSharedPreferences("thememanagersoft", Activity.MODE_PRIVATE);
     sf = getSharedPreferences("sf", Activity.MODE_PRIVATE);
@@ -177,26 +144,21 @@ public class SettingAppActivity extends BaseCompat {
     rvsetting = findViewById(R.id.rvsetting);
     rvtools = findViewById(R.id.rvtools);
     codeAZ = findViewById(R.id.codeAZ);
-    codeAZ.setTitle("Code analyzer");
-    codeAZ.setDescription(
-        "Turn off this option if your memory is low or you do not have a good mobile");
-    materialYous.setTitle("MaterialYou");
-    materialYous.setDescription(
-        "Enable dynamic colors automatically and Try a Best Color expirence");
-    effect.setTitle("Beautiful effect");
-    effect.setDescription("By activating this option, the background will have a small vibration");
-    grids.setTitle("Grid Mode ");
-    grids.setDescription(
-        "This option is for those who are tired of the normal mode and want to have a better experience ");
-    walpapersystem.setTitle("Get SystemWallpaper ");
-    walpapersystem.setDescription("With this option, you can get the system background");
-    deftheme.setTitle("Default theme ");
-    deftheme.setDescription(
-        "By activating this option, the program theme is not read from Json by default");
+    codeAZ.setTitle(getString(R.string.codeaztitles));
+    codeAZ.setDescription(getString(R.string.codeazsubtitle));
+    materialYous.setTitle(getString(R.string.materialyoutitle));
+    materialYous.setDescription(getString(R.string.materialyousubtitle));
+    effect.setTitle(getString(R.string.effect_title));
+    effect.setDescription(getString(R.string.effect_description));
+    grids.setTitle(getString(R.string.grids_title));
+    grids.setDescription(getString(R.string.grids_description));
+    walpapersystem.setTitle(getString(R.string.walpapersystem_title));
+    walpapersystem.setDescription(getString(R.string.walpapersystem_description));
+    deftheme.setTitle(getString(R.string.deftheme_title));
+    deftheme.setDescription(getString(R.string.deftheme_description));
 
-    autoSaveText.setTitle("Auto Save");
-    autoSaveText.setDescription(
-        "You do not need to click the save button with the auto save activation.");
+    autoSaveText.setTitle(getString(R.string.autoSaveText_title));
+    autoSaveText.setDescription(getString(R.string.autoSaveText_description));
 
     List<LayoutModel> layoutModel = new ArrayList<>();
 

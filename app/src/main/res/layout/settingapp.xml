@@ -119,18 +119,6 @@
                     
                 />
 
-                <dev.trindadedev.lib.ui.components.preference.Preference
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:layout_marginBottom="3dp"
-                    app:preferenceDescription="@string/Keyboard_settingsdesc"
-                    app:preferenceTitle="@string/Keyboard_settings"
-                    android:layout_marginTop="3dp"
-                    android:text="@string/Keyboard_settings"
-                    android:id="@+id/keyboardsettings"
-                    
-                />
-
 
             </LinearLayout>
 

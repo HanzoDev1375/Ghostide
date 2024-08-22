@@ -59,11 +59,28 @@
     <string name="wallmode">دریافت عکس از پس زمینه سیستم</string>
     <string name="apkwar">اخطار!!</string>
     <string name="apkversionError">ببخشید امکان اشتراک گذاری برنامه در اندروید شما نیست شما میتوانید در پوشه دانلود و پوشه apk فایل .apk را با برنامه اشتراک گذاری کنید</string>
-    <string name="themetitle">ویرایشگر تم کد ادیتور </string>
+    <string name="themetitle">ویرایشگر تم کد ادیتور</string>
     <string name="themesubtitle">با کمک این گزینه میتوانید تم گوست وب را ادیت کنید و کاملا شخصی سازی کنید</string>
     <string name="customthemetitle">تم شخصی سازی شده</string>
-    <string name="customthemesub">با استفاده از این گزینه میتوانید تم شخصی خودتان را با پسوند (.ghost)  اعمال کنید. </string>
-    <string name="customblursizetitle">سایز شفاف کردن پس زمینه </string>
+    <string name="customthemesub">با استفاده از این گزینه میتوانید تم شخصی خودتان را با پسوند (.ghost) اعمال کنید.</string>
+    <string name="customblursizetitle">سایز شفاف کردن پس زمینه</string>
     <string name="customblursizesubtitle">شما میتوانید سایز شفاف سازی پس زمینه را بین 1 تا 25 صدا کنید طبق قوانین اندروید</string>
+    <string name="codeaztitles">آنالیز گر کد</string>
+    <string name="codeazsubtitle">با فعال کردن این گزینه در مصرف رم صرفه جوی کنید.</string>
+    <string name="materialyoutitle">رنگ های پویا!</string>
+    <string name="materialyousubtitle">رنگ های پویا را به طور خودکار فعال کنید و بهترین تجربه رنگ را امتحان کنید</string>
+
+
+    <string name="effect_title">اثر زیبا</string>
+    <string name="effect_description">با فعال‌سازی این گزینه، پس‌زمینه دارای لرزش کوچک خواهد بود</string>
+    <string name="grids_title">حالت شبکه</string>
+    <string name="grids_description">این گزینه برای کسانی است که از حالت عادی خسته شده‌اند و می‌خواهند تجربه بهتری داشته باشند</string>
+    <string name="walpapersystem_title">دریافت تصویر پس‌زمینه سیستم</string>
+    <string name="walpapersystem_description">با این گزینه می‌توانید تصویر پس‌زمینه سیستم را دریافت کنید</string>
+    <string name="deftheme_title">تم پیش‌فرض</string>
+    <string name="deftheme_description">با فعال کردن این گزینه، تم برنامه به‌طور پیش‌فرض از Json خوانده نمی‌شود</string>
+    <string name="autoSaveText_title">ذخیره خودکار</string>
+    <string name="autoSaveText_description">با فعال‌سازی ذخیره‌ی خودکار، نیازی به کلیک روی دکمه‌ی ذخیره نیست.</string>
+
 
 </resources>
