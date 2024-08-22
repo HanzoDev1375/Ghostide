@@ -315,9 +315,6 @@
             android:name=".activities.GouidHtmlActivity"
         />
         <activity
-            android:name=".activities.ResultActivity"
-        />
-        <activity
             android:name=".activities.MianbarActivity"
         />
         <activity
@@ -353,64 +350,6 @@
         >
 
         </activity>
-        <activity-alias
-            android:name=".activities.BrowserActivitys"
-            android:label="web"
-            android:exported="true"
-            android:targetActivity=".activities.BrowserActivity"
-            
-        >
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="http" />
-                <data android:scheme="https" />
-                <data android:scheme="about" />
-                <data android:scheme="javascript" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:scheme="http" />
-                <data android:scheme="https" />
-                <data android:scheme="file" />
-                <data android:scheme="content" />
-                <data android:scheme="inline" />
-                <data android:mimeType="text/html" />
-                <data android:mimeType="text/plain" />
-                <data android:mimeType="application/xhtml+xml" />
-                <data android:mimeType="application/vnd.wap.xhtml+xml" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:scheme="http" />
-                <data android:scheme="https" />
-                <data android:scheme="file" />
-                <data android:scheme="content" />
-                <data android:mimeType="application/x-webarchive-xml" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.speech.action.VOICE_SEARCH_RESULTS" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.WEB_SEARCH" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.MEDIA_SEARCH" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-
-        </activity-alias>
 
         <activity
             android:name=".activities.PdfViewNewActivity"
@@ -489,31 +428,6 @@
             android:name="Ninja.coder.Ghostemane.code.keyboard.Setting"
         >
         </activity>
-        <activity
-            android:name="Ninja.coder.Ghostemane.code.keyboard.Theme" />
-        <activity
-            android:name="Ninja.coder.Ghostemane.code.keyboard.Background" />
-        <activity
-            android:name="Ninja.coder.Ghostemane.code.keyboard.Save" />
-        <activity
-            android:name="Ninja.coder.Ghostemane.code.keyboard.Reset" />
-
-        <service
-            android:label="GhostWebIdeKeyboardv1"
-            android:exported="false"
-            android:name="Ninja.coder.Ghostemane.code.keyboard.KeyboardSamsung"
-            android:permission="android.permission.BIND_INPUT_METHOD"
-            
-        >
-            <meta-data
-                android:name="android.view.im"
-                android:resource="@xml/method"
-                
-            />
-            <intent-filter>
-                <action android:name="android.view.InputMethod" />
-            </intent-filter>
-        </service>
 
         <activity-alias
             android:name=".MainActivityred"

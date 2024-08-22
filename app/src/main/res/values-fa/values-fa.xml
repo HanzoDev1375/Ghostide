@@ -54,8 +54,16 @@
     <string name="MaterialYou">رنگ های داینامیک</string>
     <string name="customtheme">تم دلخواه</string>
     <string name="customwindows">سایز پنجره تکمیل کننده</string>
+    <string name="customwindowsdesc">با استفاده از این گزینه میتوانید سایز پنجره تکمیل کننده متن را در 3 حالت تنظیم کنید</string>
     <string name="gridmode">نمای کاشی</string>
     <string name="wallmode">دریافت عکس از پس زمینه سیستم</string>
     <string name="apkwar">اخطار!!</string>
     <string name="apkversionError">ببخشید امکان اشتراک گذاری برنامه در اندروید شما نیست شما میتوانید در پوشه دانلود و پوشه apk فایل .apk را با برنامه اشتراک گذاری کنید</string>
+    <string name="themetitle">ویرایشگر تم کد ادیتور </string>
+    <string name="themesubtitle">با کمک این گزینه میتوانید تم گوست وب را ادیت کنید و کاملا شخصی سازی کنید</string>
+    <string name="customthemetitle">تم شخصی سازی شده</string>
+    <string name="customthemesub">با استفاده از این گزینه میتوانید تم شخصی خودتان را با پسوند (.ghost)  اعمال کنید. </string>
+    <string name="customblursizetitle">سایز شفاف کردن پس زمینه </string>
+    <string name="customblursizesubtitle">شما میتوانید سایز شفاف سازی پس زمینه را بین 1 تا 25 صدا کنید طبق قوانین اندروید</string>
+
 </resources>

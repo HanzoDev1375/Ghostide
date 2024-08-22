@@ -123,7 +123,7 @@
     <string name="posttheme">Enabel TransParanet Theme Editor</string>
     <string name="pvr">PM</string>
     <string name="acset">Select a old activity</string>
-    <string name="bl_size">Blur Size </string>
+    <string name="bl_size">Blur Size</string>
     <string name="bl_sizedesc">When Get SystemWallpaper is Enabled you can actually set Blur size from 1 to 25</string>
     <string name="setting">Settings</string>
     <string name="javacodes">Java codes</string>
@@ -142,7 +142,7 @@
     <string name="customtheme">Custom Theme</string>
     <string name="customthemedesc">Import Your .ghost Theme to theme and enjoy your colored theme</string>
     <string name="customwindows">Windowflags Mode</string>
-    <string name="customwindowsdesc">Ensure the right Window Mode for systembars for your device </string>
+    <string name="customwindowsdesc">Ensure the right Window Mode for systembars for your device</string>
     <string name="resource">Resource</string>
     <string name="resource_manager">Resource Manager</string>
     <string name="debug">Debug</string>
@@ -159,10 +159,15 @@
     <string name="wallmode">Wallpaper System mode</string>
     <string name="apkwar">Warning!!</string>
     <string name="apkversionError">Sorry, it is not possible to share the program on your Android. You can share the .apk file with the program in the download folder and the apk folder.</string>
-    <string name="settings_char_preview">Character Preview </string>
-    <string name="settings_display_row"> Display Row Of Numbers</string>
+    <string name="settings_char_preview">Character Preview</string>
+    <string name="settings_display_row">Display Row Of Numbers</string>
     <string name="settings_keyboard_height">Keyboard Height</string>
     <string name="drawer_subtitles">The Everythings IDE</string>
     <string name="drawer_title">Ghost IDE</string>
-
+    <string name="themetitle">EditorTheme</string>
+    <string name="themesubtitle">Select Custom Theme in Code Editor and Winter Ghost file</string>
+    <string name="customthemetitle">Custom Theme</string>
+    <string name="customthemesub">You can using custom theme (.ghost ) file in All File Path</string>
+    <string name="customblursizetitle">Blur size in Background</string>
+    <string name="customblursizesubtitle">You can select Size Blur in background using 1 ~ 25</string>
 </resources>

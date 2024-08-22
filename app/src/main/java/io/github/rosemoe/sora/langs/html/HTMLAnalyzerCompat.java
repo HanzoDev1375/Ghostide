@@ -363,19 +363,6 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
                 colorid = EditorColorScheme.OPERATOR;
               }
 
-              try {
-                Document doc = Jsoup.parse(content.toString());
-                Elements jsElements = doc.select("script");
-                for (Element jsElement : jsElements) {
-                  String jsCode = jsElement.html();
-                  var jsError = new BasicSyntaxHtmlAnalyzerMod();
-                  jsError.run(jsCode,result);
-                  Log.w("LoaderJsoup", jsCode);
-                }
-              } catch (Exception err) {
-
-              }
-
               ListCss3Color.initColor(token, line, column, result, true);
               result.addIfNeeded(line, column, colorid);
               break;
@@ -461,8 +448,8 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
 
             break;
           case HTMLLexer.LinkLiteral:
-          result.addIfNeeded(line,column,EditorColorScheme.Ninja);
-          break;
+            result.addIfNeeded(line, column, EditorColorScheme.Ninja);
+            break;
           default:
             result.addIfNeeded(line, column, EditorColorScheme.TEXT_NORMAL);
 
@@ -482,8 +469,10 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
 
         first = false;
       }
+      
+      var jsMode = new BasicSyntaxHtmlAnalyzerMod();
+      jsMode.analyze(content, result, delegate);
       result.determine(lastLine);
-
     } catch (IOException e) {
       e.printStackTrace();
       Log.e("TAG", e.getMessage());

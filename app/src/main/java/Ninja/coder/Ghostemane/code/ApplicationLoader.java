@@ -29,7 +29,7 @@ public class ApplicationLoader extends Application {
   // from terminal
   // recreate()
   private static SharedPreferences prfns;
-  protected static SharedPreferences materialYou, getvb, setfont, ru, save_path, thememanagersoft;
+  protected static SharedPreferences materialYou, getvb, setfont, ru, save_path, thememanagersoft,Analyzercod;
   private static Context mApplicationContext;
   private static Activity activity;
   private static IdeEditor editor;
@@ -82,6 +82,7 @@ public class ApplicationLoader extends Application {
     setfont = getSharedPreferences("setfont", MODE_PRIVATE);
     save_path = getSharedPreferences("path", MODE_PRIVATE);
     ru = getSharedPreferences("ru", MODE_PRIVATE);
+    Analyzercod = getSharedPreferences("Analyzercod",MODE_PRIVATE);
     thememanagersoft = getSharedPreferences("thememanagersoft", MODE_PRIVATE);
     prfns = PreferenceManager.getDefaultSharedPreferences(this);
     try (SassCompiler compiler = AndroidSassCompilerFactory.bundled(this)) {
@@ -173,6 +174,10 @@ public class ApplicationLoader extends Application {
 
   public static SharedPreferences getPrefManager() {
     return prfns;
+  }
+  
+  public static SharedPreferences getAnalyzercod(){
+    return Analyzercod;
   }
 
   public static ThemeEngine getThemeEngine() {

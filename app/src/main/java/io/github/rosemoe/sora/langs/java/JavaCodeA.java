@@ -1,5 +1,6 @@
 package io.github.rosemoe.sora.langs.java;
 
+import Ninja.coder.Ghostemane.code.ApplicationLoader;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -33,24 +34,26 @@ class JavaCodeA implements CodeAnalyzer {
       TextAnalyzeResult result,
       TextAnalyzer.AnalyzeThread.Delegate delegate) {
     try {
+      if (ApplicationLoader.getAnalyzercod().getBoolean("Analyzercod",false) == true) {
 
-      ANTLRInputStream input = new ANTLRInputStream(content.toString());
-      Java20Lexer lexer = new Java20Lexer(input);
-      CommonTokenStream stream = new CommonTokenStream(lexer);
-      Java20Parser paser = new Java20Parser(stream);
-      Java20ParserBaseListener base =
-          new Java20ParserBaseListener() {
-            @Override
-            public void visitErrorNode(ErrorNode node) {
-              super.visitErrorNode(node);
-              // TODO: Implement this method
-              int line = node.getSymbol().getLine();
-              int col = node.getSymbol().getCharPositionInLine();
-              int[] errorMatch = Utils.setErrorSpan(result, line, col);
-            }
-          };
-      ParseTreeWalker tree = new ParseTreeWalker();
-      tree.walk(base, paser.start_());
+        ANTLRInputStream input = new ANTLRInputStream(content.toString());
+        Java20Lexer lexer = new Java20Lexer(input);
+        CommonTokenStream stream = new CommonTokenStream(lexer);
+        Java20Parser paser = new Java20Parser(stream);
+        Java20ParserBaseListener base =
+            new Java20ParserBaseListener() {
+              @Override
+              public void visitErrorNode(ErrorNode node) {
+                super.visitErrorNode(node);
+                // TODO: Implement this method
+                int line = node.getSymbol().getLine();
+                int col = node.getSymbol().getCharPositionInLine();
+                int[] errorMatch = Utils.setErrorSpan(result, line, col);
+              }
+            };
+        ParseTreeWalker tree = new ParseTreeWalker();
+        tree.walk(base, paser.start_());
+      }
       Set<String> un = new HashSet<>();
       Set<String> cun = new HashSet<>();
       Set<String> contextName = new HashSet<>();
@@ -89,10 +92,8 @@ class JavaCodeA implements CodeAnalyzer {
 
                 int line = it.getNameAsExpression().getBegin().get().line;
                 int col =
-                    it.getNameAsExpression()
-                        .getBegin()
-                        .get()
-                        .column +2; // +2 برای قرار گرفتن پس از نوع
+                    it.getNameAsExpression().getBegin().get().column
+                        + 2; // +2 برای قرار گرفتن پس از نوع
                 Utils.setSpanEFO(result, line, col, EditorColorScheme.OPERATOR);
               }
               super.visit(md, arg1);
@@ -104,7 +105,7 @@ class JavaCodeA implements CodeAnalyzer {
 
               if (!un.contains(methodName)) {
                 int line = n.getBegin().get().line;
-                int col = n.getBegin().get().column +2;
+                int col = n.getBegin().get().column + 2;
                 Utils.setWaringSpan(result, line, col);
                 if (n.isStatic()) {
                   Utils.setSpanEFO(result, line, col, EditorColorScheme.HTML_TAG);
@@ -121,11 +122,8 @@ class JavaCodeA implements CodeAnalyzer {
                         contextName.add(paramName);
                         int line = param.getNameAsExpression().getBegin().get().line;
                         int col =
-                            param
-                                .getNameAsExpression()
-                                .getBegin()
-                                .get()
-                                .column +2; // موقعیت نام پارامتر
+                            param.getNameAsExpression().getBegin().get().column
+                                + 2; // موقعیت نام پارامتر
                         Utils.setSpanEFO(result, line, col, EditorColorScheme.Ninja);
                       });
 

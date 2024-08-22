@@ -37,6 +37,7 @@ public class ItemLayoutAdapterMod extends RecyclerView.Adapter<ItemLayoutAdapter
       if(label instanceof CallBackLabel) {
       	label.click(v,pos);
       }
+        
     });
   }
 

@@ -86,7 +86,6 @@ public class BrowserActivity extends BaseCompat implements NetworkChangeReceiver
     }
     view.getSettings().setAllowFileAccess(true);
     view.getSettings().setLoadWithOverviewMode(true);
-    view.loadUrl(getIntent().getStringExtra("test"));
     networkChangeReceiver = new NetworkChangeReceiver(this);
     IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
     this.registerReceiver(networkChangeReceiver, filter);
@@ -123,9 +122,7 @@ public class BrowserActivity extends BaseCompat implements NetworkChangeReceiver
     // TODO: Implement this method
     int id = menu.getItemId();
     if (id == R.id.reload) {
-      Uri uri = getIntent().getData();
-      String s = uri.toString();
-      view.loadUrl(getIntent().hasExtra("test") ? getIntent().getStringExtra("test") : s);
+      view.loadUrl(getIntent().getStringExtra("test"));
       bar.setVisibility(View.VISIBLE);
       return true;
     } else if (id == R.id.back_to_home) {
@@ -149,9 +146,9 @@ public class BrowserActivity extends BaseCompat implements NetworkChangeReceiver
     // TODO: Implement this method
     emptyView.setVisibility(View.GONE);
     view.setVisibility(View.VISIBLE);
-    Uri uri = getIntent().getData();
-    String s = uri.toString();
-    view.loadUrl(getIntent().hasExtra("test") ? getIntent().getStringExtra("test") : s);
+    if (getIntent().hasExtra("test")) {
+      view.loadUrl(getIntent().getStringExtra("test"));
+    }
     bar.setVisibility(View.VISIBLE);
   }
 

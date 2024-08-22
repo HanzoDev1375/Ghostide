@@ -94,41 +94,45 @@ public class PythonErrorManager implements CodeAnalyzer {
   }
 
   void showmenu(IdeEditor editor) {
-    var menu = new PowerMenu.Builder(editor.getContext()).setIsMaterial(true).build();
-    for (var it : errorMassges) {
-      menu.addItem(new PowerMenuItem(it + " Click to DisMiss "));
-    }
-    menu.setShowBackground(false);
-    var handler = new Handler(Looper.getMainLooper());
-    handler.postDelayed(
-        () -> {
-          menu.dismiss();
-        },
-        3000);
-    menu.setAnimation(MenuAnimation.FADE);
-    menu.setMenuRadius(20f);
-    menu.setMenuColor(MaterialColors.getColor(editor.getContext(), ColorAndroid12.Back, 0));
-    menu.setTextColor(
-        MaterialColors.getColor(editor.getContext(), ColorAndroid12.ColorAConNormal, 0));
-    int top;
-    var cursor = editor.getCursor();
-    if (cursor.isSelected()) {
-      var leftRect = editor.getLeftHandleDescriptor().position;
-      var rightRect = editor.getRightHandleDescriptor().position;
-      int top1 = selectTop(leftRect);
-      int top2 = selectTop(rightRect);
-      top = Math.min(top1, top2);
-    } else {
-      top = selectTop(editor.getInsertHandleDescriptor().position);
-    }
+    /// show editor in select in Cursor
+    if (editor.getCursor().isSelected()) {
 
-    top = Math.max(0, Math.min(top, editor.getHeight() - 5));
-    float handleLeftX =
-        editor.getOffset(editor.getCursor().getLeftLine(), editor.getCursor().getLeftColumn());
-    float handleRightX =
-        editor.getOffset(editor.getCursor().getRightLine(), editor.getCursor().getRightColumn());
-    int panelX = (int) ((handleLeftX + handleRightX) / 2f);
-    menu.showAtLocation(editor, panelX, top);
+      var menu = new PowerMenu.Builder(editor.getContext()).setIsMaterial(true).build();
+      for (var it : errorMassges) {
+        menu.addItem(new PowerMenuItem(it + " Click to Dissmiss "));
+      }
+      menu.setShowBackground(false);
+      var handler = new Handler(Looper.getMainLooper());
+      handler.postDelayed(
+          () -> {
+            menu.dismiss();
+          },
+          2000);
+      menu.setAnimation(MenuAnimation.FADE);
+      menu.setMenuRadius(20f);
+      menu.setMenuColor(MaterialColors.getColor(editor.getContext(), ColorAndroid12.Back, 0));
+      menu.setTextColor(
+          MaterialColors.getColor(editor.getContext(), ColorAndroid12.ColorAConNormal, 0));
+      int top;
+      var cursor = editor.getCursor();
+      if (cursor.isSelected()) {
+        var leftRect = editor.getLeftHandleDescriptor().position;
+        var rightRect = editor.getRightHandleDescriptor().position;
+        int top1 = selectTop(leftRect);
+        int top2 = selectTop(rightRect);
+        top = Math.min(top1, top2);
+      } else {
+        top = selectTop(editor.getInsertHandleDescriptor().position);
+      }
+
+      top = Math.max(0, Math.min(top, editor.getHeight() - 5));
+      float handleLeftX =
+          editor.getOffset(editor.getCursor().getLeftLine(), editor.getCursor().getLeftColumn());
+      float handleRightX =
+          editor.getOffset(editor.getCursor().getRightLine(), editor.getCursor().getRightColumn());
+      int panelX = (int) ((handleLeftX + handleRightX) / 2f);
+      menu.showAtLocation(editor, panelX, top);
+    }
   }
 
   private int selectTop(RectF rect) {

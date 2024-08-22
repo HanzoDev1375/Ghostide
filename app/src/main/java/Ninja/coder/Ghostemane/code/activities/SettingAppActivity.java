@@ -72,7 +72,13 @@ public class SettingAppActivity extends BaseCompat {
   private FastScrollNestedScrollView bar;
   private RecyclerView rvsetting, rvtools;
   private Intent intent = new Intent();
-  private SwitchMaterialPrf materialYous, effect, grids, walpapersystem, deftheme, autoSaveText;
+  private SwitchMaterialPrf materialYous,
+      effect,
+      grids,
+      walpapersystem,
+      deftheme,
+      autoSaveText,
+      codeAZ;
   private ObjectAnimator mdownObjectAnimator = new ObjectAnimator();
   private SharedPreferences mt300;
   private TimerTask timer;
@@ -101,7 +107,8 @@ public class SettingAppActivity extends BaseCompat {
       materialYou,
       thememanagersoft,
       sf,
-      gridMode;
+      gridMode,
+      Analyzercod;
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
@@ -160,6 +167,7 @@ public class SettingAppActivity extends BaseCompat {
     thememanagersoft = getSharedPreferences("thememanagersoft", Activity.MODE_PRIVATE);
     sf = getSharedPreferences("sf", Activity.MODE_PRIVATE);
     gridMode = getSharedPreferences("gride", Activity.MODE_PRIVATE);
+    Analyzercod = getSharedPreferences("Analyzercod", MODE_PRIVATE);
     materialYous = findViewById(R.id.MaterialYou);
     grids = findViewById(R.id.gridmod);
     effect = findViewById(R.id.effect);
@@ -168,6 +176,10 @@ public class SettingAppActivity extends BaseCompat {
     autoSaveText = findViewById(R.id.autoSaveText);
     rvsetting = findViewById(R.id.rvsetting);
     rvtools = findViewById(R.id.rvtools);
+    codeAZ = findViewById(R.id.codeAZ);
+    codeAZ.setTitle("Code analyzer");
+    codeAZ.setDescription(
+        "Turn off this option if your memory is low or you do not have a good mobile");
     materialYous.setTitle("MaterialYou");
     materialYous.setDescription(
         "Enable dynamic colors automatically and Try a Best Color expirence");
@@ -187,9 +199,17 @@ public class SettingAppActivity extends BaseCompat {
         "You do not need to click the save button with the auto save activation.");
 
     List<LayoutModel> layoutModel = new ArrayList<>();
-    
-    layoutModel.add(new LayoutModel(getString(R.string.theme), getString(R.string.theme)));
-    layoutModel.add(new LayoutModel(getString(R.string.customwindowsdesc), getString(R.string.customwindows)));
+
+    layoutModel.add(
+        new LayoutModel(getString(R.string.themesubtitle), getString(R.string.themetitle)));
+    layoutModel.add(
+        new LayoutModel(getString(R.string.customwindowsdesc), getString(R.string.customwindows)));
+    layoutModel.add(
+        new LayoutModel(getString(R.string.customthemesub), getString(R.string.customthemetitle)));
+
+    layoutModel.add(
+        new LayoutModel(
+            getString(R.string.customblursizesubtitle), getString(R.string.customblursizetitle)));
     var it =
         new ItemLayoutAdapterMod(
             layoutModel,
@@ -205,19 +225,205 @@ public class SettingAppActivity extends BaseCompat {
                       startActivity(intent);
                       break;
                     }
+                  case 1:
+                    {
+                      var di = new GhostWebMaterialDialog(SettingAppActivity.this);
+                      ViewGroup viewGroup = findViewById(android.R.id.content);
+                      View dialogview =
+                          getLayoutInflater().inflate(R.layout.lifesacel, viewGroup, false);
+                      RadioButton r1 = dialogview.findViewById(R.id.r1);
+                      RadioButton r2 = dialogview.findViewById(R.id.r2);
+                      RadioButton r3 = dialogview.findViewById(R.id.r3);
+                      di.setPositiveButton(
+                          "OK",
+                          (p1, d2) -> {
+                            int selectedValue = 1;
+                            r1.setOnCheckedChangeListener(
+                                (cdmnull, isCh) -> {
+                                  if (sf.getInt("sd100", 1) == 1) {
+                                    sf.edit().putInt("sd100", 1).apply();
+
+                                  } else {
+                                    sf.edit().remove("sd100");
+                                  }
+                                });
+                            r2.setOnCheckedChangeListener(
+                                (cdmnull, isCh) -> {
+                                  if (sf.getInt("sd100", 1) == 2) {
+                                    sf.edit().putInt("sd100", 2).apply();
+
+                                  } else {
+                                    sf.edit().remove("sd100");
+                                  }
+                                });
+                            r3.setOnCheckedChangeListener(
+                                (cdmnull, isCh) -> {
+                                  if (sf.getInt("sd100", 1) == 3) {
+                                    sf.edit().putInt("sd100", 3).apply();
+
+                                  } else {
+                                    sf.edit().remove("sd100");
+                                  }
+                                });
+
+                            if (r1.isChecked()) {
+                              selectedValue = 1;
+                            } else if (r2.isChecked()) {
+                              selectedValue = 2;
+                            } else if (r3.isChecked()) {
+                              selectedValue = 3;
+                            }
+
+                            sf.edit().putInt("sd100", selectedValue).apply();
+                          });
+                      if (sf.getInt("sd100", 1) == 1) {
+                        r1.setChecked(true);
+                        r2.setChecked(false);
+                        r3.setChecked(false);
+                      } else if (sf.getInt("sd100", 1) == 2) {
+                        r2.setChecked(true);
+                        r1.setChecked(false);
+                        r3.setChecked(false);
+                      } else if (sf.getInt("sd100", 1) == 3) {
+                        r3.setChecked(true);
+                        r1.setChecked(false);
+                        r2.setChecked(false);
+                      } else {
+                        r2.setChecked(false);
+                        r1.setChecked(false);
+                        r3.setChecked(false);
+                      }
+                      di.setView(dialogview);
+                      di.show();
+                      break;
+                    }
+                  case 2:
+                    {
+                      androidx.appcompat.app.AlertDialog dialog =
+                          new GhostWebMaterialDialog(SettingAppActivity.this)
+                              .setView(R.layout.fontsetlector)
+                              .setTitle("Custom Theme")
+                              .setMessage("Select Theme in format .ghost")
+                              .setCancelable(true)
+                              .setPositiveButton("ok", null)
+                              .setNegativeButton(android.R.string.cancel, null)
+                              .setNeutralButton("پیشفرض", null)
+                              .create();
+                      dialog.setOnShowListener(
+                          (var) -> {
+                            Button positive = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                            Button np =
+                                dialog.getButton(android.content.DialogInterface.BUTTON_NEUTRAL);
+                            com.google.android.material.textfield.TextInputLayout input =
+                                dialog.findViewById(R.id.input);
+
+                            EditText edit = dialog.findViewById(R.id.edit);
+
+                            final Handler handler = new Handler();
+                            handler.postDelayed(
+                                new Runnable() {
+                                  @Override
+                                  public void run() {
+                                    if (thememanagersoft.contains("themes")
+                                        && !thememanagersoft.getString("themes", "").equals("")) {
+                                      edit.setText(thememanagersoft.getString("themes", ""));
+                                    }
+                                  }
+                                },
+                                100);
+                            edit.setHint("Set .ghost file");
+                            ColorAndroid12.setTextColor(edit);
+                            if (edit.getText().toString().isEmpty()) {
+                              positive.setEnabled(false);
+                            } else {
+                              positive.setEnabled(true);
+                            }
+                            positive.setOnClickListener(
+                                (vftrororocjj) -> {
+                                  thememanagersoft
+                                      .edit()
+                                      .putString("themes", edit.getText().toString())
+                                      .commit();
+                                  dialog.dismiss();
+                                  Toast.makeText(
+                                          getApplicationContext(),
+                                          "Theme : "
+                                              .concat(
+                                                  edit.getText()
+                                                      .toString()
+                                                      .trim()
+                                                      .concat(" اعمال شد")),
+                                          2)
+                                      .show();
+                                });
+                            edit.addTextChangedListener(
+                                new android.text.TextWatcher() {
+                                  @Override
+                                  public void onTextChanged(
+                                      CharSequence _param1, int _param2, int _param3, int _param4) {
+                                    final String _charSeq = _param1.toString();
+
+                                    if (edit.getText().toString().isEmpty()
+                                        && edit.getText().toString().endsWith("")) {
+                                      positive.setEnabled(false);
+                                    } else {
+                                      positive.setEnabled(true);
+                                    }
+                                  }
+
+                                  @Override
+                                  public void beforeTextChanged(
+                                      CharSequence _param1,
+                                      int _param2,
+                                      int _param3,
+                                      int _param4) {}
+
+                                  @Override
+                                  public void afterTextChanged(android.text.Editable _param1) {}
+                                });
+                            np.setOnClickListener(
+                                (vftrororocjj) -> {
+                                  thememanagersoft.edit().remove("themes").commit();
+                                  DataUtil.showMessage(
+                                      getApplicationContext(), "تم پیشفرض اعمال شد");
+                                  dialog.dismiss();
+                                });
+                            if (thememanagersoft.contains("themes")
+                                && thememanagersoft.getString("themes", "").equals("")) {
+                              edit.setText(thememanagersoft.getString("themes", ""));
+                            }
+                          });
+                      final View view = dialog.getWindow().getDecorView();
+                      dialog
+                          .getWindow()
+                          .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+                      view.setScaleX(0f);
+                      view.setScaleY(0f);
+                      final ObjectAnimator alertAnim = new ObjectAnimator();
+                      final ObjectAnimator alertAnim1 = new ObjectAnimator();
+                      alertAnim.setTarget(view);
+                      alertAnim.setPropertyName("scaleX");
+                      alertAnim.setFloatValues((float) (1));
+                      alertAnim.setDuration((int) (250));
+                      alertAnim.start();
+                      alertAnim1.setTarget(view);
+                      alertAnim1.setPropertyName("scaleY");
+                      alertAnim1.setFloatValues((float) (1));
+                      alertAnim1.setDuration((int) (250));
+                      alertAnim1.start();
+                      dialog.show();
+                      break;
+                    }
+                  case 3:
+                    {
+                      _blursize();
+                      break;
+                    }
                 }
               }
             });
     rvtools.setAdapter(it);
     rvtools.setLayoutManager(new LinearLayoutManager(this));
-
-    findViewById(R.id.keyboardsettings)
-        .setOnClickListener(
-            (c) -> {
-              intent.setClass(getApplicationContext(), ResultActivity.class);
-              startActivity(intent);
-            });
-
     thememanagersoft.registerOnSharedPreferenceChangeListener(
         new SharedPreferences.OnSharedPreferenceChangeListener() {
 
@@ -251,6 +457,10 @@ public class SettingAppActivity extends BaseCompat {
             thememanagersoft.edit().putString("thememanagersoft", "no").apply();
           }
         });
+    codeAZ.setSwitchChangedListener(
+        (btn, i) -> {
+          Analyzercod.edit().putBoolean("Analyzercod", i).apply();
+        });
 
     grids.setSwitchChangedListener(
         (cc, is) -> {
@@ -268,199 +478,6 @@ public class SettingAppActivity extends BaseCompat {
             thememanagersoft.edit().remove("effect").apply();
           }
         });
-    findViewById(R.id.blursize)
-        .setOnClickListener(
-            c -> {
-              _blursize();
-            });
-
-    findViewById(R.id.themefile)
-        .setOnClickListener(
-            new View.OnClickListener() {
-              @Override
-              public void onClick(View _view) {
-                androidx.appcompat.app.AlertDialog dialog =
-                    new GhostWebMaterialDialog(SettingAppActivity.this)
-                        .setView(R.layout.fontsetlector)
-                        .setTitle("Custom Theme")
-                        .setMessage("Select Theme in format .ghost")
-                        .setCancelable(true)
-                        .setPositiveButton("ok", null)
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .setNeutralButton("پیشفرض", null)
-                        .create();
-                dialog.setOnShowListener(
-                    (var) -> {
-                      Button positive = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-                      Button np = dialog.getButton(android.content.DialogInterface.BUTTON_NEUTRAL);
-                      com.google.android.material.textfield.TextInputLayout input =
-                          dialog.findViewById(R.id.input);
-
-                      EditText edit = dialog.findViewById(R.id.edit);
-
-                      final Handler handler = new Handler();
-                      handler.postDelayed(
-                          new Runnable() {
-                            @Override
-                            public void run() {
-                              if (thememanagersoft.contains("themes")
-                                  && !thememanagersoft.getString("themes", "").equals("")) {
-                                edit.setText(thememanagersoft.getString("themes", ""));
-                              }
-                            }
-                          },
-                          100);
-                      edit.setHint("Set .ghost file");
-                      ColorAndroid12.setTextColor(edit);
-                      if (edit.getText().toString().isEmpty()) {
-                        positive.setEnabled(false);
-                      } else {
-                        positive.setEnabled(true);
-                      }
-                      positive.setOnClickListener(
-                          (vftrororocjj) -> {
-                            thememanagersoft
-                                .edit()
-                                .putString("themes", edit.getText().toString())
-                                .commit();
-                            dialog.dismiss();
-                            Toast.makeText(
-                                    getApplicationContext(),
-                                    "Theme : "
-                                        .concat(
-                                            edit.getText().toString().trim().concat(" اعمال شد")),
-                                    2)
-                                .show();
-                          });
-                      edit.addTextChangedListener(
-                          new android.text.TextWatcher() {
-                            @Override
-                            public void onTextChanged(
-                                CharSequence _param1, int _param2, int _param3, int _param4) {
-                              final String _charSeq = _param1.toString();
-
-                              if (edit.getText().toString().isEmpty()
-                                  && edit.getText().toString().endsWith("")) {
-                                positive.setEnabled(false);
-                              } else {
-                                positive.setEnabled(true);
-                              }
-                            }
-
-                            @Override
-                            public void beforeTextChanged(
-                                CharSequence _param1, int _param2, int _param3, int _param4) {}
-
-                            @Override
-                            public void afterTextChanged(android.text.Editable _param1) {}
-                          });
-                      np.setOnClickListener(
-                          (vftrororocjj) -> {
-                            thememanagersoft.edit().remove("themes").commit();
-                            DataUtil.showMessage(getApplicationContext(), "تم پیشفرض اعمال شد");
-                            dialog.dismiss();
-                          });
-                      if (thememanagersoft.contains("themes")
-                          && thememanagersoft.getString("themes", "").equals("")) {
-                        edit.setText(thememanagersoft.getString("themes", ""));
-                      }
-                    });
-                final View view = dialog.getWindow().getDecorView();
-                dialog
-                    .getWindow()
-                    .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-                view.setScaleX(0f);
-                view.setScaleY(0f);
-                final ObjectAnimator alertAnim = new ObjectAnimator();
-                final ObjectAnimator alertAnim1 = new ObjectAnimator();
-                alertAnim.setTarget(view);
-                alertAnim.setPropertyName("scaleX");
-                alertAnim.setFloatValues((float) (1));
-                alertAnim.setDuration((int) (250));
-                alertAnim.start();
-                alertAnim1.setTarget(view);
-                alertAnim1.setPropertyName("scaleY");
-                alertAnim1.setFloatValues((float) (1));
-                alertAnim1.setDuration((int) (250));
-                alertAnim1.start();
-                dialog.show();
-              }
-            });
-
-    findViewById(R.id.customwindows)
-        .setOnClickListener(
-            new View.OnClickListener() {
-              @Override
-              public void onClick(View _view) {
-                var di = new GhostWebMaterialDialog(SettingAppActivity.this);
-                ViewGroup viewGroup = findViewById(android.R.id.content);
-                View dialogview = getLayoutInflater().inflate(R.layout.lifesacel, viewGroup, false);
-                RadioButton r1 = dialogview.findViewById(R.id.r1);
-                RadioButton r2 = dialogview.findViewById(R.id.r2);
-                RadioButton r3 = dialogview.findViewById(R.id.r3);
-                di.setPositiveButton(
-                    "OK",
-                    (p1, d2) -> {
-                      int selectedValue = 1;
-                      r1.setOnCheckedChangeListener(
-                          (cdmnull, isCh) -> {
-                            if (sf.getInt("sd100", 1) == 1) {
-                              sf.edit().putInt("sd100", 1).apply();
-
-                            } else {
-                              sf.edit().remove("sd100");
-                            }
-                          });
-                      r2.setOnCheckedChangeListener(
-                          (cdmnull, isCh) -> {
-                            if (sf.getInt("sd100", 1) == 2) {
-                              sf.edit().putInt("sd100", 2).apply();
-
-                            } else {
-                              sf.edit().remove("sd100");
-                            }
-                          });
-                      r3.setOnCheckedChangeListener(
-                          (cdmnull, isCh) -> {
-                            if (sf.getInt("sd100", 1) == 3) {
-                              sf.edit().putInt("sd100", 3).apply();
-
-                            } else {
-                              sf.edit().remove("sd100");
-                            }
-                          });
-
-                      if (r1.isChecked()) {
-                        selectedValue = 1;
-                      } else if (r2.isChecked()) {
-                        selectedValue = 2;
-                      } else if (r3.isChecked()) {
-                        selectedValue = 3;
-                      }
-
-                      sf.edit().putInt("sd100", selectedValue).apply();
-                    });
-                if (sf.getInt("sd100", 1) == 1) {
-                  r1.setChecked(true);
-                  r2.setChecked(false);
-                  r3.setChecked(false);
-                } else if (sf.getInt("sd100", 1) == 2) {
-                  r2.setChecked(true);
-                  r1.setChecked(false);
-                  r3.setChecked(false);
-                } else if (sf.getInt("sd100", 1) == 3) {
-                  r3.setChecked(true);
-                  r1.setChecked(false);
-                  r2.setChecked(false);
-                } else {
-                  r2.setChecked(false);
-                  r1.setChecked(false);
-                  r3.setChecked(false);
-                }
-                di.setView(dialogview);
-                di.show();
-              }
-            });
     deftheme.setSwitchChangedListener(
         (vv, is) -> {
           if (is) {
@@ -572,6 +589,9 @@ public class SettingAppActivity extends BaseCompat {
     } else {
       walpapersystem.setValue(false);
     }
+
+    if (Analyzercod.getBoolean("Analyzercod", false) == true) codeAZ.setValue(true);
+    else codeAZ.setValue(false);
 
     List<String> fb = new ArrayList<>();
     fb.add("");
