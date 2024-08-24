@@ -4,6 +4,7 @@ import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 import io.github.rosemoe.sora.interfaces.EditorLanguage;
 import io.github.rosemoe.sora.interfaces.NewlineHandler;
+import io.github.rosemoe.sora.langs.html.HTMLAnalyzerCompat;
 import io.github.rosemoe.sora.widget.SymbolPairMatch;
 
 public class SvgLang implements EditorLanguage {
@@ -15,7 +16,7 @@ public class SvgLang implements EditorLanguage {
 
   @Override
   public CodeAnalyzer getAnalyzer() {
-    return new SvgCodeAZ();
+    return new HTMLAnalyzerCompat();
   }
 
   @Override

@@ -55,22 +55,17 @@ attribute
    // String definition
    
 STRING
-   : '"' (ESC | ~ ["\\])* '"'
+   : '"' ~ [<"]* '"'
+   | '\'' ~ [<']* '\''
    ;
 
-fragment ESC
-   : '\\' ["\\/bfnrt]
-   ; // Escape sequences (like \n, \", etc.)
-   
-   // Rule to match names (tags and attributes)
-   
 NAME
-   : [a-zA-Z_] [a-zA-Z0-9_]*
+   : Letter LetterOrDigit*
    ;
    // Skip whitespace
    
 WS
-   : [ \t\n\r]+ -> skip
+   : [ \t\r\n\u000C]+ -> channel (HIDDEN)
    ;
    //<svg> </svg>
    
@@ -91,10 +86,25 @@ ASSES
    ;
 
 HEXCOLOR
-   : '#' [a-fA-F0-9]*
+   : '#' HexDigit+
    ;
 
 Comment
    : '<-!- ' .*? '-->' -> skip
    ;
 
+fragment LetterOrDigit
+   : Letter
+   | [0-9]
+   ;
+
+fragment Letter
+   : [a-zA-Z$_] // these are the "java letters" below 0x7F
+   | ~ [\u0000-\u007F\uD800-\uDBFF] // covers all characters above 0x7F which are not a surrogate
+   | [\uD800-\uDBFF] [\uDC00-\uDFFF] // covers UTF-16 surrogate pairs encodings for U+10000 to U+10FFFF
+   
+   ;
+
+fragment HexDigit
+   : [a-fA-F0-9]
+   ;
