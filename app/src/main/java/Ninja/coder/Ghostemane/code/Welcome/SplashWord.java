@@ -10,9 +10,15 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
+import android.net.Uri;
+import androidx.core.content.ContextCompat;
+import android.content.pm.PackageManager;
+import androidx.core.app.ActivityCompat;
 import android.util.Log;
-import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import com.github.appintro.AppIntro2;
 import com.github.appintro.AppIntroPageTransformerType;
@@ -40,10 +46,31 @@ public class SplashWord extends AppIntro2 {
     var ghostStyle = "/storage/emulated/0/GhostWebIDE/theme/style.ghost";
     TestFragment t1 =
         TestFragment.newIns(
-            "filePer.json", "به گوست وب خوش امدید لطفا مجوز فایل را بدهید", "مجوز فایل", false);
+            "filePer.json", "به گوست وب خوش امدید لطفا مجوز فایل را بدهید", "مجوز فایل", true);
     t1.setCallBack(
         () -> {
-          Toast.makeText(getApplicationContext(), "2", 1).show();
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (!Environment.isExternalStorageManager()) {
+              try {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                Uri uri = Uri.fromParts("package", getPackageName(), null);
+                intent.setData(uri);
+                startActivity(intent);
+              } catch (Exception ex) {
+                Intent intent = new Intent();
+                intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                startActivity(intent);
+              }
+            }
+          } else {
+            // below android 11=======
+            if (ContextCompat.checkSelfPermission(
+                    SplashWord.this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_DENIED) {
+              ActivityCompat.requestPermissions(
+                  SplashWord.this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, 1000);
+            }
+          }
         });
 
     addSlide(t1);

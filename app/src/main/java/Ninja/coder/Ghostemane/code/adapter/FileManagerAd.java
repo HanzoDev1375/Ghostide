@@ -15,6 +15,7 @@ import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import Ninja.coder.Ghostemane.code.utils.MFileClass;
 import Ninja.coder.Ghostemane.code.widget.component.fastscrollcompat.PopupTextProvider;
 import android.content.Context;
+import android.graphics.drawable.AnimatedVectorDrawable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -123,6 +124,15 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
       }
       if (myfile.toString().endsWith(".xml")) {
         GlideCompat.LoadVector(myfile.toString(), viewHolder.icon);
+        String it = FileUtil.readFile(myfile.toString());
+        
+        
+        if(it.equals("<animated-vector")){
+          AnimatedVectorDrawable v = (AnimatedVectorDrawable) viewHolder.icon.getDrawable();
+          if(v != null){
+            v.start();
+          }
+        }
       } else if (myfile.toString().endsWith(".mp3")) {
         GlideCompat.GlideLoadMp3(viewHolder.icon, myfile.toString());
       } else if (myfile.toString().endsWith(".svg")) {

@@ -10,7 +10,8 @@ android {
     defaultConfig {
         applicationId "Ninja.coder.Ghostemane.code"
         minSdk 21
-        targetSdk 34
+        ///dont edit sdk this best version 30 not edit
+        targetSdk 30
         versionCode 28
         versionName "1.6.4"
         vectorDrawables {

@@ -44,6 +44,15 @@ public class AppIconManager {
       case 8:
         ghost();
         break;
+      case 9:
+        mtgreen();
+        break;
+      case 10:
+        mtpaper();
+        break;
+      case 11:
+        mtred();
+        break;
     }
   }
 
@@ -94,6 +103,21 @@ public class AppIconManager {
     DataUtil.showMessage(appcompat, "ENABLED ICON - GHOST");
   }
 
+  void mtgreen() {
+    sub("MainActivitygreenmt");
+    DataUtil.showMessage(appcompat, "ENABLED ICON - Material Green");
+  }
+
+  void mtpaper() {
+    sub("MainActivitypapmt");
+    DataUtil.showMessage(appcompat, "ENABLED ICON - Material Papaer");
+  }
+
+  void mtred() {
+    sub("MainActivityrednmt");
+    DataUtil.showMessage(appcompat, "ENABLED ICON - Material Red");
+  }
+
   void sub(String name) {
     disableAllComponentsExcept(name);
     enableComponent(name);
@@ -112,7 +136,10 @@ public class AppIconManager {
       "MainActivitypap",
       "MainActivitygreenhell",
       "MainActivitybluesky",
-      "MainActivityghost"
+      "MainActivityghost",
+      "MainActivitygreenmt",
+      "MainActivitypapmt",
+      "MainActivityrednmt"
     };
 
     for (String componentName : componentNames) {

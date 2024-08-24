@@ -2269,7 +2269,7 @@ public class CodeEditor extends View
       }
 
       if ((mNonPrintableOptions & FLAG_GHOSTWEB) != 0) {
-        drawMiniGraph(canvas, paintingOffset, row, charName);
+        drawMiniGraph2(canvas, paintingOffset, row, charName);
       }
 
       // Recover the offset
@@ -2454,6 +2454,23 @@ public class CodeEditor extends View
     mPaintGraph.setTypeface(getTypefaceText());
     float baseline = getRowBottom(row) - getOffsetY() - mGraphMetrics.descent;
     canvas.drawText(graph, 0, graph.length(), offset, baseline, mPaintGraph);
+  }
+
+  protected void drawMiniGraph2(Canvas canvas, float offset, int row, String graph) {
+
+    // Draw
+    mPaintGraph.setColor(mColors.getColor(EditorColorScheme.KEYWORD));
+    mPaintGraph.setTypeface(getTypefaceText());
+    float baseline = getRowBottom(row) - getOffsetY() - mGraphMetrics.descent;
+
+    // محاسبه عرض متن
+    float textWidth = mPaintGraph.measureText(graph);
+    // تعیین موقعیت افقی برای راست‌چین کردن متن با استفاده از offset
+    float x = offset; // x برابر با offset است تا متن از نقطه offset شروع شود
+    float rightAlignX = offset + textWidth; // x را برای راست‌چین کردن متن تنظیم می‌کنیم
+
+    // رسم متن
+    canvas.drawText(graph, 0, graph.length(), rightAlignX, baseline, mPaintGraph);
   }
 
   /** Draw non-printable characters */

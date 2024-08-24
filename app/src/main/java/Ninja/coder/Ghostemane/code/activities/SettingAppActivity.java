@@ -91,7 +91,8 @@ public class SettingAppActivity extends BaseCompat {
       thememanagersoft,
       sf,
       gridMode,
-      Analyzercod;
+      Analyzercod,
+      iconSpash;
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
@@ -135,6 +136,7 @@ public class SettingAppActivity extends BaseCompat {
     sf = getSharedPreferences("sf", Activity.MODE_PRIVATE);
     gridMode = getSharedPreferences("gride", Activity.MODE_PRIVATE);
     Analyzercod = getSharedPreferences("Analyzercod", MODE_PRIVATE);
+    iconSpash = getSharedPreferences("iconSpash", MODE_PRIVATE);
     materialYous = findViewById(R.id.MaterialYou);
     grids = findViewById(R.id.gridmod);
     effect = findViewById(R.id.effect);
@@ -612,10 +614,50 @@ public class SettingAppActivity extends BaseCompat {
             final int _position = _param3;
             var myicon = new AppIconManager(SettingAppActivity.this, _position);
             myicon.setIconManager();
+            int iconput = 0;
+            switch (_position) {
+              case 0:
+                iconput = 0;
+                break;
+              case 1:
+                iconput = 1;
+                break;
+              case 2:
+                iconput = 2;
+                break;
+              case 3:
+                iconput = 3;
+                break;
+              case 4:
+                iconput = 4;
+                break;
+              case 5:
+                iconput = 5;
+                break;
+              case 6:
+                iconput = 6;
+                break;
+              case 7:
+                iconput = 7;
+                break;
+              case 8:
+                iconput = 8;
+                break;
+              case 9:
+                iconput = 9;
+                break;
+              case 10:
+                iconput = 10;
+                break;
+              case 11:
+                iconput = 11;
+                break;
+            }
+            iconSpash.edit().putInt("iconSpash",iconput).apply();
           }
         });
     map.clear();
-    for (int c = 0; c < 9; c++) {
+    for (int c = 0; c < 12; c++) {
       {
         HashMap<String, Object> item = new HashMap<>();
         item.put("key", "");
@@ -668,11 +710,11 @@ public class SettingAppActivity extends BaseCompat {
                 androidx.appcompat.app.AlertDialog dialog =
                     new GhostWebMaterialDialog(SettingAppActivity.this)
                         .setView(R.layout.fontsetlector)
-                        .setTitle("فونت شخصی")
+                        .setTitle("Custom font")
                         .setMessage(
                             "لطفا دقت کنید که حتمان باید فرمت فونت .ttf باشد در غیر این صورت با خطا برنامه متوجه میشوید")
                         .setCancelable(true)
-                        .setPositiveButton("تایید", null)
+                        .setPositiveButton("ok", null)
                         .setNegativeButton(android.R.string.cancel, null)
                         .setNeutralButton("پیشفرض", null)
                         .create();

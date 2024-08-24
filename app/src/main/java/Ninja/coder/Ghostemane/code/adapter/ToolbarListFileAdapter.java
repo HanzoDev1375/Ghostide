@@ -43,7 +43,7 @@ public class ToolbarListFileAdapter extends RecyclerView.Adapter<ToolbarListFile
   }
 
   @Override
-  public void onBindViewHolder(VH holder,  int _position) {
+  public void onBindViewHolder(VH holder, int _position) {
     View _view = holder.itemView;
 
     RecyclerView.LayoutParams _lp =
@@ -54,8 +54,8 @@ public class ToolbarListFileAdapter extends RecyclerView.Adapter<ToolbarListFile
 
     if (holder.textview2 != null) {
       File file = new File(_data.get(_position).toString());
-      
-        holder.textview2.setAlpha(file.isHidden() ? 0.5f : 1f);
+
+      holder.textview2.setAlpha(file.isHidden() ? 0.5f : 1f);
     }
     holder.itemView.setOnClickListener(
         v -> {
@@ -81,11 +81,12 @@ public class ToolbarListFileAdapter extends RecyclerView.Adapter<ToolbarListFile
         v -> {
           if (back != null) {
             back.GoToTreeFile(v);
-            
           }
         });
-    if(_position == 0) {
-    	holder.textview2.setTextColor(MaterialColors.getColor(holder.textview2,com.google.android.material.R.attr.colorOutline,0));
+    if (_position == 0) {
+      holder.textview2.setTextColor(
+          MaterialColors.getColor(
+              holder.textview2, com.google.android.material.R.attr.colorOutline, 0));
     }
   }
 

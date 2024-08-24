@@ -422,8 +422,10 @@ public class FileDirActivity extends BaseCompat
       if (viewType == ViewType.GRID) {
         gridLayoutManager.setSpanCount(2);
         recyclerview2.setAdapter(fileListItem);
+        _distreeview();
       } else {
         recyclerview2.setAdapter(fileListItem);
+        _distreeview();
         gridLayoutManager.setSpanCount(1);
         fast = new FastScrollerBuilder(recyclerview2);
         fast.useMd2Style();
@@ -522,14 +524,13 @@ public class FileDirActivity extends BaseCompat
     navs.getMenu().add(0, 4, 0, "Settings").setIcon(R.drawable.drawer_item15);
     navs.getMenu().add(0, 5, 0, "LogCat Reader").setIcon(R.drawable.drawer_item6);
     navs.getMenu().add(0, 6, 0, "Icon Shop").setIcon(R.drawable.icshop);
-    navs.getMenu().add(0, 7, 0, "Learn").setIcon(R.drawable.drawer_item10);
-    navs.getMenu().add(0, 8, 0, "Update App").setIcon(R.drawable.drawer_item8);
-    navs.getMenu().add(0, 9, 0, "Plugins Manager").setIcon(R.drawable.drawer_item5);
-    navs.getMenu().add(0, 10, 0, "Backup Theme").setIcon(R.drawable.drawer_item7);
-    navs.getMenu().add(0, 11, 0, "Bookmarks (Beta)").setIcon(R.drawable.drawer_item4);
-    navs.getMenu().add(0, 12, 0, "Apk Manager").setIcon(R.drawable.drawer_item3);
-    navs.getMenu().add(0, 13, 0, "About").setIcon(R.drawable.drawer_item11);
-    navs.getMenu().add(0, 14, 0, "Leave").setIcon(R.drawable.drawer_item1);
+    navs.getMenu().add(0, 7, 0, "Update App").setIcon(R.drawable.drawer_item8);
+    navs.getMenu().add(0, 8, 0, "Plugins Manager").setIcon(R.drawable.drawer_item5);
+    navs.getMenu().add(0, 9, 0, "Backup Theme").setIcon(R.drawable.drawer_item7);
+    navs.getMenu().add(0, 10, 0, "Bookmarks (Beta)").setIcon(R.drawable.drawer_item4);
+    navs.getMenu().add(0, 11, 0, "Apk Manager").setIcon(R.drawable.drawer_item3);
+    navs.getMenu().add(0, 12, 0, "About").setIcon(R.drawable.drawer_item11);
+    navs.getMenu().add(0, 13, 0, "Leave").setIcon(R.drawable.drawer_item1);
     DrowerHandler();
   }
 
@@ -694,6 +695,7 @@ public class FileDirActivity extends BaseCompat
                     recyclerview2.setVisibility(View.VISIBLE);
                     filedir_bar.setVisibility(View.GONE);
                     recyclerview2.setAdapter(fileListItem);
+                    
                     ListSheet.bind(recyclerview2, Folder);
                     if (gridLayoutManager != null) {
                       recyclerview2.setLayoutManager(gridLayoutManager);
@@ -707,6 +709,7 @@ public class FileDirActivity extends BaseCompat
 
   void reLoadFile() {
     reLoadFile(true);
+    _distreeview();
   }
 
   public void FolderMaker() {
@@ -910,15 +913,13 @@ public class FileDirActivity extends BaseCompat
   }
 
   public void _distreeview() {
-
     List<String> pospath = spiltIntoBreadcrumbItems(Folder);
-
     adps = new ToolbarListFileAdapter(pospath, FileDirActivity.this, this);
-
     recyclerview1.setAdapter(adps);
     recyclerview1.setLayoutManager(
         new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
     recyclerview1.smoothScrollToPosition(pospath.size());
+    recyclerview1.getAdapter().notifyDataSetChanged();
   }
 
   @Override
@@ -1841,6 +1842,8 @@ public class FileDirActivity extends BaseCompat
   } 
 
   public void DrowerHandler() {
+    
+    
     navs.bringToFront();
     navs.setClick(
         (item) -> {

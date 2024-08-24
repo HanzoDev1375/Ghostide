@@ -1,77 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.drawerlayout.widget.DrawerLayout
-     xmlns:android="http://schemas.android.com/apk/res/android"
-     xmlns:app="http://schemas.android.com/apk/res-auto"
-     xmlns:tools="http://schemas.android.com/tools"
-     android:layout_height="match_parent"
-     android:layout_width="match_parent"
-     tools:openDrawer="start"
-     android:id="@+id/_drawer">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    tools:openDrawer="start"
+    android:id="@+id/_drawer"
+    >
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-         android:layout_height="match_parent"
-         android:layout_width="match_parent"
-         android:id="@+id/_coordinator">
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:id="@+id/_coordinator"
+        >
 
         <com.google.android.material.appbar.AppBarLayout
-             android:layout_height="wrap_content"
-             android:layout_width="match_parent"
-             android:theme="@style/AppTheme.AppBarOverlay"
-             android:id="@+id/_app_bar">
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            android:id="@+id/_app_bar"
+            >
 
             <androidx.appcompat.widget.Toolbar
-                 android:layout_height="?attr/actionBarSize"
-                 android:layout_width="match_parent"
-                 android:background="?attr/colorPrimary"
-                 app:popupTheme="@style/AppTheme.PopupOverlay"
-                 android:id="@+id/_toolbar" />
+                android:layout_height="?attr/actionBarSize"
+                android:layout_width="match_parent"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                android:id="@+id/_toolbar"
+                />
 
         </com.google.android.material.appbar.AppBarLayout>
 
         <LinearLayout
-             android:layout_height="match_parent"
-             android:layout_width="match_parent"
-             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-             android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:orientation="vertical"
+            >
 
             <Ninja.coder.Ghostemane.code.widget.PraramnetLayoutNinja
-                 android:layout_height="match_parent"
-                 android:layout_width="match_parent"
-                 android:orientation="vertical"
-                 android:id="@+id/paramentLayout_fileDir">
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:id="@+id/paramentLayout_fileDir"
+                >
 
                 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                     android:layout_height="match_parent"
-                     android:layout_width="match_parent"
-                     android:id="@+id/swiperefreshlayout1">
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:id="@+id/swiperefreshlayout1"
+                    >
 
                     <LinearLayout
-                         android:layout_height="match_parent"
-                         android:layout_width="match_parent"
-                         android:orientation="vertical"
-                         android:id="@+id/CensractorListView1">
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:id="@+id/CensractorListView1"
+                        >
 
                         <androidx.recyclerview.widget.RecyclerView
-                             android:layout_height="wrap_content"
-                             android:layout_width="match_parent"
-                             android:padding="8dp"
-                             android:layout_gravity="center"
-                             android:id="@+id/recyclerview1" />
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:padding="8dp"
+                            android:layout_gravity="center"
+                            android:id="@+id/recyclerview1"
+                            />
 
                         <Ninja.coder.Ghostemane.code.layoutmanager.EmptyRecyclerView
-                             android:layout_height="wrap_content"
-                             android:layout_width="match_parent"
-                             android:padding="8dp"
-                             android:id="@+id/recyclerview2" />
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:padding="8dp"
+                            android:id="@+id/recyclerview2"
+                            />
 
                         <com.google.android.material.progressindicator.CircularProgressIndicator
-                             android:layout_height="wrap_content"
-                             android:layout_width="wrap_content"
-                             android:visibility="gone"
-                             android:indeterminate="true"
-                             app:trackThickness="5dp"
-                             android:layout_gravity="center"
-                             android:id="@+id/filedir_bar" />
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:visibility="gone"
+                            android:indeterminate="true"
+                            app:trackThickness="5dp"
+                            android:layout_gravity="center"
+                            android:id="@+id/filedir_bar"
+                            />
 
                     </LinearLayout>
 
@@ -82,24 +93,26 @@
         </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-             android:layout_height="wrap_content"
-             android:layout_width="wrap_content"
-             app:rippleColor="?attr/colorPrimary"
-             android:clickable="true"
-             android:layout_margin="17dp"
-             android:focusable="true"
-             app:fabSize="normal"
-             android:layout_gravity="right|bottom"
-             android:id="@+id/fabAdd" />
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            app:rippleColor="?attr/colorPrimary"
+            android:clickable="true"
+            android:layout_margin="17dp"
+            android:focusable="true"
+            app:fabSize="normal"
+            android:layout_gravity="right|bottom"
+            android:id="@+id/fabAdd"
+            />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <Ninja.coder.Ghostemane.code.layoutmanager.NavigationViewCompnet
-         android:layout_height="match_parent"
-         android:layout_width="300dp"
-         android:scrollbars="none"
-         app:headerLayout="@layout/header"
-         android:id="@+id/navs"
-         android:layout_gravity="start" />
+        android:layout_height="match_parent"
+        android:layout_width="300dp"
+        android:scrollbars="none"
+        app:headerLayout="@layout/header"
+        android:id="@+id/navs"
+        android:layout_gravity="start"
+        />
 
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -545,6 +545,49 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
+        <activity-alias
+            android:name=".MainActivitygreenmt"
+            android:label="@string/app_name"
+            android:icon="@drawable/greendraw"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".MainActivity"
+            
+        >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".MainActivitypapmt"
+            android:label="@string/app_name"
+            android:icon="@drawable/paperdraw"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".MainActivity"
+            
+        >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".MainActivityrednmt"
+            android:label="@string/app_name"
+            android:icon="@drawable/reddraw"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".MainActivity"
+            
+        >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
         <receiver
             android:name="Ninja.coder.Ghostemane.code.NetworkChangeReceiver"
             android:enabled="false"

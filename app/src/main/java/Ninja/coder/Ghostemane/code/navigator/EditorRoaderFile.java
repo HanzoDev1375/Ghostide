@@ -24,6 +24,7 @@ import io.github.rosemoe.sora.langs.python.PythonLang;
 import io.github.rosemoe.sora.langs.sass.SassLangCompat;
 import io.github.rosemoe.sora.langs.smali.SMLang;
 import io.github.rosemoe.sora.langs.sql.MySqlLang;
+import io.github.rosemoe.sora.langs.svg.SvgLang;
 import io.github.rosemoe.sora.langs.universal.UniversalLanguage;
 import io.github.rosemoe.sora.langs.xml.XMLLanguage;
 import io.github.rosemoe.sora.widget.CodeEditor;
@@ -104,7 +105,7 @@ public class EditorRoaderFile {
       //  ic.setVisibility(View.VISIBLE);
       //  GlideCompat.LoadSvg(_path, ic);
       _fab.postDelayed(_fab::show, 400);
-      var htmllang = new HTMLLanguage(editor);
+      var htmllang = new SvgLang();
       editor.setEditorLanguage(htmllang);
     } else if (_path.endsWith(".md")) {
       ReadFileCompat(editor, _path, bar);

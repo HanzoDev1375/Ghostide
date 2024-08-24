@@ -1547,6 +1547,10 @@ public class CodeEditorActivity extends AppCompatActivity {
                   .concat(
                       Uri.parse(_data.get(_position).get("path").toString()).getLastPathSegment()));
         }
+
+        if (pathFileindir.endsWith(".svg")) {
+          GlideCompat.LoadSvg(pathFileindir, iconAuthor);
+        } else iconAuthor.setVisibility(View.INVISIBLE);
         if (_data.get(_position).get("path").toString().equals(shp.getString("pos_path", ""))) {
 
           selector.setVisibility(View.VISIBLE);
@@ -1570,9 +1574,15 @@ public class CodeEditorActivity extends AppCompatActivity {
                 shp.edit().putString("positionTabs", String.valueOf((long) (_position))).apply();
                 shp.edit().putString("pos_path", dataInsert).apply();
                 setDistreeView();
+                if (pathFileindir.endsWith(".svg")) {
+                  GlideCompat.LoadSvg(pathFileindir, iconAuthor);
+                } else iconAuthor.setVisibility(View.INVISIBLE);
                 notifyDataSetChanged();
                 if (FileUtil.isExistFile(dataInsert)) {
                   setCodeEditorFileReader(dataInsert);
+                  if (pathFileindir.endsWith(".svg")) {
+                    GlideCompat.LoadSvg(pathFileindir, iconAuthor);
+                  } else iconAuthor.setVisibility(View.INVISIBLE);
                   ideColors.setImageShow(imageloadereditor, dataInsert);
                   if (dataInsert.equals(shp.getString("pos_path", ""))) {
                     selector.setVisibility(View.VISIBLE);

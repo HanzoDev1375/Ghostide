@@ -21,6 +21,8 @@
              android:src="@drawable/ghosticon_spash"
              android:adjustViewBounds="true"
              android:layout_marginTop="10dp"
+             android:scaleType="centerInside"
+             android:id="@+id/iconSp"
              android:layout_gravity="center_vertical|center_horizontal" />
 
         <TextView

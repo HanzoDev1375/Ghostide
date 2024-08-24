@@ -2,7 +2,6 @@ package Ninja.coder.Ghostemane.code.glidecompat;
 
 import Ninja.coder.Ghostemane.code.ApplicationLoader;
 import Ninja.coder.Ghostemane.code.R;
-import Ninja.coder.Ghostemane.code.glidecompat.BlurTransformation;
 import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -15,24 +14,17 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PictureDrawable;
 import android.graphics.pdf.PdfRenderer;
 import android.media.MediaMetadataRetriever;
-import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
-import androidx.annotation.NonNull;
 import androidx.annotation.*;
-import androidx.core.graphics.drawable.RoundedBitmapDrawable;
-import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 import com.blankj.utilcode.util.ThreadUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.MultiTransformation;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
-import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.caverock.androidsvg.SVG;
 import com.google.android.material.color.MaterialColors;
 import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable;
@@ -41,7 +33,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.MessageDigest;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -68,8 +59,6 @@ public class GlideCompat {
         .transform(new RoundedCornersTransformation(RenderSize()))
         .into(imageView);
   }
-  
-    
 
   public static void GlideNormals(ImageView imageView, String path) {
     Glide.with(imageView.getContext())
@@ -406,6 +395,23 @@ public class GlideCompat {
         .diskCacheStrategy(DiskCacheStrategy.ALL)
         .priority(Priority.NORMAL)
         .into(img);
+  }
+
+  public static void LoadSvginString(String svgcode, ImageView icon) {
+    try {
+      
+      SVG svg = SVG.getFromString(svgcode);
+      var draw = new PictureDrawable(svg.renderToPicture());
+      Glide.with(icon.getContext())
+          .load(draw)
+          .transform(new RoundedCornersTransformation(RenderSize()))
+          .error(R.drawable.greendraw)
+          .diskCacheStrategy(DiskCacheStrategy.ALL)
+          .priority(Priority.NORMAL)
+          .into(icon);
+    } catch (Exception err) {
+
+    }
   }
 
   public static void LoadSvgInAsster(String input, ImageView img) {

@@ -49,41 +49,54 @@ public class ListAppIconAd extends BaseAdapter implements Adapter {
 
     if (position == 0) {
 
-      bin.textview1.setText("پیشفرض");
+      bin.textview1.setText("default");
       bin.imageview1.setImageResource(R.mipmap.ghosticon);
     }
     if (position == 1) {
-      bin.textview1.setText("ابی");
+      bin.textview1.setText("blue");
       bin.imageview1.setImageResource(R.drawable.ghosticonblue);
     }
     if (position == 2) {
-      bin.textview1.setText("سیاه");
+      bin.textview1.setText("black");
       bin.imageview1.setImageResource(R.drawable.ghosticonblack);
     }
     if (position == 3) {
-      bin.textview1.setText("قرمز");
+      bin.textview1.setText("red");
       bin.imageview1.setImageResource(R.drawable.ghosticonred);
     }
     if (position == 4) {
-      bin.textview1.setText("زرد");
+      bin.textview1.setText("yellow");
       bin.imageview1.setImageResource(R.drawable.ghosticonyellow);
     }
     if (position == 5) {
-      bin.textview1.setText("بنفش یشمی");
+      bin.textview1.setText("Jade purple");
       bin.imageview1.setImageResource(R.drawable.ghosticonpapermod);
     }
     if (position == 6) {
-      bin.textview1.setText("سبز لجنی");
+      bin.textview1.setText("Slime green");
       bin.imageview1.setImageResource(R.drawable.ghosticongreenhell);
     }
     if (position == 7) {
-      bin.textview1.setText("ابی تیره ۲ رنگ");
+      bin.textview1.setText("Dark blue 2");
       bin.imageview1.setImageResource(R.drawable.ghosticonbluemod);
     }
     if (position == 8) {
       bin.textview1.setText("Ghost");
       bin.imageview1.setImageResource(R.drawable.ghosticons);
     }
+    if(position == 9){
+      bin.textview1.setText("Material Green");
+      bin.imageview1.setImageResource(R.drawable.greendraw);
+    }
+    if(position == 10){
+      bin.textview1.setText("Material Paper");
+      bin.imageview1.setImageResource(R.drawable.paperdraw);
+    }
+    if(position == 11){
+      bin.textview1.setText("Material Red");
+      bin.imageview1.setImageResource(R.drawable.reddraw);
+    }
+    
     return bin.getRoot();
   }
 }
