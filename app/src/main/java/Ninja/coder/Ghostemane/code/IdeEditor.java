@@ -3,6 +3,7 @@ package Ninja.coder.Ghostemane.code;
 import Ninja.coder.Ghostemane.code.config.LOG;
 import Ninja.coder.Ghostemane.code.interfaces.CallBackErrorManager;
 import Ninja.coder.Ghostemane.code.marco.CommentList;
+import Ninja.coder.Ghostemane.code.marco.RegexUtilCompat;
 import Ninja.coder.Ghostemane.code.marco.editorface.IEditor;
 import Ninja.coder.Ghostemane.code.widget.SymbolInputView;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import io.github.rosemoe.sora.langs.python.PythonLang;
 import io.github.rosemoe.sora.text.Content;
 import android.os.Handler;
 import android.os.Looper;
@@ -27,6 +29,7 @@ import io.github.rosemoe.sora.interfaces.EditorLanguage;
 import io.github.rosemoe.sora.langs.xml.XMLLanguage;
 import io.github.rosemoe.sora.langs.xml.XMLLexer;
 import java.io.StringReader;
+import java.util.regex.Matcher;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.Token;
 import java.util.ArrayList;
@@ -272,64 +275,6 @@ public class IdeEditor extends CodeEditor implements IEditor {
     public void FormaterError(Throwable throwable);
   }
 
-  public static interface DoubleClickListener {
-    void onSingleClick(final View view);
-
-    void onDoubleClick(final View view);
-  }
-
-  public static class DoubleClick implements View.OnClickListener {
-
-    private final Handler mHandler = new Handler();
-    private final DoubleClickListener doubleClickListener;
-    private long DOUBLE_CLICK_INTERVAL;
-    private int clicks;
-    private boolean isBusy = false;
-
-    public DoubleClick(final DoubleClickListener doubleClickListener) {
-      this(doubleClickListener, 200L);
-      DOUBLE_CLICK_INTERVAL = 200L; // default time to wait the second click.
-    }
-
-    public DoubleClick(
-        final DoubleClickListener doubleClickListener, final long DOUBLE_CLICK_INTERVAL) {
-      this.doubleClickListener = doubleClickListener;
-      this.DOUBLE_CLICK_INTERVAL =
-          DOUBLE_CLICK_INTERVAL; // developer specified time to wait the second click.
-    }
-
-    @Override
-    public void onClick(final View view) {
-
-      if (!isBusy) {
-        //  Prevent multiple click in this short time
-        isBusy = true;
-
-        // Increase clicks count
-        clicks++;
-
-        mHandler.postDelayed(
-            new Runnable() {
-              public final void run() {
-
-                if (clicks >= 2) { // Double tap.
-                  doubleClickListener.onDoubleClick(view);
-                }
-
-                if (clicks == 1) { // Single tap
-                  doubleClickListener.onSingleClick(view);
-                }
-
-                // we need to  restore clicks count
-                clicks = 0;
-              }
-            },
-            DOUBLE_CLICK_INTERVAL);
-        isBusy = false;
-      }
-    }
-  }
-
   private void handleContentChange(@NonNull ContentChangeEvent event) {
 
     if (event.getAction() == ContentChangeEvent.ACTION_INSERT) {
@@ -428,6 +373,4 @@ public class IdeEditor extends CodeEditor implements IEditor {
   public String formatLine() {
     return String.format("%s...%s", 1, getLineCount());
   }
-
-  
 }

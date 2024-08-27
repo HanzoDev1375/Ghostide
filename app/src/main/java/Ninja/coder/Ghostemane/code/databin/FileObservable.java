@@ -23,38 +23,38 @@ import io.reactivex.rxjava3.functions.Cancellable;
 
 public class FileObservable implements ObservableOnSubscribe<FileEvent> {
 
-    private String pathToWatch;
+  private String pathToWatch;
 
-    public FileObservable(String pathToWatch) {
-        this.pathToWatch = pathToWatch;
-    }
+  public FileObservable(String pathToWatch) {
+    this.pathToWatch = pathToWatch;
+  }
 
-    @Override
-    public void subscribe(ObservableEmitter<FileEvent> emitter) throws Throwable {
-        final FileObserver observer =
-                new FileObserver(pathToWatch) {
-                    @Override
-                    public void onEvent(int event, String file) {
-                        if (emitter.isDisposed()) {
-                            return;
-                        }
+  @Override
+  public void subscribe(ObservableEmitter<FileEvent> emitter) throws Throwable {
+    final FileObserver observer =
+        new FileObserver(pathToWatch) {
+          @Override
+          public void onEvent(int event, String file) {
+            if (emitter.isDisposed()) {
+              return;
+            }
 
-                        FileEvent fileEvent = FileEvent.create(event, file);
-                        emitter.onNext(fileEvent);
+            FileEvent fileEvent = FileEvent.create(event, file);
+            emitter.onNext(fileEvent);
 
-                        if (fileEvent.isDeleteSelf()) {
-                            emitter.onComplete();
-                        }
-                    }
-                };
-        observer.startWatching();
+            if (fileEvent.isDeleteSelf()) {
+              emitter.onComplete();
+            }
+          }
+        };
+    observer.startWatching();
 
-        emitter.setCancellable(
-                new Cancellable() {
-                    @Override
-                    public void cancel() {
-                        observer.stopWatching();
-                    }
-                });
-    }
+    emitter.setCancellable(
+        new Cancellable() {
+          @Override
+          public void cancel() {
+            observer.stopWatching();
+          }
+        });
+  }
 }

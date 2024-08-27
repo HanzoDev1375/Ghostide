@@ -1532,13 +1532,12 @@ public class CodeEditorActivity extends AppCompatActivity {
       } else {
         var ideColors = new IdeColorCompat(editor);
         ideColors.Colors(selector, textview1);
+        ideColors.setIconLang(pathFileindir, imageview2);
 
         textview1.setText(dataChange);
-        ideColors.setImageShow(imageloadereditor, pathFileindir);
 
         if (FileUtil.isDirectory(pathFileindir)) {
 
-          imageview2.setImageResource(R.drawable.file);
         } else if (FileUtil.isExistFile(_data.get(_position).get("path").toString())) {
 
         } else {
@@ -1548,9 +1547,6 @@ public class CodeEditorActivity extends AppCompatActivity {
                       Uri.parse(_data.get(_position).get("path").toString()).getLastPathSegment()));
         }
 
-        if (pathFileindir.endsWith(".svg")) {
-          GlideCompat.LoadSvg(pathFileindir, iconAuthor);
-        } else iconAuthor.setVisibility(View.INVISIBLE);
         if (_data.get(_position).get("path").toString().equals(shp.getString("pos_path", ""))) {
 
           selector.setVisibility(View.VISIBLE);
@@ -1570,20 +1566,14 @@ public class CodeEditorActivity extends AppCompatActivity {
               // Single tap here.
               if (FileUtil.isExistFile(dataInsert)) {
                 setCodeEditorFileReader(dataInsert);
-                ideColors.setImageShow(imageloadereditor, dataInsert);
+
                 shp.edit().putString("positionTabs", String.valueOf((long) (_position))).apply();
                 shp.edit().putString("pos_path", dataInsert).apply();
                 setDistreeView();
-                if (pathFileindir.endsWith(".svg")) {
-                  GlideCompat.LoadSvg(pathFileindir, iconAuthor);
-                } else iconAuthor.setVisibility(View.INVISIBLE);
                 notifyDataSetChanged();
                 if (FileUtil.isExistFile(dataInsert)) {
                   setCodeEditorFileReader(dataInsert);
-                  if (pathFileindir.endsWith(".svg")) {
-                    GlideCompat.LoadSvg(pathFileindir, iconAuthor);
-                  } else iconAuthor.setVisibility(View.INVISIBLE);
-                  ideColors.setImageShow(imageloadereditor, dataInsert);
+
                   if (dataInsert.equals(shp.getString("pos_path", ""))) {
                     selector.setVisibility(View.VISIBLE);
                     n = 0;

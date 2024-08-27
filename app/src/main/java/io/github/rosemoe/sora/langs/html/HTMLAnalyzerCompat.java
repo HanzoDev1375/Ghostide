@@ -349,7 +349,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
                   || previous == HTMLLexer.LET
                   || previous == HTMLLexer.VAR) {
                 colorid = EditorColorScheme.LITERAL;
-                int[] err = Utils.setWaringSpan(result, line, column);
+                int[] err = Utils.setWaringSpan(result, line, column + 1);
               }
               if (previous == HTMLLexer.CASE || previous == HTMLLexer.FINAL) {
                 colorid = EditorColorScheme.ATTRIBUTE_NAME;
