@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.*;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -39,7 +40,7 @@ public class ColorAndroid12 {
   public static int Back = R.attr.colorSurface;
   public static int colorAccent = R.attr.colorAccent;
   public static int TvColor = R.attr.colorPrimary;
-  public static int SecColor = R.attr.colorPrimaryContainer;  
+  public static int SecColor = R.attr.colorPrimaryContainer;
   public static int ColorNormal = R.attr.colorControlNormal;
   public static int ColorAConNormal = R.attr.colorControlActivated;
   public static int SubTitle = R.attr.colorPrimaryFixedDim;
@@ -383,5 +384,26 @@ public class ColorAndroid12 {
         .setColor(EditorColorScheme.Ninja, get(colorOnTertiaryFixedVariant, editor));
     editor.getColorScheme().setColor(EditorColorScheme.print, get(colorTertiaryFixedDim, editor));
     editor.getColorScheme().setColor(EditorColorScheme.LINE_NUMBER_BACKGROUND, 0);
+  }
+
+  public static void animSlatic(View view) {
+    if (view != null) {
+      view.animate()
+          .scaleX(1.9f)
+          .setInterpolator(new AccelerateDecelerateInterpolator())
+          .setDuration(300)
+          .withEndAction(
+              new Runnable() {
+                @Override
+                public void run() {
+                  view.animate()
+                      .scaleX(1f)
+                      .setInterpolator(new AccelerateDecelerateInterpolator())
+                      .setDuration(300)
+                      .start();
+                }
+              })
+          .start();
+    }
   }
 }

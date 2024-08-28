@@ -43,6 +43,9 @@ import java.util.regex.Pattern;
  * Simple implementation of highlight CSS3. The color matching may not be beautiful and reasonable.
  * Part of it depends on css3.g4. You can continue to expand according to your needs.
  */
+
+/** علت ان منتقل شدن به html است.این کلاس منسوخ شده است */
+@Deprecated
 public class CSS3Analyzer implements CodeAnalyzer {
   protected CodeEditor soraEditor;
   private String[] getColor = {"red", "blue", "green"};

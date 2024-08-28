@@ -32,6 +32,7 @@ import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 import io.github.rosemoe.sora.interfaces.EditorLanguage;
 import io.github.rosemoe.sora.interfaces.NewlineHandler;
+import io.github.rosemoe.sora.langs.html.HTMLAnalyzerCompat;
 import io.github.rosemoe.sora.langs.internal.MyCharacter;
 import io.github.rosemoe.sora.text.TextUtils;
 import io.github.rosemoe.sora.widget.CodeEditor;
@@ -486,7 +487,7 @@ public class CSS3Language implements EditorLanguage {
 
   @Override
   public CodeAnalyzer getAnalyzer() {
-    return new CSS3Analyzer(soraEditor);
+    return new HTMLAnalyzerCompat();
   }
 
   @Override
@@ -662,12 +663,18 @@ public class CSS3Language implements EditorLanguage {
 
     public static String format(String code) {
       try {
-        formatter = new CSSFormat().setPropertiesInSeparateLines(2).setRgbAsHex(true);
+        formatter =
+            new CSSFormat()
+                .setPropertiesInSeparateLines(2)
+                .setRgbAsHex(true)
+                .setUseSourceStringValues(true);
         InputSource source = new InputSource(new StringReader(code));
+
         CSSOMParser parser = new CSSOMParser(new SACParserCSS3());
         CSSStyleSheetImpl sheet = (CSSStyleSheetImpl) parser.parseStyleSheet(source, null, null);
 
         String formattedCode = sheet.getCssText(formatter);
+        Log.w("Code formatting completed in ", String.valueOf(System.nanoTime()) + "Ms");
         return formattedCode;
       } catch (IOException err) {
         Log.e("ErrorFormatCode", err.getLocalizedMessage());
@@ -675,7 +682,7 @@ public class CSS3Language implements EditorLanguage {
         Log.e("ErrorFormatCode", "Unexpected error: " + e.getLocalizedMessage());
       }
 
-      return null;
+      return code;
     }
   }
 }

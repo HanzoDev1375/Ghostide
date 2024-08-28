@@ -22,7 +22,7 @@ import androidx.fragment.app.DialogFragment;
 import io.github.rosemoe.sora.langs.java.JavaLanguage;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
 
-public class DialogJavaCodeViewDialogFragmentActivity extends DialogFragment {
+public class DialogJavaCodeView extends DialogFragment {
 
   protected DialogjavacodeviewDialogFragmentBinding bin;
   private SharedPreferences sp;
@@ -67,7 +67,7 @@ public class DialogJavaCodeViewDialogFragmentActivity extends DialogFragment {
 
   @SuppressLint("ClickableViewAccessibility")
   private void reqApp() {
-    
+
     _clickAnimation(bin.editor);
     if (sp.contains("bin")) {
       bin.editor.setText(sp.getString("bin", ""));

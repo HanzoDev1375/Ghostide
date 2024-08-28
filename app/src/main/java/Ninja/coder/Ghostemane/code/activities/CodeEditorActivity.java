@@ -28,6 +28,7 @@ import Ninja.coder.Ghostemane.code.project.ProjectManager;
 import Ninja.coder.Ghostemane.code.tasks.app.SassForAndroid;
 import Ninja.coder.Ghostemane.code.terminal.TerminalActivity;
 import Ninja.coder.Ghostemane.code.utils.*;
+import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
 import Ninja.coder.Ghostemane.code.widget.BlurImage;
 import Ninja.coder.Ghostemane.code.widget.ExrtaFab;
 import Ninja.coder.Ghostemane.code.widget.GhostWebMaterialDialog;
@@ -1493,7 +1494,7 @@ public class CodeEditorActivity extends AppCompatActivity {
   public class Recyclerview1Adapter extends RecyclerView.Adapter<Recyclerview1Adapter.ViewHolder> {
 
     private ArrayList<HashMap<String, Object>> _data;
-    private int currentTabIndex = -1;
+    private int currentTabIndex = 0;
     private String dataChange = "";
 
     public Recyclerview1Adapter(ArrayList<HashMap<String, Object>> _arr) {
@@ -1576,7 +1577,6 @@ public class CodeEditorActivity extends AppCompatActivity {
 
                   if (dataInsert.equals(shp.getString("pos_path", ""))) {
                     selector.setVisibility(View.VISIBLE);
-                    n = 0;
                     if (currentTabIndex == _position) {
                       setPowerMenuCallBack(linear5, _data, _position);
                     } else {
@@ -1586,7 +1586,6 @@ public class CodeEditorActivity extends AppCompatActivity {
                   } else {
                     selector.setVisibility(View.GONE);
                     setDistreeView();
-                    n = 0;
                   }
                 } else {
                   selector.setVisibility(View.GONE);

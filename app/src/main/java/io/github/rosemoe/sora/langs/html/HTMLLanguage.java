@@ -27,6 +27,11 @@ import Ninja.coder.Ghostemane.code.ApplicationLoader;
 import Ninja.coder.Ghostemane.code.activities.FileDirActivity;
 import android.app.Activity;
 import android.content.SharedPreferences;
+import com.steadystate.css.dom.CSSStyleSheetImpl;
+import com.steadystate.css.format.CSSFormat;
+import com.steadystate.css.parser.CSSOMParser;
+import android.util.Log;
+import com.steadystate.css.parser.SACParserCSS3;
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 import io.github.rosemoe.sora.interfaces.EditorLanguage;
@@ -47,6 +52,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.Arrays;
+import org.w3c.css.sac.InputSource;
 
 public class HTMLLanguage implements EditorLanguage {
   public static final String[] JS = {
@@ -807,7 +813,7 @@ public class HTMLLanguage implements EditorLanguage {
     Elements styleElements = doc.select("style");
     for (Element styleElement : styleElements) {
       String cssCode = styleElement.html();
-      String formattedCssCode = javaFormat(cssCode);
+      String formattedCssCode = Css3FormatCode.format(cssCode);
       styleElement.html("\n\t" + formattedCssCode + "\n");
     }
 
@@ -1103,6 +1109,33 @@ public class HTMLLanguage implements EditorLanguage {
               .append(text = TextUtils.createIndent(count + advanceAfter, tabSize, useTab()));
       int shiftLeft = text.length() + 1;
       return new HandleResult(sb, shiftLeft);
+    }
+  }
+
+  static class Css3FormatCode {
+
+    private static CSSFormat formats;
+
+    public static String format(String code) {
+
+      formats =
+          new CSSFormat()
+              .setPropertiesInSeparateLines(2)
+              .setRgbAsHex(true)
+              .setUseSourceStringValues(true);
+      try {
+        InputSource source = new InputSource(new StringReader(code));
+        CSSOMParser parser = new CSSOMParser(new SACParserCSS3());
+        CSSStyleSheetImpl sheet = (CSSStyleSheetImpl) parser.parseStyleSheet(source, null, null);
+
+        String formattedCode = sheet.getCssText(formats);
+        Log.w("Code formatting completed in ", String.valueOf(System.nanoTime()) + "Ms");
+        return formattedCode;
+      } catch (Exception err) {
+        Log.w("Code Format Error", err.toString());
+      }
+
+      return code;
     }
   }
 }

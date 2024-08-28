@@ -362,6 +362,9 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
               if (previous == HTMLLexer.OPEN_SLASH) {
                 colorid = EditorColorScheme.OPERATOR;
               }
+              if (previous == HTMLLexer.SUB) {
+                colorid = EditorColorScheme.HTML_TAG;
+              }
 
               ListCss3Color.initColor(token, line, column, result, true);
               result.addIfNeeded(line, column, colorid);
@@ -380,25 +383,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
             block.startLine = line;
             block.startColumn = column;
             stack.push(block);
-            int[] colorIdsArrays = {
-              EditorColorScheme.ATTRIBUTE_VALUE,
-              EditorColorScheme.KEYWORD,
-              EditorColorScheme.ATTRIBUTE_NAME,
-              EditorColorScheme.HTML_TAG,
-              EditorColorScheme.LITERAL,
-              EditorColorScheme.Ninja,
-              EditorColorScheme.LINE_BLOCK_LABEL,
-              EditorColorScheme.OPERATOR,
-              EditorColorScheme.blue
-            };
-
-            // تعیین رنگ بر اساس موقعیت در stack
-            int coloridss =
-                (stack.size() < colorIdsArrays.length)
-                    ? colorIdsArrays[stack.size()]
-                    : EditorColorScheme.OPERATOR;
-
-            result.addIfNeeded(line, column, coloridss);
+            result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
             break;
           case HTMLLexer.RBRACE:
             if (!stack.isEmpty()) {
@@ -409,30 +394,8 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
               if (b.startLine != b.endLine) {
                 result.addBlockLine(b);
               }
-
-              // آرایه‌ای از رنگ‌ها
-              int[] colorIdsArray = {
-                EditorColorScheme.ATTRIBUTE_VALUE,
-                EditorColorScheme.KEYWORD,
-                EditorColorScheme.ATTRIBUTE_NAME,
-                EditorColorScheme.HTML_TAG,
-                EditorColorScheme.LITERAL,
-                EditorColorScheme.Ninja,
-                EditorColorScheme.LINE_BLOCK_LABEL,
-                EditorColorScheme.OPERATOR,
-                EditorColorScheme.blue
-              };
-
-              // تعیین رنگ بر اساس موقعیت در stack
-              int colorids =
-                  (stack.size() < colorIdsArray.length)
-                      ? colorIdsArray[stack.size()]
-                      : EditorColorScheme.OPERATOR;
-
-              result.addIfNeeded(line, column, colorids);
-            } else {
-              result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
             }
+            result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
             break;
           case HTMLLexer.DIV:
             {
@@ -469,7 +432,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
 
         first = false;
       }
-      
+
       var jsMode = new BasicSyntaxHtmlAnalyzerMod();
       jsMode.analyze(content, result, delegate);
       result.determine(lastLine);
