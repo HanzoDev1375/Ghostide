@@ -20,6 +20,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.skydoves.powermenu.PowerMenu;
 import io.github.rosemoe.sora.text.TextStyle;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
@@ -219,6 +220,23 @@ public class SetThemeForJson {
     return this;
   }
 
+  public SetThemeForJson subPowerMenu(PowerMenu menu, HashMap<String, Object> map) {
+    menu.setTextColor(
+        map.containsKey("ToolbarTextColor")
+            ? Color.parseColor(map.get("ToolbarTextColor").toString())
+            : Color.parseColor("#fff"));
+    menu.setMenuColor(
+        map.containsKey("MenuBackground")
+            ? Color.parseColor(map.get("MenuBackground").toString())
+            : Color.parseColor("#ff000000"));
+    menu.setIconColor(
+        map.containsKey("TabImageColorFilter")
+            ? Color.parseColor(map.get("TabImageColorFilter").toString())
+            : Color.parseColor("#fff472"));
+    
+    return this;
+  }
+
   public SetThemeForJson buildandpost() {
 
     return this;
@@ -293,7 +311,6 @@ public class SetThemeForJson {
     Gson styleGson = new GsonBuilder().setPrettyPrinting().create();
     FileIOUtils.writeFileFromString(customPath, gson.toJson(StyleText));
   }
-
 
   public static void LoadStyle(Map<String, Boolean> map) {
     map = new Gson().fromJson(setReloadStyle(), new TypeToken<Map<String, Boolean>>() {}.getType());

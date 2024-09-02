@@ -168,23 +168,13 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     this.initialized = false;
     AndroidHelper.switchLanguage(this, getIntent().getStringExtra(EXTRA_LANGUAGE));
-    //    switch (getViewType()) {
-    //      case LIGHT_SMALL:
-    //      case LIGHT:
-    //        setTheme(R.style.ActivityThemeDesignerLight);
-    //        break;
-    //      case DARK_SMALL:
-    //      case DARK:
-    //        setTheme(R.style.ActivityThemeDesignerDark);
-    //        break;
-    //    }
     getWindow().setSoftInputMode(2);
     AndroidHelper.forceOptionsMenuButton(this);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.designer);
     toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
-
+    setTitle("Ghost ide Layout editor");
     AndroidHelper.makeToolbarFocusable(this);
     if (!isTrainer()) {
       AndroidHelper.setAndroidTVPadding(findViewById(R.id.designerFrame));
@@ -200,32 +190,14 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
           R.drawable.ic_android,
           getIntent().getStringArrayExtra(EXTRA_TRAINER_HEADER));
     } else {
-      getSupportActionBar().setDisplayShowTitleEnabled(false);
-      getSupportActionBar().setNavigationMode(1);
-      getSupportActionBar()
-          .setListNavigationCallbacks(
-              new ArrayAdapter<>(
-                  this,
-                  17367049,
-                  new String[] {
-                    "Light Theme Small", "Dark Theme Small", "Light Theme", "Dark Theme"
-                  }),
-              (itemPosition, itemId) -> {
-                if (!initialized || itemPosition == getViewType()) {
-                  return true;
-                }
-                setViewType(itemPosition);
-                return true;
-              });
-      getSupportActionBar().setSelectedNavigationItem(getViewType());
       DrawerLayout drawerLayout = findViewById(R.id.designerDrawer);
       this.drawerToggle =
           new ActionBarDrawerToggle(
               this,
               drawerLayout,
               // R.drawable.round_menu_24,
-              17039370,
-              17039370);
+              R.string.add__,
+              R.string.add__);
       drawerLayout.setDrawerListener(this.drawerToggle);
     }
     if (isTrainer()) {

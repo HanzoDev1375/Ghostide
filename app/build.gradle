@@ -172,7 +172,7 @@ dependencies {
     implementation project(path: ':jaxp:xml')
     implementation "androidx.core:core:1.6.0"  
     implementation 'androidx.preference:preference:1.2.1'
-    implementation 'com.github.javaparser:javaparser-core:3.25.10'
+    implementation 'com.github.javaparser:javaparser-core:3.26.2'
     implementation project(':ui-designer')
     implementation project(':webview')
     implementation project(':vectormaster')   

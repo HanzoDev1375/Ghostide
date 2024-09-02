@@ -126,7 +126,7 @@ public class CodeEditorActivity extends AppCompatActivity {
   private final String code = "";
   private double click2var = 0;
   private double pos10 = 0;
-
+  private SetThemeForJson themeForJson2;
   private double n1 = 0;
   private double n2 = 0;
   private double n3 = 0;
@@ -348,6 +348,7 @@ public class CodeEditorActivity extends AppCompatActivity {
     imageloadereditor = findViewById(R.id.imageloadereditor);
     modelEditor = new ViewModelProvider(this).get(EditorViewModel.class);
     editor.restoreState(_savedInstanceState);
+    themeForJson2 = new SetThemeForJson();
     recyclerview1.addOnScrollListener(
         new RecyclerView.OnScrollListener() {
           @Override
@@ -674,8 +675,6 @@ public class CodeEditorActivity extends AppCompatActivity {
                 | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
     editor.setLineNumberAlign(Paint.Align.CENTER);
-
-    SetThemeForJson themeForJson2 = new SetThemeForJson();
     themeForJson2.setThemeCodeEditor(editor, imap, false, this);
     themeForJson2.addTextColor(
         titleauthor, "SyombolBarTextColor", Color.parseColor("#FFFFA0FB"), this, imap);
@@ -835,30 +834,8 @@ public class CodeEditorActivity extends AppCompatActivity {
     pvr.setShowBackground(false);
     pvr.setDividerHeight(2);
     pvr.setTextSize(14);
-    if (ru.contains("rup")) {
-      pvr.setIconColor(0xFFFDA893);
-      pvr.setDivider(new ColorDrawable(0xFFEEEEEE));
-      pvr.setMenuColor(0xFF2B2121);
-      pvr.setTextColor(0xFFEEEEEE);
-    } else {
-      if (imap.containsKey("ImageColor")) {
-        pvr.setIconColor(Color.parseColor(imap.get("ImageColor").toString()));
-        pvr.setDivider(new ColorDrawable(Color.parseColor(imap.get("ImageColor").toString())));
-      } else {
-        pvr.setDivider(new ColorDrawable(0xFFEEEEEE));
-        pvr.setIconColor(0xFFFDA893);
-      }
-      if (imap.containsKey("MenuBackground")) {
-        pvr.setMenuColor(Color.parseColor(imap.get("MenuBackground").toString()));
-      } else {
-        pvr.setMenuColor(0xFF2B2121);
-      }
-      if (imap.containsKey("TEXT_NORMAL")) {
-        pvr.setTextColor(Color.parseColor(imap.get("TEXT_NORMAL").toString()));
-      } else {
-        pvr.setTextColor(0xFFEEEEEE);
-      }
-    }
+    
+    themeForJson2.subPowerMenu(pvr,imap);
     pvr.setOnMenuItemClickListener(
         new OnMenuItemClickListener<PowerMenuItem>() {
           @Override

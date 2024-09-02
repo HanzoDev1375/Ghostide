@@ -93,6 +93,8 @@
         <activity
             android:name=".activities.MdCodeViewActivity"
         />
+        <activity android:name=".activities.ThemePreviewActivity" />
+
         <activity
             android:name=".activities.JavaManagerLayoutActivity"
         />

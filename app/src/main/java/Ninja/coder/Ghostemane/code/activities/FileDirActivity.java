@@ -695,7 +695,7 @@ public class FileDirActivity extends BaseCompat
                     recyclerview2.setVisibility(View.VISIBLE);
                     filedir_bar.setVisibility(View.GONE);
                     recyclerview2.setAdapter(fileListItem);
-                    
+
                     ListSheet.bind(recyclerview2, Folder);
                     if (gridLayoutManager != null) {
                       recyclerview2.setLayoutManager(gridLayoutManager);
@@ -1335,7 +1335,11 @@ public class FileDirActivity extends BaseCompat
       SendDataFromCodeEditor(newpos, "path", files, newlistmap);
     }
     if (staticstring.endsWith(".ghost")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      /// SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      var it = new Intent();
+      it.setClass(getApplicationContext(), ThemePreviewActivity.class);
+      it.putExtra("keyitem", staticstring);
+      startActivity(it);
     }
     if (staticstring.endsWith(".xml")) {
       SendDataFromCodeEditor(newpos, "path", files, newlistmap);
@@ -1811,39 +1815,36 @@ public class FileDirActivity extends BaseCompat
         });
     dialog.show();
   }
-  
-  private void setSanDisk(){
-  runOnUiThread(
-                    new Runnable() {
-                      @Override
-                      public void run() {
 
-                        if (staticStorage) {
-                          staticStorage = false;
-                          Folder = FileUtil.getExternalStorageDir();
-                          DataUtil.showMessage(
-                              getApplicationContext(), FileUtil.getExternalStorageDir());
-                          reLoadFile();
-                          _drawer.closeDrawer(GravityCompat.START);
-                        } else {
-                          staticStorage = true;
-                          if (sd_stor.hasRealRemovableSdCarde()) {
-                            Folder = sd_stor.getExtSdPath();
-                            DataUtil.showMessage(getApplicationContext(), sd_stor.getExtSdPath());
-                          } else {
-                            DataUtil.showMessage(
-                                getApplicationContext(), "مموری کارت پیدا نشد متاسفم");
-                          }
-                          reLoadFile();
-                          _drawer.closeDrawer(GravityCompat.START);
-                        }
-                      }
-                    });
-  } 
+  private void setSanDisk() {
+    runOnUiThread(
+        new Runnable() {
+          @Override
+          public void run() {
+
+            if (staticStorage) {
+              staticStorage = false;
+              Folder = FileUtil.getExternalStorageDir();
+              DataUtil.showMessage(getApplicationContext(), FileUtil.getExternalStorageDir());
+              reLoadFile();
+              _drawer.closeDrawer(GravityCompat.START);
+            } else {
+              staticStorage = true;
+              if (sd_stor.hasRealRemovableSdCarde()) {
+                Folder = sd_stor.getExtSdPath();
+                DataUtil.showMessage(getApplicationContext(), sd_stor.getExtSdPath());
+              } else {
+                DataUtil.showMessage(getApplicationContext(), "مموری کارت پیدا نشد متاسفم");
+              }
+              reLoadFile();
+              _drawer.closeDrawer(GravityCompat.START);
+            }
+          }
+        });
+  }
 
   public void DrowerHandler() {
-    
-    
+
     navs.bringToFront();
     navs.setClick(
         (item) -> {
@@ -1851,7 +1852,7 @@ public class FileDirActivity extends BaseCompat
           switch ((int) item.getItemId()) {
             case 1:
               {
-                setSanDisk(); 
+                setSanDisk();
                 break;
               }
 

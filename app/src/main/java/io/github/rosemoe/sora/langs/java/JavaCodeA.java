@@ -34,7 +34,7 @@ class JavaCodeA implements CodeAnalyzer {
       TextAnalyzeResult result,
       TextAnalyzer.AnalyzeThread.Delegate delegate) {
     try {
-      if (ApplicationLoader.getAnalyzercod().getBoolean("Analyzercod",false) == true) {
+      if (ApplicationLoader.getAnalyzercod().getBoolean("Analyzercod", false) == true) {
 
         ANTLRInputStream input = new ANTLRInputStream(content.toString());
         Java20Lexer lexer = new Java20Lexer(input);
@@ -127,6 +127,27 @@ class JavaCodeA implements CodeAnalyzer {
                         Utils.setSpanEFO(result, line, col, EditorColorScheme.Ninja);
                       });
 
+              n.getBody()
+                  .ifPresent(
+                      it -> {
+                        it.ifForStmt(
+                            its -> {
+                              Utils.setSpanEFO(
+                                  result,
+                                  its.getBegin().get().line,
+                                  its.getBegin().get().column + 1,
+                                  EditorColorScheme.COLOR_TIP);
+                            });
+                        it.ifTryStmt(
+                            va -> {
+                              Utils.setSpanEFO(
+                                  result,
+                                  va.getBegin().get().line,
+                                  va.getBegin().get().column + 1,
+                                  EditorColorScheme.COLOR_DEBUG);
+                            });
+                      });
+
               super.visit(n, arg);
             }
           },
@@ -138,6 +159,7 @@ class JavaCodeA implements CodeAnalyzer {
             public void visit(ClassOrInterfaceDeclaration n, Void arg) {
               var className = n.getNameAsString();
               cun.add(className);
+
               super.visit(n, arg);
             }
 
@@ -145,6 +167,15 @@ class JavaCodeA implements CodeAnalyzer {
             public void visit(ConstructorDeclaration n, Void arg) {
               String constructorName = n.getNameAsString();
 
+              n.getBody()
+                  .ifForStmt(
+                      it -> {
+                        Utils.setSpanEFO(
+                            result,
+                            it.getBegin().get().line,
+                            it.getBegin().get().column,
+                            EditorColorScheme.COLOR_DEBUG);
+                      });
               // بررسی کنید که آیا نام کانستراکتور در مجموعه un وجود دارد
               if (cun.contains(constructorName)) {
                 int line = n.getBegin().get().line;
