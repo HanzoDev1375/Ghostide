@@ -67,6 +67,7 @@ public class ThemePreviewActivity extends BaseCompat {
 
     SetThemeForJson theme = new SetThemeForJson();
     theme.setThemeCodeEditor((CodeEditor) bind.editor, map, false, this);
+    theme.setFabColorHint(bind.fab,map);
   }
 
   class FakeAd extends RecyclerView.Adapter<FakeAd.VH> {

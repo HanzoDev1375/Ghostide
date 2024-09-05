@@ -722,64 +722,6 @@ public class MySqlCodeAnalyzer implements CodeAnalyzer {
           case MySqlLexer.CHARSET_REVERSE_QOUTE_STRING:
             get(result, EditorColorScheme.LITERAL, true, true, line, column);
             break;
-          case MySqlLexer.HEXCOLOR:
-            {
-              String text = token.getText();
-              if (RegexUtilCompat.RegexSelect("(\\#[a-zA-F0-9]{8})|(\\#[a-zA-F0-9]{6})", text)) {
-
-                var colors = result;
-                try {
-                  int color = Color.parseColor(text);
-                  colors.addIfNeeded(line, column, EditorColorScheme.LITERAL);
-                  if (ColorUtils.calculateLuminance(color) > 0.5) {
-                    Span span =
-                        Span.obtain(
-                            column ,
-                            TextStyle.makeStyle(
-                                EditorColorScheme.black, 0, false, false, false, false, true));
-                    if (span != null) {
-                      span.setBackgroundColorMy(color);
-                      colors.add(line, span);
-                    }
-                  } else if (ColorUtils.calculateLuminance(color) <= 0.5) {
-                    Span span =
-                        Span.obtain(
-                            column ,
-                            TextStyle.makeStyle(
-                                EditorColorScheme.TEXT_NORMAL,
-                                0,
-                                false,
-                                false,
-                                false,
-                                false,
-                                true));
-                    if (span != null) {
-                      span.setBackgroundColorMy(color);
-                      colors.add(line, span);
-                    }
-                  }
-
-                  Span middle = Span.obtain(column + text.length(), EditorColorScheme.LITERAL);
-                  middle.setBackgroundColorMy(Color.TRANSPARENT);
-                  colors.add(line, middle);
-
-                  Span end =
-                      Span.obtain(
-                          column + text.length(),
-                          TextStyle.makeStyle(EditorColorScheme.TEXT_NORMAL));
-                  end.setBackgroundColorMy(Color.TRANSPARENT);
-                  colors.add(line, end);
-                  break;
-                } catch (Exception ignore) {
-                  ignore.printStackTrace();
-                }
-              }else{
-                result.addIfNeeded(line, column, EditorColorScheme.LITERAL);
-              }
-
-              result.addIfNeeded(line, column, EditorColorScheme.LITERAL);
-              break;
-            }
 
           default:
             get(result, EditorColorScheme.TEXT_NORMAL, false, false, line, column);

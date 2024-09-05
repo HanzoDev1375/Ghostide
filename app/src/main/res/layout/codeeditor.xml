@@ -73,7 +73,6 @@
                                 <ImageView
                                      android:layout_height="30dp"
                                      android:layout_width="30dp"
-                                     android:src="@drawable/default_image"
                                      android:scaleType="centerInside"
                                      android:layout_marginLeft="3dp"
                                      android:id="@+id/iconAuthor" />

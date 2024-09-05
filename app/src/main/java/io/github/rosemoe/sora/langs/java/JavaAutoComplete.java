@@ -42,14 +42,13 @@ public class JavaAutoComplete implements AutoCompleteProvider {
       List<CompletionItem> words = new ArrayList<>();
       for (String word : userIdentifiers.getIdentifiers()) {
         if (word.startsWith(match)) {
-          words.add(new CompletionItem(word, "Identifier"));
+           words.add(new CompletionItem(word, "Data?"));
         }
       }
 
       Collections.sort(words, CompletionItem.COMPARATOR_BY_NAME);
       keywords.addAll(words);
     }
-    
 
     return keywords;
   }

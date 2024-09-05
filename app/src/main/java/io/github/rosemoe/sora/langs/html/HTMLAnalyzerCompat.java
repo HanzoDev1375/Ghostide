@@ -256,6 +256,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
           case HTMLLexer.COLONCOLON:
           case HTMLLexer.ELLIPSIS:
           case HTMLLexer.DOT:
+          case HTMLLexer.DOLLAR:
             result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
             break;
           case HTMLLexer.BOOLEAN:
@@ -364,6 +365,19 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
               }
               if (previous == HTMLLexer.SUB) {
                 colorid = EditorColorScheme.HTML_TAG;
+              }
+              if(previous == HTMLLexer.DOLLAR){
+                //$php
+                colorid = EditorColorScheme.ATTRIBUTE_VALUE;
+              }
+              if(RegexUtilCompat.RegexSelect("<\\?",token.getText())) {
+              	colorid = EditorColorScheme.OPERATOR;
+              }
+              if(RegexUtilCompat.RegexSelect("\\?>",token.getText())) {
+              	colorid = EditorColorScheme.OPERATOR;
+              }
+              if(RegexUtilCompat.RegexSelect("(__.*__)",token.getText())){
+                colorid = EditorColorScheme.COLOR_LOG;
               }
 
               ListCss3Color.initColor(token, line, column, result, true);

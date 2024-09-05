@@ -16,6 +16,7 @@ import Ninja.coder.Ghostemane.code.glidecompat.GlideCompat;
 import Ninja.coder.Ghostemane.code.layoutmanager.LogCatBottomSheet;
 import Ninja.coder.Ghostemane.code.marco.CharUtil;
 import Ninja.coder.Ghostemane.code.marco.ColorView;
+import Ninja.coder.Ghostemane.code.marco.FactoryCodeError;
 import Ninja.coder.Ghostemane.code.marco.GhostWebEditorSearch;
 import Ninja.coder.Ghostemane.code.marco.NinjaMacroFileUtil;
 import Ninja.coder.Ghostemane.code.marco.WallpaperParallaxEffect;
@@ -376,6 +377,7 @@ public class CodeEditorActivity extends AppCompatActivity {
         });
     ghostIcon = findViewById(R.id.icon_backgroundghost);
     var mRootView = getWindow().getDecorView();
+
     mRootView
         .getViewTreeObserver()
         .addOnGlobalLayoutListener(
@@ -606,6 +608,8 @@ public class CodeEditorActivity extends AppCompatActivity {
           var cu = event.getEditor().getCursor();
           modelEditor.setCursor(cu.getLeftLine() + cu.getLeftColumn());
           var myChar = new CharUtil(editor.getText().toString(), titleauthor);
+          var iscode = new FactoryCodeError(editor, iconAuthor);
+          iscode.run();
         });
 
     if (sve.contains("getAutoSave")) {
@@ -723,6 +727,7 @@ public class CodeEditorActivity extends AppCompatActivity {
         .setColor(EditorColorScheme.MATCHED_TEXT_BACKGROUND, Color.parseColor("#75800F31"));
     // editor.setColorScheme(editor.getColorScheme().setColor(EditorColorScheme.red,Color.RED));
     editor.getColorScheme().setColor(EditorColorScheme.red, Color.parseColor("#FF710000"));
+
     if (tab100.contains("mpcnullgogo")) {
       try {
         _tabsize(Double.parseDouble(tab100.getString("mpcnullgogo", "")));
@@ -834,8 +839,8 @@ public class CodeEditorActivity extends AppCompatActivity {
     pvr.setShowBackground(false);
     pvr.setDividerHeight(2);
     pvr.setTextSize(14);
-    
-    themeForJson2.subPowerMenu(pvr,imap);
+
+    themeForJson2.subPowerMenu(pvr, imap);
     pvr.setOnMenuItemClickListener(
         new OnMenuItemClickListener<PowerMenuItem>() {
           @Override
