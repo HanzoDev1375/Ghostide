@@ -1,5 +1,6 @@
 package io.github.rosemoe.sora.langs.html;
 
+import Ninja.coder.Ghostemane.code.IdeEditor;
 import Ninja.coder.Ghostemane.code.marco.RegexUtilCompat;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import android.graphics.Color;
@@ -7,6 +8,8 @@ import androidx.core.graphics.ColorUtils;
 import io.github.rosemoe.sora.data.Span;
 import android.util.Log;
 import io.github.rosemoe.sora.langs.javascript.BasicSyntaxJavaScriptAnalyzer;
+import io.github.rosemoe.sora.langs.php.PHPLanguage;
+import io.github.rosemoe.sora.langs.php.PhpErrorManager;
 import io.github.rosemoe.sora.langs.xml.analyzer.BasicSyntaxPullAnalyzer;
 import io.github.rosemoe.sora.langs.xml.analyzer.Utils;
 import io.github.rosemoe.sora.text.TextStyle;
@@ -28,6 +31,15 @@ import org.jsoup.select.Elements;
 import org.jsoup.nodes.Element;
 
 public class HTMLAnalyzerCompat implements CodeAnalyzer {
+  private IdeEditor editor;
+  
+  
+  public HTMLAnalyzerCompat(){
+    
+  }
+  public HTMLAnalyzerCompat(IdeEditor editor) {
+    this.editor = editor;
+  }
 
   private BasicSyntaxPullAnalyzer htmlCodeAnalyzer;
 
@@ -366,17 +378,17 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
               if (previous == HTMLLexer.SUB) {
                 colorid = EditorColorScheme.HTML_TAG;
               }
-              if(previous == HTMLLexer.DOLLAR){
-                //$php
+              if (previous == HTMLLexer.DOLLAR) {
+                // $php
                 colorid = EditorColorScheme.ATTRIBUTE_VALUE;
               }
-              if(RegexUtilCompat.RegexSelect("<\\?",token.getText())) {
-              	colorid = EditorColorScheme.OPERATOR;
+              if (RegexUtilCompat.RegexSelect("<\\?", token.getText())) {
+                colorid = EditorColorScheme.OPERATOR;
               }
-              if(RegexUtilCompat.RegexSelect("\\?>",token.getText())) {
-              	colorid = EditorColorScheme.OPERATOR;
+              if (RegexUtilCompat.RegexSelect("\\?>", token.getText())) {
+                colorid = EditorColorScheme.OPERATOR;
               }
-              if(RegexUtilCompat.RegexSelect("(__.*__)",token.getText())){
+              if (RegexUtilCompat.RegexSelect("(__.*__)", token.getText())) {
                 colorid = EditorColorScheme.COLOR_LOG;
               }
 
@@ -447,8 +459,10 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
         first = false;
       }
 
-      var jsMode = new BasicSyntaxHtmlAnalyzerMod();
-      jsMode.analyze(content, result, delegate);
+      if(editor.getEditorLanguage() instanceof PHPLanguage) {
+        PhpErrorManager error = new PhpErrorManager();
+        error.analyze(content,result,delegate);
+      }
       result.determine(lastLine);
     } catch (IOException e) {
       e.printStackTrace();

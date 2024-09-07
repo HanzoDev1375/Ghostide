@@ -377,6 +377,7 @@ public class CodeEditorActivity extends AppCompatActivity {
         });
     ghostIcon = findViewById(R.id.icon_backgroundghost);
     var mRootView = getWindow().getDecorView();
+    syspiar.setVisibility(View.GONE);
 
     mRootView
         .getViewTreeObserver()
@@ -408,6 +409,7 @@ public class CodeEditorActivity extends AppCompatActivity {
                       .y(Math.min(max * max, 6))
                       .setDuration(1000)
                       .start();
+                   ColorAndroid12.showViewWithAnimation(syspiar);
 
                 } else {
                   // Decrease the scale
@@ -422,6 +424,7 @@ public class CodeEditorActivity extends AppCompatActivity {
                       .y(minScale)
                       .setDuration(1000)
                       .start();
+                   ColorAndroid12.hideViewWithAnimation(syspiar);
                 }
               }
             });
@@ -531,7 +534,6 @@ public class CodeEditorActivity extends AppCompatActivity {
     n2 = soundPool.load(getApplicationContext(), R.raw.typeremoved, 1);
     n3 = soundPool.load(getApplicationContext(), R.raw.ddoc, 1);
     n4 = soundPool.load(getApplicationContext(), R.raw.typespace, 1);
-    editor.setLnTip("L->");
     editor.setFirstLineNumberAlwaysVisible(true);
     editor.setOverScrollEnabled(true);
     editor.setInputType(

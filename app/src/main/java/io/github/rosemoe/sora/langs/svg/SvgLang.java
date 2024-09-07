@@ -1,5 +1,6 @@
 package io.github.rosemoe.sora.langs.svg;
 
+import Ninja.coder.Ghostemane.code.IdeEditor;
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 import io.github.rosemoe.sora.interfaces.EditorLanguage;
@@ -9,6 +10,12 @@ import io.github.rosemoe.sora.widget.SymbolPairMatch;
 
 public class SvgLang implements EditorLanguage {
 
+  private IdeEditor editor;
+
+  public SvgLang(IdeEditor editor) {
+    this.editor = editor;
+  }
+
   @Override
   public CharSequence format(CharSequence text) {
     return text;
@@ -16,7 +23,7 @@ public class SvgLang implements EditorLanguage {
 
   @Override
   public CodeAnalyzer getAnalyzer() {
-    return new HTMLAnalyzerCompat();
+    return new HTMLAnalyzerCompat(editor);
   }
 
   @Override

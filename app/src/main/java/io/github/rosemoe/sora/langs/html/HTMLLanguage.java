@@ -24,6 +24,7 @@
 package io.github.rosemoe.sora.langs.html;
 
 import Ninja.coder.Ghostemane.code.ApplicationLoader;
+import Ninja.coder.Ghostemane.code.IdeEditor;
 import Ninja.coder.Ghostemane.code.activities.FileDirActivity;
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -55,6 +56,16 @@ import java.util.Arrays;
 import org.w3c.css.sac.InputSource;
 
 public class HTMLLanguage implements EditorLanguage {
+  private IdeEditor editor;
+  
+  public HTMLLanguage(){
+    
+  }
+
+  public HTMLLanguage(IdeEditor editor) {
+    this.editor = editor;
+  }
+
   public static final String[] JS = {
     "abstract",
     "else",
@@ -696,19 +707,8 @@ public class HTMLLanguage implements EditorLanguage {
     "yellow",
     "yellowgreen"
   };
-  protected static SharedPreferences shp;
-  protected HTMLAnalyzer az;
-  private CodeEditor editor;
-  private AppConfig a;
+  
 
-  public HTMLLanguage(CodeEditor editor) {
-    AppConfig a = new AppConfig();
-    this.editor = editor;
-    az = new HTMLAnalyzer(editor);
-
-    //     Toast.makeText(ApplicationLoader.getContext(),ShowFile(),2).show();
-    shp = ApplicationLoader.getContext().getSharedPreferences("pos_path", Activity.MODE_PRIVATE);
-  }
 
   public static String ShowFile() {
     File file = new File(FileDirActivity.POSNINJACODERMAIN);
@@ -717,7 +717,7 @@ public class HTMLLanguage implements EditorLanguage {
 
   @Override
   public CodeAnalyzer getAnalyzer() {
-    return new HTMLAnalyzerCompat();
+    return new HTMLAnalyzerCompat(editor);
   }
 
   @Override
@@ -755,10 +755,6 @@ public class HTMLLanguage implements EditorLanguage {
         switch (token.getType()) {
           case HTMLLexer.LBRACE:
             advance++;
-            //            break;
-            //          case HTMLLexer.BlockEnd:
-            //          case HTMLLexer.SLASH_CLOSE:
-            //            advance--;
             break;
         }
       }

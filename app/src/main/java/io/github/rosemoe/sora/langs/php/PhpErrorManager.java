@@ -46,6 +46,9 @@ public class PhpErrorManager implements CodeAnalyzer {
             public void visitTerminal(TerminalNode node) {
               // TODO: Implement this method
               Log.d("Token Type", "Current Token Type: " + node.getSymbol().getText());
+              var text = node.getText();
+              var line = node.getSymbol().getLine() -1;
+              var col = node.getSymbol().getCharPositionInLine();
             }
 
             @Override

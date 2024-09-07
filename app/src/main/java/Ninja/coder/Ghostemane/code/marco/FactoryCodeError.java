@@ -10,6 +10,22 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 import io.github.rosemoe.sora.event.ContentChangeEvent;
+import io.github.rosemoe.sora.langs.css3.CSS3Language;
+import io.github.rosemoe.sora.langs.antlrlang.ANTLRV4Lang;
+import io.github.rosemoe.sora.langs.cpp.CppLanguage;
+import io.github.rosemoe.sora.langs.dart.DartLang;
+import io.github.rosemoe.sora.langs.ghostthemelang.ghostlang.ghostlangs;
+import io.github.rosemoe.sora.langs.html.HTMLLanguage;
+import io.github.rosemoe.sora.langs.groovy.lang.GroovyLanguage;
+import io.github.rosemoe.sora.langs.json.JsonLanguage;
+import io.github.rosemoe.sora.langs.kotlin.KotlinLanguage;
+import io.github.rosemoe.sora.langs.ninjalang.NinjaLang;
+import io.github.rosemoe.sora.langs.sass.SassLangCompat;
+import io.github.rosemoe.sora.langs.smali.SMLang;
+import io.github.rosemoe.sora.langs.typescript.TsLang;
+import io.github.rosemoe.sora.langs.xml.XMLLanguage;
+import io.github.rosemoe.sora.interfaces.EditorLanguage;
+import io.github.rosemoe.sora.langs.sql.MySqlLang;
 import io.github.rosemoe.sora.langs.java.JavaLanguage;
 import io.github.rosemoe.sora.langs.javascript.JavaScriptLanguage;
 import io.github.rosemoe.sora.langs.javascript.JavaScriptLexer;
@@ -59,14 +75,46 @@ public class FactoryCodeError {
    * هماهنگ نباشد تحلیل کردن کد به درستی پیش نمیرود
    */
   public void run() {
-    if (editor.getEditorLanguage() instanceof JavaScriptLanguage) {
-      js();
+    if (editor.getEditorLanguage() instanceof CSS3Language) {
+      call.setVisibility(View.INVISIBLE);
+    } else if (editor.getEditorLanguage() instanceof ANTLRV4Lang) {
+      call.setVisibility(View.INVISIBLE);
+    } else if (editor.getEditorLanguage() instanceof CppLanguage) {
+      call.setVisibility(View.INVISIBLE);
+    } else if (editor.getEditorLanguage() instanceof DartLang) {
+      call.setVisibility(View.INVISIBLE);
+    } else if (editor.getEditorLanguage() instanceof ghostlangs) {
+      call.setVisibility(View.INVISIBLE);
+    } else if (editor.getEditorLanguage() instanceof HTMLLanguage) {
+      call.setVisibility(View.INVISIBLE);
+    } else if (editor.getEditorLanguage() instanceof GroovyLanguage) {
+      call.setVisibility(View.INVISIBLE);
     } else if (editor.getEditorLanguage() instanceof JavaLanguage) {
       java();
+    } else if (editor.getEditorLanguage() instanceof JavaScriptLanguage) {
+      js();
+    } else if (editor.getEditorLanguage() instanceof JsonLanguage) {
+      call.setVisibility(View.INVISIBLE);
+    } else if (editor.getEditorLanguage() instanceof KotlinLanguage) {
+      call.setVisibility(View.INVISIBLE);
+    } else if (editor.getEditorLanguage() instanceof NinjaLang) {
+      call.setVisibility(View.INVISIBLE);
     } else if (editor.getEditorLanguage() instanceof PHPLanguage) {
       php();
     } else if (editor.getEditorLanguage() instanceof PythonLang) {
       py();
+    } else if (editor.getEditorLanguage() instanceof SassLangCompat) {
+      call.setVisibility(View.INVISIBLE);
+    } else if (editor.getEditorLanguage() instanceof SMLang) {
+      call.setVisibility(View.INVISIBLE);
+    } else if (editor.getEditorLanguage() instanceof TsLang) {
+      call.setVisibility(View.INVISIBLE);
+    } else if (editor.getEditorLanguage() instanceof XMLLanguage) {
+      call.setVisibility(View.INVISIBLE);
+    } else if (editor.getEditorLanguage() instanceof EditorLanguage) {
+      call.setVisibility(View.INVISIBLE);
+    } else if (editor.getEditorLanguage() instanceof MySqlLang) {
+      call.setVisibility(View.INVISIBLE);
     }
   }
 
@@ -137,6 +185,9 @@ public class FactoryCodeError {
                   new Handler(Looper.getMainLooper())
                       .post(
                           () -> {
+                            if (call.getVisibility() == View.INVISIBLE) {
+                              call.setVisibility(View.VISIBLE);
+                            }
                             if (errorCall) {
                               call.setImageResource(R.drawable.closehsi);
                               call.setColorFilter(Color.RED);
@@ -180,6 +231,9 @@ public class FactoryCodeError {
                   new Handler(Looper.getMainLooper())
                       .post(
                           () -> {
+                            if (call.getVisibility() == View.INVISIBLE) {
+                              call.setVisibility(View.VISIBLE);
+                            }
                             if (errorCall) {
                               call.setImageResource(R.drawable.closehsi);
                               call.setColorFilter(Color.RED);
@@ -225,6 +279,9 @@ public class FactoryCodeError {
                   new Handler(Looper.getMainLooper())
                       .post(
                           () -> {
+                            if (call.getVisibility() == View.INVISIBLE) {
+                              call.setVisibility(View.VISIBLE);
+                            }
                             if (errorCall) {
                               call.setImageResource(R.drawable.closehsi);
                               call.setColorFilter(Color.RED);

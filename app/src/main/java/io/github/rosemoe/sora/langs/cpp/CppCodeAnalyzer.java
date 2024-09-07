@@ -277,7 +277,6 @@ public class CppCodeAnalyzer implements CodeAnalyzer {
 
         case LBRACE:
           {
-            classNamePrevious = false;
             result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
             if (stack.isEmpty()) {
               if (currSwitch > maxSwitch) {
@@ -295,7 +294,6 @@ public class CppCodeAnalyzer implements CodeAnalyzer {
 
         case RBRACE:
           {
-            classNamePrevious = false;
             result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
             if (!stack.isEmpty()) {
               BlockLine block = stack.pop();

@@ -1,16 +1,17 @@
 package Ninja.coder.Ghostemane.code.navigator;
 
 import Ninja.coder.Ghostemane.code.IdeEditor;
-import Ninja.coder.Ghostemane.code.glidecompat.GlideCompat;
 import Ninja.coder.Ghostemane.code.utils.FileCompatApi28;
-import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import Ninja.coder.Ghostemane.code.widget.ExrtaFab;
-import android.view.View;
-// import android.widget.ImageView;
 import android.widget.ProgressBar;
-import com.google.android.material.button.MaterialButton;
-// import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import io.github.rosemoe.sora.langs.antlrlang.ANTLRV4Lang;
+import io.github.rosemoe.sora.langs.cpp.CppLanguage;
+import io.github.rosemoe.sora.langs.json.JsonLanguage;
+import io.github.rosemoe.sora.langs.dart.DartLang;
+import io.github.rosemoe.sora.langs.kotlin.KotlinLanguage;
+import io.github.rosemoe.sora.langs.groovy.lang.GroovyLanguage;
+import io.github.rosemoe.sora.langs.php.PHPLanguage;
+import io.github.rosemoe.sora.langs.typescript.TsLang;
 import io.github.rosemoe.sora.langs.css3.CSS3Language;
 import io.github.rosemoe.sora.langs.desc.*;
 import io.github.rosemoe.sora.langs.ghostthemelang.ghostlang.ghostlangs;
@@ -39,10 +40,8 @@ public class EditorRoaderFile {
   public static void RuningTask(IdeEditor editor, ExrtaFab _fab, String _path, ProgressBar bar) {
 
     if (_path.endsWith(".css")) {
-
       // this html lexer using as html css3 js and sass and scass
-
-      var CSS = new CSS3Language();
+      var CSS = new CSS3Language(editor);
       editor.setEditorLanguage(CSS);
       ReadFileCompat(editor, _path, bar);
     } else if (_path.endsWith(".py")) {
@@ -53,7 +52,7 @@ public class EditorRoaderFile {
         || _path.endsWith(".cxx")
         || _path.endsWith(".cc")
         || _path.endsWith(".h")) {
-      editor.setEditorLanguage(new io.github.rosemoe.sora.langs.cpp.CppLanguage());
+      editor.setEditorLanguage(new CppLanguage());
       _fab.postDelayed(_fab::show, 400);
       ReadFileCompat(editor, _path, bar);
     } else if (_path.endsWith(".html")) {
@@ -74,7 +73,7 @@ public class EditorRoaderFile {
       editor.setEditorLanguage(new UniversalLanguage(new CDescription()));
     } else if (_path.endsWith(".json")) {
       ReadFileCompat(editor, _path, bar);
-      editor.setEditorLanguage(new io.github.rosemoe.sora.langs.json.JsonLanguage());
+      editor.setEditorLanguage(new JsonLanguage());
       _fab.postDelayed(_fab::show, 400);
     } else if (_path.endsWith(".java")) {
       ReadFileCompat(editor, _path, bar);
@@ -105,7 +104,7 @@ public class EditorRoaderFile {
       //  ic.setVisibility(View.VISIBLE);
       //  GlideCompat.LoadSvg(_path, ic);
       _fab.postDelayed(_fab::show, 400);
-      var htmllang = new SvgLang();
+      var htmllang = new SvgLang(editor);
       editor.setEditorLanguage(htmllang);
     } else if (_path.endsWith(".md")) {
       ReadFileCompat(editor, _path, bar);
@@ -113,7 +112,7 @@ public class EditorRoaderFile {
       editor.setEditorLanguage(new MarkDownLang());
     } else if (_path.endsWith(".php")) {
       ReadFileCompat(editor, _path, bar);
-      editor.setEditorLanguage(new io.github.rosemoe.sora.langs.php.PHPLanguage());
+      editor.setEditorLanguage(new PHPLanguage(editor));
       _fab.postDelayed(_fab::show, 400);
     } else if (_path.endsWith(".go")) {
       ReadFileCompat(editor, _path, bar);
@@ -128,15 +127,15 @@ public class EditorRoaderFile {
       editor.setEditorLanguage(new UniversalLanguage(new RubyDescription()));
     } else if (_path.endsWith(".dart")) {
       ReadFileCompat(editor, _path, bar);
-      editor.setEditorLanguage(new io.github.rosemoe.sora.langs.dart.DartLang());
+      editor.setEditorLanguage(new DartLang());
     } else if (_path.endsWith(".kt")) {
       ReadFileCompat(editor, _path, bar);
       _fab.postDelayed(_fab::show, 400);
-      editor.setEditorLanguage(new io.github.rosemoe.sora.langs.kotlin.KotlinLanguage());
+      editor.setEditorLanguage(new KotlinLanguage());
     } else if (_path.endsWith(".groovy") || _path.endsWith(".gradle")) {
       ReadFileCompat(editor, _path, bar);
-      editor.setEditorLanguage(new io.github.rosemoe.sora.langs.groovy.lang.GroovyLanguage());
-    } else if (_path.endsWith(".cpp")) {
+      editor.setEditorLanguage(new GroovyLanguage());
+    } else if (_path.endsWith("jdjeje")) {
       ReadFileCompat(editor, _path, bar);
       editor.setEditorLanguage(new UniversalLanguage(new CppDescription()));
     } else if (_path.endsWith(".smali")) {
@@ -148,7 +147,7 @@ public class EditorRoaderFile {
       _fab.postDelayed(_fab::show, 400);
     } else if (_path.endsWith(".ts")) {
       ReadFileCompat(editor, _path, bar);
-      editor.setEditorLanguage(new io.github.rosemoe.sora.langs.typescript.TsLang(editor));
+      editor.setEditorLanguage(new TsLang(editor));
     } else if (_path.endsWith(".properties")) {
       _fab.hide();
       ReadFileCompat(editor, _path, bar);

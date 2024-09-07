@@ -23,6 +23,7 @@
  */
 package io.github.rosemoe.sora.langs.css3;
 
+import Ninja.coder.Ghostemane.code.IdeEditor;
 import android.util.Log;
 import com.steadystate.css.dom.CSSStyleSheetImpl;
 import com.steadystate.css.format.CSSFormat;
@@ -35,7 +36,6 @@ import io.github.rosemoe.sora.interfaces.NewlineHandler;
 import io.github.rosemoe.sora.langs.html.HTMLAnalyzerCompat;
 import io.github.rosemoe.sora.langs.internal.MyCharacter;
 import io.github.rosemoe.sora.text.TextUtils;
-import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.SymbolPairMatch;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.Token;
@@ -46,6 +46,12 @@ import org.w3c.css.sac.InputSource;
 
 public class CSS3Language implements EditorLanguage {
   /** */
+  protected IdeEditor editor;
+
+  public CSS3Language(IdeEditor editor) {
+    this.editor = editor;
+  }
+
   public static final String[] MCSS = {
     "align-content",
     "align-items",
@@ -477,17 +483,10 @@ public class CSS3Language implements EditorLanguage {
       new NewlineHandler[] {
         new BraceHandler(), new TwoIndentHandler(), new JavaDocStartHandler(), new JavaDocHandler()
       };
-  protected CodeEditor soraEditor;
-
-  public CSS3Language() {}
-
-  public CSS3Language(CodeEditor editor) {
-    this.soraEditor = editor;
-  }
 
   @Override
   public CodeAnalyzer getAnalyzer() {
-    return new HTMLAnalyzerCompat();
+    return new HTMLAnalyzerCompat(editor);
   }
 
   @Override

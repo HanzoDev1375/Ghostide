@@ -13,10 +13,13 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import com.android.tools.r8.D8;
 import com.github.javaparser.StaticJavaParser;
+import com.google.android.material.color.MaterialColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import dalvik.system.DexClassLoader;
+import java.util.Optional;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import ninjacoder.ghostide.androidtools.r8.android.JarPackager;
 
 import java.io.*;
@@ -29,7 +32,7 @@ public class JavaCompilerBeta {
 
   public static void run(Context context, String inputs) {
     // Use JavaParser to parse the class name from inputs
-    final String className = extractClassName(inputs, inputs);
+    final String className = extractFirstClassName(inputs);
 
     new AsyncTask<String, String, String>() {
       ProgressDialog pr;
@@ -155,7 +158,7 @@ public class JavaCompilerBeta {
           final TextView tx = new TextView(context);
           tx.setLayoutParams(new LinearLayout.LayoutParams(-2, -2));
           tx.setTextSize(15);
-          tx.setTextColor(ColorAndroid12.getColors(ColorAndroid12.TvColorFab));
+          tx.setTextColor(MaterialColors.getColor(tx, ColorAndroid12.TvColor));
           tx.setPadding(30, 30, 30, 30);
           tx.setTextIsSelectable(true);
 
@@ -241,14 +244,17 @@ public class JavaCompilerBeta {
   }
 
   // Method to extract class name from the input Java code using JavaParser
-  private static String extractClassName(String javaCode, String name) {
+  private static String extractFirstClassName(String javaCode) {
     try {
       CompilationUnit cu = StaticJavaParser.parse(javaCode);
-
-      return cu.getClassByName(name).orElseThrow().getNameAsString();
+      // پیدا کردن اولین کلاس
+      Optional<ClassOrInterfaceDeclaration> firstClass =
+          cu.findFirst(ClassOrInterfaceDeclaration.class);
+      // اگر کلاسی پیدا شد، نام آن را برگردانید
+      return firstClass.map(ClassOrInterfaceDeclaration::getNameAsString).orElse("Main");
     } catch (Exception e) {
       e.printStackTrace();
-      return "Main";
+      return "Main"; // در صورت خطا، یک مقدار پیش‌فرض برگردانید
     }
   }
 }

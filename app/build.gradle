@@ -113,6 +113,9 @@ task cleanUnusedXml {
 dependencies {
     
     implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
+    // https://mvnrepository.com/artifact/com.google.code.gson/gson
+    implementation 'com.google.code.gson:gson:2.11.0'
+
     implementation project(path: ":eclipse-standalone")
     implementation project(path: ":android-tools")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.2")
@@ -166,7 +169,9 @@ dependencies {
     
     implementation project(path: ":Plugin")
   	implementation project(path: ":pl-codecomment") 	
-  	implementation project(path: ":jgit") 	
+  	implementation project(path: ":jgit")
+  	implementation project(path: ":jgit")
+  	implementation project(path: ":prddownloader")
   	implementation project(path: ":datautils") 	
     implementation project(path: ':jaxp:jaxp-internal')
     implementation project(path: ':jaxp:xml')

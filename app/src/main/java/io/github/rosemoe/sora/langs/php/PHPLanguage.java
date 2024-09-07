@@ -1,10 +1,12 @@
 package io.github.rosemoe.sora.langs.php;
 
+import Ninja.coder.Ghostemane.code.IdeEditor;
 import io.github.rosemoe.sora.data.CompletionItem;
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 import io.github.rosemoe.sora.interfaces.EditorLanguage;
 import io.github.rosemoe.sora.interfaces.NewlineHandler;
+import io.github.rosemoe.sora.langs.html.HTMLAnalyzerCompat;
 import io.github.rosemoe.sora.langs.internal.MyCharacter;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.text.TextUtils;
@@ -12,12 +14,18 @@ import io.github.rosemoe.sora.widget.SymbolPairMatch;
 import lsp4custom.com.ninjacoder.customhtmllsp.ListKeyword;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.Token;
-
+import io.github.rosemoe.sora.langs.html.*;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PHPLanguage implements EditorLanguage {
+
+  private IdeEditor editor;
+
+  public PHPLanguage(IdeEditor editor) {
+    this.editor = editor;
+  }
 
   public static String[] key = {
     "abstract",
@@ -628,7 +636,7 @@ public class PHPLanguage implements EditorLanguage {
 
   @Override
   public CodeAnalyzer getAnalyzer() {
-    return new PHPCodeAnalyzer();
+    return new PHPCodeAnalyzer(editor);
   }
 
   @Override

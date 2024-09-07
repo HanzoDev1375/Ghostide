@@ -38,10 +38,8 @@ public class RecyclerViewHelper {
 
             if (direction == ItemTouchHelper.LEFT) {
               helper.CallBackLeft(position);
-              Toast.makeText(view.getContext(), "left", 2).show();
             } else if (direction == ItemTouchHelper.RIGHT) {
               helper.CallBackRight(position);
-              Toast.makeText(view.getContext(), "right", 2).show();
             }
           }
 
