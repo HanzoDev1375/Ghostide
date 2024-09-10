@@ -2113,7 +2113,7 @@ public class FileDirActivity extends BaseCompat
                 View dialogview =
                     getLayoutInflater().inflate(R.layout.makefolder, viewGroup, false);
                 EditText editor = dialogview.findViewById(R.id.editor);
-                di1.setTitle("File Tree");
+                di1.setTitle("Folder Tree");
                 di1.setMessage("Type Name Folder + name Ninja.ninja.app.txt");
                 di1.setNeutralButton(
                     "make",
@@ -2150,8 +2150,8 @@ public class FileDirActivity extends BaseCompat
                 View dialogview1 =
                     getLayoutInflater().inflate(R.layout.makefolder, viewGroup, false);
                 EditText editor = dialogview1.findViewById(R.id.editor);
-                di.setTitle("Fike Tree");
-                di.setMessage("Type Name Folder + name Ninja.ninja.app.txt");
+                di.setTitle("File Tree");
+                di.setMessage("Name file");
                 di.setNeutralButton(
                     "make",
                     (p, d) -> {
@@ -2310,9 +2310,9 @@ public class FileDirActivity extends BaseCompat
     int position =
         ((GridLayoutManager) recyclerview2.getLayoutManager()).findFirstVisibleItemPosition();
     var di = new GhostWebMaterialDialog(FileDirActivity.this);
-    di.setTitle("File Maket ");
+    di.setTitle("File Maker ");
     di.setIcon(R.drawable.file);
-    di.setMessage("File maket open file?");
+    di.setMessage("File maker open file?");
     di.setNeutralButton(
         "open",
         (p, d) -> {
