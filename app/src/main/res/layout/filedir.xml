@@ -104,6 +104,13 @@
             android:id="@+id/fabAdd"
             />
 
+        <ninja.coder.appuploader.main.ViewDownloder
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_gravity="right|bottom"
+            android:id="@+id/downloder"
+            />
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <Ninja.coder.Ghostemane.code.layoutmanager.NavigationViewCompnet

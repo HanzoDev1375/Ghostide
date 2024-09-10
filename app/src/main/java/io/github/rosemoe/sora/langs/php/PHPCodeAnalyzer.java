@@ -459,8 +459,6 @@ public class PHPCodeAnalyzer implements CodeAnalyzer {
 
         first = false;
       }
-       PhpErrorManager error = new PhpErrorManager();
-        error.analyze(content,result,delegate);
       result.determine(lastLine);
     } catch (IOException e) {
       e.printStackTrace();

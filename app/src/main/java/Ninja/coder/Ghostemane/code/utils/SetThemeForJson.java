@@ -60,7 +60,7 @@ public class SetThemeForJson {
   public SetThemeForJson setThemeCodeEditor(
       CodeEditor editor, HashMap<String, Object> imap, boolean chackHashMap, Activity x) {
 
-    /// app theme
+    
     getColor(imap, editor, "BLOCK_LINE", EditorColorScheme.BLOCK_LINE, "#ff28ffae");
     getColor(imap, editor, "OPERATOR", EditorColorScheme.OPERATOR, "#ff43ffd5");
     getColor(imap, editor, "BLOCK_LINE_CURRENT", EditorColorScheme.BLOCK_LINE_CURRENT, "#ff28ffae");
@@ -93,15 +93,38 @@ public class SetThemeForJson {
     getColor(imap, editor, "WHOLE_BACKGROUND", EditorColorScheme.WHOLE_BACKGROUND, "#02FFFFFF");
     getColor(imap, editor, "HTML_TAG", EditorColorScheme.HTML_TAG, "#ffc84100");
     getColor(imap, editor, "LITERAL", EditorColorScheme.LITERAL, "#ff2017");
-    // new theme color editor bind in SCROLLBAR
+    
     getColor(imap, editor, "print", EditorColorScheme.SCROLL_BAR_THUMB, "#ff3500");
     getColor(imap, editor, "ninja", EditorColorScheme.SCROLL_BAR_THUMB_PRESSED, "#ffacd9");
     getColor(
         imap, editor, "AUTO_COMP_PANEL_CORNER", EditorColorScheme.SCROLL_BAR_TRACK, "#ffee3201");
-    // css colors
+    getColor(imap, editor, "javakeyword", EditorColorScheme.javakeyword, "#592370");
+    getColor(imap, editor, "javaoprator", EditorColorScheme.javaoprator, "#672907");
+    getColor(imap, editor, "javafun", EditorColorScheme.javafun, "#592370");
+    getColor(imap, editor, "javafield", EditorColorScheme.javafield, "#672907");
+    getColor(imap, editor, "javatype", EditorColorScheme.javatype, "#337291");
+    getColor(imap, editor, "javaparament", EditorColorScheme.javaparament, "#336108");
+    getColor(imap, editor, "javanumber", EditorColorScheme.javanumber, "#ff620a");
+    getColor(imap, editor, "javastring", EditorColorScheme.javastring, "#ff7dd1");
+
+    getColor(imap, editor, "htmltag", EditorColorScheme.htmltag, "#ff6060");
+    getColor(imap, editor, "htmlattr", EditorColorScheme.htmlattr, "#4fc3f7");
+    getColor(imap, editor, "htmlattrname", EditorColorScheme.htmlattrname, "#ff620a");
+    getColor(imap, editor, "htmlstr", EditorColorScheme.htmlstr, "#ff620a");
+    getColor(imap, editor, "csskeyword", EditorColorScheme.csskeyword, "#ff620a");
+    getColor(imap, editor, "htmlsymbol", EditorColorScheme.htmlsymbol, "#ff620a");
+    getColor(imap, editor, "htmlblockhash", EditorColorScheme.htmlblockhash, "#ff620a");
+    getColor(imap, editor, "htmlblocknormal", EditorColorScheme.htmlblocknormal, "#ff620a");
+    getColor(imap, editor, "jskeyword", EditorColorScheme.jskeyword, "#ff620a");
+    getColor(imap, editor, "jsfun", EditorColorScheme.jsfun, "#ff620a");
+    getColor(imap, editor, "jsoprator", EditorColorScheme.jsoprator, "#ff620a");
+    getColor(imap, editor, "jsattr", EditorColorScheme.jsattr, "#ff620a");
+    getColor(imap, editor, "jsstring", EditorColorScheme.jsstring, "#ff620a");
+
+    
     editor.getColorScheme().setColor(EditorColorScheme.red, ColorCompat.RED);
     editor.getColorScheme().setColor(EditorColorScheme.aliceblue, ColorCompat.ALICEBLUE);
-    // new colors
+    
     editor.getColorScheme().setColor(EditorColorScheme.antiquewhite, ColorCompat.ANTIQUEWHITE);
     editor.getColorScheme().setColor(EditorColorScheme.aqua, ColorCompat.AQUA);
     editor.getColorScheme().setColor(EditorColorScheme.aquamarine, ColorCompat.AQUAMARINE);
@@ -115,7 +138,7 @@ public class SetThemeForJson {
     editor.getColorScheme().setColor(EditorColorScheme.brown, ColorCompat.BROWN);
     editor.getColorScheme().setColor(EditorColorScheme.white, ColorCompat.WHITE);
 
-    // install color log
+    
     editor.getColorScheme().setColor(EditorColorScheme.COLOR_DEBUG, Color.BLUE);
     editor.getColorScheme().setColor(EditorColorScheme.COLOR_ERROR, Color.RED);
     editor.getColorScheme().setColor(EditorColorScheme.COLOR_WARNING, Color.YELLOW);
@@ -162,8 +185,6 @@ public class SetThemeForJson {
 
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
       Window Hsi = a.getWindow();
-      Hsi.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-      Hsi.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
       Hsi.setStatusBarColor(
           imap.containsKey("BackgroundColorLinear")
               ? Color.parseColor(imap.get("BackgroundColorLinear").toString())
@@ -233,7 +254,7 @@ public class SetThemeForJson {
         map.containsKey("TabImageColorFilter")
             ? Color.parseColor(map.get("TabImageColorFilter").toString())
             : Color.parseColor("#fff472"));
-    
+
     return this;
   }
 
@@ -284,6 +305,27 @@ public class SetThemeForJson {
     map.put("LINE_NUMBER_BACKGROUND", "#00FFFFFF");
     map.put("TEXTCOLORIGOR", "#ffb34192");
     map.put("TEXTCOLORINIER", "#ffb36262");
+    map.put("javakeyword", "#ff6060");
+    map.put("javaoprator", "#4fc3f7");
+    map.put("javafun", "#afb42b");
+    map.put("javafield", "#f0be4b");
+    map.put("javatype", "#64b5f6");
+    map.put("javaparament", "#4fc3f7");
+    map.put("javanumber", "#8bc34a");
+    map.put("javastring", "#8bc34a");
+    map.put("htmltag", "#ff6060"); 
+    map.put("htmlattr", "#ff6060"); 
+    map.put("htmlattrname", "#3357FF"); 
+    map.put("htmlstr", "#FFC300"); 
+    map.put("csskeyword", "#DAF7A6"); 
+    map.put("htmlsymbol", "#FF33A8"); 
+    map.put("htmlblockhash", "#C70039"); 
+    map.put("htmlblocknormal", "#900C3F"); 
+    map.put("jskeyword", "#581845"); 
+    map.put("jsfun", "#900C3F"); 
+    map.put("jsoprator", "#FF5733"); 
+    map.put("jsattr", "#33FF57"); 
+    map.put("jsstring", "#FFC300");
     String path =
         FileUtil.getExternalStorageDir()
             + File.separator
@@ -294,7 +336,7 @@ public class SetThemeForJson {
             + "GhostThemeapp.ghost";
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
     FileIOUtils.writeFileFromString(path, gson.toJson(map));
-    // FileUtil.writeFile(path, gson.toJson(sortedMap));
+    
     Map<String, Boolean> StyleText = new HashMap<>();
     StyleText.put("isBold", true);
     StyleText.put("isItalic", false);

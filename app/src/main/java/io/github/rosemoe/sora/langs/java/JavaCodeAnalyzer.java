@@ -179,7 +179,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           case JavaLexer.VOLATILE:
           case JavaLexer.WHILE:
           case JavaLexer.VAR:
-          get(EditorColorScheme.KEYWORD,line,column,result);
+          get(EditorColorScheme.javakeyword,line,column,result);
             break;
           case JavaLexer.DECIMAL_LITERAL:
           case JavaLexer.HEX_LITERAL:
@@ -190,7 +190,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           case JavaLexer.BOOL_LITERAL:
           case JavaLexer.CHAR_LITERAL:
           case JavaLexer.NULL_LITERAL:
-            result.addIfNeeded(line, column, EditorColorScheme.LITERAL);
+            result.addIfNeeded(line, column, EditorColorScheme.javastring);
             break;
           case JavaLexer.STRING_LITERAL:
             {
@@ -290,7 +290,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           case JavaLexer.COLONCOLON:
           case JavaLexer.ELLIPSIS:
           case JavaLexer.DOT:
-            get(EditorColorScheme.OPERATOR, line, column, result);
+            get(EditorColorScheme.TEXT_NORMAL, line, column, result);
             break;
           case JavaLexer.BOOLEAN:
           case JavaLexer.BYTE:
@@ -301,7 +301,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           case JavaLexer.INT:
           case JavaLexer.LONG:
           case JavaLexer.SHORT:
-            get(EditorColorScheme.ATTRIBUTE_VALUE,line,column,result);
+            get(EditorColorScheme.javakeyword,line,column,result);
             break;
           case JavaLexer.BLOCK_COMMENT:
           case JavaLexer.LINE_COMMENT:
@@ -332,7 +332,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               if (previous == JavaLexer.EXTENDS
                   || previous == JavaLexer.FLOAT_LITERAL
                   || previous == JavaLexer.BOOLEAN) {
-                colorid = getRandomColor();
+                colorid = EditorColorScheme.javafun;
               }
               if (previous == JavaLexer.RETURN || previous == JavaLexer.NEW) {
                 colorid = EditorColorScheme.HTML_TAG;
@@ -350,15 +350,12 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 colorid = EditorColorScheme.HTML_TAG;
               }
               if (text1.matches("([A-Za-z]*)(Exception)([a-zA-Z]*)")) {
-                colorid = EditorColorScheme.BLOCK_LINE;
+                colorid = EditorColorScheme.javatype;
               }
               if (text1.matches("([A-Za-z]*)(Exception)([a-zA-Z]*)(\\s\\w+)")) {
-                colorid = EditorColorScheme.Ninja;
+                colorid = EditorColorScheme.javatype;
               }
-              if (previous == JavaLexer.COMMA || previous == JavaLexer.ASSIGN) {
-                colorid = EditorColorScheme.OPERATOR;
-              }
-              /// test
+              
               
                 get(colorid,line,column,result);
               break;

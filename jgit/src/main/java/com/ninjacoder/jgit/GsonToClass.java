@@ -24,6 +24,7 @@ public class GsonToClass {
   private OnCallBackChange call;
   protected Context context;
   protected String output;
+  private Call calls = Call.JAVA;
 
   public GsonToClass(Context context, String output, OnCallBackChange call) {
     this.call = call;
@@ -31,27 +32,43 @@ public class GsonToClass {
     this.output = output;
   }
 
+  enum Call {
+    JAVA("Make Java class"),
+    KT("Make Kt class"),
+    NONE("None");
+
+    private String item;
+
+    Call(String item) {
+      this.item = item;
+    }
+
+    public String getItem() {
+      return item;
+    }
+  }
+
   public void run() {
     var mydialog = new MaterialAlertDialogBuilder(context);
     mydialog.setTitle("Select Work?");
-    List<String> list = new ArrayList<>();
-    list.add("Make Java class");
-    list.add("Make data Class Kt");
-    list.add("Json to Xml");
+    List<Call> list = new ArrayList<>();
+    list.add(Call.JAVA);
+    list.add(Call.KT);
+    list.add(Call.NONE);
     mydialog.setAdapter(
         new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, list),
         (db, sw) -> {
           switch (sw) {
             case 0 -> {
-              makeJsontoJava(false, "Java");
+              makeJsontoJava(false, Call.JAVA);
               break;
             }
             case 1 -> {
-              makeJsontoJava(true, "Kotlin");
+              makeJsontoJava(true, Call.KT);
               break;
             }
             case 2 -> {
-              Toast.makeText(context, "Soon", 2).show();
+              Toast.makeText(context, Call.NONE.getItem(), 2).show();
               break;
             }
           }
@@ -60,14 +77,14 @@ public class GsonToClass {
     mydialog.show();
   }
 
-  private void makeJsontoJava(boolean isKt, String mod) {
+  private void makeJsontoJava(boolean isKt, Call mod) {
     JsonconvertLayoutBinding bind = JsonconvertLayoutBinding.inflate(LayoutInflater.from(context));
     var inputClassName = bind.inputClassName;
     var jsonCode = bind.inputJsonCode;
     jsonCode.getEditText().setSingleLine(true);
 
     dialog = new MaterialAlertDialogBuilder(context);
-    dialog.setTitle("Make Json to " + mod + " code");
+    dialog.setTitle("Make Json to " + mod.getItem() + " code");
     dialog.setView(bind.getRoot());
     dialog.setPositiveButton(
         android.R.string.ok,
@@ -115,18 +132,22 @@ public class GsonToClass {
 
         // تولید کد Java بر اساس داده‌های موجود در Map
         StringBuilder javaCode = new StringBuilder();
+        javaCode.append("package yourApp").append("\n");
+        javaCode.append("import com.google.gson.annotations.SerializedName;").append("\n");
+
         javaCode.append("public class ").append(nameClass).append("{\n");
 
         for (Map.Entry<String, Object> entry : map.entrySet()) {
           String key = entry.getKey();
           Object value = entry.getValue();
-
+          javaCode.append("\t@SerializedName("+ key +")").append('\n');
           javaCode.append("\tprivate " + convertType(value) + " " + key + ";\n");
         }
 
         for (Map.Entry<String, Object> entry : map.entrySet()) {
           String key = entry.getKey();
           Object value = entry.getValue();
+          // setNot usimg
 
           javaCode.append(
               "\n\npublic void set"
@@ -161,6 +182,9 @@ public class GsonToClass {
       var type = new TypeToken<Map<String, Object>>() {}.getType();
       Map<String, Object> map = gson.fromJson(code, type);
       var builder = new StringBuilder();
+      builder.append("package yourapp").append("\n\n");
+      builder.append("import kotlinx.serialization.Serializable").append("\n\n");
+      builder.append("@Serializable\n");
       builder.append("data class ").append(className).append("(\n");
       Iterator<Map.Entry<String, Object>> iterator = map.entrySet().iterator();
       while (iterator.hasNext()) {
@@ -217,7 +241,7 @@ public class GsonToClass {
     return str.substring(0, 1).toUpperCase() + str.substring(1);
   }
 
-  private boolean isJsonVilad(String code) {
+  public static boolean isJsonVilad(String code) {
     JsonParser jsonPaser = new JsonParser();
     JsonElement jsonElment = jsonPaser.parse(code);
     if (jsonElment.isJsonObject()) {

@@ -62,7 +62,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -91,6 +90,7 @@ import com.hzy.lib7z.Z7Extractor;
 import com.ninjacoder.jgit.GsonToClass;
 import com.skydoves.powermenu.PowerMenu;
 import java.util.stream.Collectors;
+import ninja.coder.appuploader.main.ViewDownloder;
 import ninjacoder.ghostide.androidtools.r8.android.R8Tools;
 import storage.sdcard.SdCardUtil;
 
@@ -209,6 +209,10 @@ public class FileDirActivity extends BaseCompat
   private GridLayoutManager gridLayoutManager;
   private SharedPreferences sharedPreferences;
   private CircularProgressIndicator filedir_bar;
+  private ViewDownloder downloder;
+  private HashMap<String, Object> maps = new HashMap<>();
+  private RequestNetwork last;
+  private RequestNetwork.RequestListener _last_request_listener;
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
@@ -285,6 +289,8 @@ public class FileDirActivity extends BaseCompat
     materialYou = getSharedPreferences("materialYou", Activity.MODE_PRIVATE);
     filedir_bar = findViewById(R.id.filedir_bar);
     book = getSharedPreferences("hsipsot4444", Activity.MODE_PRIVATE);
+    downloder = findViewById(R.id.downloder);
+
     WindowsMath(_drawer, _coordinator);
     var vie = LayoutInflater.from(this).inflate(R.layout.recyclerview_emptyview, null, false);
     recyclerview2.setEmptyView(vie);
@@ -295,6 +301,7 @@ public class FileDirActivity extends BaseCompat
       setViewType(ViewType.ROW);
     }
     ThemeChaker();
+  //  downloder.setVisibility(View.GONE);
 
     var helper =
         new RecyclerViewHelper(
@@ -382,6 +389,41 @@ public class FileDirActivity extends BaseCompat
           @Override
           public void onErrorResponse(String _param1, String _param2) {}
         };
+
+    last = new RequestNetwork(this);
+
+    _last_request_listener =
+        new RequestNetwork.RequestListener() {
+          @Override
+          public void onResponse(String _param1, String _param2, HashMap<String, Object> _param3) {
+            final String _response = _param2;
+            try {
+              maps = new HashMap<>();
+              maps =
+                  new Gson()
+                      .fromJson(_response, new TypeToken<HashMap<String, Object>>() {}.getType());
+            } catch (Exception e) {
+
+            }
+            downloder.setTitle(maps.get("title").toString());
+            downloder.setSizeTitle(maps.get("sizearm64").toString());
+
+//            if (maps.containsKey("showbar")) {
+//              downloder.setVisibility(View.GONE);
+//            } else {
+//              downloder.setVisibility(View.VISIBLE);
+//            }
+          }
+
+          @Override
+          public void onErrorResponse(String _param1, String _param2) {}
+        };
+
+    downloder.setOnClick(
+        v -> {
+          downloder.setDownload(maps.get("linkarm64").toString(), maps.get("appname").toString());
+        });
+
     projectMaker =
         new ProjectMaker(
             Folder,
@@ -452,6 +494,11 @@ public class FileDirActivity extends BaseCompat
         "https://raw.githubusercontent.com/HanzoDev1375/HanzoDev1375/main/log.json",
         "",
         UpdateCheck);
+    last.startRequestNetwork(
+        RequestNetworkController.GET,
+        "https://raw.githubusercontent.com/HanzoDev1375/HanzoDev1375/main/app.json",
+        "",
+        _last_request_listener);
     if (war.contains("val")) {}
 
     var progress_m = new com.zip4j.progress.ProgressMonitor();
@@ -1895,6 +1942,11 @@ public class FileDirActivity extends BaseCompat
                       "https://raw.githubusercontent.com/HanzoDev1375/HanzoDev1375/main/log.json",
                       "v",
                       UpdateCheck);
+                  last.startRequestNetwork(
+                      RequestNetworkController.GET,
+                      "https://raw.githubusercontent.com/HanzoDev1375/HanzoDev1375/main/app.json",
+                      "",
+                      _last_request_listener);
                 } else {
                   DataUtil.showMessage(getApplicationContext(), "اینترنت خاموش است");
                 }
@@ -1985,7 +2037,7 @@ public class FileDirActivity extends BaseCompat
                     "/storage/emulated/0/GhostWebIDE/" + DataUtil.getRandom(1, 200) + "theme.AA"));
 
         List<File> filesToAdd = new ArrayList<>();
-        var iconPath = getFilesDir().getAbsoluteFile() + "/icon.png";
+        var iconPath = getFilesDir().getAbsoluteFile() + "icon.png";
         filesToAdd.add(new File(iconPath));
         filesToAdd.add(new File("/sdcard/GhostWebIDE/theme/GhostThemeapp.ghost"));
 

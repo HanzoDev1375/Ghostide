@@ -5,10 +5,11 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 import io.github.rosemoe.sora.langs.xml.analyzer.Utils;
@@ -16,6 +17,7 @@ import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.text.TextAnalyzer;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import android.util.*;
 import org.antlr.parser.antlr4.java20.Java20Lexer;
@@ -57,6 +59,7 @@ class JavaCodeA implements CodeAnalyzer {
       Set<String> un = new HashSet<>();
       Set<String> cun = new HashSet<>();
       Set<String> contextName = new HashSet<>();
+      Set<String> paramNameMode = new HashSet<>();
 
       CompilationUnit it = StaticJavaParser.parse(content.toString());
 
@@ -70,7 +73,7 @@ class JavaCodeA implements CodeAnalyzer {
               if (un.contains(methodName)) {
                 int line = n.getBegin().get().line;
                 int col = n.getBegin().get().column;
-                Utils.setSpanEFO(result, line, col, EditorColorScheme.ATTRIBUTE_NAME);
+                Utils.setSpanEFO(result, line, col, EditorColorScheme.javafield);
                 Log.w("MECall", "Line: " + line + " Column: " + col + " Method: " + methodName);
               } else {
                 // اخطار برای متدهای غیرتعریف شده
@@ -94,7 +97,7 @@ class JavaCodeA implements CodeAnalyzer {
                 int col =
                     it.getNameAsExpression().getBegin().get().column
                         + 2; // +2 برای قرار گرفتن پس از نوع
-                Utils.setSpanEFO(result, line, col, EditorColorScheme.OPERATOR);
+                Utils.setSpanEFO(result, line, col, EditorColorScheme.javafield);
               }
               super.visit(md, arg1);
             }
@@ -108,47 +111,28 @@ class JavaCodeA implements CodeAnalyzer {
                 int col = n.getBegin().get().column + 2;
                 Utils.setWaringSpan(result, line, col);
                 if (n.isStatic()) {
-                  Utils.setSpanEFO(result, line, col, EditorColorScheme.HTML_TAG);
+                  Utils.setSpanEFO(result, line, col, EditorColorScheme.javafun);
                 }
               }
-
-              // دریافت پارامترها و رنگ‌آمیزی نام آن‌ها
-              n.getParameters()
-                  .forEach(
-                      param -> {
-                        String paramName = param.getNameAsString();
-
-                        // اگر نام پارامتر موجود است
-                        contextName.add(paramName);
-                        int line = param.getNameAsExpression().getBegin().get().line;
-                        int col =
-                            param.getNameAsExpression().getBegin().get().column
-                                + 2; // موقعیت نام پارامتر
-                        Utils.setSpanEFO(result, line, col, EditorColorScheme.Ninja);
-                      });
-
-              n.getBody()
-                  .ifPresent(
-                      it -> {
-                        it.ifForStmt(
-                            its -> {
-                              Utils.setSpanEFO(
-                                  result,
-                                  its.getBegin().get().line,
-                                  its.getBegin().get().column + 1,
-                                  EditorColorScheme.COLOR_TIP);
-                            });
-                        it.ifTryStmt(
-                            va -> {
-                              Utils.setSpanEFO(
-                                  result,
-                                  va.getBegin().get().line,
-                                  va.getBegin().get().column + 1,
-                                  EditorColorScheme.COLOR_DEBUG);
-                            });
-                      });
-
               super.visit(n, arg);
+            }
+
+            @Override
+            public void visit(Parameter arg0, Void arg1) {
+              super.visit(arg0, arg1);
+            }
+          },
+          null);
+
+      it.accept(
+          new VoidVisitorAdapter<Void>() {
+
+            @Override
+            public void visit(EnumDeclaration arg0, Void arg1) {
+              int line = arg0.getNameAsExpression().getBegin().get().line;
+              int col = arg0.getNameAsExpression().getBegin().get().column + 2;
+              Utils.setSpanEFO(result, line, col, EditorColorScheme.javatype);
+              super.visit(arg0, arg1);
             }
           },
           null);
@@ -181,7 +165,7 @@ class JavaCodeA implements CodeAnalyzer {
                 int line = n.getBegin().get().line;
                 int col = n.getBegin().get().column;
                 // تغییر رنگ برای نام کانستراکتور
-                Utils.setSpanEFO(result, line, col, EditorColorScheme.LITERAL);
+                Utils.setSpanEFO(result, line, col, EditorColorScheme.javaoprator);
                 Log.w(
                     "ConstructorCall",
                     "Line : " + line + " Column: " + col + " " + constructorName);
@@ -191,6 +175,19 @@ class JavaCodeA implements CodeAnalyzer {
             }
           },
           null);
+
+      List<MethodDeclaration> mylist = it.findAll(MethodDeclaration.class);
+      for (var myit : mylist) {
+        var testline = myit.getNameAsExpression().getBegin().get().line;
+        var testcol = myit.getNameAsExpression().getBegin().get().column + 2;
+        Utils.setSpanEFO(result, testline, testcol, EditorColorScheme.javafun);
+        List<Parameter> listparam = myit.getParameters();
+        for (var param : listparam) {
+          var typeline = param.getType().getBegin().get().line;
+          var typecol = param.getType().getBegin().get().column + 2;
+          Utils.setSpanEFO(result, typeline, typecol, EditorColorScheme.javatype);
+        }
+      }
 
     } catch (Exception err) {
       // Handle exception if necessary

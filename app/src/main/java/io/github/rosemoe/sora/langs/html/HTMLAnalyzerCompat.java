@@ -126,26 +126,24 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
           case HTMLLexer.VOID:
           case HTMLLexer.VOLATILE:
           case HTMLLexer.WHILE:
-            result.addIfNeeded(
-                line,
-                column,
-                TextStyle.makeStyle(EditorColorScheme.LITERAL, 0, true, false, false, false));
-            break;
           case HTMLLexer.VAR:
-            result.addIfNeeded(
-                line,
-                column,
-                TextStyle.makeStyle(EditorColorScheme.LITERAL, 0, true, false, false, false));
-
-            break;
           case HTMLLexer.FUNCTION:
           case HTMLLexer.LET:
           case HTMLLexer.DEBUGGER:
           case HTMLLexer.YELD:
+          case HTMLLexer.BYTE:
+          case HTMLLexer.CHAR:
+          case HTMLLexer.DOUBLE:
+          case HTMLLexer.ENUM:
+          case HTMLLexer.FLOAT:
+          case HTMLLexer.INT:
+          case HTMLLexer.LONG:
+          case HTMLLexer.SHORT:
+          case HTMLLexer.BOOLEAN:
             result.addIfNeeded(
                 line,
                 column,
-                TextStyle.makeStyle(EditorColorScheme.LITERAL, 0, true, false, false, false));
+                TextStyle.makeStyle(EditorColorScheme.jskeyword, 0, true, false, false, false));
             break;
           case HTMLLexer.DECIMAL_LITERAL:
           case HTMLLexer.HEX_LITERAL:
@@ -155,7 +153,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
           case HTMLLexer.HEX_FLOAT_LITERAL:
           case HTMLLexer.BOOL_LITERAL:
           case HTMLLexer.NULL_LITERAL:
-            result.addIfNeeded(line, column, EditorColorScheme.LITERAL);
+            result.addIfNeeded(line, column, EditorColorScheme.jsoprator);
             break;
           case HTMLLexer.STRING:
           case HTMLLexer.CHATREF:
@@ -220,7 +218,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
                   ignore.printStackTrace();
                 }
               } else {
-                result.addIfNeeded(line, column, EditorColorScheme.LITERAL);
+                result.addIfNeeded(line, column, forString());
               }
 
               result.addIfNeeded(line, column, forString());
@@ -269,38 +267,33 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
           case HTMLLexer.ELLIPSIS:
           case HTMLLexer.DOT:
           case HTMLLexer.DOLLAR:
-            result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
+          case HTMLLexer.DIV:
+          case HTMLLexer.AT:
+            result.addIfNeeded(line, column, EditorColorScheme.htmlsymbol);
             break;
-          case HTMLLexer.BOOLEAN:
-          case HTMLLexer.BYTE:
-          case HTMLLexer.CHAR:
-          case HTMLLexer.DOUBLE:
-          case HTMLLexer.ENUM:
-          case HTMLLexer.FLOAT:
-          case HTMLLexer.INT:
-          case HTMLLexer.LONG:
-          case HTMLLexer.SHORT:
+          
+          
           case HTMLLexer.HtmlAttr:
-            result.addIfNeeded(line, column, EditorColorScheme.ATTRIBUTE_VALUE);
+            result.addIfNeeded(line, column, EditorColorScheme.jsattr);
             break;
           case HTMLLexer.BLOCK_COMMENT:
           case HTMLLexer.LINE_COMMENT:
             result.addIfNeeded(line, column, EditorColorScheme.COMMENT);
             break;
-          case HTMLLexer.AT:
+          
           case HTMLLexer.CSSKEYWORD:
-            result.addIfNeeded(line, column, EditorColorScheme.Ninja);
+            result.addIfNeeded(line, column, EditorColorScheme.csskeyword);
             break;
           case HTMLLexer.HtmlTags:
           case HTMLLexer.HtmlTagOne:
-            result.addIfNeeded(line, column, EditorColorScheme.HTML_TAG);
+            result.addIfNeeded(line, column, EditorColorScheme.htmltag);
             break;
           case HTMLLexer.GT:
-            result.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
+            result.addIfNeeded(line, column, EditorColorScheme.htmlblockhash);
             break;
           case HTMLLexer.LT:
             {
-              result.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
+              result.addIfNeeded(line, column, EditorColorScheme.htmlblockhash);
               if (stack.isEmpty()) {
                 if (currSwitch > maxSwitch) {
                   maxSwitch = currSwitch;
@@ -317,13 +310,13 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
             }
             //// '/>'
           case HTMLLexer.SLASH_CLOSE:
-            result.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
+            result.addIfNeeded(line, column, EditorColorScheme.htmlblockhash);
             break;
 
             /// '</'
           case HTMLLexer.OPEN_SLASH:
             {
-              result.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
+              result.addIfNeeded(line, column, EditorColorScheme.htmlblockhash);
               if (!stack.isEmpty()) {
                 BlockLine b = stack.pop();
                 b.endLine = line;
@@ -353,7 +346,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
                 colorid = EditorColorScheme.ATTRIBUTE_NAME;
               }
               if (previous == HTMLLexer.VOID || previous == HTMLLexer.EXTENDS) {
-                colorid = EditorColorScheme.COLOR_WARNING;
+                colorid = EditorColorScheme.OPERATOR;
               }
               if (previous == HTMLLexer.RETURN || previous == HTMLLexer.NEW) {
                 colorid = EditorColorScheme.HTML_TAG;
@@ -382,15 +375,6 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
                 // $php
                 colorid = EditorColorScheme.ATTRIBUTE_VALUE;
               }
-              if (RegexUtilCompat.RegexSelect("<\\?", token.getText())) {
-                colorid = EditorColorScheme.OPERATOR;
-              }
-              if (RegexUtilCompat.RegexSelect("\\?>", token.getText())) {
-                colorid = EditorColorScheme.OPERATOR;
-              }
-              if (RegexUtilCompat.RegexSelect("(__.*__)", token.getText())) {
-                colorid = EditorColorScheme.COLOR_LOG;
-              }
 
               ListCss3Color.initColor(token, line, column, result, true);
               result.addIfNeeded(line, column, colorid);
@@ -409,7 +393,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
             block.startLine = line;
             block.startColumn = column;
             stack.push(block);
-            result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
+            result.addIfNeeded(line, column, EditorColorScheme.htmlblocknormal);
             break;
           case HTMLLexer.RBRACE:
             if (!stack.isEmpty()) {
@@ -421,13 +405,8 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
                 result.addBlockLine(b);
               }
             }
-            result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
+            result.addIfNeeded(line, column, EditorColorScheme.htmlblocknormal);
             break;
-          case HTMLLexer.DIV:
-            {
-              result.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
-              break;
-            }
           case HTMLLexer.COLORSSS:
             result.addIfNeeded(
                 line,
@@ -458,11 +437,6 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
 
         first = false;
       }
-
-      if(editor.getEditorLanguage() instanceof PHPLanguage) {
-        PhpErrorManager error = new PhpErrorManager();
-        error.analyze(content,result,delegate);
-      }
       result.determine(lastLine);
     } catch (IOException e) {
       e.printStackTrace();
@@ -475,6 +449,6 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
   }
 
   public long forString() {
-    return TextStyle.makeStyle(EditorColorScheme.LITERAL, 0, true, false, false);
+    return TextStyle.makeStyle(EditorColorScheme.htmlstr, 0, true, false, false);
   }
 }
