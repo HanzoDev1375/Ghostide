@@ -425,7 +425,7 @@ public class CodeEditorActivity extends AppCompatActivity {
                       .y(minScale)
                       .setDuration(1000)
                       .start();
-                  ColorAndroid12.hideViewWithAnimation(syspiar);
+                  ColorAndroid12.hideViewWithAnimation(syspiar,_fab);
                 }
               }
             });
@@ -690,15 +690,15 @@ public class CodeEditorActivity extends AppCompatActivity {
     themeForJson2.addTextColor(
         titleauthor, "SyombolBarTextColor", Color.parseColor("#FFFFA0FB"), this, imap);
     themeForJson2.AddthemetoSattos(this, imap);
-    themeForJson2.addBackground(this, imap, "ToolbarColor", CustomToolbar, 0xFF281B26);
-    themeForJson2.addBackground(this, imap, "TabImageColorFilter", divar, Color.RED);
-    themeForJson2.addBackground(this, imap, "TabImageColorFilter", divardown, Color.RED);
+    themeForJson2.addBackground(this, imap, "toolbarcolor", CustomToolbar, 0xFF281B26);
+    themeForJson2.addBackground(this, imap, "tabimagecolorfilter", divar, Color.RED);
+    themeForJson2.addBackground(this, imap, "tabimagecolorfilter", divardown, Color.RED);
     // divardown
-    themeForJson2.addImageColor(undo, this, "ImageColor", imap, Color.parseColor("#ff94e7ff"));
-    themeForJson2.addImageColor(redo, this, "ImageColor", imap, Color.parseColor("#ff94e7ff"));
-    themeForJson2.addImageColor(image, this, "ImageColor", imap, Color.parseColor("#ff94e7ff"));
+    themeForJson2.addImageColor(undo, this, "imagecolor", imap, Color.parseColor("#ff94e7ff"));
+    themeForJson2.addImageColor(redo, this, "imagecolor", imap, Color.parseColor("#ff94e7ff"));
+    themeForJson2.addImageColor(image, this, "imagecolor", imap, Color.parseColor("#ff94e7ff"));
     themeForJson2.addImageColor(
-        menupopnew, this, "ImageColor", imap, Color.parseColor("#ff94e7ff"));
+        menupopnew, this, "imagecolor", imap, Color.parseColor("#ff94e7ff"));
     themeForJson2.setFabBackground(_fab, imap);
     themeForJson2.setFabColorHint(_fab, imap);
     AnimUtils.ClickAnimation(menupopnew);
@@ -763,7 +763,7 @@ public class CodeEditorActivity extends AppCompatActivity {
     var data = thememanagersoft.contains("br") ? thememanagersoft.getFloat("br", 2) : 3;
     BlurImage.setBlurInWallpaperMobile(this, data, ghostIcon);
     var layout = findViewById(R.id.getColorPass);
-    layout.setBackgroundColor(Color.parseColor(imap.get("BackgroundColorLinear").toString()));
+    layout.setBackgroundColor(Color.parseColor(imap.get("backgroundcolorlinear").toString()));
     var i = layout.getBackground();
     ColorDrawable colorDrawable = (ColorDrawable) i;
     int color = colorDrawable.getColor();
@@ -779,18 +779,18 @@ public class CodeEditorActivity extends AppCompatActivity {
         dir.setVisibility(View.VISIBLE);
       }
     }
-    if (imap.containsKey("TabBack")) {
+    if (imap.containsKey("tabback")) {
       if (Build.VERSION.SDK_INT >= 21) {
         proanjctor
             .getIndeterminateDrawable()
             .setColorFilter(
-                Color.parseColor(imap.get("TabBack").toString()), PorterDuff.Mode.SRC_IN);
+                Color.parseColor(imap.get("tabback").toString()), PorterDuff.Mode.SRC_IN);
       }
       if (Build.VERSION.SDK_INT >= 21) {
         progressbar1
             .getIndeterminateDrawable()
             .setColorFilter(
-                Color.parseColor(imap.get("TabBack").toString()), PorterDuff.Mode.SRC_IN);
+                Color.parseColor(imap.get("tabback").toString()), PorterDuff.Mode.SRC_IN);
       }
     } else {
       if (Build.VERSION.SDK_INT >= 21) {
@@ -1195,19 +1195,19 @@ public class CodeEditorActivity extends AppCompatActivity {
       mmenuitempos.setTextColor(0xFFEEEEEE);
       mmenuitempos.setDivider(new ColorDrawable(0xFFEEEEEE));
     } else {
-      if (imap.containsKey("MenuBackground")) {
-        mmenuitempos.setMenuColor(Color.parseColor(imap.get("MenuBackground").toString()));
+      if (imap.containsKey("menubackground")) {
+        mmenuitempos.setMenuColor(Color.parseColor(imap.get("menubackground").toString()));
       } else {
         mmenuitempos.setMenuColor(0xFF2B2121);
       }
-      if (imap.containsKey("ImageColor")) {
+      if (imap.containsKey("imagecolor")) {
         mmenuitempos.setDivider(
-            new ColorDrawable(Color.parseColor(imap.get("ImageColor").toString())));
+            new ColorDrawable(Color.parseColor(imap.get("imagecolor").toString())));
       } else {
         mmenuitempos.setDivider(new ColorDrawable(0xFFEEEEEE));
       }
-      if (imap.containsKey("TEXT_NORMAL")) {
-        mmenuitempos.setTextColor(Color.parseColor(imap.get("TEXT_NORMAL").toString()));
+      if (imap.containsKey("text_normal")) {
+        mmenuitempos.setTextColor(Color.parseColor(imap.get("text_normal").toString()));
       } else {
         mmenuitempos.setTextColor(0xFFEEEEEE);
       }
@@ -1267,7 +1267,7 @@ public class CodeEditorActivity extends AppCompatActivity {
         && filteredItems.get(1).equals("emulated")
         && filteredItems.get(2).equals("0")) {
       List<String> combinedItems = new ArrayList<>();
-      combinedItems.add("Home");
+      combinedItems.add("home");
       combinedItems.addAll(filteredItems.subList(3, filteredItems.size()));
       return combinedItems;
     }

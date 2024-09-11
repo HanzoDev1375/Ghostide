@@ -163,9 +163,6 @@ public class SettingAppActivity extends BaseCompat {
     autoSaveText.setDescription(getString(R.string.autoSaveText_description));
 
     List<LayoutModel> layoutModel = new ArrayList<>();
-
-    layoutModel.add(
-        new LayoutModel(getString(R.string.themesubtitle), getString(R.string.themetitle)));
     layoutModel.add(
         new LayoutModel(getString(R.string.customwindowsdesc), getString(R.string.customwindows)));
     layoutModel.add(
@@ -183,13 +180,6 @@ public class SettingAppActivity extends BaseCompat {
               public void click(View v, int pos) {
                 switch (pos) {
                   case 0:
-                    {
-                      intent.setClass(getApplicationContext(), InjectorColorActivity.class);
-                      intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                      startActivity(intent);
-                      break;
-                    }
-                  case 1:
                     {
                       var di = new GhostWebMaterialDialog(SettingAppActivity.this);
                       ViewGroup viewGroup = findViewById(android.R.id.content);
@@ -261,7 +251,7 @@ public class SettingAppActivity extends BaseCompat {
                       di.show();
                       break;
                     }
-                  case 2:
+                  case 1:
                     {
                       androidx.appcompat.app.AlertDialog dialog =
                           new GhostWebMaterialDialog(SettingAppActivity.this)
@@ -378,7 +368,7 @@ public class SettingAppActivity extends BaseCompat {
                       dialog.show();
                       break;
                     }
-                  case 3:
+                  case 2:
                     {
                       _blursize();
                       break;

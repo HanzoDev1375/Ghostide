@@ -61,43 +61,43 @@ public class SetThemeForJson {
       CodeEditor editor, HashMap<String, Object> imap, boolean chackHashMap, Activity x) {
 
     
-    getColor(imap, editor, "BLOCK_LINE", EditorColorScheme.BLOCK_LINE, "#ff28ffae");
+    getColor(imap, editor, "block_line", EditorColorScheme.BLOCK_LINE, "#ff28ffae");
     getColor(imap, editor, "OPERATOR", EditorColorScheme.OPERATOR, "#ff43ffd5");
-    getColor(imap, editor, "BLOCK_LINE_CURRENT", EditorColorScheme.BLOCK_LINE_CURRENT, "#ff28ffae");
-    getColor(imap, editor, "NON_PRINTABLE_CHAR", EditorColorScheme.NON_PRINTABLE_CHAR, "#ffa10370");
-    getColor(imap, editor, "CURRENT_LINE", EditorColorScheme.CURRENT_LINE, "#ff6b90ff");
-    getColor(imap, editor, "SELECTION_HANDLE", EditorColorScheme.SELECTION_HANDLE, "#ff2a6373");
-    getColor(imap, editor, "LINE_NUMBER", EditorColorScheme.LINE_NUMBER, "#ffff0017");
-    getColor(imap, editor, "LINE_DIVIDER", EditorColorScheme.LINE_DIVIDER, "#1d000000");
-    getColor(imap, editor, "ATTRIBUTE_VALUE", EditorColorScheme.ATTRIBUTE_VALUE, "#ffa6ffa1");
-    getColor(imap, editor, "ATTRIBUTE_NAME", EditorColorScheme.ATTRIBUTE_NAME, "#ffff1723");
-    getColor(imap, editor, "TEXT_NORMAL", EditorColorScheme.TEXT_NORMAL, "#ffffffff");
-    getColor(imap, editor, "IDENTIFIER_NAME", EditorColorScheme.IDENTIFIER_NAME, "#501910");
-    getColor(imap, editor, "COMMENT", EditorColorScheme.COMMENT, "#424242");
-    getColor(imap, editor, "KEYWORD", EditorColorScheme.KEYWORD, "#ff1081");
+    getColor(imap, editor, "block_line_current", EditorColorScheme.BLOCK_LINE_CURRENT, "#ff28ffae");
+    getColor(imap, editor, "non_printable_char", EditorColorScheme.NON_PRINTABLE_CHAR, "#ffa10370");
+    getColor(imap, editor, "current_line", EditorColorScheme.CURRENT_LINE, "#ff6b90ff");
+    getColor(imap, editor, "selection_handle", EditorColorScheme.SELECTION_HANDLE, "#ff2a6373");
+    getColor(imap, editor, "line_number", EditorColorScheme.LINE_NUMBER, "#ffff0017");
+    getColor(imap, editor, "line_divider", EditorColorScheme.LINE_DIVIDER, "#1d000000");
+    getColor(imap, editor, "attribute_value", EditorColorScheme.ATTRIBUTE_VALUE, "#ffa6ffa1");
+    getColor(imap, editor, "attribute_name", EditorColorScheme.ATTRIBUTE_NAME, "#ffff1723");
+    getColor(imap, editor, "text_normal", EditorColorScheme.TEXT_NORMAL, "#ffffffff");
+    getColor(imap, editor, "identifier_name", EditorColorScheme.IDENTIFIER_NAME, "#501910");
+    getColor(imap, editor, "comment", EditorColorScheme.COMMENT, "#424242");
+    getColor(imap, editor, "keyword", EditorColorScheme.KEYWORD, "#ff1081");
     getColor(imap, editor, "print", EditorColorScheme.print, "#ffa801");
-    getColor(imap, editor, "Ninja", EditorColorScheme.Ninja, "#ffe200");
-    getColor(imap, editor, "AUTO_COMP_PANEL_BG", EditorColorScheme.AUTO_COMP_PANEL_BG, "#ff000000");
+    getColor(imap, editor, "ninja", EditorColorScheme.Ninja, "#ffe200");
+    getColor(imap, editor, "auto_comp_panel_bg", EditorColorScheme.AUTO_COMP_PANEL_BG, "#ff000000");
     getColor(
         imap,
         editor,
-        "AUTO_COMP_PANEL_CORNER",
+        "auto_comp_panel_corner",
         EditorColorScheme.AUTO_COMP_PANEL_CORNER,
         "#fffffffd");
     getColor(
         imap,
         editor,
-        "LINE_NUMBER_BACKGROUND",
+        "line_number_background",
         EditorColorScheme.LINE_NUMBER_BACKGROUND,
         "#fff00000");
-    getColor(imap, editor, "WHOLE_BACKGROUND", EditorColorScheme.WHOLE_BACKGROUND, "#02FFFFFF");
-    getColor(imap, editor, "HTML_TAG", EditorColorScheme.HTML_TAG, "#ffc84100");
-    getColor(imap, editor, "LITERAL", EditorColorScheme.LITERAL, "#ff2017");
+    getColor(imap, editor, "whole_background", EditorColorScheme.WHOLE_BACKGROUND, "#02FFFFFF");
+    getColor(imap, editor, "html_tag", EditorColorScheme.HTML_TAG, "#ffc84100");
+    getColor(imap, editor, "literal", EditorColorScheme.LITERAL, "#ff2017");
     
     getColor(imap, editor, "print", EditorColorScheme.SCROLL_BAR_THUMB, "#ff3500");
     getColor(imap, editor, "ninja", EditorColorScheme.SCROLL_BAR_THUMB_PRESSED, "#ffacd9");
     getColor(
-        imap, editor, "AUTO_COMP_PANEL_CORNER", EditorColorScheme.SCROLL_BAR_TRACK, "#ffee3201");
+        imap, editor, "auto_comp_panel_corner", EditorColorScheme.SCROLL_BAR_TRACK, "#ffee3201");
     getColor(imap, editor, "javakeyword", EditorColorScheme.javakeyword, "#592370");
     getColor(imap, editor, "javaoprator", EditorColorScheme.javaoprator, "#672907");
     getColor(imap, editor, "javafun", EditorColorScheme.javafun, "#592370");
@@ -186,8 +186,8 @@ public class SetThemeForJson {
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
       Window Hsi = a.getWindow();
       Hsi.setStatusBarColor(
-          imap.containsKey("BackgroundColorLinear")
-              ? Color.parseColor(imap.get("BackgroundColorLinear").toString())
+          imap.containsKey("backgroundcolorlinear")
+              ? Color.parseColor(imap.get("backgroundcolorlinear").toString())
               : Color.parseColor("#FF281B26"));
     }
 
@@ -224,8 +224,8 @@ public class SetThemeForJson {
       ExtendedFloatingActionButton fab, HashMap<String, Object> map) {
     fab.setIconTint(
         ColorStateList.valueOf(
-            map.containsKey("FabImageColor")
-                ? Color.parseColor(map.get("FabImageColor").toString())
+            map.containsKey("fabimagecolor")
+                ? Color.parseColor(map.get("fabimagecolor").toString())
                 : MaterialColors.getColor(fab, ColorAndroid12.TvColor)));
     return this;
   }
@@ -234,8 +234,8 @@ public class SetThemeForJson {
       ExtendedFloatingActionButton fab, HashMap<String, Object> imap) {
     fab.setBackgroundTintList(
         ColorStateList.valueOf(
-            map.containsKey("FabBackgroundColorColor")
-                ? Color.parseColor(map.get("FabBackgroundColorColor").toString())
+            map.containsKey("fabbackgroundcolorcolor")
+                ? Color.parseColor(map.get("fabbackgroundcolorcolor").toString())
                 : MaterialColors.getColor(fab, ColorAndroid12.Back)));
 
     return this;
@@ -243,16 +243,16 @@ public class SetThemeForJson {
 
   public SetThemeForJson subPowerMenu(PowerMenu menu, HashMap<String, Object> map) {
     menu.setTextColor(
-        map.containsKey("ToolbarTextColor")
-            ? Color.parseColor(map.get("ToolbarTextColor").toString())
+        map.containsKey("toolbartextcolor")
+            ? Color.parseColor(map.get("toolbartextcolor").toString())
             : Color.parseColor("#fff"));
     menu.setMenuColor(
-        map.containsKey("MenuBackground")
-            ? Color.parseColor(map.get("MenuBackground").toString())
+        map.containsKey("menubackground")
+            ? Color.parseColor(map.get("menubackground").toString())
             : Color.parseColor("#ff000000"));
     menu.setIconColor(
-        map.containsKey("TabImageColorFilter")
-            ? Color.parseColor(map.get("TabImageColorFilter").toString())
+        map.containsKey("tabimagecolorfilter")
+            ? Color.parseColor(map.get("tabimagecolorfilter").toString())
             : Color.parseColor("#fff472"));
 
     return this;
@@ -265,46 +265,46 @@ public class SetThemeForJson {
 
   public static void winterToPath() {
     Map<String, String> map = new HashMap<>();
-    map.put("ToolbarTextColor", "#ffffffff");
-    map.put("BLOCK_LINE_CURRENT", "#ff2e99ff");
-    map.put("LINE_DIVIDER", "#1d000000");
-    map.put("SyombolBarTextColor", "#ffffe8e8");
-    map.put("HTML_TAG", "#ffff8be5");
-    map.put("FabColorStroker", "#ffe8e8ff");
-    map.put("LINE_NUMBER", "#ffffffff");
-    map.put("KEYWORD", "#ffff7f74");
-    map.put("AUTO_COMP_PANEL_CORNER", "#ffff8a5d");
-    map.put("SELECTION_HANDLE", "#ff49736e");
-    map.put("TabImageColorFilter", "#ffffffff");
-    map.put("AUTO_COMP_PANEL_BG", "#ff323232");
-    map.put("COMMENT", "#626262");
-    map.put("ToolbarColor", "#2e000000");
-    map.put("IDENTIFIER_NAME", "#fff08d6d");
-    map.put("DisplayTextColorTab", "#ffffe58b");
-    map.put("NON_PRINTABLE_CHAR", "#ff6b90ff");
-    map.put("SELECTION_INSERT", "#ff2a6373");
-    map.put("Ninja", "#ffddaeff");
-    map.put("TEXTCOLORHDER", "#ff522012");
-    map.put("TabTextColor", "#ffc9eaff");
-    map.put("BLOCK_LINE", "#ff5effaa");
-    map.put("MenuBackground", "#ff000000");
-    map.put("LITERAL", "#ffbcf5ff");
-    map.put("FabBackgroundColorColor", "#ff000000");
-    map.put("ATTRIBUTE_VALUE", "#ff8bf4ff");
-    map.put("TabBack", "#ff1e5e71");
-    map.put("TEXTCOLORFORGRAND", "#424242");
-    map.put("ImageColor", "#ffe8e8ff");
-    map.put("TEXT_NORMAL", "#ffffffff");
-    map.put("ATTRIBUTE_NAME", "#ffa1e3ff");
+    map.put("toolbartextcolor", "#ffffffff");
+    map.put("block_line_current", "#ff2e99ff");
+    map.put("line_divider", "#1d000000");
+    map.put("syombolbartextcolor", "#ffffe8e8");
+    map.put("html_tag", "#ffff8be5");
+    map.put("fabcolorstroker", "#ffe8e8ff");
+    map.put("line_number", "#ffffffff");
+    map.put("keyword", "#ffff7f74");
+    map.put("auto_comp_panel_corner", "#ffff8a5d");
+    map.put("selection_handle", "#ff49736e");
+    map.put("tabimagecolorfilter", "#ffffffff");
+    map.put("auto_comp_panel_bg", "#ff323232");
+    map.put("comment", "#626262");
+    map.put("toolbarcolor", "#2e000000");
+    map.put("identifier_name", "#fff08d6d");
+    map.put("displaytextcolortab", "#ffffe58b");
+    map.put("non_printable_char", "#ff6b90ff");
+    map.put("selection_insert", "#ff2a6373");
+    map.put("ninja", "#ffddaeff");
+    map.put("textcolorhder", "#ff522012");
+    map.put("tabtextcolor", "#ffc9eaff");
+    map.put("block_line", "#ff5effaa");
+    map.put("menubackground", "#ff000000");
+    map.put("literal", "#ffbcf5ff");
+    map.put("fabbackgroundcolorcolor", "#ff000000");
+    map.put("attribute_value", "#ff8bf4ff");
+    map.put("tabback", "#ff1e5e71");
+    map.put("textcolorforgrand", "#424242");
+    map.put("imagecolor", "#ffe8e8ff");
+    map.put("text_normal", "#ffffffff");
+    map.put("attribute_name", "#ffa1e3ff");
     map.put("print", "#ffecffa1");
-    map.put("OPERATOR", "#ff43ffd5");
-    map.put("CURRENT_LINE", "#20171717");
-    map.put("WHOLE_BACKGROUND", "#02FFFFFF");
-    map.put("BackgroundColorLinear", "#2b000000");
-    map.put("FabImageColor", "#ffffffff");
-    map.put("LINE_NUMBER_BACKGROUND", "#00FFFFFF");
-    map.put("TEXTCOLORIGOR", "#ffb34192");
-    map.put("TEXTCOLORINIER", "#ffb36262");
+    map.put("operator", "#ff43ffd5");
+    map.put("current_line", "#20171717");
+    map.put("whole_background", "#02FFFFFF");
+    map.put("backgroundcolorlinear", "#2b000000");
+    map.put("fabimagecolor", "#ffffffff");
+    map.put("line_number_background", "#00FFFFFF");
+    map.put("textcolorigor", "#ffb34192");
+    map.put("textcolorinier", "#ffb36262");
     map.put("javakeyword", "#ff6060");
     map.put("javaoprator", "#4fc3f7");
     map.put("javafun", "#afb42b");

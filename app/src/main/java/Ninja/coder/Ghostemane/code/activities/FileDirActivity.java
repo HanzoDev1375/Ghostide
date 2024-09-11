@@ -301,7 +301,7 @@ public class FileDirActivity extends BaseCompat
       setViewType(ViewType.ROW);
     }
     ThemeChaker();
-  //  downloder.setVisibility(View.GONE);
+    downloder.setVisibility(View.GONE);
 
     var helper =
         new RecyclerViewHelper(
@@ -408,11 +408,11 @@ public class FileDirActivity extends BaseCompat
             downloder.setTitle(maps.get("title").toString());
             downloder.setSizeTitle(maps.get("sizearm64").toString());
 
-//            if (maps.containsKey("showbar")) {
-//              downloder.setVisibility(View.GONE);
-//            } else {
-//              downloder.setVisibility(View.VISIBLE);
-//            }
+           if (maps.containsKey("showbar")) {
+              downloder.setVisibility(View.GONE);
+           } else {
+             downloder.setVisibility(View.VISIBLE);
+           }
           }
 
           @Override

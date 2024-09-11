@@ -61,9 +61,6 @@
             android:name=".activities.JsRunerActivity"
         />
         <activity
-            android:name=".activities.InjectorColorActivity"
-        />
-        <activity
             android:name=".activities.SettingAppActivity"
         />
         <activity

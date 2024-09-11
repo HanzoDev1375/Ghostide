@@ -21,8 +21,6 @@ public class ExrtaFab extends ExtendedFloatingActionButton {
   public void init() {
     setIconResource(R.drawable.ic_fab_play);
     shrink();
-    setBackground(ContextCompat.getDrawable(getContext(),R.drawable.compilerr));
-    
   }
 
   public void setColorFilter(int color) {

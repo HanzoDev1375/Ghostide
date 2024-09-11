@@ -97,9 +97,9 @@ public class EditorAutoCompleteWindow extends EditorPopupWindow {
             err.printStackTrace();
         }
         EditorColorScheme colors = editor.getColorScheme();
-        mcard.setBackgroundColor(Color.parseColor(imap.get("AUTO_COMP_PANEL_BG").toString()));
+        mcard.setBackgroundColor(Color.parseColor(imap.get("auto_comp_panel_bg").toString()));
         mcard.setStrokeWidth(2);
-        mcard.setStrokeColor(Color.parseColor(imap.get("AUTO_COMP_PANEL_CORNER").toString()));
+        mcard.setStrokeColor(Color.parseColor(imap.get("auto_comp_panel_corner").toString()));
         listview1.setHorizontalScrollBarEnabled(false);
         listview1.setVerticalScrollBarEnabled(false);
         listview1.setSelector(colorAcsentDialog());

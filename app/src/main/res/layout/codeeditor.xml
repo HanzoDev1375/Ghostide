@@ -340,7 +340,7 @@
     <Ninja.coder.Ghostemane.code.widget.ExrtaFab
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_marginBottom="63dp"
+        android:layout_marginBottom="44dp"
         app:backgroundTint="?colorPrimary"
         android:padding="24dp"
         app:iconTint="?colorSurface"

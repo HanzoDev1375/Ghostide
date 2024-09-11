@@ -2,6 +2,7 @@ package Ninja.coder.Ghostemane.code.utils;
 
 import Ninja.coder.Ghostemane.code.ApplicationLoader;
 import Ninja.coder.Ghostemane.code.IdeEditor;
+import Ninja.coder.Ghostemane.code.widget.ExrtaFab;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
@@ -411,8 +412,8 @@ public class ColorAndroid12 {
   }
 
   public static void showViewWithAnimation(View view) {
+
     if (view.getVisibility() != View.VISIBLE) {
-      // Set the view to visible before starting animation
       view.setVisibility(View.VISIBLE);
       ObjectAnimator animator = ObjectAnimator.ofFloat(view, "translationY", view.getHeight(), 0);
       animator.setDuration(300);
@@ -420,14 +421,14 @@ public class ColorAndroid12 {
           new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-              view.setTranslationY(0); // Reset translation after animation
+              view.setTranslationY(0);
             }
           });
       animator.start(); // Start the animation
     }
   }
 
-  public static void hideViewWithAnimation(View view) {
+  public static void hideViewWithAnimation(View view, ExrtaFab fab) {
     if (view.getVisibility() == View.VISIBLE) {
       ObjectAnimator animator = ObjectAnimator.ofFloat(view, "translationY", 0, view.getHeight());
       animator.setDuration(300);
@@ -435,7 +436,7 @@ public class ColorAndroid12 {
           new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-              view.setVisibility(View.GONE); // Set visibility to GONE after animation
+              view.postDelayed(() -> view.setVisibility(View.GONE), 300);
             }
           });
       animator.start(); // Start the animation
