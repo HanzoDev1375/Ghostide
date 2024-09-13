@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import com.downloader.Error;
 import com.downloader.OnDownloadListener;
 import com.downloader.OnPauseListener;
@@ -20,7 +21,7 @@ import com.downloader.databinding.LayoutDownloderChildBinding;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class ViewDownloder extends LinearLayout {
+public class ViewDownloder extends RelativeLayout {
 
   private HashMap<String, Object> gsonItem;
   protected LayoutDownloderChildBinding child;
@@ -37,13 +38,12 @@ public class ViewDownloder extends LinearLayout {
   }
 
   void init() {
+    
+    removeAllViews();
     child = LayoutDownloderChildBinding.inflate(LayoutInflater.from(getContext()));
-
     var param =
-        new LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-    setLayoutParams(param);
-
+        new LayoutParams(
+          LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
     int[] colors = {0xFF81C784, 0xFF5DB895, 0xFF53B2AA};
     var gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.TL_BR, colors);
     child.getRoot().setBackground(gradientDrawable);
@@ -57,10 +57,8 @@ public class ViewDownloder extends LinearLayout {
           int animatedValue = (int) animator.getAnimatedValue();
           gradientDrawable.setColors(new int[] {animatedValue, colors[1]});
         });
-
     colorAnimation.start();
-
-    addView(child.getRoot());
+    addView(child.getRoot(),param);
   }
 
   public void setTitle(String title) {

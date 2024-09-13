@@ -60,7 +60,6 @@ public class SetThemeForJson {
   public SetThemeForJson setThemeCodeEditor(
       CodeEditor editor, HashMap<String, Object> imap, boolean chackHashMap, Activity x) {
 
-    
     getColor(imap, editor, "block_line", EditorColorScheme.BLOCK_LINE, "#ff28ffae");
     getColor(imap, editor, "OPERATOR", EditorColorScheme.OPERATOR, "#ff43ffd5");
     getColor(imap, editor, "block_line_current", EditorColorScheme.BLOCK_LINE_CURRENT, "#ff28ffae");
@@ -93,7 +92,7 @@ public class SetThemeForJson {
     getColor(imap, editor, "whole_background", EditorColorScheme.WHOLE_BACKGROUND, "#02FFFFFF");
     getColor(imap, editor, "html_tag", EditorColorScheme.HTML_TAG, "#ffc84100");
     getColor(imap, editor, "literal", EditorColorScheme.LITERAL, "#ff2017");
-    
+
     getColor(imap, editor, "print", EditorColorScheme.SCROLL_BAR_THUMB, "#ff3500");
     getColor(imap, editor, "ninja", EditorColorScheme.SCROLL_BAR_THUMB_PRESSED, "#ffacd9");
     getColor(
@@ -108,23 +107,37 @@ public class SetThemeForJson {
     getColor(imap, editor, "javastring", EditorColorScheme.javastring, "#ff7dd1");
 
     getColor(imap, editor, "htmltag", EditorColorScheme.htmltag, "#ff6060");
-    getColor(imap, editor, "htmlattr", EditorColorScheme.htmlattr, "#4fc3f7");
-    getColor(imap, editor, "htmlattrname", EditorColorScheme.htmlattrname, "#ff620a");
-    getColor(imap, editor, "htmlstr", EditorColorScheme.htmlstr, "#ff620a");
-    getColor(imap, editor, "csskeyword", EditorColorScheme.csskeyword, "#ff620a");
-    getColor(imap, editor, "htmlsymbol", EditorColorScheme.htmlsymbol, "#ff620a");
-    getColor(imap, editor, "htmlblockhash", EditorColorScheme.htmlblockhash, "#ff620a");
-    getColor(imap, editor, "htmlblocknormal", EditorColorScheme.htmlblocknormal, "#ff620a");
-    getColor(imap, editor, "jskeyword", EditorColorScheme.jskeyword, "#ff620a");
-    getColor(imap, editor, "jsfun", EditorColorScheme.jsfun, "#ff620a");
-    getColor(imap, editor, "jsoprator", EditorColorScheme.jsoprator, "#ff620a");
-    getColor(imap, editor, "jsattr", EditorColorScheme.jsattr, "#ff620a");
-    getColor(imap, editor, "jsstring", EditorColorScheme.jsstring, "#ff620a");
+    getColor(imap, editor, "htmlattr", EditorColorScheme.htmlattr, "#4fc3f7"); 
+    getColor(
+        imap, editor, "htmlattrname", EditorColorScheme.htmlattrname, "#ffab40"); 
+    getColor(imap, editor, "htmlstr", EditorColorScheme.htmlstr, "#81c784"); 
+    getColor(imap, editor, "csskeyword", EditorColorScheme.csskeyword, "#64b5f6"); 
+    getColor(imap, editor, "htmlsymbol", EditorColorScheme.htmlsymbol, "#ba68c8"); 
+    getColor(imap, editor, "htmlblockhash", EditorColorScheme.htmlblockhash, "#ff7043"); 
+    getColor(
+        imap,
+        editor,
+        "htmlblocknormal",
+        EditorColorScheme.htmlblocknormal,
+        "#90caf9"); 
+    getColor(imap, editor, "jskeyword", EditorColorScheme.jskeyword, "#64b5f6"); 
+    getColor(imap, editor, "jsfun", EditorColorScheme.jsfun, "#ffd54f"); 
+    getColor(imap, editor, "jsoprator", EditorColorScheme.jsoprator, "#4db6ac"); 
+    getColor(imap, editor, "jsattr", EditorColorScheme.jsattr, "#ffab40"); 
+    getColor(imap, editor, "jsstring", EditorColorScheme.jsstring, "#81c784"); 
 
-    
+    getColor(imap, editor, "pystring", EditorColorScheme.pystring, "#ff7d51");
+    getColor(imap, editor, "pykeyword", EditorColorScheme.pykeyword, "#51ff7d");
+    getColor(imap, editor, "pysymbol", EditorColorScheme.pysymbol, "#7d51ff");
+    getColor(imap, editor, "pynumber", EditorColorScheme.pynumber, "#ff51ec");
+    getColor(imap, editor, "pycolormatch1", EditorColorScheme.pycolormatch1, "#ffd151");
+    getColor(imap, editor, "pycolormatch2", EditorColorScheme.pycolormatch2, "#51d1ff");
+    getColor(imap, editor, "pycolormatch3", EditorColorScheme.pycolormatch3, "#51ff92");
+    getColor(imap, editor, "pycolormatch4", EditorColorScheme.pycolormatch4, "#ff51a2");
+
     editor.getColorScheme().setColor(EditorColorScheme.red, ColorCompat.RED);
     editor.getColorScheme().setColor(EditorColorScheme.aliceblue, ColorCompat.ALICEBLUE);
-    
+
     editor.getColorScheme().setColor(EditorColorScheme.antiquewhite, ColorCompat.ANTIQUEWHITE);
     editor.getColorScheme().setColor(EditorColorScheme.aqua, ColorCompat.AQUA);
     editor.getColorScheme().setColor(EditorColorScheme.aquamarine, ColorCompat.AQUAMARINE);
@@ -138,7 +151,6 @@ public class SetThemeForJson {
     editor.getColorScheme().setColor(EditorColorScheme.brown, ColorCompat.BROWN);
     editor.getColorScheme().setColor(EditorColorScheme.white, ColorCompat.WHITE);
 
-    
     editor.getColorScheme().setColor(EditorColorScheme.COLOR_DEBUG, Color.BLUE);
     editor.getColorScheme().setColor(EditorColorScheme.COLOR_ERROR, Color.RED);
     editor.getColorScheme().setColor(EditorColorScheme.COLOR_WARNING, Color.YELLOW);
@@ -265,67 +277,75 @@ public class SetThemeForJson {
 
   public static void winterToPath() {
     Map<String, String> map = new HashMap<>();
-    map.put("toolbartextcolor", "#ffffffff");
-    map.put("block_line_current", "#ff2e99ff");
-    map.put("line_divider", "#1d000000");
-    map.put("syombolbartextcolor", "#ffffe8e8");
-    map.put("html_tag", "#ffff8be5");
-    map.put("fabcolorstroker", "#ffe8e8ff");
-    map.put("line_number", "#ffffffff");
-    map.put("keyword", "#ffff7f74");
-    map.put("auto_comp_panel_corner", "#ffff8a5d");
-    map.put("selection_handle", "#ff49736e");
-    map.put("tabimagecolorfilter", "#ffffffff");
-    map.put("auto_comp_panel_bg", "#ff323232");
-    map.put("comment", "#626262");
-    map.put("toolbarcolor", "#2e000000");
-    map.put("identifier_name", "#fff08d6d");
-    map.put("displaytextcolortab", "#ffffe58b");
-    map.put("non_printable_char", "#ff6b90ff");
-    map.put("selection_insert", "#ff2a6373");
-    map.put("ninja", "#ffddaeff");
-    map.put("textcolorhder", "#ff522012");
-    map.put("tabtextcolor", "#ffc9eaff");
-    map.put("block_line", "#ff5effaa");
-    map.put("menubackground", "#ff000000");
-    map.put("literal", "#ffbcf5ff");
-    map.put("fabbackgroundcolorcolor", "#ff000000");
-    map.put("attribute_value", "#ff8bf4ff");
-    map.put("tabback", "#ff1e5e71");
-    map.put("textcolorforgrand", "#424242");
-    map.put("imagecolor", "#ffe8e8ff");
-    map.put("text_normal", "#ffffffff");
-    map.put("attribute_name", "#ffa1e3ff");
-    map.put("print", "#ffecffa1");
-    map.put("operator", "#ff43ffd5");
-    map.put("current_line", "#20171717");
-    map.put("whole_background", "#02FFFFFF");
-    map.put("backgroundcolorlinear", "#2b000000");
-    map.put("fabimagecolor", "#ffffffff");
-    map.put("line_number_background", "#00FFFFFF");
-    map.put("textcolorigor", "#ffb34192");
-    map.put("textcolorinier", "#ffb36262");
-    map.put("javakeyword", "#ff6060");
-    map.put("javaoprator", "#4fc3f7");
-    map.put("javafun", "#afb42b");
-    map.put("javafield", "#f0be4b");
-    map.put("javatype", "#64b5f6");
-    map.put("javaparament", "#4fc3f7");
-    map.put("javanumber", "#8bc34a");
-    map.put("javastring", "#8bc34a");
-    map.put("htmltag", "#ff6060"); 
-    map.put("htmlattr", "#ff6060"); 
-    map.put("htmlattrname", "#3357FF"); 
-    map.put("htmlstr", "#FFC300"); 
-    map.put("csskeyword", "#DAF7A6"); 
+    map.put("toolbartextcolor", "#B0BEC5"); 
+    map.put("block_line_current", "#4DD0E1"); 
+    map.put("line_divider", "#4B4B4B"); 
+    map.put("syombolbartextcolor", "#B0BEC5"); 
+    map.put("html_tag", "#80CBC4"); 
+    map.put("fabcolorstroker", "#4DFFFFFF"); 
+    map.put("line_number", "#B0BEC5"); 
+    map.put("keyword", "#FFAB40"); 
+    map.put("auto_comp_panel_corner", "#FF8A65"); 
+    map.put("selection_handle", "#66BB6A"); 
+    map.put("tabimagecolorfilter", "#B0BEC5"); 
+    map.put("auto_comp_panel_bg", "#263238"); 
+    map.put("comment", "#757575"); 
+    map.put("toolbarcolor", "#121212"); 
+    map.put("identifier_name", "#FF9E80"); 
+    map.put("displaytextcolortab", "#FFD54F"); 
+    map.put("non_printable_char", "#90CAF9"); 
+    map.put("selection_insert", "#4DB6AC"); 
+    map.put("ninja", "#E1BEE7"); 
+    map.put("textcolorhder", "#FFAB91"); 
+    map.put("tabtextcolor", "#B0BEC5"); 
+    map.put("block_line", "#81D4FA"); 
+    map.put("menubackground", "#1E1E1E"); 
+    map.put("literal", "#64B5F6"); 
+    map.put("fabbackgroundcolorcolor", "#1E1E1E"); 
+    map.put("attribute_value", "#80DEEA"); 
+    map.put("tabback", "#1C1C1C"); 
+    map.put("textcolorforgrand", "#B0BEC5"); 
+    map.put("imagecolor", "#B0BEC5"); 
+    map.put("text_normal", "#FFFFFF"); 
+    map.put("attribute_name", "#64B5F6"); 
+    map.put("print", "#FF8A65"); 
+    map.put("operator", "#FFB74D"); 
+    map.put("current_line", "#37474F"); 
+    map.put("whole_background", "#1E1E1E"); 
+    map.put("backgroundcolorlinear", "#1c1c1c"); 
+    map.put("fabimagecolor", "#B0BEC5"); 
+    map.put("line_number_background", "#1E1E1E"); 
+    map.put("textcolorigor", "#F06292"); 
+    map.put("textcolorinier", "#EF5350"); 
+    map.put("javakeyword", "#FFAC80"); 
+    map.put("javaoprator", "#90CAF9"); 
+    map.put("javafun", "#FFCC60"); 
+    map.put("javafield", "#FFAB60"); 
+    map.put("javatype", "#64B5F6"); 
+    map.put("javaparament", "#FFAB40"); 
+    map.put("javanumber", "#A5D6A7"); 
+    map.put("javastring", "#E0E0E0"); 
+    map.put("htmltag", "#FFAB49"); 
+    map.put("htmlattr", "#FFAB80"); 
+    map.put("htmlattrname", "#64B5F6"); 
+    map.put("htmlstr", "#FFCC80"); 
+    map.put("csskeyword", "#81D4FA"); 
     map.put("htmlsymbol", "#FF33A8"); 
-    map.put("htmlblockhash", "#C70039"); 
-    map.put("htmlblocknormal", "#900C3F"); 
-    map.put("jskeyword", "#581845"); 
-    map.put("jsfun", "#900C3F"); 
-    map.put("jsoprator", "#FF5733"); 
-    map.put("jsattr", "#33FF57"); 
-    map.put("jsstring", "#FFC300");
+    map.put("htmlblockhash", "#FF5252"); 
+    map.put("htmlblocknormal", "#FF4081"); 
+    map.put("jskeyword", "#FFAB40"); 
+    map.put("jsfun", "#FFCC80");
+    map.put("jsoprator", "#FF5252"); 
+    map.put("jsattr", "#64B5F6"); 
+    map.put("jsstring", "#FFCC80"); 
+    map.put("pystring", "#FFCC80"); 
+    map.put("pykeyword", "#FFAB40"); 
+    map.put("pysymbol", "#64B5F6"); 
+    map.put("pynumber", "#A5D6A7"); 
+    map.put("pycolormatch1", "#FFFF33"); 
+    map.put("pycolormatch2", "#33FFFF"); 
+    map.put("pycolormatch3", "#FF33FF"); 
+    map.put("pycolormatch4", "#FFC300"); 
     String path =
         FileUtil.getExternalStorageDir()
             + File.separator
@@ -336,7 +356,7 @@ public class SetThemeForJson {
             + "GhostThemeapp.ghost";
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
     FileIOUtils.writeFileFromString(path, gson.toJson(map));
-    
+
     Map<String, Boolean> StyleText = new HashMap<>();
     StyleText.put("isBold", true);
     StyleText.put("isItalic", false);

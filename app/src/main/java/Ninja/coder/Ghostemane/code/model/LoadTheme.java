@@ -1,10 +1,11 @@
 package Ninja.coder.Ghostemane.code.model;
 
-import Ninja.coder.Ghostemane.code.adapter.ThemeAdpter;
+import Ninja.coder.Ghostemane.code.IdeEditor;
+import Ninja.coder.Ghostemane.code.adapter.ThemeAdapter;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import android.content.Context;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -25,8 +26,8 @@ public class LoadTheme {
   private ArrayList<String> key = new ArrayList<>();
   private ArrayList<HashMap<String, Object>> list = new ArrayList<>();
 
-  public void runinSheet(Context context) {
-    ListView listview = new ListView(context);
+  public void runinSheet(Context context,IdeEditor editor) {
+    RecyclerView listview = new RecyclerView(context);
     MaterialAlertDialogBuilder sheet = new MaterialAlertDialogBuilder(context);
     sheet.setTitle("Theme Maanager");
     sheet.setPositiveButton("dismiss", null);
@@ -50,12 +51,9 @@ public class LoadTheme {
           }
         });
 
-    ListView.LayoutParams param =
-        new ListView.LayoutParams(
-            ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.WRAP_CONTENT);
-    listview.setDividerHeight(0);
-    listview.setScrollBarSize(0);
-    listview.setEdgeEffectColor(0);
+    RecyclerView.LayoutParams param =
+        new RecyclerView.LayoutParams(
+            RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT);
 
     if (listview != null) {
       sheet.setView(listview);
@@ -69,14 +67,15 @@ public class LoadTheme {
               .fromJson(
                   new FileReader(ThemePath), new TypeToken<HashMap<String, Object>>() {}.getType());
       getAllKeysFromMap(map, key);
-      for (int koss_ninja_coder = 0; koss_ninja_coder < (int) (key.size()); koss_ninja_coder++) {
+      for (int i = 0; i < (int) (key.size()); i++) {
         add = new HashMap<>();
-        add.put("hex", map.get(key.get((int) (koss_ninja_coder))).toString());
-        add.put("key", key.get((int) (koss_ninja_coder)));
+        add.put("hex", map.get(key.get((int) i)).toString());
+        add.put("key", key.get((int) i));
         list.add(add);
       }
-      listview.setAdapter(new ThemeAdpter(list));
-      ((BaseAdapter) listview.getAdapter()).notifyDataSetChanged();
+      listview.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
+      listview.setAdapter(new ThemeAdapter(list,editor));
+
     } catch (Exception e) {
 
     }

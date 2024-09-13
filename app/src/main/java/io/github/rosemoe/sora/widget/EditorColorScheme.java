@@ -302,6 +302,17 @@ public class EditorColorScheme {
   public static final int jsoprator = 7863;
   public static final int jsattr = 3733;
   public static final int jsstring = 5739;
+  
+  ///for python
+  public static final int pystring = 27392;
+  public static final int pykeyword = 28910;
+  public static final int pysymbol =47207;
+  public static final int pynumber = 39910;
+  public static final int pycolormatch1 = 2061;
+  public static final int pycolormatch2 = 2061;
+  public static final int pycolormatch3 = 2061;
+  public static final int pycolormatch4 = 2061;
+  
 
   /** Min pre-defined color id */
   protected static final int START_COLOR_ID = 1;

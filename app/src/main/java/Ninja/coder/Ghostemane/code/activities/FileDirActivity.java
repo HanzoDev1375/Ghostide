@@ -213,6 +213,7 @@ public class FileDirActivity extends BaseCompat
   private HashMap<String, Object> maps = new HashMap<>();
   private RequestNetwork last;
   private RequestNetwork.RequestListener _last_request_listener;
+  private TextView emptyview;
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
@@ -290,6 +291,7 @@ public class FileDirActivity extends BaseCompat
     filedir_bar = findViewById(R.id.filedir_bar);
     book = getSharedPreferences("hsipsot4444", Activity.MODE_PRIVATE);
     downloder = findViewById(R.id.downloder);
+    emptyview = findViewById(R.id.emptyview);
 
     WindowsMath(_drawer, _coordinator);
     var vie = LayoutInflater.from(this).inflate(R.layout.recyclerview_emptyview, null, false);
@@ -408,11 +410,11 @@ public class FileDirActivity extends BaseCompat
             downloder.setTitle(maps.get("title").toString());
             downloder.setSizeTitle(maps.get("sizearm64").toString());
 
-           if (maps.containsKey("showbar")) {
+            if (maps.containsKey("showbar")) {
               downloder.setVisibility(View.GONE);
-           } else {
-             downloder.setVisibility(View.VISIBLE);
-           }
+            } else {
+              downloder.setVisibility(View.VISIBLE);
+            }
           }
 
           @Override
@@ -736,6 +738,12 @@ public class FileDirActivity extends BaseCompat
                     () ->
                         DataUtil.showMessage(getApplicationContext(), "Error to " + e.toString()));
               }
+              runOnUiThread(
+                  () -> {
+                    if (files.isEmpty()) {
+                      emptyview.setVisibility(View.VISIBLE);
+                    } else emptyview.setVisibility(View.GONE);
+                  });
 
               runOnUiThread(
                   () -> {

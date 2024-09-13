@@ -3,10 +3,9 @@ package Ninja.coder.Ghostemane.code.activities;
 import Ninja.coder.Ghostemane.code.R;
 import Ninja.coder.Ghostemane.code.databinding.ThemepreviewLayoutBinding;
 import Ninja.coder.Ghostemane.code.marco.ideColors.IdeColorCompat;
+import Ninja.coder.Ghostemane.code.model.LoadTheme;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import Ninja.coder.Ghostemane.code.utils.SetThemeForJson;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,12 +26,12 @@ import io.github.rosemoe.sora.widget.CodeEditor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ThemePreviewActivity extends BaseCompat {
 
   private HashMap<String, Object> map;
   private ThemepreviewLayoutBinding bind;
+  private LoadTheme loadTheme;
 
   @Override
   protected void onCreate(Bundle saveInStatous) {
@@ -50,11 +49,12 @@ public class ThemePreviewActivity extends BaseCompat {
     bind.rv1.setAdapter(new FakeAd());
     bind.rv1.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
 
-    bind.fab.setText("Apply now");
+    bind.fab.setText("Edit Theme");
     bind.editor.setEditable(false);
     bind.fab.setOnClickListener(
         c -> {
-          Toast.makeText(getApplicationContext(), "sooon", 2).show();
+          loadTheme = new LoadTheme();
+          loadTheme.runinSheet(ThemePreviewActivity.this,bind.editor);
         });
   }
 
