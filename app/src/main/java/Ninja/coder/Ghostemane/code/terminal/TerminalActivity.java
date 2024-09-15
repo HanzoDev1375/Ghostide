@@ -61,6 +61,9 @@ public class TerminalActivity extends BaseCompat implements TerminalViewClient {
   private int MIN_FONT_SIZE;
   private int MAX_FONT_SIZE;
   private int DEFAULT_FONT_SIZE;
+  private float terminalTextSize = 24f;
+  private final float minTextSize = 10.0f;
+  private final float maxTextSize = 30.0f;
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
@@ -257,13 +260,17 @@ public class TerminalActivity extends BaseCompat implements TerminalViewClient {
 
   @Override
   public float onScale(float scale) {
-    /// not work error
-    //    if (scale < 0.9f || scale > 1.1f) {
-    //      boolean increase = scale > 1.f;
-    //      //changeFontSize(increase);
-    //      return 1.0f;
-    //    }
-    return 2f;
+    float currentTextSize = terminalTextSize;
+    float newTextSize = currentTextSize * scale;
+
+    newTextSize = Math.max(minTextSize, Math.min(newTextSize, maxTextSize));
+    terminals.setTextSize((int) newTextSize);
+    terminalTextSize = newTextSize;
+
+    if (scale < 0.9f || scale > 1.1f) {
+      return 1.0f;
+    }
+    return scale;
   }
 
   private void changeFontSize(final boolean increase) {

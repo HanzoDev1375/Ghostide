@@ -42,7 +42,7 @@ public class PluginManagerActivity extends BaseCompat {
   private LinearLayout fileChker2;
   private TextView textview3;
   private LinearLayout linear6;
-
+  private String keyboardName = "rkr.simplekeyboard.inputmethod";
   private ProgressDialog dialog;
 
   @Override

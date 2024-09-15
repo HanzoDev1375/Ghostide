@@ -1897,7 +1897,7 @@ public class CodeEditor extends View
       // Draw matched text background
       if (!matchedPositions.isEmpty()) {
         for (int position : matchedPositions) {
-          drawRowRegionBackground(
+          drawPillSearch(
               canvas,
               paintingOffset,
               row,
@@ -2456,6 +2456,7 @@ public class CodeEditor extends View
     float baseline = getRowBottom(row) - getOffsetY() - mGraphMetrics.descent;
     canvas.drawText(graph, 0, graph.length(), offset, baseline, mPaintGraph);
   }
+
   public void drawMiniGraphs(float offset, int row, String graph) {
     // Draw
     mPaintGraph.setColor(mColors.getColor(EditorColorScheme.KEYWORD));
@@ -2463,7 +2464,6 @@ public class CodeEditor extends View
     float baseline = getRowBottom(row) - getOffsetY() - mGraphMetrics.descent;
     canvas.drawText(graph, 0, graph.length(), offset, baseline, mPaintGraph);
   }
-  
 
   /** Draw non-printable characters */
   protected void drawWhitespaces(
@@ -2613,6 +2613,28 @@ public class CodeEditor extends View
    * @param color Color of background
    */
   protected void drawRowRegionBackground(
+      Canvas canvas,
+      float paintingOffset,
+      int row,
+      int firstVis,
+      int lastVis,
+      int highlightStart,
+      int highlightEnd,
+      int color,
+      int line) {
+    int paintStart = Math.min(Math.max(firstVis, highlightStart), lastVis);
+    int paintEnd = Math.min(Math.max(firstVis, highlightEnd), lastVis);
+    if (paintStart != paintEnd) {
+      mRect.top = getRowTop(row) - getOffsetY();
+      mRect.bottom = getRowBottom(row) - getOffsetY();
+      mRect.left = paintingOffset + measureText(mBuffer, firstVis, paintStart - firstVis, line);
+      mRect.right = mRect.left + measureText(mBuffer, paintStart, paintEnd - paintStart, line);
+      mPaint.setColor(color);
+      canvas.drawRoundRect(mRect, getRowHeight() * 0.26f, getRowHeight() * 0.26f, mPaint);
+    }
+  }
+
+  protected void drawPillSearch(
       Canvas canvas,
       float paintingOffset,
       int row,
