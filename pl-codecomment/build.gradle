@@ -1,10 +1,10 @@
 plugins {
-    id 'com.android.library'
+    id "com.android.library"
 }
 
 android {
     compileSdk 34
-    namespace 'ninja.coder.codecomment.rule'
+    namespace "ninja.coder.codecomment.rule"
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 30
@@ -19,11 +19,12 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
 }
+
 dependencies {
-    //add your dependencies
-    implementation "androidx.appcompat:appcompat:1.7.0"
-    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
-    implementation "com.google.android.material:material:1.12.0"
     implementation project (path: ":Plugin")
+
+    implementation("androidx.appcompat:appcompat:1.7.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("com.google.android.material:material:1.12.0")
     implementation("com.google.code.gson:gson:2.10.1")
 }

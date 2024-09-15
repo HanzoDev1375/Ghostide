@@ -1,13 +1,11 @@
 plugins {
-    id 'com.android.library'
-    id 'org.jetbrains.kotlin.android'
+    id "com.android.library"
+    id "org.jetbrains.kotlin.android"
 }
 
-
-
 android {
+    namespace "com.mcal.webview"
     compileSdk 34
-
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 33
@@ -28,21 +26,21 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
-    namespace 'com.mcal.webview'
 }
+
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':vectormaster')
-    implementation ("androidx.appcompat:appcompat:1.7.0")
-    implementation ("com.google.android.material:material:1.12.0")
-    implementation "org.jetbrains:annotations:24.0.1"
-    implementation ("com.google.android.gms:play-services-base:18.2.0")
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+
+    implementation project(":vectormaster")
+
+    implementation("androidx.appcompat:appcompat:1.7.0")
+    implementation("com.google.android.material:material:1.12.0")
+    implementation("org.jetbrains:annotations:24.0.1")
+    implementation("com.google.android.gms:play-services-base:18.2.0")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("androidx.datastore:datastore-preferences-core:1.0.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-           
-
 }
