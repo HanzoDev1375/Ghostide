@@ -1,112 +1,108 @@
-<div align = "center">
- <h3>Ghost ide fast Editor Android</h3>
 
+<div align="center">
+  <h3>Ghost IDE - Fast Editor for Android</h3>
 </div>
 
 <p align="center">
-  <img align="center" src="https://raw.githubusercontent.com/appt2/Ghost-web-ide/main/app/src/main/res/mipmap-xxxhdpi/ghosticon.png"/>
+  <img src="https://raw.githubusercontent.com/appt2/Ghost-web-ide/main/app/src/main/res/mipmap-xxxhdpi/ghosticon.png" alt="Ghost IDE Logo" width="150">
 </p>
 
-### ImageApp 
+![GitHub stars](https://img.shields.io/github/stars/HanzoDev1375/Ghostide?style=social)
+![GitHub forks](https://img.shields.io/github/forks/HanzoDev1375/Ghostide?style=social)
+![GitHub release](https://img.shields.io/github/v/release/HanzoDev1375/Ghostide)
+![Commit Activity](https://img.shields.io/github/commit-activity/m/HanzoDev1375/Ghostide)
+[![GitHub contributors](https://img.shields.io/github/contributors/HanzoDev1375/Ghostide)](https://github.com/HanzoDev1375/Ghostide/graphs/contributors)
+[![GitHub last commit](https://img.shields.io/github/last-commit/HanzoDev1375/Ghostide)](https://github.com/HanzoDev1375/Ghostide/commits/)
 
-<div align = "center"> 
-    <img style="width: 25%; height: 80%; margin-bottom :2px; border-radius :9px; " src="https://raw.githubusercontent.com/appt2/Ghost-web-ide/main/images/img1.jpg"/>
-    <img style="width: 25%; height: 80%; margin-bottom :2px; border-radius :9px;  " src="https://raw.githubusercontent.com/appt2/Ghost-web-ide/main/images/img2.jpg"/>
-    <img style="width: 25%; height: 80%; margin-bottom :2px; border-radius :9px; " src="https://raw.githubusercontent.com/appt2/Ghost-web-ide/main/images/img3.jpg"/>
-    <img style="width: 25%; height: 80%; margin-bottom :2px; border-radius :9px; text-align :left; " src="https://raw.githubusercontent.com/appt2/Ghost-web-ide/main/images/img4.jpg"/>
-</div>     
+---
 
+### App Screenshots
 
+<div align="center">
+  <img src="https://raw.githubusercontent.com/appt2/Ghost-web-ide/main/images/img1.jpg" alt="Screenshot 1" style="width: 25%; height: auto; margin: 5px; border-radius: 9px;">
+  <img src="https://raw.githubusercontent.com/appt2/Ghost-web-ide/main/images/img2.jpg" alt="Screenshot 2" style="width: 25%; height: auto; margin: 5px; border-radius: 9px;">
+  <img src="https://raw.githubusercontent.com/appt2/Ghost-web-ide/main/images/img3.jpg" alt="Screenshot 3" style="width: 25%; height: auto; margin: 5px; border-radius: 9px;">
+  <img src="https://raw.githubusercontent.com/appt2/Ghost-web-ide/main/images/img4.jpg" alt="Screenshot 4" style="width: 25%; height: auto; margin: 5px; border-radius: 9px;">
+</div>
 
-#### Telegram Group 
+---
 
-<a href ="https://t.me/ghost_web_ide" > Telegram Group </a>
+### Join the Community
 
+- **[Telegram Group](https://t.me/ghost_web_ide)**
+- **[Telegram Channel](https://t.me/Ghostwebide)**
 
-#### Telegram Channel 
+---
 
-<a href = "https://t.me/Ghostwebide" > Telegram Channel </a>
-
-#### features
+### Features
 
 - [x] Support for multiple languages
-
 - [x] Free App
-
-- [x] Run python
-
-- [x] pip (80%)
-
+- [x] Run Python scripts
+- [x] pip support (80%)
 - [x] Material Colors
+- [x] Auto-save functionality
+- [x] Git integration
+- [ ] Plugin system (coming soon)
+- [x] HTML file reader
+- [x] Sass and Scss compiler
+- [ ] Java and Kotlin compiler (coming soon)
+- [ ] Ruby compiler (coming soon)
+- [x] Physical keyboard support
 
-- [x] Auto save
-
-- [x] Git support
-
-- [ ] Plugin system
-
-- [x] File Reader html
-
-- [x] Sass and Scss Compiler
-
-- [ ] Java and Kt Compiler 
-
-- [ ] Ruby Compiler 
-
-- [x] Physical keyboard
-
+---
 
 ### Supported Languages
 
-* - [X] HTML
-* - [X] CSS
-* - [X] JavaScript
-* - [X] Python
-* - [X] PHP 
-* - [X] Java
-* - [X] Kotlin
-* - [X] swift
-* - [X] C++
-* - [X] C#
-* - [X] Ruby 
-* - [X] shell 
-* - [x] markdown 
-* - [X] go 
+- [x] HTML
+- [x] CSS
+- [x] JavaScript
+- [x] Python
+- [x] PHP
+- [x] Java
+- [x] Kotlin
+- [x] Swift
+- [x] C++
+- [x] C#
+- [x] Ruby
+- [x] Shell
+- [x] Markdown
+- [x] Go
 
+---
 
-### Note
+### Notes
 
-#### What changes are supported?
-Refactoring codes
-Improve the speed of the program
+- **Refactoring**: Code refactoring supported to improve performance and speed of program.
 
-## Cooperation Request 
+---
 
-You can apply for Ghost Web development cooperation but under the following conditions 
+### Cooperation Request
 
-- For testing, you can use `test`
-- Create a new attribute from `attribute`
+We invite you to collaborate on Ghost IDE under the following conditions:
 
-- You can use refactor to clean the code `refactor`
+- Use `test` for testing purposes.
+- Create new attributes with `attribute`.
+- Use `refactor` to clean up the code.
 
-### Features that are not accepted!
+**Please Note:** This project is entirely written in Java. Kotlin contributions will only be accepted under special circumstances.
 
-- This project is 100% with Java, and if you are a Kotlin developer, your request will not be accepted except in special circumstances
+---
 
 ### Developer
 
-I must say that you do not have the right to register the program under your own name. It is an open source program and is released under the Ghost Web brand
+- You are **not allowed** to register this program under your own name.
+- This is an open-source project under the **Ghost Web** brand.
 
+---
 
-### Code snippet 
+### Code Snippets
 
-- The code snippet in GhostWeb is a little different than the json sample that is required
+Ghost IDE supports code snippets. Here's an example:
 
-#### Fa json 
+#### FA Json Example:
 
-
-```json 
-
+```json
 {
   "snippet1": {
     "description": "این یک قطعه کد تستی است",
@@ -119,51 +115,39 @@ I must say that you do not have the right to register the program under your own
     "body": "console.log('تست دوم');"
   }
 }
-
-
 ```
 
+#### EN Json Example:
 
-##### En Json 
-
-```json 
-
- 
- {
-   "snippet1": {
-     "description": "This is a piece of test code",
-     "prefix": "test",
-     "body": "console.log('This is a test');"
-   },
-   "snippet2": {
-     "description": "Another piece of code to test",
-     "prefix": "test2",
-     "body": "console.log('second test');"
-   }
- }
-
+```json
+{
+  "snippet1": {
+    "description": "This is a piece of test code",
+    "prefix": "test",
+    "body": "console.log('This is a test');"
+  },
+  "snippet2": {
+    "description": "Another piece of code to test",
+    "prefix": "test2",
+    "body": "console.log('second test');"
+  }
+}
 ```
 
-#### Note 
-You can put any name you like, but English and with small letters like Jason's example. In the future, all supported languages ​​of Ghost Web support this feature.
+#### Note:
+You can name your snippets with lowercase English letters, as in the examples above. In the future, all languages supported by Ghost IDE will support this feature.
 
-### Physical keyboard
+---
 
-Ghost Web supports physical keyboard
-Some physical keyboard support includes
+### Physical Keyboard Shortcuts
 
-`Ctrl` and `F` -> `File creator`
+Ghost IDE offers a variety of keyboard shortcuts for physical keyboards:
 
-`Ctrl` and `G` -> `Git clone`
-
-`Ctrl` and `S` -> `Open Settring App`
-
-`Ctrl` and `F1` -> `Folder creator`
-
-`Ctrl` and `J` -> `Json to java`
-
-`Ctrl` and `D` -> `Open Drawer`
-
-`Ctrl` and `A` -> `Open ApkView`
-
-`Ctrl` and `T` -> `Open Terminal`
+- `Ctrl + F`: Create new file
+- `Ctrl + G`: Git clone
+- `Ctrl + S`: Open settings
+- `Ctrl + F1`: Create new folder
+- `Ctrl + J`: Convert JSON to Java
+- `Ctrl + D`: Open drawer
+- `Ctrl + A`: Open APK viewer
+- `Ctrl + T`: Open terminal

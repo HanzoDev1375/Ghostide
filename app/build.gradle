@@ -78,52 +78,64 @@ android {
 task cleanUnusedXml {
     doLast {
         def xmlDir = file("$projectDir/src/main/res/layout")
-        def xmlFiles = xmlDir.listFiles().findAll { it.name.endsWith('.xml') }
+        def xmlFiles = xmlDir.listFiles().findAll { it.name.endsWith(".xml") }
 
         def usedXmlFiles = []
         def viewBindingXmlFiles = []
         def regex = /R\.layout\.(\w+)/
         
-        fileTree(dir: "$projectDir/src/main/java", includes: ['/**/*.java', '/**/*.kt']).each { file ->
+        fileTree(dir: "$projectDir/src/main/java", includes: ["/**/*.java", "/**/*.kt"]).each { file ->
             def content = file.text
             def matches = content.findAll(regex)
-            usedXmlFiles += matches.collect { it.replace('R.layout.', '') }
+            usedXmlFiles += matches.collect { it.replace("R.layout.", "") }
         }
 
         xmlFiles.each { xmlFile ->
             def content = xmlFile.text
-            usedXmlFiles += content.findAll(/@layout\/(\w+)/).collect { it.replace('@layout/', '') }
+            usedXmlFiles += content.findAll(/@layout\/(\w+)/).collect { it.replace("@layout/", "") }
         }
 
         xmlFiles.each { xmlFile ->
-            if (xmlFile.text.contains('layout')) {
-                viewBindingXmlFiles.add(xmlFile.name.replace('.xml', ''))
+            if (xmlFile.text.contains("layout")) {
+                viewBindingXmlFiles.add(xmlFile.name.replace(".xml", ""))
             }
         }
         xmlFiles.each { xmlFile ->
-            def xmlName = xmlFile.name.replace('.xml', '')
+            def xmlName = xmlFile.name.replace(".xml", "")
             if (!usedXmlFiles.contains(xmlName) && !viewBindingXmlFiles.contains(xmlName)) {
                 xmlFile.delete()
                 println "Deleted unused XML file: ${xmlFile.name}"
             }
         }
     }
+	
 }
 
 dependencies {
     
     implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
-    implementation 'com.google.code.gson:gson:2.11.0'
+    implementation("com.google.code.gson:gson:2.11.0")
 
+    implementation project(path: ":Plugin")
+    implementation project(path: ":pl-codecomment") 	
+    implementation project(path: ":jgit")
+    implementation project(path: ":jgit")
+    implementation project(path: ":prddownloader")
+    implementation project(path: ":datautils") 	
+    implementation project(path: ":jaxp:jaxp-internal")
+    implementation project(path: ":jaxp:xml")
+	implementation project(path: ":ui-designer")
+    implementation project(path: ":webview")
+    implementation project(path: ":vectormaster")
     implementation project(path: ":eclipse-standalone")
     implementation project(path: ":android-tools")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.2")
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-properties:2.14.2'
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-properties:2.14.2")
     implementation("com.squareup:javapoet:1.13.0")
     implementation("com.android.tools:r8:8.3.37")
     implementation("com.jsibbold:zoomage:1.3.1")
-    implementation 'com.github.li-xiaojun:XPopup:2.10.0'
+    implementation("com.github.li-xiaojun:XPopup:2.10.0")
     implementation("net.lingala.zip4j:zip4j:2.11.5")
     implementation("com.github.skydoves:powermenu:2.2.4")
     implementation("com.caverock:androidsvg:1.4")
@@ -161,31 +173,19 @@ dependencies {
     implementation("io.apisense:rhino-android:1.0")
     implementation("com.github.TimScriptov:apksigner:1.2.0")
     implementation("org.jsoup:jsoup:1.17.2")
-    implementation "com.github.douglasjunior:android-simple-tooltip:1.1.0"
+    implementation("com.github.douglasjunior:android-simple-tooltip:1.1.0")
     implementation("io.getstream:photoview:1.0.1")
     implementation("androidx.palette:palette:1.0.0")
     implementation("de.larsgrefer.sass:sass-embedded-android:3.6.0")
     implementation("io.reactivex.rxjava3:rxjava:3.1.8")
-    
-    implementation project(path: ":Plugin")
-  	implementation project(path: ":pl-codecomment") 	
-  	implementation project(path: ":jgit")
-  	implementation project(path: ":jgit")
-  	implementation project(path: ":prddownloader")
-  	implementation project(path: ":datautils") 	
-    implementation project(path: ':jaxp:jaxp-internal')
-    implementation project(path: ':jaxp:xml')
-    implementation "androidx.core:core:1.6.0"  
-    implementation 'androidx.preference:preference:1.2.1'
-    implementation 'com.github.javaparser:javaparser-core:3.26.2'
-    implementation project(':ui-designer')
-    implementation project(':webview')
-    implementation project(':vectormaster')   
-    implementation 'com.github.AppIntro:AppIntro:6.3.1'
-    implementation 'com.airbnb.android:lottie:6.4.1'
-    implementation 'org.w3c.css:sac:1.3'
-    implementation 'net.sourceforge.cssparser:cssparser:0.9.27'
-    implementation 'com.github.jsqlparser:jsqlparser:5.0'
-   // https://mvnrepository.com/artifact/com.diogonunes/JColor
-    implementation 'com.diogonunes:JColor:5.5.1'
+    implementation("androidx.core:core:1.6.0")
+    implementation("androidx.preference:preference:1.2.1")
+    implementation("com.github.javaparser:javaparser-core:3.26.2")
+    implementation("com.github.AppIntro:AppIntro:6.3.1")
+    implementation("com.airbnb.android:lottie:6.4.1")
+    implementation("org.w3c.css:sac:1.3")
+    implementation("net.sourceforge.cssparser:cssparser:0.9.27")
+    implementation("com.github.jsqlparser:jsqlparser:5.0")
+    // https://mvnrepository.com/artifact/com.diogonunes/JColor
+    implementation("com.diogonunes:JColor:5.5.1")
 }

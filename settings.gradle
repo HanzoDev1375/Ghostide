@@ -20,15 +20,15 @@ dependencyResolutionManagement {
 rootProject.name = "GhostWeb IDE"
 
 include(":app")
-include 'eclipse-standalone'
+include(":eclipse-standalone")
 include(":android-tools")
 include(":Plugin")
 include(":pl-codecomment")	
 include(":jgit")
-include (':jaxp:jaxp-internal')
-include (':jaxp:xml')
-include(':ui-designer')
-include(':vectormaster')
-include(':webview')
-include(':datautils')
-include(':prddownloader')
+include(":jaxp:jaxp-internal")
+include(":jaxp:xml")
+include(":ui-designer")
+include(":vectormaster")
+include(":webview")
+include(":datautils")
+include(":prddownloader")
