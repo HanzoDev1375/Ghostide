@@ -25,7 +25,7 @@ package io.github.rosemoe.sora.langs.html;
 
 import Ninja.coder.Ghostemane.code.ApplicationLoader;
 import Ninja.coder.Ghostemane.code.IdeEditor;
-import Ninja.coder.Ghostemane.code.activities.FileDirActivity;
+import Ninja.coder.Ghostemane.code.activities.FileManagerActivity;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import com.steadystate.css.dom.CSSStyleSheetImpl;
@@ -711,7 +711,7 @@ public class HTMLLanguage implements EditorLanguage {
 
 
   public static String ShowFile() {
-    File file = new File(FileDirActivity.POSNINJACODERMAIN);
+    File file = new File(FileManagerActivity.POSNINJACODERMAIN);
     return file.getParent();
   }
 

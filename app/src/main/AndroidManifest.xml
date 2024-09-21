@@ -49,7 +49,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.FileDirActivity"
+            android:name=".activities.FileManagerActivity"
         />
         <activity
             android:name=".activities.CodeEditorActivity"

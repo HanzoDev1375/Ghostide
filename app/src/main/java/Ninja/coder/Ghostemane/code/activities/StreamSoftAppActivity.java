@@ -77,7 +77,7 @@ public class StreamSoftAppActivity extends BaseCompat implements StreamAd.OnItem
     public void onClick(int pos, View c) {
         switch (pos) {
             case 0:
-                setClass(FileDirActivity.class);
+                setClass(FileManagerActivity.class);
                 break;
             case 1:
                 setClass(JavaManagerLayoutActivity.class);

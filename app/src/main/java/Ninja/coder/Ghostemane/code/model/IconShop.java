@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.content.DialogInterface;
 import android.widget.EditText;
 import android.widget.ImageView;
-import Ninja.coder.Ghostemane.code.activities.FileDirActivity;
+import Ninja.coder.Ghostemane.code.activities.FileManagerActivity;
 import Ninja.coder.Ghostemane.code.utils.SvgShow;
 import android.net.Uri;
 import Ninja.coder.Ghostemane.code.compressor.SvgToPng;

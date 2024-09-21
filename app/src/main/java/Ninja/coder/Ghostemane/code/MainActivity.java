@@ -2,7 +2,7 @@ package Ninja.coder.Ghostemane.code;
 
 import Ninja.coder.Ghostemane.code.Welcome.SplashWord;
 import Ninja.coder.Ghostemane.code.activities.BaseCompat;
-import Ninja.coder.Ghostemane.code.activities.FileDirActivity;
+import Ninja.coder.Ghostemane.code.activities.FileManagerActivity;
 import Ninja.coder.Ghostemane.code.activities.StreamSoftAppActivity;
 import Ninja.coder.Ghostemane.code.databinding.MainBinding;
 import Ninja.coder.Ghostemane.code.utils.AssetsSoft;
@@ -164,7 +164,7 @@ public class MainActivity extends BaseCompat {
                       || !FileUtil.isExistFile(ghostPath)) {
                     startActivity(new Intent(getApplication(), SplashWord.class));
                   } else {
-                    gotopage.setClass(getApplicationContext(), FileDirActivity.class);
+                    gotopage.setClass(getApplicationContext(), FileManagerActivity.class);
                     gotopage.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(gotopage);
                   }

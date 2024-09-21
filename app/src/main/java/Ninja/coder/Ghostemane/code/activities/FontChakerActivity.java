@@ -184,7 +184,7 @@ public class FontChakerActivity extends BaseCompat {
               di.setNeutralButton(
                   "بله",
                   (p, d) -> {
-                    intent.setClass(getApplicationContext(), FileDirActivity.class);
+                    intent.setClass(getApplicationContext(), FileManagerActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
                   });

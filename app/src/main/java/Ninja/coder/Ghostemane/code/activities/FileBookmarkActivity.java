@@ -84,7 +84,7 @@ public class FileBookmarkActivity extends BaseCompat {
             if (FileUtil.isDirectory(utils)) {
               Intent i = new Intent();
               i.putExtra("bookmarkDir", utils);
-              i.setClass(getApplicationContext(), FileDirActivity.class);
+              i.setClass(getApplicationContext(), FileManagerActivity.class);
               if (i != null) {
                 startActivity(i);
               }
@@ -93,7 +93,7 @@ public class FileBookmarkActivity extends BaseCompat {
               Intent i = new Intent();
               /** using getParent from preview Path not files */
               i.putExtra("bookmarkDir", file.getParent());
-              i.setClass(getApplicationContext(), FileDirActivity.class);
+              i.setClass(getApplicationContext(), FileManagerActivity.class);
               if (i != null) {
                 startActivity(i);
               }

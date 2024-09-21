@@ -97,7 +97,7 @@ import storage.sdcard.SdCardUtil;
 import java.io.File;
 import java.util.*;
 
-public class FileDirActivity extends BaseCompat
+public class FileManagerActivity extends BaseCompat
     implements FileManagerAd.onClick, ToolbarListFileAdapter.CallBack {
 
   protected static final String SHARED_PREFS_KEY = "scroll_position";
@@ -255,7 +255,7 @@ public class FileDirActivity extends BaseCompat
     _drawer = findViewById(R.id._drawer);
     ActionBarDrawerToggle _toggle =
         new ActionBarDrawerToggle(
-            FileDirActivity.this, _drawer, _toolbar, R.string.app_name, R.string.app_name);
+            FileManagerActivity.this, _drawer, _toolbar, R.string.app_name, R.string.app_name);
     _drawer.addDrawerListener(_toggle);
     _toggle.syncState();
 
@@ -266,7 +266,7 @@ public class FileDirActivity extends BaseCompat
 
     recyclerview1 = findViewById(R.id.recyclerview1);
     recyclerview2 = findViewById(R.id.recyclerview2);
-    fileListItem = new FileManagerAd(files, FileDirActivity.this, this);
+    fileListItem = new FileManagerAd(files, FileManagerActivity.this, this);
     shp = getSharedPreferences("shp", Activity.MODE_PRIVATE);
     soglo = getSharedPreferences("soglo", Activity.MODE_PRIVATE);
     np = getSharedPreferences("np", Activity.MODE_PRIVATE);
@@ -358,7 +358,7 @@ public class FileDirActivity extends BaseCompat
             }
             if (!upfile.get((int) 0).get("Version").toString().equals(version)) {
               /// AddDialog
-              var di = new GhostWebMaterialDialog(FileDirActivity.this);
+              var di = new GhostWebMaterialDialog(FileManagerActivity.this);
               di.setTitle(upfile.get((int) 0).get("Title").toString());
               di.setMessage(upfile.get((int) 0).get("Massges").toString());
               di.setCancelable(false);
@@ -390,7 +390,7 @@ public class FileDirActivity extends BaseCompat
     projectMaker =
         new ProjectMaker(
             Folder,
-            FileDirActivity.this,
+            FileManagerActivity.this,
             () -> {
               reLoadFile();
             });
@@ -475,13 +475,13 @@ public class FileDirActivity extends BaseCompat
     // new FastScrollerBuilder(recyclerview2).useMd2Style().build();
 
     progressDilaog =
-        new ProgressDialog(FileDirActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
-    unzip = new ProgressDialog(FileDirActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
-    mprodialog = new ProgressDialog(FileDirActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
-    prodel = new ProgressDialog(FileDirActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
-    proveg = new ProgressDialog(FileDirActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
-    copydir = new ProgressDialog(FileDirActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
-    copypath = new ProgressDialog(FileDirActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
+        new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
+    unzip = new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
+    mprodialog = new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
+    prodel = new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
+    proveg = new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
+    copydir = new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
+    copypath = new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
     GradientDrawable u = new GradientDrawable();
     u.setColor(0xFF2B2122);
     u.setCornerRadius(25);
@@ -509,7 +509,7 @@ public class FileDirActivity extends BaseCompat
     startService(new Intent(this, FileEventUser.class));
     getSupportActionBar().hide();
     sharedPreferences = getSharedPreferences("fileSp", Context.MODE_PRIVATE);
-    utils = new HichemSoftFileUtil(sharedPreferences, FileDirActivity.this).loadData();
+    utils = new HichemSoftFileUtil(sharedPreferences, FileManagerActivity.this).loadData();
     utils.requestPermissionAllFilesAccess(); // if not allowed
     RefreshTabs();
     FileManagerUtils fileManagerUtils = new FileManagerUtils(this);
@@ -727,7 +727,7 @@ public class FileDirActivity extends BaseCompat
 
   public void FolderMaker() {
     androidx.appcompat.app.AlertDialog dialog =
-        new GhostWebMaterialDialog(FileDirActivity.this)
+        new GhostWebMaterialDialog(FileManagerActivity.this)
             .setView(R.layout.makefolder)
             .setTitle("Folder")
             .setMessage("make folder")
@@ -927,7 +927,7 @@ public class FileDirActivity extends BaseCompat
 
   public void _distreeview() {
     List<String> pospath = spiltIntoBreadcrumbItems(Folder);
-    adps = new ToolbarListFileAdapter(pospath, FileDirActivity.this, this);
+    adps = new ToolbarListFileAdapter(pospath, FileManagerActivity.this, this);
     recyclerview1.setAdapter(adps);
     recyclerview1.setLayoutManager(
         new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -990,14 +990,14 @@ public class FileDirActivity extends BaseCompat
   }
 
   void InstallTakes(int _pos, String _path, String tit, String msg) {
-    var di = new DialogUtil(FileDirActivity.this);
+    var di = new DialogUtil(FileManagerActivity.this);
 
     di.setTitle(tit);
     di.setMessage(msg);
     di.setNeutralButton(
         "مشاهده",
         (p, d) -> {
-          ZipFileShow.showAsDialog(FileDirActivity.this, _path);
+          ZipFileShow.showAsDialog(FileManagerActivity.this, _path);
         });
     di.setPositiveButton(
         "استخراج",
@@ -1022,7 +1022,7 @@ public class FileDirActivity extends BaseCompat
     if (_list.get((int) _pos).get(_str).toString().endsWith(".aa")
         || _list.get((int) _pos).get(_str).toString().endsWith(".AA")) {
       if (FileUtil.isFile("/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost")) {
-        var di = new MaterialAlertDialogBuilder(FileDirActivity.this);
+        var di = new MaterialAlertDialogBuilder(FileManagerActivity.this);
 
         di.setTitle("هشدار");
         di.setMessage("این فایل تم در حافظه شما موجود است آیا میخواهید این تم را جایگزین کنید؟");
@@ -1066,7 +1066,7 @@ public class FileDirActivity extends BaseCompat
 
   public void _dicomplier() {
     androidx.appcompat.app.AlertDialog dialog =
-        new GhostWebMaterialDialog(FileDirActivity.this)
+        new GhostWebMaterialDialog(FileManagerActivity.this)
             .setView(R.layout.classjardicompiler)
             .setTitle("Dicompiler ")
             .setMessage("")
@@ -1157,7 +1157,7 @@ public class FileDirActivity extends BaseCompat
   public void _rename(final double _pos) {
 
     AlertDialog dialog =
-        new GhostWebMaterialDialog(FileDirActivity.this)
+        new GhostWebMaterialDialog(FileManagerActivity.this)
             .setView(R.layout.ranme)
             .setTitle("Rename")
             .setMessage("type new name ")
@@ -1218,7 +1218,7 @@ public class FileDirActivity extends BaseCompat
   }
 
   public void _delFileCustom(int _pos) {
-    var di = new DialogUtil(FileDirActivity.this);
+    var di = new DialogUtil(FileManagerActivity.this);
 
     di.setTitle("Romved File");
     di.setMessage("romved ".concat(files.get(_pos).get("path").toString().concat(" your mobile?")));
@@ -1390,7 +1390,7 @@ public class FileDirActivity extends BaseCompat
       loadsvg(newpos);
     }
     if (staticstring.endsWith(".jar")) {
-      var di = new DialogUtil(FileDirActivity.this);
+      var di = new DialogUtil(FileManagerActivity.this);
 
       di.setTitle("لطفا یکی از گزینه های زیر را انتخاب کنید");
       di.setMessage(
@@ -1410,7 +1410,7 @@ public class FileDirActivity extends BaseCompat
                 staticstring.trim(),
                 GetTab.trim(),
                 26,
-                FileDirActivity.this,
+                FileManagerActivity.this,
                 () -> {
                   reLoadFile();
                 });
@@ -1538,7 +1538,7 @@ public class FileDirActivity extends BaseCompat
   }
 
   public void _projectinit() {
-    var maindialogPrfex = new DialogUtil(FileDirActivity.this);
+    var maindialogPrfex = new DialogUtil(FileManagerActivity.this);
     maindialogPrfex.setView(R.layout.projectinitre);
     maindialogPrfex.setTitle("Make project");
     maindialogPrfex.setCancelable(true);
@@ -1558,7 +1558,7 @@ public class FileDirActivity extends BaseCompat
             }
           }
           // post.setAdapter(new RecyclerviewCppAdapter(projectdata));
-          post.setLayoutManager(new GridLayoutManager(FileDirActivity.this, (int) 2));
+          post.setLayoutManager(new GridLayoutManager(FileManagerActivity.this, (int) 2));
           positive.setOnClickListener(
               (vftrororocjj) -> {
                 maindialogPrfex.dismiss();
@@ -1571,7 +1571,7 @@ public class FileDirActivity extends BaseCompat
     VectorHelper.iconPath = _input;
     VectorHelper.projectResourceDirectory = _output;
     VectorHelper.v(
-        FileDirActivity.this,
+        FileManagerActivity.this,
         () -> {
           reLoadFile();
         });
@@ -1636,7 +1636,7 @@ public class FileDirActivity extends BaseCompat
                   Toast.makeText(getApplicationContext(), "Done", Toast.LENGTH_LONG).show();
                 }
               },
-              FileDirActivity.this);
+              FileManagerActivity.this);
         });
     builder.setNeutralButton(
         "install",
@@ -1657,7 +1657,7 @@ public class FileDirActivity extends BaseCompat
             cbuilder.show();
           } else {
             String apkPath = staticstring;
-            ApkInstaller apkInstaller = new ApkInstaller(FileDirActivity.this, new File(apkPath));
+            ApkInstaller apkInstaller = new ApkInstaller(FileManagerActivity.this, new File(apkPath));
             apkInstaller.execute();
           }
         });
@@ -1751,7 +1751,7 @@ public class FileDirActivity extends BaseCompat
 
   public void _ftpinstall() {
     androidx.appcompat.app.AlertDialog dialog =
-        new GhostWebMaterialDialog(FileDirActivity.this)
+        new GhostWebMaterialDialog(FileManagerActivity.this)
             .setView(R.layout.layout_ftp_filedir_download)
             .setTitle("Ftp Downloader")
             .setCancelable(false)
@@ -1899,7 +1899,7 @@ public class FileDirActivity extends BaseCompat
               }
             case 6:
               {
-                var icon = new IconShop(FileDirActivity.this);
+                var icon = new IconShop(FileManagerActivity.this);
                 break;
               }
             case 7:
@@ -1962,7 +1962,7 @@ public class FileDirActivity extends BaseCompat
 
   public void setBackupTheme() {
     if (FileUtil.isFile("/storage/emulated/0/GhostWebIDE/theme/theme.AA")) {
-      var di = new GhostWebMaterialDialog(FileDirActivity.this);
+      var di = new GhostWebMaterialDialog(FileManagerActivity.this);
       di.setTitle("هشدار");
       di.setMessage("این فایل در مسیر شما وجود دارد ایا میخواهید این فایل را جایگزین کنید؟");
       di.setNeutralButton(
@@ -2050,7 +2050,7 @@ public class FileDirActivity extends BaseCompat
               {
                 var modl =
                     new FactoryModelProject(
-                        FileDirActivity.this,
+                        FileManagerActivity.this,
                         Folder,
                         () -> {
                           reLoadFile();
@@ -2072,7 +2072,7 @@ public class FileDirActivity extends BaseCompat
               }
             case 5:
               {
-                var di1 = new GhostWebMaterialDialog(FileDirActivity.this);
+                var di1 = new GhostWebMaterialDialog(FileManagerActivity.this);
                 ViewGroup viewGroup = findViewById(android.R.id.content);
                 View dialogview =
                     getLayoutInflater().inflate(R.layout.makefolder, viewGroup, false);
@@ -2109,7 +2109,7 @@ public class FileDirActivity extends BaseCompat
               }
             case 6:
               {
-                var di = new GhostWebMaterialDialog(FileDirActivity.this);
+                var di = new GhostWebMaterialDialog(FileManagerActivity.this);
                 ViewGroup viewGroup = findViewById(android.R.id.content);
                 View dialogview1 =
                     getLayoutInflater().inflate(R.layout.makefolder, viewGroup, false);
@@ -2154,7 +2154,7 @@ public class FileDirActivity extends BaseCompat
               {
                 CreatorModule cvt =
                     new CreatorModule(
-                        FileDirActivity.this,
+                        FileManagerActivity.this,
                         Folder,
                         () -> {
                           reLoadFile();
@@ -2164,7 +2164,7 @@ public class FileDirActivity extends BaseCompat
               }
             case 9:
               {
-                GitListSheet task = new GitListSheet(new File(Folder), FileDirActivity.this);
+                GitListSheet task = new GitListSheet(new File(Folder), FileManagerActivity.this);
                 sh.getDismiss(true);
                 break;
               }
@@ -2172,7 +2172,7 @@ public class FileDirActivity extends BaseCompat
               {
                 var jsonToJava =
                     new GsonToClass(
-                        FileDirActivity.this,
+                        FileManagerActivity.this,
                         Folder,
                         () -> {
                           reLoadFile();
@@ -2187,7 +2187,7 @@ public class FileDirActivity extends BaseCompat
 
   public void _newItemSheet(int _position, final View _view) {
     final com.google.android.material.bottomsheet.BottomSheetDialog bottomSheetDialog =
-        new com.google.android.material.bottomsheet.BottomSheetDialog(FileDirActivity.this);
+        new com.google.android.material.bottomsheet.BottomSheetDialog(FileManagerActivity.this);
 
     View bottomSheetView;
     bottomSheetView = getLayoutInflater().inflate(R.layout.layout_dir_sheet, null);
@@ -2227,7 +2227,7 @@ public class FileDirActivity extends BaseCompat
         new View.OnClickListener() {
           public void onClick(View v) {
 
-            var fileShareManager = new FileShareManager(FileDirActivity.this);
+            var fileShareManager = new FileShareManager(FileManagerActivity.this);
             File file = new File(files.get((int) _position).get("path").toString());
             try {
               fileShareManager.shareFile(file);
@@ -2271,9 +2271,9 @@ public class FileDirActivity extends BaseCompat
   }
 
   public void _dialoggits() {
-    // FileDirActivity.this
+    // FileManagerActivity.this
     AlertDialog di =
-        new MaterialAlertDialogBuilder(FileDirActivity.this)
+        new MaterialAlertDialogBuilder(FileManagerActivity.this)
             .setPositiveButton("clone", (w, r) -> {})
             .setView(R.layout.layout_gitclone)
             .setCancelable(false)
@@ -2379,7 +2379,7 @@ public class FileDirActivity extends BaseCompat
           // open gson to java
           var jsonToJava =
               new GsonToClass(
-                  FileDirActivity.this,
+                  FileManagerActivity.this,
                   Folder,
                   () -> {
                     reLoadFile();
