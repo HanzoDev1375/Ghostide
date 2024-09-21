@@ -400,31 +400,36 @@ public class FileDirActivity extends BaseCompat
           public void onResponse(String _param1, String _param2, HashMap<String, Object> _param3) {
             final String _response = _param2;
             try {
-              maps = new HashMap<>();
               maps =
                   new Gson()
                       .fromJson(_response, new TypeToken<HashMap<String, Object>>() {}.getType());
+
+              if (maps.containsKey("appname")
+                  && maps.containsKey("sizearm64")
+                  && maps.containsKey("linkarm64")) {
+                downloder.setTitle(maps.get("appname").toString());
+                downloder.setSizeTitle(maps.get("sizearm64").toString());
+
+                if (maps.containsKey("showbar")) {
+                  downloder.setVisibility(View.GONE);
+                } else {
+                  downloder.setVisibility(View.VISIBLE);
+                }
+
+                downloder.setOnClick(
+                    v -> {
+                      downloder.setDownload(
+                          maps.get("linkarm64").toString(), maps.get("appname").toString());
+                    });
+              }
             } catch (Exception e) {
-
-            }
-            downloder.setTitle(maps.get("title").toString());
-            downloder.setSizeTitle(maps.get("sizearm64").toString());
-
-            if (maps.containsKey("showbar")) {
-              downloder.setVisibility(View.GONE);
-            } else {
-              downloder.setVisibility(View.VISIBLE);
+              // Do not handle map after Exception as it will throw null pointer Exception.
             }
           }
 
           @Override
           public void onErrorResponse(String _param1, String _param2) {}
         };
-
-    downloder.setOnClick(
-        v -> {
-          downloder.setDownload(maps.get("linkarm64").toString(), maps.get("appname").toString());
-        });
 
     projectMaker =
         new ProjectMaker(
