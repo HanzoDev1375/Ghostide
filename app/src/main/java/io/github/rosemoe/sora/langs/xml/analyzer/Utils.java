@@ -28,15 +28,15 @@ public class Utils {
           if (last.column <= column - 1 && span.column >= column - 1) {
             span.problemFlags = Span.FLAG_ERROR;
             last.problemFlags = Span.FLAG_ERROR;
-            span.style = EditorColorScheme.PROBLEM_ERROR;
-            last.style = EditorColorScheme.PROBLEM_ERROR;
+        //    span.style = EditorColorScheme.PROBLEM_ERROR;
+           // last.style = EditorColorScheme.PROBLEM_ERROR;
             end[1] = last.column;
             break;
           }
         }
         if (i == spans.size() - 1 && span.column <= column - 1) {
           span.problemFlags = Span.FLAG_ERROR;
-          span.style = EditorColorScheme.PROBLEM_ERROR;
+      //    span.style = EditorColorScheme.PROBLEM_ERROR;
           end[1] = span.column;
           break;
         }
@@ -68,15 +68,15 @@ public class Utils {
           if (last.column <= column - 1 && span.column >= column - 1) {
             span.problemFlags = Span.FLAG_WARNING;
             last.problemFlags = Span.FLAG_WARNING;
-            span.style = EditorColorScheme.PROBLEM_WARNING;
-            last.style = EditorColorScheme.PROBLEM_WARNING;
+           // span.style = EditorColorScheme.PROBLEM_WARNING;
+          //  last.style = EditorColorScheme.PROBLEM_WARNING;
             end[1] = last.column;
             break;
           }
         }
         if (i == spans.size() - 1 && span.column <= column - 1) {
           span.problemFlags = Span.FLAG_WARNING;
-          span.style = EditorColorScheme.PROBLEM_WARNING;
+      //    span.style = EditorColorScheme.PROBLEM_WARNING;
           end[1] = span.column;
           break;
         }

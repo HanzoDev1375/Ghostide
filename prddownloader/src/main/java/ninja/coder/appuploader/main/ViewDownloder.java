@@ -126,8 +126,8 @@ public class ViewDownloder extends RelativeLayout {
                   @Override
                   public void onDownloadComplete() {
                     child.tvname.setText("endWork");
-                    child.getRoot().setVisibility(View.GONE);
-                    child.progrssdownload.setVisibility(View.GONE);
+                    //child.view.setVisibility(View.GONE);
+                    //child.installApk.setVisibility(View.VISIBLE);
                   }
 
                   @Override

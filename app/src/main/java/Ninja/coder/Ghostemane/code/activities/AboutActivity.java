@@ -5,7 +5,6 @@ import Ninja.coder.Ghostemane.code.RequestNetwork;
 import Ninja.coder.Ghostemane.code.RequestNetworkController;
 import Ninja.coder.Ghostemane.code.adapter.DevAd;
 import Ninja.coder.Ghostemane.code.glidecompat.GlideCompat;
-import Ninja.coder.Ghostemane.code.model.DevModel;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,7 +12,7 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.activity.OnBackPressedCallback;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
@@ -61,7 +60,7 @@ public class AboutActivity extends BaseCompat {
 
             rv_about_dev.setAdapter(devAd);
             rv_about_dev.setLayoutManager(
-                new LinearLayoutManager(AboutActivity.this, RecyclerView.VERTICAL, false));
+                new GridLayoutManager(AboutActivity.this,2));
           }
 
           @Override

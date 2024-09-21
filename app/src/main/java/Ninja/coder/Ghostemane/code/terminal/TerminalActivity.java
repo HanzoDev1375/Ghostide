@@ -63,7 +63,7 @@ public class TerminalActivity extends BaseCompat implements TerminalViewClient {
   private int DEFAULT_FONT_SIZE;
   private float terminalTextSize = 24f;
   private final float minTextSize = 10.0f;
-  private final float maxTextSize = 30.0f;
+  private final float maxTextSize = 40.0f;
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {

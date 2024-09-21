@@ -108,7 +108,6 @@ public class FileDirActivity extends BaseCompat
   protected ProgressDialog progressDialog;
   protected AlertDialog maindialogPrfex;
   protected NavigationViewCompnet navs;
-  protected SharedPreferences mSharedPreferences;
   protected FastScrollerBuilder fast;
   protected FileEventUser user;
   private Timer _timer = new Timer();
@@ -118,7 +117,6 @@ public class FileDirActivity extends BaseCompat
   private CoordinatorLayout _coordinator;
   private DrawerLayout _drawer;
   private double index = 0;
-  private String Token = "";
   private String staticstring = "";
   private double gotoback = 0;
   private FileManagerAd fileListItem;
@@ -133,13 +131,10 @@ public class FileDirActivity extends BaseCompat
   private boolean Chack = false;
   private boolean isCopyAndMoved = false;
   private double conter = 0;
-  private boolean isAllSet = false;
   private boolean staticStorage = false;
   private String version = "";
   private double post = 0;
-  private String arm = "";
   private int newpos = 0;
-  private String MColors = "";
   private int lastPos = 0;
   private List<String> list = new ArrayList<>();
   private List<String> folderList = new ArrayList<>();
@@ -210,10 +205,8 @@ public class FileDirActivity extends BaseCompat
   private SharedPreferences sharedPreferences;
   private CircularProgressIndicator filedir_bar;
   private ViewDownloder downloder;
-  private HashMap<String, Object> maps = new HashMap<>();
-  private RequestNetwork last;
-  private RequestNetwork.RequestListener _last_request_listener;
-  private TextView emptyview;
+  private List<HashMap<String, Object>> maps = new ArrayList<>();
+  private LinearLayout emptyview;
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
@@ -247,10 +240,9 @@ public class FileDirActivity extends BaseCompat
 
   private void initialize(Bundle _savedInstanceState) {
     navs = findViewById(R.id.navs);
+    fabAdd = findViewById(R.id.fabAdd);
     startService(new Intent(getApplicationContext(), MediaListenerService.class));
     // from protected NavigationViewCompnet navs;
-
-    mSharedPreferences = getSharedPreferences(SHARED_PREFS_KEY, Context.MODE_PRIVATE);
     _app_bar = findViewById(R.id._app_bar);
     _coordinator = findViewById(R.id._coordinator);
     _toolbar = findViewById(R.id._toolbar);
@@ -303,7 +295,6 @@ public class FileDirActivity extends BaseCompat
       setViewType(ViewType.ROW);
     }
     ThemeChaker();
-    downloder.setVisibility(View.GONE);
 
     var helper =
         new RecyclerViewHelper(
@@ -374,10 +365,10 @@ public class FileDirActivity extends BaseCompat
               di.setNeutralButton(
                   "Update",
                   (p, d) -> {
-                    void10.setAction(Intent.ACTION_VIEW);
-                    void10.setData(Uri.parse(upfile.get((int) 0).get("Link").toString()));
-                    startActivity(void10);
-                    finishAffinity();
+                    downloder.setTitle(upfile.get(0).get("Title").toString());
+                    downloder.setSizeTitle(upfile.get(0).get("sizearm64").toString());
+                    downloder.setVisibility(View.VISIBLE);
+                    fabAdd.setVisibility(View.GONE);
                   });
               di.setPositiveButton("Ask Later", null);
 
@@ -391,39 +382,10 @@ public class FileDirActivity extends BaseCompat
           @Override
           public void onErrorResponse(String _param1, String _param2) {}
         };
-
-    last = new RequestNetwork(this);
-
-    _last_request_listener =
-        new RequestNetwork.RequestListener() {
-          @Override
-          public void onResponse(String _param1, String _param2, HashMap<String, Object> _param3) {
-            final String _response = _param2;
-            try {
-              maps = new HashMap<>();
-              maps =
-                  new Gson()
-                      .fromJson(_response, new TypeToken<HashMap<String, Object>>() {}.getType());
-            } catch (Exception e) {
-
-            }
-            downloder.setTitle(maps.get("title").toString());
-            downloder.setSizeTitle(maps.get("sizearm64").toString());
-
-            if (maps.containsKey("showbar")) {
-              downloder.setVisibility(View.GONE);
-            } else {
-              downloder.setVisibility(View.VISIBLE);
-            }
-          }
-
-          @Override
-          public void onErrorResponse(String _param1, String _param2) {}
-        };
-
     downloder.setOnClick(
         v -> {
-          downloder.setDownload(maps.get("linkarm64").toString(), maps.get("appname").toString());
+          downloder.setDownload(
+              upfile.get(0).get("linkarm64").toString(), upfile.get(0).get("appname").toString());
         });
 
     projectMaker =
@@ -467,6 +429,7 @@ public class FileDirActivity extends BaseCompat
         gridLayoutManager.setSpanCount(2);
         recyclerview2.setAdapter(fileListItem);
         _distreeview();
+
       } else {
         recyclerview2.setAdapter(fileListItem);
         _distreeview();
@@ -496,11 +459,7 @@ public class FileDirActivity extends BaseCompat
         "https://raw.githubusercontent.com/HanzoDev1375/HanzoDev1375/main/log.json",
         "",
         UpdateCheck);
-    last.startRequestNetwork(
-        RequestNetworkController.GET,
-        "https://raw.githubusercontent.com/HanzoDev1375/HanzoDev1375/main/app.json",
-        "",
-        _last_request_listener);
+
     if (war.contains("val")) {}
 
     var progress_m = new com.zip4j.progress.ProgressMonitor();
@@ -556,7 +515,7 @@ public class FileDirActivity extends BaseCompat
     RefreshTabs();
     FileManagerUtils fileManagerUtils = new FileManagerUtils(this);
 
-    fabAdd = findViewById(R.id.fabAdd);
+    
 
     AnimUtils.Worker(fabAdd);
 
@@ -1411,7 +1370,9 @@ public class FileDirActivity extends BaseCompat
     if (staticstring.endsWith(".smali")) {
       SendDataFromCodeEditor(newpos, "path", files, newlistmap);
     }
-    if (staticstring.endsWith(".groovy") || staticstring.endsWith(".gradle")) {
+    if (staticstring.endsWith(".groovy")
+        || staticstring.endsWith(".gradle")
+        || staticstring.endsWith(".gradle.kts")) {
       SendDataFromCodeEditor(newpos, "path", files, newlistmap);
     }
     if (staticstring.endsWith(".g4")) {
@@ -1950,11 +1911,7 @@ public class FileDirActivity extends BaseCompat
                       "https://raw.githubusercontent.com/HanzoDev1375/HanzoDev1375/main/log.json",
                       "v",
                       UpdateCheck);
-                  last.startRequestNetwork(
-                      RequestNetworkController.GET,
-                      "https://raw.githubusercontent.com/HanzoDev1375/HanzoDev1375/main/app.json",
-                      "",
-                      _last_request_listener);
+
                 } else {
                   DataUtil.showMessage(getApplicationContext(), "اینترنت خاموش است");
                 }
@@ -2312,23 +2269,6 @@ public class FileDirActivity extends BaseCompat
           }
         });
     bottomSheetDialog.show();
-  }
-
-  public void _dialog() {
-    int position =
-        ((GridLayoutManager) recyclerview2.getLayoutManager()).findFirstVisibleItemPosition();
-    var di = new GhostWebMaterialDialog(FileDirActivity.this);
-    di.setTitle("File Maker ");
-    di.setIcon(R.drawable.file);
-    di.setMessage("File maker open file?");
-    di.setNeutralButton(
-        "open",
-        (p, d) -> {
-          _dataOnClickItemList(lastPos);
-        });
-    di.setPositiveButton("no", (p1, d2) -> {});
-
-    di.show();
   }
 
   public void _dialoggits() {

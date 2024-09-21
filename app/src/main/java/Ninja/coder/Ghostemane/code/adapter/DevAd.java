@@ -17,10 +17,10 @@ import java.util.HashMap;
 import java.util.List;
 
 public class DevAd extends RecyclerView.Adapter<DevAd.VH> {
-  private List<HashMap<String,Object>> listDev;
+  private List<HashMap<String, Object>> listDev;
   private OnItemClick click;
 
-  public DevAd(List<HashMap<String,Object>> listDev, OnItemClick click) {
+  public DevAd(List<HashMap<String, Object>> listDev, OnItemClick click) {
     this.listDev = listDev;
     this.click = click;
   }

@@ -1,5 +1,8 @@
 package Ninja.coder.Ghostemane.code.activities;
 
+import Ninja.coder.Ghostemane.code.PluginManager.ModelPackage.PackageAd;
+import Ninja.coder.Ghostemane.code.PluginManager.ModelPackage.PackageModels;
+import Ninja.coder.Ghostemane.code.PluginManager.ModelPackage.WorkPackageManager;
 import Ninja.coder.Ghostemane.code.R;
 import Ninja.coder.Ghostemane.code.marco.HsiZip;
 import Ninja.coder.Ghostemane.code.utils.AssetsSoft;
@@ -19,11 +22,15 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.hzy.lib7z.Z7Extractor;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PluginManagerActivity extends BaseCompat {
 
@@ -44,6 +51,9 @@ public class PluginManagerActivity extends BaseCompat {
   private LinearLayout linear6;
   private String keyboardName = "rkr.simplekeyboard.inputmethod";
   private ProgressDialog dialog;
+  private RecyclerView rv_pl;
+  private List<PackageModels> model;
+  private WorkPackageManager work;
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
@@ -58,6 +68,8 @@ public class PluginManagerActivity extends BaseCompat {
     _coordinator = findViewById(R.id._coordinator);
     _toolbar = findViewById(R.id._toolbar);
     setSupportActionBar(_toolbar);
+    rv_pl = findViewById(R.id.rv_pl);
+
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     getSupportActionBar().setHomeButtonEnabled(true);
     _toolbar.setNavigationOnClickListener(
@@ -77,6 +89,23 @@ public class PluginManagerActivity extends BaseCompat {
     fileChker2 = findViewById(R.id.fileChker2);
     textview3 = findViewById(R.id.textview3);
     linear6 = findViewById(R.id.linear6);
+    model = new ArrayList<>();
+    model.add(
+        new PackageModels(
+            "rkr.simplekeyboard.inputmethod",
+            "rkr.simplekeyboard.inputmethod.latin.settings.SettingsActivity",
+            true,
+            true));
+    rv_pl.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+    rv_pl.setAdapter(
+        new PackageAd(
+            model,
+            this,
+            new PackageAd.OnClick() {
+
+              @Override
+              public void Click(View view, int pos) {}
+            }));
 
     linear2.setOnClickListener(
         new View.OnClickListener() {
