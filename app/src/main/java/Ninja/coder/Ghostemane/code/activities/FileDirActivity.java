@@ -382,54 +382,11 @@ public class FileDirActivity extends BaseCompat
           @Override
           public void onErrorResponse(String _param1, String _param2) {}
         };
-<<<<<<< HEAD
     downloder.setOnClick(
         v -> {
           downloder.setDownload(
               upfile.get(0).get("linkarm64").toString(), upfile.get(0).get("appname").toString());
         });
-=======
-
-    last = new RequestNetwork(this);
-
-    _last_request_listener =
-        new RequestNetwork.RequestListener() {
-          @Override
-          public void onResponse(String _param1, String _param2, HashMap<String, Object> _param3) {
-            final String _response = _param2;
-            try {
-              maps =
-                  new Gson()
-                      .fromJson(_response, new TypeToken<HashMap<String, Object>>() {}.getType());
-
-              if (maps.containsKey("appname")
-                  && maps.containsKey("sizearm64")
-                  && maps.containsKey("linkarm64")) {
-                downloder.setTitle(maps.get("appname").toString());
-                downloder.setSizeTitle(maps.get("sizearm64").toString());
-
-                if (maps.containsKey("showbar")) {
-                  downloder.setVisibility(View.GONE);
-                } else {
-                  downloder.setVisibility(View.VISIBLE);
-                }
-
-                downloder.setOnClick(
-                    v -> {
-                      downloder.setDownload(
-                          maps.get("linkarm64").toString(), maps.get("appname").toString());
-                    });
-              }
-            } catch (Exception e) {
-              // Do not handle map after Exception as it will throw null pointer Exception.
-            }
-          }
-
-          @Override
-          public void onErrorResponse(String _param1, String _param2) {}
-        };
->>>>>>> e98f4f95c8544a43332e28c3c3f234c6a9c9c35e
-
     projectMaker =
         new ProjectMaker(
             Folder,
