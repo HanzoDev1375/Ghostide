@@ -82,7 +82,7 @@ public class TextStyle {
         + (strikeThrough ? STRIKETHROUGH_BIT : 0)
         + (blow ? BELOWLINE : 0);
   }
-
+  @Deprecated()
   public static long makeStyle(
       int foregroundColorId,
       int backgroundColorId,

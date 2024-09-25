@@ -209,7 +209,7 @@ public class Span {
         + style
         + ", underlineColor="
         + underlineColor
-        + ", backgroundColorMy"
+        + ", backgroundColorMy = "
         + backgroundColorMy
         + ", problemFlags="
         + problemFlags

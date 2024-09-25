@@ -1674,7 +1674,7 @@ public class CodeEditor extends View
         } else {
           mPaint.setTextSkewX(0);
         }
-        if (TextStyle.isShadowLine(styleBits)) {}
+        
 
         lastStyle = styleBits;
       }
@@ -1817,6 +1817,7 @@ public class CodeEditor extends View
     renderNode.endRecording();
     mPaint.setTextSkewX(0);
     mPaint.setFakeBoldText(false);
+    mPaint.setUnderlineText(false);
   }
 
   /**
@@ -2084,17 +2085,6 @@ public class CodeEditor extends View
             } else {
               mPaint.setTextSkewX(0);
             }
-            if (TextStyle.isShadowLine(styleBits)) {
-
-              //              mPaintOther.setColor(span.backgroundColorMy);
-              //              canvas.drawRect(
-              //                  paintingOffset,
-              //                  getRowTop(row),
-              //                  paintingOffset + width,
-              //                  getRowTop(row) + getRowHeight(),
-              //                  mPaintOther);
-            }
-
             lastStyle = styleBits;
           }
 
@@ -2443,6 +2433,7 @@ public class CodeEditor extends View
     }
 
     mPaint.setFakeBoldText(false);
+    mPaint.setUnderlineText(false);
     mPaint.setTextSkewX(0);
     mPaintOther.setStrokeWidth(circleRadius * 2);
     mDrawPoints.commitPoints(canvas, mPaintOther);

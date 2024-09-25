@@ -113,29 +113,10 @@ class JavaCodeA implements CodeAnalyzer {
               super.visit(n, arg);
             }
 
-            @Override
-            public void visit(BlockStmt arg0, Void arg1) {
-              int line = arg0.getBegin().get().line;
-              int col = arg0.getBegin().get().column;
-              Utils.setSpanEFO(result, line, col, EditorColorScheme.javaoprator);
-              super.visit(arg0, arg1);
-            }
           },
           null);
 
-      it.accept(
-          new VoidVisitorAdapter<Void>() {
-
-            @Override
-            public void visit(EnumDeclaration arg0, Void arg1) {
-              int line = arg0.getName().getBegin().get().line;
-              int col = arg0.getName().getBegin().get().column + 2;
-              Utils.setSpanEFO(result, line, col, EditorColorScheme.javatype);
-              super.visit(arg0, arg1);
-            }
-          
-          },
-          null);
+      
 
       it.accept(
           new VoidVisitorAdapter<Void>() {

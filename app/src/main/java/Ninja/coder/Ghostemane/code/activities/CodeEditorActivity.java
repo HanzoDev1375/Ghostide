@@ -110,6 +110,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import ninja.coder.appuploader.utils.ShapeUtils;
+import ninja.coder.appuploader.utils.ShapeName;
 
 public class CodeEditorActivity extends AppCompatActivity {
 
@@ -425,7 +427,7 @@ public class CodeEditorActivity extends AppCompatActivity {
                       .y(minScale)
                       .setDuration(1000)
                       .start();
-                  ColorAndroid12.hideViewWithAnimation(syspiar,_fab);
+                  ColorAndroid12.hideViewWithAnimation(syspiar, _fab);
                 }
               }
             });
@@ -690,7 +692,6 @@ public class CodeEditorActivity extends AppCompatActivity {
     themeForJson2.addTextColor(
         titleauthor, "SyombolBarTextColor", Color.parseColor("#FFFFA0FB"), this, imap);
     themeForJson2.AddthemetoSattos(this, imap);
-    themeForJson2.addBackground(this, imap, "toolbarcolor", CustomToolbar, 0xFF281B26);
     themeForJson2.addBackground(this, imap, "tabimagecolorfilter", divar, Color.RED);
     themeForJson2.addBackground(this, imap, "tabimagecolorfilter", divardown, Color.RED);
     // divardown
@@ -1521,9 +1522,19 @@ public class CodeEditorActivity extends AppCompatActivity {
       if (_data.isEmpty()) {
       } else {
         var ideColors = new IdeColorCompat(editor);
-        ideColors.Colors(selector, textview1);
-        ideColors.setIconLang(pathFileindir, imageview2);
 
+        ideColors.setIconLang(pathFileindir, imageview2);
+        ShapeUtils shap = new ShapeUtils();
+        int colorTab =
+            imap.containsKey("tabback")
+                ? Color.parseColor(imap.get("tabback").toString())
+                : Color.parseColor("#1C1C1C");
+        int colorTabText =
+            imap.containsKey("displaytextcolortab")
+                ? Color.parseColor(imap.get("displaytextcolortab").toString())
+                : Color.parseColor("#1C1C1C");
+        textview1.setTextColor(colorTabText);
+        selector.setBackground(shap.getCustomShape(colorTab, ShapeName.LINEROUND));
         textview1.setText(dataChange);
 
         if (FileUtil.isDirectory(pathFileindir)) {

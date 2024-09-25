@@ -2,6 +2,7 @@ package Ninja.coder.Ghostemane.code.marco;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.text.TextUtils;
 import android.widget.TextView;
 
 public class CharUtil {
@@ -24,7 +25,7 @@ public class CharUtil {
     builder.append("Bc ").append(String.valueOf(getBytesCount(textView))).append(" ");
     builder.append("Uc ").append(String.valueOf(getUppercasesCount(textView))).append(" ");
     result.setText(builder.toString());
-    result.setShadowLayer(10, 10, 10, Color.parseColor("#ff2051"));
+    result.setEllipsize(TextUtils.TruncateAt.END);
     result.setTypeface(Typeface.create(Typeface.SANS_SERIF, 1, true));
   }
 

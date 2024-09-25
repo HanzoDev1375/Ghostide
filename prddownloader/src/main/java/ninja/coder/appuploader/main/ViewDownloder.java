@@ -38,12 +38,10 @@ public class ViewDownloder extends RelativeLayout {
   }
 
   void init() {
-    
+
     removeAllViews();
     child = LayoutDownloderChildBinding.inflate(LayoutInflater.from(getContext()));
-    var param =
-        new LayoutParams(
-          LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+    var param = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
     int[] colors = {0xFF81C784, 0xFF5DB895, 0xFF53B2AA};
     var gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.TL_BR, colors);
     child.getRoot().setBackground(gradientDrawable);
@@ -58,7 +56,8 @@ public class ViewDownloder extends RelativeLayout {
           gradientDrawable.setColors(new int[] {animatedValue, colors[1]});
         });
     colorAnimation.start();
-    addView(child.getRoot(),param);
+    child.progrssdownload.setVisibility(View.GONE);
+    addView(child.getRoot(), param);
   }
 
   public void setTitle(String title) {
@@ -72,6 +71,7 @@ public class ViewDownloder extends RelativeLayout {
   public void setDownload(String url, String name) {
 
     child.iconfake.setVisibility(View.GONE);
+    child.progrssdownload.setVisibility(View.VISIBLE);
     child.iconfake.setImageResource(android.R.drawable.arrow_down_float);
     if (Status.RUNNING == PRDownloader.getStatus(id)) {
       PRDownloader.pause(id);
@@ -102,8 +102,7 @@ public class ViewDownloder extends RelativeLayout {
 
                   @Override
                   public void onPause() {
-                    child.progrssdownload.setVisibility(View.GONE);
-                    child.iconfake.setVisibility(View.VISIBLE);
+                    child.progrssdownload.setIndeterminate(true);
                   }
                 })
             .setOnProgressListener(
@@ -126,8 +125,8 @@ public class ViewDownloder extends RelativeLayout {
                   @Override
                   public void onDownloadComplete() {
                     child.tvname.setText("endWork");
-                    //child.view.setVisibility(View.GONE);
-                    //child.installApk.setVisibility(View.VISIBLE);
+                    child.view.setVisibility(View.GONE);
+                    child.installApk.setVisibility(View.VISIBLE);
                   }
 
                   @Override

@@ -420,7 +420,7 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
           api = tag;
           for (int i = 1; i <= num; i++) { // از 1 شروع و تا عدد موجود تکرار می‌کنیم
             openingTags.append(
-                "<" + api.replace("#", "") + " class=\"" + name + i + "\">"); // خروجی
+                "<" + api.replace("#", "") + " class=\"" + name + "\">"); // خروجی
             closingTags.insert(0, "</" + api.replace("#", "") + ">");
           }
         }

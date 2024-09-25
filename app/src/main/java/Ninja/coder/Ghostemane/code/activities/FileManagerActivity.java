@@ -369,6 +369,12 @@ public class FileManagerActivity extends BaseCompat
                     downloder.setSizeTitle(upfile.get(0).get("sizearm64").toString());
                     downloder.setVisibility(View.VISIBLE);
                     fabAdd.setVisibility(View.GONE);
+                    downloder.setOnClick(
+                        v -> {
+                          downloder.setDownload(
+                              upfile.get(0).get("linkarm64").toString(),
+                              upfile.get(0).get("appname").toString());
+                        });
                   });
               di.setPositiveButton("Ask Later", null);
 
@@ -382,11 +388,7 @@ public class FileManagerActivity extends BaseCompat
           @Override
           public void onErrorResponse(String _param1, String _param2) {}
         };
-    downloder.setOnClick(
-        v -> {
-          downloder.setDownload(
-              upfile.get(0).get("linkarm64").toString(), upfile.get(0).get("appname").toString());
-        });
+
     projectMaker =
         new ProjectMaker(
             Folder,
@@ -477,11 +479,14 @@ public class FileManagerActivity extends BaseCompat
     progressDilaog =
         new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
     unzip = new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
-    mprodialog = new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
+    mprodialog =
+        new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
     prodel = new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
     proveg = new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
-    copydir = new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
-    copypath = new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
+    copydir =
+        new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
+    copypath =
+        new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
     GradientDrawable u = new GradientDrawable();
     u.setColor(0xFF2B2122);
     u.setCornerRadius(25);
@@ -513,8 +518,6 @@ public class FileManagerActivity extends BaseCompat
     utils.requestPermissionAllFilesAccess(); // if not allowed
     RefreshTabs();
     FileManagerUtils fileManagerUtils = new FileManagerUtils(this);
-
-    
 
     AnimUtils.Worker(fabAdd);
 
@@ -1657,7 +1660,8 @@ public class FileManagerActivity extends BaseCompat
             cbuilder.show();
           } else {
             String apkPath = staticstring;
-            ApkInstaller apkInstaller = new ApkInstaller(FileManagerActivity.this, new File(apkPath));
+            ApkInstaller apkInstaller =
+                new ApkInstaller(FileManagerActivity.this, new File(apkPath));
             apkInstaller.execute();
           }
         });

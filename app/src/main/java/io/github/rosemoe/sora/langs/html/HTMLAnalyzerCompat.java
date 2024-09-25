@@ -32,11 +32,9 @@ import org.jsoup.nodes.Element;
 
 public class HTMLAnalyzerCompat implements CodeAnalyzer {
   private IdeEditor editor;
-  
-  
-  public HTMLAnalyzerCompat(){
-    
-  }
+
+  public HTMLAnalyzerCompat() {}
+
   public HTMLAnalyzerCompat(IdeEditor editor) {
     this.editor = editor;
   }
@@ -271,16 +269,15 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
           case HTMLLexer.AT:
             result.addIfNeeded(line, column, EditorColorScheme.htmlsymbol);
             break;
-          
-          
+
           case HTMLLexer.HtmlAttr:
-            result.addIfNeeded(line, column, EditorColorScheme.jsattr);
+            result.addIfNeeded(line, column, EditorColorScheme.htmlattr);
             break;
           case HTMLLexer.BLOCK_COMMENT:
           case HTMLLexer.LINE_COMMENT:
             result.addIfNeeded(line, column, EditorColorScheme.COMMENT);
             break;
-          
+
           case HTMLLexer.CSSKEYWORD:
             result.addIfNeeded(line, column, EditorColorScheme.csskeyword);
             break;
@@ -416,7 +413,12 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
 
             break;
           case HTMLLexer.LinkLiteral:
+            Span span =
+                Span.obtain(
+                    column, TextStyle.makeStyle(EditorColorScheme.Ninja, 0, true, false, false));
             result.addIfNeeded(line, column, EditorColorScheme.Ninja);
+            span.setUnderlineColor(span.getForegroundColorId());
+            if (span != null) result.add(line, span);
             break;
           default:
             result.addIfNeeded(line, column, EditorColorScheme.TEXT_NORMAL);
