@@ -7,6 +7,7 @@ import android.graphics.Color;
 import androidx.core.graphics.ColorUtils;
 import io.github.rosemoe.sora.data.Span;
 import android.util.Log;
+import io.github.rosemoe.sora.langs.java.JavaCodeA;
 import io.github.rosemoe.sora.langs.javascript.BasicSyntaxJavaScriptAnalyzer;
 import io.github.rosemoe.sora.langs.php.PHPLanguage;
 import io.github.rosemoe.sora.langs.php.PhpErrorManager;

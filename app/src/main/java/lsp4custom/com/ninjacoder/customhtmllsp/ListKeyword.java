@@ -176,10 +176,19 @@ public class ListKeyword {
     var css = new Css3Server();
     css.install(item, prfex);
   }
+  
+  public void intallCss3Color(List<CompletionItem> item, String prfex) {
+    var css = new Css3Server();
+    css.installCssColor(item, prfex);
+  }
 
   public void installCssAttr(List<CompletionItem> item, String prfex) {
     var cssattr = new Css3Attr();
     cssattr.install(item, prfex);
+  }
+  public void installCssPadding(List<CompletionItem> item, String prfex) {
+    var cssattr = new Css3Server();
+    cssattr.Padding(item, prfex);
   }
 
   public void installFromSora(List<CompletionItem> items, String prfex) {

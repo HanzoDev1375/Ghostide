@@ -57,10 +57,8 @@ import org.w3c.css.sac.InputSource;
 
 public class HTMLLanguage implements EditorLanguage {
   private IdeEditor editor;
-  
-  public HTMLLanguage(){
-    
-  }
+
+  public HTMLLanguage() {}
 
   public HTMLLanguage(IdeEditor editor) {
     this.editor = editor;
@@ -707,8 +705,6 @@ public class HTMLLanguage implements EditorLanguage {
     "yellow",
     "yellowgreen"
   };
-  
-
 
   public static String ShowFile() {
     File file = new File(FileManagerActivity.POSNINJACODERMAIN);
@@ -803,21 +799,22 @@ public class HTMLLanguage implements EditorLanguage {
     var formatStyle = "";
     Document doc = Jsoup.parse(html);
     Document.OutputSettings outputSettings = new Document.OutputSettings();
-    outputSettings.indentAmount(2);
+    outputSettings.indentAmount(4);
     doc.outputSettings(outputSettings.prettyPrint(true));
 
     Elements styleElements = doc.select("style");
     for (Element styleElement : styleElements) {
       String cssCode = styleElement.html();
-      String formattedCssCode = Css3FormatCode.format(cssCode);
-      styleElement.html("\n\t" + formattedCssCode + "\n");
+      var i = new Css3FormatCode().format(cssCode);
+      String formattedCssCode = i;
+      styleElement.html("\n\n" + formattedCssCode + "\n\n");
     }
 
     Elements jsElements = doc.select("script");
     for (Element jsElement : jsElements) {
       String jsCode = jsElement.html();
       String formattedJsCode = javaFormat(jsCode);
-      jsElement.html("\n\t" + formattedJsCode + "\n");
+      jsElement.html("\n\n" + formattedJsCode + "\n\n");
     }
 
     if (doc.toString().contains("<!doctype html>")) {
@@ -1108,15 +1105,15 @@ public class HTMLLanguage implements EditorLanguage {
     }
   }
 
-  static class Css3FormatCode {
+  class Css3FormatCode {
 
-    private static CSSFormat formats;
+    private CSSFormat formats;
 
-    public static String format(String code) {
+    public String format(String code) {
 
       formats =
           new CSSFormat()
-              .setPropertiesInSeparateLines(2)
+              .setPropertiesInSeparateLines(getIndentAdvance(code))
               .setRgbAsHex(true)
               .setUseSourceStringValues(true);
       try {

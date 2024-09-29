@@ -63,6 +63,7 @@ HtmlTags
    | 'html'
    | 'i'
    | 'iframe'
+   | 'title'
    | 'image'
    | 'ins'
    | 'isindex'
@@ -162,7 +163,7 @@ HtmlTagOne
    | 'source'
    | 'track'
    | 'wbr'
-   | '<!DOCTYPE html>'
+   | 'DOCTYPE'
    ;
 
 HtmlAttr
@@ -184,7 +185,6 @@ HtmlAttr
    | 'contenteditable'
    | 'controls'
    | 'coords'
-   | 'data-*'
    | 'datetime'
    | 'defer'
    | 'dirname'
@@ -317,7 +317,6 @@ HtmlAttr
    | 'step'
    | 'tabindex'
    | 'target'
-   | 'title'
    | 'translate'
    | 'type'
    | 'usemap'
@@ -1148,4 +1147,20 @@ CHATREF
 LinkLiteral
    : ('http' 's'? | 'ftp' | 'file') '://' [a-zA-Z0-9./?=]+
    ;
-   
+
+CSSDOMATTR
+   : 'px'
+   | 'em'
+   | 'rem'
+   | 'vw'
+   | 'vh'
+   | 'vmin'
+   | 'vmax'
+   | 'in'
+   | 'cm'
+   | 'mm'
+   | 'pt'
+   | 'pc'
+   | 'ch'
+   ;
+

@@ -5,6 +5,9 @@ import Ninja.coder.Ghostemane.code.databin.DiagnosticWrapper;
 import Ninja.coder.Ghostemane.code.utils.SetThemeForJson;
 import android.graphics.Color;
 import androidx.core.graphics.ColorUtils;
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import io.github.rosemoe.sora.util.TrieTree;
@@ -179,7 +182,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           case JavaLexer.VOLATILE:
           case JavaLexer.WHILE:
           case JavaLexer.VAR:
-          get(EditorColorScheme.javakeyword,line,column,result);
+            get(EditorColorScheme.javakeyword, line, column, result);
             break;
           case JavaLexer.DECIMAL_LITERAL:
           case JavaLexer.HEX_LITERAL:
@@ -301,7 +304,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           case JavaLexer.INT:
           case JavaLexer.LONG:
           case JavaLexer.SHORT:
-            get(EditorColorScheme.javakeyword,line,column,result);
+            get(EditorColorScheme.javakeyword, line, column, result);
             break;
           case JavaLexer.BLOCK_COMMENT:
           case JavaLexer.LINE_COMMENT:
@@ -355,9 +358,8 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               if (text1.matches("([A-Za-z]*)(Exception)([a-zA-Z]*)(\\s\\w+)")) {
                 colorid = EditorColorScheme.javatype;
               }
-              
-              
-                get(colorid,line,column,result);
+
+              get(colorid, line, column, result);
               break;
             }
 
@@ -373,7 +375,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               }
               var lists = result.getBlocks();
               int colorid = EditorColorScheme.OPERATOR;
-            //   result.addIfNeeded(line, column, colorid);
+              //   result.addIfNeeded(line, column, colorid);
               break;
             }
 
@@ -385,7 +387,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               stack.push(block); // اضافه کردن بلوک به استک
               var lists = result.getBlocks();
               int colorid = EditorColorScheme.OPERATOR;
-         //     result.addIfNeeded(line, column, colorid);
+              //     result.addIfNeeded(line, column, colorid);
               // بررسی maxSwitch
               if (stack.isEmpty()) {
                 if (currSwitch > maxSwitch) {

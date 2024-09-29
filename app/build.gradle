@@ -11,7 +11,7 @@ android {
         applicationId "Ninja.coder.Ghostemane.code"
         minSdk 21
         ///dont edit sdk this best version 30 not edit
-        targetSdk 30
+        targetSdk 34
         versionCode 29
         versionName "1.6.4beta"
         vectorDrawables {
@@ -125,7 +125,7 @@ dependencies {
     implementation project(path: ":datautils") 	
     implementation project(path: ":jaxp:jaxp-internal")
     implementation project(path: ":jaxp:xml")
-	implementation project(path: ":ui-designer")
+  	implementation project(path: ":ui-designer")
     implementation project(path: ":webview")
     implementation project(path: ":vectormaster")
     implementation project(path: ":eclipse-standalone")
@@ -139,9 +139,9 @@ dependencies {
     implementation("net.lingala.zip4j:zip4j:2.11.5")
     implementation("com.github.skydoves:powermenu:2.2.4")
     implementation("com.caverock:androidsvg:1.4")
-    implementation("com.github.bumptech.glide:avif-integration:4.16.0")
-    implementation("com.github.bumptech.glide:recyclerview-integration:4.16.0")
-    implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation("com.github.bumptech.glide:avif-integration:5.0.0-rc01")
+    implementation("com.github.bumptech.glide:recyclerview-integration:5.0.0-rc01")
+    implementation("com.github.bumptech.glide:glide:5.0.0-rc01")
     implementation("com.blankj:utilcodex:1.31.1")
     implementation("androidx.webkit:webkit:1.10.0")
     implementation("org.eclipse.jgit:org.eclipse.jgit:6.8.0.202311291450-r")

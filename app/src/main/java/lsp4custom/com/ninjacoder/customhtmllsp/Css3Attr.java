@@ -33,7 +33,6 @@ public class Css3Attr {
     "italic",
     "bold",
     "normal",
-    "#RRGGBB",
     "rgba(R, G, B, A)",
     "hsl(H, S, L)",
     "url(\"path/to/image\")",

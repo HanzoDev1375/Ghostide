@@ -226,6 +226,8 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
     keyhtml.installHtmlAttr(items, prfex);
     keyhtml.intallCss3KeyWord(items, prfex);
     keyhtml.installCssAttr(items, prfex);
+    keyhtml.intallCss3Color(items, prfex);
+    keyhtml.installCssPadding(items,prfex);
     for (String ddd : HTMLLanguage.JS)
       if (ddd.startsWith(prefix)) items.add(dddAsCompletion(ddd, htmlconfig.JsKey));
     for (String classapp : HTMLLanguage.EmtClass)
@@ -283,8 +285,6 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
     }
     return false;
   }
-
-  
 
   public void idTag(String tagsInput) {
     String api = "";
@@ -419,8 +419,7 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
         for (String tag : validTags) {
           api = tag;
           for (int i = 1; i <= num; i++) { // از 1 شروع و تا عدد موجود تکرار می‌کنیم
-            openingTags.append(
-                "<" + api.replace("#", "") + " class=\"" + name + "\">"); // خروجی
+            openingTags.append("<" + api.replace("#", "") + " class=\"" + name + "\">"); // خروجی
             closingTags.insert(0, "</" + api.replace("#", "") + ">");
           }
         }

@@ -125,6 +125,7 @@ DOLLAR=124
 COLORSSS=125
 CHATREF=126
 LinkLiteral=127
+CSSDOMATTR=128
 'abstract'=5
 'assert'=6
 'boolean'=7
