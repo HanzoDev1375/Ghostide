@@ -254,7 +254,7 @@ public class Css3Server {
       String colorPrefix = prefix.substring(propertyName.length() + 1).trim();
       for (String color : HTMLLanguage.colorsCss) {
         if (color.startsWith(colorPrefix)) {
-          list.add(css(color, "CssColor", propertyName + ": " + color + " ;"));
+          list.add(css(color,htmlconfig.CssColor, propertyName + ": " + color + " ;"));
         }
       }
     }

@@ -13,6 +13,7 @@ import android.view.*;
 import io.github.rosemoe.sora.langs.html.HTMLLanguage;
 import io.github.rosemoe.sora.langs.java.JavaLanguage;
 import io.github.rosemoe.sora.langs.javascript.JavaScriptLanguage;
+import io.github.rosemoe.sora.langs.kotlin.KotlinLanguage;
 import io.github.rosemoe.sora.langs.php.PHPLanguage;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 import Ninja.coder.Ghostemane.code.R;
@@ -63,7 +64,7 @@ public class CustomAdGhostWeb extends EditorCompletionAdapter {
     item_type.setText(item.desc);
     item_desc.setText(item.commit);
     item_icon.setText(item.label.substring(0, 1));
-
+    item_icon.setPadding(9,9,9,9);
     item_label.setTextColor(getThemeColor(EditorColorScheme.ATTRIBUTE_VALUE));
     item_desc.setTextColor(getThemeColor(EditorColorScheme.ATTRIBUTE_VALUE));
     item_icon.setTextColor(getThemeColor(EditorColorScheme.ATTRIBUTE_VALUE));
@@ -86,8 +87,11 @@ public class CustomAdGhostWeb extends EditorCompletionAdapter {
     } else if (editor.getEditorLanguage() instanceof PHPLanguage) {
       item_icon.setBackground(colorSet("#FF1B6BFF"));
     } else if (editor.getEditorLanguage() instanceof JavaLanguage) {
-      
+      item_desc.setText(HtmlHelper.getHelpJava(item.label));
       item_icon.setBackground(colorSet("#ff720100"));
+    }else if(editor.getEditorLanguage() instanceof KotlinLanguage){
+      item_desc.setText(HtmlHelper.getHelpKotlin(item.label));
+      item_icon.setBackground(colorSet("#FF9A530B"));
     }
 
     view.setTag(pos);
