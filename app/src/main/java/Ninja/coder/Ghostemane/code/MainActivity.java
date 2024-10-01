@@ -13,7 +13,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.net.Uri;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,20 +50,29 @@ public class MainActivity extends BaseCompat {
     setContentView(bind.getRoot());
     initialize(_savedInstanceState);
     iconSp = bind.iconSp;
-
-    if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-            == PackageManager.PERMISSION_DENIED
-        || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            == PackageManager.PERMISSION_DENIED) {
-      ActivityCompat.requestPermissions(
-          this,
-          new String[] {
-            Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE
-          },
-          1000);
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      if (!Environment.isExternalStorageManager()) {
+        try {
+          Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+          Uri uri = Uri.fromParts("package", getPackageName(), null);
+          intent.setData(uri);
+          startActivity(intent);
+        } catch (Exception ex) {
+          Intent intent = new Intent();
+          intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+          startActivity(intent);
+        }
+      }else tryToRunApp();
     } else {
-      tryToRunApp();
+      // below android 11=======
+      if (ContextCompat.checkSelfPermission(
+              this, Manifest.permission.READ_EXTERNAL_STORAGE)
+          == PackageManager.PERMISSION_DENIED) {
+        ActivityCompat.requestPermissions(
+            this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, 1000);
+      }else tryToRunApp();
     }
+    tryToRunApp();
   }
 
   @Override
@@ -79,15 +92,6 @@ public class MainActivity extends BaseCompat {
   private void tryToRunApp() {
     ThemeChaker();
 
-    FileUtil.makeDir("/storage/emulated/0/GhostWebIDE/");
-    FileUtil.makeDir("/storage/emulated/0/GhostWebIDE/.icon");
-    FileUtil.makeDir("/storage/emulated/0/GhostWebIDE/android");
-    FileUtil.makeDir("/storage/emulated/0/GhostWebIDE/theme");
-    FileUtil.makeDir("/storage/emulated/0/GhostWebIDE/ninjacoder");
-    FileUtil.makeDir("/storage/emulated/0/ghostweb/icon/vector");
-    FileUtil.makeDir("/storage/emulated/0/ghostweb/icon/svg");
-    FileUtil.makeDir("/storage/emulated/0/GhostWebIDE/font");
-    FileUtil.makeDir("/storage/emulated/0/GhostWebIDE/apk");
     var mypath = getFilesDir().getAbsolutePath() + "/" + "databins";
     var pythonPath =
         getFilesDir().getAbsolutePath() + File.separator + "files" + File.separator + "env.sh";

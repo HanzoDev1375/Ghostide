@@ -228,6 +228,7 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
     keyhtml.installCssAttr(items, prfex);
     keyhtml.intallCss3Color(items, prfex);
     keyhtml.installCssPadding(items,prfex);
+    keyhtml.randomColor(items,prfex);
     for (String ddd : HTMLLanguage.JS)
       if (ddd.startsWith(prefix)) items.add(dddAsCompletion(ddd, htmlconfig.JsKey));
     for (String classapp : HTMLLanguage.EmtClass)

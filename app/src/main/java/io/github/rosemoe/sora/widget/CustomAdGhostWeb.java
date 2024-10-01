@@ -64,7 +64,7 @@ public class CustomAdGhostWeb extends EditorCompletionAdapter {
     item_type.setText(item.desc);
     item_desc.setText(item.commit);
     item_icon.setText(item.label.substring(0, 1));
-    item_icon.setPadding(9,9,9,9);
+    item_icon.setPadding(9, 9, 9, 9);
     item_label.setTextColor(getThemeColor(EditorColorScheme.ATTRIBUTE_VALUE));
     item_desc.setTextColor(getThemeColor(EditorColorScheme.ATTRIBUTE_VALUE));
     item_icon.setTextColor(getThemeColor(EditorColorScheme.ATTRIBUTE_VALUE));
@@ -76,12 +76,15 @@ public class CustomAdGhostWeb extends EditorCompletionAdapter {
       item_desc.setTextColor(HtmlHelper.cssColor(label.toString()));
     } else if (item.desc.equals(htmlconfig.PhpKeys)) {
       item_desc.setText(HtmlHelper.getHelpPhp(item.label));
+    } else if (item.desc.equals(htmlconfig.RandomColor)) {
+      AnimUtils.AutoColorSynchronizedfromTxt(Color.parseColor(label.toString()), item_icon);
+      item_icon.setBackgroundColor(Color.parseColor(label.toString()));
     } else {
       item_desc.setText(item.desc);
     }
     var editor = getEditor();
     if (editor.getEditorLanguage() instanceof HTMLLanguage) {
-      item_icon.setBackground(colorSet("#FFD67600"));
+      //  item_icon.setBackground(colorSet("#FFD67600"));
     } else if (editor.getEditorLanguage() instanceof JavaScriptLanguage) {
       item_icon.setBackground(colorSet("#FFFFA940"));
     } else if (editor.getEditorLanguage() instanceof PHPLanguage) {
@@ -89,7 +92,7 @@ public class CustomAdGhostWeb extends EditorCompletionAdapter {
     } else if (editor.getEditorLanguage() instanceof JavaLanguage) {
       item_desc.setText(HtmlHelper.getHelpJava(item.label));
       item_icon.setBackground(colorSet("#ff720100"));
-    }else if(editor.getEditorLanguage() instanceof KotlinLanguage){
+    } else if (editor.getEditorLanguage() instanceof KotlinLanguage) {
       item_desc.setText(HtmlHelper.getHelpKotlin(item.label));
       item_icon.setBackground(colorSet("#FF9A530B"));
     }

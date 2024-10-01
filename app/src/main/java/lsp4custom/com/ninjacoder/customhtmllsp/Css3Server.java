@@ -4,9 +4,13 @@ import io.github.rosemoe.sora.data.CompletionItem;
 import io.github.rosemoe.sora.langs.html.HTMLLanguage;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Css3Server {
+  private Random RANDOM = new Random();
+  private int COLORS_TO_GENERATE = 20;
   public static final String[] MCSS = {
     "align-content",
     "align-items",
@@ -254,7 +258,7 @@ public class Css3Server {
       String colorPrefix = prefix.substring(propertyName.length() + 1).trim();
       for (String color : HTMLLanguage.colorsCss) {
         if (color.startsWith(colorPrefix)) {
-          list.add(css(color,htmlconfig.CssColor, propertyName + ": " + color + " ;"));
+          list.add(css(color, htmlconfig.CssColor, propertyName + ": " + color + " ;"));
         }
       }
     }
@@ -298,5 +302,25 @@ public class Css3Server {
     final var item = new CompletionItem(attr, desc);
     item.cursorOffset(item.commit.length() - 1);
     return item;
+  }
+
+  public void setColorRandom(List<CompletionItem> list, String prfex) {
+    List<String> fake = generateRandomColors(COLORS_TO_GENERATE);
+    fake.forEach(
+        it -> {
+          if (prfex.endsWith("#f")) list.add(css(it, "RandomColor"));
+        });
+  }
+
+  private List<String> generateRandomColors(int count) {
+    List<String> colors = new ArrayList<>();
+    for (int i = 0; i < count; i++) {
+      colors.add(generateRandomHexColor());
+    }
+    return colors;
+  }
+
+  private String generateRandomHexColor() {
+    return String.format("#%06X", RANDOM.nextInt(0xFFFFFF + 1));
   }
 }

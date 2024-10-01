@@ -10,14 +10,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.Settings;
-import android.net.Uri;
-import androidx.core.content.ContextCompat;
-import android.content.pm.PackageManager;
-import androidx.core.app.ActivityCompat;
 import android.util.Log;
 import androidx.fragment.app.Fragment;
 import com.github.appintro.AppIntro2;
@@ -34,6 +27,7 @@ public class SplashWord extends AppIntro2 {
     super.onCreate(arg0);
     // TODO: Implement this method
     dialog = new ProgressDialogCompat(this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
+
     ColorAndroid12.shapeViews(dialog.getWindow().getDecorView());
     dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
     dialog.setTitle("Loading....");
@@ -44,36 +38,7 @@ public class SplashWord extends AppIntro2 {
         getFilesDir().getAbsolutePath() + File.separator + "lib" + File.separator + "libx265.so";
     var ghostPath = "/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost";
     var ghostStyle = "/storage/emulated/0/GhostWebIDE/theme/style.ghost";
-    TestFragment t1 =
-        TestFragment.newIns(
-            "filePer.json", "به گوست وب خوش امدید لطفا مجوز فایل را بدهید", "مجوز فایل", true);
-    t1.setCallBack(
-        () -> {
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            if (!Environment.isExternalStorageManager()) {
-              try {
-                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
-                Uri uri = Uri.fromParts("package", getPackageName(), null);
-                intent.setData(uri);
-                startActivity(intent);
-              } catch (Exception ex) {
-                Intent intent = new Intent();
-                intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-                startActivity(intent);
-              }
-            }
-          } else {
-            // below android 11=======
-            if (ContextCompat.checkSelfPermission(
-                    SplashWord.this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_DENIED) {
-              ActivityCompat.requestPermissions(
-                  SplashWord.this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, 1000);
-            }
-          }
-        });
-
-    addSlide(t1);
+    
 
     TestFragment t2 =
         TestFragment.newIns(
@@ -83,6 +48,16 @@ public class SplashWord extends AppIntro2 {
             !FileUtil.isExistFile(ghostPath) || !FileUtil.isExistFile(ghostStyle));
     t2.setCallBack(
         () -> {
+          FileUtil.makeDir("/storage/emulated/0/GhostWebIDE/");
+          FileUtil.makeDir("/storage/emulated/0/GhostWebIDE/.icon");
+          FileUtil.makeDir("/storage/emulated/0/GhostWebIDE/android");
+          FileUtil.makeDir("/storage/emulated/0/GhostWebIDE/theme");
+          FileUtil.makeDir("/storage/emulated/0/GhostWebIDE/ninjacoder");
+          FileUtil.makeDir("/storage/emulated/0/ghostweb/icon/vector");
+          FileUtil.makeDir("/storage/emulated/0/ghostweb/icon/svg");
+          FileUtil.makeDir("/storage/emulated/0/GhostWebIDE/font");
+          FileUtil.makeDir("/storage/emulated/0/GhostWebIDE/apk");
+
           try {
             if (!FileUtil.isExistFile(ghostPath)) {
               SetThemeForJson.winterToPath();
@@ -148,11 +123,6 @@ public class SplashWord extends AppIntro2 {
     setSkipArrowColor(Color.RED);
     setBarColor(0);
     setNavBarColor(0);
-
-    String[] item = {
-      Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE
-    };
-    askForPermissions(item, 1);
   }
 
   @Override

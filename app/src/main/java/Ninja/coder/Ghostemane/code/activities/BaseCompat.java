@@ -7,6 +7,7 @@ import Ninja.coder.Ghostemane.code.utils.ReSizeApp;
 import Ninja.coder.Ghostemane.code.utils.SetThemeForJson;
 import Ninja.coder.Ghostemane.code.widget.BlurImage;
 import android.animation.ObjectAnimator;
+import android.app.ActivityOptions;
 import android.app.WallpaperManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -445,5 +446,10 @@ public class BaseCompat extends AppCompatActivity {
     } catch (Exception err) {
       Log.e("Error Theme not Setup ", err.getLocalizedMessage());
     }
+  }
+  public void loadAnim(Intent o){
+    var op = ActivityOptions.makeCustomAnimation(this,android.R.anim.fade_in,android.R.anim.fade_out);
+    if(op == null) return;
+    startActivity(o,op.toBundle());
   }
 }

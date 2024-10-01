@@ -36,7 +36,7 @@ import io.github.rosemoe.sora.text.TextAnalyzeResult;
 /**
  * Auto complete window for editing code quicker
  *
- * @author Rose
+ * @author Ninja
  */
 public class EditorAutoCompleteWindow extends EditorPopupWindow {
     private final CodeEditor mEditor;

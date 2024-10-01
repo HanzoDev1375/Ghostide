@@ -5,20 +5,15 @@ import Ninja.coder.Ghostemane.code.IdeEditor;
 
 import Ninja.coder.Ghostemane.code.R;
 import Ninja.coder.Ghostemane.code.RequestNetwork;
-import Ninja.coder.Ghostemane.code.activities.BaseCompat;
 import Ninja.coder.Ghostemane.code.adapter.SyspiarAdapter;
 import Ninja.coder.Ghostemane.code.adapter.ToolbarListFileAdapter;
-import Ninja.coder.Ghostemane.code.config.AmazonClassHelper;
 import Ninja.coder.Ghostemane.code.config.CommonFactoryData;
 import Ninja.coder.Ghostemane.code.databinding.Antcomp8lerBinding;
-import Ninja.coder.Ghostemane.code.folder.FileIconHelper;
-import Ninja.coder.Ghostemane.code.glidecompat.GlideCompat;
 import Ninja.coder.Ghostemane.code.layoutmanager.LogCatBottomSheet;
 import Ninja.coder.Ghostemane.code.marco.CharUtil;
 import Ninja.coder.Ghostemane.code.marco.ColorView;
 import Ninja.coder.Ghostemane.code.marco.FactoryCodeError;
 import Ninja.coder.Ghostemane.code.marco.GhostWebEditorSearch;
-import Ninja.coder.Ghostemane.code.marco.NinjaMacroFileUtil;
 import Ninja.coder.Ghostemane.code.marco.WallpaperParallaxEffect;
 import Ninja.coder.Ghostemane.code.marco.ideColors.IdeColorCompat;
 import Ninja.coder.Ghostemane.code.model.EditorViewModel;
@@ -32,15 +27,10 @@ import Ninja.coder.Ghostemane.code.utils.*;
 import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
 import Ninja.coder.Ghostemane.code.widget.BlurImage;
 import Ninja.coder.Ghostemane.code.widget.ExrtaFab;
-import Ninja.coder.Ghostemane.code.widget.GhostWebMaterialDialog;
-import Ninja.coder.Ghostemane.code.widget.PraramnetLayoutNinja;
-import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.*;
-import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -52,12 +42,7 @@ import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Vibrator;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
 import android.util.TypedValue;
 import android.view.*;
 import android.view.View;
@@ -71,8 +56,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -88,19 +71,16 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mcal.uidesigner.XmlLayoutDesignActivity;
 import com.ninjacoder.jgit.GsonToClass;
-import com.sdsmdg.harjot.vectormaster.VectorMasterView;
 import com.skydoves.powermenu.MenuAnimation;
 import com.skydoves.powermenu.OnMenuItemClickListener;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
 import io.github.rosemoe.sora.event.ContentChangeEvent;
 import io.github.rosemoe.sora.langs.html.HTMLLanguage;
-import io.github.rosemoe.sora.text.Content;
 import io.github.rosemoe.sora.text.Cursor;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.EditorAutoCompleteWindow;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
-import com.google.android.material.button.MaterialButton;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -108,8 +88,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import ninja.coder.appuploader.utils.ShapeUtils;
 import ninja.coder.appuploader.utils.ShapeName;
 
@@ -242,29 +220,7 @@ public class CodeEditorActivity extends AppCompatActivity {
     super.onCreate(_savedInstanceState);
     setContentView(R.layout.codeeditor);
     initialize(_savedInstanceState);
-
-    if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-            == PackageManager.PERMISSION_DENIED
-        || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            == PackageManager.PERMISSION_DENIED) {
-      ActivityCompat.requestPermissions(
-          this,
-          new String[] {
-            Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE
-          },
-          1000);
-    } else {
-      initializeLogic();
-    }
-  }
-
-  @Override
-  public void onRequestPermissionsResult(
-      int requestCode, String[] permissions, int[] grantResults) {
-    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    if (requestCode == 1000) {
-      initializeLogic();
-    }
+    initializeLogic();
   }
 
   private boolean isJsonError(String string) {
@@ -528,6 +484,42 @@ public class CodeEditorActivity extends AppCompatActivity {
     setWallpaperParallaxEffect();
     POSTMANPATH = shp.getString("pos_path", "");
     // _fab.shrink();
+    imap = new HashMap<>();
+
+    if (FileUtil.isExistFile(thememanagersoft.getString("themes", ""))) {
+      if (thememanagersoft.contains("themes")) {
+        imap =
+            new Gson()
+                .fromJson(
+                    FileUtil.readFile(thememanagersoft.getString("themes", "")),
+                    new TypeToken<HashMap<String, Object>>() {}.getType());
+      } else {
+        String mainTheme = "storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost";
+        if (FileUtil.isExistFile(mainTheme)) {
+          if (GsonToClass.isJsonVilad(FileUtil.readFile(mainTheme))) {
+
+            imap =
+                new Gson()
+                    .fromJson(
+                        FileUtil.readFile(mainTheme),
+                        new TypeToken<HashMap<String, Object>>() {}.getType());
+          }
+        }
+      }
+    } else {
+      String mainTheme = "storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost";
+      if (FileUtil.isExistFile(mainTheme)) {
+        if (GsonToClass.isJsonVilad(FileUtil.readFile(mainTheme))) {
+
+          imap =
+              new Gson()
+                  .fromJson(
+                      FileUtil.readFile(mainTheme),
+                      new TypeToken<HashMap<String, Object>>() {}.getType());
+        }
+      }
+    }
+
     Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.ab);
     animation.start();
     editor.setAnimation(animation);
@@ -645,41 +637,6 @@ public class CodeEditorActivity extends AppCompatActivity {
     badgeview3.setBadgeCount("");
     if (re.getString("f380", "").equals("true")) {
       editor.setNonPrintablePaintingFlags(CodeEditor.FLAG_DRAW_LINE_SEPARATOR);
-    }
-    imap = new HashMap<>();
-
-    if (FileUtil.isExistFile(thememanagersoft.getString("themes", ""))) {
-      if (thememanagersoft.contains("themes")) {
-        imap =
-            new Gson()
-                .fromJson(
-                    FileUtil.readFile(thememanagersoft.getString("themes", "")),
-                    new TypeToken<HashMap<String, Object>>() {}.getType());
-      } else {
-        String mainTheme = "storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost";
-        if (FileUtil.isExistFile(mainTheme)) {
-          if (GsonToClass.isJsonVilad(FileUtil.readFile(mainTheme))) {
-
-            imap =
-                new Gson()
-                    .fromJson(
-                        FileUtil.readFile(mainTheme),
-                        new TypeToken<HashMap<String, Object>>() {}.getType());
-          }
-        }
-      }
-    } else {
-      String mainTheme = "storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost";
-      if (FileUtil.isExistFile(mainTheme)) {
-        if (GsonToClass.isJsonVilad(FileUtil.readFile(mainTheme))) {
-
-          imap =
-              new Gson()
-                  .fromJson(
-                      FileUtil.readFile(mainTheme),
-                      new TypeToken<HashMap<String, Object>>() {}.getType());
-        }
-      }
     }
 
     getWindow()

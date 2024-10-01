@@ -9,8 +9,7 @@ android {
     
     defaultConfig {
         applicationId "Ninja.coder.Ghostemane.code"
-        minSdk 21
-        ///dont edit sdk this best version 30 not edit
+        minSdk 21 
         targetSdk 34
         versionCode 29
         versionName "1.6.4beta"

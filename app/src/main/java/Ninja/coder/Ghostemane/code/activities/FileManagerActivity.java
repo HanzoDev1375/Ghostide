@@ -284,10 +284,11 @@ public class FileManagerActivity extends BaseCompat
     book = getSharedPreferences("hsipsot4444", Activity.MODE_PRIVATE);
     downloder = findViewById(R.id.downloder);
     emptyview = findViewById(R.id.emptyview);
-
+    _distreeview();
     WindowsMath(_drawer, _coordinator);
     var vie = LayoutInflater.from(this).inflate(R.layout.recyclerview_emptyview, null, false);
     recyclerview2.setEmptyView(vie);
+
     BackPressed();
     if (gridMode.contains("gride")) {
       setViewType(ViewType.GRID);
@@ -429,11 +430,10 @@ public class FileManagerActivity extends BaseCompat
       if (viewType == ViewType.GRID) {
         gridLayoutManager.setSpanCount(2);
         recyclerview2.setAdapter(fileListItem);
-        _distreeview();
 
       } else {
         recyclerview2.setAdapter(fileListItem);
-        _distreeview();
+
         gridLayoutManager.setSpanCount(1);
         fast = new FastScrollerBuilder(recyclerview2);
         fast.useMd2Style();
@@ -704,6 +704,7 @@ public class FileManagerActivity extends BaseCompat
                     if (files.isEmpty()) {
                       emptyview.setVisibility(View.VISIBLE);
                     } else emptyview.setVisibility(View.GONE);
+                    _distreeview();
                   });
 
               runOnUiThread(
@@ -719,8 +720,6 @@ public class FileManagerActivity extends BaseCompat
                   });
             })
         .start();
-
-    _distreeview();
   }
 
   void reLoadFile() {
@@ -890,14 +889,14 @@ public class FileManagerActivity extends BaseCompat
 
       shp.edit().putString(_key, new Gson().toJson(_listmap2)).commit();
       shp.edit().putString("positionTabs", String.valueOf((long) (positionTabs))).commit();
-      startActivity(activitiy);
+      loadAnim(activitiy);
     } else {
       n = 0;
       while (true) {
         if (_listmap2.get((int) n).get(_key).toString().contains(tab)) {
           activitiy.setClass(getApplicationContext(), CodeEditorActivity.class);
           shp.edit().putString("positionTabs", String.valueOf((long) (n))).commit();
-          startActivity(activitiy);
+          loadAnim(activitiy);
           break;
         } else {
           if (n == (_listmap2.size() - 1)) {
@@ -919,7 +918,8 @@ public class FileManagerActivity extends BaseCompat
                     .getLastPathSegment());
             File file = new File(_listmap1.get((int) _position).get(_key).toString());
             activitiy.putExtra("root", file.getParent());
-            startActivity(activitiy);
+            loadAnim(activitiy);
+            
             break;
           }
         }
@@ -935,7 +935,8 @@ public class FileManagerActivity extends BaseCompat
     recyclerview1.setLayoutManager(
         new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
     recyclerview1.smoothScrollToPosition(pospath.size());
-    recyclerview1.getAdapter().notifyDataSetChanged();
+    // recyclerview1.getAdapter().notifyDataSetChanged();
+    recyclerview1.setVisibility(View.VISIBLE);
   }
 
   @Override
