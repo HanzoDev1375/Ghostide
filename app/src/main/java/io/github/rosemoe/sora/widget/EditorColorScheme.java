@@ -31,6 +31,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 /**
  * This class manages the colors of editor. You can use color ids that are not in pre-defined id
@@ -128,15 +129,10 @@ public class EditorColorScheme {
   public static final int aquamarine = 2392;
 
   public static final int azure = 4837;
-
   public static final int beige = 9093;
-
   public static final int bisque = 233;
-
   public static final int black = 2492;
-
   public static final int blanchedalmond = 283;
-
   public static final int blue = 1223;
   public static final int blueviolet = 733;
   public static final int brown = 50282;
@@ -293,7 +289,7 @@ public class EditorColorScheme {
   public static final int htmlattr = 2800;
   public static final int htmlattrname = 6200;
   public static final int htmlstr = 271;
-  public static final int csskeyword=2733;
+  public static final int csskeyword = 2733;
   public static final int htmlsymbol = 37233;
   public static final int htmlblockhash = 3017;
   public static final int htmlblocknormal = 3820;
@@ -302,17 +298,36 @@ public class EditorColorScheme {
   public static final int jsoprator = 7863;
   public static final int jsattr = 3733;
   public static final int jsstring = 5739;
-  
-  ///for python
+
+  /// for python
   public static final int pystring = 27392;
   public static final int pykeyword = 28910;
-  public static final int pysymbol =47207;
+  public static final int pysymbol = 47207;
   public static final int pynumber = 39910;
   public static final int pycolormatch1 = 2061;
   public static final int pycolormatch2 = 2061;
   public static final int pycolormatch3 = 2061;
   public static final int pycolormatch4 = 2061;
-  
+
+  public static final int searchcolor1 = 70108;
+  public static final int searchcolor2 = 38292;
+  public static final int searchcolor3 = 6281;
+  public static final int searchcolor4 = 47282;
+  public static final int searchcolor5 = 729237;
+  public static final int searchcolor6 = 272838;
+
+  // from php
+  public static final int phpkeyword = 7100;
+  public static final int phpattr = 20017;
+  public static final int phpsymbol = 1061;
+  public static final int phphtmlattr = 71071;
+  public static final int phphtmlkeyword = 20179;
+  public static final int phpcolormatch1 = 49971;
+  public static final int phpcolormatch2 = 4182;
+  public static final int phpcolormatch3 = 5720;
+  public static final int phpcolormatch4 = 71592;
+  public static final int phpcolormatch5 = 24810;
+  public static final int phpcolormatch6 = 10372;
 
   /** Min pre-defined color id */
   protected static final int START_COLOR_ID = 1;
@@ -471,6 +486,12 @@ public class EditorColorScheme {
       case IDENTIFIER_VAR:
       case IDENTIFIER_NAME:
       case FUNCTION_NAME:
+      case searchcolor1:
+      case searchcolor2:
+      case searchcolor3:
+      case searchcolor4:
+      case searchcolor5:
+      case searchcolor6:
         color = 0xff333333;
         break;
       case MATCHED_TEXT_BACKGROUND:

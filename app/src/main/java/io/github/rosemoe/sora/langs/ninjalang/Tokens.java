@@ -1,67 +1,66 @@
 package io.github.rosemoe.sora.langs.ninjalang;
 
 public enum Tokens {
-    /// Symbol
+    
     WHITESPACE,
     NEWLINE,
     UNKNOWN,
     EOF,
-    AT,
-    // 注释类 Comments
-    LONG_COMMENT, // 长注释 Long comment
-    LINE_COMMENT, // 单行注释 Single line comment
-    DIV, // 除
-    MULT, // 乘
-    IDENTIFIER, // 标识符
-    INTEGER_LITERAL, // 整数
-    DOT, // 点
-    MINUS, // 减
-    STRING, // 字符串
-    CHARACTER_LITERAL, // 字符
-    LPAREN, // 左小括号
-    RPAREN, // 右小括号
-    LBRACE, // 左大括号
-    RBRACE, // 右大括号
-    LBRACK, // 左中括号
-    RBRACK, // 右中括号
-    SEMICOLON, // 分号
-    COMMA, // 逗号
-    EQ, // 等于
-    GT, // 大于
-    LT, // 小于
-    NOT, // 非
-    COMP, // ~
-    QUESTION, // 问号
-    COLON, // 冒号
-    AND, // 与
-    OR, // 或
-    PLUS, // 加
-    XOR, // 异或
-    MOD, // 百分号
+    AT,    
+    LONG_COMMENT, 
+    LINE_COMMENT, 
+    DIV, 
+    MULT, 
+    IDENTIFIER, 
+    INTEGER_LITERAL, 
+    DOT, 
+    MINUS, 
+    STRING, 
+    CHARACTER_LITERAL, 
+    LPAREN, 
+    RPAREN, 
+    LBRACE, 
+    RBRACE, 
+    LBRACK, 
+    RBRACK, 
+    SEMICOLON, 
+    COMMA, 
+    EQ, 
+    GT, 
+    LT, 
+    NOT, 
+    COMP, 
+    QUESTION, 
+    COLON, 
+    AND, 
+    OR, 
+    PLUS, 
+    XOR, 
+    MOD, 
     DIVEQ,
     MULTEQ,
-    FLOATING_POINT_LITERAL, // 浮点数
-    MINUSMINUS, // 减减
+    FLOATING_POINT_LITERAL, 
+    MINUSMINUS, 
     MINUSEQ,
-    EQEQ, // 等于等于
+    EQEQ, 
     GTEQ,
-    RSHIFT, // 右位移
+    RSHIFT, 
     LTEQ,
-    LSHIFT, // 左位移
+    LSHIFT, 
     NOTEQ,
     ANDEQ,
-    ANDAND, // 与与
+    ANDAND, 
     OREQ,
-    OROR, // 或或
+    OROR, 
     PLUSEQ,
-    PLUSPLUS, // 加加
+    PLUSPLUS, 
     XOREQ,
     MODEQ,
     RSHIFTEQ,
     URSHIFT,
     LSHIFTEQ,
     URSHIFTEQ,
-    // KeyWord
+    
     ABSOLUTE,
     ABSTRACT,
     ALL,

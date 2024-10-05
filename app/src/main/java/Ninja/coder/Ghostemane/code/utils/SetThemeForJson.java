@@ -107,24 +107,18 @@ public class SetThemeForJson {
     getColor(imap, editor, "javastring", EditorColorScheme.javastring, "#ff7dd1");
 
     getColor(imap, editor, "htmltag", EditorColorScheme.htmltag, "#ff6060");
-    getColor(imap, editor, "htmlattr", EditorColorScheme.htmlattr, "#4fc3f7"); 
-    getColor(
-        imap, editor, "htmlattrname", EditorColorScheme.htmlattrname, "#ffab40"); 
-    getColor(imap, editor, "htmlstr", EditorColorScheme.htmlstr, "#81c784"); 
-    getColor(imap, editor, "csskeyword", EditorColorScheme.csskeyword, "#64b5f6"); 
-    getColor(imap, editor, "htmlsymbol", EditorColorScheme.htmlsymbol, "#ba68c8"); 
-    getColor(imap, editor, "htmlblockhash", EditorColorScheme.htmlblockhash, "#ff7043"); 
-    getColor(
-        imap,
-        editor,
-        "htmlblocknormal",
-        EditorColorScheme.htmlblocknormal,
-        "#90caf9"); 
-    getColor(imap, editor, "jskeyword", EditorColorScheme.jskeyword, "#64b5f6"); 
-    getColor(imap, editor, "jsfun", EditorColorScheme.jsfun, "#ffd54f"); 
-    getColor(imap, editor, "jsoprator", EditorColorScheme.jsoprator, "#4db6ac"); 
-    getColor(imap, editor, "jsattr", EditorColorScheme.jsattr, "#ffab40"); 
-    getColor(imap, editor, "jsstring", EditorColorScheme.jsstring, "#81c784"); 
+    getColor(imap, editor, "htmlattr", EditorColorScheme.htmlattr, "#4fc3f7");
+    getColor(imap, editor, "htmlattrname", EditorColorScheme.htmlattrname, "#ffab40");
+    getColor(imap, editor, "htmlstr", EditorColorScheme.htmlstr, "#81c784");
+    getColor(imap, editor, "csskeyword", EditorColorScheme.csskeyword, "#64b5f6");
+    getColor(imap, editor, "htmlsymbol", EditorColorScheme.htmlsymbol, "#ba68c8");
+    getColor(imap, editor, "htmlblockhash", EditorColorScheme.htmlblockhash, "#ff7043");
+    getColor(imap, editor, "htmlblocknormal", EditorColorScheme.htmlblocknormal, "#90caf9");
+    getColor(imap, editor, "jskeyword", EditorColorScheme.jskeyword, "#64b5f6");
+    getColor(imap, editor, "jsfun", EditorColorScheme.jsfun, "#ffd54f");
+    getColor(imap, editor, "jsoprator", EditorColorScheme.jsoprator, "#4db6ac");
+    getColor(imap, editor, "jsattr", EditorColorScheme.jsattr, "#ffab40");
+    getColor(imap, editor, "jsstring", EditorColorScheme.jsstring, "#81c784");
 
     getColor(imap, editor, "pystring", EditorColorScheme.pystring, "#ff7d51");
     getColor(imap, editor, "pykeyword", EditorColorScheme.pykeyword, "#51ff7d");
@@ -134,7 +128,17 @@ public class SetThemeForJson {
     getColor(imap, editor, "pycolormatch2", EditorColorScheme.pycolormatch2, "#51d1ff");
     getColor(imap, editor, "pycolormatch3", EditorColorScheme.pycolormatch3, "#51ff92");
     getColor(imap, editor, "pycolormatch4", EditorColorScheme.pycolormatch4, "#ff51a2");
-
+    getColor(imap, editor, "phpkeyword", EditorColorScheme.phpkeyword, "#0000ff");
+    getColor(imap, editor, "phpattr", EditorColorScheme.phpattr, "#ff8c00");
+    getColor(imap, editor, "phpsymbol", EditorColorScheme.phpsymbol, "#b22222");
+    getColor(imap, editor, "phphtmlattr", EditorColorScheme.phphtmlattr, "#8a2be2");
+    getColor(imap, editor, "phphtmlkeyword", EditorColorScheme.phphtmlkeyword, "#32cd32");
+    getColor(imap, editor, "phpcolormatch1", EditorColorScheme.phpcolormatch1, "#ff69b4");
+    getColor(imap, editor, "phpcolormatch2", EditorColorScheme.phpcolormatch2, "#ffa500");
+    getColor(imap, editor, "phpcolormatch3", EditorColorScheme.phpcolormatch3, "#1e90ff");
+    getColor(imap, editor, "phpcolormatch4", EditorColorScheme.phpcolormatch4, "#ff51a2");
+    getColor(imap, editor, "phpcolormatch5", EditorColorScheme.phpcolormatch5, "#7fff00");
+    getColor(imap, editor, "phpcolormatch6", EditorColorScheme.phpcolormatch6, "#ff4500");
     editor.getColorScheme().setColor(EditorColorScheme.red, ColorCompat.RED);
     editor.getColorScheme().setColor(EditorColorScheme.aliceblue, ColorCompat.ALICEBLUE);
 
@@ -156,7 +160,12 @@ public class SetThemeForJson {
     editor.getColorScheme().setColor(EditorColorScheme.COLOR_WARNING, Color.YELLOW);
     editor.getColorScheme().setColor(EditorColorScheme.COLOR_LOG, Color.GREEN);
     editor.getColorScheme().setColor(EditorColorScheme.COLOR_TIP, Color.CYAN);
-
+    editor.getColorScheme().setColor(EditorColorScheme.searchcolor1, Color.parseColor("#ACF85D5D"));
+    editor.getColorScheme().setColor(EditorColorScheme.searchcolor2, Color.parseColor("#AC6CF85D"));
+    editor.getColorScheme().setColor(EditorColorScheme.searchcolor3, Color.parseColor("#AC22F8FF"));
+    editor.getColorScheme().setColor(EditorColorScheme.searchcolor4, Color.parseColor("#ACFF22CF"));
+    editor.getColorScheme().setColor(EditorColorScheme.searchcolor5, Color.parseColor("#ACB4DA43"));
+    editor.getColorScheme().setColor(EditorColorScheme.searchcolor6, Color.parseColor("#ACAA6CFB"));
     return this;
   }
 
@@ -277,75 +286,90 @@ public class SetThemeForJson {
 
   public static void winterToPath() {
     Map<String, String> map = new HashMap<>();
-    map.put("toolbartextcolor", "#B0BEC5"); 
-    map.put("block_line_current", "#4DD0E1"); 
-    map.put("line_divider", "#4B4B4B"); 
-    map.put("syombolbartextcolor", "#B0BEC5"); 
-    map.put("html_tag", "#80CBC4"); 
-    map.put("fabcolorstroker", "#4DFFFFFF"); 
-    map.put("line_number", "#B0BEC5"); 
-    map.put("keyword", "#FFAB40"); 
-    map.put("auto_comp_panel_corner", "#FF8A65"); 
-    map.put("selection_handle", "#66BB6A"); 
-    map.put("tabimagecolorfilter", "#B0BEC5"); 
-    map.put("auto_comp_panel_bg", "#263238"); 
-    map.put("comment", "#757575"); 
-    map.put("toolbarcolor", "#121212"); 
-    map.put("identifier_name", "#FF9E80"); 
-    map.put("displaytextcolortab", "#FFD54F"); 
-    map.put("non_printable_char", "#90CAF9"); 
-    map.put("selection_insert", "#4DB6AC"); 
-    map.put("ninja", "#E1BEE7"); 
-    map.put("textcolorhder", "#FFAB91"); 
-    map.put("tabtextcolor", "#B0BEC5"); 
-    map.put("block_line", "#81D4FA"); 
-    map.put("menubackground", "#1E1E1E"); 
-    map.put("literal", "#64B5F6"); 
-    map.put("fabbackgroundcolorcolor", "#1E1E1E"); 
-    map.put("attribute_value", "#80DEEA"); 
-    map.put("tabback", "#1C1C1C"); 
-    map.put("textcolorforgrand", "#B0BEC5"); 
-    map.put("imagecolor", "#B0BEC5"); 
-    map.put("text_normal", "#FFFFFF"); 
-    map.put("attribute_name", "#64B5F6"); 
-    map.put("print", "#FF8A65"); 
-    map.put("operator", "#FFB74D"); 
-    map.put("current_line", "#37474F"); 
-    map.put("whole_background", "#1E1E1E"); 
-    map.put("backgroundcolorlinear", "#1c1c1c"); 
-    map.put("fabimagecolor", "#B0BEC5"); 
-    map.put("line_number_background", "#1E1E1E"); 
-    map.put("textcolorigor", "#F06292"); 
-    map.put("textcolorinier", "#EF5350"); 
-    map.put("javakeyword", "#FFAC80"); 
-    map.put("javaoprator", "#90CAF9"); 
-    map.put("javafun", "#FFCC60"); 
-    map.put("javafield", "#FFAB60"); 
-    map.put("javatype", "#64B5F6"); 
-    map.put("javaparament", "#FFAB40"); 
-    map.put("javanumber", "#A5D6A7"); 
-    map.put("javastring", "#E0E0E0"); 
-    map.put("htmltag", "#FFAB49"); 
-    map.put("htmlattr", "#FFAB80"); 
-    map.put("htmlattrname", "#64B5F6"); 
-    map.put("htmlstr", "#FFCC80"); 
-    map.put("csskeyword", "#81D4FA"); 
-    map.put("htmlsymbol", "#FF33A8"); 
-    map.put("htmlblockhash", "#FF5252"); 
-    map.put("htmlblocknormal", "#FF4081"); 
-    map.put("jskeyword", "#FFAB40"); 
+    map.put("toolbartextcolor", "#B0BEC5");
+    map.put("block_line_current", "#4DD0E1");
+    map.put("line_divider", "#4B4B4B");
+    map.put("syombolbartextcolor", "#B0BEC5");
+    map.put("html_tag", "#80CBC4");
+    map.put("fabcolorstroker", "#4DFFFFFF");
+    map.put("line_number", "#B0BEC5");
+    map.put("keyword", "#FFAB40");
+    map.put("auto_comp_panel_corner", "#FF8A65");
+    map.put("selection_handle", "#66BB6A");
+    map.put("tabimagecolorfilter", "#B0BEC5");
+    map.put("auto_comp_panel_bg", "#263238");
+    map.put("comment", "#757575");
+    map.put("toolbarcolor", "#121212");
+    map.put("identifier_name", "#FF9E80");
+    map.put("displaytextcolortab", "#FFD54F");
+    map.put("non_printable_char", "#90CAF9");
+    map.put("selection_insert", "#4DB6AC");
+    map.put("ninja", "#E1BEE7");
+    map.put("textcolorhder", "#FFAB91");
+    map.put("tabtextcolor", "#B0BEC5");
+    map.put("block_line", "#81D4FA");
+    map.put("menubackground", "#1E1E1E");
+    map.put("literal", "#64B5F6");
+    map.put("fabbackgroundcolorcolor", "#1E1E1E");
+    map.put("attribute_value", "#80DEEA");
+    map.put("tabback", "#515151");
+    map.put("textcolorforgrand", "#B0BEC5");
+    map.put("imagecolor", "#B0BEC5");
+    map.put("text_normal", "#FFFFFF");
+    map.put("attribute_name", "#64B5F6");
+    map.put("print", "#FF8A65");
+    map.put("operator", "#FFB74D");
+    map.put("current_line", "#37474F");
+    map.put("whole_background", "#1E1E1E");
+    map.put("backgroundcolorlinear", "#1c1c1c");
+    map.put("fabimagecolor", "#B0BEC5");
+    map.put("line_number_background", "#1E1E1E");
+    map.put("textcolorigor", "#F06292");
+    map.put("textcolorinier", "#EF5350");
+    map.put("javakeyword", "#FFAC80");
+    map.put("javaoprator", "#90CAF9");
+    map.put("javafun", "#FFCC60");
+    map.put("javafield", "#FFAB60");
+    map.put("javatype", "#64B5F6");
+    map.put("javaparament", "#FFAB40");
+    map.put("javanumber", "#A5D6A7");
+    map.put("javastring", "#E0E0E0");
+    map.put("htmltag", "#FFAB49");
+    map.put("htmlattr", "#FFAB80");
+    map.put("htmlattrname", "#64B5F6");
+    map.put("htmlstr", "#FFCC80");
+    map.put("csskeyword", "#81D4FA");
+    map.put("htmlsymbol", "#FF33A8");
+    map.put("htmlblockhash", "#FF5252");
+    map.put("htmlblocknormal", "#FF4081");
+    //for js
+    map.put("jskeyword", "#FFAB40");
     map.put("jsfun", "#FFCC80");
-    map.put("jsoprator", "#FF5252"); 
-    map.put("jsattr", "#64B5F6"); 
-    map.put("jsstring", "#FFCC80"); 
-    map.put("pystring", "#FFCC80"); 
-    map.put("pykeyword", "#FFAB40"); 
-    map.put("pysymbol", "#64B5F6"); 
-    map.put("pynumber", "#A5D6A7"); 
-    map.put("pycolormatch1", "#FFFF33"); 
-    map.put("pycolormatch2", "#33FFFF"); 
-    map.put("pycolormatch3", "#FF33FF"); 
-    map.put("pycolormatch4", "#FFC300"); 
+    map.put("jsoprator", "#FF5252");
+    map.put("jsattr", "#64B5F6");
+    map.put("jsstring", "#FFCC80");
+    ///for py
+    map.put("pystring", "#FFCC80");
+    map.put("pykeyword", "#FFAB40");
+    map.put("pysymbol", "#64B5F6");
+    map.put("pynumber", "#A5D6A7");
+    map.put("pycolormatch1", "#FFFF33");
+    map.put("pycolormatch2", "#33FFFF");
+    map.put("pycolormatch3", "#FF33FF");
+    map.put("pycolormatch4", "#FFC300");
+    //for php 
+    map.put("phpkeyword", "#FF5733");
+    map.put("phpattr", "#33FF57");
+    map.put("phpsymbol", "#3357FF");
+    map.put("phphtmlattr", "#F0E68C");
+    map.put("phphtmlkeyword", "#FF33F6");
+    map.put("phpcolormatch1", "#FF8C00");
+    map.put("phpcolormatch2", "#00FA9A");
+    map.put("phpcolormatch3", "#8A2BE2");
+    map.put("phpcolormatch4", "#FFD700");
+    map.put("phpcolormatch5", "#FF69B4");
+    map.put("phpcolormatch6", "#20B2AA");
+
     String path =
         FileUtil.getExternalStorageDir()
             + File.separator

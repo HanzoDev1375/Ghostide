@@ -1,6 +1,7 @@
 package io.github.rosemoe.sora.langs.html;
 
 import Ninja.coder.Ghostemane.code.activities.FileManagerActivity;
+import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import io.github.rosemoe.sora.data.CompletionItem;
@@ -11,8 +12,10 @@ import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 import io.github.rosemoe.sora.widget.commentRule.AppConfig;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import lsp4custom.com.ninjacoder.customhtmllsp.CodeSnippet;
 import lsp4custom.com.ninjacoder.customhtmllsp.ListKeyword;
 
 import java.io.File;
@@ -37,6 +40,7 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
   private CodeEditor editor;
   private IdentifierAutoComplete.Identifiers userIdentifiers;
   private TextAnalyzeResult analyzeResult;
+  private String codeSinppetPath = "/storage/emulated/0/GhostWebIDE/ninjacoder/html.code.json";
 
   public HTMLAutoComplete() {
     config = new AppConfig();
@@ -72,6 +76,20 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
         Collections.sort(listasFiles, CompletionItem.COMPARATOR_BY_NAME);
         items.addAll(listasFiles);
       }
+    }
+
+    Collections.sort(items, CompletionItem.COMPARATOR_BY_NAME);
+    Object extra = analyzeResult.getExtra();
+    Identifiers userIdentifiers = (extra instanceof Identifiers) ? (Identifiers) extra : null;
+    if (userIdentifiers != null) {
+      List<CompletionItem> words = new ArrayList<>();
+      for (String word : userIdentifiers.getIdentifiers()) {
+        if (word.startsWith(prfex)) {
+          words.add(new CompletionItem(word, "( Identifier )"));
+        }
+      }
+      Collections.sort(words, CompletionItem.COMPARATOR_BY_NAME);
+      items.addAll(words);
     }
 
     // Test
@@ -227,8 +245,8 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
     keyhtml.intallCss3KeyWord(items, prfex);
     keyhtml.installCssAttr(items, prfex);
     keyhtml.intallCss3Color(items, prfex);
-    keyhtml.installCssPadding(items,prfex);
-    keyhtml.randomColor(items,prfex);
+    keyhtml.installCssPadding(items, prfex);
+    keyhtml.randomColor(items, prfex);
     for (String ddd : HTMLLanguage.JS)
       if (ddd.startsWith(prefix)) items.add(dddAsCompletion(ddd, htmlconfig.JsKey));
     for (String classapp : HTMLLanguage.EmtClass)
@@ -431,6 +449,36 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
       tagCompletion.commit = wrappedTags;
       tagCompletion.cursorOffset = openingTags.length() - 2;
       items.add(tagCompletion);
+    }
+  }
+
+  public static class Identifiers {
+
+    private static final Object SIGN = new Object();
+    private final List<String> identifiers = new ArrayList<>();
+    private HashMap<String, Object> cache;
+
+    public void addIdentifier(String identifier) {
+      if (cache == null) {
+        throw new IllegalStateException("begin() has not been called");
+      }
+      if (cache.put(identifier, SIGN) == SIGN) {
+        return;
+      }
+      identifiers.add(identifier);
+    }
+
+    public void begin() {
+      cache = new HashMap<>();
+    }
+
+    public void finish() {
+      cache.clear();
+      cache = null;
+    }
+
+    public List<String> getIdentifiers() {
+      return identifiers;
     }
   }
 }

@@ -454,8 +454,6 @@ public class HtmlRunerActivity extends BaseCompat {
     bin.web.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
     bin.web.getSettings().setSupportZoom(true);
     //    bin.web.getSettings().setBuiltInZoomControls(true);
-
-    WebSettingsCompat.setAlgorithmicDarkeningAllowed(bin.web.getSettings(), true);
   }
 
   public void startInspectMode(WebView _webview) {

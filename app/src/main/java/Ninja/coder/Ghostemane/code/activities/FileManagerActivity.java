@@ -152,8 +152,7 @@ public class FileManagerActivity extends BaseCompat
   private PraramnetLayoutNinja paramentLayout_fileDir;
   private LinearLayout CensractorListView1;
   private SwipeRefreshLayout swiperefreshlayout1;
-  private RecyclerView recyclerview1;
-  private EmptyRecyclerView recyclerview2;
+  private RecyclerView recyclerview1, recyclerview2;
   private Intent myketint = new Intent();
   private Intent intgetTheme = new Intent();
   private Intent intentgetSettings = new Intent();
@@ -286,8 +285,6 @@ public class FileManagerActivity extends BaseCompat
     emptyview = findViewById(R.id.emptyview);
     _distreeview();
     WindowsMath(_drawer, _coordinator);
-    var vie = LayoutInflater.from(this).inflate(R.layout.recyclerview_emptyview, null, false);
-    recyclerview2.setEmptyView(vie);
 
     BackPressed();
     if (gridMode.contains("gride")) {
@@ -598,7 +595,7 @@ public class FileManagerActivity extends BaseCompat
                     gotoback++;
                     if (gotoback == 3) {
                       Chack = false;
-                      finish();
+                      finishAffinity();
                     }
                   } else {
 
@@ -610,7 +607,7 @@ public class FileManagerActivity extends BaseCompat
                     gotoback++;
                     if (gotoback == 3) {
                       Chack = false;
-                      finish();
+                      finishAffinity();
                     }
                   } else {
                     Folder = Folder.substring((int) (0), (int) (Folder.lastIndexOf("/")));
@@ -704,7 +701,6 @@ public class FileManagerActivity extends BaseCompat
                     if (files.isEmpty()) {
                       emptyview.setVisibility(View.VISIBLE);
                     } else emptyview.setVisibility(View.GONE);
-                    _distreeview();
                   });
 
               runOnUiThread(
@@ -720,6 +716,7 @@ public class FileManagerActivity extends BaseCompat
                   });
             })
         .start();
+    _distreeview();
   }
 
   void reLoadFile() {
@@ -919,7 +916,7 @@ public class FileManagerActivity extends BaseCompat
             File file = new File(_listmap1.get((int) _position).get(_key).toString());
             activitiy.putExtra("root", file.getParent());
             loadAnim(activitiy);
-            
+
             break;
           }
         }
@@ -935,7 +932,7 @@ public class FileManagerActivity extends BaseCompat
     recyclerview1.setLayoutManager(
         new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
     recyclerview1.smoothScrollToPosition(pospath.size());
-    // recyclerview1.getAdapter().notifyDataSetChanged();
+     recyclerview1.getAdapter().notifyDataSetChanged();
     recyclerview1.setVisibility(View.VISIBLE);
   }
 
@@ -968,7 +965,7 @@ public class FileManagerActivity extends BaseCompat
         && filteredItems.get(1).equals("emulated")
         && filteredItems.get(2).equals("0")) {
       List<String> combinedItems = new ArrayList<>();
-      combinedItems.add(Build.MANUFACTURER + " " + Build.MODEL);
+      combinedItems.add("Home ");
       combinedItems.addAll(filteredItems.subList(3, filteredItems.size()));
       return combinedItems;
     }
@@ -978,7 +975,7 @@ public class FileManagerActivity extends BaseCompat
   @Override
   protected void onActivityResult(int _requestCode, int _resultCode, Intent _data) {
     super.onActivityResult(_requestCode, _resultCode, _data);
-    if (_resultCode == Activity.RESULT_OK) {
+    if (_resultCode == RESULT_OK) {
       if (_data != null) {
         utils.persistFolder(_data);
       }
@@ -1158,7 +1155,7 @@ public class FileManagerActivity extends BaseCompat
     dialog.show();
   }
 
-  public void _rename(final double _pos) {
+  public void setRenameFile( double _pos) {
 
     AlertDialog dialog =
         new GhostWebMaterialDialog(FileManagerActivity.this)
@@ -2006,7 +2003,7 @@ public class FileManagerActivity extends BaseCompat
                     "/storage/emulated/0/GhostWebIDE/" + DataUtil.getRandom(1, 200) + "theme.AA"));
 
         List<File> filesToAdd = new ArrayList<>();
-        var iconPath = getFilesDir().getAbsoluteFile() + "icon.png";
+        var iconPath = getFilesDir().getAbsoluteFile() + "/icon.png";
         filesToAdd.add(new File(iconPath));
         filesToAdd.add(new File("/sdcard/GhostWebIDE/theme/GhostThemeapp.ghost"));
 
@@ -2151,7 +2148,7 @@ public class FileManagerActivity extends BaseCompat
               }
             case 7:
               {
-                _dialoggits();
+                setDialogGitDownload();
                 sh.getDismiss(true);
                 break;
               }
@@ -2190,7 +2187,7 @@ public class FileManagerActivity extends BaseCompat
         });
   }
 
-  public void _newItemSheet(int _position, final View _view) {
+  public void setItemSheetOld(int _position, final View _view) {
     final com.google.android.material.bottomsheet.BottomSheetDialog bottomSheetDialog =
         new com.google.android.material.bottomsheet.BottomSheetDialog(FileManagerActivity.this);
 
@@ -2209,7 +2206,7 @@ public class FileManagerActivity extends BaseCompat
           public void onClick(View v) {
 
             bottomSheetDialog.dismiss();
-            _rename(_position);
+            setRenameFile(_position);
           }
         });
     del.setOnClickListener(
@@ -2275,7 +2272,7 @@ public class FileManagerActivity extends BaseCompat
     bottomSheetDialog.show();
   }
 
-  public void _dialoggits() {
+  public void setDialogGitDownload() {
     // FileManagerActivity.this
     AlertDialog di =
         new MaterialAlertDialogBuilder(FileManagerActivity.this)
@@ -2352,7 +2349,7 @@ public class FileManagerActivity extends BaseCompat
 
   @Override
   public void onLongClick(View view, int pos) {
-    _newItemSheet(pos, view);
+    setItemSheetOld(pos, view);
   }
 
   @Override
@@ -2372,7 +2369,7 @@ public class FileManagerActivity extends BaseCompat
           return true;
         case KeyEvent.KEYCODE_G:
           // git
-          _dialoggits();
+          setDialogGitDownload();
           return true;
         case KeyEvent.KEYCODE_D:
           // open drawer

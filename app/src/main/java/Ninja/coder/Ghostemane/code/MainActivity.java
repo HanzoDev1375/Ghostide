@@ -3,28 +3,23 @@ package Ninja.coder.Ghostemane.code;
 import Ninja.coder.Ghostemane.code.Welcome.SplashWord;
 import Ninja.coder.Ghostemane.code.activities.BaseCompat;
 import Ninja.coder.Ghostemane.code.activities.FileManagerActivity;
-import Ninja.coder.Ghostemane.code.activities.StreamSoftAppActivity;
 import Ninja.coder.Ghostemane.code.databinding.MainBinding;
 import Ninja.coder.Ghostemane.code.utils.AssetsSoft;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
-import Ninja.coder.Ghostemane.code.utils.SetThemeForJson;
 import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.net.Uri;
 import android.provider.Settings;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.*;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import com.google.android.material.progressindicator.LinearProgressIndicator;
+import android.content.pm.PackageManager;
+import androidx.core.app.ActivityCompat;
 import com.hzy.lib7z.IExtractCallback;
 import com.hzy.lib7z.Z7Extractor;
 import java.io.File;
@@ -38,7 +33,6 @@ public class MainActivity extends BaseCompat {
   private Timer _timer = new Timer();
   private String bin = "";
   private Intent gotopage = new Intent();
-  private ImageView iconSp;
   private TimerTask ask;
   private SharedPreferences setac, iconSpash;
   private static final String C_COMPILER_DIR = "c_compiler";
@@ -49,7 +43,7 @@ public class MainActivity extends BaseCompat {
     super.onCreate(_savedInstanceState);
     setContentView(bind.getRoot());
     initialize(_savedInstanceState);
-    iconSp = bind.iconSp;
+
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
       if (!Environment.isExternalStorageManager()) {
         try {
@@ -62,25 +56,17 @@ public class MainActivity extends BaseCompat {
           intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
           startActivity(intent);
         }
-      }else tryToRunApp();
+      } else {
+        tryToRunApp();
+      }
     } else {
-      // below android 11=======
-      if (ContextCompat.checkSelfPermission(
-              this, Manifest.permission.READ_EXTERNAL_STORAGE)
+      if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
           == PackageManager.PERMISSION_DENIED) {
         ActivityCompat.requestPermissions(
             this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, 1000);
-      }else tryToRunApp();
-    }
-    tryToRunApp();
-  }
-
-  @Override
-  public void onRequestPermissionsResult(
-      int requestCode, String[] permissions, int[] grantResults) {
-    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    if (requestCode == 1000) {
-      tryToRunApp();
+      } else {
+        tryToRunApp();
+      }
     }
   }
 
@@ -220,6 +206,6 @@ public class MainActivity extends BaseCompat {
         iconSize = R.drawable.reddraw;
         break;
     }
-    iconSp.setImageResource(iconSize);
+    bind.iconSp.setImageResource(iconSize);
   }
 }

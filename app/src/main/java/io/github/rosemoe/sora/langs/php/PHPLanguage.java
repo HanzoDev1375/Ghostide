@@ -1,6 +1,8 @@
 package io.github.rosemoe.sora.langs.php;
 
 import Ninja.coder.Ghostemane.code.IdeEditor;
+import android.os.Build;
+import com.ninjacoder.jgit.PHPFormatter;
 import io.github.rosemoe.sora.data.CompletionItem;
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
@@ -22,6 +24,7 @@ import java.util.List;
 public class PHPLanguage implements EditorLanguage {
 
   private IdeEditor editor;
+  private boolean isSdk33 = Build.VERSION.SDK_INT >= 33;
 
   public PHPLanguage(IdeEditor editor) {
     this.editor = editor;

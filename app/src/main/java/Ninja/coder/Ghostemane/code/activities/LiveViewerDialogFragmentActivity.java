@@ -50,12 +50,6 @@ public class LiveViewerDialogFragmentActivity extends DialogFragment {
         imageview1 = _view.findViewById(R.id.imageview1);
         textview1 = _view.findViewById(R.id.textview1);
         shp = getContext().getSharedPreferences("shp", Activity.MODE_PRIVATE);
-
-        //no listener code
-
-        //no listener code
-
-        //webviewOnProgressChanged
         mweb.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int _newProgress) {

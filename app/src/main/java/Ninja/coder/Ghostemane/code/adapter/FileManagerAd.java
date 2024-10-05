@@ -29,6 +29,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -153,6 +154,8 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
         AmazonClassHelper.getFileJavaAsChild(viewHolder.icon, myfile.toString());
       } else if (myfile.toString().endsWith(".g4")) {
         AmazonClassHelper.getScanAntlr4Grammer(viewHolder.icon, myfile.toString());
+      }else if(myfile.toString().endsWith(".AA")) {
+      	GlideCompat.LoadIconTheme(myfile.toString(),viewHolder.icon);
       }
     }
 

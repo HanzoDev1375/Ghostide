@@ -33,11 +33,9 @@ import org.jsoup.nodes.Element;
 
 public class PHPCodeAnalyzer implements CodeAnalyzer {
   private IdeEditor editor;
-  
-  
-  public PHPCodeAnalyzer(){
-    
-  }
+
+  public PHPCodeAnalyzer() {}
+
   public PHPCodeAnalyzer(IdeEditor editor) {
     this.editor = editor;
   }
@@ -127,18 +125,16 @@ public class PHPCodeAnalyzer implements CodeAnalyzer {
           case HTMLLexer.VOID:
           case HTMLLexer.VOLATILE:
           case HTMLLexer.WHILE:
-            result.addIfNeeded(
-                line,
-                column,
-                TextStyle.makeStyle(EditorColorScheme.LITERAL, 0, true, false, false, false));
-            break;
+          case HTMLLexer.BOOLEAN:
+          case HTMLLexer.BYTE:
+          case HTMLLexer.CHAR:
+          case HTMLLexer.DOUBLE:
+          case HTMLLexer.ENUM:
+          case HTMLLexer.FLOAT:
+          case HTMLLexer.INT:
+          case HTMLLexer.LONG:
+          case HTMLLexer.SHORT:
           case HTMLLexer.VAR:
-            result.addIfNeeded(
-                line,
-                column,
-                TextStyle.makeStyle(EditorColorScheme.LITERAL, 0, true, false, false, false));
-
-            break;
           case HTMLLexer.FUNCTION:
           case HTMLLexer.LET:
           case HTMLLexer.DEBUGGER:
@@ -146,7 +142,7 @@ public class PHPCodeAnalyzer implements CodeAnalyzer {
             result.addIfNeeded(
                 line,
                 column,
-                TextStyle.makeStyle(EditorColorScheme.LITERAL, 0, true, false, false, false));
+                TextStyle.makeStyle(EditorColorScheme.phpkeyword, 0, true, false, false, false));
             break;
           case HTMLLexer.DECIMAL_LITERAL:
           case HTMLLexer.HEX_LITERAL:
@@ -156,7 +152,7 @@ public class PHPCodeAnalyzer implements CodeAnalyzer {
           case HTMLLexer.HEX_FLOAT_LITERAL:
           case HTMLLexer.BOOL_LITERAL:
           case HTMLLexer.NULL_LITERAL:
-            result.addIfNeeded(line, column, EditorColorScheme.LITERAL);
+            result.addIfNeeded(line, column, EditorColorScheme.phpattr);
             break;
           case HTMLLexer.STRING:
           case HTMLLexer.CHATREF:
@@ -270,38 +266,32 @@ public class PHPCodeAnalyzer implements CodeAnalyzer {
           case HTMLLexer.ELLIPSIS:
           case HTMLLexer.DOT:
           case HTMLLexer.DOLLAR:
-            result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
+          case HTMLLexer.AT:
+          case HTMLLexer.DIV:
+            result.addIfNeeded(line, column, EditorColorScheme.phpsymbol);
             break;
-          case HTMLLexer.BOOLEAN:
-          case HTMLLexer.BYTE:
-          case HTMLLexer.CHAR:
-          case HTMLLexer.DOUBLE:
-          case HTMLLexer.ENUM:
-          case HTMLLexer.FLOAT:
-          case HTMLLexer.INT:
-          case HTMLLexer.LONG:
-          case HTMLLexer.SHORT:
+
           case HTMLLexer.HtmlAttr:
-            result.addIfNeeded(line, column, EditorColorScheme.ATTRIBUTE_VALUE);
+            result.addIfNeeded(line, column, EditorColorScheme.phphtmlattr);
             break;
           case HTMLLexer.BLOCK_COMMENT:
           case HTMLLexer.LINE_COMMENT:
             result.addIfNeeded(line, column, EditorColorScheme.COMMENT);
             break;
-          case HTMLLexer.AT:
+
           case HTMLLexer.CSSKEYWORD:
             result.addIfNeeded(line, column, EditorColorScheme.Ninja);
             break;
           case HTMLLexer.HtmlTags:
           case HTMLLexer.HtmlTagOne:
-            result.addIfNeeded(line, column, EditorColorScheme.HTML_TAG);
+            result.addIfNeeded(line, column, EditorColorScheme.phphtmlkeyword);
             break;
           case HTMLLexer.GT:
-            result.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
+            result.addIfNeeded(line, column, EditorColorScheme.phpsymbol);
             break;
           case HTMLLexer.LT:
             {
-              result.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
+              result.addIfNeeded(line, column, EditorColorScheme.phpsymbol);
               if (stack.isEmpty()) {
                 if (currSwitch > maxSwitch) {
                   maxSwitch = currSwitch;
@@ -318,13 +308,13 @@ public class PHPCodeAnalyzer implements CodeAnalyzer {
             }
             //// '/>'
           case HTMLLexer.SLASH_CLOSE:
-            result.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
+            result.addIfNeeded(line, column, EditorColorScheme.phpsymbol);
             break;
 
             /// '</'
           case HTMLLexer.OPEN_SLASH:
             {
-              result.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
+              result.addIfNeeded(line, column, EditorColorScheme.phpsymbol);
               if (!stack.isEmpty()) {
                 BlockLine b = stack.pop();
                 b.endLine = line;
@@ -341,56 +331,50 @@ public class PHPCodeAnalyzer implements CodeAnalyzer {
               int colorid = EditorColorScheme.TEXT_NORMAL;
               boolean isBold, isItalic, isUnderLineMode = false;
               if (previous == HTMLLexer.AT) {
-                colorid = EditorColorScheme.Ninja;
+                colorid = EditorColorScheme.phpsymbol;
               }
               if (previous == HTMLLexer.CLASS || previous == HTMLLexer.CONST) {
-                colorid = EditorColorScheme.AUTO_COMP_PANEL_CORNER;
+                colorid = EditorColorScheme.phpcolormatch1;
               }
               if (previous == HTMLLexer.LBRACK
                   || previous == HTMLLexer.DOT
                   || previous == HTMLLexer.IMPORT
                   || previous == HTMLLexer.FUNCTION
                   || previous == HTMLLexer.COLONCOLON) {
-                colorid = EditorColorScheme.ATTRIBUTE_NAME;
+                colorid = EditorColorScheme.phpcolormatch2;
               }
               if (previous == HTMLLexer.VOID || previous == HTMLLexer.EXTENDS) {
-                colorid = EditorColorScheme.COLOR_WARNING;
+                colorid = EditorColorScheme.phpcolormatch3;
               }
               if (previous == HTMLLexer.RETURN || previous == HTMLLexer.NEW) {
-                colorid = EditorColorScheme.HTML_TAG;
+                colorid = EditorColorScheme.phpcolormatch3;
               }
               if (previous == HTMLLexer.INT
                   || previous == HTMLLexer.LET
                   || previous == HTMLLexer.VAR) {
                 colorid = EditorColorScheme.LITERAL;
-                int[] err = Utils.setWaringSpan(result, line, column + 1);
+                colorid = EditorColorScheme.phpcolormatch4;
               }
               if (previous == HTMLLexer.CASE || previous == HTMLLexer.FINAL) {
                 colorid = EditorColorScheme.ATTRIBUTE_NAME;
               }
               // show '<'
               if (previous == HTMLLexer.LT) {
-                colorid = EditorColorScheme.OPERATOR;
+                colorid = EditorColorScheme.phpsymbol;
               }
               // end '</'
               if (previous == HTMLLexer.OPEN_SLASH) {
-                colorid = EditorColorScheme.OPERATOR;
+                colorid = EditorColorScheme.phpsymbol;
               }
               if (previous == HTMLLexer.SUB) {
-                colorid = EditorColorScheme.HTML_TAG;
+                colorid = EditorColorScheme.phpcolormatch5;
               }
               if (previous == HTMLLexer.DOLLAR) {
                 // $php
-                colorid = EditorColorScheme.ATTRIBUTE_VALUE;
+                colorid = EditorColorScheme.phpsymbol;
               }
-              if (RegexUtilCompat.RegexSelect("<\\?", token.getText())) {
-                colorid = EditorColorScheme.OPERATOR;
-              }
-              if (RegexUtilCompat.RegexSelect("\\?>", token.getText())) {
-                colorid = EditorColorScheme.OPERATOR;
-              }
-              if (RegexUtilCompat.RegexSelect("(__.*__)", token.getText())) {
-                colorid = EditorColorScheme.COLOR_LOG;
+              if (previous == HTMLLexer.COLON) {
+                colorid = EditorColorScheme.phpcolormatch6;
               }
 
               ListCss3Color.initColor(token, line, column, result, true);
@@ -410,7 +394,7 @@ public class PHPCodeAnalyzer implements CodeAnalyzer {
             block.startLine = line;
             block.startColumn = column;
             stack.push(block);
-            result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
+            result.addIfNeeded(line, column, EditorColorScheme.phpsymbol);
             break;
           case HTMLLexer.RBRACE:
             if (!stack.isEmpty()) {
@@ -422,13 +406,9 @@ public class PHPCodeAnalyzer implements CodeAnalyzer {
                 result.addBlockLine(b);
               }
             }
-            result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
+            result.addIfNeeded(line, column, EditorColorScheme.phpsymbol);
             break;
-          case HTMLLexer.DIV:
-            {
-              result.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
-              break;
-            }
+
           case HTMLLexer.COLORSSS:
             result.addIfNeeded(
                 line,

@@ -5,7 +5,6 @@ import Ninja.coder.Ghostemane.code.tasks.app.ProgressDialogCompat;
 import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import Ninja.coder.Ghostemane.code.utils.SetThemeForJson;
-import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -28,6 +27,7 @@ public class SplashWord extends AppIntro2 {
     // TODO: Implement this method
     dialog = new ProgressDialogCompat(this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
 
+
     ColorAndroid12.shapeViews(dialog.getWindow().getDecorView());
     dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
     dialog.setTitle("Loading....");
@@ -38,7 +38,6 @@ public class SplashWord extends AppIntro2 {
         getFilesDir().getAbsolutePath() + File.separator + "lib" + File.separator + "libx265.so";
     var ghostPath = "/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost";
     var ghostStyle = "/storage/emulated/0/GhostWebIDE/theme/style.ghost";
-    
 
     TestFragment t2 =
         TestFragment.newIns(

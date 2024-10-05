@@ -1,9 +1,13 @@
 package ninja.coder.appuploader.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.animation.ValueAnimator;
 import android.animation.ArgbEvaluator;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +22,7 @@ import com.downloader.PRDownloader;
 import com.downloader.Progress;
 import com.downloader.Status;
 import com.downloader.databinding.LayoutDownloderChildBinding;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -85,53 +90,62 @@ public class ViewDownloder extends RelativeLayout {
     child.getRoot().setEnabled(false);
     child.progrssdownload.setIndeterminate(true);
 
-    id =
-        PRDownloader.download(url, "/storage/emulated/0/GhostWebIDE/apk/", name)
-            .build()
-            .setOnStartOrResumeListener(
-                new OnStartOrResumeListener() {
+    File file = new File("/storage/emulated/0/GhostWebIDE/apk/" + name);
+    if (file.exists()) {
+      child.view.setVisibility(View.GONE);
+      child.installApk.setVisibility(View.VISIBLE);
+      child.installApk.setOnClickListener(
+          it -> {
+            installApk(file.toString());
+          });
+    } else {
+      id =
+          PRDownloader.download(url, "/storage/emulated/0/GhostWebIDE/apk/", name)
+              .build()
+              .setOnStartOrResumeListener(
+                  new OnStartOrResumeListener() {
 
-                  @Override
-                  public void onStartOrResume() {
-                    child.progrssdownload.setIndeterminate(false);
-                    child.getRoot().setEnabled(true);
-                  }
-                })
-            .setOnPauseListener(
-                new OnPauseListener() {
+                    @Override
+                    public void onStartOrResume() {
+                      child.progrssdownload.setIndeterminate(false);
+                      child.getRoot().setEnabled(true);
+                    }
+                  })
+              .setOnPauseListener(
+                  new OnPauseListener() {
 
-                  @Override
-                  public void onPause() {
-                    child.progrssdownload.setIndeterminate(true);
-                  }
-                })
-            .setOnProgressListener(
-                new OnProgressListener() {
+                    @Override
+                    public void onPause() {
+                      child.progrssdownload.setIndeterminate(true);
+                    }
+                  })
+              .setOnProgressListener(
+                  new OnProgressListener() {
+                    @Override
+                    public void onProgress(Progress progress) {
+                      child.progrssdownload.setVisibility(View.VISIBLE);
+                      child.iconfake.setVisibility(View.GONE);
+                      long progressPercent = progress.currentBytes * 100 / progress.totalBytes;
+                      child.progrssdownload.setProgressCompat((int) progressPercent, false);
+                      child.tvname.setText(
+                          getProgressDisplayLine(progress.currentBytes, progress.totalBytes));
+                      child.progrssdownload.setIndeterminate(false);
+                    }
+                  })
+              .start(
+                  new OnDownloadListener() {
 
-                  @Override
-                  public void onProgress(Progress progress) {
-                    child.progrssdownload.setVisibility(View.VISIBLE);
-                    child.iconfake.setVisibility(View.GONE);
-                    long progressPercent = progress.currentBytes * 100 / progress.totalBytes;
-                    child.progrssdownload.setProgressCompat((int) progressPercent, false);
-                    child.tvname.setText(
-                        getProgressDisplayLine(progress.currentBytes, progress.totalBytes));
-                    child.progrssdownload.setIndeterminate(false);
-                  }
-                })
-            .start(
-                new OnDownloadListener() {
+                    @Override
+                    public void onDownloadComplete() {
+                      child.tvname.setText("endWork");
+                      child.view.setVisibility(View.GONE);
+                      child.installApk.setVisibility(View.VISIBLE);
+                    }
 
-                  @Override
-                  public void onDownloadComplete() {
-                    child.tvname.setText("endWork");
-                    child.view.setVisibility(View.GONE);
-                    child.installApk.setVisibility(View.VISIBLE);
-                  }
-
-                  @Override
-                  public void onError(Error error) {}
-                });
+                    @Override
+                    public void onError(Error error) {}
+                  });
+    }
   }
 
   public void setOnClick(OnClick onclick) {
@@ -149,5 +163,19 @@ public class ViewDownloder extends RelativeLayout {
 
   private String getBytesToMBString(long bytes) {
     return String.format(Locale.ENGLISH, "%.2fMb", bytes / (1024.00 * 1024.00));
+  }
+
+  void installApk(String name) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+        && !getContext().getPackageManager().canRequestPackageInstalls()) {
+      var intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
+      intent.setData(Uri.parse("package:" + "Ninja.coder.Ghostemane.code"));
+      getContext().startActivity(intent);
+    } else {
+      ApkInstallerCompat compat =
+          new ApkInstallerCompat(
+              getContext(), new File("/storage/emulated/0/GhostWebIDE/apk/ghostidearm64.apk"));
+      compat.execute();
+    }
   }
 }

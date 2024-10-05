@@ -77,7 +77,7 @@ public class IdeEditor extends CodeEditor implements IEditor {
 
   public IdeEditor(Context context, AttributeSet set, int def) {
     super(context, set, def);
-
+     
     init();
   }
 
@@ -90,6 +90,7 @@ public class IdeEditor extends CodeEditor implements IEditor {
     setLineInfoTextSize(18f);
     setScalable(true);
     setCursorWidth(4.0f);
+    
 
     setNonPrintablePaintingFlags(
         FLAG_DRAW_WHITESPACE_LEADING

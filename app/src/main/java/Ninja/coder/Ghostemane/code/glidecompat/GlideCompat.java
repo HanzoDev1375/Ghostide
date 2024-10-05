@@ -328,6 +328,17 @@ public class GlideCompat {
         .priority(Priority.NORMAL)
         .into(v);
   }
+  
+  public static void LoadIconTheme(String file, ImageView v) {
+    Glide.with(v.getContext())
+        .asBitmap()
+        .load(getIconSwbFile(file, "icon.png"))
+        .transform(new RoundedCornersTransformation(RenderSize()))
+        .error(R.drawable.file)
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
+        .priority(Priority.NORMAL)
+        .into(v);
+  }
 
   public static Drawable getApkIcon(final String _path, Context context) {
     android.content.pm.PackageManager packageManager = context.getPackageManager();
@@ -350,7 +361,7 @@ public class GlideCompat {
         .into(img);
   }
 
-  protected static Bitmap getIconSwbFile(String zipFilePath, String iconName) {
+  public static Bitmap getIconSwbFile(String zipFilePath, String iconName) {
     Bitmap icon = null;
     ZipFile zipFile = null;
 

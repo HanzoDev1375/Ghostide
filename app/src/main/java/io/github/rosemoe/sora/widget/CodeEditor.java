@@ -1674,7 +1674,6 @@ public class CodeEditor extends View
         } else {
           mPaint.setTextSkewX(0);
         }
-        
 
         lastStyle = styleBits;
       }
@@ -1898,16 +1897,84 @@ public class CodeEditor extends View
       // Draw matched text background
       if (!matchedPositions.isEmpty()) {
         for (int position : matchedPositions) {
-          drawPillSearch(
-              canvas,
-              paintingOffset,
-              row,
-              firstVisibleChar,
-              lastVisibleChar,
-              position,
-              position + mSearcher.mSearchText.length(),
-              mColors.getColor(EditorColorScheme.MATCHED_TEXT_BACKGROUND),
-              line);
+          if (mSearcher.mSearchText.length() == 1) {
+            drawPillSearch(
+                canvas,
+                paintingOffset,
+                row,
+                firstVisibleChar,
+                lastVisibleChar,
+                position,
+                position + mSearcher.mSearchText.length(),
+                mColors.getColor(EditorColorScheme.searchcolor1),
+                line);
+          } else if (mSearcher.mSearchText.length() == 2) {
+            drawPillSearch(
+                canvas,
+                paintingOffset,
+                row,
+                firstVisibleChar,
+                lastVisibleChar,
+                position,
+                position + mSearcher.mSearchText.length(),
+                mColors.getColor(EditorColorScheme.searchcolor2),
+                line);
+          } else if (mSearcher.mSearchText.length() == 3) {
+            drawPillSearch(
+                canvas,
+                paintingOffset,
+                row,
+                firstVisibleChar,
+                lastVisibleChar,
+                position,
+                position + mSearcher.mSearchText.length(),
+                mColors.getColor(EditorColorScheme.searchcolor3),
+                line);
+          } else if (mSearcher.mSearchText.length() == 4) {
+            drawPillSearch(
+                canvas,
+                paintingOffset,
+                row,
+                firstVisibleChar,
+                lastVisibleChar,
+                position,
+                position + mSearcher.mSearchText.length(),
+                mColors.getColor(EditorColorScheme.searchcolor4),
+                line);
+          } else if (mSearcher.mSearchText.length() == 5) {
+            drawPillSearch(
+                canvas,
+                paintingOffset,
+                row,
+                firstVisibleChar,
+                lastVisibleChar,
+                position,
+                position + mSearcher.mSearchText.length(),
+                mColors.getColor(EditorColorScheme.searchcolor5),
+                line);
+          } else if (mSearcher.mSearchText.length() == 6) {
+            drawPillSearch(
+                canvas,
+                paintingOffset,
+                row,
+                firstVisibleChar,
+                lastVisibleChar,
+                position,
+                position + mSearcher.mSearchText.length(),
+                mColors.getColor(EditorColorScheme.searchcolor6),
+                line);
+          } else {
+            drawPillSearch(
+                canvas,
+                paintingOffset,
+                row,
+                firstVisibleChar,
+                lastVisibleChar,
+                position,
+                position + mSearcher.mSearchText.length(),
+                mColors.getColor(EditorColorScheme.searchcolor1),
+                line);
+          }
         }
       }
 

@@ -53,6 +53,9 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
       CodePointCharStream stream = CharStreams.fromReader(new StringReader(content.toString()));
       htmlCodeAnalyzer = new BasicSyntaxPullAnalyzer();
       HTMLLexer lexer = new HTMLLexer(stream);
+      HTMLAutoComplete auto = new HTMLAutoComplete();
+      HTMLAutoComplete.Identifiers info = new HTMLAutoComplete.Identifiers();
+      info.begin();
       var classNamePrevious = false;
       Token token, preToken = null, prePreToken = null;
       boolean first = true;
@@ -329,6 +332,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
           case HTMLLexer.IDENTIFIER:
             {
               int colorid = EditorColorScheme.TEXT_NORMAL;
+              info.addIdentifier(token.getText());
               boolean isBold, isItalic, isUnderLineMode = false;
               if (previous == HTMLLexer.AT) {
                 colorid = EditorColorScheme.Ninja;
@@ -441,6 +445,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
         first = false;
       }
       result.determine(lastLine);
+      result.setExtra(info);
     } catch (IOException e) {
       e.printStackTrace();
       Log.e("TAG", e.getMessage());

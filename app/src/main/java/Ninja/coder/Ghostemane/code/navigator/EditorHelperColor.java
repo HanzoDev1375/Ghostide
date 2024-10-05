@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import static androidx.core.graphics.ColorUtils.calculateLuminance;
 
+
 public class EditorHelperColor {
   private IdeEditor editor;
   private BadgeView view;
@@ -78,7 +79,7 @@ public class EditorHelperColor {
 
                   }
                 } else {
-                  editor.getSearcher().search(currentWord);
+               //   editor.getSearcher().search(currentWord);
                 }
               }
             }

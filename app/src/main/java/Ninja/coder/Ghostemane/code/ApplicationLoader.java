@@ -1,6 +1,8 @@
 package Ninja.coder.Ghostemane.code;
 
 import Ninja.coder.Ghostemane.code.activities.ErrorManagerActivity;
+import Ninja.coder.Ghostemane.code.utils.AssetsSoft;
+import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import Ninja.coder.Ghostemane.code.utils.MobileInfo;
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -29,7 +31,13 @@ public class ApplicationLoader extends Application {
   // from terminal
   // recreate()
   private static SharedPreferences prfns;
-  protected static SharedPreferences materialYou, getvb, setfont, ru, save_path, thememanagersoft,Analyzercod;
+  protected static SharedPreferences materialYou,
+      getvb,
+      setfont,
+      ru,
+      save_path,
+      thememanagersoft,
+      Analyzercod;
   private static Context mApplicationContext;
   private static Activity activity;
   private static IdeEditor editor;
@@ -82,9 +90,16 @@ public class ApplicationLoader extends Application {
     setfont = getSharedPreferences("setfont", MODE_PRIVATE);
     save_path = getSharedPreferences("path", MODE_PRIVATE);
     ru = getSharedPreferences("ru", MODE_PRIVATE);
-    Analyzercod = getSharedPreferences("Analyzercod",MODE_PRIVATE);
+    Analyzercod = getSharedPreferences("Analyzercod", MODE_PRIVATE);
     thememanagersoft = getSharedPreferences("thememanagersoft", MODE_PRIVATE);
     prfns = PreferenceManager.getDefaultSharedPreferences(this);
+    
+
+    AssetsSoft soft = new AssetsSoft();
+    var iconPath = getFilesDir().getAbsoluteFile() + "/icon.png";
+    if (!FileUtil.isExistFile(iconPath)) {
+      soft.copyOneFileFromAssets("icon.png", getFilesDir().getAbsolutePath() + "/", this);
+    }
     try (SassCompiler compiler = AndroidSassCompilerFactory.bundled(this)) {
       Toast.makeText(getApplicationContext(), compiler.getVersion().toString(), Toast.LENGTH_SHORT)
           .show();
@@ -175,8 +190,8 @@ public class ApplicationLoader extends Application {
   public static SharedPreferences getPrefManager() {
     return prfns;
   }
-  
-  public static SharedPreferences getAnalyzercod(){
+
+  public static SharedPreferences getAnalyzercod() {
     return Analyzercod;
   }
 
