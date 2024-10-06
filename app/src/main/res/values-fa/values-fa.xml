@@ -69,8 +69,6 @@
     <string name="codeazsubtitle">با فعال کردن این گزینه در مصرف رم صرفه جوی کنید.</string>
     <string name="materialyoutitle">رنگ های پویا!</string>
     <string name="materialyousubtitle">رنگ های پویا را به طور خودکار فعال کنید و بهترین تجربه رنگ را امتحان کنید</string>
-
-
     <string name="effect_title">اثر زیبا</string>
     <string name="effect_description">با فعال‌سازی این گزینه، پس‌زمینه دارای لرزش کوچک خواهد بود</string>
     <string name="grids_title">حالت شبکه</string>
@@ -81,6 +79,4 @@
     <string name="deftheme_description">با فعال کردن این گزینه، تم برنامه به‌طور پیش‌فرض از Json خوانده نمی‌شود</string>
     <string name="autoSaveText_title">ذخیره خودکار</string>
     <string name="autoSaveText_description">با فعال‌سازی ذخیره‌ی خودکار، نیازی به کلیک روی دکمه‌ی ذخیره نیست.</string>
-
-
 </resources>
