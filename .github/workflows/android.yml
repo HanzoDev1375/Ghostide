@@ -23,4 +23,4 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build for all architectures
-      run: ./gradlew build
+      run: ./gradlew build --warning-mode all
