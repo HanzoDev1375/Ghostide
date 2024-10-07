@@ -20,22 +20,23 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
-    - name: Set up Android SDK
-      uses: android-actions/setup-android@v2
-      with:
-        api-level: 33
-        build-tools: 33.0.0
-        ndk: 21.4.7075529
-        cache: true
-
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    - name: Build for all architectures
-      run: ./gradlew build --warning-mode all
+    - name: Build with Gradle for arm32
+      run: ./gradlew assembleArm32Debug
 
-    - name: Upload APKs
+    - name: Build with Gradle for arm64
+      run: ./gradlew assembleArm64Debug
+
+    - name: Upload arm32 APK
       uses: actions/upload-artifact@v3
       with:
-        name: app-apks
-        path: app/build/outputs/apk/**/*.apk
+        name: app-debug-arm32
+        path: app/build/outputs/apk/arm32/debug/app-arm32-debug.apk
+        
+    - name: Upload arm64 APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: app-debug-arm64
+        path: app/build/outputs/apk/arm64/debug/app-arm64-debug.apk
