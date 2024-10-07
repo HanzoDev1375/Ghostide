@@ -901,7 +901,7 @@ public class CodeEditorActivity extends AppCompatActivity {
 
   void saveFileByIo() {
     if (editor.getText().toString().isEmpty()) {
-      DataUtil.showMessage(getApplicationContext(), "خطا متن خالی نمیشود ذخیره شود");
+      DataUtil.showMessage(getApplicationContext(), getString(R.string.errorEmptyFile));
     } else {
       try {
         if (shp.contains("pos_path")) {

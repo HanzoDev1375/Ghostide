@@ -79,4 +79,27 @@
     <string name="deftheme_description">با فعال کردن این گزینه، تم برنامه به‌طور پیش‌فرض از Json خوانده نمی‌شود</string>
     <string name="autoSaveText_title">ذخیره خودکار</string>
     <string name="autoSaveText_description">با فعال‌سازی ذخیره‌ی خودکار، نیازی به کلیک روی دکمه‌ی ذخیره نیست.</string>
+    <string name="inittheme">لطفا تم را نصب کنید</string>
+    <string name="initphp">لطفا php را نصب کنید</string>
+    <string name="initpy">پایتون را نصب کنید سپس وارد برنامه شوید</string>
+    <string name="filecreator">فایل با موفقیت ایجاد شد</string>
+    <string name="foldercreator">پوشه یا موفقیت ایجاد شد</string>
+    <string name="errorEmptyFile">خطا فایل خالی ذخیره نمیشود</string>
+    <string name="filesavesuccessfully">فایل با موفقیت ذخیره شد.</string>
+    <string name="themewarning">هشدار تم!</string>
+    <string name="themewaringmassge">این فایل تم در حافظه شما موجود است آیا میخواهید این تم را جایگزین کنید؟</string>
+    <string name="sdcarderror">کارت حافظه پیدا نشد متاسفم</string>
+    <string name="make_folder">ایجاد پوشه</string>
+    <string name="make_file">ایجاد فایل</string>
+    <string name="make_project">ایجاد پروژه</string>
+    <string name="ftp">FTP</string>
+    <string name="search_file">جستجوی فایل (بتا)</string>
+    <string name="folder_tree">درخت پوشه</string>
+    <string name="file_tree">درخت فایل</string>
+    <string name="git_clone">کلون گیت</string>
+    <string name="android_module">ماژول اندروید</string>
+    <string name="git_tools">ابزارهای گیت</string>
+    <string name="gson_to_class">Gson به کلاس</string>
+
+
 </resources>

@@ -2,24 +2,17 @@ package io.github.rosemoe.sora.langs.php;
 
 import Ninja.coder.Ghostemane.code.IdeEditor;
 import android.os.Build;
-import com.ninjacoder.jgit.PHPFormatter;
-import io.github.rosemoe.sora.data.CompletionItem;
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 import io.github.rosemoe.sora.interfaces.EditorLanguage;
 import io.github.rosemoe.sora.interfaces.NewlineHandler;
-import io.github.rosemoe.sora.langs.html.HTMLAnalyzerCompat;
 import io.github.rosemoe.sora.langs.internal.MyCharacter;
-import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.text.TextUtils;
 import io.github.rosemoe.sora.widget.SymbolPairMatch;
-import lsp4custom.com.ninjacoder.customhtmllsp.ListKeyword;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.Token;
 import io.github.rosemoe.sora.langs.html.*;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
 
 public class PHPLanguage implements EditorLanguage {
 
@@ -644,7 +637,7 @@ public class PHPLanguage implements EditorLanguage {
 
   @Override
   public AutoCompleteProvider getAutoCompleteProvider() {
-    return new AutoText();
+    return new HTMLAutoComplete();
   }
 
   @Override
@@ -793,51 +786,6 @@ public class PHPLanguage implements EditorLanguage {
               .append("\n")
               .append(TextUtils.createIndent(count + tabSize, tabSize, useTab()));
       return new HandleResult(sb, 0);
-    }
-  }
-
-  class AutoText implements AutoCompleteProvider {
-
-    @Override
-    public List<CompletionItem> getAutoCompleteItems(
-        String prefix, TextAnalyzeResult analyzeResult, int line, int column) {
-      List<CompletionItem> list = new ArrayList<>();
-      for (var item : PHPLanguage.key) {
-        if (item.startsWith(prefix)) {
-          list.add(normalKey(item, "Php Keyword"));
-        }
-      }
-      var keyhtml = new ListKeyword();
-      keyhtml.installFromSora(list, prefix);
-      keyhtml.installHtmlAttr(list, prefix);
-      for (String phpfuns : phpFuns) {
-        if (phpfuns.startsWith(prefix)) {
-          list.add(attrAsCompletion(phpfuns, "Function php"));
-        }
-      }
-
-      return list;
-    }
-
-    private CompletionItem normalKey(String php, String desc) {
-      final CompletionItem item = new CompletionItem(php + "  ", desc);
-      item.cursorOffset(item.commit.length() - 1);
-      return item;
-    }
-
-    private CompletionItem htmlTag(String tag, String desc) {
-      final String open = "<".concat(tag).concat(">");
-      final String close = "</".concat(tag).concat(">");
-      final var item = new CompletionItem(tag, desc);
-      item.commit = open.concat(close);
-      item.cursorOffset(item.commit.length() - close.length());
-      return item;
-    }
-
-    private CompletionItem attrAsCompletion(String attr, String desc) {
-      final var item = new CompletionItem(attr, attr.concat("=\"\""), desc);
-      item.cursorOffset(item.commit.length());
-      return item;
     }
   }
 }

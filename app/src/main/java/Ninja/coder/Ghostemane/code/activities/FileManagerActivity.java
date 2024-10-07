@@ -15,7 +15,6 @@ import Ninja.coder.Ghostemane.code.filehelper.FactoryModelProject;
 import Ninja.coder.Ghostemane.code.folder.FileIconHelper;
 import Ninja.coder.Ghostemane.code.git.GitListSheet;
 import Ninja.coder.Ghostemane.code.interfaces.FileCallBack;
-import Ninja.coder.Ghostemane.code.layoutmanager.EmptyRecyclerView;
 import Ninja.coder.Ghostemane.code.layoutmanager.NavigationViewCompnet;
 import Ninja.coder.Ghostemane.code.marco.*;
 import Ninja.coder.Ghostemane.code.model.IconShop;
@@ -31,7 +30,6 @@ import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
 import Ninja.coder.Ghostemane.code.utils.DialogUtil;
 import Ninja.coder.Ghostemane.code.utils.VectorHelper;
 import Ninja.coder.Ghostemane.code.widget.GhostWebMaterialDialog;
-import Ninja.coder.Ghostemane.code.widget.PraramnetLayoutNinja;
 import Ninja.coder.Ghostemane.code.widget.component.SwbData;
 import Ninja.coder.Ghostemane.code.widget.component.fastscrollcompat.FastScrollerBuilder;
 import android.Manifest;
@@ -66,7 +64,6 @@ import android.widget.*;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -75,9 +72,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.blankj.utilcode.util.ThreadUtils;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -112,7 +109,7 @@ public class FileManagerActivity extends BaseCompat
   protected FileEventUser user;
   private Timer _timer = new Timer();
   private ExtendedFloatingActionButton fabAdd;
-  private Toolbar _toolbar;
+  private MaterialToolbar _toolbar;
   private AppBarLayout _app_bar;
   private CoordinatorLayout _coordinator;
   private DrawerLayout _drawer;
@@ -149,9 +146,7 @@ public class FileManagerActivity extends BaseCompat
   private ArrayList<String> str2 = new ArrayList<>();
   private ArrayList<HashMap<String, Object>> projectdata = new ArrayList<>();
   private ArrayList<Double> cache = new ArrayList<>();
-  private PraramnetLayoutNinja paramentLayout_fileDir;
   private LinearLayout CensractorListView1;
-  private SwipeRefreshLayout swiperefreshlayout1;
   private RecyclerView recyclerview1, recyclerview2;
   private Intent myketint = new Intent();
   private Intent intgetTheme = new Intent();
@@ -257,12 +252,7 @@ public class FileManagerActivity extends BaseCompat
             FileManagerActivity.this, _drawer, _toolbar, R.string.app_name, R.string.app_name);
     _drawer.addDrawerListener(_toggle);
     _toggle.syncState();
-
-    paramentLayout_fileDir = findViewById(R.id.paramentLayout_fileDir);
     CensractorListView1 = findViewById(R.id.CensractorListView1);
-
-    swiperefreshlayout1 = findViewById(R.id.swiperefreshlayout1);
-
     recyclerview1 = findViewById(R.id.recyclerview1);
     recyclerview2 = findViewById(R.id.recyclerview2);
     fileListItem = new FileManagerAd(files, FileManagerActivity.this, this);
@@ -283,7 +273,7 @@ public class FileManagerActivity extends BaseCompat
     book = getSharedPreferences("hsipsot4444", Activity.MODE_PRIVATE);
     downloder = findViewById(R.id.downloder);
     emptyview = findViewById(R.id.emptyview);
-    _distreeview();
+    
     WindowsMath(_drawer, _coordinator);
 
     BackPressed();
@@ -311,14 +301,7 @@ public class FileManagerActivity extends BaseCompat
                 recyclerview2.getAdapter().notifyDataSetChanged();
               }
             });
-    swiperefreshlayout1.setOnRefreshListener(
-        new SwipeRefreshLayout.OnRefreshListener() {
-          @Override
-          public void onRefresh() {
-            recyclerview2.getAdapter().notifyDataSetChanged();
-            swiperefreshlayout1.setRefreshing(false);
-          }
-        });
+    
 
     recyclerview2.addOnScrollListener(
         new RecyclerView.OnScrollListener() {
@@ -489,10 +472,6 @@ public class FileManagerActivity extends BaseCompat
     u.setCornerRadius(25);
     u.setStroke(1, 0xFFF8B09A);
 
-    paramentLayout_fileDir.setLayoutParams(
-        new LinearLayout.LayoutParams(
-            DataUtil.getDisplayWidthPixels(getApplicationContext()),
-            DataUtil.getDisplayHeightPixels(getApplicationContext())));
 
     sd_stor = new SdCardUtil(this);
 
@@ -509,7 +488,6 @@ public class FileManagerActivity extends BaseCompat
         });
 
     startService(new Intent(this, FileEventUser.class));
-    getSupportActionBar().hide();
     sharedPreferences = getSharedPreferences("fileSp", Context.MODE_PRIVATE);
     utils = new HichemSoftFileUtil(sharedPreferences, FileManagerActivity.this).loadData();
     utils.requestPermissionAllFilesAccess(); // if not allowed
@@ -716,7 +694,6 @@ public class FileManagerActivity extends BaseCompat
                   });
             })
         .start();
-    _distreeview();
   }
 
   void reLoadFile() {
@@ -927,13 +904,11 @@ public class FileManagerActivity extends BaseCompat
 
   public void _distreeview() {
     List<String> pospath = spiltIntoBreadcrumbItems(Folder);
-    adps = new ToolbarListFileAdapter(pospath, FileManagerActivity.this, this);
+    adps = new ToolbarListFileAdapter(pospath, this, this);
     recyclerview1.setAdapter(adps);
     recyclerview1.setLayoutManager(
         new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
     recyclerview1.smoothScrollToPosition(pospath.size());
-     recyclerview1.getAdapter().notifyDataSetChanged();
-    recyclerview1.setVisibility(View.VISIBLE);
   }
 
   @Override
@@ -965,7 +940,7 @@ public class FileManagerActivity extends BaseCompat
         && filteredItems.get(1).equals("emulated")
         && filteredItems.get(2).equals("0")) {
       List<String> combinedItems = new ArrayList<>();
-      combinedItems.add("Home ");
+      combinedItems.add(Build.MANUFACTURER + " " + Build.MODEL);
       combinedItems.addAll(filteredItems.subList(3, filteredItems.size()));
       return combinedItems;
     }
@@ -1025,10 +1000,10 @@ public class FileManagerActivity extends BaseCompat
       if (FileUtil.isFile("/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost")) {
         var di = new MaterialAlertDialogBuilder(FileManagerActivity.this);
 
-        di.setTitle("هشدار");
-        di.setMessage("این فایل تم در حافظه شما موجود است آیا میخواهید این تم را جایگزین کنید؟");
+        di.setTitle(R.string.themewarning);
+        di.setMessage(R.string.themewaringmassge);
         di.setNeutralButton(
-            "بله",
+            android.R.string.ok,
             (p, d) -> {
               try {
 
@@ -1042,7 +1017,7 @@ public class FileManagerActivity extends BaseCompat
               reLoadFile();
               DataUtil.showMessage(getApplicationContext(), "انجام شد");
             });
-        di.setPositiveButton("خیر", (p1, d2) -> {});
+        di.setPositiveButton(android.R.string.cancel, (p1, d2) -> {});
 
         di.show();
 
@@ -1056,7 +1031,7 @@ public class FileManagerActivity extends BaseCompat
           showMessage(e.toString());
         }
         reLoadFile();
-        DataUtil.showMessage(getApplicationContext(), "انجام شد");
+        DataUtil.showMessage(getApplicationContext(), "done");
       }
     }
   }
@@ -1096,7 +1071,7 @@ public class FileManagerActivity extends BaseCompat
           positive.setOnClickListener(
               (vftrororocjj) -> {
                 if (output.getText().toString().isEmpty()) {
-                  DataUtil.showMessage(getApplicationContext(), "خروجی نمیتواند خالی باشد");
+                  
                 } else {
                   new AsyncTask<String, String, String>() {
                     @Override
@@ -1155,7 +1130,7 @@ public class FileManagerActivity extends BaseCompat
     dialog.show();
   }
 
-  public void setRenameFile( double _pos) {
+  public void setRenameFile(double _pos) {
 
     AlertDialog dialog =
         new GhostWebMaterialDialog(FileManagerActivity.this)
@@ -1819,7 +1794,7 @@ public class FileManagerActivity extends BaseCompat
 
                             Toast.makeText(
                                     getApplicationContext(),
-                                    "فایل با موفقیت دانلود شد.",
+                                    R.string.filecreator,
                                     Toast.LENGTH_SHORT)
                                 .show();
                             dialog.dismiss();
@@ -1851,7 +1826,7 @@ public class FileManagerActivity extends BaseCompat
                 Folder = sd_stor.getExtSdPath();
                 DataUtil.showMessage(getApplicationContext(), sd_stor.getExtSdPath());
               } else {
-                DataUtil.showMessage(getApplicationContext(), "مموری کارت پیدا نشد متاسفم");
+                DataUtil.showMessage(getApplicationContext(), getString(R.string.sdcarderror));
               }
               reLoadFile();
               _drawer.closeDrawer(GravityCompat.START);
@@ -1914,7 +1889,6 @@ public class FileManagerActivity extends BaseCompat
                       UpdateCheck);
 
                 } else {
-                  DataUtil.showMessage(getApplicationContext(), "اینترنت خاموش است");
                 }
                 break;
               }
@@ -1959,45 +1933,16 @@ public class FileManagerActivity extends BaseCompat
               }
           }
           return false;
+          
         });
   }
 
   public void setBackupTheme() {
     if (FileUtil.isFile("/storage/emulated/0/GhostWebIDE/theme/theme.AA")) {
-      var di = new GhostWebMaterialDialog(FileManagerActivity.this);
-      di.setTitle("هشدار");
-      di.setMessage("این فایل در مسیر شما وجود دارد ایا میخواهید این فایل را جایگزین کنید؟");
-      di.setNeutralButton(
-          android.R.string.ok,
-          (p, d) -> {
-            try {
-
-              net.lingala.zip4j.ZipFile zip4 =
-                  new net.lingala.zip4j.ZipFile(
-                      new File(
-                          "/storage/emulated/0/GhostWebIDE/"
-                              + DataUtil.getRandom(1, 200)
-                              + "theme.AA"));
-
-              ArrayList filesToAdd = new ArrayList<>();
-              var iconPath = getFilesDir().getAbsoluteFile() + "/icon.png";
-              filesToAdd.add(new File(iconPath));
-              filesToAdd.add(new File("/sdcard/GhostWebIDE/theme/GhostThemeapp.ghost"));
-
-              zip4.addFiles(filesToAdd);
-              DataUtil.showMessage(getApplicationContext(), "انجام شد در پوشه برنامه");
-
-            } catch (net.lingala.zip4j.exception.ZipException e) {
-
-            }
-          });
-      di.setPositiveButton("خیر", (p1, d2) -> {});
-
-      di.show();
     } else {
       try {
 
-        net.lingala.zip4j.ZipFile zip4 =
+        var zip4 =
             new net.lingala.zip4j.ZipFile(
                 new File(
                     "/storage/emulated/0/GhostWebIDE/" + DataUtil.getRandom(1, 200) + "theme.AA"));
@@ -2008,7 +1953,7 @@ public class FileManagerActivity extends BaseCompat
         filesToAdd.add(new File("/sdcard/GhostWebIDE/theme/GhostThemeapp.ghost"));
 
         zip4.addFiles(filesToAdd);
-        DataUtil.showMessage(getApplicationContext(), "انجام شد در پوشه برنامه");
+        DataUtil.showMessage(getApplicationContext(), "done");
 
       } catch (net.lingala.zip4j.exception.ZipException e) {
 
@@ -2022,17 +1967,17 @@ public class FileManagerActivity extends BaseCompat
     var fileHelper = new FileIconHelper(Folder);
     sh.setSheetDialog(this);
 
-    sh.addItem("MakeFolder", R.drawable.folder);
-    sh.addItem("MakeFile", R.drawable.folders_0_5);
-    sh.addItem("MakeProject", R.drawable.textfile);
+    sh.addItem(getString(R.string.make_folder), R.drawable.folder);
+    sh.addItem(getString(R.string.make_file), R.drawable.folders_0_5);
+    sh.addItem(getString(R.string.make_project), R.drawable.textfile);
     sh.addItem("FTP", R.drawable.iconmode);
-    sh.addItem("SearchFile(beta)", R.drawable.imgsearch);
-    sh.addItem("Folder Tree", R.drawable.foldermultipleplus);
-    sh.addItem("FileTree", R.drawable.filemultiple);
-    sh.addItem("Git Clone", R.drawable.git);
-    sh.addItem("Android module", R.drawable.mdapk);
-    sh.addItem("Git Tools", R.drawable.git);
-    sh.addItem("Gson to Class", R.drawable.ic_material_folder_json);
+    sh.addItem(getString(R.string.search_file), R.drawable.imgsearch);
+    sh.addItem(getString(R.string.folder_tree), R.drawable.foldermultipleplus);
+    sh.addItem(getString(R.string.file_tree), R.drawable.filemultiple);
+    sh.addItem(getString(R.string.git_clone), R.drawable.git);
+    sh.addItem(getString(R.string.android_module), R.drawable.mdapk);
+    sh.addItem(getString(R.string.git_tools), R.drawable.git);
+    sh.addItem(getString(R.string.gson_to_class), R.drawable.ic_material_folder_json);
     sh.setOnItemClickLabe(
         (pos333) -> {
           switch (pos333) {

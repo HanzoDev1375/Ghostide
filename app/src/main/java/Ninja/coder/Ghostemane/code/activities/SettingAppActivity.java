@@ -8,8 +8,6 @@ import Ninja.coder.Ghostemane.code.config.SwitchMaterialPrf;
 import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
 import Ninja.coder.Ghostemane.code.utils.DataUtil;
 import Ninja.coder.Ghostemane.code.widget.GhostWebMaterialDialog;
-import Ninja.coder.Ghostemane.code.widget.component.fastscrollcompat.FastScrollNestedScrollView;
-import Ninja.coder.Ghostemane.code.widget.component.fastscrollcompat.FastScrollerBuilder;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 
@@ -19,7 +17,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -28,19 +25,20 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowInsets;
 import android.view.WindowManager;
 import android.widget.*;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import com.google.android.material.textfield.TextInputLayout;
-import com.ninjacoder.jgit.childer.LayoutChilder;
 import com.quickersilver.themeengine.ThemeChooserDialogBuilder;
 import com.quickersilver.themeengine.ThemeEngine;
 import com.quickersilver.themeengine.ThemeMode;
@@ -56,7 +54,7 @@ public class SettingAppActivity extends BaseCompat {
 
   private Timer _timer = new Timer();
 
-  private Toolbar _toolbar;
+  private MaterialToolbar _toolbar;
   private AppBarLayout _app_bar;
   private CoordinatorLayout _coordinator;
   private boolean boolea = false;
@@ -69,7 +67,7 @@ public class SettingAppActivity extends BaseCompat {
   private ArrayList<HashMap<String, Object>> mp = new ArrayList<>();
   private ArrayList<HashMap<String, Object>> c2 = new ArrayList<>();
   private List<HashMap<String, Object>> map = new ArrayList<>();
-  private FastScrollNestedScrollView bar;
+  private NestedScrollView bar;
   private RecyclerView rvsetting, rvtools;
   private Intent intent = new Intent();
   private SwitchMaterialPrf materialYous,
@@ -161,6 +159,17 @@ public class SettingAppActivity extends BaseCompat {
 
     autoSaveText.setTitle(getString(R.string.autoSaveText_title));
     autoSaveText.setDescription(getString(R.string.autoSaveText_description));
+
+    _toolbar.setOnApplyWindowInsetsListener(
+        new View.OnApplyWindowInsetsListener() {
+          @Override
+          public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
+            v.setPadding(
+                insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(),
+                insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
+            return insets;
+          }
+        });
 
     List<LayoutModel> layoutModel = new ArrayList<>();
     layoutModel.add(
@@ -466,22 +475,14 @@ public class SettingAppActivity extends BaseCompat {
   private void StartLuncherApp() {
     _seechackswich();
 
-    var fastScrollerBuilder = new FastScrollerBuilder(bar);
-    fastScrollerBuilder.useMd2Style();
-    fastScrollerBuilder.setPadding(3, 3, 3, 3);
-    fastScrollerBuilder.build();
-
     if (war.contains("val")) {
 
       Drawable drawable = WallpaperManager.getInstance(SettingAppActivity.this).getDrawable();
       if (drawable != null) {
-        bar.setBackgroundDrawable(drawable);
+        bar.setBackground(drawable);
       }
     }
-
     ColorList(getApplicationContext(), getWindow().getDecorView());
-
-    _toolbar.setBackgroundColor(Color.TRANSPARENT);
   }
 
   protected void ColorList(Context context, View v) {
@@ -529,8 +530,6 @@ public class SettingAppActivity extends BaseCompat {
     if (sve.contains("getAutoSave")) {
       autoSaveText.setValue(true);
     }
-
-    ColorAndroid12.setToolbarinit(_toolbar);
     if (materialYou.contains("materialYou")) {
       materialYous.setValue(true);
     } else materialYous.setValue(false);
@@ -643,7 +642,7 @@ public class SettingAppActivity extends BaseCompat {
                 iconput = 11;
                 break;
             }
-            iconSpash.edit().putInt("iconSpash",iconput).apply();
+            iconSpash.edit().putInt("iconSpash", iconput).apply();
           }
         });
     map.clear();
