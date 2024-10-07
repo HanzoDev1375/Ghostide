@@ -376,7 +376,6 @@ public class PHPCodeAnalyzer implements CodeAnalyzer {
               if (previous == HTMLLexer.COLON) {
                 colorid = EditorColorScheme.phpcolormatch6;
               }
-
               ListCss3Color.initColor(token, line, column, result, true);
               result.addIfNeeded(line, column, colorid);
               break;

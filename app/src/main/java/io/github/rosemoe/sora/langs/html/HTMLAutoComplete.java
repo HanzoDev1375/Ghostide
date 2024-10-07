@@ -281,6 +281,11 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
         items.add(dddAsCompletion(phpfuns, htmlconfig.PhpFun));
       }
     }
+    for(var it : PHPLanguage.key){
+      if(it.startsWith(prefix)) {
+      	items.add(dddAsCompletion(it,htmlconfig.PhpKeys));
+      }
+    }
   }
 
   protected String clazz() {
@@ -331,7 +336,7 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
       for (String tag : validTags) {
         api = tag;
         openingTags.append("<" + api.replace("#", "") + " id=\"" + result.toString() + "\">");
-        closingTags.insert(0, "</" + api + ">");
+        closingTags.insert(0, "</" + api.replace(".","") + ">");
       }
 
       String wrappedTags = openingTags.toString() + closingTags.toString();
@@ -365,11 +370,13 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
       StringBuilder result = new StringBuilder();
       while (matcher.find()) {
         result.append(matcher.group(1));
+        
       }
+      
       for (String tag : validTags) {
         api = tag;
         openingTags.append("<" + api.replace(".", "") + " class=\"" + result.toString() + "\">");
-        closingTags.insert(0, "</" + api + ">");
+        closingTags.insert(0, "</" + api.replace(".","") + ">");
       }
 
       String wrappedTags = openingTags.toString() + closingTags.toString();

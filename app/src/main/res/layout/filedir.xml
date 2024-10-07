@@ -14,120 +14,106 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:id="@+id/_coordinator"
+        android:fitsSystemWindows="true"
         
     >
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:layout_width="match_parent"
-            android:theme="@style/AppTheme.AppBarOverlay"
+            android:background="#00000000"
             android:id="@+id/_app_bar"
+            android:fitsSystemWindows="true"
             
         >
 
-            <androidx.appcompat.widget.Toolbar
-                android:layout_height="0dp"
-                android:layout_width="0dp"
-                android:visibility="gone"
-                android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay"
+            <com.google.android.material.appbar.MaterialToolbar
+                android:layout_height="?attr/actionBarSize"
+                android:layout_width="match_parent"
+                android:background="@android:color/transparent"
+                app:title="Home"
+                style="@style/CustomToolbar"
                 android:id="@+id/_toolbar"
                 
             />
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <LinearLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:orientation="vertical"
             
         >
 
-            <Ninja.coder.Ghostemane.code.widget.PraramnetLayoutNinja
+            <LinearLayout
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:id="@+id/paramentLayout_fileDir"
                 
             >
 
-                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                <LinearLayout
                     android:layout_height="match_parent"
                     android:layout_width="match_parent"
-                    android:id="@+id/swiperefreshlayout1"
+                    android:orientation="vertical"
+                    android:id="@+id/CensractorListView1"
                     
                 >
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:padding="8dp"
+                        android:id="@+id/recyclerview2"
+                        
+                    />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:padding="8dp"
+                        android:id="@+id/recyclerview1"
+                        
+                    />
+
+                    <com.google.android.material.progressindicator.CircularProgressIndicator
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:visibility="gone"
+                        android:indeterminate="true"
+                        app:trackThickness="5dp"
+                        android:layout_gravity="center"
+                        android:id="@+id/filedir_bar"
+                        
+                    />
 
                     <LinearLayout
                         android:layout_height="match_parent"
                         android:layout_width="match_parent"
-                        android:orientation="vertical"
-                        android:id="@+id/CensractorListView1"
+                        android:visibility="gone"
+                        android:gravity="center"
+                        android:textSize="20dp"
+                        android:layout_gravity="center"
+                        android:id="@+id/emptyview"
                         
                     >
 
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:layout_height="wrap_content"
-                            android:layout_width="match_parent"
-                            android:padding="8dp"
-                            android:id="@+id/recyclerview2"
-                            
-                        />
-
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:layout_height="wrap_content"
-                            android:layout_width="match_parent"
-                            android:padding="8dp"
-                            android:layout_gravity="center"
-                            android:id="@+id/recyclerview1"
-                            
-                        />
-
-                        <com.google.android.material.progressindicator.CircularProgressIndicator
+                        <TextView
                             android:layout_height="wrap_content"
                             android:layout_width="wrap_content"
-                            android:visibility="gone"
-                            android:indeterminate="true"
-                            app:trackThickness="5dp"
-                            android:layout_gravity="center"
-                            android:id="@+id/filedir_bar"
+                            android:gravity="center"
+                            android:textColor="?@attr/colorPrimary"
+                            android:text="Empty List"
                             
                         />
-
-                        <LinearLayout
-                            android:layout_height="match_parent"
-                            android:layout_width="match_parent"
-                            android:visibility="gone"
-                            android:gravity="center"
-                            android:textSize="20dp"
-                            android:layout_gravity="center"
-                            android:id="@+id/emptyview"
-                            
-                        >
-
-                            <TextView
-                                android:layout_height="wrap_content"
-                                android:layout_width="wrap_content"
-                                android:gravity="center"
-                                android:textColor="?@attr/colorPrimary"
-                                android:text="Empty List"
-                                
-                            />
-
-                        </LinearLayout>
 
                     </LinearLayout>
 
-                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                </LinearLayout>
 
-            </Ninja.coder.Ghostemane.code.widget.PraramnetLayoutNinja>
+            </LinearLayout>
 
-        </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:layout_height="wrap_content"

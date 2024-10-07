@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
 
 public class JavaAutoComplete implements AutoCompleteProvider {
@@ -36,16 +35,16 @@ public class JavaAutoComplete implements AutoCompleteProvider {
       }
     }
     Collections.sort(keywords, CompletionItem.COMPARATOR_BY_NAME);
+
     Object extra = analyzeResult.getExtra();
     Identifiers userIdentifiers = (extra instanceof Identifiers) ? (Identifiers) extra : null;
     if (userIdentifiers != null) {
       List<CompletionItem> words = new ArrayList<>();
       for (String word : userIdentifiers.getIdentifiers()) {
         if (word.startsWith(match)) {
-           words.add(new CompletionItem(word, "Data?"));
+          words.add(new CompletionItem(word, "Data?"));
         }
       }
-
       Collections.sort(words, CompletionItem.COMPARATOR_BY_NAME);
       keywords.addAll(words);
     }

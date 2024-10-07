@@ -1,143 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    android:fitsSystemWindows="true"
-    android:id="@+id/_coordinator"
-    
->
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     android:id="@+id/_coordinator">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:background="@android:color/transparent"
-        android:fitsSystemWindows="true"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        android:id="@+id/_app_bar"
-        
-    >
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         app:liftOnScroll="false"
+         android:background="#03FFFFFF"
+         android:stateListAnimator="@null"
+         android:id="@+id/_app_bar">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
-            android:layout_width="match_parent"
-            app:contentScrim="@drawable/transparent"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-            style="?attr/collapsingToolbarLayoutLargeStyle"
-            
-        >
+             android:layout_height="?attr/collapsingToolbarLayoutMediumSize"
+             android:layout_width="match_parent"
+             app:expandedTitleTextAppearance="?textAppearanceHeadlineLarge"
+             app:contentScrim="#03FFFFFF"
+             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+             app:title="@string/Settings"
+             app:expandedTitleMarginStart="24dp"
+             app:collapsedTitleTextAppearance="?textAppearanceTitleLarge"
+             style="?attr/collapsingToolbarLayoutMediumStyle"
+             app:titleCollapseMode="scale"
+             app:expandedTitleTextColor="?attr/colorOnSurface"
+             app:collapsedTitleTextColor="?attr/colorOnSurface">
 
             <com.google.android.material.appbar.MaterialToolbar
-                android:layout_height="?attr/actionBarSize"
-                android:layout_width="match_parent"
-                app:contentScrim="@drawable/transparent"
-                android:elevation="0dp"
-                app:title="Settings"
-                app:backgroundTint="@android:color/transparent"
-                app:layout_collapseMode="pin"
-                app:titleTextColor="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay"
-                android:id="@+id/_toolbar"
-                
-            />
+                 android:layout_height="?attr/actionBarSize"
+                 android:layout_width="match_parent"
+                 android:paddingEnd="8dp"
+                 android:elevation="0dp"
+                 app:layout_collapseMode="pin"
+                 android:paddingStart="24dp"
+                 android:id="@+id/_toolbar" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <Ninja.coder.Ghostemane.code.widget.component.fastscrollcompat.FastScrollNestedScrollView
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:fillViewport="true"
-        android:clipToPadding="false"
-        android:id="@+id/bar"
-        
-    >
+    <androidx.core.widget.NestedScrollView
+         android:layout_height="match_parent"
+         android:layout_width="match_parent"
+         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+         android:id="@+id/bar">
 
         <LinearLayout
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:orientation="vertical"
-            
-        >
+             android:layout_height="match_parent"
+             android:layout_width="match_parent"
+             android:orientation="vertical">
 
             <LinearLayout
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:id="@+id/layoutChilderHelper"
-                
-            >
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:orientation="vertical"
+                 android:id="@+id/layoutChilderHelper">
 
                 <Ninja.coder.Ghostemane.code.config.SwitchMaterialPrf
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:id="@+id/MaterialYou"
-                    
-                />
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:id="@+id/MaterialYou" />
 
                 <Ninja.coder.Ghostemane.code.config.SwitchMaterialPrf
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:id="@+id/effect"
-                    
-                />
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:id="@+id/effect" />
 
                 <Ninja.coder.Ghostemane.code.config.SwitchMaterialPrf
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:id="@+id/gridmod"
-                    
-                />
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:id="@+id/gridmod" />
 
                 <Ninja.coder.Ghostemane.code.config.SwitchMaterialPrf
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:id="@+id/walpapers"
-                    
-                />
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:id="@+id/walpapers" />
 
                 <Ninja.coder.Ghostemane.code.config.SwitchMaterialPrf
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:id="@+id/deftheme"
-                    
-                />
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:id="@+id/deftheme" />
 
                 <Ninja.coder.Ghostemane.code.config.SwitchMaterialPrf
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:id="@+id/autoSaveText"
-                    
-                />
-                <Ninja.coder.Ghostemane.code.config.SwitchMaterialPrf
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:id="@+id/codeAZ"
-                    
-                />
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:id="@+id/autoSaveText" />
 
+                <Ninja.coder.Ghostemane.code.config.SwitchMaterialPrf
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:id="@+id/codeAZ" />
 
             </LinearLayout>
 
+            <androidx.recyclerview.widget.RecyclerView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:id="@+id/rvtools" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:id="@+id/rvtools"
-                
-            />
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:id="@+id/rvsetting"
-                
-            />
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:id="@+id/rvsetting" />
 
         </LinearLayout>
 
-    </Ninja.coder.Ghostemane.code.widget.component.fastscrollcompat.FastScrollNestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

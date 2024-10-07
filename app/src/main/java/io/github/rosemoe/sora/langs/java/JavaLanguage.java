@@ -42,7 +42,21 @@ public class JavaLanguage implements EditorLanguage {
 
   @Override
   public boolean isAutoCompleteChar(char ch) {
-    return MyCharacter.isJavaIdentifierPart(ch);
+    return Character.isLetter(ch)
+        || Character.isDigit(ch)
+        || ch == '<'
+        || ch == '/'
+        || ch == ':'
+        || ch == '.'
+        || ch == '!'
+        || ch == '<'
+        || ch == '?'
+        || ch == '-'
+        || ch == '+'
+        || ch == '$'
+        || ch == '#'
+        || ch == '*'
+        || MyCharacter.isJavaIdentifierStart(ch);
   }
 
   @Override

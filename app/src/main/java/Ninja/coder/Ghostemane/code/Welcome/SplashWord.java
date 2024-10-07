@@ -1,5 +1,6 @@
 package Ninja.coder.Ghostemane.code.Welcome;
 
+import Ninja.coder.Ghostemane.code.R;
 import Ninja.coder.Ghostemane.code.activities.StreamSoftAppActivity;
 import Ninja.coder.Ghostemane.code.tasks.app.ProgressDialogCompat;
 import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
@@ -27,7 +28,6 @@ public class SplashWord extends AppIntro2 {
     // TODO: Implement this method
     dialog = new ProgressDialogCompat(this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
 
-
     ColorAndroid12.shapeViews(dialog.getWindow().getDecorView());
     dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
     dialog.setTitle("Loading....");
@@ -42,8 +42,8 @@ public class SplashWord extends AppIntro2 {
     TestFragment t2 =
         TestFragment.newIns(
             "theme.json",
-            "لطفا تم را نصب کنید",
-            "تم",
+            getString(R.string.inittheme),
+            getString(R.string.theme),
             !FileUtil.isExistFile(ghostPath) || !FileUtil.isExistFile(ghostStyle));
     t2.setCallBack(
         () -> {
@@ -71,7 +71,7 @@ public class SplashWord extends AppIntro2 {
     addSlide(t2);
     TestFragment t3 =
         TestFragment.newIns(
-            "phpitem.json", "لطفا php را نصب کنید", "نصب php", !FileUtil.isExistFile(phpPath));
+            "phpitem.json", "Php", getString(R.string.initphp), !FileUtil.isExistFile(phpPath));
     t3.setCallBack(
         () -> {
           try {
@@ -86,10 +86,7 @@ public class SplashWord extends AppIntro2 {
     addSlide(t3);
     TestFragment t4 =
         TestFragment.newIns(
-            "python.json",
-            "پایتون را نصب کنید سپس وارد برنامه شوید ",
-            "نصب پایتون",
-            !FileUtil.isExistFile(pythonPath));
+            "python.json", getString(R.string.initpy), "Python", !FileUtil.isExistFile(pythonPath));
     t4.setCallBack(
         () -> {
           try {

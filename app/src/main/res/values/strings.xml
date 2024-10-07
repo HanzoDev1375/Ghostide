@@ -174,7 +174,7 @@
     <string name="codeazsubtitle">Turn off this option if your memory is low or you do not have a good mobile</string>
     <string name="materialyoutitle">Material You!</string>
     <string name="materialyousubtitle">Enable dynamic colors automatically and Try a Best Color expirence</string>
-  
+
     <string name="effect_title">Beautiful effect</string>
     <string name="effect_description">By activating this option, the background will have a small vibration</string>
     <string name="grids_title">Grid Mode</string>
@@ -185,4 +185,26 @@
     <string name="deftheme_description">By activating this option, the program theme is not read from Json by default</string>
     <string name="autoSaveText_title">Auto Save</string>
     <string name="autoSaveText_description">You do not need to click the save button with the auto save activation.</string>
+    <string name="inittheme">Please install the theme</string>
+    <string name="initphp">Please install PHP</string>
+    <string name="initpy">Install Python and then enter the application</string>
+    <string name="filecreator">File created successfully</string>
+    <string name="foldercreator">Folder created successfully</string>
+    <string name="errorEmptyFile">Error: Empty files cannot be saved</string>
+    <string name="filesavesuccessfully">File saved successfully.</string>
+    <string name="themewarning">Theme Warning!</string>
+    <string name="themewaringmassge">This theme file is already present in your storage. Do you want to replace it?</string>
+    <string name="sdcarderror">No SD card found, sorry</string>
+    <string name="make_folder">Create Folder</string>
+    <string name="make_file">Create File</string>
+    <string name="make_project">Create Project</string>
+    <string name="ftp">FTP</string>
+    <string name="search_file">Search File (beta)</string>
+    <string name="folder_tree">Folder Tree</string>
+    <string name="file_tree">File Tree</string>
+    <string name="git_clone">Git Clone</string>
+    <string name="android_module">Android Module</string>
+    <string name="git_tools">Git Tools</string>
+    <string name="gson_to_class">Gson to Class</string>
+
 </resources>
