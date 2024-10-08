@@ -40,3 +40,20 @@ jobs:
       with:
         name: app-debug-arm64
         path: app/build/outputs/apk/arm64/debug/app-arm64-debug.apk
+       - name: Build with Gradle for arm32 release
+      run: ./gradlew assembleArm32Release
+
+    - name: Build with Gradle for arm64 release
+      run: ./gradlew assembleArm64Release
+
+    - name: Upload arm32 Release APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: app-release-arm32
+        path: app/build/outputs/apk/arm32/release/app-arm32-release.apk
+
+    - name: Upload arm64 Release APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: app-release-arm64
+        path: app/build/outputs/apk/arm64/release/app-arm64-release.apk     
