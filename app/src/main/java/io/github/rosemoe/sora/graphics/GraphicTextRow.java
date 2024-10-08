@@ -23,29 +23,26 @@
  */
 package io.github.rosemoe.sora.graphics;
 
+import io.github.rosemoe.sora.data.Span;
 import static io.github.rosemoe.sora.text.TextStyle.isBold;
 import static io.github.rosemoe.sora.text.TextStyle.isItalics;
-
 import android.annotation.SuppressLint;
-import android.graphics.Typeface;
-
 import java.util.List;
-
-import io.github.rosemoe.sora.data.Span;
 import io.github.rosemoe.sora.text.ContentLine;
 
+/** Manages graphical(actually measuring) operations of a text row */
 public class GraphicTextRow {
 
   private static final float SKEW_X = -0.2f;
-  private static final GraphicTextRow[] sCached = new GraphicTextRow[5];
   private final Paint mPaint = new Paint();
-  private final float[] mBuffer;
   private ContentLine mText;
   private int mStart;
   private int mEnd;
   private int mTabWidth;
   private List<Span> mSpans;
-  private Typeface mLastTypeface;
+  private final float[] mBuffer;
+
+  private static final GraphicTextRow[] sCached = new GraphicTextRow[5];
 
   private GraphicTextRow() {
     mBuffer = new float[2];
@@ -80,14 +77,13 @@ public class GraphicTextRow {
     }
   }
 
+  /** Reset */
   public void set(
       ContentLine line, int start, int end, int tabWidth, List<Span> spans, Paint paint) {
     if (mPaint.getTextSize() != paint.getTextSize()) mPaint.setTextSizeWrapped(paint.getTextSize());
-    // Cut time usage to native methods
     var typeface = paint.getTypeface();
-    if (mLastTypeface != typeface) {
+    if (mPaint.getTypeface() != typeface) {
       mPaint.setTypefaceWrapped(typeface);
-      mLastTypeface = typeface;
     }
     if (paint.getFontFeatureSettings() != null)
       mPaint.setFontFeatureSettingsWrapped(paint.getFontFeatureSettings());
@@ -98,6 +94,7 @@ public class GraphicTextRow {
     mSpans = spans;
   }
 
+  /** Build measure cache for the text */
   public void buildMeasureCache() {
     if (mText.widthCache == null || mText.widthCache.length < mEnd) {
       mText.widthCache = new float[Math.max(128, mText.length())];
@@ -117,12 +114,12 @@ public class GraphicTextRow {
     if (mText.widthCache != null) {
       float w = 0f;
       var cache = mText.widthCache;
-      for (int i = start; i < mEnd; i++) {
+      for (int i = start; i <= mEnd; i++) {
         if (w > advance) {
-          mBuffer[0] = i;
-          mBuffer[1] = w;
+          mBuffer[0] = Math.max(start, i - 1);
+          mBuffer[1] = i > start ? w - cache[i - 1] : w;
           return mBuffer;
-        } else {
+        } else if (i < mEnd) {
           w += cache[i];
         }
       }
@@ -157,7 +154,7 @@ public class GraphicTextRow {
         lastStyle = style;
       }
 
-      // Find in sub-region
+      // Find in subregion
       int res = -1;
       {
         int lastStart = regionStart;
@@ -225,16 +222,20 @@ public class GraphicTextRow {
   }
 
   public float measureText(int start, int end) {
-    if (start == end) {
-      return 0f;
-    }
-    if (mText.widthCache != null) {
-      float width = 0f;
-      var cache = mText.widthCache;
-      for (int i = start; i < end; i++) {
-        width += cache[i];
+    try {
+      if (start == end) {
+        return 0f;
       }
-      return width;
+      if (mText.widthCache != null) {
+        float width = 0f;
+        var cache = mText.widthCache;
+        for (int i = start; i < end; i++) {
+          width += cache[i];
+        }
+        return width;
+      }
+    } catch (Exception err) {
+   
     }
     return measureTextInternal(start, end, null);
   }

@@ -326,4 +326,22 @@ public class ContentLine implements CharSequence, GetChars {
   public char[] getBackingCharArray() {
     return value;
   }
+
+  private boolean isPersianCharacter(char c) {
+    return (0x0590 <= c && c <= 0x08FF)
+        || // RTL scripts
+        c == 0x200E
+        || // Bidi format character
+        c == 0x200F
+        || // Bidi format character
+        (0x202A <= c && c <= 0x202E)
+        || // Bidi format characters
+        (0x2066 <= c && c <= 0x2069)
+        || // Bidi format characters
+        (0xD800 <= c && c <= 0xDFFF)
+        || // Surrogate pairs
+        (0xFB1D <= c && c <= 0xFDFF)
+        || // Hebrew and Arabic presentation forms
+        (0xFE70 <= c && c <= 0xFEFE);
+  }
 }

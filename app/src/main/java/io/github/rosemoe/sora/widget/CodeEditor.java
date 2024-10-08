@@ -3381,6 +3381,24 @@ public class CodeEditor extends View
    * @param offX Offset x for paint
    * @param offY Offset y for paint(baseline)
    */
+  private boolean isPersianCharacter(char c) {
+    return (0x0590 <= c && c <= 0x08FF)
+        || // RTL scripts
+        c == 0x200E
+        || // Bidi format character
+        c == 0x200F
+        || // Bidi format character
+        (0x202A <= c && c <= 0x202E)
+        || // Bidi format characters
+        (0x2066 <= c && c <= 0x2069)
+        || // Bidi format characters
+        (0xD800 <= c && c <= 0xDFFF)
+        || // Surrogate pairs
+        (0xFB1D <= c && c <= 0xFDFF)
+        || // Hebrew and Arabic presentation forms
+        (0xFE70 <= c && c <= 0xFEFE);
+  }
+
   @SuppressLint("NewApi")
   protected void drawText(
       Canvas canvas,
@@ -3392,19 +3410,40 @@ public class CodeEditor extends View
       float offX,
       float offY,
       int lineNumber) {
-    // drawTextRun() can be called directly on low API systems
+
+    if (index < 0 || index >= line.value.length || count < 0 || index + count > line.value.length) {
+      return;
+    }
+
     int end = index + count;
     var src = line.value;
-    int st = index;
+
+    StringBuilder currentWord = new StringBuilder();
+    float wordWidth = 0;
+
     for (int i = index; i < end; i++) {
-      if (src[i] == '\t') {
-        canvas.drawTextRun(src, st, i - st, contextStart, contextCount, offX, offY, false, mPaint);
-        offX = offX + measureText(line, st, i - st + 1, lineNumber);
-        st = i + 1;
+      currentWord.append(src[i]);
+
+      // محاسبه عرض کلمه
+      wordWidth = mPaint.measureText(currentWord.toString());
+
+      // اگر کاراکتر بعدی یک فضای خالی باشد یا به انتهای متن برسیم
+      if (i + 1 < end
+          && (src[i + 1] == ' '
+              || src[i + 1] == '.'
+              || isPersianCharacter(src[i]) != isPersianCharacter(src[i + 1]))) {
+        // رسم کلمه
+        canvas.drawText(currentWord.toString(), offX, offY, mPaint);
+        offX += wordWidth;
+
+        // بازنشانی
+        currentWord.setLength(0);
       }
     }
-    if (st < end) {
-      canvas.drawTextRun(src, st, end - st, contextStart, contextCount, offX, offY, false, mPaint);
+
+    // رسم آخرین کلمه اگر وجود داشته باشد
+    if (currentWord.length() > 0) {
+      canvas.drawText(currentWord.toString(), offX, offY, mPaint);
     }
   }
 

@@ -46,162 +46,160 @@ import io.github.rosemoe.sora.util.ArrayList;
 @Experimental
 class HwAcceleratedRenderer implements ContentListener {
 
-    private final CodeEditor editor;
-    private final ArrayList<TextRenderNode> cache;
+  private final CodeEditor editor;
+  private final ArrayList<TextRenderNode> cache;
 
-    public HwAcceleratedRenderer(CodeEditor editor) {
-        this.editor = editor;
-        cache = new ArrayList<>(64);
+  public HwAcceleratedRenderer(CodeEditor editor) {
+    this.editor = editor;
+    cache = new ArrayList<>(64);
+  }
+
+  private boolean shouldUpdateCache() {
+    return !editor.isWordwrap() && editor.isHardwareAcceleratedDrawAllowed();
+  }
+
+  public boolean invalidateInRegion(int startLine, int endLine) {
+    var res = new AtomicBoolean(false);
+    cache.forEach(
+        (node) -> {
+          if (!node.isDirty && node.line >= startLine && node.line <= endLine) {
+            node.isDirty = true;
+            res.set(true);
+          }
+        });
+    return res.get();
+  }
+
+  /**
+   * Called by editor when text style changes. Such as text size/typeface. Also called when wordwrap
+   * state changes from true to false
+   */
+  public void invalidate() {
+    if (shouldUpdateCache()) {
+      invalidateDirectly();
     }
+  }
 
-    private boolean shouldUpdateCache() {
-        return !editor.isWordwrap() && editor.isHardwareAcceleratedDrawAllowed();
-    }
+  public void invalidateDirectly() {
+    cache.forEach(node -> node.isDirty = true);
+  }
 
-    public boolean invalidateInRegion(int startLine, int endLine) {
-        var res = new AtomicBoolean(false);
-        cache.forEach(
-                (node) -> {
-                    if (!node.isDirty && node.line >= startLine && node.line <= endLine) {
-                        node.isDirty = true;
-                        res.set(true);
-                    }
-                });
-        return res.get();
-    }
-
-    /**
-     * Called by editor when text style changes. Such as text size/typeface. Also called when wordwrap
-     * state changes from true to false
-     */
-    public void invalidate() {
-        if (shouldUpdateCache()) {
-            invalidateDirectly();
-        }
-    }
-
-    public void invalidateDirectly() {
-        cache.forEach(node -> node.isDirty = true);
-    }
-
-    public void invalidateDirtyRegions(List<List<Span>> old, List<List<Span>> updated) {
-        // Simply compares hash code
-        cache.forEach(
-                (node) -> {
-                    try {
-                        var olds = old.get(node.line);
-                        var news = updated.get(node.line);
-                        if ((olds.size() != news.size() || olds.hashCode() != news.hashCode())) {
-                            node.isDirty = true;
-                        }
-                    } catch (IndexOutOfBoundsException | NullPointerException e) {
-                        node.isDirty = true;
-                    }
-                });
-    }
-
-    public TextRenderNode getNode(int line) {
-        var size = cache.size();
-        for (int i = 0; i < size; i++) {
-            var node = cache.get(i);
-            if (node.line == line) {
-                cache.remove(i);
-                cache.add(0, node);
-                return node;
+  public void invalidateDirtyRegions(List<List<Span>> old, List<List<Span>> updated) {
+    // Simply compares hash code
+    cache.forEach(
+        (node) -> {
+          try {
+            var olds = old.get(node.line);
+            var news = updated.get(node.line);
+            if ((olds.size() != news.size() || olds.hashCode() != news.hashCode())) {
+              node.isDirty = true;
             }
-        }
-        var node = new TextRenderNode(line);
+          } catch (IndexOutOfBoundsException | NullPointerException e) {
+            node.isDirty = true;
+          }
+        });
+  }
+
+  public TextRenderNode getNode(int line) {
+    var size = cache.size();
+    for (int i = 0; i < size; i++) {
+      var node = cache.get(i);
+      if (node.line == line) {
+        cache.remove(i);
         cache.add(0, node);
         return node;
+      }
+    }
+    var node = new TextRenderNode(line);
+    cache.add(0, node);
+    return node;
+  }
+
+  public void keepCurrentInDisplay(int start, int end) {
+    var itr = cache.iterator();
+    while (itr.hasNext()) {
+      var node = itr.next();
+      if (node.line < start || node.line > end) {
+        itr.remove();
+        node.renderNode.discardDisplayList();
+      }
+    }
+  }
+
+  public int drawLineHardwareAccelerated(Canvas canvas, int line, float offset) {
+    if (!canvas.isHardwareAccelerated()) {
+      throw new UnsupportedOperationException("Only hardware-accelerated canvas can be used");
+    }
+    var spanMap = editor.getTextAnalyzeResult().getSpanMap();
+    // It's safe to use row directly because the mode is non-wordwrap
+    var node = getNode(line);
+    if (node.needsRecord()) {
+      List<Span> spans = null;
+      if (line < spanMap.size() && line >= 0) {
+        spans = spanMap.get(line);
+      }
+      if (spans == null || spans.size() == 0) {
+        spans = new ArrayList<>();
+        spans.add(Span.obtain(0, EditorColorScheme.TEXT_NORMAL));
+      }
+      editor.updateLineDisplayList(node.renderNode, line, spans);
+      node.isDirty = false;
+    }
+    canvas.save();
+    canvas.translate(offset, editor.getRowTop(line) - editor.getOffsetY());
+    canvas.drawRenderNode(node.renderNode);
+    canvas.restore();
+    return node.renderNode.getWidth();
+  }
+
+  @Override
+  public void beforeReplace(Content content) {
+    // Intentionally empty
+  }
+
+  @Override
+  public void afterInsert(
+      Content content,
+      int startLine,
+      int startColumn,
+      int endLine,
+      int endColumn,
+      CharSequence insertedContent) {
+    if (shouldUpdateCache()) {
+      if (startLine != endLine) invalidateInRegion(startLine, Integer.MAX_VALUE);
+    }
+  }
+
+  @Override
+  public void afterDelete(
+      Content content,
+      int startLine,
+      int startColumn,
+      int endLine,
+      int endColumn,
+      CharSequence deletedContent) {
+    if (shouldUpdateCache()) {
+      int delta = endLine - startLine;
+      if (delta != 0) invalidateInRegion(startLine, Integer.MAX_VALUE);
+    }
+  }
+
+  protected static class TextRenderNode {
+
+    /** The target line of this node. -1 for unavailable */
+    public int line;
+
+    public RenderNode renderNode;
+    public boolean isDirty;
+
+    public TextRenderNode(int line) {
+      this.line = line;
+      renderNode = new RenderNode("editorRenderNode");
+      isDirty = true;
     }
 
-    public void keepCurrentInDisplay(int start, int end) {
-        var itr = cache.iterator();
-        while (itr.hasNext()) {
-            var node = itr.next();
-            if (node.line < start || node.line > end) {
-                itr.remove();
-                node.renderNode.discardDisplayList();
-            }
-        }
+    public boolean needsRecord() {
+      return isDirty || !renderNode.hasDisplayList();
     }
-
-    public int drawLineHardwareAccelerated(Canvas canvas, int line, float offset) {
-        if (!canvas.isHardwareAccelerated()) {
-            throw new UnsupportedOperationException("Only hardware-accelerated canvas can be used");
-        }
-        var spanMap = editor.getTextAnalyzeResult().getSpanMap();
-        // It's safe to use row directly because the mode is non-wordwrap
-        var node = getNode(line);
-        if (node.needsRecord()) {
-            List<Span> spans = null;
-            if (line < spanMap.size() && line >= 0) {
-                spans = spanMap.get(line);
-            }
-            if (spans == null || spans.size() == 0) {
-                spans = new ArrayList<>();
-                spans.add(Span.obtain(0, EditorColorScheme.TEXT_NORMAL));
-            }
-            editor.updateLineDisplayList(node.renderNode, line, spans);
-            node.isDirty = false;
-        }
-        canvas.save();
-        canvas.translate(offset, editor.getRowTop(line) - editor.getOffsetY());
-        canvas.drawRenderNode(node.renderNode);
-        canvas.restore();
-        return node.renderNode.getWidth();
-    }
-
-    @Override
-    public void beforeReplace(Content content) {
-        // Intentionally empty
-    }
-
-    @Override
-    public void afterInsert(
-            Content content,
-            int startLine,
-            int startColumn,
-            int endLine,
-            int endColumn,
-            CharSequence insertedContent) {
-        if (shouldUpdateCache()) {
-            if (startLine != endLine) invalidateInRegion(startLine, Integer.MAX_VALUE);
-        }
-    }
-
-    @Override
-    public void afterDelete(
-            Content content,
-            int startLine,
-            int startColumn,
-            int endLine,
-            int endColumn,
-            CharSequence deletedContent) {
-        if (shouldUpdateCache()) {
-            int delta = endLine - startLine;
-            if (delta != 0) invalidateInRegion(startLine, Integer.MAX_VALUE);
-        }
-    }
-
-    protected static class TextRenderNode {
-
-        /**
-         * The target line of this node. -1 for unavailable
-         */
-        public int line;
-
-        public RenderNode renderNode;
-        public boolean isDirty;
-
-        public TextRenderNode(int line) {
-            this.line = line;
-            renderNode = new RenderNode("editorRenderNode");
-            isDirty = true;
-        }
-
-        public boolean needsRecord() {
-            return isDirty || !renderNode.hasDisplayList();
-        }
-    }
+  }
 }
