@@ -100,11 +100,7 @@ public class CppCodeAnalyzer implements CodeAnalyzer {
             result.addIfNeeded(line, column, EditorColorScheme.ATTRIBUTE_VALUE);
             break;
           }
-          if (previous == tokenizer.scanOperatorTwo(Tokens.LBRACE)
-              || previous == tokenizer.scanOperatorTwo(Tokens.RBRACE)) {
-            result.addIfNeeded(line, column, EditorColorScheme.BLOCK_LINE_CURRENT);
-            break;
-          }
+        
           if (next == Tokens.SEMICOLON) {
             result.addIfNeeded(
                 line,
@@ -172,7 +168,6 @@ public class CppCodeAnalyzer implements CodeAnalyzer {
         case LT:
         case GT:
         case SEMICOLON:
-          classNamePrevious = false;
           result.addIfNeeded(line, column, EditorColorScheme.HTML_TAG);
           break;
         case INT:

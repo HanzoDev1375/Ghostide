@@ -1,7 +1,9 @@
 package io.github.rosemoe.sora.langs.json;
 
+import Ninja.coder.Ghostemane.code.marco.RegexUtilCompat;
 import android.graphics.Color;
 import android.util.Log;
+import androidx.core.graphics.ColorUtils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
@@ -83,8 +85,6 @@ public class JsonCodeAnalyzer implements CodeAnalyzer {
           break;
         case IDENTIFIER:
           // Add a identifier to auto complete
-          int[] end = Utils.setErrorSpan(result, line, column);
-
           identifiers.addIdentifier(
               text.substring(
                   tokenizer.getIndex(), tokenizer.getTokenLength() + tokenizer.getIndex()));
@@ -93,6 +93,60 @@ public class JsonCodeAnalyzer implements CodeAnalyzer {
             result.addIfNeeded(line, column, EditorColorScheme.print);
             break;
           }
+          // read colpr
+
+          if (RegexUtilCompat.RegexSelect(
+              "(\\#[a-zA-F0-9]{8})|(\\#[a-zA-F0-9]{6})|(\\#[a-zA-F0-9]{3})", content.toString())) {
+            var colors = result;
+            String colorString = content.toString();
+            var text1 = colorString;
+            if (colorString.length() == 4) { // اگر رنگ سه رقمی باشد
+              String red = colorString.substring(1, 2);
+              String green = colorString.substring(2, 3);
+              String blue = colorString.substring(3, 4);
+              colorString = "#" + red + red + green + green + blue + blue; // تبدیل به شش رقمی
+            }
+
+            try {
+              int color = Color.parseColor(colorString);
+              colors.addIfNeeded(line, column, EditorColorScheme.LITERAL);
+              if (ColorUtils.calculateLuminance(color) > 0.5) {
+                Span span =
+                    Span.obtain(
+                        column,
+                        TextStyle.makeStyle(
+                            EditorColorScheme.black, 0, false, false, false, false, true));
+                if (span != null) {
+                  span.setBackgroundColorMy(color);
+                  colors.add(line, span);
+                }
+              } else {
+                Span span =
+                    Span.obtain(
+                        column,
+                        TextStyle.makeStyle(
+                            EditorColorScheme.TEXT_NORMAL, 0, false, false, false, false, true));
+                if (span != null) {
+                  span.setBackgroundColorMy(color);
+                  colors.add(line, span);
+                }
+              }
+
+              Span middle = Span.obtain(column + text1.length(), EditorColorScheme.LITERAL);
+              middle.setBackgroundColorMy(Color.TRANSPARENT);
+              colors.add(line, middle);
+
+              Span end =
+                  Span.obtain(
+                      column + text1.length(), TextStyle.makeStyle(EditorColorScheme.TEXT_NORMAL));
+              end.setBackgroundColorMy(Color.TRANSPARENT);
+              colors.add(line, end);
+              break;
+            } catch (Exception ignore) {
+              ignore.printStackTrace();
+            }
+          }
+
           // Here we have to get next token to see if it is function
           // We can only get the next token in stream.
           // If more tokens required, we have to use a stack in tokenizer
@@ -131,6 +185,7 @@ public class JsonCodeAnalyzer implements CodeAnalyzer {
 
         case STRING:
           result.addIfNeeded(line, column, EditorColorScheme.LITERAL);
+          if (previous == Tokens.COLON) result.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
           break;
         case FLOATING_POINT_LITERAL:
         case INTEGER_LITERAL:
@@ -155,17 +210,6 @@ public class JsonCodeAnalyzer implements CodeAnalyzer {
               line,
               column,
               TextStyle.makeStyle(EditorColorScheme.AUTO_COMP_PANEL_CORNER, 0, true, false, false));
-          if (stack.isEmpty()) {
-            if (currSwitch > maxSwitch) {
-              maxSwitch = currSwitch;
-            }
-            currSwitch = 0;
-          }
-          currSwitch++;
-          BlockLine blocks = result.obtainNewBlock();
-          blocks.startLine = line;
-          blocks.startColumn = column;
-          stack.push(blocks);
           break;
 
         case LBRACE:
@@ -230,7 +274,7 @@ public class JsonCodeAnalyzer implements CodeAnalyzer {
       }
     }
     BasicSyntaxJsonAnalyzer j = new BasicSyntaxJsonAnalyzer();
-    j.analyze(content,result,delegate);
+    j.analyze(content, result, delegate);
     if (stack.isEmpty()) {
       if (currSwitch > maxSwitch) {
         maxSwitch = currSwitch;

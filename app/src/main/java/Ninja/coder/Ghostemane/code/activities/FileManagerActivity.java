@@ -70,7 +70,6 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.blankj.utilcode.util.ThreadUtils;
 import com.google.android.material.appbar.AppBarLayout;
@@ -94,8 +93,7 @@ import storage.sdcard.SdCardUtil;
 import java.io.File;
 import java.util.*;
 
-public class FileManagerActivity extends BaseCompat
-    implements FileManagerAd.onClick, ToolbarListFileAdapter.CallBack {
+public class FileManagerActivity extends BaseCompat implements FileManagerAd.onClick {
 
   protected static final String SHARED_PREFS_KEY = "scroll_position";
   protected static final String ITEM_POSITION_KEY = "item_position";
@@ -273,7 +271,7 @@ public class FileManagerActivity extends BaseCompat
     book = getSharedPreferences("hsipsot4444", Activity.MODE_PRIVATE);
     downloder = findViewById(R.id.downloder);
     emptyview = findViewById(R.id.emptyview);
-    
+
     WindowsMath(_drawer, _coordinator);
 
     BackPressed();
@@ -301,7 +299,6 @@ public class FileManagerActivity extends BaseCompat
                 recyclerview2.getAdapter().notifyDataSetChanged();
               }
             });
-    
 
     recyclerview2.addOnScrollListener(
         new RecyclerView.OnScrollListener() {
@@ -471,7 +468,6 @@ public class FileManagerActivity extends BaseCompat
     u.setColor(0xFF2B2122);
     u.setCornerRadius(25);
     u.setStroke(1, 0xFFF8B09A);
-
 
     sd_stor = new SdCardUtil(this);
 
@@ -698,7 +694,6 @@ public class FileManagerActivity extends BaseCompat
 
   void reLoadFile() {
     reLoadFile(true);
-    _distreeview();
   }
 
   public void FolderMaker() {
@@ -902,51 +897,6 @@ public class FileManagerActivity extends BaseCompat
     }
   }
 
-  public void _distreeview() {
-    List<String> pospath = spiltIntoBreadcrumbItems(Folder);
-    adps = new ToolbarListFileAdapter(pospath, this, this);
-    recyclerview1.setAdapter(adps);
-    recyclerview1.setLayoutManager(
-        new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-    recyclerview1.smoothScrollToPosition(pospath.size());
-  }
-
-  @Override
-  public void GoToDir(View view) {}
-
-  @Override
-  public void GoToTreeFile(View view) {
-    ColorView.setPath(
-        Folder,
-        this,
-        (ps) -> {
-          Folder = ps;
-          reLoadFile();
-        },
-        view);
-  }
-
-  public List<String> spiltIntoBreadcrumbItems(String filePath) {
-    String separator = "/";
-    String[] items = filePath.split(separator);
-    List<String> filteredItems = new ArrayList<>();
-    for (String item : items) {
-      if (!item.trim().isEmpty()) {
-        filteredItems.add(item);
-      }
-    }
-    if (filteredItems.size() >= 3
-        && filteredItems.get(0).equals("storage")
-        && filteredItems.get(1).equals("emulated")
-        && filteredItems.get(2).equals("0")) {
-      List<String> combinedItems = new ArrayList<>();
-      combinedItems.add(Build.MANUFACTURER + " " + Build.MODEL);
-      combinedItems.addAll(filteredItems.subList(3, filteredItems.size()));
-      return combinedItems;
-    }
-    return filteredItems;
-  }
-
   @Override
   protected void onActivityResult(int _requestCode, int _resultCode, Intent _data) {
     super.onActivityResult(_requestCode, _resultCode, _data);
@@ -1071,7 +1021,7 @@ public class FileManagerActivity extends BaseCompat
           positive.setOnClickListener(
               (vftrororocjj) -> {
                 if (output.getText().toString().isEmpty()) {
-                  
+
                 } else {
                   new AsyncTask<String, String, String>() {
                     @Override
@@ -1933,7 +1883,6 @@ public class FileManagerActivity extends BaseCompat
               }
           }
           return false;
-          
         });
   }
 

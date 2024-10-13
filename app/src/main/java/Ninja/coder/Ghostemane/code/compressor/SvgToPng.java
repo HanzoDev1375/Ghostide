@@ -21,95 +21,99 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class SvgToPng extends AsyncTaskCompat<Void, Void, Void> {
-    private Context context;
-    private File svgFile;
-    private File pngFile;
-    private ProgressDialogCompat progressDialog;
-    private OnConversionListener listener;
-    private float width = -1f;
-    private float height = -1f;
-    private int backgroundColor = Color.parseColor("#FF281D1B");
+  private Context context;
+  private File svgFile;
+  private File pngFile;
+  private ProgressDialogCompat progressDialog;
+  private OnConversionListener listener;
+  private float width = -1f;
+  private float height = -1f;
+  private int backgroundColor = Color.parseColor("#FF281D1B");
 
-    public SvgToPng(Context context, File svgFile, File pngFile, OnConversionListener listener) {
-        this.context = context;
-        this.svgFile = svgFile;
-        this.listener = listener;
-        this.pngFile = pngFile;
+  public SvgToPng(Context context, File svgFile, File pngFile, OnConversionListener listener) {
+    this.context = context;
+    this.svgFile = svgFile;
+    this.listener = listener;
+    this.pngFile = pngFile;
+  }
+
+  public void setWidth(float width) {
+    this.width = width;
+  }
+
+  public void setHeight(float height) {
+    this.height = height;
+  }
+
+  public void setBackgroundColor(int color) {
+    this.backgroundColor = color;
+  }
+
+  @Override
+  protected void onPreExecute() {
+    super.onPreExecute();
+    MaterialShapeDrawable mshap =
+        new MaterialShapeDrawable(
+            ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 20f).build());
+    progressDialog = new ProgressDialogCompat(context, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
+    progressDialog.setMessage("Converting SVG to PNG...");
+    progressDialog.setCancelable(false);
+    mshap.setFillColor(ColorStateList.valueOf(this.backgroundColor));
+    mshap.setStroke(1f, Color.parseColor("#FFFFBB8E"));
+    progressDialog.getWindow().getDecorView().setBackground(mshap);
+    progressDialog.show();
+  }
+
+  @Override
+  protected Void doInBackground(Void... voids) {
+    try {
+      convertToPng(context, svgFile, pngFile);
+    } catch (Exception e) {
+      e.printStackTrace();
     }
+    return null;
+  }
 
-    public void setWidth(float width) {
-        this.width = width;
+  @Override
+  protected void onPostExecute(Void aVoid) {
+    super.onPostExecute(aVoid);
+    if (progressDialog != null && progressDialog.isShowing()) {
+      progressDialog.dismiss();
     }
-
-    public void setHeight(float height) {
-        this.height = height;
+    if (listener != null) {
+      if (pngFile.exists()) {
+        listener.onConversionSuccess();
+      } else {
+        listener.onConversionError("Error converting SVG to PNG.");
+      }
     }
+  }
 
-    public void setBackgroundColor(int color) {
-        this.backgroundColor = color;
+  public void convertToPng(Context context, File svgFile, File pngFile)
+      throws SVGParseException, IOException {
+    SVG svg =
+        SVG.getFromInputStream(context.getContentResolver().openInputStream(Uri.fromFile(svgFile)));
+    float svgWidth = svg.getDocumentWidth();
+    float svgHeight = svg.getDocumentHeight();
+    if (this.width > 0 && this.height > 0) {
+      svgWidth = this.width;
+      svgHeight = this.height;
     }
-
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        MaterialShapeDrawable mshap = new MaterialShapeDrawable(
-                ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 20f).build());
-        progressDialog = new ProgressDialogCompat(context, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
-        progressDialog.setMessage("Converting SVG to PNG...");
-        progressDialog.setCancelable(false);
-        mshap.setFillColor(ColorStateList.valueOf(this.backgroundColor));
-        mshap.setStroke(1f, Color.parseColor("#FFFFBB8E"));
-        progressDialog.getWindow().getDecorView().setBackground(mshap);
-        progressDialog.show();
+    Picture picture = svg.renderToPicture((int) svgWidth, (int) svgHeight);
+    Bitmap bitmap =
+        Bitmap.createBitmap(picture.getWidth(), picture.getHeight(), Bitmap.Config.ARGB_8888);
+    Canvas canvas = new Canvas(bitmap);
+    canvas.drawPicture(picture);
+    try (FileOutputStream outputStream = new FileOutputStream(pngFile)) {
+      bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+    } catch (Exception e) {
+      e.printStackTrace();
     }
+  }
 
-    @Override
-    protected Void doInBackground(Void... voids) {
-        try {
-            convertToPng(context, svgFile, pngFile);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+  public interface OnConversionListener {
+    void onConversionSuccess();
 
-    @Override
-    protected void onPostExecute(Void aVoid) {
-        super.onPostExecute(aVoid);
-        if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.dismiss();
-        }
-        if (listener != null) {
-            if (pngFile.exists()) {
-                listener.onConversionSuccess();
-            } else {
-                listener.onConversionError("Error converting SVG to PNG.");
-            }
-        }
-    }
-
-    public void convertToPng(Context context, File svgFile, File pngFile) throws SVGParseException, IOException {
-        SVG svg = SVG.getFromInputStream(context.getContentResolver().openInputStream(Uri.fromFile(svgFile)));
-        float svgWidth = svg.getDocumentWidth();
-        float svgHeight = svg.getDocumentHeight();
-        if (this.width > 0 && this.height > 0) {
-            svgWidth = this.width;
-            svgHeight = this.height;
-        }
-        Picture picture = svg.renderToPicture((int) svgWidth, (int) svgHeight);
-        Bitmap bitmap = Bitmap.createBitmap(picture.getWidth(), picture.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        canvas.drawPicture(picture);
-        try (FileOutputStream outputStream = new FileOutputStream(pngFile)) {
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public interface OnConversionListener {
-        void onConversionSuccess();
-
-        void onConversionError(String error);
-    }
+    void onConversionError(String error);
+  }
 }

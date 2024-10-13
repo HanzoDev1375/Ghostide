@@ -183,6 +183,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           case JavaLexer.WHILE:
           case JavaLexer.VAR:
             get(EditorColorScheme.javakeyword, line, column, result);
+            classNamePrevious = true;
             break;
           case JavaLexer.DECIMAL_LITERAL:
           case JavaLexer.HEX_LITERAL:
@@ -293,6 +294,9 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           case JavaLexer.COLONCOLON:
           case JavaLexer.ELLIPSIS:
           case JavaLexer.DOT:
+            if (previous == JavaLexer.IDENTIFIER) {
+              get(EditorColorScheme.ATTRIBUTE_VALUE, line, column, result);
+            }
             get(EditorColorScheme.TEXT_NORMAL, line, column, result);
             break;
           case JavaLexer.BOOLEAN:
@@ -305,6 +309,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           case JavaLexer.LONG:
           case JavaLexer.SHORT:
             get(EditorColorScheme.javakeyword, line, column, result);
+            classNamePrevious = true;
             break;
           case JavaLexer.BLOCK_COMMENT:
           case JavaLexer.LINE_COMMENT:
@@ -321,15 +326,17 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               if (previous == JavaLexer.AT) {
                 colorid = EditorColorScheme.Ninja;
               }
-              if (previous == JavaLexer.CLASS) {
-                colorid = EditorColorScheme.AUTO_COMP_PANEL_CORNER;
+              if (previous == JavaLexer.CLASS || previous == JavaLexer.IMPLEMENTS) {
+                colorid = EditorColorScheme.javafun;
               }
+
               if (previous == JavaLexer.LBRACK
                   || previous == JavaLexer.DOT
                   || prePreToken != null && prePreToken.getType() == JavaLexer.DOT
                   || previous == JavaLexer.ASSERT
                   || previous == JavaLexer.PACKAGE
-                  || previous == JavaLexer.IMPORT) {
+                  || previous == JavaLexer.IMPORT
+                  || previous == JavaLexer.VOID) {
                 colorid = EditorColorScheme.LITERAL;
               }
               if (previous == JavaLexer.EXTENDS

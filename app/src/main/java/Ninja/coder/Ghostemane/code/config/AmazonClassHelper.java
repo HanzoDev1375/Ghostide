@@ -127,9 +127,7 @@ public class AmazonClassHelper {
         .start();
   }
 
-  public static void getAuthors(IdeEditor editor, ImageView img, TextView tv) {
-    
-  }
+  public static void getAuthors(IdeEditor editor, ImageView img, TextView tv) {}
 
   public static boolean isHtml(String code) {
     try {
@@ -145,5 +143,4 @@ public class AmazonClassHelper {
    *
    * @author Ninja
    */
-  
 }

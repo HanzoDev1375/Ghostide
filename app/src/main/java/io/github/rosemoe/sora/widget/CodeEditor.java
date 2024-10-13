@@ -3417,33 +3417,18 @@ public class CodeEditor extends View
 
     int end = index + count;
     var src = line.value;
-
-    StringBuilder currentWord = new StringBuilder();
-    float wordWidth = 0;
-
+    int st = index;
     for (int i = index; i < end; i++) {
-      currentWord.append(src[i]);
-
-      // محاسبه عرض کلمه
-      wordWidth = mPaint.measureText(currentWord.toString());
-
-      // اگر کاراکتر بعدی یک فضای خالی باشد یا به انتهای متن برسیم
-      if (i + 1 < end
-          && (src[i + 1] == ' '
-              || src[i + 1] == '.'
-              || isPersianCharacter(src[i]) != isPersianCharacter(src[i + 1]))) {
-        // رسم کلمه
-        canvas.drawText(currentWord.toString(), offX, offY, mPaint);
-        offX += wordWidth;
-
-        // بازنشانی
-        currentWord.setLength(0);
+      if (src[i] == '\t') {
+        // به جای drawTextRun از drawText استفاده کنید
+        canvas.drawText(src, st, i - st, offX, offY, mPaint);
+        offX = offX + measureText(line, st, i - st + 1, lineNumber);
+        st = i + 1;
       }
     }
-
-    // رسم آخرین کلمه اگر وجود داشته باشد
-    if (currentWord.length() > 0) {
-      canvas.drawText(currentWord.toString(), offX, offY, mPaint);
+    if (st < end) {
+      // بار دیگر استفاده از drawText به جای drawTextRun
+      canvas.drawText(src, st, end - st, offX, offY, mPaint);
     }
   }
 

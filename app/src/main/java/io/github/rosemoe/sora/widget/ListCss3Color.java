@@ -31,38 +31,45 @@ public class ListCss3Color {
       int wordLength = token.getText().length(); // طول کلمه‌ی به رنگ قرمز
       int endOfRed = column + wordLength;
       // test
-      if (ColorUtils.calculateLuminance(color) > 0.5) {
-        Span span =
-            Span.obtain(
-                column,
-                TextStyle.makeStyle(EditorColorScheme.black, 0, false, false, false, false, true));
-        if (span != null) {
+      String tokenText = token.getText();
 
-          span.setBackgroundColorMy(color);
-          result.add(line, span);
-        }
-      } else if (ColorUtils.calculateLuminance(color) <= 0.5) {
-        Span span =
-            Span.obtain(
-                column,
-                TextStyle.makeStyle(
-                    EditorColorScheme.TEXT_NORMAL, 0, false, false, false, false, true));
-        if (span != null) {
+      // چک کردن اینکه آیا کلمه فقط حروف انگلیسی است
+      if (tokenText.matches("\\b\\w+\\b")) {
 
-          span.setBackgroundColorMy(color);
-          result.add(line, span);
+        if (ColorUtils.calculateLuminance(color) > 0.5) {
+          Span span =
+              Span.obtain(
+                  column,
+                  TextStyle.makeStyle(
+                      EditorColorScheme.black, 0, false, false, false, false, true));
+          if (span != null) {
+
+            span.setBackgroundColorMy(color);
+            result.add(line, span);
+          }
+        } else if (ColorUtils.calculateLuminance(color) <= 0.5) {
+          Span span =
+              Span.obtain(
+                  column,
+                  TextStyle.makeStyle(
+                      EditorColorScheme.TEXT_NORMAL, 0, false, false, false, false, true));
+          if (span != null) {
+
+            span.setBackgroundColorMy(color);
+            result.add(line, span);
+          }
         }
+
+        Span middle = Span.obtain(endOfRed, EditorColorScheme.LITERAL);
+
+        middle.setBackgroundColorMy(Color.TRANSPARENT);
+        result.add(line, middle);
+
+        Span end = Span.obtain(endOfRed, TextStyle.makeStyle(EditorColorScheme.TEXT_NORMAL));
+
+        end.setBackgroundColorMy(Color.TRANSPARENT);
+        result.add(line, end);
       }
-
-      Span middle = Span.obtain(endOfRed, EditorColorScheme.LITERAL);
-
-      middle.setBackgroundColorMy(Color.TRANSPARENT);
-      result.add(line, middle);
-
-      Span end = Span.obtain(endOfRed, TextStyle.makeStyle(EditorColorScheme.TEXT_NORMAL));
-
-      end.setBackgroundColorMy(Color.TRANSPARENT);
-      result.add(line, end);
     } catch (Exception ignore) {
       result.addIfNeeded(line, column, EditorColorScheme.ATTRIBUTE_VALUE);
     }
@@ -124,7 +131,7 @@ public class ListCss3Color {
                     new TypeToken<List<Map<String, String>>>() {}.getType());
         colorList.forEach(
             it -> {
-              if (getRegex("\\b" + it.get("colorName").trim() + "\\b", text)) {
+              if (getRegex("\\b" + it.get("colorName") + "\\b", text)) {
                 getColor(token, line, column, result, Color.parseColor(it.get("cssColor")));
               }
             });
@@ -143,7 +150,9 @@ public class ListCss3Color {
     return TextStyle.makeStyle(EditorColorScheme.LITERAL, 0, true, false, false);
   }
 
-  static boolean getRegex(String regexCode, String text) {
-    return RegexUtilCompat.RegexSelect(regexCode, text);
+  public static boolean getRegex(String regex, String text) {
+    Pattern pattern = Pattern.compile(regex);
+    Matcher matcher = pattern.matcher(text);
+    return matcher.find();
   }
 }
