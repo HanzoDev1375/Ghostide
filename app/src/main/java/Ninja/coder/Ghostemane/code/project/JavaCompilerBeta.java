@@ -1,5 +1,6 @@
 package Ninja.coder.Ghostemane.code.project;
 
+import Ninja.coder.Ghostemane.code.IdeEditor;
 import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import android.app.ProgressDialog;
@@ -8,6 +9,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.text.TextUtils;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -18,6 +20,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import dalvik.system.DexClassLoader;
+import io.github.rosemoe.sora.widget.schemes.SchemePurple;
 import java.util.Optional;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import ninjacoder.ghostide.androidtools.r8.android.JarPackager;
@@ -50,24 +53,25 @@ public class JavaCompilerBeta {
       @Override
       protected String doInBackground(String... params) {
         // Prepare files and directories
-        FileUtil.deleteFile(FileUtil.getPackageDataDir(context).concat("/bin/"));
-        FileUtil.makeDir(FileUtil.getPackageDataDir(context).concat("/bin/"));
+        
+        FileUtil.deleteFile(FileUtil.getRoot(context).concat("/bin/"));
+        FileUtil.makeDir(FileUtil.getRoot(context).concat("/bin/"));
 
         // Write inputs to a file named after the class name
         try {
           String fileName = className + ".java";
           FileUtil.writeFile(
-              FileUtil.getPackageDataDir(context).concat("/bin/").concat(fileName), inputs);
+              FileUtil.getRoot(context).concat("/bin/").concat(fileName), inputs);
         } catch (Exception e) {
           e.printStackTrace();
           return "Error writing Java file: " + e.getMessage();
         }
 
         // Copy cp.jar from assets to temp folder if it doesn't exist
-        if (!FileUtil.isExistFile(FileUtil.getPackageDataDir(context).concat("/bin/cp.jar"))) {
+        if (!FileUtil.isExistFile(FileUtil.getRoot(context).concat("/bin/cp.jar"))) {
           try (InputStream input = context.getAssets().open("cp.jar");
               OutputStream output =
-                  new FileOutputStream(FileUtil.getPackageDataDir(context).concat("/bin/cp.jar"))) {
+                  new FileOutputStream(FileUtil.getRoot(context).concat("/bin/cp.jar"))) {
             byte[] buffer = new byte[input.available()];
             int length;
             while ((length = input.read(buffer)) != -1) {
@@ -87,14 +91,14 @@ public class JavaCompilerBeta {
         opt.add("-nowarn");
         opt.add("-deprecation");
         opt.add("-d");
-        opt.add(FileUtil.getPackageDataDir(context).concat("/bin/classes"));
+        opt.add(FileUtil.getRoot(context).concat("/bin/classes"));
         opt.add("-cp");
-        opt.add(FileUtil.getPackageDataDir(context).concat("/bin/cp.jar"));
+        opt.add(FileUtil.getRoot(context).concat("/bin/cp.jar"));
         opt.add("-proc:none");
         opt.add("-sourcepath");
         opt.add("ignore");
         opt.add(
-            FileUtil.getPackageDataDir(context).concat("/bin/").concat(className).concat(".java"));
+            FileUtil.getRoot(context).concat("/bin/").concat(className).concat(".java"));
 
         StringBuilder compileErrors = new StringBuilder();
 
@@ -121,8 +125,8 @@ public class JavaCompilerBeta {
         publishProgress("Packaging JAR...");
         try {
           new JarPackager(
-                  FileUtil.getPackageDataDir(context).concat("/bin/classes/"),
-                  FileUtil.getPackageDataDir(context).concat("/bin/classes.jar"))
+                  FileUtil.getRoot(context).concat("/bin/classes/"),
+                  FileUtil.getRoot(context).concat("/bin/classes.jar"))
               .create();
         } catch (Exception e) {
           return "Packaging JAR failed: " + e.toString();
@@ -134,10 +138,10 @@ public class JavaCompilerBeta {
           publishProgress("Dexing with D8...");
           opt.clear();
           opt.add("--output");
-          opt.add(FileUtil.getPackageDataDir(context).concat("/bin/"));
+          opt.add(FileUtil.getRoot(context).concat("/bin/"));
           opt.add("--lib");
-          opt.add(FileUtil.getPackageDataDir(context).concat("/bin/cp.jar"));
-          opt.add(FileUtil.getPackageDataDir(context).concat("/bin/classes.jar"));
+          opt.add(FileUtil.getRoot(context).concat("/bin/cp.jar"));
+          opt.add(FileUtil.getRoot(context).concat("/bin/classes.jar"));
           D8.main(opt.toArray(new String[0]));
         } catch (Exception e) {
           return "Dex failed: " + e.toString();
@@ -155,16 +159,13 @@ public class JavaCompilerBeta {
       protected void onPostExecute(String _result) {
         pr.dismiss();
         if (TextUtils.isEmpty(_result)) {
-          final TextView tx = new TextView(context);
+          final EditText tx = new EditText(context);
           tx.setLayoutParams(new LinearLayout.LayoutParams(-2, -2));
-          tx.setTextSize(15);
-          tx.setTextColor(MaterialColors.getColor(tx, ColorAndroid12.TvColor));
           tx.setPadding(30, 30, 30, 30);
-          tx.setTextIsSelectable(true);
-
           final ScrollView sc = new ScrollView(context);
           sc.setLayoutParams(new LinearLayout.LayoutParams(-1, -2));
           sc.addView(tx);
+          tx.setBackgroundColor(0);
 
           OutputStream _outstream =
               new OutputStream() {
@@ -178,7 +179,6 @@ public class JavaCompilerBeta {
                   return tx.getText().toString();
                 }
               };
-
           System.setOut(new PrintStream(_outstream));
           System.setErr(new PrintStream(_outstream));
 
@@ -187,7 +187,7 @@ public class JavaCompilerBeta {
 
             DexClassLoader dcl =
                 new DexClassLoader(
-                    FileUtil.getPackageDataDir(context).concat("/bin/classes.dex"),
+                    FileUtil.getRoot(context).concat("/bin/classes.dex"),
                     optimizedDir,
                     null,
                     context.getClassLoader());

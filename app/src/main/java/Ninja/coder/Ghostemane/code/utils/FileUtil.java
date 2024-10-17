@@ -232,6 +232,9 @@ public class FileUtil {
   public static String getPackageDataDir(Context context) {
     return context.getExternalFilesDir(null).getAbsolutePath();
   }
+  public static String getRoot(Context context){
+    return context.getFilesDir().getPath();
+  }
 
   public static String getPublicDir(String type) {
     return Environment.getExternalStoragePublicDirectory(type).getAbsolutePath();
