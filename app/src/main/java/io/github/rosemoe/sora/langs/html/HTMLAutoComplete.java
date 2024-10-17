@@ -1,7 +1,7 @@
 package io.github.rosemoe.sora.langs.html;
 
-import Ninja.coder.Ghostemane.code.activities.FileManagerActivity;
-import Ninja.coder.Ghostemane.code.utils.FileUtil;
+import Ninja.coder.Ghostemane.code.ApplicationLoader;
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import io.github.rosemoe.sora.data.CompletionItem;
@@ -12,13 +12,13 @@ import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 import io.github.rosemoe.sora.widget.commentRule.AppConfig;
+import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import lsp4custom.com.ninjacoder.customhtmllsp.CodeSnippet;
 import lsp4custom.com.ninjacoder.customhtmllsp.ListKeyword;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,7 +26,7 @@ import java.util.Random;
 
 public class HTMLAutoComplete implements AutoCompleteProvider {
   protected HTMLConstants htmlconfig;
-  protected SharedPreferences shp;
+
   String Folder = "";
   String prfex = "";
   AppConfig config;
@@ -40,7 +40,7 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
   private CodeEditor editor;
   private IdentifierAutoComplete.Identifiers userIdentifiers;
   private TextAnalyzeResult analyzeResult;
-  private String codeSinppetPath = "/storage/emulated/0/GhostWebIDE/ninjacoder/html.code.json";
+  protected SharedPreferences save_path; // using default name
 
   public HTMLAutoComplete() {
     config = new AppConfig();
@@ -48,6 +48,8 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
     userIdentifiers = new IdentifierAutoComplete.Identifiers();
     pathz = new ArrayList<>();
     keyhtml = new ListKeyword();
+    save_path =
+        ApplicationLoader.getContext().getSharedPreferences("save_path", Activity.MODE_PRIVATE);
   }
 
   @Override
@@ -61,22 +63,6 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
     classTag(prefix);
     idTags(prefix);
     Collections.sort(items, CompletionItem.COMPARATOR_BY_NAME);
-
-    List<CompletionItem> listasFiles = new ArrayList<>();
-    File file = new File(FileManagerActivity.POSNINJACODERMAIN);
-    if (file.exists() && file.isDirectory()) {
-      File[] listFile = file.listFiles();
-      if (listFile != null) {
-        for (File f : listFile) {
-          if (f.isFile()) {
-            CompletionItem item = new CompletionItem(f.getName(), "File Path");
-            listasFiles.add(item);
-          }
-        }
-        Collections.sort(listasFiles, CompletionItem.COMPARATOR_BY_NAME);
-        items.addAll(listasFiles);
-      }
-    }
 
     Collections.sort(items, CompletionItem.COMPARATOR_BY_NAME);
     Object extra = analyzeResult.getExtra();
@@ -225,7 +211,7 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
 
   public String getLoramRandom(int count) {
     StringBuilder builder = new StringBuilder();
-    String[] lorams = {"loram", "im", "to", "is"};
+    String[] lorams = {"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud ", "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud "};
     Random random = new Random();
     for (int i = 0; i < count; i++) {
       int index = random.nextInt(lorams.length);
@@ -240,6 +226,40 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
   }
 
   public void setList(String prefix) {
+    if ("loram".startsWith(prefix) && prefix.length() > 0) {
+      items.add(new CompletionItem(getLoramRandom(10), "Loram"));
+    }
+    if ("stylecss3".startsWith(prefix) && prefix.length() > 0) {
+      var cssCode =
+          """
+      <style type = "text/css">
+
+       *{
+          color:red;
+          background-color:black;
+          padding:8px;
+          text-align:left;
+        }
+
+      </style>
+
+      """;
+      items.add(new CompletionItem(cssCode, "CssWord","Style"));
+    }
+    // open list path
+    if ("./".startsWith(prefix) && prefix.length() > 0) {
+      File fileOrgi = new File(save_path.getString("path", ""));
+      File[] arryfile = fileOrgi.listFiles();
+      List<File> listFile = new ArrayList<>(Arrays.asList(arryfile));
+      listFile.forEach(
+          it -> {
+            items.add(
+                new CompletionItem(
+                    it.isDirectory() ? it.getPath() : it.getName(),
+                    it.isDirectory() ? "Dir" : "File"));
+          });
+    }
+
     keyhtml.installFromSora(items, prefix);
     keyhtml.installHtmlAttr(items, prfex);
     keyhtml.intallCss3KeyWord(items, prfex);
@@ -281,9 +301,9 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
         items.add(dddAsCompletion(phpfuns, htmlconfig.PhpFun));
       }
     }
-    for(var it : PHPLanguage.key){
-      if(it.startsWith(prefix)) {
-      	items.add(dddAsCompletion(it,htmlconfig.PhpKeys));
+    for (var it : PHPLanguage.key) {
+      if (it.startsWith(prefix)) {
+        items.add(dddAsCompletion(it, htmlconfig.PhpKeys));
       }
     }
   }
@@ -336,7 +356,7 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
       for (String tag : validTags) {
         api = tag;
         openingTags.append("<" + api.replace("#", "") + " id=\"" + result.toString() + "\">");
-        closingTags.insert(0, "</" + api.replace(".","") + ">");
+        closingTags.insert(0, "</" + api.replace(".", "") + ">");
       }
 
       String wrappedTags = openingTags.toString() + closingTags.toString();
@@ -370,13 +390,12 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
       StringBuilder result = new StringBuilder();
       while (matcher.find()) {
         result.append(matcher.group(1));
-        
       }
-      
+
       for (String tag : validTags) {
         api = tag;
         openingTags.append("<" + api.replace(".", "") + " class=\"" + result.toString() + "\">");
-        closingTags.insert(0, "</" + api.replace(".","") + ">");
+        closingTags.insert(0, "</" + api.replace(".", "") + ">");
       }
 
       String wrappedTags = openingTags.toString() + closingTags.toString();

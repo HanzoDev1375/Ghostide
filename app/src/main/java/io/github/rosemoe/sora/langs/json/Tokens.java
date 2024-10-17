@@ -97,6 +97,7 @@ public enum Tokens {
     TRUE,
     FALSE,
     NULL,
-    CLASS
+    CLASS,
+    CLASS_USER
 
 }

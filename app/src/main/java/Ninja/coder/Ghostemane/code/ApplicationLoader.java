@@ -110,6 +110,9 @@ public class ApplicationLoader extends Application {
     themeEngine.setThemeMode(ThemeMode.DARK);
     mApplicationContext = getApplicationContext();
     themeEngine.applyToActivities(this);
+    
+    Toast.makeText(getApplicationContext(), save_path.getString("path",""), Toast.LENGTH_SHORT)
+          .show();
 
     softwareInfo
         .append("SDK: ")
@@ -193,6 +196,9 @@ public class ApplicationLoader extends Application {
 
   public static SharedPreferences getAnalyzercod() {
     return Analyzercod;
+  }
+  public static SharedPreferences getSavePath(){
+    return save_path;
   }
 
   public static ThemeEngine getThemeEngine() {

@@ -322,50 +322,119 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             {
               info.addIdentifier(token.getText());
               boolean isBold, isItalic, isUnderLineMode = false;
+              boolean dataUpp = false;
+              boolean opratorName = false;
+              boolean isNewObject = false;
               int colorid = EditorColorScheme.TEXT_NORMAL;
               if (previous == JavaLexer.AT) {
                 colorid = EditorColorScheme.Ninja;
+                dataUpp = false;
+                opratorName = false;
+                isNewObject = false;
               }
-              if (previous == JavaLexer.CLASS || previous == JavaLexer.IMPLEMENTS) {
+              if (previous == JavaLexer.CLASS
+                  || previous == JavaLexer.IMPLEMENTS
+                  || previous == JavaLexer.VOID) {
                 colorid = EditorColorScheme.javafun;
+                dataUpp = false;
+                opratorName = false;
+                isNewObject = false;
               }
 
-              if (previous == JavaLexer.LBRACK
-                  || previous == JavaLexer.DOT
-                  || prePreToken != null && prePreToken.getType() == JavaLexer.DOT
-                  || previous == JavaLexer.ASSERT
-                  || previous == JavaLexer.PACKAGE
-                  || previous == JavaLexer.IMPORT
-                  || previous == JavaLexer.VOID) {
+              if (previous == JavaLexer.LBRACK || previous == JavaLexer.ASSERT) {
                 colorid = EditorColorScheme.LITERAL;
+                dataUpp = false;
+                opratorName = false;
+                isNewObject = false;
               }
+              if (previous == JavaLexer.PACKAGE
+                  || previous == JavaLexer.IMPORT
+                  || prePreToken != null && prePreToken.getType() == JavaLexer.DOT
+                  || previous == JavaLexer.DOT) {
+                dataUpp = true;
+                opratorName = false;
+                colorid = EditorColorScheme.javafield;
+                isNewObject = false;
+              }
+
               if (previous == JavaLexer.EXTENDS
                   || previous == JavaLexer.FLOAT_LITERAL
                   || previous == JavaLexer.BOOLEAN) {
                 colorid = EditorColorScheme.javafun;
+                dataUpp = false;
+                opratorName = false;
+                isNewObject = false;
               }
               if (previous == JavaLexer.RETURN || previous == JavaLexer.NEW) {
                 colorid = EditorColorScheme.HTML_TAG;
+                dataUpp = false;
+                opratorName = false;
+                isNewObject = true;
               }
               if (previous == JavaLexer.INT) {
-                colorid = EditorColorScheme.LITERAL;
+                colorid = EditorColorScheme.javafield;
+                dataUpp = false;
+                opratorName = false;
+                isNewObject = false;
               }
               if (previous == JavaLexer.CASE || previous == JavaLexer.FINAL) {
                 colorid = EditorColorScheme.ATTRIBUTE_NAME;
+                dataUpp = false;
+                opratorName = false;
+                isNewObject = false;
               }
 
               if (previous == JavaLexer.PRIVATE
                   || previous == JavaLexer.PROTECTED
                   || previous == JavaLexer.PUBLIC) {
                 colorid = EditorColorScheme.HTML_TAG;
+                dataUpp = false;
+                opratorName = false;
+                isNewObject = false;
               }
               if (text1.matches("([A-Za-z]*)(Exception)([a-zA-Z]*)")) {
                 colorid = EditorColorScheme.javatype;
+                dataUpp = true;
+                opratorName = false;
+                isNewObject = false;
               }
               if (text1.matches("([A-Za-z]*)(Exception)([a-zA-Z]*)(\\s\\w+)")) {
                 colorid = EditorColorScheme.javatype;
+                dataUpp = true;
+                opratorName = false;
+                isNewObject = false;
               }
+              if (previous == JavaLexer.LPAREN
+                  || prePreToken != null && prePreToken.getType() == JavaLexer.LPAREN
+                  || previous == JavaLexer.RPAREN
+                  || prePreToken != null && prePreToken.getType() == JavaLexer.RPAREN) {
+                dataUpp = true;
+                isNewObject = false;
+                colorid = EditorColorScheme.javaparament;
+              }
+              if (previous == JavaLexer.LT
+                  || prePreToken != null && prePreToken.getType() == JavaLexer.LT
+                  || previous == JavaLexer.GT
+                  || prePreToken != null && prePreToken.getType() == JavaLexer.GT) {
+                dataUpp = true;
+                isNewObject = false;
+                colorid = EditorColorScheme.javafun;
+              }
+              opratorName = true;
+              String resultCode = token.getText();
+              boolean hasUpperCase = resultCode.chars().parallel().anyMatch(Character::isUpperCase);
 
+              if (hasUpperCase && dataUpp) {
+                colorid = EditorColorScheme.HTML_TAG;
+              }
+              var start = token.getText();
+              boolean startsWithUpperCase = Character.isUpperCase(start.charAt(0));
+              if (startsWithUpperCase) {
+                colorid =
+                    isNewObject
+                        ? EditorColorScheme.ATTRIBUTE_VALUE
+                        : EditorColorScheme.ATTRIBUTE_NAME;
+              }
               get(colorid, line, column, result);
               break;
             }
@@ -381,8 +450,8 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 }
               }
               var lists = result.getBlocks();
-              int colorid = EditorColorScheme.OPERATOR;
-              //   result.addIfNeeded(line, column, colorid);
+              int colorid = EditorColorScheme.TEXT_NORMAL;
+              result.addIfNeeded(line, column, colorid);
               break;
             }
 
@@ -393,8 +462,8 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               block.startColumn = column;
               stack.push(block); // اضافه کردن بلوک به استک
               var lists = result.getBlocks();
-              int colorid = EditorColorScheme.OPERATOR;
-              //     result.addIfNeeded(line, column, colorid);
+              int colorid = EditorColorScheme.TEXT_NORMAL;
+              result.addIfNeeded(line, column, colorid);
               // بررسی maxSwitch
               if (stack.isEmpty()) {
                 if (currSwitch > maxSwitch) {

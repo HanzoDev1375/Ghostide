@@ -257,6 +257,9 @@ public class JsonCodeAnalyzer implements CodeAnalyzer {
         case LONG_COMMENT:
           result.addIfNeeded(line, column, EditorColorScheme.COMMENT);
           break;
+        case CLASS_USER:
+          result.addIfNeeded(line, column, EditorColorScheme.javafun);
+          break;
         default:
           if (token == Tokens.LBRACK || (token == Tokens.RBRACK && previous == Tokens.LBRACK)) {
             result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
