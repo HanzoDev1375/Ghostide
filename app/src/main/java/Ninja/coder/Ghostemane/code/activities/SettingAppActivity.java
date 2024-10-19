@@ -294,28 +294,26 @@ public class SettingAppActivity extends BaseCompat {
                                   }
                                 },
                                 100);
-                            edit.setHint("Set .ghost file");
+                            edit.setHint("Choose my body by format .ghost");
                             ColorAndroid12.setTextColor(edit);
-                            if (edit.getText().toString().isEmpty()) {
+                            if (edit.getText().toString().isEmpty()
+                                && !edit.getText().toString().endsWith(".ghost")) {
                               positive.setEnabled(false);
                             } else {
                               positive.setEnabled(true);
                             }
                             positive.setOnClickListener(
-                                (vftrororocjj) -> {
+                                (itaral) -> {
                                   thememanagersoft
                                       .edit()
                                       .putString("themes", edit.getText().toString())
-                                      .commit();
+                                      .apply();
                                   dialog.dismiss();
                                   Toast.makeText(
                                           getApplicationContext(),
                                           "Theme : "
                                               .concat(
-                                                  edit.getText()
-                                                      .toString()
-                                                      .trim()
-                                                      .concat(" اعمال شد")),
+                                                  edit.getText().toString().trim().concat("Done!")),
                                           2)
                                       .show();
                                 });
@@ -327,7 +325,7 @@ public class SettingAppActivity extends BaseCompat {
                                     final String _charSeq = _param1.toString();
 
                                     if (edit.getText().toString().isEmpty()
-                                        && edit.getText().toString().endsWith("")) {
+                                        && !edit.getText().toString().endsWith(".ghost")) {
                                       positive.setEnabled(false);
                                     } else {
                                       positive.setEnabled(true);
@@ -346,9 +344,9 @@ public class SettingAppActivity extends BaseCompat {
                                 });
                             np.setOnClickListener(
                                 (vftrororocjj) -> {
-                                  thememanagersoft.edit().remove("themes").commit();
+                                  thememanagersoft.edit().remove("themes").apply();
                                   DataUtil.showMessage(
-                                      getApplicationContext(), "تم پیشفرض اعمال شد");
+                                      getApplicationContext(), "Default theme applied successfully");
                                   dialog.dismiss();
                                 });
                             if (thememanagersoft.contains("themes")

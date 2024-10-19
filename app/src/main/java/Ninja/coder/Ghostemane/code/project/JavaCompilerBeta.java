@@ -87,7 +87,7 @@ public class JavaCompilerBeta {
         long time = System.currentTimeMillis();
         publishProgress("Compiling Java...");
         opt.clear();
-        opt.add("-1.8");
+        opt.add("-11");
         opt.add("-nowarn");
         opt.add("-deprecation");
         opt.add("-d");

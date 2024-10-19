@@ -56,7 +56,8 @@ public class JavaLanguage implements EditorLanguage {
         || ch == '$'
         || ch == '#'
         || ch == '*'
-        || MyCharacter.isJavaIdentifierStart(ch);
+        || MyCharacter.isJavaIdentifierStart(ch)
+        || MyCharacter.isJavaIdentifierPart(ch);
   }
 
   @Override

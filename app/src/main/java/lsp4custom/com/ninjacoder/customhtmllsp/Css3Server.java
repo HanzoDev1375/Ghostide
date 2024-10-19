@@ -292,13 +292,13 @@ public class Css3Server {
     Padding(list, prefix, "padding:", "padding-top:");
   }
 
-  private CompletionItem css(String attr, String desc, String data) {
+  public CompletionItem css(String attr, String desc, String data) {
     final var item = new CompletionItem(attr, data, desc);
     item.cursorOffset(item.commit.length() - 1);
     return item;
   }
 
-  private CompletionItem css(String attr, String desc) {
+  public CompletionItem css(String attr, String desc) {
     final var item = new CompletionItem(attr, desc);
     item.cursorOffset(item.commit.length() - 1);
     return item;

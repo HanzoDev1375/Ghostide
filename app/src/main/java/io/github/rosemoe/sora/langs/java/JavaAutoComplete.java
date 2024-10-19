@@ -8,11 +8,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
+import lsp4custom.com.ninjacoder.customhtmllsp.JavaCardshorts;
 
 public class JavaAutoComplete implements AutoCompleteProvider {
 
   private String[] mKeywords;
   private boolean mKeywordsAreLowCase;
+  private JavaCardshorts shortcard;
 
   public void setKeywords(String[] keywords) {
     mKeywords = keywords;
@@ -48,6 +50,7 @@ public class JavaAutoComplete implements AutoCompleteProvider {
       Collections.sort(words, CompletionItem.COMPARATOR_BY_NAME);
       keywords.addAll(words);
     }
+    shortcard = new JavaCardshorts(keywords,prefix);
 
     return keywords;
   }

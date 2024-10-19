@@ -284,7 +284,7 @@ public class SetThemeForJson {
     return this;
   }
 
-  public static void winterToPath() {
+  public static Map<String, String> getMapObjectTheme() {
     Map<String, String> map = new HashMap<>();
     map.put("toolbartextcolor", "#B0BEC5");
     map.put("block_line_current", "#4DD0E1");
@@ -342,13 +342,13 @@ public class SetThemeForJson {
     map.put("htmlsymbol", "#FF33A8");
     map.put("htmlblockhash", "#FF5252");
     map.put("htmlblocknormal", "#FF4081");
-    //for js
+    // for js
     map.put("jskeyword", "#FFAB40");
     map.put("jsfun", "#FFCC80");
     map.put("jsoprator", "#FF5252");
     map.put("jsattr", "#64B5F6");
     map.put("jsstring", "#FFCC80");
-    ///for py
+    /// for py
     map.put("pystring", "#FFCC80");
     map.put("pykeyword", "#FFAB40");
     map.put("pysymbol", "#64B5F6");
@@ -357,7 +357,7 @@ public class SetThemeForJson {
     map.put("pycolormatch2", "#33FFFF");
     map.put("pycolormatch3", "#FF33FF");
     map.put("pycolormatch4", "#FFC300");
-    //for php 
+    // for php
     map.put("phpkeyword", "#FF5733");
     map.put("phpattr", "#33FF57");
     map.put("phpsymbol", "#3357FF");
@@ -369,7 +369,21 @@ public class SetThemeForJson {
     map.put("phpcolormatch4", "#FFD700");
     map.put("phpcolormatch5", "#FF69B4");
     map.put("phpcolormatch6", "#20B2AA");
+    return map;
+  }
+  public static Map<String,Boolean> getMapStyleText(){
+    Map<String,Boolean> styleLine = new HashMap<>();
+    styleLine.put("isBold", true);
+    styleLine.put("isItalic", false);
+    styleLine.put("isStrike", false);
+    styleLine.put("isLine", false);
+    styleLine.put("isPhpBold",false);
+    
+    return styleLine;
+  }
 
+  public static void winterToPath() {
+    Map<String, String> map = getMapObjectTheme();
     String path =
         FileUtil.getExternalStorageDir()
             + File.separator
@@ -381,11 +395,8 @@ public class SetThemeForJson {
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
     FileIOUtils.writeFileFromString(path, gson.toJson(map));
 
-    Map<String, Boolean> StyleText = new HashMap<>();
-    StyleText.put("isBold", true);
-    StyleText.put("isItalic", false);
-    StyleText.put("isStrike", false);
-    StyleText.put("isLine", false);
+    Map<String, Boolean> StyleText = getMapStyleText();
+    
     var customPath =
         FileUtil.getExternalStorageDir()
             + File.separator
@@ -410,7 +421,7 @@ public class SetThemeForJson {
             + File.separator
             + "theme"
             + File.separator
-            + "style.ghost");
+            + "GhostThemeapp.ghost");
   }
 
   public static String setReloadStyle() {
@@ -422,5 +433,96 @@ public class SetThemeForJson {
             + "theme"
             + File.separator
             + "style.ghost");
+  }
+
+  public static String themeLoad() {
+    return setReloadTheme();
+  }
+
+  public static String themeAsString() {
+    return """
+    {
+        "javastring": "#89BA62",
+        "javafield": "#DF6C75",
+        "tabimagecolorfilter": "#B0BEC5",
+        "fabbackgroundcolorcolor": "#1A1B20",
+        "backgroundcolorlinear": "#1A1B20",
+        "htmlstr": "#FFCC80",
+        "operator": "#FFB74D",
+        "pysymbol": "#64B5F6",
+        "pykeyword": "#FFAB40",
+        "text_normal": "#FFFFFF",
+        "line_number_background": "#0E1C1C1C",
+        "selection_handle": "#66BB6A",
+        "phpkeyword": "#FFB800",
+        "tabback": "#282c34",
+        "javafun": "#5DA6E2",
+        "keyword": "#01FF00",
+        "jsfun": "#FFCC80",
+        "auto_comp_panel_corner": "#FF8C00",
+        "pycolormatch3": "#FF33FF",
+        "pycolormatch4": "#FFC300",
+        "htmltag": "#FFAB49",
+        "phphtmlkeyword": "#41FFE4",
+        "htmlattrname": "#64B5F6",
+        "pycolormatch1": "#FFFF33",
+        "phpsymbol": "#ACFF70",
+        "pycolormatch2": "#33FFFF",
+        "javaparament": "#D19A66",
+        "identifier_name": "#FF9E80",
+        "ninja": "#E1BEE7",
+        "toolbarcolor": "#121212",
+        "pynumber": "#A5D6A7",
+        "javatype": "#E0BD75",
+        "fabcolorstroker": "#4DFFFFFF",
+        "htmlblocknormal": "#FF4081",
+        "auto_comp_panel_bg": "#000000",
+        "tabtextcolor": "#dcdcdc",
+        "csskeyword": "#81D4FA",
+        "block_line": "#81D4FA",
+        "htmlblockhash": "#FF5252",
+        "literal": "#64B5F6",
+        "toolbartextcolor": "#B0BEC5",
+        "phphtmlattr": "#F0E68C",
+        "line_number": "#B0BEC5",
+        "block_line_current": "#4DD0E1",
+        "selection_insert": "#4DB6AC",
+        "whole_background": "#0E1C1C1C",
+        "attribute_name": "#50DAFF",
+        "textcolorigor": "#F06292",
+        "javanumber": "#89BA62",
+        "menubackground": "#1E1E1E",
+        "jsattr": "#64B5F6",
+        "imagecolor": "#B0BEC5",
+        "javakeyword": "#B972D0",
+        "phpcolormatch3": "#E1C1FF",
+        "phpcolormatch2": "#A7B8F3",
+        "phpcolormatch5": "#E89CC2",
+        "phpattr": "#FFE333",
+        "phpcolormatch4": "#FFD700",
+        "jsstring": "#FFCC80",
+        "phpcolormatch6": "#C5FFA3",
+        "line_divider": "#00000000",
+        "fabimagecolor": "#B0BEC5",
+        "html_tag": "#80CBC4",
+        "textcolorforgrand": "#B0BEC5",
+        "javaoprator": "#E0BD75",
+        "phpcolormatch1": "#E98989",
+        "current_line": "#37474F",
+        "htmlattr": "#FFAB80",
+        "htmlsymbol": "#FF33A8",
+        "pystring": "#FFCC80",
+        "print": "#FF8A65",
+        "jskeyword": "#FFAB40",
+        "textcolorhder": "#FFAB91",
+        "syombolbartextcolor": "#B0BEC5",
+        "displaytextcolortab": "#dcdcdc",
+        "comment": "#757575",
+        "attribute_value": "#33D77E",
+        "textcolorinier": "#EF5350",
+        "jsoprator": "#FF5252",
+        "non_printable_char": "#90CAF9"
+    }
+    """;
   }
 }

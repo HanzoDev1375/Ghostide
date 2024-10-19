@@ -322,15 +322,15 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             {
               info.addIdentifier(token.getText());
               boolean isBold, isItalic, isUnderLineMode = false;
-              boolean dataUpp = false;
-              boolean opratorName = false;
-              boolean isNewObject = false;
+              boolean dataUpp = false, opratorName = false, isNewObject = false, isAtObject = false;
+
               int colorid = EditorColorScheme.TEXT_NORMAL;
               if (previous == JavaLexer.AT) {
                 colorid = EditorColorScheme.Ninja;
                 dataUpp = false;
                 opratorName = false;
                 isNewObject = false;
+                isAtObject = true;
               }
               if (previous == JavaLexer.CLASS
                   || previous == JavaLexer.IMPLEMENTS
@@ -339,6 +339,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 dataUpp = false;
                 opratorName = false;
                 isNewObject = false;
+                isAtObject = false;
               }
 
               if (previous == JavaLexer.LBRACK || previous == JavaLexer.ASSERT) {
@@ -346,6 +347,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 dataUpp = false;
                 opratorName = false;
                 isNewObject = false;
+                isAtObject = false;
               }
               if (previous == JavaLexer.PACKAGE
                   || previous == JavaLexer.IMPORT
@@ -355,6 +357,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 opratorName = false;
                 colorid = EditorColorScheme.javafield;
                 isNewObject = false;
+                isAtObject = false;
               }
 
               if (previous == JavaLexer.EXTENDS
@@ -364,24 +367,28 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 dataUpp = false;
                 opratorName = false;
                 isNewObject = false;
+                isAtObject = false;
               }
               if (previous == JavaLexer.RETURN || previous == JavaLexer.NEW) {
                 colorid = EditorColorScheme.HTML_TAG;
                 dataUpp = false;
                 opratorName = false;
                 isNewObject = true;
+                isAtObject = false;
               }
               if (previous == JavaLexer.INT) {
                 colorid = EditorColorScheme.javafield;
                 dataUpp = false;
                 opratorName = false;
                 isNewObject = false;
+                isAtObject = false;
               }
               if (previous == JavaLexer.CASE || previous == JavaLexer.FINAL) {
                 colorid = EditorColorScheme.ATTRIBUTE_NAME;
                 dataUpp = false;
                 opratorName = false;
                 isNewObject = false;
+                isAtObject = false;
               }
 
               if (previous == JavaLexer.PRIVATE
@@ -391,18 +398,21 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 dataUpp = false;
                 opratorName = false;
                 isNewObject = false;
+                isAtObject = false;
               }
               if (text1.matches("([A-Za-z]*)(Exception)([a-zA-Z]*)")) {
                 colorid = EditorColorScheme.javatype;
                 dataUpp = true;
                 opratorName = false;
                 isNewObject = false;
+                isAtObject = false;
               }
               if (text1.matches("([A-Za-z]*)(Exception)([a-zA-Z]*)(\\s\\w+)")) {
                 colorid = EditorColorScheme.javatype;
                 dataUpp = true;
                 opratorName = false;
                 isNewObject = false;
+                isAtObject = false;
               }
               if (previous == JavaLexer.LPAREN
                   || prePreToken != null && prePreToken.getType() == JavaLexer.LPAREN
@@ -410,6 +420,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                   || prePreToken != null && prePreToken.getType() == JavaLexer.RPAREN) {
                 dataUpp = true;
                 isNewObject = false;
+                isAtObject = false;
                 colorid = EditorColorScheme.javaparament;
               }
               if (previous == JavaLexer.LT
@@ -417,6 +428,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                   || previous == JavaLexer.GT
                   || prePreToken != null && prePreToken.getType() == JavaLexer.GT) {
                 dataUpp = true;
+                isAtObject = false;
                 isNewObject = false;
                 colorid = EditorColorScheme.javafun;
               }
@@ -434,6 +446,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                     isNewObject
                         ? EditorColorScheme.ATTRIBUTE_VALUE
                         : EditorColorScheme.ATTRIBUTE_NAME;
+                colorid = isAtObject ? EditorColorScheme.Ninja : EditorColorScheme.ATTRIBUTE_NAME;
               }
               get(colorid, line, column, result);
               break;

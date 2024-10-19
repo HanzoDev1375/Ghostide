@@ -493,31 +493,13 @@ public class CodeEditorActivity extends AppCompatActivity {
                 .fromJson(
                     FileUtil.readFile(thememanagersoft.getString("themes", "")),
                     new TypeToken<HashMap<String, Object>>() {}.getType());
-      } else {
-        String mainTheme = "storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost";
-        if (FileUtil.isExistFile(mainTheme)) {
-          if (GsonToClass.isJsonVilad(FileUtil.readFile(mainTheme))) {
-
-            imap =
-                new Gson()
-                    .fromJson(
-                        FileUtil.readFile(mainTheme),
-                        new TypeToken<HashMap<String, Object>>() {}.getType());
-          }
-        }
       }
     } else {
-      String mainTheme = "storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost";
-      if (FileUtil.isExistFile(mainTheme)) {
-        if (GsonToClass.isJsonVilad(FileUtil.readFile(mainTheme))) {
-
-          imap =
-              new Gson()
-                  .fromJson(
-                      FileUtil.readFile(mainTheme),
-                      new TypeToken<HashMap<String, Object>>() {}.getType());
-        }
-      }
+      imap =
+          new Gson()
+              .fromJson(
+                  SetThemeForJson.themeAsString(),
+                  new TypeToken<HashMap<String, Object>>() {}.getType());
     }
 
     Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.ab);
