@@ -12,11 +12,13 @@ import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import com.github.appintro.AppIntro2;
 import com.github.appintro.AppIntroPageTransformerType;
 import com.hzy.lib7z.IExtractCallback;
 import com.hzy.lib7z.Z7Extractor;
+import com.xiaoyv.ccompile.CCppEngine;
 import java.io.File;
 
 public class SplashWord extends AppIntro2 {
@@ -106,6 +108,15 @@ public class SplashWord extends AppIntro2 {
     }
 
     addSlide(t4);
+    var gccAngelpath =
+        getFilesDir().getAbsolutePath()
+            + File.separator
+            + "c_compiler"
+            + File.separator
+            + "gcc"
+            + File.separator
+            + "plugin_version";
+    
 
     setTransformer(AppIntroPageTransformerType.Zoom.INSTANCE);
     showStatusBar(true);

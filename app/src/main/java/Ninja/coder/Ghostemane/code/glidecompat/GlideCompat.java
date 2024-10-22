@@ -317,18 +317,6 @@ public class GlideCompat {
     }
     return drawable;
   }
-
-  public static void LoadSwbIcon(String file, ImageView v) {
-    Glide.with(v.getContext())
-        .asBitmap()
-        .load(getIconSwbFile(file, "resources/icons/icon.png"))
-        .transform(new RoundedCornersTransformation(RenderSize()))
-        .error(R.drawable.skproapp_orig)
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
-        .priority(Priority.NORMAL)
-        .into(v);
-  }
-  
   public static void LoadIconTheme(String file, ImageView v) {
     Glide.with(v.getContext())
         .asBitmap()
@@ -410,7 +398,7 @@ public class GlideCompat {
 
   public static void LoadSvginString(String svgcode, ImageView icon) {
     try {
-      
+
       SVG svg = SVG.getFromString(svgcode);
       var draw = new PictureDrawable(svg.renderToPicture());
       Glide.with(icon.getContext())
@@ -434,6 +422,7 @@ public class GlideCompat {
           .transform(new RoundedCornersTransformation(RenderSize()))
           .error(R.drawable.ic_material_image)
           .diskCacheStrategy(DiskCacheStrategy.ALL)
+          .placeholder(CircelPrograssBar())
           .priority(Priority.NORMAL)
           .into(img);
     } catch (Exception err) {

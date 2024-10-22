@@ -27,7 +27,7 @@ import java.util.ArrayList;
  * @since 2020/5/14
  */
 public class CCppEngine {
-  private static final String C_COMPILER_DIR = "c_compiler";
+  public static String C_COMPILER_DIR = "c_compiler";
 
   private static final String GCC_VERSION = "7.2.0";
 

@@ -146,8 +146,6 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
         }
       } else if (myfile.toString().endsWith(".apk")) {
         GlideCompat.LoadApkFile(myfile.toString(), viewHolder.icon);
-      } else if (myfile.toString().endsWith(".swb")) {
-        GlideCompat.LoadSwbIcon(myfile.toString(), viewHolder.icon);
       } else if (myfile.toString().endsWith(".vsix")) {
         GlideCompat.LoadIconVsCode(myfile.toString(), viewHolder.icon);
       } else if (myfile.toString().endsWith(".java")) {

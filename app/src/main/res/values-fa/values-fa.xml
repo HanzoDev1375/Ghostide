@@ -100,6 +100,6 @@
     <string name="android_module">ماژول اندروید</string>
     <string name="git_tools">ابزارهای گیت</string>
     <string name="gson_to_class">Gson به کلاس</string>
-
-
+    <string name="sheetlive">نمایش کامپایلر در دیالوگ</string>
+    <string name="sheetsub">با این کار سریع تر کد خودتان را مشاهده کنید فقط حالت مشاهده هست عمل کرد خاصی ندارد.</string>
 </resources>

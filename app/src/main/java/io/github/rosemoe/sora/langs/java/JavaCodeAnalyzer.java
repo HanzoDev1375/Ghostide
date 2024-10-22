@@ -5,9 +5,6 @@ import Ninja.coder.Ghostemane.code.databin.DiagnosticWrapper;
 import Ninja.coder.Ghostemane.code.utils.SetThemeForJson;
 import android.graphics.Color;
 import androidx.core.graphics.ColorUtils;
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import io.github.rosemoe.sora.util.TrieTree;
@@ -373,7 +370,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 colorid = EditorColorScheme.HTML_TAG;
                 dataUpp = false;
                 opratorName = false;
-                isNewObject = true;
+                isNewObject = false;
                 isAtObject = false;
               }
               if (previous == JavaLexer.INT) {

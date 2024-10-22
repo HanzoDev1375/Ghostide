@@ -66,65 +66,36 @@ public class AmazonClassHelper {
   }
 
   public static void getFileJavaAsChild(ImageView imageView, String file) {
-    new Thread(
-            new Runnable() {
-              public void run() {
-                String code = FileUtil.readFile(file);
-                if (code != null) {
-                  try {
-                    CompilationUnit cu = StaticJavaParser.parse(code);
-                    ClassOrInterfaceDeclaration classOrInterface =
-                        cu.findFirst(ClassOrInterfaceDeclaration.class).orElse(null);
-                    if (classOrInterface != null) {
-                      if (classOrInterface.isInterface()) {
-                        // Code that runs when it's an interface
-                        ColorAndroid12.runOnUiThread(
-                            () -> {
-                              GlideCompat.LoadSvgInAsster("myface.svg", imageView);
-                            });
 
-                      } else if (classOrInterface.isAbstract()) {
-                        ColorAndroid12.runOnUiThread(
-                            () -> {
-                              GlideCompat.LoadSvgInAsster("absclass.svg", imageView);
-                            });
+    String code = FileUtil.readFile(file);
+    if (code != null) {
+      try {
+        CompilationUnit cu = StaticJavaParser.parse(code);
+        ClassOrInterfaceDeclaration classOrInterface =
+            cu.findFirst(ClassOrInterfaceDeclaration.class).orElse(null);
+        if (classOrInterface != null) {
+          if (classOrInterface.isInterface()) {
+            // Code that runs when it's an interface
+            GlideCompat.LoadSvgInAsster("myface.svg", imageView);
+          } else if (classOrInterface.isAbstract()) {
+            GlideCompat.LoadSvgInAsster("absclass.svg", imageView);
+          } else if (classOrInterface.isEnumDeclaration() || code.matches("(public\\s+enum)")) {
+            GlideCompat.LoadSvgInAsster("enummodel.svg", imageView);
+          } else if (classOrInterface.isInnerClass()) {
+            GlideCompat.LoadSvgInAsster("ennerclass.svg", imageView);
+          } else if (classOrInterface.isAnnotationDeclaration()) {
+            GlideCompat.LoadSvgInAsster("ann.svg", imageView);
+          } else if (classOrInterface.isEmpty()) {
+            GlideCompat.LoadSvgInAsster("emptyclass.svg", imageView);
+          } else {
+            GlideCompat.LoadSvgInAsster("myclas.svg", imageView);
+          }
+        }
 
-                      } else if (classOrInterface.isEnumDeclaration()) {
-                        ColorAndroid12.runOnUiThread(
-                            () -> {
-                              GlideCompat.LoadSvgInAsster("enummodel.svg", imageView);
-                            });
-
-                      } else if (classOrInterface.isInnerClass()) {
-                        ColorAndroid12.runOnUiThread(
-                            () -> {
-                              GlideCompat.LoadSvgInAsster("ennerclass.svg", imageView);
-                            });
-                      } else if (classOrInterface.isAnnotationDeclaration()) {
-                        ColorAndroid12.runOnUiThread(
-                            () -> {
-                              GlideCompat.LoadSvgInAsster("ann.svg", imageView);
-                            });
-                      } else if (classOrInterface.isEmpty()) {
-                        ColorAndroid12.runOnUiThread(
-                            () -> {
-                              GlideCompat.LoadSvgInAsster("emptyclass.svg", imageView);
-                            });
-                      } else {
-                        ColorAndroid12.runOnUiThread(
-                            () -> {
-                              GlideCompat.LoadSvgInAsster("myclas.svg", imageView);
-                            });
-                      }
-                    }
-
-                  } catch (ParseProblemException e) {
-                    e.printStackTrace();
-                  }
-                }
-              }
-            })
-        .start();
+      } catch (ParseProblemException e) {
+        e.printStackTrace();
+      }
+    }
   }
 
   public static void getAuthors(IdeEditor editor, ImageView img, TextView tv) {}

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    
+>
+
+    <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        
+    />
+
+    <LinearLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        
+    >
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:gravity="center_horizontal"
+            android:textSize="18sp"
+            android:text="Compiler"
+            android:textStyle="bold"
+            
+        />
+
+        <EditText
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:background="@android:color/transparent"
+            android:gravity="top|left"
+            android:textStyle="bold"
+            android:visibility="gone"
+            android:textColor="?@attr/colorPrimary"
+            android:id="@+id/myeditorresult"
+            
+        />
+        <WebView
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:id="@+id/web"
+            
+        />
+
+    </LinearLayout>
+
+</LinearLayout>

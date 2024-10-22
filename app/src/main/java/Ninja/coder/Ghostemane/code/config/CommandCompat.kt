@@ -2,6 +2,7 @@ package Ninja.coder.Ghostemane.code.config;
 
 import android.content.Context
 import java.io.*
+import com.xiaoyv.ccompile.utils.*
 
 object CommandCompat {
     fun getBasicCommand(context: Context): String {
@@ -40,10 +41,11 @@ object CommandCompat {
     }
 
     fun getRunPhpCommand(context: Context, phpFile: File): String {
-        val appLibDirPath = context.applicationInfo.nativeLibraryDir
-        val appFileDirPath = context.filesDir.absolutePath
-        val phpLibDirPath = "$appFileDirPath/lib"
-        val phpIniPath = File(context.filesDir, "php.ini").path
-        return "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:$phpLibDirPath && \"$appLibDirPath/libphp-8.2.8.so\" -f \"${phpFile.path}\" -c \"$phpIniPath\" && echo '[Enter to Exit]' && read junk && exit"
-    }
+    val appLibDirPath = context.applicationInfo.nativeLibraryDir
+    val appFileDirPath = context.filesDir.absolutePath
+    val phpLibDirPath = "$appFileDirPath/lib"
+    val phpIniPath = File(context.filesDir, "php.ini").path
+    val redText = ShellUtils.shellCyan
+    return "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:$phpLibDirPath && \"$appLibDirPath/libphp-8.2.8.so\" -f \"${phpFile.path}\" -c \"$phpIniPath\" && echo '${redText}[Enter to Exit]\\033[0m' && read junk && exit"
+}
 }

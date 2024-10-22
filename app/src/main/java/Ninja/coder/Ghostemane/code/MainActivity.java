@@ -22,6 +22,8 @@ import android.content.pm.PackageManager;
 import androidx.core.app.ActivityCompat;
 import com.hzy.lib7z.IExtractCallback;
 import com.hzy.lib7z.Z7Extractor;
+
+import com.xiaoyv.ccompile.CCppEngine;
 import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -84,13 +86,11 @@ public class MainActivity extends BaseCompat {
     var phpPath =
         getFilesDir().getAbsolutePath() + File.separator + "lib" + File.separator + "libx265.so";
     var ghostPath = "/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost";
-    var iconPath = getFilesDir().getAbsoluteFile() + "/";
-
+    var iconPath = getFilesDir().getAbsoluteFile() + "/icon.png";
     if (!FileUtil.isExistFile(iconPath)) {
       AssetsSoft soft = new AssetsSoft();
       soft.copyOneFileFromAssets("icon.png", iconPath, this);
     }
-
     try {
       if (!FileUtil.isExistFile("/storage/emulated/0/GhostWebIDE/android/android.jar")) {
         var asster = getAssets();
@@ -152,6 +152,7 @@ public class MainActivity extends BaseCompat {
                       || !FileUtil.isExistFile(phpPath)
                       || !FileUtil.isExistFile(mypath)
                       || !FileUtil.isExistFile(ghostPath)) {
+
                     startActivity(new Intent(getApplication(), SplashWord.class));
                   } else {
                     gotopage.setClass(getApplicationContext(), FileManagerActivity.class);

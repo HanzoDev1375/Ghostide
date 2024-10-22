@@ -191,8 +191,6 @@ public class FileBookmarkActivity extends BaseCompat {
           }
         } else if (file.toString().endsWith(".apk")) {
           GlideCompat.LoadApkFile(file.toString(), bin.imageview1);
-        } else if (file.toString().endsWith(".swb")) {
-          GlideCompat.LoadSwbIcon(file.toString(), bin.imageview1);
         } else if (file.toString().endsWith(".vsix")) {
           GlideCompat.LoadIconVsCode(file.toString(), bin.imageview1);
         }

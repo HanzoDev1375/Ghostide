@@ -76,7 +76,7 @@ public class SettingAppActivity extends BaseCompat {
       walpapersystem,
       deftheme,
       autoSaveText,
-      codeAZ;
+      codeAZ,livemodel;
   private ObjectAnimator mdownObjectAnimator = new ObjectAnimator();
   private TimerTask timer;
   private SharedPreferences getvb,
@@ -156,7 +156,9 @@ public class SettingAppActivity extends BaseCompat {
     walpapersystem.setDescription(getString(R.string.walpapersystem_description));
     deftheme.setTitle(getString(R.string.deftheme_title));
     deftheme.setDescription(getString(R.string.deftheme_description));
-
+    livemodel = findViewById(R.id.liveModel);
+    livemodel.setTitle(getString(R.string.sheetlive));
+    livemodel.setDescription(getString(R.string.sheetsub));
     autoSaveText.setTitle(getString(R.string.autoSaveText_title));
     autoSaveText.setDescription(getString(R.string.autoSaveText_description));
 
@@ -467,6 +469,16 @@ public class SettingAppActivity extends BaseCompat {
             themeEngine.setDynamicTheme(false);
           }
         });
+    
+    livemodel.setSwitchChangedListener(
+        (bin, is) -> {
+          if (is) {
+            ru.edit().putBoolean("live", true).apply();
+          } else {
+            ru.edit().putBoolean("live",false);
+          }
+        });
+    
     StartLuncherApp();
   }
 
@@ -539,6 +551,9 @@ public class SettingAppActivity extends BaseCompat {
       walpapersystem.setValue(true);
     } else {
       walpapersystem.setValue(false);
+    }
+    if(ru.getBoolean("live",false) == true){
+      livemodel.setValue(true);
     }
 
     if (Analyzercod.getBoolean("Analyzercod", false) == true) codeAZ.setValue(true);

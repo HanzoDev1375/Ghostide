@@ -206,5 +206,7 @@
     <string name="android_module">Android Module</string>
     <string name="git_tools">Git Tools</string>
     <string name="gson_to_class">Gson to Class</string>
+    <string name="sheetlive">Open Web in DialogSheet</string>
+    <string name="sheetsub">Showing Code in BottomSheetDialog 2xFaster to load Code</string>
 
 </resources>

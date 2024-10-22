@@ -3,18 +3,17 @@ package Ninja.coder.Ghostemane.code.terminal;
 import Ninja.coder.Ghostemane.code.ApplicationLoader;
 import Ninja.coder.Ghostemane.code.R;
 import Ninja.coder.Ghostemane.code.activities.BaseCompat;
+import Ninja.coder.Ghostemane.code.marco.CommentList;
 import Ninja.coder.Ghostemane.code.terminal.key.VirtualKeysView;
 import Ninja.coder.Ghostemane.code.terminal.key.VirtualKeyButton;
 import Ninja.coder.Ghostemane.code.terminal.key.VirtualKeysInfo;
 import Ninja.coder.Ghostemane.code.terminal.key.VirtualKeysConstants;
 import Ninja.coder.Ghostemane.code.terminal.key.SpecialButton;
 import Ninja.coder.Ghostemane.code.config.CommandCompat;
-import Ninja.coder.Ghostemane.code.utils.Commands;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -28,21 +27,13 @@ import com.termux.terminal.TerminalColors;
 import com.termux.terminal.TerminalEmulator;
 import com.termux.terminal.TerminalSession;
 import com.termux.view.TerminalViewClient;
-import com.xiaoyv.ccompile.CCppEngine;
-import com.xiaoyv.ccompile.compiler.listener.CompileCallback;
-import com.xiaoyv.ccompile.compiler.listener.ExecuteListener;
 import io.github.rosemoe.sora.widget.AndroidClassHelper.helper;
 import com.termux.terminal.TerminalSessionClient;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException;
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import com.termux.view.TerminalView;
 import android.os.Bundle;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import org.json.JSONException;
@@ -212,11 +203,11 @@ public class TerminalActivity extends BaseCompat implements TerminalViewClient {
 
           } else if (getIntent().hasExtra("phpcode")) {
             String php =
-                CommandCompat.INSTANCE.getRunPhpCommand(
+                CommentList.getRunPhpCommand(
                     getApplicationContext(), new File(getIntent().getStringExtra("phpcode")));
             terminals.mTermSession.write(php + '\r');
           } else if (getIntent().hasExtra("cpp")) {
-            terminals.mTermSession.write("echo cpp Compiler Soon!" + '\r');
+            
           } else {
             if (getvb.contains("Script")) {
               var code =

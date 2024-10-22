@@ -30,7 +30,6 @@ import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
 import Ninja.coder.Ghostemane.code.utils.DialogUtil;
 import Ninja.coder.Ghostemane.code.utils.VectorHelper;
 import Ninja.coder.Ghostemane.code.widget.GhostWebMaterialDialog;
-import Ninja.coder.Ghostemane.code.widget.component.SwbData;
 import Ninja.coder.Ghostemane.code.widget.component.fastscrollcompat.FastScrollerBuilder;
 import android.Manifest;
 import android.animation.ObjectAnimator;
@@ -1374,10 +1373,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     if (staticstring.endsWith(".7z")) {
       _sevenUnZip(staticstring, Folder);
     }
-    if (staticstring.endsWith(".swb")) {
-      var myswb = new SwbData(this);
-      myswb.init(staticstring);
-    }
+    
     if (staticstring.endsWith(".zip")) {
       InstallTakesZip(newpos, staticstring);
     }

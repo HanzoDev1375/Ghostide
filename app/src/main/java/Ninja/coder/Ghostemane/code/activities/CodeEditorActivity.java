@@ -9,6 +9,7 @@ import Ninja.coder.Ghostemane.code.adapter.SyspiarAdapter;
 import Ninja.coder.Ghostemane.code.adapter.ToolbarListFileAdapter;
 import Ninja.coder.Ghostemane.code.config.CommonFactoryData;
 import Ninja.coder.Ghostemane.code.databinding.Antcomp8lerBinding;
+import Ninja.coder.Ghostemane.code.enums.Mode;
 import Ninja.coder.Ghostemane.code.layoutmanager.LogCatBottomSheet;
 import Ninja.coder.Ghostemane.code.marco.CharUtil;
 import Ninja.coder.Ghostemane.code.marco.ColorView;
@@ -25,6 +26,7 @@ import Ninja.coder.Ghostemane.code.tasks.app.SassForAndroid;
 import Ninja.coder.Ghostemane.code.terminal.TerminalActivity;
 import Ninja.coder.Ghostemane.code.utils.*;
 import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.CompilerUtils;
 import Ninja.coder.Ghostemane.code.widget.BlurImage;
 import Ninja.coder.Ghostemane.code.widget.ExrtaFab;
 import android.animation.ObjectAnimator;
@@ -70,7 +72,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mcal.uidesigner.XmlLayoutDesignActivity;
-import com.ninjacoder.jgit.GsonToClass;
 import com.skydoves.powermenu.MenuAnimation;
 import com.skydoves.powermenu.OnMenuItemClickListener;
 import com.skydoves.powermenu.PowerMenu;
@@ -1255,8 +1256,8 @@ public class CodeEditorActivity extends AppCompatActivity {
       }
 
       if (shp.getString("pos_path", "").contains(".html")) {
-        if (moalaqfragment.contains("mpost")) {
-          _fragmentdatapost();
+        if (ru.getBoolean("live",false) == true) {
+          var it = new CompilerUtils(shp.getString("pos_path", ""),Mode.WEB,CodeEditorActivity.this);
         } else {
           htmlrus.setClass(getApplicationContext(), HtmlRunerActivity.class);
           htmlrus.putExtra("run", shp.getString("pos_path", ""));
@@ -1335,9 +1336,7 @@ public class CodeEditorActivity extends AppCompatActivity {
                               false,
                               false);
                         } else if (shp.getString("pos_path", "").contains(".cpp")) {
-                          getmd.setClass(getApplicationContext(), TerminalActivity.class);
-                          getmd.putExtra("cpp", shp.getString("pos_path", ""));
-                          startActivity(getmd);
+                          
                         }
                       }
                     }
