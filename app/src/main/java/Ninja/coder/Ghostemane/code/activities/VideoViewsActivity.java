@@ -101,27 +101,19 @@ public class VideoViewsActivity extends BaseCompat {
         new LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     viewvideo.setLayoutParams(lpviewvideo);
+    mVideoView.setPadding(0,0,0,0);
+    mVideoView.setClipToPadding(false);
     viewvideo.addView(mVideoView);
     mWidthPixels = getResources().getDisplayMetrics().widthPixels;
-    mVideoView.setLayoutParams(
-        new LinearLayout.LayoutParams(mWidthPixels, mWidthPixels * 9 / 16 + 1));
-
+    //  mVideoView.setLayoutParams(
+    //   new LinearLayout.LayoutParams(mWidthPixels, mWidthPixels * 9 / 16 + 1));
     mVideoView.setUrl(path);
     mController = new StandardVideoController(this);
-    // mController.addDefaultControlComponent(title, false);
     mController.addControlComponent(new CompleteView(this));
     mController.addControlComponent(new ErrorView(this));
     mController.addControlComponent(new PrepareView(this));
     mController.addControlComponent(new GestureView(this));
     vodControlView = new VodControlView(this);
-
-    vodControlView.setCallBack(
-        new VodControlView.OnClick() {
-          @Override
-          public void click() {
-            // TODO: Implement this method
-          }
-        });
     vodControlView
         .findViewById(R.id.speed)
         .setOnClickListener(

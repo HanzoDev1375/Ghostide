@@ -9,7 +9,10 @@ import Ninja.coder.Ghostemane.code.adapter.ToolbarListFileAdapter;
 import Ninja.coder.Ghostemane.code.adapter.ViewType;
 import Ninja.coder.Ghostemane.code.compressor.TarGzExtractor;
 import Ninja.coder.Ghostemane.code.compressor.ZxExtractor;
+import Ninja.coder.Ghostemane.code.databin.FileEvent;
 import Ninja.coder.Ghostemane.code.databin.FileMaker;
+import Ninja.coder.Ghostemane.code.databin.RxFileObserver;
+import android.util.Log;
 import Ninja.coder.Ghostemane.code.filehelper.CreatorModule;
 import Ninja.coder.Ghostemane.code.filehelper.FactoryModelProject;
 import Ninja.coder.Ghostemane.code.folder.FileIconHelper;
@@ -84,6 +87,7 @@ import com.google.gson.reflect.TypeToken;
 import com.hzy.lib7z.Z7Extractor;
 import com.ninjacoder.jgit.GsonToClass;
 import com.skydoves.powermenu.PowerMenu;
+import io.reactivex.rxjava3.core.Observable;
 import java.util.stream.Collectors;
 import ninja.coder.appuploader.main.ViewDownloder;
 import ninjacoder.ghostide.androidtools.r8.android.R8Tools;
@@ -280,6 +284,15 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
       setViewType(ViewType.ROW);
     }
     ThemeChaker();
+
+    Observable<FileEvent> fileObservable = RxFileObserver.create(Folder);
+
+    fileObservable.subscribe(
+        (it) -> {
+          if (it.isCreate()) {
+            Log.w("FileCreate", it.toString());
+          }
+        });
 
     var helper =
         new RecyclerViewHelper(
@@ -1373,7 +1386,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     if (staticstring.endsWith(".7z")) {
       _sevenUnZip(staticstring, Folder);
     }
-    
+
     if (staticstring.endsWith(".zip")) {
       InstallTakesZip(newpos, staticstring);
     }

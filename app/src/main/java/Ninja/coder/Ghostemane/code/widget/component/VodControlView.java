@@ -249,7 +249,6 @@ public class VodControlView extends FrameLayout
     int id = v.getId();
     if (id == R.id.fullscreen) {
       toggleFullScreen();
-      click.click();
     } else if (id == R.id.iv_play) {
       mControlWrapper.togglePlay();
     } else if (id == R.id.speed) {
