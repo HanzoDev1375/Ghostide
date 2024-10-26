@@ -12,6 +12,7 @@ import Ninja.coder.Ghostemane.code.compressor.ZxExtractor;
 import Ninja.coder.Ghostemane.code.databin.FileEvent;
 import Ninja.coder.Ghostemane.code.databin.FileMaker;
 import Ninja.coder.Ghostemane.code.databin.RxFileObserver;
+import Ninja.coder.Ghostemane.code.marco.editorface.ClassNodePaserImpl;
 import android.util.Log;
 import Ninja.coder.Ghostemane.code.filehelper.CreatorModule;
 import Ninja.coder.Ghostemane.code.filehelper.FactoryModelProject;
@@ -76,6 +77,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.blankj.utilcode.util.ThreadUtils;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -1936,6 +1938,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     sh.addItem(getString(R.string.android_module), R.drawable.mdapk);
     sh.addItem(getString(R.string.git_tools), R.drawable.git);
     sh.addItem(getString(R.string.gson_to_class), R.drawable.ic_material_folder_json);
+    sh.addItem("PastJavaCode?", R.drawable.ic_material_java);
     sh.setOnItemClickLabe(
         (pos333) -> {
           switch (pos333) {
@@ -2086,13 +2089,26 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                 sh.getDismiss(true);
                 break;
               }
+            case 11:
+              {
+                var nodeChild =
+                    new ClassNodePaserImpl(
+                        Folder,
+                        FileManagerActivity.this,
+                        () -> {
+                          reLoadFile();
+                        },
+                        null);
+                sh.getDismiss(true);
+                nodeChild.setMode(ClassNodePaserImpl.ModeUser.DIALOG);
+                break;
+              }
           }
         });
   }
 
   public void setItemSheetOld(int _position, final View _view) {
-    final com.google.android.material.bottomsheet.BottomSheetDialog bottomSheetDialog =
-        new com.google.android.material.bottomsheet.BottomSheetDialog(FileManagerActivity.this);
+    var bottomSheetDialog = new BottomSheetDialog(FileManagerActivity.this);
 
     View bottomSheetView;
     bottomSheetView = getLayoutInflater().inflate(R.layout.layout_dir_sheet, null);

@@ -82,7 +82,7 @@ public class ClassNodePaserImpl {
     dialogSheet.setPositiveButton(
         android.R.string.ok,
         (it, __) -> {
-          if (bind.editor.length() > 0) node = new ClassNodePaser(path, bind.editor.getText());
+          node = new ClassNodePaser(path, bind.editor.getText().toString());
           paster.past();
         });
     dialogSheet.setNegativeButton(android.R.string.cancel, null);

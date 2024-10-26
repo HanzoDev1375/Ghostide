@@ -1,6 +1,7 @@
 package Ninja.coder.Ghostemane.code.marco.editorface;
 
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
+import android.util.Log;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
@@ -10,15 +11,21 @@ import java.util.Optional;
 class ClassNodePaser {
 
   private String path;
-  private String paster;
+  private String javaCode;
 
-  public ClassNodePaser(String path, String paster) {
+  public ClassNodePaser(String path, String javaCode) {
     this.path = path;
-    this.paster = paster;
+    this.javaCode = javaCode;
+    init();
   }
 
   void init() {
-    FileUtil.writeFile(path + findClassName(paster) + ".java", format(paster));
+    try {
+      FileUtil.writeFile(path + "/" + findClassName(javaCode) + ".java", format(javaCode));
+      Log.w("Class Mod : ", path + "/" + findClassName(javaCode) + ".java");
+    } catch (Exception err) {
+
+    }
   }
 
   private String findClassName(String javaCode) throws Exception {
@@ -28,7 +35,7 @@ class ClassNodePaser {
     return firstClass.map(ClassOrInterfaceDeclaration::getNameAsString).orElse("Main");
   }
 
-  static String format(String code) {
+  String format(String code) {
     try {
       var cu = StaticJavaParser.parse(code);
       var configuration = new DefaultPrinterConfiguration();

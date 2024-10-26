@@ -9,6 +9,7 @@ import Ninja.coder.Ghostemane.code.glidecompat.GlideCompat;
 import Ninja.coder.Ghostemane.code.interfaces.FileCallBack;
 import Ninja.coder.Ghostemane.code.marco.FileCounter;
 import Ninja.coder.Ghostemane.code.marco.binder.BinderRecyclerview1;
+import Ninja.coder.Ghostemane.code.marco.editorface.ClassNodePaserImpl;
 import Ninja.coder.Ghostemane.code.utils.AnimUtils;
 import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
@@ -17,7 +18,6 @@ import Ninja.coder.Ghostemane.code.widget.component.fastscrollcompat.PopupTextPr
 import android.content.Context;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +29,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,19 +56,7 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     this.filteredFiles = files;
     this.click = click;
 
-    registerAdapterDataObserver(
-        new RecyclerView.AdapterDataObserver() {
-
-          @Override
-          public void onChanged() {
-            super.onChanged();
-            if (getItemCount() == 0) {
-              Log.e("item reday", "getItemCount()");
-            } else {
-              Log.e("item not redy", "0");
-            }
-          }
-        });
+    
   }
 
   @Override
@@ -126,11 +113,10 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
       if (myfile.toString().endsWith(".xml")) {
         GlideCompat.LoadVector(myfile.toString(), viewHolder.icon);
         String it = FileUtil.readFile(myfile.toString());
-        
-        
-        if(it.equals("<animated-vector")){
+
+        if (it.equals("<animated-vector")) {
           AnimatedVectorDrawable v = (AnimatedVectorDrawable) viewHolder.icon.getDrawable();
-          if(v != null){
+          if (v != null) {
             v.start();
           }
         }
@@ -152,8 +138,8 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
         AmazonClassHelper.getFileJavaAsChild(viewHolder.icon, myfile.toString());
       } else if (myfile.toString().endsWith(".g4")) {
         AmazonClassHelper.getScanAntlr4Grammer(viewHolder.icon, myfile.toString());
-      }else if(myfile.toString().endsWith(".AA")) {
-      	GlideCompat.LoadIconTheme(myfile.toString(),viewHolder.icon);
+      } else if (myfile.toString().endsWith(".AA")) {
+        GlideCompat.LoadIconTheme(myfile.toString(), viewHolder.icon);
       }
     }
 

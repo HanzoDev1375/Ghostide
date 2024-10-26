@@ -132,7 +132,7 @@ public class GsonToClass {
 
         // تولید کد Java بر اساس داده‌های موجود در Map
         StringBuilder javaCode = new StringBuilder();
-        javaCode.append("package yourApp").append("\n");
+        javaCode.append("package yourApp;").append("\n");
         javaCode.append("import com.google.gson.annotations.SerializedName;").append("\n");
 
         javaCode.append("public class ").append(nameClass).append("{\n");
