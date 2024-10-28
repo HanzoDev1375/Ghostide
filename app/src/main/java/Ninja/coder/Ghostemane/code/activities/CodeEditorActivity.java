@@ -94,18 +94,16 @@ import ninja.coder.appuploader.utils.ShapeName;
 
 public class CodeEditorActivity extends AppCompatActivity {
 
-  public static String POSTMANPATH = "";
   public final int REQ_CD_SETPASZAMINE = 101;
   protected Sound sound;
   protected EditorAutoCompleteWindow window;
   protected ExrtaFab _fab; // /By ninja coder big man main
-  private final Timer _timer = new Timer();
   private WallpaperParallaxEffect effect;
   private CoordinatorLayout Coordinator;
-  private String currentWord = "";
+  
   private HashMap<String, Object> imap = new HashMap<>();
   private double n = 0;
-  private boolean home = false;
+  
   private final String code = "";
   private double click2var = 0;
   private double pos10 = 0;
@@ -121,21 +119,11 @@ public class CodeEditorActivity extends AppCompatActivity {
   private double ic = 0;
   private final String vasteh = "";
 
-  private final ArrayList<HashMap<String, Object>> dexter = new ArrayList<>();
+  
   private ArrayList<HashMap<String, Object>> tabs_listmap = new ArrayList<>();
-  private final ArrayList<String> indifier = new ArrayList<>();
-  private final ArrayList<HashMap<String, Object>> tags = new ArrayList<>();
   private ArrayList<HashMap<String, Object>> staticSymbiolPiare = new ArrayList<>();
   private final ArrayList<String> string = new ArrayList<>();
-  private final ArrayList<HashMap<String, Object>> map = new ArrayList<>();
-  private final ArrayList<HashMap<String, Object>> treeviewmap = new ArrayList<>();
-  private final ArrayList<String> hsistr3000 = new ArrayList<>();
-  private final ArrayList<HashMap<String, Object>> hsimap3000 = new ArrayList<>();
   private final ArrayList<String> list = new ArrayList<>();
-  private final ArrayList<String> folderList = new ArrayList<>();
-  private final ArrayList<String> fileList = new ArrayList<>();
-  private final ArrayList<HashMap<String, Object>> files = new ArrayList<>();
-
   private LinearLayout multytab;
   private FrameLayout FrameLayout01;
   private LinearLayout newLayoutSymbolBar;
@@ -168,8 +156,6 @@ public class CodeEditorActivity extends AppCompatActivity {
   private SharedPreferences line;
   private SharedPreferences shp;
   private SharedPreferences qo;
-  private RequestNetwork constreust;
-  private RequestNetwork.RequestListener _constreust_request_listener;
   private AlertDialog.Builder myDialog;
   private final Intent res = new Intent();
   private TimerTask ask;
@@ -181,7 +167,6 @@ public class CodeEditorActivity extends AppCompatActivity {
   private final Intent further = new Intent();
   private SharedPreferences re;
   private SharedPreferences war;
-  private SharedPreferences kos;
   private SharedPreferences tab100;
   private SharedPreferences setfont;
   private SharedPreferences atx;
@@ -280,14 +265,12 @@ public class CodeEditorActivity extends AppCompatActivity {
     line = getSharedPreferences("line", Activity.MODE_PRIVATE);
     shp = getSharedPreferences("shp", Activity.MODE_PRIVATE);
     qo = getSharedPreferences("qo", Activity.MODE_PRIVATE);
-    constreust = new RequestNetwork(this);
     myDialog = new AlertDialog.Builder(this);
     di = new AlertDialog.Builder(this);
     vb = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
     getvb = getSharedPreferences("getvb", Activity.MODE_PRIVATE);
     re = getSharedPreferences("re", Activity.MODE_PRIVATE);
     war = getSharedPreferences("war", Activity.MODE_PRIVATE);
-    kos = getSharedPreferences("kos", Activity.MODE_PRIVATE);
     tab100 = getSharedPreferences("tab100", Activity.MODE_PRIVATE);
     setfont = getSharedPreferences("setfont", Activity.MODE_PRIVATE);
     atx = getSharedPreferences("atx", Activity.MODE_PRIVATE);
@@ -409,35 +392,26 @@ public class CodeEditorActivity extends AppCompatActivity {
         });
 
     image.setOnClickListener(
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View _view) {
-            if (ic == 1) {
-              image.setImageResource(R.drawable.noeye);
-              editor.setEditable(false);
-              ic--;
-            } else {
-              editor.setEditable(true);
-              image.setImageResource(R.drawable.okeye);
-              ic++;
-            }
+        (it) -> {
+          if (ic == 1) {
+            image.setImageResource(R.drawable.noeye);
+            editor.setEditable(false);
+            ic--;
+          } else {
+            editor.setEditable(true);
+            image.setImageResource(R.drawable.okeye);
+            ic++;
           }
         });
 
     redo.setOnClickListener(
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View _view) {
-            editor.AutoRedo();
-          }
+        (v) -> {
+          editor.AutoRedo();
         });
 
     undo.setOnClickListener(
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View _view) {
-            editor.AutoUndo();
-          }
+        (it) -> {
+          editor.AutoUndo();
         });
 
     menupopnew.setOnClickListener(
@@ -446,45 +420,23 @@ public class CodeEditorActivity extends AppCompatActivity {
         });
 
     imageview1.setOnClickListener(
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View _view) {
-            barSymoble.setVisibility(View.GONE);
-            _fab.setVisibility(View.VISIBLE);
-          }
+        (it) -> {
+          barSymoble.setVisibility(View.GONE);
+          _fab.setVisibility(View.VISIBLE);
         });
 
     _fab.setOnClickListener(
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View _view) {
-            FabFileRuner();
-          }
+        (it) -> {
+          FabFileRuner();
         });
 
-    _constreust_request_listener =
-        new RequestNetwork.RequestListener() {
-          @Override
-          public void onResponse(String _param1, String _param2, HashMap<String, Object> _param3) {
-            final String _tag = _param1;
-            final String _response = _param2;
-            final HashMap<String, Object> _responseHeaders = _param3;
-          }
-
-          @Override
-          public void onErrorResponse(String _param1, String _param2) {
-            final String _tag = _param1;
-            final String _message = _param2;
-          }
-        };
   }
 
   private void initializeLogic() {
     proanjctor.setVisibility(View.GONE);
     barSymoble.setVisibility(View.VISIBLE);
     setWallpaperParallaxEffect();
-    POSTMANPATH = shp.getString("pos_path", "");
-    // _fab.shrink();
+    
     imap = new HashMap<>();
 
     if (FileUtil.isExistFile(thememanagersoft.getString("themes", ""))) {
@@ -589,6 +541,8 @@ public class CodeEditorActivity extends AppCompatActivity {
           modelEditor.setCursor(cu.getLeftLine() + cu.getLeftColumn());
           var myChar = new CharUtil(editor.getText().toString(), titleauthor);
           var iscode = new FactoryCodeError(editor, iconAuthor);
+          undo.setEnabled(editor.canUndo());
+          redo.setEnabled(editor.canRedo());
           iscode.run();
         });
 
@@ -712,7 +666,7 @@ public class CodeEditorActivity extends AppCompatActivity {
     getWindow().setStatusBarColor(color);
     editor.setAutoCompletionEnabled(!auto.contains("mauto"));
     //   _fab.setIconResource(R.drawable.play);
-    home = true;
+    
     if (getinitdir.contains("mdir")) {
       if (getinitdir.getString("mdir", "").equals("true")) {
         dir.setVisibility(View.GONE);
@@ -1256,8 +1210,9 @@ public class CodeEditorActivity extends AppCompatActivity {
       }
 
       if (shp.getString("pos_path", "").contains(".html")) {
-        if (ru.getBoolean("live",false) == true) {
-          var it = new CompilerUtils(shp.getString("pos_path", ""),Mode.WEB,CodeEditorActivity.this);
+        if (ru.getBoolean("live", false) == true) {
+          var it =
+              new CompilerUtils(shp.getString("pos_path", ""), Mode.WEB, CodeEditorActivity.this);
         } else {
           htmlrus.setClass(getApplicationContext(), HtmlRunerActivity.class);
           htmlrus.putExtra("run", shp.getString("pos_path", ""));
@@ -1336,7 +1291,7 @@ public class CodeEditorActivity extends AppCompatActivity {
                               false,
                               false);
                         } else if (shp.getString("pos_path", "").contains(".cpp")) {
-                          
+
                         }
                       }
                     }

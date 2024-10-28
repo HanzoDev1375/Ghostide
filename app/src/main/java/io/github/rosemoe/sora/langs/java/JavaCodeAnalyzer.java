@@ -399,14 +399,14 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               }
               if (text1.matches("([A-Za-z]*)(Exception)([a-zA-Z]*)")) {
                 colorid = EditorColorScheme.javatype;
-                dataUpp = true;
+                dataUpp = false;
                 opratorName = false;
                 isNewObject = false;
                 isAtObject = false;
               }
               if (text1.matches("([A-Za-z]*)(Exception)([a-zA-Z]*)(\\s\\w+)")) {
                 colorid = EditorColorScheme.javatype;
-                dataUpp = true;
+                dataUpp = false;
                 opratorName = false;
                 isNewObject = false;
                 isAtObject = false;

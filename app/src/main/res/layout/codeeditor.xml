@@ -6,14 +6,16 @@
     android:layout_width="match_parent"
     android:fitsSystemWindows="false"
     android:id="@+id/Coordinator"
-    >
+    
+>
 
     <ImageView
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:scaleType="centerCrop"
         android:id="@+id/icon_backgroundghost"
-        />
+        
+    />
 
     <LinearLayout
         android:layout_height="match_parent"
@@ -21,13 +23,15 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:orientation="vertical"
         android:id="@+id/getColorPass"
-        >
+        
+    >
 
         <LinearLayout
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:orientation="vertical"
-            >
+            
+        >
 
             <Ninja.coder.Ghostemane.code.widget.PraramnetLayoutNinja
                 android:layout_height="match_parent"
@@ -35,7 +39,8 @@
                 android:gravity="center_vertical"
                 android:orientation="vertical"
                 android:id="@+id/Mainlinear"
-                >
+                
+            >
 
                 <LinearLayout
                     android:layout_height="wrap_content"
@@ -43,7 +48,8 @@
                     android:gravity="center_horizontal|center_vertical"
                     android:orientation="vertical"
                     android:id="@+id/multytab"
-                    >
+                    
+                >
 
                     <LinearLayout
                         android:layout_height="wrap_content"
@@ -52,7 +58,8 @@
                         android:orientation="horizontal"
                         android:translationX="2.0dp"
                         android:id="@+id/CustomToolbar"
-                        >
+                        
+                    >
 
                         <LinearLayout
                             android:layout_height="wrap_content"
@@ -61,7 +68,8 @@
                             android:padding="4dp"
                             android:orientation="vertical"
                             android:id="@+id/linear1"
-                            >
+                            
+                        >
 
                             <LinearLayout
                                 android:layout_height="wrap_content"
@@ -70,7 +78,8 @@
                                 android:padding="8dp"
                                 android:orientation="horizontal"
                                 android:id="@+id/linear2"
-                                >
+                                
+                            >
 
                                 <com.allenliu.badgeview.BadgeView
                                     android:layout_height="30dp"
@@ -78,7 +87,8 @@
                                     android:padding="2dp"
                                     android:orientation="horizontal"
                                     android:id="@+id/badgeview3"
-                                    />
+                                    
+                                />
 
                                 <TextView
                                     android:layout_height="wrap_content"
@@ -86,10 +96,12 @@
                                     android:padding="8dp"
                                     android:textSize="16sp"
                                     android:textColor="#ffffff"
-                                    android:layout_weight="13"
+                                    android:layout_weight="2"
                                     android:id="@+id/titleauthor"
-                                    android:text="TextView"
-                                    />
+                                    android:singleLine="true"
+                                    android:ellipsize="end"
+                                    
+                                />
 
                                 <ImageView
                                     android:layout_height="25dp"
@@ -99,7 +111,8 @@
                                     android:layout_marginLeft="3dp"
                                     android:layout_marginRight="3dp"
                                     android:id="@+id/image"
-                                    />
+                                    
+                                />
 
                                 <ImageView
                                     android:layout_height="25dp"
@@ -109,7 +122,8 @@
                                     android:layout_marginLeft="3dp"
                                     android:layout_marginRight="3dp"
                                     android:id="@+id/redo"
-                                    />
+                                    
+                                />
 
                                 <ImageView
                                     android:layout_height="25dp"
@@ -119,7 +133,8 @@
                                     android:layout_marginLeft="3dp"
                                     android:layout_marginRight="3dp"
                                     android:id="@+id/undo"
-                                    />
+                                    
+                                />
 
                                 <ImageView
                                     android:layout_height="25dp"
@@ -128,7 +143,8 @@
                                     android:scaleType="fitCenter"
                                     android:layout_marginRight="4dp"
                                     android:id="@+id/menupopnew"
-                                    />
+                                    
+                                />
 
                             </LinearLayout>
 
@@ -143,7 +159,8 @@
                         android:padding="8dp"
                         style="?android:progressBarStyleHorizontal"
                         android:id="@+id/progressbar1"
-                        />
+                        
+                    />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:layout_height="wrap_content"
@@ -151,14 +168,16 @@
                         android:padding="8dp"
                         android:orientation="horizontal"
                         android:id="@+id/recyclerview1"
-                        />
+                        
+                    />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:layout_height="wrap_content"
                         android:layout_width="match_parent"
                         android:padding="8dp"
                         android:id="@+id/dir"
-                        />
+                        
+                    />
 
                     <LinearLayout
                         android:layout_height="2dp"
@@ -168,7 +187,8 @@
                         android:orientation="horizontal"
                         android:translationY="-7.5dp"
                         android:id="@+id/divar"
-                        >
+                        
+                    >
 
                     </LinearLayout>
 
@@ -179,7 +199,8 @@
                     android:layout_width="match_parent"
                     android:layout_weight="5"
                     android:id="@+id/FrameLayout01"
-                    >
+                    
+                >
 
                     <Ninja.coder.Ghostemane.code.IdeEditor
                         android:layout_height="match_parent"
@@ -187,14 +208,16 @@
                         android:gravity="left|top"
                         android:padding="8dp"
                         android:id="@+id/editor"
-                        />
+                        
+                    />
 
                     <ImageView
                         android:layout_height="match_parent"
                         android:layout_width="match_parent"
                         android:scaleType="centerInside"
                         android:id="@+id/imageloadereditor"
-                        />
+                        
+                    />
 
                     <LinearLayout
                         android:layout_height="wrap_content"
@@ -203,7 +226,8 @@
                         android:orientation="horizontal"
                         android:id="@+id/FrameLayout02"
                         android:layout_gravity="right"
-                        >
+                        
+                    >
 
                         <LinearLayout
                             android:layout_height="wrap_content"
@@ -211,7 +235,8 @@
                             android:gravity="right|center_vertical"
                             android:padding="8dp"
                             android:id="@+id/linear3"
-                            >
+                            
+                        >
 
                             <ImageView
                                 android:layout_height="30dp"
@@ -223,7 +248,8 @@
                                 android:layout_marginRight="5dp"
                                 android:layout_marginTop="8dp"
                                 android:id="@+id/iconAuthor"
-                                />
+                                
+                            />
 
                             <ProgressBar
                                 android:layout_height="30dp"
@@ -236,7 +262,8 @@
                                 android:layout_marginTop="8dp"
                                 android:id="@+id/proanjctor"
                                 android:layout_gravity="right|center_vertical"
-                                />
+                                
+                            />
 
                         </LinearLayout>
 
@@ -251,13 +278,15 @@
                     android:padding="3dp"
                     android:orientation="horizontal"
                     android:id="@+id/newLayoutSymbolBar"
-                    >
+                    
+                >
 
                     <LinearLayout
                         android:layout_height="wrap_content"
                         android:layout_width="match_parent"
                         android:orientation="vertical"
-                        >
+                        
+                    >
 
                         <LinearLayout
                             android:layout_height="0dp"
@@ -267,7 +296,8 @@
                             android:padding="2dp"
                             android:orientation="vertical"
                             android:id="@+id/barSymoble"
-                            >
+                            
+                        >
 
                             <ImageView
                                 android:layout_height="25dp"
@@ -278,7 +308,8 @@
                                 android:layout_marginLeft="2dp"
                                 android:layout_marginRight="2dp"
                                 android:id="@+id/imageview1"
-                                />
+                                
+                            />
 
                             <LinearLayout
                                 android:layout_height="wrap_content"
@@ -287,7 +318,8 @@
                                 android:padding="8dp"
                                 android:orientation="horizontal"
                                 android:id="@+id/linear6"
-                                >
+                                
+                            >
 
                             </LinearLayout>
 
@@ -298,7 +330,8 @@
                             android:layout_width="match_parent"
                             android:orientation="vertical"
                             android:id="@+id/linear5"
-                            >
+                            
+                        >
 
                             <LinearLayout
                                 android:layout_height="1dp"
@@ -307,7 +340,8 @@
                                 android:padding="8dp"
                                 android:orientation="horizontal"
                                 android:id="@+id/divardown"
-                                >
+                                
+                            >
 
                             </LinearLayout>
 
@@ -316,14 +350,16 @@
                                 android:layout_width="wrap_content"
                                 android:padding="8dp"
                                 android:id="@+id/editor_ser"
-                                />
+                                
+                            />
 
                             <androidx.recyclerview.widget.RecyclerView
                                 android:layout_height="wrap_content"
                                 android:layout_width="match_parent"
                                 android:padding="8dp"
                                 android:id="@+id/syspiar"
-                                />
+                                
+                            />
 
                         </LinearLayout>
 
@@ -349,6 +385,7 @@
         android:layout_marginTop="18dp"
         android:id="@+id/_fab"
         android:layout_gravity="right|bottom"
-        />
+        
+    />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

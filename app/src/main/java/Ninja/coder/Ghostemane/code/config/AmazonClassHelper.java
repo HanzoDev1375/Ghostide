@@ -30,7 +30,7 @@ public class AmazonClassHelper {
                   // addImage
                 } else if (RegexUtilCompat.RegexSelect("(interface\\s)", code)) {
 
-                } else {
+                } else if(RegexUtilCompat.RegexSelect("(object\\s)", code)) {
 
                 }
               }
