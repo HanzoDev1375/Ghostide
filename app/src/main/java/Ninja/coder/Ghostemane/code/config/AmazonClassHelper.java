@@ -6,6 +6,10 @@ import Ninja.coder.Ghostemane.code.glidecompat.GlideCompat;
 import Ninja.coder.Ghostemane.code.marco.RegexUtilCompat;
 import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
+import android.util.Log;
+import java.util.List;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import java.util.stream.Collectors;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,7 +34,7 @@ public class AmazonClassHelper {
                   // addImage
                 } else if (RegexUtilCompat.RegexSelect("(interface\\s)", code)) {
 
-                } else if(RegexUtilCompat.RegexSelect("(object\\s)", code)) {
+                } else if (RegexUtilCompat.RegexSelect("(object\\s)", code)) {
 
                 }
               }
@@ -87,6 +91,8 @@ public class AmazonClassHelper {
             GlideCompat.LoadSvgInAsster("ann.svg", imageView);
           } else if (classOrInterface.isEmpty()) {
             GlideCompat.LoadSvgInAsster("emptyclass.svg", imageView);
+          } else if (isModelClass(code)) {
+            GlideCompat.LoadSvgInAsster("modelclass.svg", imageView);
           } else {
             GlideCompat.LoadSvgInAsster("myclas.svg", imageView);
           }
@@ -107,6 +113,62 @@ public class AmazonClassHelper {
     } catch (Exception err) {
       return false;
     }
+  }
+
+  public static boolean isModelClass(String javaCode) {
+    CompilationUnit cu;
+
+    try {
+      cu = StaticJavaParser.parse(javaCode); // parse java code
+    } catch (ParseProblemException err) {
+      Log.e("Error Code 0", "Java code is invalid: " + err.getMessage());
+      return false; // return false, invalid java code
+    }
+
+    // Check all classes for model classes
+    return cu.findAll(ClassOrInterfaceDeclaration.class).stream()
+        .anyMatch(
+            classDecl -> {
+              // Initialize model class check
+              boolean hasPublicFields =
+                  classDecl.getFields().stream()
+                      .anyMatch(
+                          field ->
+                              field.getModifiers().stream()
+                                  .anyMatch(modifier -> modifier.equals("public")));
+
+              if (hasPublicFields) {
+                return false; // Not a model class due to public fields
+              }
+
+              List<String> methodNames =
+                  classDecl.getMethods().stream()
+                      .map(MethodDeclaration::getNameAsString)
+                      .collect(Collectors.toList());
+
+              // Check for getters and setters
+              return classDecl.getFields().stream()
+                  .allMatch(
+                      field -> {
+                        return field.getVariables().stream()
+                            .allMatch(
+                                variable -> {
+                                  String getter = "get" + capitalize(variable.getNameAsString());
+                                  String setter = "set" + capitalize(variable.getNameAsString());
+                                  // Check if both getter and setter exist
+                                  return methodNames.contains(getter)
+                                      && methodNames.contains(setter);
+                                });
+                      });
+            });
+  }
+
+  // Utility method to capitalize field names
+  private static String capitalize(String str) {
+    if (str == null || str.isEmpty()) {
+      return str;
+    }
+    return str.substring(0, 1).toUpperCase() + str.substring(1);
   }
 
   /**

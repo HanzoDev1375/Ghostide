@@ -186,18 +186,7 @@ public class ToolItem {
   }
 
   public void GotoListFile(List<CompletionItem> item, ArrayList<String> paths) {
-    File file = new File(CodeEditorActivity.POSTMANPATH);
-    if (!file.exists() || !file.isDirectory()) return;
-    File[] pathlist = file.listFiles();
-    if (pathlist == null || pathlist.length == 0) return;
-    item.clear();
-    for (var it : pathlist) {
-      if (it.isDirectory()) {
-        item.add(new CompletionItem(it.getAbsolutePath(), "Directory"));
-      } else {
-        item.add(new CompletionItem(it.getAbsolutePath(), "File"));
-      }
-    }
+    
   }
 
   public void StringFog(CodeEditor editor) {
