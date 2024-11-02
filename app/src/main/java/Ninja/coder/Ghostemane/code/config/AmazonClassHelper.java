@@ -7,6 +7,7 @@ import Ninja.coder.Ghostemane.code.marco.RegexUtilCompat;
 import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import android.util.Log;
+import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import java.util.List;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import java.util.stream.Collectors;
@@ -85,7 +86,7 @@ public class AmazonClassHelper {
             GlideCompat.LoadSvgInAsster("absclass.svg", imageView);
           } else if (classOrInterface.isEnumDeclaration() || code.matches("(public\\s+enum)")) {
             GlideCompat.LoadSvgInAsster("enummodel.svg", imageView);
-          } else if (classOrInterface.isInnerClass()) {
+          } else if (hasInnerClass(code)) {
             GlideCompat.LoadSvgInAsster("ennerclass.svg", imageView);
           } else if (classOrInterface.isAnnotationDeclaration()) {
             GlideCompat.LoadSvgInAsster("ann.svg", imageView);
@@ -169,6 +170,36 @@ public class AmazonClassHelper {
       return str;
     }
     return str.substring(0, 1).toUpperCase() + str.substring(1);
+  }
+
+  public static boolean hasInnerClass(String filePath) {
+    CompilationUnit cu;
+    try {
+      cu = StaticJavaParser.parse(filePath);
+      InnerClassVisitor visitor = new InnerClassVisitor();
+      visitor.visit(cu, null);
+      return visitor.hasInnerClass();
+    } catch (ParseProblemException e) {
+      e.printStackTrace();
+      return false;
+    }
+  }
+
+  private static class InnerClassVisitor extends VoidVisitorAdapter<Void> {
+    private boolean innerClassFound = false;
+
+    @Override
+    public void visit(ClassOrInterfaceDeclaration n, Void arg) {
+      if (n.isInnerClass()) {
+        innerClassFound = true;
+      }
+
+      super.visit(n, arg);
+    }
+
+    public boolean hasInnerClass() {
+      return innerClassFound;
+    }
   }
 
   /**

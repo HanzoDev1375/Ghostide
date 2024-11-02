@@ -2,17 +2,11 @@ package io.github.rosemoe.sora.langs.html;
 
 import Ninja.coder.Ghostemane.code.IdeEditor;
 import Ninja.coder.Ghostemane.code.marco.RegexUtilCompat;
-import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import android.graphics.Color;
 import androidx.core.graphics.ColorUtils;
 import io.github.rosemoe.sora.data.Span;
 import android.util.Log;
-import io.github.rosemoe.sora.langs.java.JavaCodeA;
-import io.github.rosemoe.sora.langs.javascript.BasicSyntaxJavaScriptAnalyzer;
-import io.github.rosemoe.sora.langs.php.PHPLanguage;
-import io.github.rosemoe.sora.langs.php.PhpErrorManager;
 import io.github.rosemoe.sora.langs.xml.analyzer.BasicSyntaxPullAnalyzer;
-import io.github.rosemoe.sora.langs.xml.analyzer.Utils;
 import io.github.rosemoe.sora.text.TextStyle;
 import io.github.rosemoe.sora.widget.ListCss3Color;
 import java.util.Stack;
@@ -26,10 +20,6 @@ import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.text.TextAnalyzer;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
-import org.jsoup.nodes.Document;
-import org.jsoup.Jsoup;
-import org.jsoup.select.Elements;
-import org.jsoup.nodes.Element;
 
 public class HTMLAnalyzerCompat implements CodeAnalyzer {
   private IdeEditor editor;
@@ -341,7 +331,8 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
                 colorid = EditorColorScheme.AUTO_COMP_PANEL_CORNER;
               }
               if (previous == HTMLLexer.LBRACK
-                  || previous == HTMLLexer.DOT
+                  || previous == HTMLLexer.LPAREN
+                  || previous == HTMLLexer.RPAREN
                   || previous == HTMLLexer.IMPORT
                   || previous == HTMLLexer.FUNCTION
                   || previous == HTMLLexer.COLONCOLON) {
@@ -357,7 +348,6 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
                   || previous == HTMLLexer.LET
                   || previous == HTMLLexer.VAR) {
                 colorid = EditorColorScheme.LITERAL;
-                int[] err = Utils.setWaringSpan(result, line, column + 1);
               }
               if (previous == HTMLLexer.CASE || previous == HTMLLexer.FINAL) {
                 colorid = EditorColorScheme.ATTRIBUTE_NAME;
@@ -379,6 +369,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
               }
 
               ListCss3Color.initColor(token, line, column, result, true);
+
               result.addIfNeeded(line, column, colorid);
               break;
             }

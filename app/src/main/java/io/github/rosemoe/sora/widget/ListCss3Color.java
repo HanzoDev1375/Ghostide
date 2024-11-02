@@ -34,7 +34,7 @@ public class ListCss3Color {
       String tokenText = token.getText();
 
       // چک کردن اینکه آیا کلمه فقط حروف انگلیسی است
-      if (tokenText.matches("\\b\\w+\\b")) {
+      if (tokenText.matches("\\b[a-z]+\\b")) {
 
         if (ColorUtils.calculateLuminance(color) > 0.5) {
           Span span =
@@ -131,9 +131,12 @@ public class ListCss3Color {
                     new TypeToken<List<Map<String, String>>>() {}.getType());
         colorList.forEach(
             it -> {
-              if (getRegex("\\b" + it.get("colorName") + "\\b", text)) {
-                getColor(token, line, column, result, Color.parseColor(it.get("cssColor")));
+              if (it.get("colorName") != null) {
+                if (getRegex("\\b" + it.get("colorName") + "\\b", text)) {
+                  getColor(token, line, column, result, Color.parseColor(it.get("cssColor")));
+                }
               }
+              
             });
 
       } catch (Exception err) {
@@ -153,6 +156,6 @@ public class ListCss3Color {
   public static boolean getRegex(String regex, String text) {
     Pattern pattern = Pattern.compile(regex);
     Matcher matcher = pattern.matcher(text);
-    return matcher.find();
+    return matcher.matches();
   }
 }

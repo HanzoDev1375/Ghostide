@@ -266,7 +266,7 @@ public class SetThemeForJson {
     menu.setTextColor(
         map.containsKey("toolbartextcolor")
             ? Color.parseColor(map.get("toolbartextcolor").toString())
-            : Color.parseColor("#fff"));
+            : Color.parseColor("#ffffff"));
     menu.setMenuColor(
         map.containsKey("menubackground")
             ? Color.parseColor(map.get("menubackground").toString())

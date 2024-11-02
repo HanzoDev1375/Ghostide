@@ -497,6 +497,7 @@ public class CSS3Language implements EditorLanguage {
   @Override
   public boolean isAutoCompleteChar(char ch) {
     return MyCharacter.isJavaIdentifierPart(ch)
+        || Character.isDigit(ch)
         || ch == '<'
         || ch == '/'
         || ch == ':'

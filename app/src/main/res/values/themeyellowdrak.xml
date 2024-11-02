@@ -1,5 +1,13 @@
 <resources>
-    <style name="Theme.ThemeEngine.YellowDark" parent="Theme.Material3.Dark.NoActionBar">
+    <style
+        name="Theme.ThemeEngine.YellowDark"
+        parent="Theme.Material3.Dark.NoActionBar"
+        >
+        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.App.BottomSheetDialog</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialAlertDialog</item>
+        <item name="popupMenuBackground">@drawable/menucustom</item>
+        <item name="textAppearanceLargePopupMenu">@style/TextAppearance.App.BodyLarge</item>
+        <item name="textAppearanceSmallPopupMenu">@style/TextAppearance.App.BodyLarge</item>
         <item name="colorPrimary">@color/yellowdark_theme_primary</item>
         <item name="colorOnPrimary">@color/yellowdark_theme_onPrimary</item>
         <item name="colorPrimaryContainer">@color/yellowdark_theme_primaryContainer</item>

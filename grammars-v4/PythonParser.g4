@@ -557,9 +557,7 @@ maybe_star_pattern
    ;
 
 star_pattern
-   : '*' pattern_capture_target
-   | '*' wildcard_pattern
-   ;
+    : '*' NAME;
 
 mapping_pattern
    : LBRACE RBRACE

@@ -8,6 +8,7 @@ import Ninja.coder.Ghostemane.code.adapter.FileManagerAd;
 import Ninja.coder.Ghostemane.code.adapter.ToolbarListFileAdapter;
 import Ninja.coder.Ghostemane.code.adapter.ViewType;
 import Ninja.coder.Ghostemane.code.compressor.TarGzExtractor;
+import Ninja.coder.Ghostemane.code.compressor.XmlToSvg;
 import Ninja.coder.Ghostemane.code.compressor.ZxExtractor;
 import Ninja.coder.Ghostemane.code.databin.FileEvent;
 import Ninja.coder.Ghostemane.code.databin.FileMaker;
@@ -1231,6 +1232,32 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
         });
   }
 
+  void loadVector(int newpos) {
+    var sh = new ListSheet();
+    sh.setSheetDialog(this);
+    sh.addItem("Show in Editor", 0);
+    sh.addItem("Cast to Xml", 0);
+    sh.setOnItemClickLabe(
+        (pos333) -> {
+          switch (pos333) {
+            case 0:
+              {
+                SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+                sh.getDismiss(true);
+                break;
+              }
+            case 1:
+              {
+                new XmlToSvg(this,files.get((int) newpos).get("path").toString(),() ->{
+                  reLoadFile();
+                },Folder);
+                sh.getDismiss(true);
+                break;
+              }
+          }
+        });
+  }
+
   public void _dataOnClickItemList(int _pos) {
     newpos = _pos;
     if (staticstring.endsWith(".txt") || staticstring.endsWith(".log")) {
@@ -1295,7 +1322,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
       startActivity(it);
     }
     if (staticstring.endsWith(".xml")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      loadVector(newpos);
     }
     if (staticstring.endsWith(".ninja")) {
       SendDataFromCodeEditor(newpos, "path", files, newlistmap);
