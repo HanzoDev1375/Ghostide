@@ -18,7 +18,6 @@
         android:textSize="16sp"
         android:paddingBottom="4dp"
         android:singleLine="true"
-        android:textColor="?colorOnSurface"
         android:text="hello word im title"
         android:id="@+id/preference_title"
         android:paddingTop="0dp"
@@ -30,7 +29,6 @@
         android:ellipsize="end"
         android:textSize="12sp"
         android:singleLine="true"
-        android:textColor="?colorOnSurfaceVariant"
         android:text="hello im subTitle in setting prf like for me "
         android:id="@+id/preference_description"
         />

@@ -5,8 +5,8 @@ import androidx.annotation.StyleRes;
 import Ninja.coder.Ghostemane.code.R;
 
 public enum Theme {
-  AMBER(R.style.Theme_ThemeEngine_Amber, R.color.amber_theme_primary),
   BLUE(R.style.Theme_ThemeEngine_Blue, R.color.blue_theme_primary),
+  AMBER(R.style.Theme_ThemeEngine_Amber, R.color.amber_theme_primary),
   RED(R.style.Theme_ThemeEngine_RED, R.color.red_theme_primary),
   GREEN(R.style.Theme_ThemeEngine_Green, R.color.green_theme_primary),
   BLUEDARK(R.style.Theme_ThemeEngine_BlueDark, R.color.bluedark_theme_onPrimary),

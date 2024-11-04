@@ -554,7 +554,7 @@ public class SettingAppActivity extends BaseCompat {
     }
     if(ru.getBoolean("live",false) == true){
       livemodel.setValue(true);
-    }
+    }else livemodel.setValue(false);
 
     if (Analyzercod.getBoolean("Analyzercod", false) == true) codeAZ.setValue(true);
     else codeAZ.setValue(false);
