@@ -281,17 +281,7 @@ public class VectorMasterDrawable extends Drawable {
                     (tempPosition != -1)
                         ? Float.parseFloat(xpp.getAttributeValue(tempPosition))
                         : DefaultValues.PATH_TRIM_PATH_START);
-                tempPosition = getAttrPosition(xpp, "shadowColor");
-                pathModel.setShadowColor(
-                    (tempPosition != -1)
-                        ? Utils.getColorFromString(
-                            xpp.getAttributeValue(tempPosition), useLightTheme)
-                        : DefaultValues.VECTOR_SHADOWCOLOR);
-                tempPosition = getAttrPosition(xpp, "shadowRadius");
-                pathModel.setShadowRadius(
-                    (tempPosition != -1)
-                        ? Float.parseFloat(xpp.getAttributeValue(tempPosition))
-                        : DefaultValues.VECTOR_SHADOWCOLOR);
+                
                 pathModel.buildPath(useLegacyParser);
                 break;
               case "group":

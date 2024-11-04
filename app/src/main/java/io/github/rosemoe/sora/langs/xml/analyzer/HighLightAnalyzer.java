@@ -175,7 +175,7 @@ public class HighLightAnalyzer implements CodeAnalyzer {
             // for name in <name...
             // code block start
             else if (preToken != null && preToken.getType() == XMLLexer.OPEN) {
-              colors.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
+              colors.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
               BlockLine block = new BlockLine();
               block.startLine = preToken.getLine() - 1;
               block.startColumn = preToken.getCharPositionInLine(); // -1 for '<'

@@ -86,7 +86,6 @@ public class FileIconHelper {
 
   private void setupFolderIcons() {
     if (filePath.equals("")) fileIconRes = R.drawable.ic_material_folder;
-
     if (isDynamicFolderEnabled) {
       if (isEnvironmentEnabled) {
         if (fileEnvHelper.angularjs().isAngularJsDirectory())

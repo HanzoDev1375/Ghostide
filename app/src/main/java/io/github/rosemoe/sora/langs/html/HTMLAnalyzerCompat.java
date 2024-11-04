@@ -50,7 +50,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
       Token token, preToken = null, prePreToken = null;
       boolean first = true;
       Stack<BlockLine> stack = new Stack<>();
-      int type, currSwitch = 1, maxSwitch = 0, previous = -1;
+      int type, currSwitch = 1, maxSwitch = 0, previous = -1, next = 1;
       int lastLine = 1;
       int line, column;
       var prevIsTagName = false;
@@ -324,6 +324,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
               int colorid = EditorColorScheme.TEXT_NORMAL;
               info.addIdentifier(token.getText());
               boolean isBold, isItalic, isUnderLineMode = false;
+
               if (previous == HTMLLexer.AT) {
                 colorid = EditorColorScheme.Ninja;
               }
@@ -432,7 +433,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
         if (type != HTMLLexer.WS) {
           previous = type;
         }
-
+        next = type;
         first = false;
       }
       result.determine(lastLine);
