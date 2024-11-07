@@ -17,16 +17,16 @@ public class CharUtil {
     this.textView = textView;
     this.result = result;
     var builder = new StringBuilder();
-    builder.append("Ws ").append(String.valueOf(getWhiteSpacesCount(textView))).append(" ");
+    builder.append("W ").append(String.valueOf(getWhiteSpacesCount(textView))).append(" ");
     builder
-        .append("Cc ")
+        .append("C ")
         .append(String.valueOf(getCharactersCountWithoutSpaces(textView)))
         .append(" ");
-    builder.append("Bc ").append(String.valueOf(getBytesCount(textView))).append(" ");
-    builder.append("Uc ").append(String.valueOf(getUppercasesCount(textView))).append(" ");
+    builder.append("B ").append(String.valueOf(getBytesCount(textView))).append(" ");
+    builder.append("U ").append(String.valueOf(getUppercasesCount(textView))).append(" ");
     result.setText(builder.toString());
+    result.setSingleLine(true);
     result.setEllipsize(TextUtils.TruncateAt.END);
-    result.setTypeface(Typeface.create(Typeface.SANS_SERIF, 1, true));
   }
 
   public int getCharactersCount(final String Text) {

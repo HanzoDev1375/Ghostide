@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:layout_height="wrap_content"
+     android:layout_width="match_parent"
+     android:padding="9dp"
+     android:orientation="vertical">
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:layout_marginBottom="10dp"
+         android:textSize="16sp"
+         android:id="@+id/message" />
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+         android:layout_height="match_parent"
+         android:layout_width="match_parent"
+         android:id="@+id/progress" />
+
+</LinearLayout>

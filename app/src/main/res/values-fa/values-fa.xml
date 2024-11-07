@@ -102,4 +102,10 @@
     <string name="gson_to_class">Gson به کلاس</string>
     <string name="sheetlive">نمایش کامپایلر در دیالوگ</string>
     <string name="sheetsub">با این کار سریع تر کد خودتان را مشاهده کنید فقط حالت مشاهده هست عمل کرد خاصی ندارد.</string>
+    <string name="custom_icons">ایکون های شخصی سازی شده </string>
+    <string name="termthemes">تم ترمینال را شخصی کنید </string>
+    <string name="scriptcustom">اسکریپت اجرا کننده را شخصی کنید </string>
+    <string name="customthemeapp">شخصی سازی تم برنامه </string>
+    <string name="customchareditor">حروف تک نوشته شخصی کد ادیتور </string>
+
 </resources>

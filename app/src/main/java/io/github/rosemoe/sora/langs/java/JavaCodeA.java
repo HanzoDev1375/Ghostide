@@ -6,6 +6,7 @@ import io.github.rosemoe.sora.langs.xml.analyzer.Utils;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.text.TextAnalyzer;
 import android.util.*;
+import io.github.rosemoe.sora.widget.EditorColorScheme;
 import org.antlr.parser.antlr4.java20.Java20Lexer;
 import org.antlr.parser.antlr4.java20.Java20Parser;
 import org.antlr.parser.antlr4.java20.Java20ParserBaseListener;
@@ -41,6 +42,22 @@ public class JavaCodeA implements CodeAnalyzer {
                 int col = node.getSymbol().getCharPositionInLine();
                 int[] errorMatch = Utils.setErrorSpan(result, line, col);
               }
+
+              @Override
+              public void enterTypeParameter(Java20Parser.TypeParameterContext ctx) {
+                var token = ctx.getStart();
+                int line = token.getLine() - 1;
+                int colum = token.getCharPositionInLine();
+                Utils.setSpanEFO(result, line, colum, EditorColorScheme.javatype);
+              }
+
+              /**
+               * {@inheritDoc}
+               *
+               * <p>The default implementation does nothing.
+               */
+              @Override
+              public void exitTypeParameter(Java20Parser.TypeParameterContext ctx) {}
             };
 
         ParseTreeWalker tree = new ParseTreeWalker();

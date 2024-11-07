@@ -208,5 +208,9 @@
     <string name="gson_to_class">Gson to Class</string>
     <string name="sheetlive">Open Web in DialogSheet</string>
     <string name="sheetsub">Showing Code in BottomSheetDialog 2xFaster to load Code</string>
-
+    <string name="custom_icons">Custom icon</string>
+    <string name="termthemes">Terminal Theme</string>
+    <string name="scriptcustom">Custom Script</string>
+    <string name="customthemeapp">Custom Theme App</string>
+    <string name="customchareditor">Custom Char editor</string>
 </resources>

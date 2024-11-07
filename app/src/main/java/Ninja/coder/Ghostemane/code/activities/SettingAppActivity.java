@@ -76,7 +76,8 @@ public class SettingAppActivity extends BaseCompat {
       walpapersystem,
       deftheme,
       autoSaveText,
-      codeAZ,livemodel;
+      codeAZ,
+      livemodel;
   private ObjectAnimator mdownObjectAnimator = new ObjectAnimator();
   private TimerTask timer;
   private SharedPreferences getvb,
@@ -348,7 +349,8 @@ public class SettingAppActivity extends BaseCompat {
                                 (vftrororocjj) -> {
                                   thememanagersoft.edit().remove("themes").apply();
                                   DataUtil.showMessage(
-                                      getApplicationContext(), "Default theme applied successfully");
+                                      getApplicationContext(),
+                                      "Default theme applied successfully");
                                   dialog.dismiss();
                                 });
                             if (thememanagersoft.contains("themes")
@@ -469,16 +471,16 @@ public class SettingAppActivity extends BaseCompat {
             themeEngine.setDynamicTheme(false);
           }
         });
-    
+
     livemodel.setSwitchChangedListener(
         (bin, is) -> {
           if (is) {
             ru.edit().putBoolean("live", true).apply();
           } else {
-            ru.edit().putBoolean("live",false);
+            ru.edit().putBoolean("live", false).apply();
           }
         });
-    
+
     StartLuncherApp();
   }
 
@@ -552,9 +554,9 @@ public class SettingAppActivity extends BaseCompat {
     } else {
       walpapersystem.setValue(false);
     }
-    if(ru.getBoolean("live",false) == true){
+    if (ru.getBoolean("live", false) == true) {
       livemodel.setValue(true);
-    }else livemodel.setValue(false);
+    } else livemodel.setValue(false);
 
     if (Analyzercod.getBoolean("Analyzercod", false) == true) codeAZ.setValue(true);
     else codeAZ.setValue(false);
@@ -787,20 +789,6 @@ public class SettingAppActivity extends BaseCompat {
                 dialog
                     .getWindow()
                     .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-                view.setScaleX(0f);
-                view.setScaleY(0f);
-                final ObjectAnimator alertAnim = new ObjectAnimator();
-                final ObjectAnimator alertAnim1 = new ObjectAnimator();
-                alertAnim.setTarget(view);
-                alertAnim.setPropertyName("scaleX");
-                alertAnim.setFloatValues((float) (1));
-                alertAnim.setDuration((int) (250));
-                alertAnim.start();
-                alertAnim1.setTarget(view);
-                alertAnim1.setPropertyName("scaleY");
-                alertAnim1.setFloatValues((float) (1));
-                alertAnim1.setDuration((int) (250));
-                alertAnim1.start();
                 dialog.show();
               }
             });
@@ -810,21 +798,21 @@ public class SettingAppActivity extends BaseCompat {
             c -> {
               initIconColors();
             });
-        textview1.setText("Custom icon");
+        textview1.setText(getString(R.string.custom_icons));
         imageview1.setImageResource(R.drawable.keyboardlisnertalluserpost_3);
       }
       if (_position == 2) {
         _view.setOnClickListener(_riee_ -> terminalTheme());
-        textview1.setText("Terminal Theme");
+        textview1.setText(getString(R.string.termthemes));
         imageview1.setImageResource(R.drawable.ic_material_settings);
       }
       if (_position == 3) {
         _view.setOnClickListener(_ddd_ -> CustomPythonCode());
-        textview1.setText("Custom Script");
+        textview1.setText(getString(R.string.scriptcustom));
         imageview1.setImageResource(R.drawable.ic_material_console);
       }
       if (_position == 4) {
-        textview1.setText("Custom Theme (new)");
+        textview1.setText(getString(R.string.customthemeapp));
         imageview1.setImageResource(R.drawable.ghosttheme);
         _view.setOnClickListener(
             _dddrr_ -> {
@@ -852,7 +840,7 @@ public class SettingAppActivity extends BaseCompat {
             });
       }
       if (_position == 5) {
-        textview1.setText("Custom Char editor");
+        textview1.setText(getString(R.string.customchareditor));
         _view.setOnClickListener(v -> getCustomChar());
         imageview1.setImageResource(0);
       }
@@ -960,8 +948,6 @@ public class SettingAppActivity extends BaseCompat {
             .setPositiveButton(android.R.string.ok, null)
             .setNeutralButton(android.R.string.cancel, null)
             .setCancelable(true)
-            .setPositiveButton("ok", null)
-            .setNeutralButton("پیشفرض", null)
             .create();
     dialog.setOnShowListener(
         (var) -> {
@@ -973,13 +959,12 @@ public class SettingAppActivity extends BaseCompat {
 
           final Handler handler = new Handler(Looper.getMainLooper());
           handler.postDelayed(
-              new Runnable() {
-                @Override
-                public void run() {
+              () -> {
+
                   if (getvb.contains("Script") && !getvb.getString("Script", "").equals("")) {
                     edit.setText(getvb.getString("Script", ""));
                   }
-                }
+                
               },
               100);
           input.setHint("Select Property theme");

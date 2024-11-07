@@ -88,6 +88,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hzy.lib7z.Z7Extractor;
+import com.ninjacoder.jgit.GitClone;
 import com.ninjacoder.jgit.GsonToClass;
 import com.skydoves.powermenu.PowerMenu;
 import io.reactivex.rxjava3.core.Observable;
@@ -1248,9 +1249,13 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
               }
             case 1:
               {
-                new XmlToSvg(this,files.get((int) newpos).get("path").toString(),() ->{
-                  reLoadFile();
-                },Folder);
+                new XmlToSvg(
+                    this,
+                    files.get((int) newpos).get("path").toString(),
+                    () -> {
+                      reLoadFile();
+                    },
+                    Folder);
                 sh.getDismiss(true);
                 break;
               }
@@ -2219,78 +2224,12 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
   }
 
   public void setDialogGitDownload() {
-    // FileManagerActivity.this
-    AlertDialog di =
-        new MaterialAlertDialogBuilder(FileManagerActivity.this)
-            .setPositiveButton("clone", (w, r) -> {})
-            .setView(R.layout.layout_gitclone)
-            .setCancelable(false)
-            .setNegativeButton(android.R.string.cancel, null)
-            .create();
-    di.setTitle("Git Clone");
-    di.setMessage("Match Link Repository like in Download ");
-
-    di.setOnShowListener(
-        cc -> {
-          EditText et = di.findViewById(R.id.et);
-          TextInputLayout input = di.findViewById(R.id.input);
-          ProgressBar bar = di.findViewById(R.id.bar);
-          TextView tv = di.findViewById(R.id.tv);
-          LinearLayout helper = di.findViewById(R.id.helper);
-          helper.setVisibility(View.GONE);
-          input.setBoxCornerRadii(20, 20, 20, 20);
-          Button button = di.getButton(DialogInterface.BUTTON_POSITIVE);
-          button.setOnClickListener(
-              c1010108829 -> {
-                CloneRepository cloneRepository = new CloneRepository();
-                cloneRepository.setDirectory(new File(Folder));
-                if (et != null) {
-                  cloneRepository.setUrl(et.getText().toString());
-                }
-
-                cloneRepository.cloneRp(
-                    new CloneRepository.OnGitChange() {
-                      @Override
-                      public void Start() {
-                        runOnUiThread(() -> tv.setText("Start"));
-                      }
-
-                      @Override
-                      public void BindTask(String string, int i) {
-                        runOnUiThread(
-                            () -> {
-                              bar.setMax(i);
-                              tv.setText(string);
-                              helper.setVisibility(View.VISIBLE);
-                              input.setVisibility(View.GONE);
-                            });
-                      }
-
-                      @Override
-                      public void UploadData(int upload) {
-                        runOnUiThread(
-                            () -> {
-                              bar.setProgress(upload);
-                            });
-                      }
-
-                      @Override
-                      public void EndTask() {
-                        runOnUiThread(
-                            () -> {
-                              bar.setProgress(0);
-                              tv.setText("end");
-                              helper.setVisibility(View.GONE);
-                              input.setVisibility(View.VISIBLE);
-                              reLoadFile(false);
-                              di.dismiss();
-                            });
-                      }
-                    });
-              });
+    GitClone mygit = new GitClone();
+    mygit.clone(Folder, this);
+    mygit.setCall(
+        () -> {
+          reLoadFile();
         });
-
-    di.show();
   }
 
   @Override
