@@ -115,19 +115,13 @@ public class EditorColorScheme {
 
   /** Color Text Custom ad Ghost web ide */
   public static final int TEXTCOLORINIER = 401;
-
   public static final int TEXTCOLORHDER = 402;
   public static final int TEXTCOLORFORGRAND = 403;
   public static final int TEXTCOLORIGOR = 404;
-
   public static final int aliceblue = 40181;
-
   public static final int antiquewhite = 30001;
-
   public static final int aqua = 3482;
-
   public static final int aquamarine = 2392;
-
   public static final int azure = 4837;
   public static final int beige = 9093;
   public static final int bisque = 233;
@@ -328,6 +322,18 @@ public class EditorColorScheme {
   public static final int phpcolormatch4 = 71592;
   public static final int phpcolormatch5 = 24810;
   public static final int phpcolormatch6 = 10372;
+
+  // from typescript
+  public static final int tskeyword = 210710;
+  public static final int tsattr = 109871;
+  public static final int tssymbols = 69160;
+  public static final int tscolormatch1 = 73103;
+  public static final int tscolormatch2 = 29483;
+  public static final int tscolormatch3 = 59273;
+  public static final int tscolormatch4 = 58373;
+  public static final int tscolormatch5 = 27301;
+  public static final int tscolormatch6 = 72630;
+  public static final int tscolormatch7 = 48284;
 
   /** Min pre-defined color id */
   protected static final int START_COLOR_ID = 1;

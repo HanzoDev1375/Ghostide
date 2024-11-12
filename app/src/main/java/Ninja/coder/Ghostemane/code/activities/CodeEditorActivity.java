@@ -107,7 +107,7 @@ public class CodeEditorActivity extends AppCompatActivity {
   private final String code = "";
   private double click2var = 0;
   private double pos10 = 0;
-  private SetThemeForJson themeForJson2;
+  private ThemeUtils themeForJson2;
   private double n1 = 0;
   private double n2 = 0;
   private double n3 = 0;
@@ -292,7 +292,7 @@ public class CodeEditorActivity extends AppCompatActivity {
     imageloadereditor = findViewById(R.id.imageloadereditor);
     modelEditor = new ViewModelProvider(this).get(EditorViewModel.class);
     editor.restoreState(_savedInstanceState);
-    themeForJson2 = new SetThemeForJson();
+    themeForJson2 = new ThemeUtils();
     recyclerview1.addOnScrollListener(
         new RecyclerView.OnScrollListener() {
           @Override
@@ -451,7 +451,7 @@ public class CodeEditorActivity extends AppCompatActivity {
       imap =
           new Gson()
               .fromJson(
-                  SetThemeForJson.themeAsString(),
+                  ThemeUtils.themeAsString(),
                   new TypeToken<HashMap<String, Object>>() {}.getType());
     }
 

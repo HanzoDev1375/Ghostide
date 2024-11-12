@@ -16,13 +16,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.color.MaterialColors;
 
+import com.ninjacoder.jgit.databinding.LayoutListsheetBinding;
 import java.io.File;
 import java.util.ArrayList;
 
 public class ListSheet {
-  protected ListView listview;
   protected BottomSheetDialog dialog;
   private ArrayList<ItemSheet> item = new ArrayList<>();
+  protected LayoutListsheetBinding binding;
 
   public static void bind(RecyclerView tv, String Folder) {
     TextView tvview = new TextView(tv.getContext());
@@ -40,18 +41,13 @@ public class ListSheet {
   }
 
   public void setSheetDialog(Context context) {
-
-    listview = new ListView(context);
-    ListView.LayoutParams param =
-        new ListView.LayoutParams(
-            ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.WRAP_CONTENT);
-    listview.setLayoutParams(param);
-    listview.setAdapter(new SheetAd(item));
-    listview.setDividerHeight(0);
-
-    listview.setPadding(7, 7, 7, 7);
+    binding = LayoutListsheetBinding.inflate(LayoutInflater.from(context));
+    
+    
+    binding.list.setAdapter(new SheetAd(item));
+    binding.list.setDividerHeight(0);
     dialog = new BottomSheetDialog(context);
-    dialog.setContentView(listview);
+    dialog.setContentView(binding.getRoot());
 
     if (dialog != null) {
       dialog.show();
@@ -60,7 +56,7 @@ public class ListSheet {
 
   public void setOnItemClickLabe(OnItemClick itemClick) {
     if (itemClick != null) {
-      listview.setOnItemClickListener(
+      binding.list.setOnItemClickListener(
           (adview, view, pos, lb) -> {
             itemClick.OnItemClick(pos);
           });

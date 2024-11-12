@@ -5,7 +5,7 @@ import Ninja.coder.Ghostemane.code.ServerHost;
 import Ninja.coder.Ghostemane.code.databinding.HtmlrunerBinding;
 import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
-import Ninja.coder.Ghostemane.code.utils.SetThemeForJson;
+import Ninja.coder.Ghostemane.code.utils.ThemeUtils;
 import Ninja.coder.Ghostemane.code.widget.GhostWebMaterialDialog;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
@@ -481,7 +481,7 @@ public class HtmlRunerActivity extends BaseCompat {
             .fromJson(
                 FileUtil.readFile("storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost"),
                 new TypeToken<HashMap<String, Object>>() {}.getType());
-    SetThemeForJson themeForJson2 = new SetThemeForJson();
+    ThemeUtils themeForJson2 = new ThemeUtils();
     themeForJson2.setThemeCodeEditor(editor, imap, false, this);
     sheet.setContentView(view);
     sheet.show();

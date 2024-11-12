@@ -16,7 +16,7 @@ public class G4Compiler {
   public static void compile(String input, String output, String packages) {
     if (input.endsWith(".g4")) {
       String[] args = {
-        input, "-package", packages, "-visitor", "-Werror", "-Xlog", "-o", output,
+        input, "-package", packages, "-Werror", "-Xlog", "-o", output,
       };
       main(args);
       pathOutput = output;

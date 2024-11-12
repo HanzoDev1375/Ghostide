@@ -1,7 +1,7 @@
 package Ninja.coder.Ghostemane.code.services;
 
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
-import Ninja.coder.Ghostemane.code.utils.SetThemeForJson;
+import Ninja.coder.Ghostemane.code.utils.ThemeUtils;
 import android.app.Service;
 import android.content.Intent;
 import android.os.FileObserver;
@@ -45,7 +45,7 @@ public class MediaListenerService extends Service {
             if (event == FileObserver.DELETE && file.endsWith("ghost")) {
               new Thread(
                       () -> {
-                        SetThemeForJson.winterToPath();
+                        ThemeUtils.winterToPath();
                       })
                   .start();
             }

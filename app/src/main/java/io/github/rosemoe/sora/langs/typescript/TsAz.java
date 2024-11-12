@@ -1,26 +1,19 @@
 package io.github.rosemoe.sora.langs.typescript;
 
-import android.graphics.Color;
 import android.util.Log;
-import io.github.rosemoe.sora.data.Span;
+import io.github.rosemoe.sora.langs.java.JavaAutoComplete;
 import io.github.rosemoe.sora.text.TextStyle;
-
 import java.util.Stack;
-
 import io.github.rosemoe.sora.data.BlockLine;
-import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
 import org.antlr.v4.runtime.Token;
-
 import java.io.IOException;
 import java.io.StringReader;
-
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.text.TextAnalyzer;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
-import org.antlr.v4.runtime.TokenSource;
 
 public class TsAz implements CodeAnalyzer {
 
@@ -32,14 +25,16 @@ public class TsAz implements CodeAnalyzer {
     try {
       CodePointCharStream stream = CharStreams.fromReader(new StringReader(content.toString()));
       var lexer = new TypeScriptLexer(stream);
-      int maxSwitch = 1, currSwitch = 0;
+      int maxSwitch = 1, currSwitch = 0, previous = -1, type = 0;
       Token token;
-      Token previous = UnknownToken.INSTANCE;
       Token prePreToken = null;
       boolean first = true;
       int lastLine = 1;
       int line, column;
-
+      JavaAutoComplete auto = new JavaAutoComplete();
+      auto.setKeywords(TsLang.list);
+      JavaAutoComplete.Identifiers info = new JavaAutoComplete.Identifiers();
+      info.begin();
       Stack<BlockLine> stack = new Stack<>();
       while (delegate.shouldAnalyze()) {
         token = lexer.nextToken();
@@ -49,22 +44,20 @@ public class TsAz implements CodeAnalyzer {
           break;
         }
         line = token.getLine() - 1;
+        type = token.getType();
         column = token.getCharPositionInLine();
         lastLine = line;
+        if (type == TypeScriptLexer.EOF) {
+          lastLine = line;
+          break;
+        }
 
-        switch (token.getType()) {
+        switch (type) {
           case TypeScriptLexer.WhiteSpaces:
             if (first) result.addNormalIfNull();
             break;
 
-          case TypeScriptLexer.At:
-            result.addIfNeeded(
-                line,
-                column,
-                TextStyle.makeStyle(EditorColorScheme.ATTRIBUTE_NAME, 0, true, false, true));
-
-            break;
-          case TypeScriptLexer.CloseParen:
+          case TypeScriptLexer.CloseBrace:
             result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
             if (!stack.isEmpty()) {
               BlockLine b = stack.pop();
@@ -92,7 +85,6 @@ public class TsAz implements CodeAnalyzer {
           case TypeScriptLexer.RegularExpressionLiteral:
           case TypeScriptLexer.OpenBracket:
           case TypeScriptLexer.CloseBracket:
-          case TypeScriptLexer.OpenParen:
           case TypeScriptLexer.BitNot:
           case TypeScriptLexer.Not:
           case TypeScriptLexer.Multiply:
@@ -132,10 +124,11 @@ public class TsAz implements CodeAnalyzer {
           case TypeScriptLexer.HexIntegerLiteral:
           case TypeScriptLexer.OctalIntegerLiteral:
           case TypeScriptLexer.BinaryIntegerLiteral:
+          case TypeScriptLexer.At:
             result.addIfNeeded(
                 line,
                 column,
-                TextStyle.makeStyle(EditorColorScheme.OPERATOR, 0, true, false, false));
+                TextStyle.makeStyle(EditorColorScheme.tssymbols, 0, false, false, false));
             break;
           case TypeScriptLexer.Break:
           case TypeScriptLexer.Do:
@@ -164,11 +157,6 @@ public class TsAz implements CodeAnalyzer {
           case TypeScriptLexer.In:
           case TypeScriptLexer.Try:
           case TypeScriptLexer.As:
-            result.addIfNeeded(
-                line,
-                column,
-                TextStyle.makeStyle(EditorColorScheme.KEYWORD, 0, true, false, false));
-            break;
           case TypeScriptLexer.From:
           case TypeScriptLexer.ReadOnly:
           case TypeScriptLexer.Async:
@@ -192,7 +180,7 @@ public class TsAz implements CodeAnalyzer {
             result.addIfNeeded(
                 line,
                 column,
-                TextStyle.makeStyle(EditorColorScheme.HTML_TAG, 0, true, false, false));
+                TextStyle.makeStyle(EditorColorScheme.tskeyword, 0, true, false, false));
             break;
 
           case TypeScriptLexer.Number:
@@ -219,7 +207,7 @@ public class TsAz implements CodeAnalyzer {
             result.addIfNeeded(
                 line,
                 column,
-                TextStyle.makeStyle(EditorColorScheme.ATTRIBUTE_VALUE, 0, true, false, false));
+                TextStyle.makeStyle(EditorColorScheme.tsattr, 0, false, false, false));
             break;
           case TypeScriptLexer.MultiLineComment:
           case TypeScriptLexer.SingleLineComment:
@@ -232,7 +220,7 @@ public class TsAz implements CodeAnalyzer {
             break;
           case TypeScriptLexer.Colon:
           case TypeScriptLexer.TemplateCloseBrace:
-          case TypeScriptLexer.CloseBrace:
+          case TypeScriptLexer.OpenParen:
           case TypeScriptLexer.SemiColon:
           case TypeScriptLexer.Comma:
           case TypeScriptLexer.Assign:
@@ -242,24 +230,85 @@ public class TsAz implements CodeAnalyzer {
           case TypeScriptLexer.PlusPlus:
           case TypeScriptLexer.MinusMinus:
           case TypeScriptLexer.Plus:
+          case TypeScriptLexer.CloseParen:
           case TypeScriptLexer.Minus:
-            result.addIfNeeded(line, column, EditorColorScheme.LITERAL);
+            result.addIfNeeded(line, column, EditorColorScheme.tssymbols);
             break;
-          case TypeScriptLexer.STYLE_VSCODEBRACE:
-            result.addIfNeeded(
-                line,
-                column,
-                TextStyle.makeStyle(EditorColorScheme.BLOCK_LINE_CURRENT, 0, true, true, false));
-            break;
+          case TypeScriptLexer.Identifier:
+            {
+              int colorid = EditorColorScheme.TEXT_NORMAL;
+              info.addIdentifier(token.getText());
+              boolean isPart = false;
+              int types = previous;
+              if (types == TypeScriptLexer.At) {
+                colorid = EditorColorScheme.tssymbols;
+                isPart = false;
+              }
+              if (types == TypeScriptLexer.Dot) {
+                colorid = EditorColorScheme.tscolormatch1;
+                isPart = false;
+              }
+              if (types == TypeScriptLexer.Class
+                  || types == TypeScriptLexer.Interface
+                  || types == TypeScriptLexer.Abstract
+                  || types == TypeScriptLexer.Export
+                  || types == TypeScriptLexer.Extends) {
+                colorid = EditorColorScheme.tscolormatch2;
+                isPart = false;
+              }
+              if (types == TypeScriptLexer.Package
+                  || types == TypeScriptLexer.Public
+                  || types == TypeScriptLexer.Protected
+                  || types == TypeScriptLexer.Private
+                  || types == TypeScriptLexer.Void) {
+                colorid = EditorColorScheme.tscolormatch3;
+                isPart = false;
+              }
+              if (types == TypeScriptLexer.Colon
+                  || types == TypeScriptLexer.From
+                  || types == TypeScriptLexer.This
+                  || types == TypeScriptLexer.Or
+                  || types == TypeScriptLexer.And
+                  || types == TypeScriptLexer.Any
+                  || types == TypeScriptLexer.Yield) {
+                colorid = EditorColorScheme.tscolormatch4;
+                isPart = false;
+              }
+              if (types == TypeScriptLexer.Implements
+                  || types == TypeScriptLexer.Import
+                  || types == TypeScriptLexer.Var
+                  || types == TypeScriptLexer.Let) {
+                colorid = EditorColorScheme.tscolormatch5;
+                isPart = false;
+              }
+              if (types == TypeScriptLexer.Enum
+                  || types == TypeScriptLexer.New
+                  || types == TypeScriptLexer.Typeof
+                  || types == TypeScriptLexer.TypeAlias
+                  || types == TypeScriptLexer.Super) {
+                colorid = EditorColorScheme.tscolormatch6;
+                isPart = false;
+              }
+              if (types == TypeScriptLexer.OpenParen
+                  || types == TypeScriptLexer.CloseParen
+                  || types == TypeScriptLexer.Assign) {
+                colorid = EditorColorScheme.tscolormatch7;
+                isPart = false;
+              }
+              isPart = true;
+              result.addIfNeeded(line, column, colorid);
+              break;
+            }
+
           default:
-            int colorIds = EditorColorScheme.OPERATOR;
+            int colorIds = EditorColorScheme.TEXT_NORMAL;
             result.addIfNeeded(line, column, colorIds);
             break;
         }
 
         first = false;
-        if (token.getType() != TypeScriptLexer.WhiteSpaces) {
-          previous = token;
+        if (type != TypeScriptLexer.WhiteSpaces) {
+          previous = type;
         }
       }
       result.determine(lastLine);
@@ -268,65 +317,12 @@ public class TsAz implements CodeAnalyzer {
           maxSwitch = currSwitch;
         }
       }
+      info.finish();
+      result.setExtra(info);
       result.setSuppressSwitch(maxSwitch + 10);
     } catch (IOException e) {
       e.printStackTrace();
       Log.e("TAG", e.getMessage());
-    }
-  }
-
-  private static class UnknownToken implements Token {
-
-    public static UnknownToken INSTANCE = new UnknownToken();
-
-    @Override
-    public String getText() {
-      return "";
-    }
-
-    @Override
-    public int getType() {
-      return -1;
-    }
-
-    @Override
-    public int getLine() {
-      return 0;
-    }
-
-    @Override
-    public int getCharPositionInLine() {
-      return 0;
-    }
-
-    @Override
-    public int getChannel() {
-      return 0;
-    }
-
-    @Override
-    public int getTokenIndex() {
-      return 0;
-    }
-
-    @Override
-    public int getStartIndex() {
-      return 0;
-    }
-
-    @Override
-    public int getStopIndex() {
-      return 0;
-    }
-
-    @Override
-    public TokenSource getTokenSource() {
-      return null;
-    }
-
-    @Override
-    public CharStream getInputStream() {
-      return null;
     }
   }
 }

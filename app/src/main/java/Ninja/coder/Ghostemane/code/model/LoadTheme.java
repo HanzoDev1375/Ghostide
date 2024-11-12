@@ -4,8 +4,10 @@ import Ninja.coder.Ghostemane.code.IdeEditor;
 import Ninja.coder.Ghostemane.code.adapter.ThemeAdapter;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import android.content.Context;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.blankj.utilcode.util.ThreadUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -13,6 +15,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class LoadTheme {
@@ -23,10 +26,10 @@ public class LoadTheme {
   private HashMap<String, Object> add = new HashMap<>();
   private HashMap<String, Object> file = new HashMap<>();
 
-  private ArrayList<String> key = new ArrayList<>();
-  private ArrayList<HashMap<String, Object>> list = new ArrayList<>();
+  private List<String> key = new ArrayList<>();
+  private List<HashMap<String, Object>> list = new ArrayList<>();
 
-  public void runinSheet(Context context,IdeEditor editor) {
+  public void runinSheet(Context context, IdeEditor editor) {
     RecyclerView listview = new RecyclerView(context);
     MaterialAlertDialogBuilder sheet = new MaterialAlertDialogBuilder(context);
     sheet.setTitle("Theme Maanager");
@@ -45,6 +48,9 @@ public class LoadTheme {
             FileUtil.writeFile(
                 "/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost",
                 new Gson().toJson(file));
+            ThreadUtils.runOnUiThread(() -> {
+              ((AppCompatActivity)context).recreate();
+            });
 
           } catch (Exception err) {
             err.printStackTrace();
@@ -74,19 +80,19 @@ public class LoadTheme {
         list.add(add);
       }
       listview.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
-      listview.setAdapter(new ThemeAdapter(list,editor));
+      listview.setAdapter(new ThemeAdapter(list, editor));
 
     } catch (Exception e) {
 
     }
   }
 
-  public void getAllKeysFromMap(Map<String, Object> _map, ArrayList<String> _output) {
-    if (_output == null) return;
-    _output.clear();
-    if (_map == null || _map.size() < 1) return;
-    for (Map.Entry<String, Object> _entry : _map.entrySet()) {
-      _output.add(_entry.getKey());
+  public void getAllKeysFromMap(Map<String, Object> map, ArrayList<String> output) {
+    if (output == null) return;
+    output.clear();
+    if (map == null || map.size() < 1) return;
+    for (Map.Entry<String, Object> entry : map.entrySet()) {
+      output.add(entry.getKey());
     }
   }
 }

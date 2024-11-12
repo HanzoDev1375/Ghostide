@@ -2,7 +2,7 @@ package Ninja.coder.Ghostemane.code.tasks.app;
 
 import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
-import Ninja.coder.Ghostemane.code.utils.SetThemeForJson;
+import Ninja.coder.Ghostemane.code.utils.ThemeUtils;
 import android.app.Activity;
 import android.content.Context;
 import android.widget.LinearLayout;
@@ -99,7 +99,7 @@ public class SassForAndroid {
       } catch (Exception err) {
         err.printStackTrace();
       }
-      var theme = new SetThemeForJson();
+      var theme = new ThemeUtils();
       theme.setThemeCodeEditor(tv, imap, true, (Activity) context);
       ColorAndroid12.runOnUiThread(
           () -> {

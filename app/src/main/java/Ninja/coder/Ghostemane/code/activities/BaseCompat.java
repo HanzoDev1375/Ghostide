@@ -4,7 +4,7 @@ import Ninja.coder.Ghostemane.code.marco.WallpaperParallaxEffect;
 import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import Ninja.coder.Ghostemane.code.utils.ReSizeApp;
-import Ninja.coder.Ghostemane.code.utils.SetThemeForJson;
+import Ninja.coder.Ghostemane.code.utils.ThemeUtils;
 import Ninja.coder.Ghostemane.code.widget.BlurImage;
 import android.animation.ObjectAnimator;
 import android.app.ActivityOptions;
@@ -440,7 +440,7 @@ public class BaseCompat extends AppCompatActivity {
   public void ThemeChaker() {
     try {
       if (!FileUtil.isExistFile(ThemePath)) {
-        SetThemeForJson.winterToPath();
+        ThemeUtils.winterToPath();
         Toast.makeText(getApplicationContext(), "Theme the Maket in " + ThemePath.trim(), 2).show();
       }
     } catch (Exception err) {

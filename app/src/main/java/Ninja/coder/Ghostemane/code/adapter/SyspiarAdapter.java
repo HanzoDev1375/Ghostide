@@ -145,11 +145,6 @@ public class SyspiarAdapter extends RecyclerView.Adapter<SyspiarAdapter.ViewHold
         if (ApplicationLoader.getRu().contains("rub")) {
             sysbarInsertId.setTextColor(0xFFC4A68A);
         } else {
-            //      SetThemeForJson maintheme = new SetThemeForJson();
-            //      maintheme.addTextColor(
-            //          sysbarInsertId, "SyombolBarTextColor", Color.parseColor("#FFFFA0FB"),
-            // ApplicationLoader.getContext(), imap);
-            //      maintheme.buildandpost();
         }
     }
 

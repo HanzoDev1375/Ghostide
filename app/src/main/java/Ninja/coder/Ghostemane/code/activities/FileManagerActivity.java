@@ -90,13 +90,14 @@ import com.google.gson.reflect.TypeToken;
 import com.hzy.lib7z.Z7Extractor;
 import com.ninjacoder.jgit.GitClone;
 import com.ninjacoder.jgit.GsonToClass;
+import com.ninjacoder.jgit.childer.TextFindListener;
 import com.skydoves.powermenu.PowerMenu;
 import io.reactivex.rxjava3.core.Observable;
 import java.util.stream.Collectors;
 import ninja.coder.appuploader.main.ViewDownloder;
 import ninjacoder.ghostide.androidtools.r8.android.R8Tools;
 import storage.sdcard.SdCardUtil;
-
+import com.ninjacoder.jgit.childer.TextFind;
 import java.io.File;
 import java.util.*;
 
@@ -2006,7 +2007,20 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
               }
             case 4:
               {
-                FilterFile();
+                var find =
+                    new TextFind(
+                        new TextFindListener() {
+
+                          @Override
+                          public void onComplete() {
+                            reLoadFile();
+                          }
+
+                          @Override
+                          public void onError(String errorMessage) {}
+                        },
+                        this,
+                        Folder);
                 sh.getDismiss(true);
                 break;
               }

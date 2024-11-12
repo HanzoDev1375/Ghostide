@@ -2,7 +2,7 @@ package Ninja.coder.Ghostemane.code.activities;
 
 import Ninja.coder.Ghostemane.code.databinding.DialogjavacodeviewDialogFragmentBinding;
 import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
-import Ninja.coder.Ghostemane.code.utils.SetThemeForJson;
+import Ninja.coder.Ghostemane.code.utils.ThemeUtils;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ClipData;
@@ -81,12 +81,12 @@ public class DialogJavaCodeView extends DialogFragment {
     }
 
     try {
-      var theme = new SetThemeForJson();
+      var theme = new ThemeUtils();
       map = new HashMap<>();
       map =
           new Gson()
               .fromJson(
-                  new StringReader(SetThemeForJson.themeAsString()),
+                  new StringReader(ThemeUtils.themeAsString()),
                   new TypeToken<HashMap<String, Object>>() {}.getType());
 
       theme.setThemeCodeEditor(bin.editor, map, false, requireActivity());

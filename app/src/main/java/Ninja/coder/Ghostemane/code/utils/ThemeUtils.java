@@ -2,7 +2,7 @@ package Ninja.coder.Ghostemane.code.utils;
 
 import Ninja.coder.Ghostemane.code.marco.ColorCompat;
 import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
-import Ninja.coder.Ghostemane.code.utils.SetThemeForJson;
+
 import Ninja.coder.Ghostemane.code.widget.ExrtaFab;
 import android.app.Activity;
 import android.content.res.ColorStateList;
@@ -32,18 +32,18 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeMap;
 
-public class SetThemeForJson {
+public class ThemeUtils {
   protected HashMap<String, Object> map = new HashMap<>();
   private Timer timer = new Timer();
   private TimerTask task;
 
-  public SetThemeForJson() {}
+  public ThemeUtils() {}
 
-  public SetThemeForJson(HashMap<String, Object> maps) {
+  public ThemeUtils(HashMap<String, Object> maps) {
     this.map = maps;
   }
 
-  public SetThemeForJson setShowTheme() {
+  public ThemeUtils setShowTheme() {
     if (map.containsKey("Title")) {
       map.put("Title", Color.parseColor("#FF84A9FF"));
     } else {
@@ -57,7 +57,7 @@ public class SetThemeForJson {
     return this;
   }
 
-  public SetThemeForJson setThemeCodeEditor(
+  public ThemeUtils setThemeCodeEditor(
       CodeEditor editor, HashMap<String, Object> imap, boolean chackHashMap, Activity x) {
 
     getColor(imap, editor, "block_line", EditorColorScheme.BLOCK_LINE, "#ff28ffae");
@@ -139,9 +139,23 @@ public class SetThemeForJson {
     getColor(imap, editor, "phpcolormatch4", EditorColorScheme.phpcolormatch4, "#ff51a2");
     getColor(imap, editor, "phpcolormatch5", EditorColorScheme.phpcolormatch5, "#7fff00");
     getColor(imap, editor, "phpcolormatch6", EditorColorScheme.phpcolormatch6, "#ff4500");
+    getColor(imap, editor, "tskeyword", EditorColorScheme.tskeyword, "#00ff7f");
+    getColor(imap, editor, "tsattr", EditorColorScheme.tsattr, "#1e90ff");
+    getColor(imap, editor, "tssymbols", EditorColorScheme.tssymbols, "#ff1493");
+    getColor(imap, editor, "tscolormatch1", EditorColorScheme.tscolormatch1, "#ffd700");
+    getColor(imap, editor, "tscolormatch2", EditorColorScheme.tscolormatch2, "#ff6347");
+    getColor(imap, editor, "tscolormatch3", EditorColorScheme.tscolormatch3, "#7b68ee");
+    getColor(imap, editor, "tscolormatch4", EditorColorScheme.tscolormatch4, "#32cd32");
+    getColor(imap, editor, "tscolormatch5", EditorColorScheme.tscolormatch5, "#ff4500");
+    getColor(imap, editor, "tscolormatch6", EditorColorScheme.tscolormatch6, "#ff8c00");
+    getColor(imap, editor, "tscolormatch7", EditorColorScheme.tscolormatch7, "#20b2aa");
+
+    // fa: اینجا برای رنگ بندی بدون تم جیسون است
+    // اگر برای تم عادی میخواهید میتوانید از این روش کمک بگیرید
+    // en: Here's to coloring without Json theme
+    // If you want a normal theme, you can use this method
     editor.getColorScheme().setColor(EditorColorScheme.red, ColorCompat.RED);
     editor.getColorScheme().setColor(EditorColorScheme.aliceblue, ColorCompat.ALICEBLUE);
-
     editor.getColorScheme().setColor(EditorColorScheme.antiquewhite, ColorCompat.ANTIQUEWHITE);
     editor.getColorScheme().setColor(EditorColorScheme.aqua, ColorCompat.AQUA);
     editor.getColorScheme().setColor(EditorColorScheme.aquamarine, ColorCompat.AQUAMARINE);
@@ -154,7 +168,6 @@ public class SetThemeForJson {
     editor.getColorScheme().setColor(EditorColorScheme.blueviolet, ColorCompat.BLUEVIOLET);
     editor.getColorScheme().setColor(EditorColorScheme.brown, ColorCompat.BROWN);
     editor.getColorScheme().setColor(EditorColorScheme.white, ColorCompat.WHITE);
-
     editor.getColorScheme().setColor(EditorColorScheme.COLOR_DEBUG, Color.BLUE);
     editor.getColorScheme().setColor(EditorColorScheme.COLOR_ERROR, Color.RED);
     editor.getColorScheme().setColor(EditorColorScheme.COLOR_WARNING, Color.YELLOW);
@@ -184,7 +197,7 @@ public class SetThemeForJson {
                 : Color.parseColor(colorNull));
   }
 
-  public SetThemeForJson setHashMapInabel(boolean isEnabel, HashMap<String, Object> imap) {
+  public ThemeUtils setHashMapInabel(boolean isEnabel, HashMap<String, Object> imap) {
     if (isEnabel) {
       isEnabel = true;
       imap = new HashMap<>();
@@ -197,12 +210,12 @@ public class SetThemeForJson {
   }
 
   @Deprecated
-  private SetThemeForJson dialogError(Activity x) {
+  private ThemeUtils dialogError(Activity x) {
 
     return this;
   }
 
-  public SetThemeForJson AddthemetoSattos(Activity a, HashMap<String, Object> imap) {
+  public ThemeUtils AddthemetoSattos(Activity a, HashMap<String, Object> imap) {
 
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
       Window Hsi = a.getWindow();
@@ -215,7 +228,7 @@ public class SetThemeForJson {
     return this;
   }
 
-  public SetThemeForJson addTextColor(
+  public ThemeUtils addTextColor(
       TextView id, String datatype, int color, Activity x, HashMap<String, Object> imap2) {
     id.setTextColor(
         imap2.containsKey(datatype)
@@ -224,7 +237,7 @@ public class SetThemeForJson {
     return this;
   }
 
-  public SetThemeForJson addBackground(
+  public ThemeUtils addBackground(
       Activity c, HashMap<String, Object> imap, String datatype, View object, int color) {
     object.setBackgroundColor(
         imap.containsKey(datatype) ? Color.parseColor(imap.get(datatype).toString()) : 0xFF281B26);
@@ -232,7 +245,7 @@ public class SetThemeForJson {
     return this;
   }
 
-  public SetThemeForJson addImageColor(
+  public ThemeUtils addImageColor(
       ImageView id, Activity c, String datatype, HashMap<String, Object> map, int color) {
     id.setColorFilter(
         map.containsKey(datatype) ? Color.parseColor(map.get(datatype).toString()) : 0xFFDE7CD1,
@@ -241,7 +254,7 @@ public class SetThemeForJson {
     return this;
   }
 
-  public SetThemeForJson setFabBackground(
+  public ThemeUtils setFabBackground(
       ExtendedFloatingActionButton fab, HashMap<String, Object> map) {
     fab.setIconTint(
         ColorStateList.valueOf(
@@ -251,7 +264,7 @@ public class SetThemeForJson {
     return this;
   }
 
-  public SetThemeForJson setFabColorHint(
+  public ThemeUtils setFabColorHint(
       ExtendedFloatingActionButton fab, HashMap<String, Object> imap) {
     fab.setBackgroundTintList(
         ColorStateList.valueOf(
@@ -262,7 +275,7 @@ public class SetThemeForJson {
     return this;
   }
 
-  public SetThemeForJson subPowerMenu(PowerMenu menu, HashMap<String, Object> map) {
+  public ThemeUtils subPowerMenu(PowerMenu menu, HashMap<String, Object> map) {
     menu.setTextColor(
         map.containsKey("toolbartextcolor")
             ? Color.parseColor(map.get("toolbartextcolor").toString())
@@ -279,7 +292,7 @@ public class SetThemeForJson {
     return this;
   }
 
-  public SetThemeForJson buildandpost() {
+  public ThemeUtils buildandpost() {
 
     return this;
   }
@@ -342,13 +355,11 @@ public class SetThemeForJson {
     map.put("htmlsymbol", "#FF33A8");
     map.put("htmlblockhash", "#FF5252");
     map.put("htmlblocknormal", "#FF4081");
-    // for js
     map.put("jskeyword", "#FFAB40");
     map.put("jsfun", "#FFCC80");
     map.put("jsoprator", "#FF5252");
     map.put("jsattr", "#64B5F6");
     map.put("jsstring", "#FFCC80");
-    /// for py
     map.put("pystring", "#FFCC80");
     map.put("pykeyword", "#FFAB40");
     map.put("pysymbol", "#64B5F6");
@@ -357,7 +368,6 @@ public class SetThemeForJson {
     map.put("pycolormatch2", "#33FFFF");
     map.put("pycolormatch3", "#FF33FF");
     map.put("pycolormatch4", "#FFC300");
-    // for php
     map.put("phpkeyword", "#FF5733");
     map.put("phpattr", "#33FF57");
     map.put("phpsymbol", "#3357FF");
@@ -369,16 +379,28 @@ public class SetThemeForJson {
     map.put("phpcolormatch4", "#FFD700");
     map.put("phpcolormatch5", "#FF69B4");
     map.put("phpcolormatch6", "#20B2AA");
+    map.put("tskeyword", "#FF5733");
+    map.put("tsattr", "#33FF57");
+    map.put("tssymbols", "#3357FF");
+    map.put("tscolormatch1", "#F5D04D");
+    map.put("tscolormatch2", "#D04DF5");
+    map.put("tscolormatch3", "#FFDA44");
+    map.put("tscolormatch4", "#1FA3A5");
+    map.put("tscolormatch5", "#ACAA6C");
+    map.put("tscolormatch6", "#B06DFF");
+    map.put("tscolormatch7", "#FF7E1A");
+
     return map;
   }
-  public static Map<String,Boolean> getMapStyleText(){
-    Map<String,Boolean> styleLine = new HashMap<>();
+
+  public static Map<String, Boolean> getMapStyleText() {
+    Map<String, Boolean> styleLine = new HashMap<>();
     styleLine.put("isBold", true);
     styleLine.put("isItalic", false);
     styleLine.put("isStrike", false);
     styleLine.put("isLine", false);
-    styleLine.put("isPhpBold",false);
-    
+    styleLine.put("isPhpBold", false);
+
     return styleLine;
   }
 
@@ -396,7 +418,7 @@ public class SetThemeForJson {
     FileIOUtils.writeFileFromString(path, gson.toJson(map));
 
     Map<String, Boolean> StyleText = getMapStyleText();
-    
+
     var customPath =
         FileUtil.getExternalStorageDir()
             + File.separator
@@ -441,88 +463,98 @@ public class SetThemeForJson {
 
   public static String themeAsString() {
     return """
-    {
-        "javastring": "#89BA62",
-        "javafield": "#DF6C75",
-        "tabimagecolorfilter": "#B0BEC5",
-        "fabbackgroundcolorcolor": "#1A1B20",
-        "backgroundcolorlinear": "#1A1B20",
-        "htmlstr": "#FFCC80",
-        "operator": "#FFB74D",
-        "pysymbol": "#64B5F6",
-        "pykeyword": "#FFAB40",
-        "text_normal": "#FFFFFF",
-        "line_number_background": "#0E1C1C1C",
-        "selection_handle": "#66BB6A",
-        "phpkeyword": "#FFB800",
-        "tabback": "#282c34",
-        "javafun": "#5DA6E2",
-        "keyword": "#01FF00",
-        "jsfun": "#FFCC80",
-        "auto_comp_panel_corner": "#FF8C00",
-        "pycolormatch3": "#FF33FF",
-        "pycolormatch4": "#FFC300",
-        "htmltag": "#FFAB49",
-        "phphtmlkeyword": "#41FFE4",
-        "htmlattrname": "#64B5F6",
-        "pycolormatch1": "#FFFF33",
-        "phpsymbol": "#ACFF70",
-        "pycolormatch2": "#33FFFF",
-        "javaparament": "#D19A66",
-        "identifier_name": "#FF9E80",
-        "ninja": "#E1BEE7",
-        "toolbarcolor": "#121212",
-        "pynumber": "#A5D6A7",
-        "javatype": "#E0BD75",
-        "fabcolorstroker": "#4DFFFFFF",
-        "htmlblocknormal": "#FF4081",
-        "auto_comp_panel_bg": "#000000",
-        "tabtextcolor": "#dcdcdc",
-        "csskeyword": "#81D4FA",
-        "block_line": "#81D4FA",
-        "htmlblockhash": "#FF5252",
-        "literal": "#64B5F6",
-        "toolbartextcolor": "#B0BEC5",
-        "phphtmlattr": "#F0E68C",
-        "line_number": "#B0BEC5",
-        "block_line_current": "#4DD0E1",
-        "selection_insert": "#4DB6AC",
-        "whole_background": "#0E1C1C1C",
-        "attribute_name": "#50DAFF",
-        "textcolorigor": "#F06292",
-        "javanumber": "#89BA62",
-        "menubackground": "#1E1E1E",
-        "jsattr": "#64B5F6",
-        "imagecolor": "#B0BEC5",
-        "javakeyword": "#B972D0",
-        "phpcolormatch3": "#E1C1FF",
-        "phpcolormatch2": "#A7B8F3",
-        "phpcolormatch5": "#E89CC2",
-        "phpattr": "#FFE333",
-        "phpcolormatch4": "#FFD700",
-        "jsstring": "#FFCC80",
-        "phpcolormatch6": "#C5FFA3",
-        "line_divider": "#00000000",
-        "fabimagecolor": "#B0BEC5",
-        "html_tag": "#80CBC4",
-        "textcolorforgrand": "#B0BEC5",
-        "javaoprator": "#E0BD75",
-        "phpcolormatch1": "#E98989",
-        "current_line": "#37474F",
-        "htmlattr": "#FFAB80",
-        "htmlsymbol": "#FF33A8",
-        "pystring": "#FFCC80",
-        "print": "#FF8A65",
-        "jskeyword": "#FFAB40",
-        "textcolorhder": "#FFAB91",
-        "syombolbartextcolor": "#B0BEC5",
-        "displaytextcolortab": "#dcdcdc",
-        "comment": "#757575",
-        "attribute_value": "#33D77E",
-        "textcolorinier": "#EF5350",
-        "jsoprator": "#FF5252",
-        "non_printable_char": "#90CAF9"
-    }
+{
+  "javastring": "#89BA62",
+  "javafield": "#DF6C75",
+  "tabimagecolorfilter": "#B0BEC5",
+  "fabbackgroundcolorcolor": "#1A1B20",
+  "backgroundcolorlinear": "#1A1B20",
+  "htmlstr": "#FFCC80",
+  "operator": "#FFB74D",
+  "pysymbol": "#64B5F6",
+  "pykeyword": "#FFAB40",
+  "text_normal": "#FFFFFF",
+  "line_number_background": "#0E1C1C1C",
+  "selection_handle": "#66BB6A",
+  "phpkeyword": "#FFB800",
+  "tabback": "#282c34",
+  "javafun": "#5DA6E2",
+  "keyword": "#01FF00",
+  "jsfun": "#FFCC80",
+  "auto_comp_panel_corner": "#FF8C00",
+  "pycolormatch3": "#FF33FF",
+  "pycolormatch4": "#FFC300",
+  "htmltag": "#FFAB49",
+  "phphtmlkeyword": "#41FFE4",
+  "htmlattrname": "#64B5F6",
+  "pycolormatch1": "#FFFF33",
+  "phpsymbol": "#ACFF70",
+  "pycolormatch2": "#33FFFF",
+  "javaparament": "#D19A66",
+  "identifier_name": "#FF9E80",
+  "ninja": "#E1BEE7",
+  "toolbarcolor": "#121212",
+  "pynumber": "#A5D6A7",
+  "javatype": "#E0BD75",
+  "fabcolorstroker": "#4DFFFFFF",
+  "htmlblocknormal": "#FF4081",
+  "auto_comp_panel_bg": "#000000",
+  "tabtextcolor": "#dcdcdc",
+  "csskeyword": "#81D4FA",
+  "block_line": "#81D4FA",
+  "htmlblockhash": "#FF5252",
+  "literal": "#64B5F6",
+  "toolbartextcolor": "#B0BEC5",
+  "phphtmlattr": "#F0E68C",
+  "line_number": "#B0BEC5",
+  "block_line_current": "#4DD0E1",
+  "selection_insert": "#4DB6AC",
+  "whole_background": "#0E1C1C1C",
+  "attribute_name": "#50DAFF",
+  "textcolorigor": "#F06292",
+  "javanumber": "#89BA62",
+  "menubackground": "#1E1E1E",
+  "jsattr": "#64B5F6",
+  "imagecolor": "#B0BEC5",
+  "javakeyword": "#B972D0",
+  "phpcolormatch3": "#E1C1FF",
+  "phpcolormatch2": "#A7B8F3",
+  "phpcolormatch5": "#E89CC2",
+  "phpattr": "#FFE333",
+  "phpcolormatch4": "#FFD700",
+  "jsstring": "#FFCC80",
+  "phpcolormatch6": "#C5FFA3",
+  "line_divider": "#00000000",
+  "fabimagecolor": "#B0BEC5",
+  "html_tag": "#80CBC4",
+  "textcolorforgrand": "#B0BEC5",
+  "javaoprator": "#E0BD75",
+  "phpcolormatch1": "#E98989",
+  "current_line": "#37474F",
+  "htmlattr": "#FFAB80",
+  "htmlsymbol": "#FF33A8",
+  "pystring": "#FFCC80",
+  "print": "#FF8A65",
+  "jskeyword": "#FFAB40",
+  "textcolorhder": "#FFAB91",
+  "syombolbartextcolor": "#B0BEC5",
+  "displaytextcolortab": "#dcdcdc",
+  "comment": "#757575",
+  "attribute_value": "#33D77E",
+  "textcolorinier": "#EF5350",
+  "jsoprator": "#FF5252",
+  "non_printable_char": "#90CAF9",
+  "tskeyword": "#84FFFE",
+  "tsattr": "#FF7979",
+  "tssymbols": "#91FFDA",
+  "tscolormatch1": "#FFBC88",
+  "tscolormatch2": "#99D0FF",
+  "tscolormatch3": "#FFDA44",
+  "tscolormatch4": "#1FA3A5",
+  "tscolormatch5": "#FFFB8C",
+  "tscolormatch6": "#C1AEFF",
+  "tscolormatch7": "#FFCEFF7F"
+}
     """;
   }
 }

@@ -2,7 +2,7 @@ package io.github.rosemoe.sora.langs.java;
 
 import Ninja.coder.Ghostemane.code.IdeEditor;
 import Ninja.coder.Ghostemane.code.databin.DiagnosticWrapper;
-import Ninja.coder.Ghostemane.code.utils.SetThemeForJson;
+import Ninja.coder.Ghostemane.code.utils.ThemeUtils;
 import android.graphics.Color;
 import androidx.core.graphics.ColorUtils;
 import com.google.gson.Gson;
@@ -590,7 +590,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
     mapStyle =
         new Gson()
             .fromJson(
-                SetThemeForJson.setReloadStyle(),
+                ThemeUtils.setReloadStyle(),
                 new TypeToken<Map<String, Boolean>>() {}.getType());
 
     result.addIfNeeded(

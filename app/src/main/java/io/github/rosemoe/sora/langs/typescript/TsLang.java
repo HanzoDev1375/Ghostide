@@ -5,6 +5,7 @@ import io.github.rosemoe.sora.interfaces.NewlineHandler;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 import io.github.rosemoe.sora.interfaces.EditorLanguage;
 import io.github.rosemoe.sora.langs.internal.MyCharacter;
+import io.github.rosemoe.sora.langs.java.JavaAutoComplete;
 import io.github.rosemoe.sora.langs.java.JavaLanguage;
 import io.github.rosemoe.sora.text.TextUtils;
 import io.github.rosemoe.sora.widget.SymbolPairMatch;
@@ -108,7 +109,9 @@ public class TsLang implements EditorLanguage {
 
   @Override
   public AutoCompleteProvider getAutoCompleteProvider() {
-    return new TsAuto();
+    var tsAuto = new JavaAutoComplete();
+    tsAuto.setKeywords(list);
+    return tsAuto;
   }
 
   @Override

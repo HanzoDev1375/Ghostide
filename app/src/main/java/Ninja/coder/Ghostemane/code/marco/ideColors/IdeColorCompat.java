@@ -3,7 +3,6 @@ package Ninja.coder.Ghostemane.code.marco.ideColors;
 import Ninja.coder.Ghostemane.code.R;
 import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
-import Ninja.coder.Ghostemane.code.utils.SetThemeForJson;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Build;

@@ -5,7 +5,7 @@ import Ninja.coder.Ghostemane.code.databinding.ThemepreviewLayoutBinding;
 import Ninja.coder.Ghostemane.code.marco.ideColors.IdeColorCompat;
 import Ninja.coder.Ghostemane.code.model.LoadTheme;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
-import Ninja.coder.Ghostemane.code.utils.SetThemeForJson;
+import Ninja.coder.Ghostemane.code.utils.ThemeUtils;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,7 +65,7 @@ public class ThemePreviewActivity extends BaseCompat {
                 FileUtil.readFile(themePath),
                 new TypeToken<HashMap<String, Object>>() {}.getType());
 
-    SetThemeForJson theme = new SetThemeForJson();
+    var theme = new ThemeUtils();
     theme.setThemeCodeEditor((CodeEditor) bind.editor, map, false, this);
     theme.setFabColorHint(bind.fab,map);
   }
@@ -163,7 +163,7 @@ public class ThemePreviewActivity extends BaseCompat {
           bind.editor.setEditorLanguage(new NinjaLang());
           return """
                 #! /bin/bash
-                echo 'Hello, Termux!'
+                echo 'Hello, Ghosy ide!'
                 """;
         case "build.json":
           bind.editor.setEditorLanguage(new JsonLanguage());

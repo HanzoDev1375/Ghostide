@@ -5,7 +5,7 @@ import Ninja.coder.Ghostemane.code.activities.StreamSoftAppActivity;
 import Ninja.coder.Ghostemane.code.tasks.app.ProgressDialogCompat;
 import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
-import Ninja.coder.Ghostemane.code.utils.SetThemeForJson;
+import Ninja.coder.Ghostemane.code.utils.ThemeUtils;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -61,7 +61,7 @@ public class SplashWord extends AppIntro2 {
 
           try {
             if (!FileUtil.isExistFile(ghostPath)) {
-              SetThemeForJson.winterToPath();
+              ThemeUtils.winterToPath();
             } else {
               Log.e("File is ExistFile", "");
             }
