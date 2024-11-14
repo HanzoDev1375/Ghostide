@@ -22,7 +22,7 @@ public class LoadTheme {
 
   protected static final String ThemePath =
       "/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost";
-  private HashMap<String, Object> map = new HashMap<>();
+  private Map<String, Object> map = new HashMap<>();
   private HashMap<String, Object> add = new HashMap<>();
   private HashMap<String, Object> file = new HashMap<>();
 
@@ -87,7 +87,7 @@ public class LoadTheme {
     }
   }
 
-  public void getAllKeysFromMap(Map<String, Object> map, ArrayList<String> output) {
+  public void getAllKeysFromMap(Map<String, Object> map, List<String> output) {
     if (output == null) return;
     output.clear();
     if (map == null || map.size() < 1) return;

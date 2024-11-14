@@ -5,11 +5,15 @@ import Ninja.coder.Ghostemane.code.config.CreatorComment;
 import Ninja.coder.Ghostemane.code.config.GetterSetterGenerator;
 import Ninja.coder.Ghostemane.code.databinding.MakefolderBinding;
 import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.ImportDeclaration;
 import io.github.rosemoe.sora.langs.java.JavaLanguage;
 import io.github.rosemoe.sora.widget.SymbolChannel;
 import io.github.rosemoe.sora.widget.Transilt;
-import io.github.rosemoe.sora.widget.schemes.SchemeDarcula;
+import io.github.rosemoe.sora.widget.schemes.GhostThemeDark;
 import java.lang.reflect.Field;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -28,6 +32,7 @@ import com.google.android.material.color.MaterialColors;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class JavaTools {
   protected ToolItem item;
@@ -86,15 +91,15 @@ public class JavaTools {
           } else if (pos == 5) {
 
           } else if (pos == 6) {
-            installextractJavaClass(context, editor);
+            bindList(editor, context);
           } else if (pos == 7) {
             Transilt.Start(editor);
           } else if (pos == 8) {
-            GetterSetterGenerator.main(context,editor.getText().toString(),(IdeEditor)editor);
+            GetterSetterGenerator.main(context, editor.getText().toString(), (IdeEditor) editor);
           } else if (pos == 9) {
             item.StringFog(editor);
-          }else if(pos == 10){
-            makeComment(context,editor);
+          } else if (pos == 10) {
+            makeComment(context, editor);
           }
         });
   }
@@ -120,7 +125,7 @@ public class JavaTools {
     editor.getContext().startActivity(shareIntent);
   }
 
-  public void installextractJavaClass(Context c, CodeEditor editor) {
+  public void installextractJavaClass(Context c, CodeEditor editor, String text) {
     var myeditor = new CodeEditor(c);
     LinearLayout.LayoutParams params =
         new LinearLayout.LayoutParams(
@@ -129,9 +134,9 @@ public class JavaTools {
     myeditor.setLayoutParams(params);
     myeditor.setEditable(false);
     myeditor.setLineNumberEnabled(false);
-    myeditor.setEditorLanguage(new JavaLanguage((IdeEditor)editor));
-    myeditor.setColorScheme(new SchemeDarcula());
-    extractJavaClass(editor.getSelectedText(), myeditor);
+    myeditor.setEditorLanguage(new JavaLanguage((IdeEditor) editor));
+    myeditor.setColorScheme(new GhostThemeDark());
+    extractJavaClass(text, myeditor);
     var dialog = new MaterialAlertDialogBuilder(c);
     dialog.setTitle("Class View");
     dialog.setPositiveButton("ok", null);
@@ -146,9 +151,9 @@ public class JavaTools {
         String text = "// Extracted class: " + cls.getName();
 
         text += "\n\n// Annotations (if it's empty means there's nothing)";
-        //        for (java.text.Annotation a : cls.getDeclaredAnnotations()) {
-        //          text += "\n\n" + a.toString();
-        //        }
+        for (var a : cls.getDeclaredAnnotations()) {
+          text += "\n\n" + a.toString();
+        }
 
         text += "\n\n// Fields (if it's empty means there's nothing)";
         for (Field f : cls.getDeclaredFields()) {
@@ -156,17 +161,17 @@ public class JavaTools {
         }
 
         text += "\n\n// Constructors (if it's empty means there's nothing)";
-        for (Constructor c : cls.getDeclaredConstructors()) {
+        for (var c : cls.getDeclaredConstructors()) {
           text += "\n\n" + c.toString();
         }
 
         text += "\n\n// Methods (if it's empty means there's nothing)";
-        for (Method m : cls.getDeclaredMethods()) {
+        for (var m : cls.getDeclaredMethods()) {
           text += "\n\n" + m.toString();
         }
 
         text += "\n\n// Classes (if it's empty means there's nothing)";
-        for (Class c : cls.getDeclaredClasses()) {
+        for (var c : cls.getDeclaredClasses()) {
           text += "\n\n" + c.toString();
         }
 
@@ -192,5 +197,37 @@ public class JavaTools {
               }
             })
         .show();
+  }
+
+  private List<String> finalAllImportByCode(String text) {
+    List<String> list = new ArrayList<>();
+    var cu = StaticJavaParser.parse(text);
+    cu.findAll(ImportDeclaration.class)
+        .forEach(
+            it -> {
+              list.add(it.getNameAsString());
+            });
+
+    return list;
+  }
+
+  void bindList(CodeEditor editor, Context context) {
+    var listView = new ListView(context);
+    List<String> itemFull = finalAllImportByCode(editor.getText().toString());
+    listView.setAdapter(
+        new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, itemFull));
+
+    listView.setOnItemClickListener(
+        (parent, view, position, __) -> {
+          
+          var get = itemFull.get(position);
+          installextractJavaClass(context, editor, get);
+        });
+
+    var dialog = new MaterialAlertDialogBuilder(context);
+    dialog.setTitle("Class View");
+    dialog.setNegativeButton(android.R.string.cancel, null);
+    dialog.setView(listView);
+    dialog.show();
   }
 }

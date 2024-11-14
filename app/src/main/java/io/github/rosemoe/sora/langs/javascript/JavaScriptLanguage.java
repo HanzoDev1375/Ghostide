@@ -133,12 +133,8 @@ public class JavaScriptLanguage implements EditorLanguage {
 
   @Override
   public CharSequence format(CharSequence text) {
-    try {
-      return Antlr4Formatter.formatJs(text.toString());
-    } catch (Exception err) {
-      return text;
-    }
-    // return javaFormat(text.toString());
+    
+     return javaFormat(text.toString());
   }
 
   @Override

@@ -19,12 +19,13 @@ import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> {
-  private ArrayList<HashMap<String, Object>> listMap;
+  private List<HashMap<String, Object>> listMap;
   private IdeEditor editor;
 
-  public ThemeAdapter(ArrayList<HashMap<String, Object>> listMap,IdeEditor editor) {
+  public ThemeAdapter(List<HashMap<String, Object>> listMap,IdeEditor editor) {
     this.listMap = listMap;
     this.editor = editor;
   }
@@ -97,5 +98,6 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> 
       tv = itemView.findViewById(R.id.name);
       id = itemView.findViewById(R.id.idcolor);
     }
+    
   }
 }

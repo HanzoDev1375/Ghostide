@@ -18,11 +18,11 @@ import com.google.android.material.color.MaterialColors;
 
 import com.ninjacoder.jgit.databinding.LayoutListsheetBinding;
 import java.io.File;
-import java.util.ArrayList;
+import java.util.*;
 
 public class ListSheet {
   protected BottomSheetDialog dialog;
-  private ArrayList<ItemSheet> item = new ArrayList<>();
+  private List<ItemSheet> item = new ArrayList<>();
   protected LayoutListsheetBinding binding;
 
   public static void bind(RecyclerView tv, String Folder) {
@@ -80,9 +80,9 @@ public class ListSheet {
   }
 
   private class SheetAd extends BaseAdapter {
-    ArrayList<ItemSheet> helper = new ArrayList<>();
+    List<ItemSheet> helper = new ArrayList<>();
 
-    public SheetAd(ArrayList<ItemSheet> helper) {
+    public SheetAd(List<ItemSheet> helper) {
       this.helper = helper;
     }
 

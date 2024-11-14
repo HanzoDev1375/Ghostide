@@ -6,6 +6,8 @@ import Ninja.coder.Ghostemane.code.marco.ideColors.IdeColorCompat;
 import Ninja.coder.Ghostemane.code.model.LoadTheme;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import Ninja.coder.Ghostemane.code.utils.ThemeUtils;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.shape.MaterialShapeDrawable;
+import com.google.android.material.shape.ShapeAppearanceModel;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import io.github.rosemoe.sora.langs.java.JavaLanguage;
@@ -54,7 +58,7 @@ public class ThemePreviewActivity extends BaseCompat {
     bind.fab.setOnClickListener(
         c -> {
           loadTheme = new LoadTheme();
-          loadTheme.runinSheet(ThemePreviewActivity.this,bind.editor);
+          loadTheme.runinSheet(ThemePreviewActivity.this, bind.editor);
         });
   }
 
@@ -67,7 +71,7 @@ public class ThemePreviewActivity extends BaseCompat {
 
     var theme = new ThemeUtils();
     theme.setThemeCodeEditor((CodeEditor) bind.editor, map, false, this);
-    theme.setFabColorHint(bind.fab,map);
+    theme.setFabColorHint(bind.fab, map);
   }
 
   class FakeAd extends RecyclerView.Adapter<FakeAd.VH> {
@@ -108,9 +112,21 @@ public class ThemePreviewActivity extends BaseCompat {
       TextView tv = itemView.findViewById(R.id.textview1);
       ImageView imgview = itemView.findViewById(R.id.imageview2);
       tv.setText(binder);
-      var idecolor = new IdeColorCompat(bind.editor);
-      idecolor.Colors(selector, tv);
-
+      var theme = new ThemeUtils();
+      map =
+          new Gson()
+              .fromJson(
+                  FileUtil.readFile(getIntent().getStringExtra("keyitem")),
+                  new TypeToken<HashMap<String, Object>>() {}.getType());
+      tv.setTextColor(Color.parseColor(map.get("tabtextcolor").toString()));
+      var shape =
+          new MaterialShapeDrawable(
+              ShapeAppearanceModel.builder()
+                  .setTopLeftCorner(20, 20)
+                  .setTopRightCorner(20, 20)
+                  .build());
+      shape.setFillColor(ColorStateList.valueOf(Color.parseColor(map.get("tabback").toString())));
+      selector.setBackground(shape);
       if (selectedPosition == pos) {
         selector.setVisibility(View.VISIBLE);
         bind.editor.setText(getNewTextForItem(binder));

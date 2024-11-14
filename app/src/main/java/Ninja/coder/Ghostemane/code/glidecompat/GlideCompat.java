@@ -287,6 +287,9 @@ public class GlideCompat {
       img.setImageResource(R.drawable.ic_material_android);
     }
   }
+  protected static int RenderSize() {
+    return 25;
+  }
 
   public static void LoadSvg(String path, ImageView c) {
     Glide.with(c.getContext())
@@ -298,11 +301,6 @@ public class GlideCompat {
         .priority(Priority.NORMAL)
         .into(c);
   }
-
-  protected static int RenderSize() {
-    return 25;
-  }
-
   protected static Drawable loadSvg(String path) {
     Drawable drawable = null;
     try {
@@ -312,8 +310,6 @@ public class GlideCompat {
 
     } catch (Exception e) {
       e.printStackTrace();
-
-      //	Toast.makeText(getApplicationContext(), e.toString(), 3000).show();
     }
     return drawable;
   }
