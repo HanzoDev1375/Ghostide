@@ -6,6 +6,7 @@ import Ninja.coder.Ghostemane.code.widget.ExrtaFab;
 import android.widget.ProgressBar;
 import io.github.rosemoe.sora.langs.antlrlang.ANTLRV4Lang;
 import io.github.rosemoe.sora.langs.cpp.CppLanguage;
+import io.github.rosemoe.sora.langs.csharp.CSharpLanguage;
 import io.github.rosemoe.sora.langs.json.JsonLanguage;
 import io.github.rosemoe.sora.langs.dart.DartLang;
 import io.github.rosemoe.sora.langs.kotlin.KotlinLanguage;
@@ -81,7 +82,7 @@ public class EditorRoaderFile {
       _fab.postDelayed(_fab::show, 400);
     } else if (_path.endsWith(".cs")) {
       ReadFileCompat(editor, _path, bar);
-      editor.setEditorLanguage(new UniversalLanguage(new sharpDescription()));
+      editor.setEditorLanguage(new CSharpLanguage());
     } else if (_path.endsWith(".xml")) {
       ReadFileCompat(editor, _path, bar);
       //	editor.setEditorLanguage(new io.github.rosemoe.sora.langs.xml.XMLLanguage());

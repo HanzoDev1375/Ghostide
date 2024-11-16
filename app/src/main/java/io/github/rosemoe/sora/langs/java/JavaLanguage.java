@@ -36,6 +36,7 @@ public class JavaLanguage implements EditorLanguage {
   @Override
   public AutoCompleteProvider getAutoCompleteProvider() {
     JavaAutoComplete auto = new JavaAutoComplete();
+    auto.setMd(true);
     auto.setKeywords(keywords);
     return auto;
   }

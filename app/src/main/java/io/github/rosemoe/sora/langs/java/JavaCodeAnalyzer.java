@@ -92,7 +92,8 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
       var classNamePrevious = false;
       Token token, preToken = null, prePreToken = null;
       boolean first = true;
-      JavaAutoComplete auto = new JavaAutoComplete();
+      JavaAutoComplete auto = new JavaAutoComplete(editor);
+      auto.setMd(true);
       auto.setKeywords(JavaLanguage.keywords);
       JavaAutoComplete.Identifiers info = new JavaAutoComplete.Identifiers();
       info.begin();

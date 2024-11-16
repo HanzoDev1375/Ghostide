@@ -1,6 +1,13 @@
 package lsp4custom.com.ninjacoder.customhtmllsp;
 
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
+import com.github.javaparser.printer.DefaultPrettyPrinter;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import io.github.rosemoe.sora.data.CompletionItem;
+import java.io.StringReader;
 import java.util.List;
 
 public class JavaCardshorts extends Css3Server {
@@ -21,7 +28,7 @@ public class JavaCardshorts extends Css3Server {
       item.add(css("forloop", "forloop", forLoop()));
     }
     if ("foreach".startsWith(prf) && isLen) {
-      item.add(css("foreach", "foreach", forEachLoop()));
+      item.add(css("foreach", "foreach", format(forEachLoop())));
     }
     if ("trycatch".startsWith(prf) && isLen) {
       item.add(css("trycatch", "trycatch", tryCatchBlock()));
@@ -54,7 +61,7 @@ public class JavaCardshorts extends Css3Server {
 
   private String forEachLoop() {
     return """
-    for(element : iterable) {
+    for(var element : iterable) {
         // TODO: process element
     }
     """;
@@ -119,5 +126,21 @@ public class JavaCardshorts extends Css3Server {
         // TODO: implement main logic
     }
     """;
+  }
+
+  String format(String code) {
+    try {
+      CompilationUnit cu = StaticJavaParser.parse(code);
+
+      DefaultPrinterConfiguration configuration = new DefaultPrinterConfiguration();
+      DefaultPrettyPrinter printer = new DefaultPrettyPrinter(configuration);
+
+      String formattedCode = printer.print(cu);
+      System.out.println(formattedCode);
+      return formattedCode;
+    } catch (Throwable t) {
+      System.err.println("An error occurred during code formatting: " + t.getMessage());
+      return code; // Return the original code if an error occurs
+    }
   }
 }

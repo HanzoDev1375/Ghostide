@@ -1,27 +1,18 @@
-package io.github.rosemoe.sora.langs.groovy.lang;
+package io.github.rosemoe.sora.langs.csharp;
 
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
-import io.github.rosemoe.sora.interfaces.NewlineHandler;
 import io.github.rosemoe.sora.interfaces.EditorLanguage;
-import io.github.rosemoe.sora.langs.groovy.GroovyAnalyzer;
-import io.github.rosemoe.sora.langs.groovy.GroovyLexer;
 import io.github.rosemoe.sora.langs.internal.MyCharacter;
 import io.github.rosemoe.sora.text.TextUtils;
 import io.github.rosemoe.sora.widget.SymbolPairMatch;
-
+import io.github.rosemoe.sora.interfaces.NewlineHandler;
 import java.io.StringReader;
-
+import org.antlr.parser.antlr4.csharp.CSharpLexer;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.Token;
 
-public class GroovyLanguage implements EditorLanguage {
-  private final NewlineHandler[] newLineHandlers =
-      new NewlineHandler[] {
-        new BraceHandler(), new TwoIndentHandler(), new JavaDocStartHandler(), new JavaDocHandler()
-      };
-
-  public GroovyLanguage() {}
+public class CSharpLanguage implements EditorLanguage {
 
   @Override
   public CharSequence format(CharSequence text) {
@@ -30,26 +21,28 @@ public class GroovyLanguage implements EditorLanguage {
 
   @Override
   public CodeAnalyzer getAnalyzer() {
-    return new GroovyAnalyzer();
+    return new CSharpCodeAnalyzer();
   }
 
   @Override
   public AutoCompleteProvider getAutoCompleteProvider() {
-    return new GroovyAutoComplete();
+    var auto = new CsAutoComplete();
+    auto.setKeywords(csharpKeywords);
+    return auto;
   }
 
   @Override
   public int getIndentAdvance(String content) {
     try {
-      GroovyLexer lexer = new GroovyLexer(CharStreams.fromReader(new StringReader(content)));
+      var lexer = new CSharpLexer(CharStreams.fromReader(new StringReader(content)));
       Token token;
       int advance = 0;
       while (((token = lexer.nextToken()) != null && token.getType() != token.EOF)) {
         switch (token.getType()) {
-          case GroovyLexer.LBRACE:
+          case CSharpLexer.OPEN_BRACE:
             advance++;
             break;
-          case GroovyLexer.RBRACE:
+          case CSharpLexer.CLOSE_BRACE:
             advance--;
             break;
         }
@@ -62,6 +55,15 @@ public class GroovyLanguage implements EditorLanguage {
     return 0;
   }
 
+  private final NewlineHandler[] newLineHandlers =
+      new NewlineHandler[] {new JavaDocStartHandler(), new JavaDocHandler()};
+
+  @Override
+  public NewlineHandler[] getNewlineHandlers() {
+
+    return newLineHandlers;
+  }
+
   @Override
   public SymbolPairMatch getSymbolPairs() {
     return null;
@@ -69,40 +71,12 @@ public class GroovyLanguage implements EditorLanguage {
 
   @Override
   public boolean isAutoCompleteChar(char ch) {
-    return MyCharacter.isJavaIdentifierStart(ch) || ch == '.';
+    return MyCharacter.isJavaIdentifierPart(ch);
   }
 
   @Override
   public boolean useTab() {
     return true;
-  }
-
-  @Override
-  public NewlineHandler[] getNewlineHandlers() {
-    return newLineHandlers;
-  }
-
-  class BraceHandler implements NewlineHandler {
-
-    @Override
-    public boolean matchesRequirement(String beforeText, String afterText) {
-      return beforeText.endsWith("{") && afterText.startsWith("}");
-    }
-
-    @Override
-    public HandleResult handleNewline(String beforeText, String afterText, int tabSize) {
-      int count = TextUtils.countLeadingSpaceCount(beforeText, tabSize);
-      int advanceBefore = getIndentAdvance(beforeText);
-      int advanceAfter = getIndentAdvance(afterText);
-      String text;
-      StringBuilder sb =
-          new StringBuilder("\n")
-              .append(TextUtils.createIndent(count + advanceBefore, tabSize, useTab()))
-              .append('\n')
-              .append(text = TextUtils.createIndent(count + advanceAfter, tabSize, useTab()));
-      int shiftLeft = text.length() + 1;
-      return new HandleResult(sb, shiftLeft);
-    }
   }
 
   class JavaDocStartHandler implements NewlineHandler {
@@ -153,28 +127,103 @@ public class GroovyLanguage implements EditorLanguage {
     }
   }
 
-  class TwoIndentHandler implements NewlineHandler {
-
-    @Override
-    public boolean matchesRequirement(String beforeText, String afterText) {
-      //  Log.d("BeforeText", beforeText);
-      if (beforeText.replace("\r", "").trim().startsWith(".")) {
-        return false;
-      }
-      return beforeText.endsWith(")") && !afterText.startsWith(";");
-    }
-
-    @Override
-    public HandleResult handleNewline(String beforeText, String afterText, int tabSize) {
-      int count = TextUtils.countLeadingSpaceCount(beforeText, tabSize);
-      int advanceAfter = getIndentAdvance(afterText) + (4 * 2);
-      String text;
-      StringBuilder sb =
-          new StringBuilder()
-              .append('\n')
-              .append(text = TextUtils.createIndent(count + advanceAfter, tabSize, useTab()));
-      int shiftLeft = 0;
-      return new HandleResult(sb, shiftLeft);
-    }
-  }
+  public static String[] csharpKeywords = {
+    "abstract",
+    "as",
+    "base",
+    "bool",
+    "break",
+    "byte",
+    "case",
+    "catch",
+    "char",
+    "checked",
+    "class",
+    "const",
+    "continue",
+    "decimal",
+    "default",
+    "delegate",
+    "do",
+    "double",
+    "else",
+    "enum",
+    "event",
+    "explicit",
+    "extern",
+    "false",
+    "finally",
+    "fixed",
+    "float",
+    "for",
+    "foreach",
+    "goto",
+    "if",
+    "implicit",
+    "in",
+    "int",
+    "interface",
+    "internal",
+    "is",
+    "lock",
+    "long",
+    "namespace",
+    "new",
+    "null",
+    "object",
+    "operator",
+    "out",
+    "override",
+    "params",
+    "private",
+    "protected",
+    "public",
+    "readonly",
+    "ref",
+    "return",
+    "sbyte",
+    "sealed",
+    "short",
+    "sizeof",
+    "stackalloc",
+    "static",
+    "string",
+    "struct",
+    "switch",
+    "this",
+    "throw",
+    "true",
+    "try",
+    "typeof",
+    "uint",
+    "ulong",
+    "unchecked",
+    "unsafe",
+    "ushort",
+    "using",
+    "virtual",
+    "void",
+    "volatile",
+    "while",
+    "add",
+    "alias",
+    "ascending",
+    "descending",
+    "dynamic",
+    "from",
+    "get",
+    "global",
+    "group",
+    "into",
+    "join",
+    "let",
+    "orderby",
+    "partial",
+    "remove",
+    "select",
+    "yield",
+    "where",
+    "var",
+    "async"
+  };
 }

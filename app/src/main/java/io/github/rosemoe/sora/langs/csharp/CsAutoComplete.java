@@ -1,33 +1,18 @@
-package io.github.rosemoe.sora.langs.java;
+package io.github.rosemoe.sora.langs.csharp;
 
-import Ninja.coder.Ghostemane.code.IdeEditor;
-import io.github.rosemoe.sora.data.CompletionItem;
+import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
+import java.util.List;
+import io.github.rosemoe.sora.data.CompletionItem;
+import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
-import lsp4custom.com.ninjacoder.customhtmllsp.JavaCardshorts;
 
-public class JavaAutoComplete implements AutoCompleteProvider {
+public class CsAutoComplete  implements AutoCompleteProvider{
 
   private String[] mKeywords;
   private boolean mKeywordsAreLowCase;
-  private JavaCardshorts shortcard;
-  private IdeEditor editor;
-  boolean isMd = false;
-
-  public JavaAutoComplete() {}
-
-  public JavaAutoComplete(IdeEditor editor) {
-    this.editor = editor;
-  }
-
-  public void setMd(boolean isMd) {
-    this.isMd = isMd;
-  }
-
+  
   public void setKeywords(String[] keywords) {
     mKeywords = keywords;
     mKeywordsAreLowCase = false;
@@ -62,7 +47,7 @@ public class JavaAutoComplete implements AutoCompleteProvider {
       Collections.sort(words, CompletionItem.COMPARATOR_BY_NAME);
       keywords.addAll(words);
     }
-    shortcard = new JavaCardshorts(keywords, prefix);
+    
     return keywords;
   }
 
