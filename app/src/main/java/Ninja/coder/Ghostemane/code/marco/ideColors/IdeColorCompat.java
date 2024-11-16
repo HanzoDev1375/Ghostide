@@ -20,16 +20,12 @@ import ninja.coder.appuploader.utils.ShapeUtils;
 
 public class IdeColorCompat {
   private CodeEditor editor;
-  
 
   public IdeColorCompat(CodeEditor editor) {
     this.editor = editor;
-    
   }
 
-  public void Colors(View view, TextView text) {
-    
-  }
+  public void Colors(View view, TextView text) {}
 
   public void setIconLang(String path, ImageView icon) {
     icon.setColorFilter(
@@ -46,7 +42,9 @@ public class IdeColorCompat {
       icon.setImageResource(R.drawable.ghostfile);
     } else if (path.endsWith(".html")) {
       icon.setImageResource(R.drawable.ic_material_html);
-    } else if (path.endsWith(".groovy")) {
+    } else if (path.endsWith(".groovy")
+        || path.endsWith(".gradle")
+        || path.endsWith("gradle.kts")) {
       icon.setImageResource(R.drawable.ic_material_groovy);
     } else if (path.endsWith(".java")) {
       icon.setImageResource(R.drawable.ic_material_java);
@@ -74,6 +72,10 @@ public class IdeColorCompat {
       icon.setImageResource(R.drawable.ic_material_markdown);
     } else if (path.endsWith(".sql")) {
       icon.setImageResource(R.drawable.ic_material_database);
-    }
+    } else if (path.endsWith(".cs")) {
+      icon.setImageResource(R.drawable.ic_material_csharp);
+    } else if (path.endsWith(".c")) {
+      icon.setImageResource(R.drawable.ic_material_c);
+    } else icon.setImageResource(R.drawable.ic_material_document);
   }
 }

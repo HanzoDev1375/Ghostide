@@ -5,11 +5,9 @@ import Ninja.coder.Ghostemane.code.R;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
-import io.github.rosemoe.sora.event.ContentChangeEvent;
+import io.github.rosemoe.sora.langs.csharp.CSharpLanguage;
 import io.github.rosemoe.sora.langs.css3.CSS3Language;
 import io.github.rosemoe.sora.langs.antlrlang.ANTLRV4Lang;
 import io.github.rosemoe.sora.langs.cpp.CppLanguage;
@@ -40,6 +38,9 @@ import io.github.rosemoe.sora.langs.python.PythonLexer;
 import io.github.rosemoe.sora.langs.python.PythonParser;
 import io.github.rosemoe.sora.langs.python.PythonParserBaseListener;
 import java.io.StringReader;
+import org.antlr.parser.antlr4.csharp.CSharpLexer;
+import org.antlr.parser.antlr4.csharp.CSharpParser;
+import org.antlr.parser.antlr4.csharp.CSharpParserBaseListener;
 import org.antlr.parser.antlr4.java20.Java20Lexer;
 import org.antlr.parser.antlr4.java20.Java20Parser;
 import org.antlr.parser.antlr4.java20.Java20ParserBaseListener;
@@ -68,6 +69,10 @@ public class FactoryCodeError {
     this.editor = editor;
     this.call = call;
   }
+  
+  void Iconnotfound(){
+    call.setImageResource(R.drawable.ic_material_doc);
+  }
 
   /**
    * این متتود باید کال شود مگر نه عمل کرد کار نمیکند این متتود به صورت خودکار زبان ها را حمایت
@@ -76,45 +81,47 @@ public class FactoryCodeError {
    */
   public void run() {
     if (editor.getEditorLanguage() instanceof CSS3Language) {
-      call.setVisibility(View.INVISIBLE);
+      Iconnotfound(); 
     } else if (editor.getEditorLanguage() instanceof ANTLRV4Lang) {
-      call.setVisibility(View.INVISIBLE);
+      Iconnotfound(); 
     } else if (editor.getEditorLanguage() instanceof CppLanguage) {
-      call.setVisibility(View.INVISIBLE);
+      Iconnotfound(); 
     } else if (editor.getEditorLanguage() instanceof DartLang) {
-      call.setVisibility(View.INVISIBLE);
+      Iconnotfound(); 
     } else if (editor.getEditorLanguage() instanceof ghostlangs) {
-      call.setVisibility(View.INVISIBLE);
+      Iconnotfound(); 
     } else if (editor.getEditorLanguage() instanceof HTMLLanguage) {
-      call.setVisibility(View.INVISIBLE);
+      Iconnotfound(); 
     } else if (editor.getEditorLanguage() instanceof GroovyLanguage) {
-      call.setVisibility(View.INVISIBLE);
+      Iconnotfound(); 
     } else if (editor.getEditorLanguage() instanceof JavaLanguage) {
       java();
     } else if (editor.getEditorLanguage() instanceof JavaScriptLanguage) {
       js();
     } else if (editor.getEditorLanguage() instanceof JsonLanguage) {
-      call.setVisibility(View.INVISIBLE);
+      Iconnotfound(); 
     } else if (editor.getEditorLanguage() instanceof KotlinLanguage) {
-      call.setVisibility(View.INVISIBLE);
+      Iconnotfound(); 
     } else if (editor.getEditorLanguage() instanceof NinjaLang) {
-      call.setVisibility(View.INVISIBLE);
+      Iconnotfound(); 
     } else if (editor.getEditorLanguage() instanceof PHPLanguage) {
       php();
     } else if (editor.getEditorLanguage() instanceof PythonLang) {
       py();
     } else if (editor.getEditorLanguage() instanceof SassLangCompat) {
-      call.setVisibility(View.INVISIBLE);
+      Iconnotfound(); 
     } else if (editor.getEditorLanguage() instanceof SMLang) {
-      call.setVisibility(View.INVISIBLE);
+      Iconnotfound(); 
     } else if (editor.getEditorLanguage() instanceof TsLang) {
-      call.setVisibility(View.INVISIBLE);
+      Iconnotfound(); 
     } else if (editor.getEditorLanguage() instanceof XMLLanguage) {
-      call.setVisibility(View.INVISIBLE);
-    } else if (editor.getEditorLanguage() instanceof EditorLanguage) {
-      call.setVisibility(View.INVISIBLE);
+      Iconnotfound(); 
+    } else if (editor.getEditorLanguage() instanceof CSharpLanguage) {
+      cs(); 
     } else if (editor.getEditorLanguage() instanceof MySqlLang) {
-      call.setVisibility(View.INVISIBLE);
+      Iconnotfound(); 
+    } else if (editor.getEditorLanguage() instanceof EditorLanguage) {
+      Iconnotfound();
     }
   }
 
@@ -185,9 +192,7 @@ public class FactoryCodeError {
                   new Handler(Looper.getMainLooper())
                       .post(
                           () -> {
-                            if (call.getVisibility() == View.INVISIBLE) {
-                              call.setVisibility(View.VISIBLE);
-                            }
+                            
                             if (errorCall) {
                               call.setImageResource(R.drawable.closehsi);
                               call.setColorFilter(Color.RED);
@@ -231,9 +236,7 @@ public class FactoryCodeError {
                   new Handler(Looper.getMainLooper())
                       .post(
                           () -> {
-                            if (call.getVisibility() == View.INVISIBLE) {
-                              call.setVisibility(View.VISIBLE);
-                            }
+                            
                             if (errorCall) {
                               call.setImageResource(R.drawable.closehsi);
                               call.setColorFilter(Color.RED);
@@ -279,9 +282,46 @@ public class FactoryCodeError {
                   new Handler(Looper.getMainLooper())
                       .post(
                           () -> {
-                            if (call.getVisibility() == View.INVISIBLE) {
-                              call.setVisibility(View.VISIBLE);
+                            
+                            if (errorCall) {
+                              call.setImageResource(R.drawable.closehsi);
+                              call.setColorFilter(Color.RED);
+                            } else {
+                              call.setImageResource(R.drawable.ic_palette_check_box);
+                              call.setColorFilter(Color.GREEN);
                             }
+                          });
+                } catch (Exception err) {
+
+                }
+              })
+          .start();
+    }
+  }
+
+  void cs() {
+    if (editor != null) {
+      new Thread(
+              () -> {
+                try {
+                  var input = new ANTLRInputStream(new StringReader(editor.getText().toString()));
+                  var lexer = new CSharpLexer(input);
+                  var stream = new CommonTokenStream(lexer);
+                  var paser = new CSharpParser(stream);
+                  var callBackLabe =
+                      new CSharpParserBaseListener() {
+                        @Override
+                        public void visitErrorNode(ErrorNode node) {
+                          errorCall = true;
+                        }
+                      };
+
+                  var walk = new ParseTreeWalker();
+                  walk.walk(callBackLabe, paser.compilation_unit());
+                  new Handler(Looper.getMainLooper())
+                      .post(
+                          () -> {
+                            
                             if (errorCall) {
                               call.setImageResource(R.drawable.closehsi);
                               call.setColorFilter(Color.RED);

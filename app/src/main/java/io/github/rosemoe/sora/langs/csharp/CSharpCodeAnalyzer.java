@@ -1,13 +1,24 @@
 package io.github.rosemoe.sora.langs.csharp;
 
+import Ninja.coder.Ghostemane.code.ApplicationLoader;
+import android.graphics.Color;
 import android.util.Log;
 import io.github.rosemoe.sora.data.BlockLine;
+import io.github.rosemoe.sora.data.Span;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
+import io.github.rosemoe.sora.langs.xml.analyzer.Utils;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.text.TextAnalyzer;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
 import java.io.StringReader;
 import java.util.Stack;
+import org.antlr.parser.antlr4.csharp.CSharpLexer;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.parser.antlr4.csharp.CSharpParser;
+import org.antlr.parser.antlr4.csharp.CSharpParserBaseListener;
+import org.antlr.v4.runtime.tree.ErrorNode;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.Token;
 
@@ -278,10 +289,17 @@ public class CSharpCodeAnalyzer implements CodeAnalyzer {
                   || previous == CSharpLexer.CLOSE_BRACE) {
                 color = EditorColorScheme.javafun;
               }
+              if (previous == CSharpLexer.NAMESPACE) {
+                color = EditorColorScheme.javatype;
+                Span span = Span.obtain(column, color);
+                span.setAlphaCompat(120);
+                result.add(line, span);
+              }
+              
               if (token.getText().equals("Console")) {
                 color = EditorColorScheme.ATTRIBUTE_VALUE;
               }
-              result.addIfNeeded(line,column,color);
+              result.addIfNeeded(line, column, color);
               break;
             }
           default:
@@ -294,6 +312,29 @@ public class CSharpCodeAnalyzer implements CodeAnalyzer {
       }
       result.determine(lastline);
       result.setExtra(info);
+      try {
+        if (ApplicationLoader.getAnalyzercod().getBoolean("Analyzercod", false) == true) {
+          var antlrinputstream = new ANTLRInputStream(content.toString());
+          var lexer = new CSharpLexer(antlrinputstream);
+          var stream = new CommonTokenStream(lexer);
+          var paser = new CSharpParser(stream);
+          var base =
+              new CSharpParserBaseListener() {
+
+                @Override
+                public void visitErrorNode(ErrorNode node) {
+                  var lines = node.getSymbol().getLine() - 1;
+                  var col = node.getSymbol().getCharPositionInLine();
+                  var text = node.getText().toString();
+                  int[] error = Utils.setErrorSpan(result, lines, col);
+                }
+              };
+          var treeWalk = new ParseTreeWalker();
+          treeWalk.walk(base, paser.compilation_unit());
+        }
+      } catch (Exception err) {
+        Log.e("Analyzercode Error by ", err.getMessage());
+      }
 
     } catch (Exception err) {
       Log.e("Lexer Error : ", err.getMessage());

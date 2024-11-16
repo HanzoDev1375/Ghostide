@@ -36,9 +36,10 @@ public class TextStyle {
   public static final long BOLD_BIT = 1L << (COLOR_ID_BIT_COUNT * 2);
   public static final long ITALICS_BIT = BOLD_BIT << 1;
   public static final long STRIKETHROUGH_BIT = ITALICS_BIT << 1;
-  public static final long BELOWLINE = STRIKETHROUGH_BIT << 1;
-  public static final long ShadowColor = BELOWLINE << 1;
+  public static final long BELOWLINE = STRIKETHROUGH_BIT << 2;
+  public static final long ShadowColor = BELOWLINE << 3;
   public static final String hexColor = "#3FFD091D";
+  
 
   /** Convenient method */
   public static long makeStyle(int foregroundColorId) {
@@ -143,4 +144,5 @@ public class TextStyle {
   public static String getHexColor(){
     return hexColor;
   }
+  
 }

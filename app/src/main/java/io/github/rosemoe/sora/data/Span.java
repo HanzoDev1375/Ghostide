@@ -23,6 +23,7 @@
  */
 package io.github.rosemoe.sora.data;
 
+import android.graphics.Paint;
 import androidx.annotation.NonNull;
 import io.github.rosemoe.sora.interfaces.ExternalRenderer;
 import io.github.rosemoe.sora.text.TextStyle;
@@ -73,6 +74,8 @@ public class Span {
   public long style;
   public int underlineColor;
   public int backgroundColorMy;
+  public int alpha;
+  public int alphacompat;
 
   /**
    * Set this value to draw curly lines for this span to indicates code problems.
@@ -151,6 +154,7 @@ public class Span {
     Span copy = obtain(column, style);
     copy.setUnderlineColor(underlineColor);
     copy.setBackgroundColorMy(backgroundColorMy);
+    copy.setAlpha(alpha);
     copy.problemFlags = problemFlags;
     copy.renderer = renderer;
     return copy;
@@ -159,6 +163,7 @@ public class Span {
   public boolean recycle() {
     problemFlags = column = underlineColor = backgroundColorMy = 0;
     style = 0;
+    alpha = 1;
     renderer = null;
     return cacheQueue.offer(this);
   }
@@ -184,6 +189,7 @@ public class Span {
         && style == span.style
         && underlineColor == span.underlineColor
         && problemFlags == span.problemFlags
+        && alpha == span.alpha
         && backgroundColorMy == span.backgroundColorMy
         && Objects.equals(renderer, span.renderer);
   }
@@ -194,6 +200,7 @@ public class Span {
     hash = 31 * hash + Long.hashCode(style);
     hash = 31 * hash + underlineColor;
     hash = 31 * hash + backgroundColorMy;
+    hash = 31 * hash + alpha;
     hash = 31 * hash + problemFlags;
     hash = 31 * hash + (renderer == null ? 0 : renderer.hashCode());
     return hash;
@@ -215,6 +222,8 @@ public class Span {
         + problemFlags
         + ", renderer="
         + renderer
+        + ", alpha ="
+        + alpha
         + "}";
   }
 
@@ -224,5 +233,21 @@ public class Span {
 
   public void setBackgroundColorMy(int backgroundColorMy) {
     this.backgroundColorMy = backgroundColorMy;
+  }
+
+  public int getAlpha() {
+    return this.alpha;
+  }
+
+  public void setAlpha(int alpha) {
+    this.alpha = alpha;
+  }
+
+  public void setAlphaCompat(int alphacompat) {
+    this.alphacompat = alphacompat;
+  }
+
+  public int getAlphacompat() {
+    return this.alphacompat;
   }
 }

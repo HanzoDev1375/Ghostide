@@ -5,8 +5,15 @@ import Ninja.coder.Ghostemane.code.databin.DiagnosticWrapper;
 import Ninja.coder.Ghostemane.code.utils.ThemeUtils;
 import android.graphics.Color;
 import androidx.core.graphics.ColorUtils;
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import io.github.rosemoe.sora.langs.xml.analyzer.Utils;
 import io.github.rosemoe.sora.util.TrieTree;
 import java.util.ArrayList;
 import io.github.rosemoe.sora.text.CharPosition;
@@ -320,132 +327,75 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             {
               info.addIdentifier(token.getText());
               boolean isBold, isItalic, isUnderLineMode = false;
-              boolean dataUpp = false, opratorName = false, isNewObject = false, isAtObject = false;
+              boolean isDot = true;
 
               int colorid = EditorColorScheme.TEXT_NORMAL;
               if (previous == JavaLexer.AT) {
                 colorid = EditorColorScheme.Ninja;
-                dataUpp = false;
-                opratorName = false;
-                isNewObject = false;
-                isAtObject = true;
               }
               if (previous == JavaLexer.CLASS
                   || previous == JavaLexer.IMPLEMENTS
                   || previous == JavaLexer.VOID) {
                 colorid = EditorColorScheme.javafun;
-                dataUpp = false;
-                opratorName = false;
-                isNewObject = false;
-                isAtObject = false;
               }
 
               if (previous == JavaLexer.LBRACK || previous == JavaLexer.ASSERT) {
                 colorid = EditorColorScheme.LITERAL;
-                dataUpp = false;
-                opratorName = false;
-                isNewObject = false;
-                isAtObject = false;
               }
               if (previous == JavaLexer.PACKAGE
                   || previous == JavaLexer.IMPORT
                   || prePreToken != null && prePreToken.getType() == JavaLexer.DOT
                   || previous == JavaLexer.DOT) {
-                dataUpp = true;
-                opratorName = false;
+                isDot = false;
                 colorid = EditorColorScheme.javafield;
-                isNewObject = false;
-                isAtObject = false;
               }
 
               if (previous == JavaLexer.EXTENDS
                   || previous == JavaLexer.FLOAT_LITERAL
                   || previous == JavaLexer.BOOLEAN) {
                 colorid = EditorColorScheme.javafun;
-                dataUpp = false;
-                opratorName = false;
-                isNewObject = false;
-                isAtObject = false;
               }
               if (previous == JavaLexer.RETURN || previous == JavaLexer.NEW) {
                 colorid = EditorColorScheme.HTML_TAG;
-                dataUpp = false;
-                opratorName = false;
-                isNewObject = false;
-                isAtObject = false;
               }
               if (previous == JavaLexer.INT) {
                 colorid = EditorColorScheme.javafield;
-                dataUpp = false;
-                opratorName = false;
-                isNewObject = false;
-                isAtObject = false;
               }
               if (previous == JavaLexer.CASE || previous == JavaLexer.FINAL) {
                 colorid = EditorColorScheme.ATTRIBUTE_NAME;
-                dataUpp = false;
-                opratorName = false;
-                isNewObject = false;
-                isAtObject = false;
               }
 
               if (previous == JavaLexer.PRIVATE
                   || previous == JavaLexer.PROTECTED
                   || previous == JavaLexer.PUBLIC) {
                 colorid = EditorColorScheme.HTML_TAG;
-                dataUpp = false;
-                opratorName = false;
-                isNewObject = false;
-                isAtObject = false;
               }
               if (text1.matches("([A-Za-z]*)(Exception)([a-zA-Z]*)")) {
                 colorid = EditorColorScheme.javatype;
-                dataUpp = false;
-                opratorName = false;
-                isNewObject = false;
-                isAtObject = false;
               }
               if (text1.matches("([A-Za-z]*)(Exception)([a-zA-Z]*)(\\s\\w+)")) {
                 colorid = EditorColorScheme.javatype;
-                dataUpp = false;
-                opratorName = false;
-                isNewObject = false;
-                isAtObject = false;
               }
               if (previous == JavaLexer.LPAREN
                   || prePreToken != null && prePreToken.getType() == JavaLexer.LPAREN
                   || previous == JavaLexer.RPAREN
                   || prePreToken != null && prePreToken.getType() == JavaLexer.RPAREN) {
-                dataUpp = true;
-                isNewObject = false;
-                isAtObject = false;
+
                 colorid = EditorColorScheme.javaparament;
               }
               if (previous == JavaLexer.LT
                   || prePreToken != null && prePreToken.getType() == JavaLexer.LT
                   || previous == JavaLexer.GT
                   || prePreToken != null && prePreToken.getType() == JavaLexer.GT) {
-                dataUpp = true;
-                isAtObject = false;
-                isNewObject = false;
                 colorid = EditorColorScheme.javafun;
               }
-              opratorName = true;
-              String resultCode = token.getText();
-              boolean hasUpperCase = resultCode.chars().parallel().anyMatch(Character::isUpperCase);
 
-              if (hasUpperCase && dataUpp) {
-                colorid = EditorColorScheme.HTML_TAG;
+              if (token.getText().equals("Black")) {
+                Span span = Span.obtain(column, EditorColorScheme.javafun);
+                span.setBackgroundColorMy(Color.BLACK);
+                result.add(line, span);
               }
-              var start = token.getText();
-              boolean startsWithUpperCase = Character.isUpperCase(start.charAt(0));
-              if (startsWithUpperCase) {
-                colorid =
-                    isNewObject
-                        ? EditorColorScheme.ATTRIBUTE_VALUE
-                        : EditorColorScheme.ATTRIBUTE_NAME;
-                colorid = isAtObject ? EditorColorScheme.Ninja : EditorColorScheme.ATTRIBUTE_NAME;
-              }
+
               get(colorid, line, column, result);
               break;
             }
@@ -510,6 +460,53 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
 
       result.determine(lastLine);
       result.setExtra(info);
+
+      var cu = StaticJavaParser.parse(content.toString());
+      Set<String> declaredVariables = new HashSet<>();
+      Set<String> usedVariables = new HashSet<>();
+      Map<String, Integer> inline = new HashMap<>();
+      Map<String, Integer> incol = new HashMap<>();
+      cu.accept(
+          new VoidVisitorAdapter<Void>() {
+            @Override
+            public void visit(FieldDeclaration fieldDeclaration, Void arg) {
+              for (VariableDeclarator variable : fieldDeclaration.getVariables()) {
+                String variableName = variable.getNameAsString();
+                int line = variable.getBegin().get().line;
+                int column = variable.getBegin().get().column;
+                declaredVariables.add(variableName);
+                incol.put(variableName, column);
+                inline.put(variableName, line);
+              }
+              super.visit(fieldDeclaration, arg);
+            }
+
+            @Override
+            public void visit(VariableDeclarationExpr variableDeclarationExpr, Void arg) {
+              for (VariableDeclarator variable : variableDeclarationExpr.getVariables()) {
+                String variableName = variable.getNameAsString();
+                int line = variable.getBegin().get().line;
+                int column = variable.getBegin().get().column;
+                declaredVariables.add(variableName);
+                inline.put(variableName, line);
+                incol.put(variableName, column);
+              }
+              super.visit(variableDeclarationExpr, arg);
+            }
+
+            @Override
+            public void visit(NameExpr nameExpr, Void arg) {
+              usedVariables.add(nameExpr.getNameAsString());
+              super.visit(nameExpr, arg);
+            }
+          },
+          null);
+      declaredVariables.removeAll(usedVariables);
+      for (var unusedVar : declaredVariables) {
+        var lines = inline.get(unusedVar);
+        var col = incol.get(unusedVar);
+        Utils.setSpanEFO(result, lines.intValue(), col.intValue(), EditorColorScheme.COMMENT);
+      }
 
     } catch (IOException e) {
       e.printStackTrace();
@@ -579,20 +576,12 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
     editor.getText().endStreamCharGetting();
   }
 
-  public int getRandomColor() {
-    int[] colors = {EditorColorScheme.OPERATOR, EditorColorScheme.KEYWORD};
-    Random random = new Random();
-    int color = colors[random.nextInt(colors.length)];
-    return color;
-  }
-
   private void get(int color, int line, int col, TextAnalyzeResult result) {
     mapStyle = new HashMap<>();
     mapStyle =
         new Gson()
             .fromJson(
-                ThemeUtils.setReloadStyle(),
-                new TypeToken<Map<String, Boolean>>() {}.getType());
+                ThemeUtils.setReloadStyle(), new TypeToken<Map<String, Boolean>>() {}.getType());
 
     result.addIfNeeded(
         line,

@@ -1669,11 +1669,13 @@ public class CodeEditor extends View
       if (span.getStyleBits() != lastStyle) {
         mPaint.setFakeBoldText(TextStyle.isBold(styleBits));
         mPaint.setUnderlineText(TextStyle.isBELOWLINE(styleBits));
+        mPaint.setAlpha(span.getAlphacompat() == 0 ? 255 : span.getAlphacompat());
         if (TextStyle.isItalics(styleBits)) {
           mPaint.setTextSkewX(-0.2f);
         } else {
           mPaint.setTextSkewX(0);
         }
+        
 
         lastStyle = styleBits;
       }
@@ -1695,6 +1697,7 @@ public class CodeEditor extends View
       if (span.backgroundColorMy != 0) {
         mPaintOther.setColor(span.backgroundColorMy);
         float cornerRadius = 10; // تعیین شعاع گوشه‌ها
+        
         canvas.drawRoundRect(
             new RectF(
                 paintingOffset,
@@ -2147,11 +2150,13 @@ public class CodeEditor extends View
           if (span.getStyleBits() != lastStyle) {
             mPaint.setFakeBoldText(TextStyle.isBold(styleBits));
             mPaint.setUnderlineText(TextStyle.isBELOWLINE(styleBits));
+            mPaint.setAlpha(span.getAlphacompat() == 0 ? 255 : span.getAlphacompat());
             if (TextStyle.isItalics(styleBits)) {
               mPaint.setTextSkewX(-0.2f);
             } else {
               mPaint.setTextSkewX(0);
             }
+
             lastStyle = styleBits;
           }
 
@@ -2168,6 +2173,9 @@ public class CodeEditor extends View
                 mColors.getColor(backgroundColorId),
                 line);
           }
+
+          // mPaint.setAlpha(TextStyle.getAlpha(styleBits));
+          
 
           if (span.backgroundColorMy != 0) {
             mPaintOther.setColor(span.backgroundColorMy);
@@ -3414,7 +3422,7 @@ public class CodeEditor extends View
     if (index < 0 || index >= line.value.length || count < 0 || index + count > line.value.length) {
       return;
     }
-
+    
     int end = index + count;
     var src = line.value;
     int st = index;
