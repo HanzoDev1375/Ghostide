@@ -25,6 +25,9 @@ package io.github.rosemoe.sora.widget;
 
 import Ninja.coder.Ghostemane.code.utils.DiagnosticsListener;
 import androidx.core.graphics.ColorUtils;
+import io.github.rosemoe.sora.event.ColorSchemeUpdateEvent;
+import io.github.rosemoe.sora.text.TextUtils;
+import kotlin.text.StringsKt;
 import java.io.File;
 import Ninja.coder.Ghostemane.code.databin.DiagnosticWrapper;
 import android.util.TypedValue;
@@ -1675,7 +1678,6 @@ public class CodeEditor extends View
         } else {
           mPaint.setTextSkewX(0);
         }
-        
 
         lastStyle = styleBits;
       }
@@ -1697,7 +1699,7 @@ public class CodeEditor extends View
       if (span.backgroundColorMy != 0) {
         mPaintOther.setColor(span.backgroundColorMy);
         float cornerRadius = 10; // تعیین شعاع گوشه‌ها
-        
+
         canvas.drawRoundRect(
             new RectF(
                 paintingOffset,
@@ -2175,7 +2177,6 @@ public class CodeEditor extends View
           }
 
           // mPaint.setAlpha(TextStyle.getAlpha(styleBits));
-          
 
           if (span.backgroundColorMy != 0) {
             mPaintOther.setColor(span.backgroundColorMy);
@@ -3422,7 +3423,7 @@ public class CodeEditor extends View
     if (index < 0 || index >= line.value.length || count < 0 || index + count > line.value.length) {
       return;
     }
-    
+
     int end = index + count;
     var src = line.value;
     int st = index;
@@ -3576,6 +3577,69 @@ public class CodeEditor extends View
       canvas.restore();
       mPaint.setShadowLayer(0, 0, 0, 0);
     }
+  }
+
+  /** Indents the selected lines. Does nothing if the text is not selected. */
+  public void indentSelection() {
+    indentLines(true);
+  }
+
+  protected String createTabString() {
+    final var language = getEditorLanguage();
+    return TextUtils.createIndent(getTabWidth(), getTabWidth(), language.useTab());
+  }
+
+  /**
+   * Indents the lines. Does nothing if the <code>onlyIfSelected</code> is <code>true</code> and no
+   * text is selected.
+   *
+   * @param onlyIfSelected Set to <code>true</code> if lines must be indented only if the text is
+   *     selected.
+   */
+  public void indentLines(boolean onlyIfSelected) {
+
+    final var cursor = getCursor();
+    if (onlyIfSelected && !cursor.isSelected()) {
+      return;
+    }
+
+    final var tabString = createTabString();
+    final var text = getText();
+    final var tabWidth = getTabWidth();
+
+    text.beginBatchEdit();
+    for (int i = cursor.getLeftLine(); i <= cursor.getRightLine(); i++) {
+      final var line = text.getLine(i);
+      final var result = TextUtils.countLeadingSpacesAndTabs(line);
+      final var spaceCount = IntPair.getFirst(result);
+      final var tabCount = IntPair.getSecond(result);
+      final var spaces = spaceCount + (tabCount * tabWidth);
+      final var endColumn = spaceCount + tabCount;
+
+      final var requiredSpaces = tabWidth - (spaces % tabWidth);
+      if (spaceCount > 0 && tabCount > 0) {
+        // indentation contains spaces as well as tabs
+        // replace the leading indentation with appropriate indendation (according to
+        // language.useTabs())
+        // this should be done while incrementing the indentation
+        final var finalSpaceCount =
+            ((requiredSpaces == 0 ? tabWidth : requiredSpaces) + spaces) / tabWidth;
+        text.replace(i, 0, i, endColumn, StringsKt.repeat(tabString, finalSpaceCount));
+        continue;
+      }
+
+      if (requiredSpaces == 0) {
+        // line is evenly indented
+        // increase the indentation by \t or tabWidthSpaces
+        text.insert(i, endColumn, tabString);
+      } else {
+        // line is oddly indented
+        // We know that a line can never be oddly indented when it is indented only with tabs
+        // therefore, we insert spaces to align the line
+        text.insert(i, endColumn, StringsKt.repeat(" ", requiredSpaces));
+      }
+    }
+    text.endBatchEdit();
   }
 
   /**
@@ -5298,12 +5362,13 @@ public class CodeEditor extends View
    *
    * @param type Color type changed
    */
-  protected void onColorUpdated(int type) {
+  public void onColorUpdated(int type) {
     if (type == EditorColorScheme.AUTO_COMP_PANEL_BG
         || type == EditorColorScheme.AUTO_COMP_PANEL_CORNER) {
       if (mCompletionWindow != null) mCompletionWindow.applyColorScheme();
       return;
     }
+    dispatchEvent(new ColorSchemeUpdateEvent(this));
     invalidateHwRenderer();
     invalidate();
   }
@@ -5315,6 +5380,7 @@ public class CodeEditor extends View
   /** Called by color scheme to init colors */
   protected void onColorFullUpdate() {
     if (mCompletionWindow != null) mCompletionWindow.applyColorScheme();
+    dispatchEvent(new ColorSchemeUpdateEvent(this));
     invalidateHwRenderer();
     invalidate();
   }

@@ -35,58 +35,48 @@ import io.github.rosemoe.sora.widget.CodeEditor;
  */
 public class SelectionChangeEvent extends Event {
 
-    /**
-     * Unknown cause
-     */
-    public static final int CAUSE_UNKNOWN = 0;
-    /**
-     * Selection change caused by text modifications
-     */
-    public static final int CAUSE_TEXT_MODIFICATION = 1;
-    /**
-     * Set selection by handle
-     */
-    public static final int CAUSE_SELECTION_HANDLE = 2;
-    /**
-     * Set selection by single tap
-     */
-    public static final int CAUSE_TAP = 3;
-    /**
-     * Set selection because of {@link android.view.inputmethod.InputConnection#setSelection(int,
-     * int)}
-     */
-    public static final int CAUSE_IME = 4;
-    public static final int CAUSE_LONG_PRESS = 5;
-    private final CharPosition left;
-    private final CharPosition right;
-    private final int cause = 0;
+  /** Unknown cause */
+  public static final int CAUSE_UNKNOWN = 0;
 
-    public SelectionChangeEvent(CodeEditor editor) {
-        super(editor);
-        var cursor = editor.getText().getCursor();
-        left = cursor.left();
-        right = cursor.right();
+  /** Selection change caused by text modifications */
+  public static final int CAUSE_TEXT_MODIFICATION = 1;
 
-    }
+  /** Set selection by handle */
+  public static final int CAUSE_SELECTION_HANDLE = 2;
 
-    /**
-     * Get the left selection's position
-     */
-    public CharPosition getLeft() {
-        return left;
-    }
+  /** Set selection by single tap */
+  public static final int CAUSE_TAP = 3;
 
-    /**
-     * Get the right selection's position
-     */
-    public CharPosition getRight() {
-        return right;
-    }
+  /**
+   * Set selection because of {@link android.view.inputmethod.InputConnection#setSelection(int,
+   * int)}
+   */
+  public static final int CAUSE_IME = 4;
 
-    /**
-     * Checks whether text is selected
-     */
-    public boolean isSelected() {
-        return left.index != right.index;
-    }
+  public static final int CAUSE_LONG_PRESS = 5;
+  private final CharPosition left;
+  private final CharPosition right;
+  private final int cause = 0;
+
+  public SelectionChangeEvent(CodeEditor editor) {
+    super(editor);
+    var cursor = editor.getText().getCursor();
+    left = cursor.left();
+    right = cursor.right();
+  }
+
+  /** Get the left selection's position */
+  public CharPosition getLeft() {
+    return left;
+  }
+
+  /** Get the right selection's position */
+  public CharPosition getRight() {
+    return right;
+  }
+
+  /** Checks whether text is selected */
+  public boolean isSelected() {
+    return left.index != right.index;
+  }
 }

@@ -30,170 +30,165 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
- * This class manages event dispatching in editor.
- * Users can either register their event receivers here or dispatch event to
- * the receivers in this manager.
- * <p>
- * There may be several EventManagers in one editor instance. For example, each plugin
- * will have it own EventManager and the editor also has a root event manager for external
- * listeners.
- * <p>
- * Note that the event type must be exact. That's to say, you need to use a terminal class instead
- * of using its parent classes. For instance, if you register a receiver with the event type {@link Event},
- * no event will be sent to your receiver.
+ * This class manages event dispatching in editor. Users can either register their event receivers
+ * here or dispatch event to the receivers in this manager.
+ *
+ * <p>There may be several EventManagers in one editor instance. For example, each plugin will have
+ * it own EventManager and the editor also has a root event manager for external listeners.
+ *
+ * <p>Note that the event type must be exact. That's to say, you need to use a terminal class
+ * instead of using its parent classes. For instance, if you register a receiver with the event type
+ * {@link Event}, no event will be sent to your receiver.
  *
  * @author Rosemoe
  */
 public class EventManager {
 
-    @SuppressWarnings("rawtypes")
-    private final Map<Class<?>, Receivers> receivers;
-    private final ReadWriteLock lock;
-    private final EventReceiver<?>[][] caches = new EventReceiver[10][];
+  @SuppressWarnings("rawtypes")
+  private final Map<Class<?>, Receivers> receivers;
 
-    public EventManager() {
-        receivers = new HashMap<>();
-        lock = new ReentrantReadWriteLock();
+  private final ReadWriteLock lock;
+  private final EventReceiver<?>[][] caches = new EventReceiver[10][];
+
+  public EventManager() {
+    receivers = new HashMap<>();
+    lock = new ReentrantReadWriteLock();
+  }
+
+  /** Get receivers container of a given event type safely */
+  @NonNull
+  @SuppressWarnings("unchecked")
+  private <T extends Event> Receivers<T> getReceivers(@NonNull Class<T> type) {
+    lock.readLock().lock();
+    Receivers<T> result;
+    try {
+      result = receivers.get(type);
+    } finally {
+      lock.readLock().unlock();
     }
-
-    /**
-     * Get receivers container of a given event type safely
-     */
-    @NonNull
-    @SuppressWarnings("unchecked")
-    private <T extends Event> Receivers<T> getReceivers(@NonNull Class<T> type) {
-        lock.readLock().lock();
-        Receivers<T> result;
-        try {
-            result = receivers.get(type);
-        } finally {
-            lock.readLock().unlock();
-        }
+    if (result == null) {
+      lock.writeLock().lock();
+      try {
+        result = receivers.get(type);
         if (result == null) {
-            lock.writeLock().lock();
-            try {
-                result = receivers.get(type);
-                if (result == null) {
-                    result = new Receivers<>();
-                    receivers.put(type, result);
-                }
-            } finally {
-                lock.writeLock().unlock();
-            }
+          result = new Receivers<>();
+          receivers.put(type, result);
         }
-        return result;
+      } finally {
+        lock.writeLock().unlock();
+      }
     }
+    return result;
+  }
 
-    /**
-     * Register a receiver of the given event.
-     *
-     * @param eventType Event type to be received
-     * @param receiver  Receiver of event
-     * @param <T>       Event type
-     */
-    public <T extends Event> void subscribeEvent(Class<T> eventType, EventReceiver<T> receiver) {
-        var receivers = getReceivers(eventType);
+  /**
+   * Register a receiver of the given event.
+   *
+   * @param eventType Event type to be received
+   * @param receiver Receiver of event
+   * @param <T> Event type
+   */
+  public <T extends Event> void subscribeEvent(Class<T> eventType, EventReceiver<T> receiver) {
+    var receivers = getReceivers(eventType);
+    receivers.lock.writeLock().lock();
+    try {
+      var list = receivers.receivers;
+      if (list.contains(receiver)) {
+        throw new IllegalArgumentException("the receiver is already registered for this type");
+      }
+      list.add(receiver);
+    } finally {
+      receivers.lock.writeLock().unlock();
+    }
+  }
+
+  /**
+   * Dispatch the given event to its receivers registered in this manager.
+   *
+   * @param event Event to dispatch
+   * @param <T> Event type
+   */
+  @SuppressWarnings("unchecked")
+  public <T extends Event> void dispatchEvent(T event) {
+    // Safe cast
+    var receivers = getReceivers((Class<T>) event.getClass());
+    receivers.lock.readLock().lock();
+    EventReceiver<T>[] receiverArr;
+    int count;
+    try {
+      count = receivers.receivers.size();
+      receiverArr = obtainBuffer(count);
+      receivers.receivers.toArray(receiverArr);
+    } finally {
+      receivers.lock.readLock().unlock();
+    }
+    List<EventReceiver<T>> unsubscribedReceivers = null;
+    try {
+      Unsubscribe unsubscribe = new Unsubscribe();
+      for (int i = 0; i < count; i++) {
+        var receiver = receiverArr[i];
+        receiver.onReceive(event, unsubscribe);
+        if (unsubscribe.isUnsubscribed()) {
+          if (unsubscribedReceivers == null) {
+            unsubscribedReceivers = new LinkedList<>();
+          }
+          unsubscribedReceivers.add(receiver);
+        }
+        unsubscribe.reset();
+      }
+    } finally {
+      if (unsubscribedReceivers != null) {
         receivers.lock.writeLock().lock();
         try {
-            var list = receivers.receivers;
-            if (list.contains(receiver)) {
-                throw new IllegalArgumentException("the receiver is already registered for this type");
-            }
-            list.add(receiver);
+          receivers.receivers.removeAll(unsubscribedReceivers);
         } finally {
-            receivers.lock.writeLock().unlock();
+          receivers.lock.writeLock().unlock();
         }
+      }
+      recycleBuffer(receiverArr);
     }
+  }
 
-    /**
-     * Dispatch the given event to its receivers registered in this manager.
-     *
-     * @param event Event to dispatch
-     * @param <T>   Event type
-     */
-    @SuppressWarnings("unchecked")
-    public <T extends Event> void dispatchEvent(T event) {
-        // Safe cast
-        var receivers = getReceivers((Class<T>) event.getClass());
-        receivers.lock.readLock().lock();
-        EventReceiver<T>[] receiverArr;
-        int count;
-        try {
-            count = receivers.receivers.size();
-            receiverArr = obtainBuffer(count);
-            receivers.receivers.toArray(receiverArr);
-        } finally {
-            receivers.lock.readLock().unlock();
+  @SuppressWarnings("unchecked")
+  private <V extends Event> EventReceiver<V>[] obtainBuffer(int size) {
+    EventReceiver<V>[] res = null;
+    synchronized (this) {
+      for (int i = 0; i < caches.length; i++) {
+        if (caches[i] != null && caches[i].length >= size) {
+          res = (EventReceiver<V>[]) caches[i];
+          caches[i] = null;
+          break;
         }
-        List<EventReceiver<T>> unsubscribedReceivers = null;
-        try {
-            Unsubscribe unsubscribe = new Unsubscribe();
-            for (int i = 0; i < count; i++) {
-                var receiver = receiverArr[i];
-                receiver.onReceive(event, unsubscribe);
-                if (unsubscribe.isUnsubscribed()) {
-                    if (unsubscribedReceivers == null) {
-                        unsubscribedReceivers = new LinkedList<>();
-                    }
-                    unsubscribedReceivers.add(receiver);
-                }
-                unsubscribe.reset();
-            }
-        } finally {
-            if (unsubscribedReceivers != null) {
-                receivers.lock.writeLock().lock();
-                try {
-                    receivers.receivers.removeAll(unsubscribedReceivers);
-                } finally {
-                    receivers.lock.writeLock().unlock();
-                }
-            }
-            recycleBuffer(receiverArr);
-        }
+      }
     }
-
-    @SuppressWarnings("unchecked")
-    private <V extends Event> EventReceiver<V>[] obtainBuffer(int size) {
-        EventReceiver<V>[] res = null;
-        synchronized (this) {
-            for (int i = 0; i < caches.length; i++) {
-                if (caches[i] != null && caches[i].length >= size) {
-                    res = (EventReceiver<V>[]) caches[i];
-                    caches[i] = null;
-                    break;
-                }
-            }
-        }
-        if (res == null) {
-            res = new EventReceiver[size];
-        }
-        return res;
+    if (res == null) {
+      res = new EventReceiver[size];
     }
+    return res;
+  }
 
-    private synchronized void recycleBuffer(EventReceiver<?>[] array) {
-        if (array == null) {
-            return;
-        }
-        for (int i = 0; i < caches.length; i++) {
-            if (caches[i] == null) {
-                Arrays.fill(array, null);
-                caches[i] = array;
-                break;
-            }
-        }
+  private synchronized void recycleBuffer(EventReceiver<?>[] array) {
+    if (array == null) {
+      return;
     }
-
-    /**
-     * Internal class for saving receivers of each type
-     *
-     * @param <T> Event type
-     */
-    private static class Receivers<T extends Event> {
-
-        ReadWriteLock lock = new ReentrantReadWriteLock();
-
-        List<EventReceiver<T>> receivers = new ArrayList<>();
-
+    for (int i = 0; i < caches.length; i++) {
+      if (caches[i] == null) {
+        Arrays.fill(array, null);
+        caches[i] = array;
+        break;
+      }
     }
+  }
 
+  /**
+   * Internal class for saving receivers of each type
+   *
+   * @param <T> Event type
+   */
+  private static class Receivers<T extends Event> {
+
+    ReadWriteLock lock = new ReentrantReadWriteLock();
+
+    List<EventReceiver<T>> receivers = new ArrayList<>();
+  }
 }

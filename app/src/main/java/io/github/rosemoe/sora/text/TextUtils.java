@@ -46,6 +46,7 @@ public class TextUtils {
     return IntPair.pack(spaces, tabs);
   }
 
+  
   /**
    * Compute leading space count
    *

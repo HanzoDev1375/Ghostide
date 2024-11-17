@@ -3,7 +3,6 @@ package Ninja.coder.Ghostemane.code;
 import Ninja.coder.Ghostemane.code.config.LOG;
 import Ninja.coder.Ghostemane.code.interfaces.CallBackErrorManager;
 import Ninja.coder.Ghostemane.code.marco.CommentList;
-import Ninja.coder.Ghostemane.code.marco.RegexUtilCompat;
 import Ninja.coder.Ghostemane.code.marco.editorface.IEditor;
 import Ninja.coder.Ghostemane.code.widget.SymbolInputView;
 import android.content.Context;
@@ -11,12 +10,10 @@ import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
-import io.github.rosemoe.sora.langs.python.PythonLang;
 import io.github.rosemoe.sora.text.Content;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
-import android.view.View;
 import android.view.animation.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,7 +26,6 @@ import io.github.rosemoe.sora.interfaces.EditorLanguage;
 import io.github.rosemoe.sora.langs.xml.XMLLanguage;
 import io.github.rosemoe.sora.langs.xml.XMLLexer;
 import java.io.StringReader;
-import java.util.regex.Matcher;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.Token;
 import java.util.ArrayList;
@@ -77,7 +73,7 @@ public class IdeEditor extends CodeEditor implements IEditor {
 
   public IdeEditor(Context context, AttributeSet set, int def) {
     super(context, set, def);
-     
+
     init();
   }
 
@@ -90,7 +86,6 @@ public class IdeEditor extends CodeEditor implements IEditor {
     setLineInfoTextSize(18f);
     setScalable(true);
     setCursorWidth(4.0f);
-    
 
     setNonPrintablePaintingFlags(
         FLAG_DRAW_WHITESPACE_LEADING
@@ -265,6 +260,8 @@ public class IdeEditor extends CodeEditor implements IEditor {
   public void setErrorCallBack(CallBackErrorManager callBack) {
     this.call = callBack;
   }
+
+  
 
   public interface Result {
     void onTextEnd(String data);

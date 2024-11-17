@@ -76,6 +76,7 @@ import com.skydoves.powermenu.MenuAnimation;
 import com.skydoves.powermenu.OnMenuItemClickListener;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
+import io.github.rosemoe.sora.event.ColorSchemeUpdateEvent;
 import io.github.rosemoe.sora.event.ContentChangeEvent;
 import io.github.rosemoe.sora.langs.html.HTMLLanguage;
 import io.github.rosemoe.sora.text.Cursor;
@@ -100,10 +101,10 @@ public class CodeEditorActivity extends AppCompatActivity {
   protected ExrtaFab _fab; // /By ninja coder big man main
   private WallpaperParallaxEffect effect;
   private CoordinatorLayout Coordinator;
-  
+
   private HashMap<String, Object> imap = new HashMap<>();
   private double n = 0;
-  
+
   private final String code = "";
   private double click2var = 0;
   private double pos10 = 0;
@@ -119,7 +120,6 @@ public class CodeEditorActivity extends AppCompatActivity {
   private double ic = 0;
   private final String vasteh = "";
 
-  
   private ArrayList<HashMap<String, Object>> tabs_listmap = new ArrayList<>();
   private ArrayList<HashMap<String, Object>> staticSymbiolPiare = new ArrayList<>();
   private final ArrayList<String> string = new ArrayList<>();
@@ -429,14 +429,13 @@ public class CodeEditorActivity extends AppCompatActivity {
         (it) -> {
           FabFileRuner();
         });
-
   }
 
   private void initializeLogic() {
     proanjctor.setVisibility(View.GONE);
     barSymoble.setVisibility(View.VISIBLE);
     setWallpaperParallaxEffect();
-    
+
     imap = new HashMap<>();
 
     if (FileUtil.isExistFile(thememanagersoft.getString("themes", ""))) {
@@ -527,6 +526,7 @@ public class CodeEditorActivity extends AppCompatActivity {
     editor.setAutoCompletionOnComposing(false);
     editor.setLineInfoTextSize(20f);
     editor.setBlockLineEnabled(true);
+
     if (getvb.contains("chars")) {
       editor.setCustomCharName(getvb.getString("chars", ""));
     }
@@ -666,7 +666,7 @@ public class CodeEditorActivity extends AppCompatActivity {
     getWindow().setStatusBarColor(color);
     editor.setAutoCompletionEnabled(!auto.contains("mauto"));
     //   _fab.setIconResource(R.drawable.play);
-    
+
     if (getinitdir.contains("mdir")) {
       if (getinitdir.getString("mdir", "").equals("true")) {
         dir.setVisibility(View.GONE);
@@ -728,6 +728,7 @@ public class CodeEditorActivity extends AppCompatActivity {
             .addItem(new PowerMenuItem("Save All (Beta)", false, R.drawable.setsavefileall))
             .addItem(new PowerMenuItem("Code nave", false, R.drawable.setsavefileall))
             .addItem(new PowerMenuItem("File List"))
+            .addItem(new PowerMenuItem("Reload Color"))
             .setIsMaterial(true)
             .build();
     pvr.setSelectedMenuColor(0xFFFDA893);
@@ -757,7 +758,7 @@ public class CodeEditorActivity extends AppCompatActivity {
               case 1:
                 {
                   ColorPickerDialogBuilder.with(CodeEditorActivity.this)
-                      .setTitle("لطفا رنگ را انتخاب کنید")
+                      .setTitle("Set Color")
                       // .initialColor(getColor(R.color.Ninja))
                       .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
                       .showColorPreview(true)
@@ -829,6 +830,15 @@ public class CodeEditorActivity extends AppCompatActivity {
                   test.setlistFile(file.getParentFile().toString());
                   Toast.makeText(CodeEditorActivity.this, file.getParentFile().toString(), 2)
                       .show();
+                  break;
+                }
+              case 7:
+                {
+                  editor.subscribeEvent(
+                      ColorSchemeUpdateEvent.class,
+                      (it, rr) -> {
+                        editor.setColorScheme(it.getColorScheme());
+                      });
                   break;
                 }
             }
@@ -989,8 +999,8 @@ public class CodeEditorActivity extends AppCompatActivity {
     }
   }
 
-  public void _sysba(final String _input) {
-    io.github.rosemoe.sora.widget.SymbolChannel channel = editor.createNewSymbolChannel();
+  public void _sysba(String _input) {
+    var channel = editor.createNewSymbolChannel();
     channel.insertSymbol(_input, _input.length());
   }
 
@@ -1029,7 +1039,8 @@ public class CodeEditorActivity extends AppCompatActivity {
                 public void POST(String post) {
                   _sysba(post);
                 }
-              });
+              },
+              editor);
 
       syspiar.setAdapter(syspiarAdapter);
       syspiar.setLayoutManager(
