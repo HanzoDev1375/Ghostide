@@ -1,216 +1,187 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-    <string name="app_name">Ghost web ide</string>
-    <string name="dkplayer_replay">replay</string>
-    <string name="dkplayer_lock_tip">locktop！</string>
-    <string name="dkplayer_unlocked">unlokced</string>
-    <string name="dkplayer_locked">locked</string>
-    <string name="dkplayer_error_message">Error</string>
-    <string name="dkplayer_retry">retry</string>
-    <string name="dkplayer_continue_play">contine to play</string>
-    <string name="dkplayer_wifi_tip">not found wifi</string>
-    <string name="word_separators">.,;:!?\10()[]*&amp;@{}/&lt;&gt;_+=|</string>
-    <item
-        name="paste"
-        type="string"
-        
-    >Paste</item>
-    <item
-        name="copy"
-        type="string"
-        
-    >Copy</item>
-    <item
-        name="selectAll"
-        type="string"
-        formatted="true"
-        
-    >Select All</item>
-    <item
-        name="saveToProject"
-        type="string"
-        translatable="false"
-        
-    >Project</item>
-    <item
-        name="cut"
-        type="string"
-        
-    >Cut</item>
-    <item
-        name="last"
-        type="string"
-        
-    >Last</item>
-    <item
-        name="next"
-        type="string"
-        
-    >Next</item>
-    <item
-        name="replace"
-        type="string"
-        
-    >Replace</item>
-    <item
-        name="replaceAll"
-        type="string"
-        
-    >Replace All</item>
-    <item
-        name="replacement"
-        type="string"
-        
-    >Replacement</item>
-    <item
-        name="cancel"
-        type="string"
-        
-    >Cancel</item>
-    <item
-        name="text_to_search"
-        type="string"
-        
-    >Text to search</item>
-    <item
-        name="more"
-        type="string"
-        translatable="false"
-        
-    >More</item>
-    <string name="sting">App settings</string>
-    <string name="java">java codes</string>
-    <string name="googleplay">Add star to my app to myket</string>
-    <string name="ter">terminal</string>
-    <string name="sdcard1">sdcard</string>
-    <string name="sdcard2">home</string>
-    <string name="about">About the app</string>
-    <string name="htmlle">training</string>
-    <string name="keyboard">Keyboard App</string>
-    <string name="up">Breakdown app update</string>
-    <string name="themebackoup">BackUp in theme app</string>
-    <string name="logcater">Log cater</string>
-    <string name="exitapp">exit in app</string>
-    <string name="geticonmod">Icon Pack</string>
-    <string name="exitappmsg">Can you Exit in app??</string>
-    <string name="no">No</string>
-    <string name="yes">Yes</string>
-    <string name="Settings">Settings</string>
-    <string name="theme">App Theme</string>
-    <string name="Themes_manager">Themes manager</string>
-    <string name="Keyboard_settings">Keyboard Settings</string>
-    <string name="Keyboard_settingsdesc">Customize the app keyboard Themes and other Configs</string>
-    <string name="Keyboard_features">Keyboard feature</string>
-    <string name="General">General</string>
-    <string name="Fixing_countin_numbers">Fixing counting numbers</string>
-    <string name="Turn_off_photo_and_video_size">Turn off photo and video size</string>
-    <string name="Filemanager">File manager</string>
-    <string name="Turnoffmedialengthwidth">Turn off media length and width</string>
-    <string name="Enablehoverpage">Enable the hover page</string>
-    <string name="Manuallycompletetext">Manually complete the text</string>
-    <string name="Customize_tab_icons">Customize tab icons</string>
-    <string name="Manually_edit_lines_of_code">Manually edit lines of code</string>
-    <string name="Activate_default_theme">Activate default theme</string>
-    <string name="Manual_tab_size">Manual tab size</string>
-    <string name="Customize_font">Customize font</string>
-    <string name="mEditor">CodeEditor</string>
-    <string name="saveandexit">Auto Save</string>
-    <string name="gos">GWI</string>
-    <string name="dirfiles">Display the list of dictator Activities</string>
-    <string name="paste_text">Paste</string>
-    <string name="copy_text">Copy</string>
-    <string name="text_selection_more">More…</string>
-    <string name="posttheme">Enabel TransParanet Theme Editor</string>
-    <string name="pvr">PM</string>
-    <string name="acset">Select a old activity</string>
-    <string name="bl_size">Blur Size</string>
-    <string name="bl_sizedesc">When Get SystemWallpaper is Enabled you can actually set Blur size from 1 to 25</string>
-    <string name="setting">Settings</string>
-    <string name="javacodes">Java codes</string>
-    <string name="myket">Add Star to Myket</string>
-    <string name="terminal">Terminal</string>
-    <string name="sd">Sdcard</string>
-    <string name="themebackup">Back up theme</string>
-    <string name="logcat">Log cat</string>
-    <string name="icon">Icon store</string>
-    <string name="newversion">Program update</string>
-    <string name="exitapps">Exit App</string>
-    <string name="leran">Leran</string>
-    <string name="dev">Developer</string>
-    <string name="color_tree">Text Color Tree</string>
-    <string name="MaterialYou">MaterialYou</string>
-    <string name="customtheme">Custom Theme</string>
-    <string name="customthemedesc">Import Your .ghost Theme to theme and enjoy your colored theme</string>
-    <string name="customwindows">Windowflags Mode</string>
-    <string name="customwindowsdesc">Ensure the right Window Mode for systembars for your device</string>
-    <string name="resource">Resource</string>
-    <string name="resource_manager">Resource Manager</string>
-    <string name="debug">Debug</string>
-    <string name="component_tree">Component Tree</string>
-    <string name="raw_xml">Raw XML</string>
-    <string name="ok">ok</string>
-    <string name="run">Run</string>
-    <string name="mode">Mode</string>
-    <string name="design_surface">Design surface</string>
-    <string name="view">View</string>
-    <string name="design">Design</string>
-    <string name="blueprint">Blueprint</string>
-    <string name="gridmode">GridView</string>
-    <string name="wallmode">Wallpaper System mode</string>
-    <string name="apkwar">Warning!!</string>
-    <string name="apkversionError">Sorry, it is not possible to share the program on your Android. You can share the .apk file with the program in the download folder and the apk folder.</string>
-    <string name="settings_char_preview">Character Preview</string>
-    <string name="settings_display_row">Display Row Of Numbers</string>
-    <string name="settings_keyboard_height">Keyboard Height</string>
-    <string name="drawer_subtitles">The Everythings IDE</string>
-    <string name="drawer_title">Ghost IDE</string>
-    <string name="themetitle">EditorTheme</string>
-    <string name="themesubtitle">Select Custom Theme in Code Editor and Winter Ghost file</string>
-    <string name="customthemetitle">Custom Theme</string>
-    <string name="customthemesub">You can using custom theme (.ghost ) file in All File Path</string>
-    <string name="customblursizetitle">Blur size in Background</string>
-    <string name="customblursizesubtitle">You can select Size Blur in background using 1 ~ 25</string>
-    <string name="codeaztitles">Code analyzer</string>
-    <string name="codeazsubtitle">Turn off this option if your memory is low or you do not have a good mobile</string>
-    <string name="materialyoutitle">Material You!</string>
-    <string name="materialyousubtitle">Enable dynamic colors automatically and Try a Best Color expirence</string>
-
-    <string name="effect_title">Beautiful effect</string>
-    <string name="effect_description">By activating this option, the background will have a small vibration</string>
-    <string name="grids_title">Grid Mode</string>
-    <string name="grids_description">This option is for those who are tired of the normal mode and want to have a better experience</string>
-    <string name="walpapersystem_title">Get System Wallpaper</string>
-    <string name="walpapersystem_description">With this option, you can get the system background</string>
-    <string name="deftheme_title">Default Theme</string>
-    <string name="deftheme_description">By activating this option, the program theme is not read from Json by default</string>
-    <string name="autoSaveText_title">Auto Save</string>
-    <string name="autoSaveText_description">You do not need to click the save button with the auto save activation.</string>
-    <string name="inittheme">Please install the theme</string>
-    <string name="initphp">Please install PHP</string>
-    <string name="initpy">Install Python and then enter the application</string>
-    <string name="filecreator">File created successfully</string>
-    <string name="foldercreator">Folder created successfully</string>
-    <string name="errorEmptyFile">Error: Empty files cannot be saved</string>
-    <string name="filesavesuccessfully">File saved successfully.</string>
-    <string name="themewarning">Theme Warning!</string>
-    <string name="themewaringmassge">This theme file is already present in your storage. Do you want to replace it?</string>
-    <string name="sdcarderror">No SD card found, sorry</string>
-    <string name="make_folder">Create Folder</string>
-    <string name="make_file">Create File</string>
-    <string name="make_project">Create Project</string>
-    <string name="ftp">FTP</string>
-    <string name="search_file">Search File (beta)</string>
-    <string name="folder_tree">Folder Tree</string>
-    <string name="file_tree">File Tree</string>
-    <string name="git_clone">Git Clone</string>
-    <string name="android_module">Android Module</string>
-    <string name="git_tools">Git Tools</string>
-    <string name="gson_to_class">Gson to Class</string>
-    <string name="sheetlive">Open Web in DialogSheet</string>
-    <string name="sheetsub">Showing Code in BottomSheetDialog 2xFaster to load Code</string>
-    <string name="custom_icons">Custom icon</string>
-    <string name="termthemes">Terminal Theme</string>
-    <string name="scriptcustom">Custom Script</string>
-    <string name="customthemeapp">Custom Theme App</string>
-    <string name="customchareditor">Custom Char editor</string>
+  <string name="app_name">Ghost Web IDE</string>
+  <string name="dkplayer_replay">Replay</string>
+  <string name="dkplayer_lock_tip">Locked</string>
+  <string name="dkplayer_unlocked">Unlocked</string>
+  <string name="dkplayer_locked">Locked</string>
+  <string name="dkplayer_error_message">Error</string>
+  <string name="dkplayer_retry">Retry</string>
+  <string name="dkplayer_continue_play">Continue playing</string>
+  <string name="dkplayer_wifi_tip">WiFi not available</string>
+  <string name="word_separators">.,;:!?\10()[]*&amp;@{}/&lt;&gt;_+=|</string>
+  <item
+    name="paste"
+    type="string">Paste</item>
+  <item
+    name="copy"
+    type="string">Copy</item>
+  <item
+    name="selectAll"
+    type="string"
+    formatted="true">Select All</item>
+  <item
+    name="saveToProject"
+    type="string"
+    translatable="false">Save to Project</item>
+  <item
+    name="cut"
+    type="string">Cut</item>
+  <item
+    name="last"
+    type="string">Last</item>
+  <item
+    name="next"
+    type="string">Next</item>
+  <item
+    name="replace"
+    type="string">Replace</item>
+  <item
+    name="replaceAll"
+    type="string">Replace All</item>
+ <item
+    name="replacement"
+    type="string">Replacement</item>
+  <item
+    name="cancel"
+    type="string">Cancel</item>
+  <item
+    name="text_to_search"
+    type="string">Text to Search</item>
+  <item
+    name="more"
+    type="string"
+    translatable="false">More</item>
+  <string name="sting">App Settings</string>
+  <string name="java">Java Code</string>
+  <string name="googleplay">Add a star to my app on Myket</string>
+  <string name="ter">Terminal</string>
+  <string name="sdcard1">SD Card</string>
+  <string name="sdcard2">Home</string>
+  <string name="about">About the App</string>
+  <string name="htmlle">Training</string>
+  <string name="keyboard">Keyboard App</string>
+  <string name="up">Breakdown of App Update</string>
+  <string name="themebackoup">Backup in Theme App</string>
+  <string name="logcater">Log Cater</string>
+  <string name="exitapp">Exit from App</string>
+  <string name="geticonmod">Icon Pack</string>
+  <string name="exitappmsg">Do you want to exit from the app?</string>
+  <string name="no">No</string>
+  <string name="yes">Yes</string>
+  <string name="Settings">Settings</string>
+  <string name="theme">App Theme</string>
+  <string name="Themes_manager">Themes Manager</string> 
+  <string name="Keyboard_settings">Keyboard Settings</string>
+  <string name="Keyboard_settingsdesc">Customize the app keyboard themes and other configurations</string>
+  <string name="Keyboard_features">Keyboard Features</string>
+  <string name="General">General</string>
+  <string name="Fixing_countin_numbers">Fix counting numbers</string>
+  <string name="Turn_off_photo_and_video_size">Disable photo and video size limits</string>
+  <string name="Filemanager">File Manager</string>
+  <string name="Turnoffmedialengthwidth">Disable media length and width</string>
+  <string name="Enablehoverpage">Enable Hover Page</string>
+  <string name="Manuallycompletetext">Manually complete text</string>
+  <string name="Customize_tab_icons">Customize Tab Icons</string>
+  <string name="Manually_edit_lines_of_code">Manually Edit Lines of Code</string>
+  <string name="Activate_default_theme">Activate Default Theme</string>
+  <string name="Manual_tab_size">Manual Tab Size</string>
+  <string name="Customize_font">Customize Font</string>
+  <string name="mEditor">Code Editor</string>
+  <string name="saveandexit">Auto Save</string>
+  <string name="gos">GWI</string>
+  <string name="dirfiles">Display the list of directory activities</string>
+  <string name="paste_text">Paste</string>
+  <string name="copy_text">Copy</string>
+  <string name="text_selection_more">More…</string>
+  <string name="posttheme">Enable Transparent Theme Editor</string>
+  <string name="pvr">PM</string>
+  <string name="acset">Select an old activity</string>
+  <string name="bl_size">Blur Size</string>
+  <string name="bl_sizedesc">When Get System Wallpaper is enabled, you can set the blur size from 1 to 25</string>
+  <string name="setting">Settings</string>
+  <string name="javacodes">Java Codes</string>
+  <string name="myket">Add a Star to Myket</string>
+  <string name="terminal">Terminal</string>
+  <string name="sd">SD Card</string>
+  <string name="themebackup">Backup Theme</string>
+  <string name="logcat">Logcat</string>
+  <string name="icon">Icon Store</string>
+  <string name="newversion">Program Update</string>
+  <string name="exitapps">Exit App</string>
+  <string name="leran">Learn</string>
+  <string name="dev">Developer</string>
+  <string name="color_tree">Text Color Tree</string>
+  <string name="MaterialYou">Material You</string>
+  <string name="customtheme">Custom Theme</string>
+  <string name="customthemedesc">Import your .ghost theme to customize and enjoy your personalized theme</string>
+  <string name="customwindows">Window Flags Mode</string>
+  <string name="customwindowsdesc">Ensure the right window mode for system bars on your device</string>
+  <string name="resource">Resource</string>
+  <string name="resource_manager">Resource Manager</string>
+  <string name="debug">Debug</string>
+  <string name="component_tree">Component Tree</string>
+  <string name="raw_xml">Raw XML</string>
+  <string name="ok">OK</string>
+  <string name="run">Run</string>
+  <string name="mode">Mode</string>
+  <string name="design_surface">Design Surface</string>
+  <string name="view">View</string>
+  <string name="design">Design</string>
+  <string name="blueprint">Blueprint</string>
+  <string name="gridmode">Grid View</string>
+  <string name="wallmode">Wallpaper System Mode</string>
+  <string name="apkwar">Warning!</string>
+  <string name="apkversionError">Sorry, sharing the program is not possible on your Android. You can share the .apk file located in the download or apk folder.</string>
+  <string name="settings_char_preview">Character Preview</string>
+  <string name="settings_display_row">Display Row of Numbers</string>
+  <string name="settings_keyboard_height">Keyboard Height</string>
+  <string name="drawer_subtitles">The Everything IDE</string>
+  <string name="themetitle">Editor Theme</string>
+  <string name="themesubtitle">Select a Custom Theme in Code Editor or Winter Ghost file</string>
+  <string name="customthemetitle">Custom Theme</string>
+  <string name="customthemesub">You can use a custom theme (.ghost file) from any file path</string>
+  <string name="customblursizetitle">Background Blur Size</string>
+  <string name="customblursizesubtitle">You can set the background blur size between 1 and 25</string>
+  <string name="codeazsubtitle">Turn off this option if your device has low memory or performance issues</string>
+  <string name="materialyoutitle">Material You</string>
+  <string name="materialyousubtitle">Enable dynamic colors automatically for the best color experience</string>
+  <string name="effect_title">Beautiful Effect</string>
+  <string name="effect_description">Activate this option to add a subtle vibration effect to the background</string>
+  <string name="grids_title">Grid Mode</string>
+  <string name="grids_description">Switch to grid mode for a more organized and enhanced experience</string>
+  <string name="walpapersystem_title">Get System Wallpaper</string>
+  <string name="walpapersystem_description">Enable this option to use your system background wallpaper</string>
+  <string name="deftheme_title">Default Theme</string>
+  <string name="deftheme_description">By enabling this option, the program theme will not be read from JSON by default</string>
+  <string name="autoSaveText_title">Auto Save</string>
+  <string name="autoSaveText_description">With auto-save enabled, you don't need to click the save button</string>
+  <string name="inittheme">Please install the theme</string>
+  <string name="initphp">Please install PHP</string>
+  <string name="initpy">Install Python before entering the application</string>
+  <string name="filecreator">File created successfully</string>
+  <string name="foldercreator">Folder created successfully</string>
+  <string name="errorEmptyFile">Error: Empty files cannot be saved</string>
+  <string name="filesavesuccessfully">File saved successfully</string>
+  <string name="themewarning">Theme Warning</string>
+  <string name="themewaringmassge">This theme file already exists in your storage. Do you want to replace it?</string>
+  <string name="sdcarderror">No SD card found</string>
+  <string name="make_folder">Create Folder</string>
+  <string name="make_file">Create File</string>
+  <string name="make_project">Create Project</string>
+  <string name="ftp">FTP</string>
+  <string name="search_file">Search File (Beta)</string>
+  <string name="folder_tree">Folder Tree</string>
+  <string name="file_tree">File Tree</string>
+  <string name="git_clone">Git Clone</string>
+  <string name="android_module">Android Module</string>
+  <string name="git_tools">Git Tools</string>
+  <string name="gson_to_class">GSON to Class</string>
+  <string name="sheetlive">Open Web in Dialog Sheet</string>
+  <string name="sheetsub">Show code in BottomSheetDialog 2x faster for loading</string>
+  <string name="custom_icons">Custom Icons</string>
+  <string name="termthemes">Terminal Theme</string>
+  <string name="scriptcustom">Custom Script</string>
+  <string name="customthemeapp">Custom Theme App</string>
+  <string name="customchareditor">Custom Character Editor</string>
 </resources>
