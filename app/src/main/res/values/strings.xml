@@ -2,13 +2,13 @@
 <resources>
     <string name="app_name">Ghost web ide</string>
     <string name="dkplayer_replay">replay</string>
-    <string name="dkplayer_lock_tip">locktop！</string>
-    <string name="dkplayer_unlocked">unlokced</string>
+    <string name="dkplayer_lock_tip">locked！</string>
+    <string name="dkplayer_unlocked">unlocked</string>
     <string name="dkplayer_locked">locked</string>
     <string name="dkplayer_error_message">Error</string>
     <string name="dkplayer_retry">retry</string>
-    <string name="dkplayer_continue_play">contine to play</string>
-    <string name="dkplayer_wifi_tip">not found wifi</string>
+    <string name="dkplayer_continue_play">continue to play</string>
+    <string name="dkplayer_wifi_tip">WiFi not found</string>
     <string name="word_separators">.,;:!?\10()[]*&amp;@{}/&lt;&gt;_+=|</string>
     <item
         name="paste"
@@ -80,7 +80,7 @@
     >More</item>
     <string name="sting">App settings</string>
     <string name="java">java codes</string>
-    <string name="googleplay">Add star to my app to myket</string>
+    <string name="googleplay">Add star to my app on Myket</string>
     <string name="ter">terminal</string>
     <string name="sdcard1">sdcard</string>
     <string name="sdcard2">home</string>
@@ -90,9 +90,9 @@
     <string name="up">Breakdown app update</string>
     <string name="themebackoup">BackUp in theme app</string>
     <string name="logcater">Log cater</string>
-    <string name="exitapp">exit in app</string>
+    <string name="exitapp">exit from app</string>
     <string name="geticonmod">Icon Pack</string>
-    <string name="exitappmsg">Can you Exit in app??</string>
+    <string name="exitappmsg">Do you want to exit from the app ?</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
     <string name="Settings">Settings</string>
@@ -120,7 +120,7 @@
     <string name="paste_text">Paste</string>
     <string name="copy_text">Copy</string>
     <string name="text_selection_more">More…</string>
-    <string name="posttheme">Enabel TransParanet Theme Editor</string>
+    <string name="posttheme">Enable transparent Theme Editor</string>
     <string name="pvr">PM</string>
     <string name="acset">Select a old activity</string>
     <string name="bl_size">Blur Size</string>
