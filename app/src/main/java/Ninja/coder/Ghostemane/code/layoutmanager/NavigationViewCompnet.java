@@ -1,7 +1,7 @@
 package Ninja.coder.Ghostemane.code.layoutmanager;
 
 import Ninja.coder.Ghostemane.code.R;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.util.AttributeSet;
@@ -29,9 +29,9 @@ public class NavigationViewCompnet extends NavigationView {
 
     public NavigationViewCompnet init() {
 
-       /* setItemTextColor(ColorStateList.valueOf(MaterialColors.getColor(this, ColorAndroid12.TvColor)));
+       /* setItemTextColor(ColorStateList.valueOf(MaterialColors.getColor(this, ObjectUtils.TvColor)));
         setItemIconTintList(
-                ColorStateList.valueOf(MaterialColors.getColor(this, ColorAndroid12.ColorFilter)));
+                ColorStateList.valueOf(MaterialColors.getColor(this, ObjectUtils.ColorFilter)));
         setItemMaxLines(1);
         setItemIconSize(50);*/
         setBackground(getBackground());
@@ -71,7 +71,7 @@ public class NavigationViewCompnet extends NavigationView {
                                 .build());
 
         shapeDrawable.setFillColor(
-                ColorStateList.valueOf(MaterialColors.getColor(getContext(), ColorAndroid12.Back, 0)));
+                ColorStateList.valueOf(MaterialColors.getColor(getContext(), ObjectUtils.Back, 0)));
 
         return shapeDrawable;
     }

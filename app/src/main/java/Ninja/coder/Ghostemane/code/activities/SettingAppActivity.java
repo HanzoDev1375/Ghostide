@@ -5,7 +5,7 @@ import Ninja.coder.Ghostemane.code.R;
 import Ninja.coder.Ghostemane.code.adapter.ListAppIconAd;
 import Ninja.coder.Ghostemane.code.config.AppIconManager;
 import Ninja.coder.Ghostemane.code.config.SwitchMaterialPrf;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import Ninja.coder.Ghostemane.code.utils.DataUtil;
 import Ninja.coder.Ghostemane.code.widget.GhostWebMaterialDialog;
 import android.animation.ObjectAnimator;
@@ -298,7 +298,7 @@ public class SettingAppActivity extends BaseCompat {
                                 },
                                 100);
                             edit.setHint("Choose my body by format .ghost");
-                            ColorAndroid12.setTextColor(edit);
+                            ObjectUtils.setTextColor(edit);
                             if (edit.getText().toString().isEmpty()
                                 && !edit.getText().toString().endsWith(".ghost")) {
                               positive.setEnabled(false);
@@ -507,9 +507,9 @@ public class SettingAppActivity extends BaseCompat {
         }
       } else {
         if ((v instanceof ImageView)) {
-          ColorAndroid12.setColorFilter(((ImageView) v));
+          ObjectUtils.setColorFilter(((ImageView) v));
         } else if ((v instanceof TextView)) {
-          ColorAndroid12.setTextColor((TextView) v);
+          ObjectUtils.setTextColor((TextView) v);
         }
       }
     } catch (Exception e) {
@@ -527,7 +527,7 @@ public class SettingAppActivity extends BaseCompat {
         }
       } else {
         if ((v instanceof TextView)) {
-          ColorAndroid12.setTextColor(((TextView) v));
+          ObjectUtils.setTextColor(((TextView) v));
         }
       }
     } catch (Exception e) {
@@ -701,8 +701,8 @@ public class SettingAppActivity extends BaseCompat {
       final ImageView imageview1 = _view.findViewById(R.id.imageview1);
       String api = bind.get(_position);
 
-      ColorAndroid12.setColorFilter(imageview1);
-      ColorAndroid12.setTextColor(textview1);
+      ObjectUtils.setColorFilter(imageview1);
+      ObjectUtils.setTextColor(textview1);
 
       if (_position == 0) {
         textview1.setText(R.string.Customize_font);
@@ -890,7 +890,7 @@ public class SettingAppActivity extends BaseCompat {
               },
               100);
           input.setHint("Select Property theme");
-          ColorAndroid12.setTextColor(edit);
+          ObjectUtils.setTextColor(edit);
           if (edit.getText().toString().isEmpty()) {
             positive.setEnabled(false);
           } else {
@@ -968,7 +968,7 @@ public class SettingAppActivity extends BaseCompat {
               },
               100);
           input.setHint("Select Property theme");
-          ColorAndroid12.setTextColor(edit);
+          ObjectUtils.setTextColor(edit);
           if (edit.getText().toString().isEmpty()) {
             positive.setEnabled(false);
           } else {
@@ -1047,7 +1047,7 @@ public class SettingAppActivity extends BaseCompat {
               },
               100);
           input.setHint("Select Char name Like 👻");
-          ColorAndroid12.setTextColor(edit);
+          ObjectUtils.setTextColor(edit);
           if (edit.getText().toString().isEmpty()) {
             positive.setEnabled(false);
           } else {

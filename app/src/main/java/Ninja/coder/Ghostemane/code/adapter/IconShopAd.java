@@ -4,7 +4,7 @@ import Ninja.coder.Ghostemane.code.R;
 import Ninja.coder.Ghostemane.code.compressor.SvgToPng;
 import Ninja.coder.Ghostemane.code.filehelper.FileNio;
 import Ninja.coder.Ghostemane.code.glidecompat.GlideCompat;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import Ninja.coder.Ghostemane.code.utils.VectorHelper;
 import android.app.Activity;
@@ -60,9 +60,9 @@ public class IconShopAd extends RecyclerView.Adapter<IconShopAd.VH> {
                                     .addItem(new PowerMenuItem("Case to png"))
                                     .setIsMaterial(true)
                                     .build();
-                    menu.setMenuColor(MaterialColors.getColor(context, ColorAndroid12.Back, 0));
+                    menu.setMenuColor(MaterialColors.getColor(context, ObjectUtils.Back, 0));
                     menu.setMenuRadius(20f);
-                    menu.setTextColor(MaterialColors.getColor(context, ColorAndroid12.colorOnSurface, 0));
+                    menu.setTextColor(MaterialColors.getColor(context, ObjectUtils.colorOnSurface, 0));
                     menu.setShowBackground(false);
                     menu.setAutoDismiss(true);
                     menu.setOnMenuItemClickListener(

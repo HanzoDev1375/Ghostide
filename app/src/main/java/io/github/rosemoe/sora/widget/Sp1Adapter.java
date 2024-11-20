@@ -1,6 +1,6 @@
 package io.github.rosemoe.sora.widget;
 
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.widget.TextView;
@@ -56,9 +56,9 @@ public class Sp1Adapter extends BaseAdapter {
         final TextView textview1 = _view.findViewById(R.id.textview1);
 
         textview1.setText(_data.get((int) _position).get("key").toString());
-        textview1.setTextColor(ColorStateList.valueOf(MaterialColors.getColor(textview1, ColorAndroid12.TvColor)));
-        ColorAndroid12.setColorFilter(imageview1);
-        ColorAndroid12.shapeViews(linear1);
+        textview1.setTextColor(ColorStateList.valueOf(MaterialColors.getColor(textview1, ObjectUtils.TvColor)));
+        ObjectUtils.setColorFilter(imageview1);
+        ObjectUtils.shapeViews(linear1);
         return _view;
 
     }

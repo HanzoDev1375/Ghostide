@@ -3,7 +3,7 @@ package Ninja.coder.Ghostemane.code.Welcome;
 import Ninja.coder.Ghostemane.code.R;
 import Ninja.coder.Ghostemane.code.activities.StreamSoftAppActivity;
 import Ninja.coder.Ghostemane.code.tasks.app.ProgressDialogCompat;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import Ninja.coder.Ghostemane.code.utils.ThemeUtils;
 import android.app.ProgressDialog;
@@ -30,7 +30,7 @@ public class SplashWord extends AppIntro2 {
     // TODO: Implement this method
     dialog = new ProgressDialogCompat(this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
 
-    ColorAndroid12.shapeViews(dialog.getWindow().getDecorView());
+    ObjectUtils.shapeViews(dialog.getWindow().getDecorView());
     dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
     dialog.setTitle("Loading....");
     var mypath = getFilesDir().getAbsolutePath() + "/" + "databins";

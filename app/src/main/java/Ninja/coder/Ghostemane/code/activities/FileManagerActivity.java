@@ -1,3 +1,8 @@
+/**
+ * Comment by ghost ide
+ *
+ * @author: Ninjacoder
+ */
 package Ninja.coder.Ghostemane.code.activities;
 
 import Ninja.coder.Ghostemane.code.PluginManager.IntentHelper;
@@ -31,7 +36,7 @@ import Ninja.coder.Ghostemane.code.services.FileEventUser;
 import Ninja.coder.Ghostemane.code.services.MediaListenerService;
 import Ninja.coder.Ghostemane.code.terminal.TerminalActivity;
 import Ninja.coder.Ghostemane.code.utils.*;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import Ninja.coder.Ghostemane.code.utils.DialogUtil;
 import Ninja.coder.Ghostemane.code.utils.VectorHelper;
 import Ninja.coder.Ghostemane.code.widget.GhostWebMaterialDialog;
@@ -103,109 +108,156 @@ import java.util.*;
 
 public class FileManagerActivity extends BaseCompat implements FileManagerAd.onClick {
 
-  protected static final String SHARED_PREFS_KEY = "scroll_position";
-  protected static final String ITEM_POSITION_KEY = "item_position";
-  public static String POSNINJACODERMAIN = "";
   public String Folder = "";
+
   protected SdCardUtil sd_stor;
-  protected ProgressDialog progressDialog;
+
   protected AlertDialog maindialogPrfex;
+
   protected NavigationViewCompnet navs;
+
   protected FastScrollerBuilder fast;
+
   protected FileEventUser user;
-  private Timer _timer = new Timer();
+
   private ExtendedFloatingActionButton fabAdd;
+
   private MaterialToolbar _toolbar;
+
   private AppBarLayout _app_bar;
+
   private CoordinatorLayout _coordinator;
+
   private DrawerLayout _drawer;
+
   private double index = 0;
+
   private String staticstring = "";
+
   private double gotoback = 0;
+
   private FileManagerAd fileListItem;
+
   private String CreateFolder = "";
-  private String mainfile = "";
+
   private String GetTab = "";
+
   private String tab = "";
+
   private double n = 0;
+
   private ProjectMaker projectMaker;
+
   private double positionTabs = 0;
+
   protected SharedPreferences gridMode;
+
   private boolean Chack = false;
-  private boolean isCopyAndMoved = false;
-  private double conter = 0;
+
   private boolean staticStorage = false;
+
   private String version = "";
+
   private double post = 0;
+
   private int newpos = 0;
-  private int lastPos = 0;
+
   private List<String> list = new ArrayList<>();
+
   private List<String> folderList = new ArrayList<>();
+
   private List<String> fileList = new ArrayList<>();
+
   private ArrayList<HashMap<String, Object>> files = new ArrayList<>();
+
   private ArrayList<HashMap<String, Object>> newlistmap = new ArrayList<>();
+
   private ArrayList<String> pv = new ArrayList<>();
-  private ArrayList<String> zip = new ArrayList<>();
+
   private ArrayList<HashMap<String, Object>> upfile = new ArrayList<>();
-  private ArrayList<HashMap<String, Object>> map = new ArrayList<>();
-  private ArrayList<String> str1 = new ArrayList<>();
-  private ArrayList<String> str2 = new ArrayList<>();
+
   private ArrayList<HashMap<String, Object>> projectdata = new ArrayList<>();
-  private ArrayList<Double> cache = new ArrayList<>();
+
   private LinearLayout CensractorListView1;
+
   private RecyclerView recyclerview1, recyclerview2;
-  private Intent myketint = new Intent();
-  private Intent intgetTheme = new Intent();
+
   private Intent intentgetSettings = new Intent();
+
   private SharedPreferences shp;
+
   private Intent activitiy = new Intent();
+
   private ProgressDialog progressDilaog;
+
   private ProgressDialog unzip;
-  private ToolbarListFileAdapter adps;
+
   private SharedPreferences soglo;
+
   private SharedPreferences np;
+
   private ProgressDialog mprodialog;
+
   private SharedPreferences dismoveFile;
+
   private ProgressDialog prodel;
+
   private ProgressDialog proveg;
+
   private Intent getabout = new Intent();
+
   private Intent void10 = new Intent();
+
   private SharedPreferences sd;
+
   private SharedPreferences delfile;
+
   private ProgressDialog copydir;
+
   private ProgressDialog copypath;
-  private MediaPlayer m;
-  private TimerTask vvv12;
+
   private Intent getJavaLayoutManager = new Intent();
+
   private SharedPreferences zipCuntishen;
+
   private Intent govirwFilm = new Intent();
-  private TimerTask ask;
+
   private SharedPreferences war;
+
   private RequestNetwork CheckNewVersion;
+
   private RequestNetwork.RequestListener UpdateCheck;
+
   private Intent finalintentpostfont = new Intent();
+
   private Intent intentgetLogCat = new Intent();
+
   private SharedPreferences tmp;
-  private PowerMenu mmenuitempos;
-  private PowerMenu mmenuVector;
-  private ObjectAnimator one = new ObjectAnimator();
-  private ObjectAnimator thow = new ObjectAnimator();
-  private TimerTask MtimerPost;
-  private ObjectAnimator mobjectOnTaskStart = new ObjectAnimator();
-  private ObjectAnimator MobjectTaskEnd = new ObjectAnimator();
+
   private Intent musicShow = new Intent();
+
   private SharedPreferences base;
+
   private SharedPreferences save_path;
+
   private SharedPreferences materialYou;
+
   private SharedPreferences book;
+
   private ArrayList<HashMap<String, Object>> a = new ArrayList<>();
+
   private HashMap<String, Object> mapz32 = new HashMap<>();
+
   private HichemSoftFileUtil utils;
+
   private GridLayoutManager gridLayoutManager;
+
   private SharedPreferences sharedPreferences;
+
   private CircularProgressIndicator filedir_bar;
+
   private ViewDownloder downloder;
-  private List<HashMap<String, Object>> maps = new ArrayList<>();
+
   private LinearLayout emptyview;
 
   @Override
@@ -213,7 +265,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     super.onCreate(_savedInstanceState);
     setContentView(R.layout.filedir);
     initialize(_savedInstanceState);
-
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
             == PackageManager.PERMISSION_DENIED
         || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -249,7 +300,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     setSupportActionBar(_toolbar);
     gridLayoutManager = new GridLayoutManager(this, 1);
     gridMode = getSharedPreferences("gride", Activity.MODE_PRIVATE);
-
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     getSupportActionBar().setHomeButtonEnabled(true);
     _drawer = findViewById(R.id._drawer);
@@ -279,9 +329,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     book = getSharedPreferences("hsipsot4444", Activity.MODE_PRIVATE);
     downloder = findViewById(R.id.downloder);
     emptyview = findViewById(R.id.emptyview);
-
     WindowsMath(_drawer, _coordinator);
-
     BackPressed();
     if (gridMode.contains("gride")) {
       setViewType(ViewType.GRID);
@@ -289,16 +337,13 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
       setViewType(ViewType.ROW);
     }
     ThemeChaker();
-
     Observable<FileEvent> fileObservable = RxFileObserver.create(Folder);
-
     fileObservable.subscribe(
         (it) -> {
           if (it.isCreate()) {
             Log.w("FileCreate", it.toString());
           }
         });
-
     var helper =
         new RecyclerViewHelper(
             recyclerview2,
@@ -316,9 +361,9 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                 recyclerview2.getAdapter().notifyDataSetChanged();
               }
             });
-
     recyclerview2.addOnScrollListener(
         new RecyclerView.OnScrollListener() {
+
           @Override
           public void onScrollStateChanged(RecyclerView recyclerView, int _scrollState) {
             super.onScrollStateChanged(recyclerView, _scrollState);
@@ -334,14 +379,14 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
             }
           }
         });
-
     UpdateCheck =
         new RequestNetwork.RequestListener() {
+
           @Override
           public void onResponse(String _param1, String _param2, HashMap<String, Object> _param3) {
-            final String _tag = _param1;
+
             final String _response = _param2;
-            final HashMap<String, Object> _responseHeaders = _param3;
+
             try {
               upfile =
                   new Gson()
@@ -349,7 +394,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                           _response,
                           new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
             } catch (Exception e) {
-
             }
             if (!upfile.get((int) 0).get("Version").toString().equals(version)) {
               /// AddDialog
@@ -372,9 +416,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                         });
                   });
               di.setPositiveButton("Ask Later", null);
-
               di.show();
-
             } else {
               /// Empty
             }
@@ -383,7 +425,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
           @Override
           public void onErrorResponse(String _param1, String _param2) {}
         };
-
     projectMaker =
         new ProjectMaker(
             Folder,
@@ -424,10 +465,8 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
       if (viewType == ViewType.GRID) {
         gridLayoutManager.setSpanCount(2);
         recyclerview2.setAdapter(fileListItem);
-
       } else {
         recyclerview2.setAdapter(fileListItem);
-
         gridLayoutManager.setSpanCount(1);
         fast = new FastScrollerBuilder(recyclerview2);
         fast.useMd2Style();
@@ -444,7 +483,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
   }
 
   private void initStartApp() {
-
     getWindow()
         .setSoftInputMode(
             WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
@@ -454,10 +492,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
         "https://raw.githubusercontent.com/HanzoDev1375/HanzoDev1375/main/log.json",
         "",
         UpdateCheck);
-
     if (war.contains("val")) {}
-
-    var progress_m = new com.zip4j.progress.ProgressMonitor();
 
     try {
       var pInfo =
@@ -469,7 +504,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
       showMessage(e.toString());
     }
     // new FastScrollerBuilder(recyclerview2).useMd2Style().build();
-
     progressDilaog =
         new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
     unzip = new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
@@ -485,9 +519,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     u.setColor(0xFF2B2122);
     u.setCornerRadius(25);
     u.setStroke(1, 0xFFF8B09A);
-
     sd_stor = new SdCardUtil(this);
-
     if (getIntent().hasExtra("bookmarkDir")) {
       Folder = getIntent().getStringExtra("bookmarkDir");
       reLoadFile();
@@ -499,19 +531,17 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
         () -> {
           Toast.makeText(getApplicationContext(), "File changed", Toast.LENGTH_LONG).show();
         });
-
     startService(new Intent(this, FileEventUser.class));
     sharedPreferences = getSharedPreferences("fileSp", Context.MODE_PRIVATE);
     utils = new HichemSoftFileUtil(sharedPreferences, FileManagerActivity.this).loadData();
-    utils.requestPermissionAllFilesAccess(); // if not allowed
+    // if not allowed
+    utils.requestPermissionAllFilesAccess();
     RefreshTabs();
-    FileManagerUtils fileManagerUtils = new FileManagerUtils(this);
 
     AnimUtils.Worker(fabAdd);
-
     fabAdd.setText("Create");
     fabAdd.setIconResource(R.drawable.create);
-    ColorAndroid12.setFab(fabAdd);
+    ObjectUtils.setFab(fabAdd);
     fabAdd.setOnClickListener(
         v -> {
           DialogItemSheet();
@@ -533,7 +563,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
   }
 
   public void FilterFile() {
-
     var view = LayoutInflater.from(this).inflate(R.layout.reminderlist, null, false);
     var dialog = new DialogUtil(this);
     dialog.setTitle("Filter List");
@@ -542,7 +571,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     if (dialog != null) {
       dialog.build();
     }
-
     TextInputEditText et = view.findViewById(R.id.ed_filter);
     TextInputLayout layout = view.findViewById(R.id.input);
     layout.setEndIconVisible(false);
@@ -551,13 +579,11 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     layout.setEndIconDrawable(R.drawable.deletear);
     layout.setEndIconOnClickListener(v -> et.getText().clear());
     sendFilePathToReceiver(Folder);
-
     et.addTextChangedListener(
         new TextWatcher() {
 
           @Override
           public void onTextChanged(CharSequence ser, int arg1, int arg2, int arg3) {
-
             ThreadUtils.runOnUiThread(
                 () -> {
                   fileListItem.search(ser.toString());
@@ -578,6 +604,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
         .addCallback(
             this,
             new OnBackPressedCallback(true) {
+
               @Override
               public void handleOnBackPressed() {
                 if (sd_stor.hasRealRemovableSdCarde()) {
@@ -589,7 +616,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                       finishAffinity();
                     }
                   } else {
-
                     Folder = Folder.substring((int) (0), (int) (Folder.lastIndexOf("/")));
                     reLoadFile();
                   }
@@ -625,11 +651,9 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
   public void reLoadFile(boolean isSortFile) {
     recyclerview2.setVisibility(View.GONE);
     filedir_bar.setVisibility(View.VISIBLE);
-
     new Thread(
             () -> {
               save_path.edit().putString("path", Folder).apply();
-
               list.clear();
               files.clear();
               folderList.clear();
@@ -648,7 +672,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                       return f1.compareToIgnoreCase(f2);
                     });
               }
-
               list.forEach(
                   item -> {
                     if (FileUtil.isDirectory(item)) {
@@ -657,7 +680,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                       fileList.add(item);
                     }
                   });
-
               List<HashMap<String, Object>> folderItems =
                   folderList.stream()
                       .map(
@@ -672,7 +694,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                             return !path.isEmpty() && !new File(path).isHidden();
                           })
                       .collect(Collectors.toList());
-
               files.addAll(folderItems);
               fileList.forEach(
                   item -> {
@@ -681,7 +702,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                     files.add(_item);
                   });
               try {
-
               } catch (Exception e) {
                 runOnUiThread(
                     () ->
@@ -693,13 +713,11 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                       emptyview.setVisibility(View.VISIBLE);
                     } else emptyview.setVisibility(View.GONE);
                   });
-
               runOnUiThread(
                   () -> {
                     recyclerview2.setVisibility(View.VISIBLE);
                     filedir_bar.setVisibility(View.GONE);
                     recyclerview2.setAdapter(fileListItem);
-
                     ListSheet.bind(recyclerview2, Folder);
                     if (gridLayoutManager != null) {
                       recyclerview2.setLayoutManager(gridLayoutManager);
@@ -742,7 +760,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
               v -> {
                 editor.setText("");
               });
-
           positive.setOnClickListener(
               (vftrororocjj) -> {
                 DataUtil.hideKeyboard(getApplicationContext());
@@ -754,11 +771,11 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                     NinjaMacroFileUtil.createDirectory(
                         Folder.concat("/".concat(CreateFolder.concat("/"))),
                         new NinjaMacroFileUtil.OnFileOperationListener() {
+
                           @Override
                           public void onSuccess(String content) {
                             // محتوای فایل با موفقیت خوانده شد
                             Toast.makeText(getApplicationContext(), content, 2).show();
-
                             if (recyclerview2 != null) {
                               reLoadFile();
                               recyclerview2.getAdapter().notifyItemChanged(files.size());
@@ -771,20 +788,18 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                             Toast.makeText(getApplicationContext(), e, 2).show();
                           }
                         });
-
                   } catch (Exception e) {
-
                   }
                 }
                 dialog.dismiss();
               });
           editor.addTextChangedListener(
               new android.text.TextWatcher() {
+
                 @Override
                 public void onTextChanged(
                     CharSequence _param1, int _param2, int _param3, int _param4) {
                   final String _charSeq = _param1.toString();
-
                   if (editor.getText().toString().isEmpty()) {
                     positive.setEnabled(false);
                   } else {
@@ -820,7 +835,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
   }
 
   public void FileMaker() {
-
     var folders = new FileMaker(this);
     folders.setFolderName(Folder);
     folders.setCallBack(
@@ -872,7 +886,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
         _item.put(_key, _listmap1.get((int) _position).get(_key).toString());
         _listmap2.add(_item);
       }
-
       shp.edit().putString(_key, new Gson().toJson(_listmap2)).commit();
       shp.edit().putString("positionTabs", String.valueOf((long) (positionTabs))).commit();
       loadAnim(activitiy);
@@ -892,7 +905,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
               _item.put(_key, _listmap1.get((int) _position).get(_key).toString());
               _listmap2.add(_item);
             }
-
             shp.edit().putString(_key, new Gson().toJson(_listmap2)).commit();
             shp.edit()
                 .putString("positionTabs", String.valueOf((long) (_listmap2.size() - 1)))
@@ -905,7 +917,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
             File file = new File(_listmap1.get((int) _position).get(_key).toString());
             activitiy.putExtra("root", file.getParent());
             loadAnim(activitiy);
-
             break;
           }
         }
@@ -934,7 +945,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
 
   void InstallTakes(int _pos, String _path, String tit, String msg) {
     var di = new DialogUtil(FileManagerActivity.this);
-
     di.setTitle(tit);
     di.setMessage(msg);
     di.setNeutralButton(
@@ -966,34 +976,26 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
         || _list.get((int) _pos).get(_str).toString().endsWith(".AA")) {
       if (FileUtil.isFile("/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost")) {
         var di = new MaterialAlertDialogBuilder(FileManagerActivity.this);
-
         di.setTitle(R.string.themewarning);
         di.setMessage(R.string.themewaringmassge);
         di.setNeutralButton(
             android.R.string.ok,
             (p, d) -> {
               try {
-
                 new net.lingala.zip4j.ZipFile(_list.get((int) _pos).get(_str).toString())
                     .extractAll("/storage/emulated/0/GhostWebIDE/");
-
               } catch (net.lingala.zip4j.exception.ZipException e) {
                 showMessage(e.toString());
               }
-
               reLoadFile();
               DataUtil.showMessage(getApplicationContext(), "انجام شد");
             });
         di.setPositiveButton(android.R.string.cancel, (p1, d2) -> {});
-
         di.show();
-
       } else {
         try {
-
           new net.lingala.zip4j.ZipFile(_list.get((int) _pos).get(_str).toString())
               .extractAll("/storage/emulated/0/GhostWebIDE/");
-
         } catch (net.lingala.zip4j.exception.ZipException e) {
           showMessage(e.toString());
         }
@@ -1020,17 +1022,12 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     dialog.setOnShowListener(
         (var) -> {
           EditText input = dialog.findViewById(R.id.input);
-
           EditText output = dialog.findViewById(R.id.output);
-
           com.google.android.material.textfield.TextInputLayout tvin =
               dialog.findViewById(R.id.tvin);
-
           com.google.android.material.textfield.TextInputLayout tvou =
               dialog.findViewById(R.id.tvou);
-
           ProgressBar pros = dialog.findViewById(R.id.pros);
-
           input.setText(staticstring);
           pros.setVisibility(View.GONE);
           output.setText(GetTab);
@@ -1038,9 +1035,9 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
           positive.setOnClickListener(
               (vftrororocjj) -> {
                 if (output.getText().toString().isEmpty()) {
-
                 } else {
                   new AsyncTask<String, String, String>() {
+
                     @Override
                     protected void onPreExecute() {
                       input.setEnabled(false);
@@ -1065,9 +1062,9 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                       try {
                         org.benf.cfr.reader.Main.main(pv.toArray(new String[0]));
                       } catch (Exception e) {
-
                         runOnUiThread(
                             new Runnable() {
+
                               @Override
                               public void run() {
                                 DataUtil.showMessage(getApplicationContext(), e.toString());
@@ -1093,12 +1090,10 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                 }
               });
         });
-
     dialog.show();
   }
 
   public void setRenameFile(double _pos) {
-
     AlertDialog dialog =
         new GhostWebMaterialDialog(FileManagerActivity.this)
             .setView(R.layout.ranme)
@@ -1112,8 +1107,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
         (var) -> {
           EditText editor = dialog.findViewById(R.id.editor);
           editor.setTextSize(16);
-          editor.setTextColor(MaterialColors.getColor(editor, ColorAndroid12.colorOnSurface, 0));
-
+          editor.setTextColor(MaterialColors.getColor(editor, ObjectUtils.colorOnSurface, 0));
           Button positive = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
           editor.setText(
               Uri.parse(files.get((int) _pos).get("path").toString()).getLastPathSegment());
@@ -1124,10 +1118,10 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
           }
           editor.addTextChangedListener(
               new TextWatcher() {
+
                 @Override
                 public void onTextChanged(
                     CharSequence _param1, int _param2, int _param3, int _param4) {
-                  final String _charSeq = _param1.toString();
 
                   if (editor.getText().toString().isEmpty()) {
                     positive.setEnabled(false);
@@ -1156,21 +1150,19 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                 reLoadFile();
               });
         });
-
     dialog.show();
   }
 
   public void _delFileCustom(int _pos) {
     var di = new DialogUtil(FileManagerActivity.this);
-
     di.setTitle("Romved File");
     di.setMessage("romved ".concat(files.get(_pos).get("path").toString().concat(" your mobile?")));
     di.setNeutralButton("no", (p, d) -> {});
-
     di.setPositiveButton(
         "ok",
         (p1, d2) -> {
           new AsyncTask<String, String, String>() {
+
             @Override
             protected void onPreExecute() {
               prodel.setTitle("Romving ...");
@@ -1183,9 +1175,8 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
 
             @Override
             protected String doInBackground(String... params) {
-              String _param = params[0];
-              FileUtil.deleteFile(files.get(_pos).get("path").toString());
 
+              FileUtil.deleteFile(files.get(_pos).get("path").toString());
               return "";
             }
 
@@ -1196,7 +1187,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
             }
           }.execute("");
         });
-
     di.build();
   }
 
@@ -1226,7 +1216,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                 projectMaker.setSvgToPngConvert(
                     files.get((int) newpos).get("path").toString(),
                     files.get((int) newpos).get("path").toString().replace(".svg", ".png"));
-
                 sh.getDismiss(true);
                 break;
               }
@@ -1364,12 +1353,10 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     }
     if (staticstring.endsWith(".jar")) {
       var di = new DialogUtil(FileManagerActivity.this);
-
       di.setTitle("لطفا یکی از گزینه های زیر را انتخاب کنید");
       di.setMessage(
           "توجه داشته باشید که برای تغییر jar به dex گزینه مناسب را انتخاب کنید ممکن است تغییرات و یا دیکامپایل کردن چند دقیقه طول بکشد یا حتی این عمل انجام نشود");
       di.setCancelable(false);
-
       di.setNeutralButton(
           "Dicompile",
           (p, d) -> {
@@ -1388,7 +1375,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                   reLoadFile();
                 });
           });
-
       di.build();
     }
     if (staticstring.endsWith(".mp3")) {
@@ -1421,7 +1407,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     if (staticstring.endsWith(".7z")) {
       _sevenUnZip(staticstring, Folder);
     }
-
     if (staticstring.endsWith(".zip")) {
       InstallTakesZip(newpos, staticstring);
     }
@@ -1447,7 +1432,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
 
   void MakeZipFileFromThread(int _number, String title, String massges, String format) {
     var di = new DialogUtil(this);
-
     di.setTitle(title);
     di.setMessage(massges);
     di.setPositiveButton(
@@ -1458,7 +1442,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
           copydir.setTitle("Loading...");
           copydir.setCancelable(false);
           copydir.show();
-
           Thread thread =
               new Thread(
                   () -> {
@@ -1492,7 +1475,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                         runOnUiThread(() -> showMessage(e.toString()));
                       }
                     }
-
                     runOnUiThread(
                         () -> {
                           reLoadFile();
@@ -1501,9 +1483,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                   });
           thread.start();
         });
-
     di.setNeutralButton("خیر", null);
-
     di.build();
   }
 
@@ -1514,7 +1494,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     maindialogPrfex.setCancelable(true);
     maindialogPrfex.setPositiveButton("make", null);
     maindialogPrfex.setNegativeButton(android.R.string.cancel, null);
-
     maindialogPrfex.setOnShowListener(
         (var) -> {
           RecyclerView post = maindialogPrfex.getAlertDialog().findViewById(R.id.post);
@@ -1573,7 +1552,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     sb.append("Package Name: ").append(packageInfo.packageName).append("\n");
     sb.append("Version Name: ").append(packageInfo.versionName).append("\n");
     sb.append("Version Code: ").append(packageInfo.versionCode).append("\n");
-
     // دریافت نام API با استفاده از minSdkVersion
     int minSdkVersion = packageInfo.applicationInfo.minSdkVersion;
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -1600,6 +1578,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
           AS.runs(
               staticstring,
               new AS.CallBack() {
+
                 @Override
                 public void end() {
                   reLoadFile();
@@ -1632,7 +1611,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
             apkInstaller.execute();
           }
         });
-
     builder.show();
   }
 
@@ -1670,13 +1648,14 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
       dialog.show();
       new Thread(
               new Runnable() {
+
                 @Override
                 public void run() {
-
                   Z7Extractor.extractFile(
                       _in,
                       _ou,
                       new com.hzy.lib7z.IExtractCallback() {
+
                         @Override
                         public void onProgress(final String name, final long size) {
                           runOnUiThread(
@@ -1733,19 +1712,12 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
         (var) -> {
           Button positive = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
           EditText ftpserver = dialog.findViewById(R.id.ftpserver);
-
           EditText ftpport = dialog.findViewById(R.id.ftpport);
-
           EditText ftpusername = dialog.findViewById(R.id.ftpusername);
-
           EditText ftppass = dialog.findViewById(R.id.ftppass);
-
           EditText ftpLocalRemote = dialog.findViewById(R.id.ftpLocalRemote);
-
           ProgressBar bar = dialog.findViewById(R.id.bar);
-
           LinearLayout mlinear1 = dialog.findViewById(R.id.mlinear1);
-
           bar.setVisibility(View.GONE);
           positive.setOnClickListener(
               (vftrororocjj) -> {
@@ -1759,7 +1731,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                 }
                 int ab = Integer.parseInt(ftpLocalRemote.getText().toString());
                 if (ab == 0) return;
-
                 mlinear1.setVisibility(View.GONE);
                 FtpDownloader downloader =
                     new FtpDownloader(
@@ -1770,22 +1741,20 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                         ftpLocalRemote.getText().toString(),
                         Folder,
                         new FtpDownloader.ProgressListener() {
+
                           @Override
                           public void onProgressUpdate(int percent) {
-
                             bar.setProgress(percent);
                           }
 
                           @Override
                           public void onError(String message) {
-
                             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT)
                                 .show();
                           }
 
                           @Override
                           public void onDownloadFinished() {
-
                             Toast.makeText(
                                     getApplicationContext(),
                                     R.string.filecreator,
@@ -1795,7 +1764,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                             reLoadFile();
                           }
                         });
-
                 downloader.start();
               });
         });
@@ -1805,9 +1773,9 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
   private void setSanDisk() {
     runOnUiThread(
         new Runnable() {
+
           @Override
           public void run() {
-
             if (staticStorage) {
               staticStorage = false;
               Folder = FileUtil.getExternalStorageDir();
@@ -1830,7 +1798,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
   }
 
   public void DrowerHandler() {
-
     navs.bringToFront();
     navs.setClick(
         (item) -> {
@@ -1841,7 +1808,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                 setSanDisk();
                 break;
               }
-
             case 2:
               {
                 getJavaLayoutManager.setClass(
@@ -1881,7 +1847,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                       "https://raw.githubusercontent.com/HanzoDev1375/HanzoDev1375/main/log.json",
                       "v",
                       UpdateCheck);
-
                 } else {
                 }
                 break;
@@ -1897,20 +1862,17 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                 setBackupTheme();
                 break;
               }
-
             case 10:
               {
                 intentgetLogCat.setClass(getApplicationContext(), FileBookmarkActivity.class);
                 startActivity(intentgetLogCat);
                 break;
               }
-
             case 11:
               {
                 var b = new Intent();
                 b.setClass(getApplicationContext(), ApkViewActivity.class);
                 startActivity(b);
-
                 break;
               }
             case 12:
@@ -1919,7 +1881,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                 startActivity(getabout);
                 break;
               }
-
             case 13:
               {
                 finishAffinity();
@@ -1934,32 +1895,25 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     if (FileUtil.isFile("/storage/emulated/0/GhostWebIDE/theme/theme.AA")) {
     } else {
       try {
-
         var zip4 =
             new net.lingala.zip4j.ZipFile(
                 new File(
                     "/storage/emulated/0/GhostWebIDE/" + DataUtil.getRandom(1, 200) + "theme.AA"));
-
         List<File> filesToAdd = new ArrayList<>();
         var iconPath = getFilesDir().getAbsoluteFile() + "/icon.png";
         filesToAdd.add(new File(iconPath));
         filesToAdd.add(new File("/sdcard/GhostWebIDE/theme/GhostThemeapp.ghost"));
-
         zip4.addFiles(filesToAdd);
         DataUtil.showMessage(getApplicationContext(), "done");
-
       } catch (net.lingala.zip4j.exception.ZipException e) {
-
       }
     }
   }
 
   public void DialogItemSheet() {
-
     var sh = new ListSheet();
-    var fileHelper = new FileIconHelper(Folder);
-    sh.setSheetDialog(this);
 
+    sh.setSheetDialog(this);
     sh.addItem(getString(R.string.make_folder), R.drawable.folder);
     sh.addItem(getString(R.string.make_file), R.drawable.folders_0_5);
     sh.addItem(getString(R.string.make_project), R.drawable.textfile);
@@ -1989,13 +1943,12 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
               }
             case 2:
               {
-                var modl =
-                    new FactoryModelProject(
-                        FileManagerActivity.this,
-                        Folder,
-                        () -> {
-                          reLoadFile();
-                        });
+                new FactoryModelProject(
+                    FileManagerActivity.this,
+                    Folder,
+                    () -> {
+                      reLoadFile();
+                    });
                 sh.getDismiss(true);
                 break;
               }
@@ -2039,6 +1992,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                       FileTree.FolderTree(
                           Folder + "/" + editor.getText().toString(),
                           new FileTree.Event() {
+
                             @Override
                             public void StartEvent() {}
 
@@ -2055,7 +2009,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                           });
                     });
                 di1.setNegativeButton("dismiss", (p3, d3) -> {});
-
                 di1.setView(dialogview);
                 di1.show();
                 sh.getDismiss(true);
@@ -2076,6 +2029,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                       FileTree.FilesTree(
                           Folder + "/" + editor.getText().toString(),
                           new FileTree.Event() {
+
                             @Override
                             public void StartEvent() {}
 
@@ -2092,7 +2046,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                           });
                     });
                 di.setNegativeButton("dismiss", (p3, d3) -> {});
-
                 di.setView(dialogview1);
                 di.show();
                 sh.getDismiss(true);
@@ -2106,13 +2059,12 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
               }
             case 8:
               {
-                CreatorModule cvt =
-                    new CreatorModule(
-                        FileManagerActivity.this,
-                        Folder,
-                        () -> {
-                          reLoadFile();
-                        });
+                new CreatorModule(
+                    FileManagerActivity.this,
+                    Folder,
+                    () -> {
+                      reLoadFile();
+                    });
                 sh.getDismiss(true);
                 break;
               }
@@ -2155,11 +2107,9 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
 
   public void setItemSheetOld(int _position, final View _view) {
     var bottomSheetDialog = new BottomSheetDialog(FileManagerActivity.this);
-
     View bottomSheetView;
     bottomSheetView = getLayoutInflater().inflate(R.layout.layout_dir_sheet, null);
     bottomSheetDialog.setContentView(bottomSheetView);
-
     LinearLayout re = (LinearLayout) bottomSheetView.findViewById(R.id.re);
     LinearLayout del = (LinearLayout) bottomSheetView.findViewById(R.id.del);
     LinearLayout pr = (LinearLayout) bottomSheetView.findViewById(R.id.pr);
@@ -2168,32 +2118,32 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     LinearLayout mark = (LinearLayout) bottomSheetView.findViewById(R.id.mark);
     re.setOnClickListener(
         new View.OnClickListener() {
-          public void onClick(View v) {
 
+          public void onClick(View v) {
             bottomSheetDialog.dismiss();
             setRenameFile(_position);
           }
         });
     del.setOnClickListener(
         new View.OnClickListener() {
-          public void onClick(View v) {
 
+          public void onClick(View v) {
             _delFileCustom(_position);
             bottomSheetDialog.dismiss();
           }
         });
     pr.setOnClickListener(
         new View.OnClickListener() {
-          public void onClick(View v) {
 
+          public void onClick(View v) {
             MakeZipFileFromThread(_position);
             bottomSheetDialog.dismiss();
           }
         });
     sh.setOnClickListener(
         new View.OnClickListener() {
-          public void onClick(View v) {
 
+          public void onClick(View v) {
             var fileShareManager = new FileShareManager(FileManagerActivity.this);
             File file = new File(files.get((int) _position).get("path").toString());
             try {
@@ -2201,22 +2151,21 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
             } catch (Exception e) {
               e.printStackTrace();
             }
-
             bottomSheetDialog.dismiss();
           }
         });
     zp.setOnClickListener(
         new View.OnClickListener() {
-          public void onClick(View v) {
 
+          public void onClick(View v) {
             MakeZipFileFromThreads(_position);
             bottomSheetDialog.dismiss();
           }
         });
     mark.setOnClickListener(
         new View.OnClickListener() {
-          public void onClick(View v) {
 
+          public void onClick(View v) {
             if (book.getString("hsipsot4444", "").equals("")) {
               book.edit().putString("hsipsot4444", "[]").apply();
             } else {

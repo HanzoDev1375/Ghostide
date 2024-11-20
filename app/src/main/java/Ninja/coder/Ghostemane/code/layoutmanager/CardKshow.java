@@ -1,6 +1,6 @@
 package Ninja.coder.Ghostemane.code.layoutmanager;
 
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -29,9 +29,9 @@ public class CardKshow extends MaterialCardView {
 
     public void ShapeCustom() {
         setStrokeWidth(1);
-        if (ColorAndroid12.Android12) {
-            setCardBackgroundColor(ColorStateList.valueOf(MaterialColors.getColor(getContext(), ColorAndroid12.Back, 0)));
-            setStrokeColor(ColorStateList.valueOf(MaterialColors.getColor(getContext(), ColorAndroid12.TvColor, 0)));
+        if (ObjectUtils.Android12) {
+            setCardBackgroundColor(ColorStateList.valueOf(MaterialColors.getColor(getContext(), ObjectUtils.Back, 0)));
+            setStrokeColor(ColorStateList.valueOf(MaterialColors.getColor(getContext(), ObjectUtils.TvColor, 0)));
         } else {
             setCardBackgroundColor(ColorStateList.valueOf(Color.parseColor("#ff201B16")));
             setStrokeColor(ColorStateList.valueOf(Color.parseColor("#FFDCBD")));

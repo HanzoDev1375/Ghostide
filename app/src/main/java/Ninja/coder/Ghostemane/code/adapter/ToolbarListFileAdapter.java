@@ -1,7 +1,7 @@
 package Ninja.coder.Ghostemane.code.adapter;
 
 import Ninja.coder.Ghostemane.code.R;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Environment;
@@ -62,9 +62,9 @@ public class ToolbarListFileAdapter extends RecyclerView.Adapter<ToolbarListFile
           Log.e("This pos : ", _data.get(_position));
         });
     holder.textview2.setTextColor(
-        MaterialColors.getColor(holder.textview2, ColorAndroid12.colorOnSurface));
+        MaterialColors.getColor(holder.textview2, ObjectUtils.colorOnSurface));
     holder.imageview1.setColorFilter(
-        MaterialColors.getColor(holder.imageview1, ColorAndroid12.colorOnSurface, 0),
+        MaterialColors.getColor(holder.imageview1, ObjectUtils.colorOnSurface, 0),
         PorterDuff.Mode.SRC_IN);
     holder.textview2.setOnLongClickListener(
         longClick -> {

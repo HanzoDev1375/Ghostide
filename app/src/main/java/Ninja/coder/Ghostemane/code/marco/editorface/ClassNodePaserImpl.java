@@ -3,7 +3,7 @@ package Ninja.coder.Ghostemane.code.marco.editorface;
 import Ninja.coder.Ghostemane.code.databinding.MakefolderBinding;
 import Ninja.coder.Ghostemane.code.interfaces.JavaClassPaster;
 import Ninja.coder.Ghostemane.code.marco.editorface.ClassNodePaser;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,10 +57,10 @@ public class ClassNodePaserImpl {
         new PowerMenu.Builder(context)
             .addItem(new PowerMenuItem("PastJavaCode"))
             .setIsMaterial(true)
-            .setTextColor(MaterialColors.getColor(context, ColorAndroid12.TvColor, 0))
+            .setTextColor(MaterialColors.getColor(context, ObjectUtils.TvColor, 0))
             .setShowBackground(false)
             .setMenuRadius(30f)
-            .setMenuColor(MaterialColors.getColor(context, ColorAndroid12.Back, 0))
+            .setMenuColor(MaterialColors.getColor(context, ObjectUtils.Back, 0))
             .setAutoDismiss(true)
             .build();
     menus.setOnMenuItemClickListener(

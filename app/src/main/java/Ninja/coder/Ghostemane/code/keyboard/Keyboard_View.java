@@ -1,7 +1,7 @@
 package Ninja.coder.Ghostemane.code.keyboard;
 
 import Ninja.coder.Ghostemane.code.R;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
@@ -69,33 +69,33 @@ public class Keyboard_View extends KeyboardView {
     Theme = PreferenceManager.getDefaultSharedPreferences(getContext()).getString("Theme", "5");
 
     if (Theme.equals("1")) {
-      paint2.setColor(MaterialColors.getColor(getContext(), ColorAndroid12.TvColor, 0));
+      paint2.setColor(MaterialColors.getColor(getContext(), ObjectUtils.TvColor, 0));
     } else if (Theme.equals("2")) {
-      paint2.setColor(MaterialColors.getColor(getContext(), ColorAndroid12.TvColor, 0));
+      paint2.setColor(MaterialColors.getColor(getContext(), ObjectUtils.TvColor, 0));
     } else if (Theme.equals("3")) {
-      paint2.setColor(MaterialColors.getColor(getContext(), ColorAndroid12.TvColor, 0));
+      paint2.setColor(MaterialColors.getColor(getContext(), ObjectUtils.TvColor, 0));
     } else if (Theme.equals("4")) {
-      paint2.setColor(MaterialColors.getColor(getContext(), ColorAndroid12.TvColor, 0));;
+      paint2.setColor(MaterialColors.getColor(getContext(), ObjectUtils.TvColor, 0));;
     } else if (Theme.equals("5")) {
-      paint2.setColor(MaterialColors.getColor(getContext(), ColorAndroid12.TvColor, 0));
+      paint2.setColor(MaterialColors.getColor(getContext(), ObjectUtils.TvColor, 0));
     } else if (Theme.equals("6")) {
-      paint2.setColor(MaterialColors.getColor(getContext(), ColorAndroid12.TvColor, 0));
+      paint2.setColor(MaterialColors.getColor(getContext(), ObjectUtils.TvColor, 0));
     } else if (Theme.equals("7")) {
-      paint2.setColor(MaterialColors.getColor(getContext(), ColorAndroid12.TvColor, 0));
+      paint2.setColor(MaterialColors.getColor(getContext(), ObjectUtils.TvColor, 0));
     } else if (Theme.equals("8")) {
-      paint2.setColor(MaterialColors.getColor(getContext(), ColorAndroid12.TvColor, 0));
+      paint2.setColor(MaterialColors.getColor(getContext(), ObjectUtils.TvColor, 0));
     } else if (Theme.equals("9")) {
-      paint2.setColor(MaterialColors.getColor(getContext(), ColorAndroid12.TvColor, 0));
+      paint2.setColor(MaterialColors.getColor(getContext(), ObjectUtils.TvColor, 0));
     } else if (Theme.equals("10")) {
-      paint2.setColor(MaterialColors.getColor(getContext(), ColorAndroid12.TvColor, 0));
+      paint2.setColor(MaterialColors.getColor(getContext(), ObjectUtils.TvColor, 0));
     } else if (Theme.equals("11")) {
-      paint2.setColor(MaterialColors.getColor(getContext(), ColorAndroid12.TvColor, 0));
+      paint2.setColor(MaterialColors.getColor(getContext(), ObjectUtils.TvColor, 0));
     } else if (Theme.equals("12")) {
-      paint2.setColor(MaterialColors.getColor(getContext(), ColorAndroid12.TvColor, 0));
+      paint2.setColor(MaterialColors.getColor(getContext(), ObjectUtils.TvColor, 0));
     } else if (Theme.equals("13")) {
-      paint2.setColor(MaterialColors.getColor(getContext(), ColorAndroid12.TvColor, 0));
+      paint2.setColor(MaterialColors.getColor(getContext(), ObjectUtils.TvColor, 0));
     } else if (Theme.equals("14")) {
-      paint2.setColor(MaterialColors.getColor(getContext(), ColorAndroid12.TvColor, 0));
+      paint2.setColor(MaterialColors.getColor(getContext(), ObjectUtils.TvColor, 0));
     }
     paint2.setTextSize(
         getPrefInt(PreferenceManager.getDefaultSharedPreferences(getContext()), "TextSize2", 20));

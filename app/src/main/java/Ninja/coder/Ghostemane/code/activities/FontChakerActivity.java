@@ -1,7 +1,7 @@
 package Ninja.coder.Ghostemane.code.activities;
 
 import Ninja.coder.Ghostemane.code.R;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import Ninja.coder.Ghostemane.code.utils.DataUtil;
 import android.app.Activity;
@@ -60,8 +60,8 @@ public class FontChakerActivity extends BaseCompat {
   private void initializeLogic() {
     Folder = "/storage/emulated/0/GhostWebIDE/font/";
     _getFiles("");
-    ColorAndroid12.setTextColor(textview1);
-    ColorAndroid12.setColorFilter(imageview1);
+    ObjectUtils.setTextColor(textview1);
+    ObjectUtils.setColorFilter(imageview1);
   }
 
   public void _getFiles(final String _path) {

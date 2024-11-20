@@ -1,7 +1,7 @@
 package io.github.rosemoe.sora.langs.python;
 
 import Ninja.coder.Ghostemane.code.IdeEditor;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.graphics.RectF;
 import android.os.Handler;
 import android.os.Looper;
@@ -110,9 +110,9 @@ public class PythonErrorManager implements CodeAnalyzer {
           2000);
       menu.setAnimation(MenuAnimation.FADE);
       menu.setMenuRadius(20f);
-      menu.setMenuColor(MaterialColors.getColor(editor.getContext(), ColorAndroid12.Back, 0));
+      menu.setMenuColor(MaterialColors.getColor(editor.getContext(), ObjectUtils.Back, 0));
       menu.setTextColor(
-          MaterialColors.getColor(editor.getContext(), ColorAndroid12.ColorAConNormal, 0));
+          MaterialColors.getColor(editor.getContext(), ObjectUtils.ColorAConNormal, 0));
       int top;
       var cursor = editor.getCursor();
       if (cursor.isSelected()) {

@@ -1,7 +1,7 @@
 package Ninja.coder.Ghostemane.code.widget.component;
 
 import Ninja.coder.Ghostemane.code.R;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -45,8 +45,8 @@ public class PrepareView extends FrameLayout implements IControlComponent {
                                 mControlWrapper.start();
                             }
                         });
-        ColorAndroid12.setColorFilter(mThumb);
-        ColorAndroid12.setColorFilter(mStartPlay);
+        ObjectUtils.setColorFilter(mThumb);
+        ObjectUtils.setColorFilter(mStartPlay);
     }
 
     public PrepareView(@NonNull Context context) {

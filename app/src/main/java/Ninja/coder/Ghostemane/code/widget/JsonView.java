@@ -1,7 +1,7 @@
 package Ninja.coder.Ghostemane.code.widget;
 
 import Ninja.coder.Ghostemane.code.R;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -181,7 +181,7 @@ public class JsonView extends LinearLayout {
         ColorStateList colorStateList =
                 new ColorStateList(
                         new int[][]{new int[]{}},
-                        new int[]{MaterialColors.getColor(getContext(), ColorAndroid12.TvColor, 0)});
+                        new int[]{MaterialColors.getColor(getContext(), ObjectUtils.TvColor, 0)});
         RippleDrawable rippleDrawable = new RippleDrawable(colorStateList, null, null);
         view.setBackground(rippleDrawable);
     }

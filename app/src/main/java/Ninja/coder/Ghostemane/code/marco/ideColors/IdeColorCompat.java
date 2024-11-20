@@ -1,7 +1,7 @@
 package Ninja.coder.Ghostemane.code.marco.ideColors;
 
 import Ninja.coder.Ghostemane.code.R;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -29,7 +29,7 @@ public class IdeColorCompat {
 
   public void setIconLang(String path, ImageView icon) {
     icon.setColorFilter(
-        MaterialColors.getColor(icon, ColorAndroid12.ColorNormal), PorterDuff.Mode.MULTIPLY);
+        MaterialColors.getColor(icon, ObjectUtils.ColorNormal), PorterDuff.Mode.MULTIPLY);
     if (path.endsWith(".css")) {
       icon.setImageResource(R.drawable.ic_material_css);
     } else if (path.endsWith(".g4")) {

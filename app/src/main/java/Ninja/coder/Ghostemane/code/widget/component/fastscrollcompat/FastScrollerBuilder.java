@@ -17,7 +17,7 @@
 package Ninja.coder.Ghostemane.code.widget.component.fastscrollcompat;
 
 import Ninja.coder.Ghostemane.code.R;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.content.Context;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -111,10 +111,10 @@ public class FastScrollerBuilder {
     Context context = mView.getContext();
     mTrackDrawable =
         Utils.getGradientDrawableWithTintAttr(
-            R.drawable.afs_track, ColorAndroid12.ColorNormal, context);
+            R.drawable.afs_track, ObjectUtils.ColorNormal, context);
     mThumbDrawable =
         Utils.getGradientDrawableWithTintAttr(
-            R.drawable.afs_thumb, ColorAndroid12.ColorAConNormal, context);
+            R.drawable.afs_thumb, ObjectUtils.ColorAConNormal, context);
     mPopupStyle = PopupStyles.DEFAULT;
     return this;
   }
@@ -124,10 +124,10 @@ public class FastScrollerBuilder {
     Context context = mView.getContext();
     mTrackDrawable =
         Utils.getGradientDrawableWithTintAttr(
-            R.drawable.afs_md2_track, ColorAndroid12.ColorNormal, context);
+            R.drawable.afs_md2_track, ObjectUtils.ColorNormal, context);
     mThumbDrawable =
         Utils.getGradientDrawableWithTintAttr(
-            R.drawable.afs_md2_thumb, ColorAndroid12.ColorAConNormal, context);
+            R.drawable.afs_md2_thumb, ObjectUtils.ColorAConNormal, context);
     mPopupStyle = PopupStyles.MD2;
     return this;
   }

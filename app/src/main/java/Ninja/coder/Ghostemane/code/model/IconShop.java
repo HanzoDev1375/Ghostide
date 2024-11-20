@@ -2,7 +2,7 @@ package Ninja.coder.Ghostemane.code.model;
 
 import Ninja.coder.Ghostemane.code.R;
 import Ninja.coder.Ghostemane.code.adapter.IconManagerAdapter;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import Ninja.coder.Ghostemane.code.utils.VectorHelper;
 import android.app.Activity;
@@ -171,8 +171,8 @@ public class IconShop {
             .addItem(new PowerMenuItem("Convert to Image"))
             .addItem(new PowerMenuItem("Copy in project"))
             .setMenuRadius(22f)
-            .setMenuColor(MaterialColors.getColor(context, ColorAndroid12.Back, 0))
-            .setTextColor(MaterialColors.getColor(context, ColorAndroid12.colorOnSurface, 0))
+            .setMenuColor(MaterialColors.getColor(context, ObjectUtils.Back, 0))
+            .setTextColor(MaterialColors.getColor(context, ObjectUtils.colorOnSurface, 0))
             .setAutoDismiss(true)
             .setShowBackground(false)
             .build();

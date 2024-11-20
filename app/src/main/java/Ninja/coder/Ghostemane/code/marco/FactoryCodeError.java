@@ -1,12 +1,16 @@
 package Ninja.coder.Ghostemane.code.marco;
 
+import Ninja.coder.Ghostemane.code.ApplicationLoader;
 import Ninja.coder.Ghostemane.code.IdeEditor;
 import Ninja.coder.Ghostemane.code.R;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.widget.ImageView;
+import androidx.annotation.MainThread;
+import com.ninjacoder.jgit.AsyncTaskCompat;
 import io.github.rosemoe.sora.langs.csharp.CSharpLanguage;
 import io.github.rosemoe.sora.langs.css3.CSS3Language;
 import io.github.rosemoe.sora.langs.antlrlang.ANTLRV4Lang;
@@ -69,8 +73,8 @@ public class FactoryCodeError {
     this.editor = editor;
     this.call = call;
   }
-  
-  void Iconnotfound(){
+
+  void Iconnotfound() {
     call.setImageResource(R.drawable.ic_material_doc);
   }
 
@@ -80,48 +84,51 @@ public class FactoryCodeError {
    * هماهنگ نباشد تحلیل کردن کد به درستی پیش نمیرود
    */
   public void run() {
-    if (editor.getEditorLanguage() instanceof CSS3Language) {
-      Iconnotfound(); 
-    } else if (editor.getEditorLanguage() instanceof ANTLRV4Lang) {
-      Iconnotfound(); 
-    } else if (editor.getEditorLanguage() instanceof CppLanguage) {
-      Iconnotfound(); 
-    } else if (editor.getEditorLanguage() instanceof DartLang) {
-      Iconnotfound(); 
-    } else if (editor.getEditorLanguage() instanceof ghostlangs) {
-      Iconnotfound(); 
-    } else if (editor.getEditorLanguage() instanceof HTMLLanguage) {
-      Iconnotfound(); 
-    } else if (editor.getEditorLanguage() instanceof GroovyLanguage) {
-      Iconnotfound(); 
-    } else if (editor.getEditorLanguage() instanceof JavaLanguage) {
-      java();
-    } else if (editor.getEditorLanguage() instanceof JavaScriptLanguage) {
-      js();
-    } else if (editor.getEditorLanguage() instanceof JsonLanguage) {
-      Iconnotfound(); 
-    } else if (editor.getEditorLanguage() instanceof KotlinLanguage) {
-      Iconnotfound(); 
-    } else if (editor.getEditorLanguage() instanceof NinjaLang) {
-      Iconnotfound(); 
-    } else if (editor.getEditorLanguage() instanceof PHPLanguage) {
-      php();
-    } else if (editor.getEditorLanguage() instanceof PythonLang) {
-      py();
-    } else if (editor.getEditorLanguage() instanceof SassLangCompat) {
-      Iconnotfound(); 
-    } else if (editor.getEditorLanguage() instanceof SMLang) {
-      Iconnotfound(); 
-    } else if (editor.getEditorLanguage() instanceof TsLang) {
-      Iconnotfound(); 
-    } else if (editor.getEditorLanguage() instanceof XMLLanguage) {
-      Iconnotfound(); 
-    } else if (editor.getEditorLanguage() instanceof CSharpLanguage) {
-      cs(); 
-    } else if (editor.getEditorLanguage() instanceof MySqlLang) {
-      Iconnotfound(); 
-    } else if (editor.getEditorLanguage() instanceof EditorLanguage) {
-      Iconnotfound();
+    if (ApplicationLoader.getAnalyzercod().getBoolean("Analyzercod", false) == true) {
+
+      if (editor.getEditorLanguage() instanceof CSS3Language) {
+        Iconnotfound();
+      } else if (editor.getEditorLanguage() instanceof ANTLRV4Lang) {
+        Iconnotfound();
+      } else if (editor.getEditorLanguage() instanceof CppLanguage) {
+        Iconnotfound();
+      } else if (editor.getEditorLanguage() instanceof DartLang) {
+        Iconnotfound();
+      } else if (editor.getEditorLanguage() instanceof ghostlangs) {
+        Iconnotfound();
+      } else if (editor.getEditorLanguage() instanceof HTMLLanguage) {
+        Iconnotfound();
+      } else if (editor.getEditorLanguage() instanceof GroovyLanguage) {
+        Iconnotfound();
+      } else if (editor.getEditorLanguage() instanceof JavaLanguage) {
+        java();
+      } else if (editor.getEditorLanguage() instanceof JavaScriptLanguage) {
+        js();
+      } else if (editor.getEditorLanguage() instanceof JsonLanguage) {
+        Iconnotfound();
+      } else if (editor.getEditorLanguage() instanceof KotlinLanguage) {
+        Iconnotfound();
+      } else if (editor.getEditorLanguage() instanceof NinjaLang) {
+        Iconnotfound();
+      } else if (editor.getEditorLanguage() instanceof PHPLanguage) {
+        php();
+      } else if (editor.getEditorLanguage() instanceof PythonLang) {
+        py();
+      } else if (editor.getEditorLanguage() instanceof SassLangCompat) {
+        Iconnotfound();
+      } else if (editor.getEditorLanguage() instanceof SMLang) {
+        Iconnotfound();
+      } else if (editor.getEditorLanguage() instanceof TsLang) {
+        Iconnotfound();
+      } else if (editor.getEditorLanguage() instanceof XMLLanguage) {
+        Iconnotfound();
+      } else if (editor.getEditorLanguage() instanceof CSharpLanguage) {
+        cs();
+      } else if (editor.getEditorLanguage() instanceof MySqlLang) {
+        Iconnotfound();
+      } else if (editor.getEditorLanguage() instanceof EditorLanguage) {
+        Iconnotfound();
+      }
     }
   }
 
@@ -172,40 +179,7 @@ public class FactoryCodeError {
 
   void java() {
     if (editor != null) {
-      new Thread(
-              () -> {
-                try {
-                  var input = new ANTLRInputStream(new StringReader(editor.getText().toString()));
-                  var lexer = new Java20Lexer(input);
-                  var stream = new CommonTokenStream(lexer);
-                  var paser = new Java20Parser(stream);
-                  var callBackLabe =
-                      new Java20ParserBaseListener() {
-                        @Override
-                        public void visitErrorNode(ErrorNode node) {
-                          errorCall = true;
-                        }
-                      };
-
-                  var walk = new ParseTreeWalker();
-                  walk.walk(callBackLabe, paser.start_());
-                  new Handler(Looper.getMainLooper())
-                      .post(
-                          () -> {
-                            
-                            if (errorCall) {
-                              call.setImageResource(R.drawable.closehsi);
-                              call.setColorFilter(Color.RED);
-                            } else {
-                              call.setImageResource(R.drawable.ic_palette_check_box);
-                              call.setColorFilter(Color.GREEN);
-                            }
-                          });
-                } catch (Exception err) {
-
-                }
-              })
-          .start();
+      new JavaTask().execute(editor.getText().toString());
     }
   }
 
@@ -236,7 +210,6 @@ public class FactoryCodeError {
                   new Handler(Looper.getMainLooper())
                       .post(
                           () -> {
-                            
                             if (errorCall) {
                               call.setImageResource(R.drawable.closehsi);
                               call.setColorFilter(Color.RED);
@@ -282,7 +255,6 @@ public class FactoryCodeError {
                   new Handler(Looper.getMainLooper())
                       .post(
                           () -> {
-                            
                             if (errorCall) {
                               call.setImageResource(R.drawable.closehsi);
                               call.setColorFilter(Color.RED);
@@ -321,7 +293,6 @@ public class FactoryCodeError {
                   new Handler(Looper.getMainLooper())
                       .post(
                           () -> {
-                            
                             if (errorCall) {
                               call.setImageResource(R.drawable.closehsi);
                               call.setColorFilter(Color.RED);
@@ -335,6 +306,53 @@ public class FactoryCodeError {
                 }
               })
           .start();
+    }
+  }
+
+  private class JavaTask extends AsyncTaskCompat<String, Void, Boolean> {
+
+    private boolean errorCall = false;
+
+    @MainThread
+    @Override
+    protected void onPreExecute() {
+      call.setImageDrawable(ObjectUtils.getCircularProgress());
+    }
+
+    @Override
+    protected Boolean doInBackground(String... params) {
+
+      try {
+        var input = new ANTLRInputStream(new StringReader(params[0]));
+        var lexer = new Java20Lexer(input);
+        var stream = new CommonTokenStream(lexer);
+        var parser = new Java20Parser(stream);
+
+        var callbackLabel =
+            new Java20ParserBaseListener() {
+              @Override
+              public void visitErrorNode(ErrorNode node) {
+                errorCall = true;
+              }
+            };
+
+        var walk = new ParseTreeWalker();
+        walk.walk(callbackLabel, parser.start_());
+      } catch (Exception err) {
+        // Handle exception if necessary
+      }
+      return errorCall;
+    }
+
+    @Override
+    protected void onPostExecute(Boolean errorCall) {
+      if (errorCall) {
+        call.setImageResource(R.drawable.closehsi);
+        call.setColorFilter(Color.RED);
+      } else {
+        call.setImageResource(R.drawable.ic_palette_check_box);
+        call.setColorFilter(Color.GREEN);
+      }
     }
   }
 }

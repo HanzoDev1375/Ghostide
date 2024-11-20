@@ -4,7 +4,7 @@ import Ninja.coder.Ghostemane.code.IdeEditor;
 import Ninja.coder.Ghostemane.code.R;
 import Ninja.coder.Ghostemane.code.glidecompat.GlideCompat;
 import Ninja.coder.Ghostemane.code.marco.RegexUtilCompat;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import android.util.Log;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
@@ -48,20 +48,20 @@ public class AmazonClassHelper {
             () -> {
               String code = FileUtil.readFile(file);
               if (RegexUtilCompat.RegexSelect("(grammar\\s\\w+)", code)) {
-                ColorAndroid12.runOnUiThread(
+                ObjectUtils.runOnUiThread(
                     () -> {
                       GlideCompat.GlideNormal(imageView, R.drawable.antlr4_grammer_normal);
                     });
               }
 
               if (RegexUtilCompat.RegexSelect("(lexer\\sgrammar\\s\\w+)\\;", code)) {
-                ColorAndroid12.runOnUiThread(
+                ObjectUtils.runOnUiThread(
                     () -> {
                       GlideCompat.GlideNormal(imageView, R.drawable.antlr4_lexer);
                     });
               }
               if (RegexUtilCompat.RegexSelect("(parser\\sgrammar\\s\\w+)\\;", code)) {
-                ColorAndroid12.runOnUiThread(
+                ObjectUtils.runOnUiThread(
                     () -> {
                       GlideCompat.GlideNormal(imageView, R.drawable.antlr_parser);
                     });

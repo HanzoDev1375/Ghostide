@@ -5,7 +5,7 @@ import Ninja.coder.Ghostemane.code.utils.VectorHelper;
 import Ninja.coder.Ghostemane.code.compressor.SvgToPng;
 import Ninja.coder.Ghostemane.code.glidecompat.GlideCompat;
 import Ninja.coder.Ghostemane.code.tasks.AsyncTaskCompat;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import Ninja.coder.Ghostemane.code.utils.DataUtil;
 import Ninja.coder.Ghostemane.code.utils.SvgShow;
@@ -115,7 +115,7 @@ public class IconModActivity extends BaseCompat {
     input_iconmode
         .getEditText()
         .setHintTextColor(
-            MaterialColors.getColor(input_iconmode.getEditText(), ColorAndroid12.TvColor));
+            MaterialColors.getColor(input_iconmode.getEditText(), ObjectUtils.TvColor));
     input_iconmode.setHint("Search icon");
 
     runOnUiThread(
@@ -232,9 +232,9 @@ public class IconModActivity extends BaseCompat {
 
     progressbar1.setVisibility(View.GONE);
 
-    ColorAndroid12.setFabColor(_fab);
+    ObjectUtils.setFabColor(_fab);
     itemList();
-    ColorAndroid12.PrograssBarColor(progressbar1);
+    ObjectUtils.PrograssBarColor(progressbar1);
   }
 
   public void itemList() {
@@ -352,8 +352,8 @@ public class IconModActivity extends BaseCompat {
       GlideCompat.LoadSvg(_data.get(_position).get("path").toString(), imageview1);
       textview2.setTypeface(
           Typeface.createFromAsset(getAssets(), "fonts/ghostfont.ttf"), Typeface.NORMAL);
-      ColorAndroid12.setTextColor(textview2);
-      ColorAndroid12.setTextColor(textview1);
+      ObjectUtils.setTextColor(textview2);
+      ObjectUtils.setTextColor(textview1);
       textview2.setEllipsize(TextUtils.TruncateAt.MARQUEE);
       textview2.setMarqueeRepeatLimit(-1);
       textview2.setSingleLine(true);
@@ -374,7 +374,7 @@ public class IconModActivity extends BaseCompat {
 
               spannableString.setSpan(
                   new ForegroundColorSpan(
-                      MaterialColors.getColor(IconModActivity.this, ColorAndroid12.ButtonBack, 0)),
+                      MaterialColors.getColor(IconModActivity.this, ObjectUtils.ButtonBack, 0)),
                   matcher.start(),
                   matcher.end(),
                   Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -384,9 +384,9 @@ public class IconModActivity extends BaseCompat {
                   new BackgroundColorSpan(
                       i2 % 2 == 0
                           ? MaterialColors.getColor(
-                              IconModActivity.this, ColorAndroid12.TvColorFab, 0)
+                              IconModActivity.this, ObjectUtils.TvColorFab, 0)
                           : MaterialColors.getColor(
-                              IconModActivity.this, ColorAndroid12.ColorNormal, 0)),
+                              IconModActivity.this, ObjectUtils.ColorNormal, 0)),
                   matcher.start(),
                   matcher.end(),
                   33);
@@ -427,10 +427,10 @@ public class IconModActivity extends BaseCompat {
                             ent.setMenuRadius((float) 20);
                             ent.setMenuColor(
                                 MaterialColors.getColor(
-                                    IconModActivity.this, ColorAndroid12.Back, 0));
+                                    IconModActivity.this, ObjectUtils.Back, 0));
                             ent.setTextColor(
                                 MaterialColors.getColor(
-                                    IconModActivity.this, ColorAndroid12.TvColor, 0));
+                                    IconModActivity.this, ObjectUtils.TvColor, 0));
                             ent.showAsDropDown(positive);
                             ent.setShowBackground(false);
                             ent.setOnMenuItemClickListener(
@@ -535,7 +535,7 @@ public class IconModActivity extends BaseCompat {
       cardview1.setRadius((float) 10);
       cardview1.setCardElevation((float) 0);
       cardview1.setUseCompatPadding(true);
-      ColorAndroid12.setColorFilter(imageview1);
+      ObjectUtils.setColorFilter(imageview1);
     }
 
     @Override

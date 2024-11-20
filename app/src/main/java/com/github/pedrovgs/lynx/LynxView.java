@@ -16,7 +16,7 @@
 
 package com.github.pedrovgs.lynx;
 
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import Ninja.coder.Ghostemane.code.layoutmanager.NestedScrollListView;
 import android.content.Context;
 import android.content.Intent;
@@ -193,7 +193,7 @@ public class LynxView extends LinearLayout implements LynxPresenter.View {
           menu.addItem(new PowerMenuItem("Share Log"));
           menu.setAnimation(MenuAnimation.DROP_DOWN);
           menu.setTextColor(
-              MaterialColors.getColor(getContext(), ColorAndroid12.colorOnSurface, 0));
+              MaterialColors.getColor(getContext(), ObjectUtils.colorOnSurface, 0));
           menu.setOnMenuItemClickListener(
               (vm, dm) -> {
                 switch (vm) {
@@ -210,7 +210,7 @@ public class LynxView extends LinearLayout implements LynxPresenter.View {
                     }
                 }
               });
-          menu.setMenuColor(MaterialColors.getColor(getContext(), ColorAndroid12.Back, 0));
+          menu.setMenuColor(MaterialColors.getColor(getContext(), ObjectUtils.Back, 0));
           menu.setAutoDismiss(true);
           menu.showAsAnchorCenter(lv_traces);
           
@@ -349,7 +349,7 @@ public class LynxView extends LinearLayout implements LynxPresenter.View {
         getContext().getDrawable(com.google.android.material.R.drawable.ic_search_black_24));
     input.setStartIconVisible(true);
     input.setStartIconTintList(
-        ColorStateList.valueOf(MaterialColors.getColor(input, ColorAndroid12.TvColor)));
+        ColorStateList.valueOf(MaterialColors.getColor(input, ObjectUtils.TvColor)));
     input.setStartIconScaleType(ImageView.ScaleType.CENTER_INSIDE);
     input.setStartIconMinSize(30);
     showSearcher(true);

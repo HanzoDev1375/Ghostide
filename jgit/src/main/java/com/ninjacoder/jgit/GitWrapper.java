@@ -200,6 +200,7 @@ public class GitWrapper {
     Iterable<RevCommit> log = null;
     List<RevCommit> revCommits = new ArrayList<>();
     try {
+      if(repo == null) return null;
       Git git = getGit(repo);
       if (git != null) {
         log = git.log().call();

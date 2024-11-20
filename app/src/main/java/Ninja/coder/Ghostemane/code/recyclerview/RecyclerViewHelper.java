@@ -1,7 +1,7 @@
 package Ninja.coder.Ghostemane.code.recyclerview;
 
 import Ninja.coder.Ghostemane.code.R;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.view.View;
@@ -57,12 +57,12 @@ public class RecyclerViewHelper {
                     c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
                 .addSwipeLeftBackgroundColor(Color.BLUE)
                 .addSwipeLeftActionIcon(R.drawable.dkplayer_battery_level)
-                .addSwipeRightBackgroundColor(ColorAndroid12.getColors(ColorAndroid12.ButtonBack))
+                .addSwipeRightBackgroundColor(ObjectUtils.getColors(ObjectUtils.ButtonBack))
                 .addSwipeRightActionIcon(R.drawable.delete)
                 .addSwipeRightLabel("Delete")
                 .setSwipeRightLabelColor(Color.WHITE)
                 .addSwipeLeftLabel("Add to Project")
-                .setSwipeLeftLabelColor(ColorAndroid12.getColors(ColorAndroid12.TvColorFab))
+                .setSwipeLeftLabelColor(ObjectUtils.getColors(ObjectUtils.TvColorFab))
                 // .addCornerRadius(TypedValue.COMPLEX_UNIT_DIP, 16)
                 // .addPadding(TypedValue.COMPLEX_UNIT_DIP, 8, 16, 8)
                 .create()

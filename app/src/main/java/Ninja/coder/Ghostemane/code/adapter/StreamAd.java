@@ -2,7 +2,7 @@ package Ninja.coder.Ghostemane.code.adapter;
 
 import Ninja.coder.Ghostemane.code.R;
 import Ninja.coder.Ghostemane.code.model.ListitemModel;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,8 +39,8 @@ public class StreamAd extends RecyclerView.Adapter<StreamAd.VH> {
         ListitemModel model = modelz.get(pos);
         holder.tvid.setText(model.getId());
         holder.icon.setImageResource(model.getIcon());
-        ColorAndroid12.setColorFilter(holder.icon);
-        holder.tvid.setTextColor(MaterialColors.getColor(holder.tvid, ColorAndroid12.colorOnSurface, 0));
+        ObjectUtils.setColorFilter(holder.icon);
+        holder.tvid.setTextColor(MaterialColors.getColor(holder.tvid, ObjectUtils.colorOnSurface, 0));
 
     }
 

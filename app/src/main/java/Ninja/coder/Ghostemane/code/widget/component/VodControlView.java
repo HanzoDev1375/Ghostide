@@ -1,7 +1,7 @@
 package Ninja.coder.Ghostemane.code.widget.component;
 
 import Ninja.coder.Ghostemane.code.R;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -59,13 +59,13 @@ public class VodControlView extends FrameLayout
     speed.setOnClickListener(this);
     proportion = findViewById(R.id.proportion);
     proportion.setOnClickListener(this);
-    ColorAndroid12.setColorFilter(speed);
-    ColorAndroid12.setColorFilter(mFullScreen);
-    ColorAndroid12.setTextColor(mTotalTime);
-    ColorAndroid12.setTextColor(mCurrTime);
+    ObjectUtils.setColorFilter(speed);
+    ObjectUtils.setColorFilter(mFullScreen);
+    ObjectUtils.setTextColor(mTotalTime);
+    ObjectUtils.setTextColor(mCurrTime);
 
-    ColorAndroid12.setColorFilter(proportion);
-    ColorAndroid12.setColorFilter(mPlayButton);
+    ObjectUtils.setColorFilter(proportion);
+    ObjectUtils.setColorFilter(mPlayButton);
 
     // 5.1以下系统SeekBar高度需要设置成WRAP_CONTENT
     if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {

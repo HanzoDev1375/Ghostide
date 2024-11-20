@@ -2,7 +2,7 @@ package Ninja.coder.Ghostemane.code.activities;
 
 import Ninja.coder.Ghostemane.code.R;
 import Ninja.coder.Ghostemane.code.glidecompat.GlideCompat;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import android.app.WallpaperManager;
 import android.content.res.ColorStateList;
@@ -46,8 +46,8 @@ public class SetHomeWallpActivity extends BaseCompat {
     shap.setAllCorners(CornerFamily.ROUNDED, 30f);
     fab.setShapeAppearanceModel(shap.build());
     toolbar.setBackgroundTintList(
-        ColorStateList.valueOf(MaterialColors.getColor(toolbar, ColorAndroid12.Back)));
-    toolbar.setTitleTextColor(MaterialColors.getColor(toolbar, ColorAndroid12.TvColor));
+        ColorStateList.valueOf(MaterialColors.getColor(toolbar, ObjectUtils.Back)));
+    toolbar.setTitleTextColor(MaterialColors.getColor(toolbar, ObjectUtils.TvColor));
     fab.setOnClickListener(v -> setWallpaperImageView(imageView));
     ClickEffcat(fab);
   }

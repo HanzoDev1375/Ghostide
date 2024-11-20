@@ -23,11 +23,7 @@
  */
 package io.github.rosemoe.sora.langs.html;
 
-import Ninja.coder.Ghostemane.code.ApplicationLoader;
 import Ninja.coder.Ghostemane.code.IdeEditor;
-import Ninja.coder.Ghostemane.code.activities.FileManagerActivity;
-import android.app.Activity;
-import android.content.SharedPreferences;
 import com.steadystate.css.dom.CSSStyleSheetImpl;
 import com.steadystate.css.format.CSSFormat;
 import com.steadystate.css.parser.CSSOMParser;
@@ -41,7 +37,6 @@ import io.github.rosemoe.sora.langs.internal.MyCharacter;
 import io.github.rosemoe.sora.text.TextUtils;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.SymbolPairMatch;
-import io.github.rosemoe.sora.widget.commentRule.AppConfig;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.Token;
 import org.jsoup.Jsoup;
@@ -50,7 +45,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.StringReader;
 import java.util.Arrays;
 import org.w3c.css.sac.InputSource;
@@ -707,7 +701,7 @@ public class HTMLLanguage implements EditorLanguage {
   };
 
   public static String ShowFile() {
-    File file = new File(FileManagerActivity.POSNINJACODERMAIN);
+    File file = new File("");
     return file.getParent();
   }
 

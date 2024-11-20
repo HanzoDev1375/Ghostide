@@ -17,7 +17,7 @@
 package Ninja.coder.Ghostemane.code.widget.component.fastscrollcompat;
 
 import Ninja.coder.Ghostemane.code.R;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.*;
@@ -44,7 +44,7 @@ public class Md2PopupBackground extends Drawable {
     public Md2PopupBackground(@NonNull Context context) {
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
-        mPaint.setColor(Utils.getColorFromAttrRes(ColorAndroid12.ColorAConNormal, context));
+        mPaint.setColor(Utils.getColorFromAttrRes(ObjectUtils.ColorAConNormal, context));
         mPaint.setStyle(Paint.Style.FILL);
         Resources resources = context.getResources();
         mPaddingStart = resources.getDimensionPixelOffset(R.dimen.afs_md2_popup_padding_start);

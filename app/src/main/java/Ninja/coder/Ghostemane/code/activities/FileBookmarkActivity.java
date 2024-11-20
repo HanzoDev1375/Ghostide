@@ -7,7 +7,7 @@ import Ninja.coder.Ghostemane.code.folder.FileIconHelper;
 import Ninja.coder.Ghostemane.code.glidecompat.GlideCompat;
 import Ninja.coder.Ghostemane.code.marco.binder.BinderRecyclerview1;
 import Ninja.coder.Ghostemane.code.utils.AnimUtils;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import android.app.Activity;
 import android.content.Intent;
@@ -117,8 +117,8 @@ public class FileBookmarkActivity extends BaseCompat {
   }
 
   private void initializeLogic() {
-    ColorAndroid12.setToolbarinit(bin.Toolbar);
-    //  ColorAndroid12.setTextColor(textview1);
+    ObjectUtils.setToolbarinit(bin.Toolbar);
+    //  ObjectUtils.setTextColor(textview1);
   }
 
   public void _RefreshData() {
@@ -160,9 +160,9 @@ public class FileBookmarkActivity extends BaseCompat {
     public View getView(final int _position, View _v, ViewGroup _container) {
 
       LayoutFilebookmarkBinding bin = LayoutFilebookmarkBinding.inflate(getLayoutInflater());
-      ColorAndroid12.shap(bin.imageview1);
+      ObjectUtils.shap(bin.imageview1);
       AnimUtils.Sacla(bin.getRoot());
-      ColorAndroid12.setTextColor(bin.textview1);
+      ObjectUtils.setTextColor(bin.textview1);
       File file = new File(map.get((int) _position).get("list").toString());
       FileIconHelper helper = new FileIconHelper(file.toString());
       helper.setDynamicFolderEnabled(true);

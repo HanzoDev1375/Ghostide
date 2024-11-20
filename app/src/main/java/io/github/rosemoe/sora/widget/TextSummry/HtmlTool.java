@@ -1,6 +1,6 @@
 package io.github.rosemoe.sora.widget.TextSummry;
 
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import Ninja.coder.Ghostemane.code.IdeEditor;
 import Ninja.coder.Ghostemane.code.marco.ColorView;
 import Ninja.coder.Ghostemane.code.marco.HtmlTagView;
@@ -41,8 +41,8 @@ public class HtmlTool implements Serializable {
     menu.setAutoDismiss(true);
     menu.setTextSize(14);
 
-    menu.setMenuColor(MaterialColors.getColor(context, ColorAndroid12.Back, 0));
-    menu.setTextColor(MaterialColors.getColor(context, ColorAndroid12.TvColor, 0));
+    menu.setMenuColor(MaterialColors.getColor(context, ObjectUtils.Back, 0));
+    menu.setTextColor(MaterialColors.getColor(context, ObjectUtils.TvColor, 0));
     menu.showAsAnchorRightBottom(view);
     menu.setAnimation(MenuAnimation.ELASTIC_CENTER);
     menu.setHeaderView(item.getCustomHader("Html Helper", context));

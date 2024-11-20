@@ -1,6 +1,6 @@
 package io.github.rosemoe.sora.widget.TextSummry;
 
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import com.google.android.material.color.MaterialColors;
 import com.skydoves.powermenu.MenuAnimation;
 import android.content.Context;
@@ -33,8 +33,8 @@ public class OtherLangs {
     menu.setShowBackground(false);
     menu.setAutoDismiss(true);
     menu.setTextSize(14);
-    menu.setMenuColor(MaterialColors.getColor(context, ColorAndroid12.Back, 0));
-    menu.setTextColor(MaterialColors.getColor(context, ColorAndroid12.TvColor, 0));
+    menu.setMenuColor(MaterialColors.getColor(context, ObjectUtils.Back, 0));
+    menu.setTextColor(MaterialColors.getColor(context, ObjectUtils.TvColor, 0));
     menu.showAsAnchorRightBottom(view);
     menu.setAnimation(MenuAnimation.ELASTIC_CENTER);
     menu.setHeaderView(item.getCustomHader("Other Helper", context));

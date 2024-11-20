@@ -3,7 +3,7 @@ package Ninja.coder.Ghostemane.code.activities;
 import Ninja.coder.Ghostemane.code.PHPProcess;
 import Ninja.coder.Ghostemane.code.PHPServerHelper;
 import Ninja.coder.Ghostemane.code.R;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -107,7 +107,7 @@ public class PhpActivity extends BaseCompat {
       web.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
       web.getSettings().setJavaScriptEnabled(true);
       web.getSettings().setUseWideViewPort(true);
-      ColorAndroid12.setToolbarinit(_toolbar);
+      ObjectUtils.setToolbarinit(_toolbar);
     } catch (Exception err) {
       err.printStackTrace();
     }

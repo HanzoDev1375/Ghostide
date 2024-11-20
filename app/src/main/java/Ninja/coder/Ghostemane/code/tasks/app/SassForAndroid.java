@@ -1,6 +1,6 @@
 package Ninja.coder.Ghostemane.code.tasks.app;
 
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import Ninja.coder.Ghostemane.code.utils.ThemeUtils;
 import android.app.Activity;
@@ -101,7 +101,7 @@ public class SassForAndroid {
       }
       var theme = new ThemeUtils();
       theme.setThemeCodeEditor(tv, imap, true, (Activity) context);
-      ColorAndroid12.runOnUiThread(
+      ObjectUtils.runOnUiThread(
           () -> {
             if (input.contains(".sass")) {
               FileUtil.writeFile(output.replace(".sass", ".css"), cssContent);

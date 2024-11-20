@@ -1,7 +1,7 @@
 package Ninja.coder.Ghostemane.code.marco;
 
 import Ninja.coder.Ghostemane.code.tasks.app.ProgressDialogCompat;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.widget.TextView;
@@ -28,7 +28,7 @@ public class AS {
     signer.setV3SigningEnabled(true);
     signer.setV4SigningEnabled(false);
     signer.signDebug();
-        ColorAndroid12.runOnUiThread(() ->{
+        ObjectUtils.runOnUiThread(() ->{
           compat.dismiss();
             back.end();
         });

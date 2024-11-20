@@ -11,7 +11,7 @@ import Ninja.coder.Ghostemane.code.marco.FileCounter;
 import Ninja.coder.Ghostemane.code.marco.binder.BinderRecyclerview1;
 import Ninja.coder.Ghostemane.code.marco.editorface.ClassNodePaserImpl;
 import Ninja.coder.Ghostemane.code.utils.AnimUtils;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import Ninja.coder.Ghostemane.code.utils.MFileClass;
 import Ninja.coder.Ghostemane.code.widget.component.fastscrollcompat.PopupTextProvider;
@@ -97,7 +97,7 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
       mfileC.execute(myfile.toString());
       if (viewType == ViewType.ROW) {
         viewHolder.icon.setPadding(8, 8, 8, 8);
-        ColorAndroid12.shp(viewHolder.icon);
+        ObjectUtils.shp(viewHolder.icon);
       }
 
       viewHolder.tvTools.setText("");

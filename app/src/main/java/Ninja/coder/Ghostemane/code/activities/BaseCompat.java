@@ -1,22 +1,19 @@
 package Ninja.coder.Ghostemane.code.activities;
 
 import Ninja.coder.Ghostemane.code.marco.WallpaperParallaxEffect;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import Ninja.coder.Ghostemane.code.utils.ReSizeApp;
 import Ninja.coder.Ghostemane.code.utils.ThemeUtils;
 import Ninja.coder.Ghostemane.code.widget.BlurImage;
 import android.animation.ObjectAnimator;
 import android.app.ActivityOptions;
-import android.app.WallpaperManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -36,7 +33,6 @@ import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -70,12 +66,12 @@ public class BaseCompat extends AppCompatActivity {
     initParseWallpapaer();
     if (Build.VERSION.SDK_INT >= 28)
       getWindow()
-          .setNavigationBarDividerColor(MaterialColors.getColor(this, ColorAndroid12.TvColor, 0));
+          .setNavigationBarDividerColor(MaterialColors.getColor(this, ObjectUtils.TvColor, 0));
     /// using system Wallpapar
     if (Build.VERSION.SDK_INT >= 21)
-      getWindow().setNavigationBarColor(MaterialColors.getColor(this, ColorAndroid12.Back, 0));
+      getWindow().setNavigationBarColor(MaterialColors.getColor(this, ObjectUtils.Back, 0));
     if (Build.VERSION.SDK_INT >= 21)
-      getWindow().setStatusBarColor(MaterialColors.getColor(this, ColorAndroid12.Back, 0));
+      getWindow().setStatusBarColor(MaterialColors.getColor(this, ObjectUtils.Back, 0));
 
     setBackGroundIsMobile();
   }
@@ -277,29 +273,8 @@ public class BaseCompat extends AppCompatActivity {
   }
 
   public BaseCompat colorPrograssBar(ProgressBar bar) {
-    int[] apl = {
-      Color.parseColor("#FFFFB584"),
-      Color.parseColor("#FFFF8884"),
-      Color.parseColor("#FFDAFF84"),
-      Color.parseColor("#FF84FFB1"),
-      Color.parseColor("#FF84FFD8"),
-      Color.parseColor("#FF84FDFF"),
-      Color.parseColor("#FF84D4FF"),
-      Color.parseColor("#FF8A84FF"),
-      Color.parseColor("#FFB584FF"),
-      Color.parseColor("#FFF984FF"),
-      Color.parseColor("#FFFF84D6"),
-      Color.parseColor("#FFFF84B3")
-    };
-    CircularProgressDrawable app = new CircularProgressDrawable(this);
-    app.setStrokeWidth(6f);
-    app.setCenterRadius(10f);
-    app.setArrowEnabled(true);
-    app.setStrokeCap(Paint.Cap.ROUND);
-    app.setArrowScale(10f);
-    app.setColorSchemeColors(apl);
-    app.start();
-    bar.setIndeterminateDrawable((Drawable) app);
+    
+    bar.setIndeterminateDrawable(ObjectUtils.getCircularProgress());
     return this;
   }
 
@@ -385,11 +360,11 @@ public class BaseCompat extends AppCompatActivity {
     try {
       getWindow()
           .getDecorView()
-          .setBackgroundColor(MaterialColors.getColor(this, ColorAndroid12.Back, 0));
+          .setBackgroundColor(MaterialColors.getColor(this, ObjectUtils.Back, 0));
       if (Build.VERSION.SDK_INT >= 21)
-        getWindow().setNavigationBarColor(MaterialColors.getColor(this, ColorAndroid12.Back, 0));
+        getWindow().setNavigationBarColor(MaterialColors.getColor(this, ObjectUtils.Back, 0));
       if (Build.VERSION.SDK_INT >= 21)
-        getWindow().setStatusBarColor(MaterialColors.getColor(this, ColorAndroid12.Back, 0));
+        getWindow().setStatusBarColor(MaterialColors.getColor(this, ObjectUtils.Back, 0));
     } catch (Exception err) {
 
     }
@@ -434,7 +409,7 @@ public class BaseCompat extends AppCompatActivity {
   }
 
   public int colors() {
-    return MaterialColors.getColor(getWindow().getDecorView(), ColorAndroid12.Back, 0);
+    return MaterialColors.getColor(getWindow().getDecorView(), ObjectUtils.Back, 0);
   }
 
   public void ThemeChaker() {

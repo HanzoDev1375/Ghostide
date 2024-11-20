@@ -8,7 +8,7 @@ import Ninja.coder.Ghostemane.code.config.ChlidJavaList;
 
 import Ninja.coder.Ghostemane.code.model.CodeNavigationInfo;
 import Ninja.coder.Ghostemane.code.navigator.SmaliParser;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -68,12 +68,12 @@ public class ColorView {
             .setIsMaterial(true)
             .build();
     menu.setAutoDismiss(true);
-    menu.setTextColor(MaterialColors.getColor(context, ColorAndroid12.colorOnSurface, 0));
+    menu.setTextColor(MaterialColors.getColor(context, ObjectUtils.colorOnSurface, 0));
     menu.setTextSize(15);
     menu.setAnimation(MenuAnimation.ELASTIC_CENTER);
     menu.setMenuRadius(20);
     menu.setShowBackground(false);
-    menu.setMenuColor(MaterialColors.getColor(context, ColorAndroid12.Back, 0));
+    menu.setMenuColor(MaterialColors.getColor(context, ObjectUtils.Back, 0));
     menu.showAsDropDown(mainview);
     menu.setOnMenuItemClickListener(
         (itemPos, cc) -> {
@@ -303,7 +303,7 @@ public class ColorView {
         new MaterialShapeDrawable(
             ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 18).build());
     shapeDrawable.setFillColor(
-        ColorStateList.valueOf(MaterialColors.getColor(v, ColorAndroid12.Back, 0)));
+        ColorStateList.valueOf(MaterialColors.getColor(v, ObjectUtils.Back, 0)));
     return shapeDrawable;
   }
 
@@ -350,8 +350,8 @@ public class ColorView {
       normaltext.setText(_data.get(_position).get("linker").toString());
       titleview.setText(normaltext.getText().toString().substring(0, 1));
       getTag.setBackground(getShape(getTag));
-      titleview.setTextColor(MaterialColors.getColor(titleview, ColorAndroid12.TvColor));
-      normaltext.setTextColor(MaterialColors.getColor(normaltext, ColorAndroid12.TvColor));
+      titleview.setTextColor(MaterialColors.getColor(titleview, ObjectUtils.TvColor));
+      normaltext.setTextColor(MaterialColors.getColor(normaltext, ObjectUtils.TvColor));
 
       return _view;
     }

@@ -1,7 +1,7 @@
 package Ninja.coder.Ghostemane.code.widget.component;
 
 import Ninja.coder.Ghostemane.code.R;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -57,9 +57,9 @@ public class TitleView extends FrameLayout implements IControlComponent {
     // 电量
     ImageView batteryLevel = findViewById(R.id.iv_battery);
     mBatteryReceiver = new BatteryReceiver(batteryLevel);
-    ColorAndroid12.setColorFilter(batteryLevel);
-    ColorAndroid12.setTextColor(mTitle);
-    ColorAndroid12.setTextColor(mSysTime);
+    ObjectUtils.setColorFilter(batteryLevel);
+    ObjectUtils.setTextColor(mTitle);
+    ObjectUtils.setTextColor(mSysTime);
   }
 
   public TitleView(@NonNull Context context) {

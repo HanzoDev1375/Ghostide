@@ -6,7 +6,7 @@ import Ninja.coder.Ghostemane.code.PluginManager.ModelPackage.WorkPackageManager
 import Ninja.coder.Ghostemane.code.R;
 import Ninja.coder.Ghostemane.code.marco.HsiZip;
 import Ninja.coder.Ghostemane.code.utils.AssetsSoft;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import android.app.ProgressDialog;
 import android.content.res.AssetManager;
@@ -398,15 +398,15 @@ public class PluginManagerActivity extends BaseCompat {
             }
           }.getIns((int) 99, 0xFF4CAF50));
     }
-    ColorAndroid12.setToolbarinit(_toolbar);
+    ObjectUtils.setToolbarinit(_toolbar);
     _clickAnimation(linear2);
     _clickAnimation(linear4);
     _clickAnimation(linear5);
     linear2.setElevation((float) 3);
     linear4.setElevation((float) 3);
-    ColorAndroid12.setTextColor(textview1);
-    ColorAndroid12.setTextColor(textview2);
-    ColorAndroid12.setTextColor(textview3);
+    ObjectUtils.setTextColor(textview1);
+    ObjectUtils.setTextColor(textview2);
+    ObjectUtils.setTextColor(textview3);
   }
 
   public void _clickAnimation(final View _view) {

@@ -6,9 +6,15 @@ import Ninja.coder.Ghostemane.code.utils.ThemeUtils;
 import android.graphics.Color;
 import androidx.core.graphics.ColorUtils;
 import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.ObjectCreationExpr;
+import com.github.javaparser.ast.expr.TypeExpr;
+import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.google.gson.Gson;
@@ -16,16 +22,13 @@ import com.google.gson.reflect.TypeToken;
 import io.github.rosemoe.sora.langs.xml.analyzer.Utils;
 import io.github.rosemoe.sora.util.TrieTree;
 import java.util.ArrayList;
-import io.github.rosemoe.sora.text.CharPosition;
 import android.util.Log;
 import io.github.rosemoe.sora.data.Span;
-import io.github.rosemoe.sora.text.Indexer;
 import io.github.rosemoe.sora.text.TextStyle;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Stack;
@@ -39,7 +42,6 @@ import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.text.TextAnalyzer;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
-import org.openjdk.javax.tools.Diagnostic;
 
 public class JavaCodeAnalyzer implements CodeAnalyzer {
 
@@ -375,6 +377,12 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               }
               if (text1.matches("([A-Za-z]*)(Exception)([a-zA-Z]*)(\\s\\w+)")) {
                 colorid = EditorColorScheme.javatype;
+                Span span = Span.obtain(column, TextStyle.makeStyle(EditorColorScheme.javatype));
+                span.setBackgroundColorMy(Color.parseColor("#F40000"));
+                // #1BF40000
+                span.setDrawminiText("Exception Handler");
+
+                result.add(line, span);
               }
               if (previous == JavaLexer.LPAREN
                   || prePreToken != null && prePreToken.getType() == JavaLexer.LPAREN
@@ -390,9 +398,10 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 colorid = EditorColorScheme.javafun;
               }
 
-              if (token.getText().equals("Black")) {
-                Span span = Span.obtain(column, EditorColorScheme.javafun);
+              if (token.getText().equals("System")) {
+                Span span = Span.obtain(column, TextStyle.makeStyle(EditorColorScheme.javafun));
                 span.setBackgroundColorMy(Color.BLACK);
+                span.setDrawminiText("System::");
                 result.add(line, span);
               }
 
@@ -464,8 +473,13 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
       var cu = StaticJavaParser.parse(content.toString());
       Set<String> declaredVariables = new HashSet<>();
       Set<String> usedVariables = new HashSet<>();
+      Set<String> unusedImport = new HashSet<>();
+      Set<String> mtcall = new HashSet<>();
+      Map<String, Integer> mlines = new HashMap<>();
+      Map<String, Integer> mcoloum = new HashMap<>();
       Map<String, Integer> inline = new HashMap<>();
       Map<String, Integer> incol = new HashMap<>();
+
       cu.accept(
           new VoidVisitorAdapter<Void>() {
             @Override
@@ -475,8 +489,8 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 int line = variable.getBegin().get().line;
                 int column = variable.getBegin().get().column;
                 declaredVariables.add(variableName);
-                incol.put(variableName, column);
                 inline.put(variableName, line);
+                incol.put(variableName, column);
               }
               super.visit(fieldDeclaration, arg);
             }
@@ -499,13 +513,88 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               usedVariables.add(nameExpr.getNameAsString());
               super.visit(nameExpr, arg);
             }
+
+            @Override
+            public void visit(ImportDeclaration dec, Void arg) {
+              String importName = dec.getNameAsString();
+              int line = dec.getBegin().get().line;
+              int column = dec.getBegin().get().column;
+              inline.put(importName, line);
+              incol.put(importName, column);
+              unusedImport.add(importName);
+              super.visit(dec, arg);
+            }
+
+            @Override
+            public void visit(ObjectCreationExpr objectCreationExpr, Void arg) {
+              String className = objectCreationExpr.getType().getNameAsString();
+              usedVariables.add(className);
+              super.visit(objectCreationExpr, arg);
+            }
+
+            @Override
+            public void visit(TypeExpr arg0, Void arg1) {
+              var l = arg0.getBegin().get().line;
+              var c = arg0.getBegin().get().column;
+              Utils.setSpanEFO(result, l, c + 1, EditorColorScheme.javastring);
+              super.visit(arg0, arg1);
+            }
+
+            @Override
+            public void visit(TypeParameter arg0, Void arg1) {
+              var l = arg0.getBegin().get().line;
+              var c = arg0.getBegin().get().column;
+              Utils.setSpanEFO(result, l, c + 1, EditorColorScheme.javatype);
+              super.visit(arg0, arg1);
+            }
+
+            @Override
+            public void visit(MethodCallExpr arg0, Void arg1) {
+              String names = arg0.getNameAsString();
+              mtcall.add(names);
+
+              var li = arg0.getBegin().get().line;
+              var col = arg0.getBegin().get().column;
+              mlines.put(names, li);
+              mcoloum.put(names, col);
+
+              // Utils.setSpanEFO(result, li, col + 2, EditorColorScheme.COMMENT);
+
+              super.visit(arg0, arg1);
+            }
+
+            @Override
+            public void visit(Parameter arg0, Void arg1) {
+              var li = arg0.getBegin().get().line;
+              var col = arg0.getBegin().get().column;
+              Utils.setSpanEFO(result, li, col + 2, EditorColorScheme.javaparament);
+              super.visit(arg0, arg1);
+            }
           },
           null);
+      unusedImport.removeIf(importName -> usedVariables.contains(getSimpleName(importName)));
       declaredVariables.removeAll(usedVariables);
+
+      for (var it : unusedImport) {
+        var myline = inline.get(it);
+        var mycol = incol.get(it);
+        Utils.setSpanEFO(
+            result, myline.intValue(), mycol.intValue() + it.length(), EditorColorScheme.COMMENT);
+      }
+
       for (var unusedVar : declaredVariables) {
         var lines = inline.get(unusedVar);
         var col = incol.get(unusedVar);
-        Utils.setSpanEFO(result, lines.intValue(), col.intValue(), EditorColorScheme.COMMENT);
+        Utils.setSpanEFO(
+            result,
+            lines.intValue(),
+            col.intValue() + unusedVar.length(),
+            EditorColorScheme.COMMENT);
+      }
+      for (var it : mtcall) {
+        var li = mlines.get(it);
+        var col = mcoloum.get(it);
+        Utils.setSpanEFO(result, li, col + 2, EditorColorScheme.javaoprator);
       }
 
     } catch (IOException e) {
@@ -514,66 +603,16 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
     }
   }
 
-  public long withoutCompletion(int id) {
+  private String getSimpleName(String importName) {
+    return importName.substring(importName.lastIndexOf('.') + 1);
+  }
+
+  long withoutCompletion(int id) {
     return TextStyle.makeStyle(id, 0, true, false, false);
   }
 
-  public long forString() {
+  long forString() {
     return TextStyle.makeStyle(EditorColorScheme.LITERAL, 0, true, true, false);
-  }
-
-  public static void markDiagnostics(
-      IdeEditor editor, List<DiagnosticWrapper> diagnostics, TextAnalyzeResult colors) {
-    editor.getText().beginStreamCharGetting(0);
-    Indexer indexer = editor.getText().getIndexer();
-
-    diagnostics.forEach(
-        it -> {
-          try {
-            int startLine;
-            int startColumn;
-            int endLine;
-            int endColumn;
-            if (it.getPosition() != DiagnosticWrapper.USE_LINE_POS) {
-              if (it.getStartPosition() == -1) {
-                it.setStartPosition(it.getPosition());
-              }
-              if (it.getEndPosition() == -1) {
-                it.setEndPosition(it.getPosition());
-              }
-              CharPosition start = indexer.getCharPosition((int) it.getStartPosition());
-              CharPosition end = indexer.getCharPosition((int) it.getEndPosition());
-
-              int sLine = start.line;
-              int sColumn = start.column;
-              int eLine = end.line;
-              int eColumn = end.column;
-
-              // the editor does not support marking underline spans for the same start and end
-              // index
-              // to work around this, we just subtract one to the start index
-              if (sLine == eLine && eColumn == sColumn) {
-                sColumn--;
-                eColumn++;
-              }
-
-              it.setStartLine(sLine);
-              it.setEndLine(eLine);
-              it.setStartColumn(sColumn);
-              it.setEndColumn(eColumn);
-            }
-            startLine = it.getStartLine();
-            startColumn = it.getStartColumn();
-            endLine = it.getEndLine();
-            endColumn = it.getEndColumn();
-
-            int flag = it.getKind() == Diagnostic.Kind.ERROR ? Span.FLAG_ERROR : Span.FLAG_WARNING;
-            colors.markProblemRegion(flag, startLine, startColumn, endLine, endColumn);
-          } catch (IllegalArgumentException | IndexOutOfBoundsException e) {
-
-          }
-        });
-    editor.getText().endStreamCharGetting();
   }
 
   private void get(int color, int line, int col, TextAnalyzeResult result) {

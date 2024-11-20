@@ -1,6 +1,6 @@
 package com.flask.colorpicker.builder;
 
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import androidx.appcompat.app.AlertDialog;
@@ -56,7 +56,7 @@ public class ColorPickerDialogBuilder {
     private ColorPickerDialogBuilder(Context context, int theme) {
 
         di = new MaterialAlertDialogBuilder(context);
-        di.setBackground(ColorAndroid12.getColor(context, 20));
+        di.setBackground(ObjectUtils.getColor(context, 20));
         pickerContainer = new LinearLayout(context);
         pickerContainer.setOrientation(LinearLayout.VERTICAL);
         pickerContainer.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
@@ -276,8 +276,8 @@ public class ColorPickerDialogBuilder {
             inputLayout.setCounterEnabled(true);
             inputLayout.setErrorEnabled(true);
             inputLayout.setCounterMaxLength(9);
-            inputLayout.setCounterTextColor(ColorStateList.valueOf(MaterialColors.getColor(inputLayout, ColorAndroid12.TvColor)));
-            colorEdit.setHintTextColor(MaterialColors.getColor(colorEdit, ColorAndroid12.TvColor));
+            inputLayout.setCounterTextColor(ColorStateList.valueOf(MaterialColors.getColor(inputLayout, ObjectUtils.TvColor)));
+            colorEdit.setHintTextColor(MaterialColors.getColor(colorEdit, ObjectUtils.TvColor));
             colorEdit.setCursorVisible(false);
 
             // colorEdit.setHighlightColor(Color.parseColor("#FF8D86"));
@@ -320,10 +320,10 @@ public class ColorPickerDialogBuilder {
                             new MaterialShapeDrawable(
                                     ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 23f).build());
                     shapeDrawable.setFillColor(
-                            ColorStateList.valueOf(MaterialColors.getColor(context, ColorAndroid12.Back, 0)));
+                            ColorStateList.valueOf(MaterialColors.getColor(context, ObjectUtils.Back, 0)));
                     shapeDrawable.setStroke(
                             2f,
-                            ColorStateList.valueOf(MaterialColors.getColor(context, ColorAndroid12.TvColor, 0)));
+                            ColorStateList.valueOf(MaterialColors.getColor(context, ObjectUtils.TvColor, 0)));
                     colorImage.setBackground(shapeDrawable);
                     colorPreview.addView(colorLayout);
                 }

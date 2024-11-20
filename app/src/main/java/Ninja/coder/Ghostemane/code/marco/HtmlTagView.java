@@ -2,7 +2,7 @@ package Ninja.coder.Ghostemane.code.marco;
 
 import Ninja.coder.Ghostemane.code.IdeEditor;
 import Ninja.coder.Ghostemane.code.R;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.ColorStateList;
@@ -58,7 +58,7 @@ public class HtmlTagView {
                         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         textView.setText("Not Found Tag");
         textView.setTypeface(Typeface.MONOSPACE);
-        textView.setTextColor(MaterialColors.getColor(textView, ColorAndroid12.TvColor));
+        textView.setTextColor(MaterialColors.getColor(textView, ObjectUtils.TvColor));
         listview1.setDividerHeight(0);
         AlertDialog dialogBuilder =
                 new MaterialAlertDialogBuilder(context)
@@ -119,7 +119,7 @@ public class HtmlTagView {
                         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         textView.setText("Not Found Tag");
         textView.setTypeface(Typeface.MONOSPACE);
-        textView.setTextColor(MaterialColors.getColor(textView, ColorAndroid12.TvColor));
+        textView.setTextColor(MaterialColors.getColor(textView, ObjectUtils.TvColor));
         listview1.setDividerHeight(0);
         AlertDialog dialogBuilder =
                 new MaterialAlertDialogBuilder(context)
@@ -182,7 +182,7 @@ public class HtmlTagView {
                         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         textView.setText("Not Found Tag");
         textView.setTypeface(Typeface.MONOSPACE);
-        textView.setTextColor(MaterialColors.getColor(textView, ColorAndroid12.TvColor));
+        textView.setTextColor(MaterialColors.getColor(textView, ObjectUtils.TvColor));
         listview1.setDividerHeight(0);
         AlertDialog dialogBuilder =
                 new MaterialAlertDialogBuilder(context)
@@ -235,7 +235,7 @@ public class HtmlTagView {
                 new MaterialShapeDrawable(
                         ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 18).build());
         shapeDrawable.setFillColor(
-                ColorStateList.valueOf(MaterialColors.getColor(v, ColorAndroid12.Back, 0)));
+                ColorStateList.valueOf(MaterialColors.getColor(v, ObjectUtils.Back, 0)));
         return shapeDrawable;
     }
 
@@ -278,8 +278,8 @@ public class HtmlTagView {
             normaltext.setText(_data.get(_position).get("tag").toString());
             titleview.setText(normaltext.getText().toString().substring(0, 1));
             getTag.setBackground(getShape(getTag));
-            titleview.setTextColor(MaterialColors.getColor(titleview, ColorAndroid12.TvColor));
-            normaltext.setTextColor(MaterialColors.getColor(normaltext, ColorAndroid12.TvColor));
+            titleview.setTextColor(MaterialColors.getColor(titleview, ObjectUtils.TvColor));
+            normaltext.setTextColor(MaterialColors.getColor(normaltext, ObjectUtils.TvColor));
 
             return _view;
         }

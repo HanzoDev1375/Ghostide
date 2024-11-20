@@ -1,7 +1,7 @@
 package Ninja.coder.Ghostemane.code.adapter;
 
 import Ninja.coder.Ghostemane.code.R;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -70,7 +70,7 @@ public class ColorRenderAdapter extends BaseAdapter {
                 new MaterialShapeDrawable(
                         ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 18).build());
         shapeDrawable.setFillColor(
-                ColorStateList.valueOf(MaterialColors.getColor(v, ColorAndroid12.Back, 0)));
+                ColorStateList.valueOf(MaterialColors.getColor(v, ObjectUtils.Back, 0)));
         return shapeDrawable;
     }
 }

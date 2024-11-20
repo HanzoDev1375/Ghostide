@@ -1,7 +1,7 @@
 package Ninja.coder.Ghostemane.code.navigator;
 
 import Ninja.coder.Ghostemane.code.IdeEditor;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.graphics.Color;
 import android.widget.TextView;
 import com.allenliu.badgeview.BadgeView;

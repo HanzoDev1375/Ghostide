@@ -3,7 +3,7 @@ package Ninja.coder.Ghostemane.code.activities;
 import Ninja.coder.Ghostemane.code.NetworkChangeReceiver;
 import Ninja.coder.Ghostemane.code.R;
 import Ninja.coder.Ghostemane.code.layoutmanager.WebViewCompatGhostWeb;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
@@ -66,11 +66,11 @@ public class BrowserActivity extends BaseCompat implements NetworkChangeReceiver
 
   public void installLoder() {
 
-    toolbar.setTitleTextColor(MaterialColors.getColor(toolbar, ColorAndroid12.TvColor));
+    toolbar.setTitleTextColor(MaterialColors.getColor(toolbar, ObjectUtils.TvColor));
     toolbar.setBackgroundTintList(
-        ColorStateList.valueOf(MaterialColors.getColor(toolbar, ColorAndroid12.Back)));
+        ColorStateList.valueOf(MaterialColors.getColor(toolbar, ObjectUtils.Back)));
     toolbar.setNavigationIcon(R.drawable.closehsi);
-    toolbar.setNavigationIconTint(MaterialColors.getColor(toolbar, ColorAndroid12.TvColor));
+    toolbar.setNavigationIconTint(MaterialColors.getColor(toolbar, ObjectUtils.TvColor));
     toolbar.setTitleCentered(true);
     toolbar.setNavigationOnClickListener(v -> finish());
     toolbar.setSubtitleCentered(true);

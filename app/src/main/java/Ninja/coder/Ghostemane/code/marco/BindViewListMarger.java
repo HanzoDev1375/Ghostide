@@ -3,7 +3,7 @@ package Ninja.coder.Ghostemane.code.marco;
 import Ninja.coder.Ghostemane.code.ApplicationLoader;
 import Ninja.coder.Ghostemane.code.R;
 import Ninja.coder.Ghostemane.code.folder.FileEnvironmentHelper;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
@@ -46,7 +46,7 @@ public class BindViewListMarger {
             //  img.setImageResource(R.drawable.foldervscode);
             tv.setTextColor(Color.parseColor("#FFAAFF4F"));
         } else if (doctor.matches("\\bghostweb\\b")) {
-            tv.setTextColor(MaterialColors.getColor(tv, ColorAndroid12.ColorFilter));
+            tv.setTextColor(MaterialColors.getColor(tv, ObjectUtils.ColorFilter));
         } else if (doctor.matches("\\btheme\\b")) {
             tv.setTextColor(Color.parseColor("#ff5001"));
         } else if (doctor.startsWith("MT2")) {
@@ -63,7 +63,7 @@ public class BindViewListMarger {
         } else {
 
             img.setImageResource(R.drawable.folder);
-            // ColorAndroid12.setColorFilter(img);
+            // ObjectUtils.setColorFilter(img);
         }
     }
 
@@ -346,10 +346,10 @@ public class BindViewListMarger {
                         });
 
             } else {
-                ColorAndroid12.setTextColor(view);
+                ObjectUtils.setTextColor(view);
             }
         } else {
-            ColorAndroid12.setTextColor(view);
+            ObjectUtils.setTextColor(view);
         }
     }
 

@@ -28,7 +28,6 @@ import androidx.annotation.NonNull;
 import io.github.rosemoe.sora.interfaces.ExternalRenderer;
 import io.github.rosemoe.sora.text.TextStyle;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
-
 import java.util.Collection;
 import java.util.Objects;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -70,12 +69,20 @@ public class Span {
   public static final int FLAG_DEPRECATED = 1;
 
   private static final BlockingQueue<Span> cacheQueue = new ArrayBlockingQueue<>(8192 * 2);
+
   public int column;
+
   public long style;
+
   public int underlineColor;
+
   public int backgroundColorMy;
+
   public int alpha;
+
   public int alphacompat;
+
+  public String drawminiText = "";
 
   /**
    * Set this value to draw curly lines for this span to indicates code problems.
@@ -155,6 +162,7 @@ public class Span {
     copy.setUnderlineColor(underlineColor);
     copy.setBackgroundColorMy(backgroundColorMy);
     copy.setAlpha(alpha);
+    copy.setDrawminiText(drawminiText);
     copy.problemFlags = problemFlags;
     copy.renderer = renderer;
     return copy;
@@ -164,6 +172,7 @@ public class Span {
     problemFlags = column = underlineColor = backgroundColorMy = 0;
     style = 0;
     alpha = 1;
+    drawminiText = "";
     renderer = null;
     return cacheQueue.offer(this);
   }
@@ -191,6 +200,7 @@ public class Span {
         && problemFlags == span.problemFlags
         && alpha == span.alpha
         && backgroundColorMy == span.backgroundColorMy
+        && drawminiText == span.drawminiText
         && Objects.equals(renderer, span.renderer);
   }
 
@@ -249,5 +259,13 @@ public class Span {
 
   public int getAlphacompat() {
     return this.alphacompat;
+  }
+
+  public String getDrawminiText() {
+    return this.drawminiText;
+  }
+
+  public void setDrawminiText(String drawminiText) {
+    this.drawminiText = drawminiText;
   }
 }

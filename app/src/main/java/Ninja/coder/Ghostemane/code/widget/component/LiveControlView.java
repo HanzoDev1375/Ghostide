@@ -1,7 +1,7 @@
 package Ninja.coder.Ghostemane.code.widget.component;
 
 import Ninja.coder.Ghostemane.code.R;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
@@ -43,8 +43,8 @@ public class LiveControlView extends FrameLayout
         refresh.setOnClickListener(this);
         AnimationRunImageView(refresh);
         AnimationRunImageView(mPlayButton);
-        ColorAndroid12.setColorFilter(mFullScreen);
-        ColorAndroid12.setColorFilter(mPlayButton);
+        ObjectUtils.setColorFilter(mFullScreen);
+        ObjectUtils.setColorFilter(mPlayButton);
     }
 
     public LiveControlView(@NonNull Context context) {

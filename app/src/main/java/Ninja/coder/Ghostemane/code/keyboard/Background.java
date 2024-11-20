@@ -2,7 +2,7 @@ package Ninja.coder.Ghostemane.code.keyboard;
 
 import Ninja.coder.Ghostemane.code.R;
 import Ninja.coder.Ghostemane.code.activities.BaseCompat;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.animation.ObjectAnimator;
 import android.app.WallpaperManager;
 import android.content.DialogInterface;
@@ -177,35 +177,35 @@ public class Background extends BaseCompat {
     rang3
         .getButtonDrawable()
         .setColorFilter(
-            MaterialColors.getColor(rang3, ColorAndroid12.TvColor), PorterDuff.Mode.SRC_IN);
+            MaterialColors.getColor(rang3, ObjectUtils.TvColor), PorterDuff.Mode.SRC_IN);
     rang4
         .getButtonDrawable()
         .setColorFilter(
-            MaterialColors.getColor(rang4, ColorAndroid12.TvColor), PorterDuff.Mode.SRC_IN);
+            MaterialColors.getColor(rang4, ObjectUtils.TvColor), PorterDuff.Mode.SRC_IN);
     rang5
         .getButtonDrawable()
         .setColorFilter(
-            MaterialColors.getColor(rang5, ColorAndroid12.TvColor), PorterDuff.Mode.SRC_IN);
+            MaterialColors.getColor(rang5, ObjectUtils.TvColor), PorterDuff.Mode.SRC_IN);
     rang6
         .getButtonDrawable()
         .setColorFilter(
-            MaterialColors.getColor(rang6, ColorAndroid12.TvColor), PorterDuff.Mode.SRC_IN);
+            MaterialColors.getColor(rang6, ObjectUtils.TvColor), PorterDuff.Mode.SRC_IN);
     rang7
         .getButtonDrawable()
         .setColorFilter(
-            MaterialColors.getColor(rang7, ColorAndroid12.TvColor), PorterDuff.Mode.SRC_IN);
+            MaterialColors.getColor(rang7, ObjectUtils.TvColor), PorterDuff.Mode.SRC_IN);
     rang8
         .getButtonDrawable()
         .setColorFilter(
-            MaterialColors.getColor(rang8, ColorAndroid12.TvColor), PorterDuff.Mode.SRC_IN);
+            MaterialColors.getColor(rang8, ObjectUtils.TvColor), PorterDuff.Mode.SRC_IN);
     rang9
         .getButtonDrawable()
         .setColorFilter(
-            MaterialColors.getColor(rang9, ColorAndroid12.TvColor), PorterDuff.Mode.SRC_IN);
+            MaterialColors.getColor(rang9, ObjectUtils.TvColor), PorterDuff.Mode.SRC_IN);
     rang10
         .getButtonDrawable()
         .setColorFilter(
-            MaterialColors.getColor(rang10, ColorAndroid12.TvColor), PorterDuff.Mode.SRC_IN);
+            MaterialColors.getColor(rang10, ObjectUtils.TvColor), PorterDuff.Mode.SRC_IN);
 
     Background =
         PreferenceManager.getDefaultSharedPreferences(this).getString("Background", "asli");

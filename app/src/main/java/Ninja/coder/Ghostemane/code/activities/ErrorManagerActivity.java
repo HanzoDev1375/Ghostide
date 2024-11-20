@@ -1,7 +1,7 @@
 package Ninja.coder.Ghostemane.code.activities;
 
 import Ninja.coder.Ghostemane.code.R;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import android.Manifest;
 import android.content.Intent;
@@ -102,14 +102,14 @@ public class ErrorManagerActivity extends BaseCompat {
         error.append(getIntent().getStringExtra("Date"));
 
         result.setText(error.toString());
-        _toolbar.setSubtitleTextColor(MaterialColors.getColor(_toolbar, ColorAndroid12.colorOnSurface));
+        _toolbar.setSubtitleTextColor(MaterialColors.getColor(_toolbar, ObjectUtils.colorOnSurface));
         _toolbar.setNavigationIcon(R.drawable.closecompat);
-        _toolbar.setTitleTextColor(MaterialColors.getColor(_toolbar, ColorAndroid12.colorOnSurface));
+        _toolbar.setTitleTextColor(MaterialColors.getColor(_toolbar, ObjectUtils.colorOnSurface));
         setTitle("app Crash");
-        ColorAndroid12.setTextColor(textview2);
-        ColorAndroid12.setTextColor(result);
-        ColorAndroid12.setFabColor(_fab);
-        ColorAndroid12.setToolbarinit(_toolbar);
+        ObjectUtils.setTextColor(textview2);
+        ObjectUtils.setTextColor(result);
+        ObjectUtils.setFabColor(_fab);
+        ObjectUtils.setToolbarinit(_toolbar);
         FileUtil.writeFile(
                 FileUtil.getExternalStorageDir().concat("/GhostWebIDE/Error.log"), error.toString());
     }

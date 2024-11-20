@@ -1,7 +1,7 @@
 package Ninja.coder.Ghostemane.code.activities;
 
 import Ninja.coder.Ghostemane.code.databinding.DialogjavacodeviewDialogFragmentBinding;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import Ninja.coder.Ghostemane.code.utils.ThemeUtils;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -101,7 +101,7 @@ public class DialogJavaCodeView extends DialogFragment {
     bin.editor.setEditable(false);
     bin.editor.setEditorLanguage(new JavaLanguage());
     
-    ColorAndroid12.setColorFilter(bin.imageview1);
+    ObjectUtils.setColorFilter(bin.imageview1);
   }
 
   @Override

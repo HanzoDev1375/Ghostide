@@ -2,7 +2,7 @@ package Ninja.coder.Ghostemane.code.marco;
 
 import Ninja.coder.Ghostemane.code.IdeEditor;
 import Ninja.coder.Ghostemane.code.R;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.app.Activity;
 import android.graphics.drawable.GradientDrawable;
 import android.text.Editable;
@@ -64,9 +64,9 @@ public class EditorSearcherT {
     close.setOnClickListener(view -> popup.dismiss());
 
     GradientDrawable backgroundDrawable = new GradientDrawable();
-    backgroundDrawable.setColor(MaterialColors.getColor(popupView, ColorAndroid12.Back, 0));
+    backgroundDrawable.setColor(MaterialColors.getColor(popupView, ObjectUtils.Back, 0));
     backgroundDrawable.setStroke(
-        1, MaterialColors.getColor(popupView, ColorAndroid12.colorOnSurface, 0));
+        1, MaterialColors.getColor(popupView, ObjectUtils.colorOnSurface, 0));
     popupView.setBackground(backgroundDrawable);
 
     etSearch.addTextChangedListener(

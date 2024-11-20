@@ -3,7 +3,7 @@ package Ninja.coder.Ghostemane.code.activities;
 import Ninja.coder.Ghostemane.code.R;
 
 import Ninja.coder.Ghostemane.code.databinding.LayoutjavamanagerBinding;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import Ninja.coder.Ghostemane.code.utils.DataUtil;
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -157,9 +157,9 @@ public class JavaManagerLayoutActivity extends BaseCompat {
     ((BaseAdapter) listview1.getAdapter()).notifyDataSetChanged();
     textinputlayoutsearch.setCounterMaxLength(40);
     _toolbar.setVisibility(View.GONE);
-    ColorAndroid12.setTextColor(textview1);
-    ColorAndroid12.EdittextColor(edittext1);
-    ColorAndroid12.setColorFilter(imageview1);
+    ObjectUtils.setTextColor(textview1);
+    ObjectUtils.EdittextColor(edittext1);
+    ObjectUtils.setColorFilter(imageview1);
     if (textinputlayoutsearch.getCounterMaxLength() == 40) {
       textinputlayoutsearch.setCounterTextColor(ColorStateList.valueOf(0xFFFDA893));
       textinputlayoutsearch.setErrorEnabled(false);
@@ -237,9 +237,9 @@ public class JavaManagerLayoutActivity extends BaseCompat {
       cardview1.setCardElevation((float) 0);
       cardview1.setPreventCornerOverlap(true);
       _clickAnimation(cardview1);
-      ColorAndroid12.setTextColor(getTitle);
-      ColorAndroid12.setTextColor(getid);
-      ColorAndroid12.setColorFilter(imageview1);
+      ObjectUtils.setTextColor(getTitle);
+      ObjectUtils.setTextColor(getid);
+      ObjectUtils.setColorFilter(imageview1);
 
       return binds.getRoot();
     }

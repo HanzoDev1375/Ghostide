@@ -1,7 +1,7 @@
 package Ninja.coder.Ghostemane.code.layoutmanager;
 
 import Ninja.coder.Ghostemane.code.R;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,8 +48,8 @@ public class LogCatBottomSheet {
                                     .setIsMaterial(true)
                                     .build();
                     menu.setAutoDismiss(true);
-                    menu.setMenuColor(MaterialColors.getColor(context, ColorAndroid12.Back, 0));
-                    menu.setTextColor(MaterialColors.getColor(context, ColorAndroid12.colorOnSurface, 0));
+                    menu.setMenuColor(MaterialColors.getColor(context, ObjectUtils.Back, 0));
+                    menu.setTextColor(MaterialColors.getColor(context, ObjectUtils.colorOnSurface, 0));
                     menu.setAnimation(MenuAnimation.DROP_DOWN);
                     menu.setShowBackground(false);
                     menu.setOnMenuItemClickListener(

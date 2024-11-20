@@ -1,7 +1,7 @@
 package Ninja.coder.Ghostemane.code.widget.component;
 
 import Ninja.coder.Ghostemane.code.R;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
@@ -54,7 +54,7 @@ public class CompleteView extends FrameLayout implements IControlComponent {
                 });
 
         setClickable(true);
-        ColorAndroid12.setColorFilter(mStopFullscreen);
+        ObjectUtils.setColorFilter(mStopFullscreen);
 
     }
 

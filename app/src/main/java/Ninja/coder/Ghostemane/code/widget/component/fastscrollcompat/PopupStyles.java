@@ -17,7 +17,7 @@
 package Ninja.coder.Ghostemane.code.widget.component.fastscrollcompat;
 
 import Ninja.coder.Ghostemane.code.R;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.content.Context;
 import android.content.res.Resources;
 import android.text.TextUtils;
@@ -46,7 +46,7 @@ public class PopupStyles {
                         new AutoMirrorDrawable(
                                 Utils.getGradientDrawableWithTintAttr(
                                         R.drawable.afs_popup_background,
-                                        ColorAndroid12.ColorAConNormal,
+                                        ObjectUtils.ColorAConNormal,
                                         context)));
                 popupView.setEllipsize(TextUtils.TruncateAt.MIDDLE);
                 popupView.setGravity(Gravity.CENTER);

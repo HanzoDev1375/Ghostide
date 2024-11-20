@@ -2,6 +2,7 @@ package Ninja.coder.Ghostemane.code.utils;
 
 import Ninja.coder.Ghostemane.code.ApplicationLoader;
 import Ninja.coder.Ghostemane.code.IdeEditor;
+import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import Ninja.coder.Ghostemane.code.widget.ExrtaFab;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -10,6 +11,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -25,6 +27,7 @@ import android.widget.*;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
 import com.google.android.material.R;
@@ -38,8 +41,15 @@ import com.google.android.material.shape.CornerFamily;
 import com.google.android.material.shape.MaterialShapeDrawable;
 import com.google.android.material.shape.ShapeAppearanceModel;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import android.graphics.Canvas;
+import android.graphics.Path;
+import android.graphics.RectF;
+import java.io.IOException;
 
-public class ColorAndroid12 {
+public class ObjectUtils {
   public static boolean Android12 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S;
   public static int Back = R.attr.colorSurface;
   public static int colorAccent = R.attr.colorAccent;
@@ -441,5 +451,101 @@ public class ColorAndroid12 {
           });
       animator.start(); // Start the animation
     }
+  }
+
+  public static Drawable getCircularProgress() {
+    var app = new CircularProgressDrawable(ApplicationLoader.getContext());
+    app.setStrokeWidth(6f);
+    app.setCenterRadius(10f);
+    app.setArrowEnabled(true);
+    app.setStrokeCap(Paint.Cap.ROUND);
+    app.setArrowScale(10f);
+    app.setColorSchemeColors(getColorApl());
+    app.start();
+
+    return app;
+  }
+
+  public static int[] getColorApl() {
+    int[] apl = {
+      Color.parseColor("#FFFFB584"),
+      Color.parseColor("#FFFF8884"),
+      Color.parseColor("#FFDAFF84"),
+      Color.parseColor("#FF84FFB1"),
+      Color.parseColor("#FF84FFD8"),
+      Color.parseColor("#FF84FDFF"),
+      Color.parseColor("#FF84D4FF"),
+      Color.parseColor("#FF8A84FF"),
+      Color.parseColor("#FFB584FF"),
+      Color.parseColor("#FFF984FF"),
+      Color.parseColor("#FFFF84D6"),
+      Color.parseColor("#FFFF84B3")
+    };
+
+    return apl;
+  }
+
+  public static void setSaveToBitMap(Bitmap bitmap, String path) {
+    FileUtil.makeDir(path.substring(0, path.lastIndexOf(File.separator)));
+    try (var fileOutputStream = new FileOutputStream(path)) {
+      bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+      fileOutputStream.flush();
+    } catch (IOException err) {
+      Log.e("Error to Winter bitmap", err.getMessage());
+    }
+  }
+
+  public static Bitmap captureAppIco(View view, int size) {
+    Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+
+    Canvas canvas = new Canvas(bitmap);
+
+    Path path = new Path();
+    RectF rect = new RectF(0, 0, view.getWidth(), view.getHeight());
+    path.addRoundRect(rect, cardRadius, cardRadius, Path.Direction.CW);
+    canvas.clipPath(path);
+    view.draw(canvas);
+
+    Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, size, size, true);
+    bitmap.recycle();
+
+    return scaledBitmap;
+  }
+
+  public static Bitmap captureForeground(
+      View view, int size, boolean score, boolean pattern, View pattView, View scoreView, View bg) {
+
+    bg.setVisibility(View.INVISIBLE);
+    if (!score) scoreView.setVisibility(View.INVISIBLE);
+    if (!pattern) pattView.setVisibility(View.INVISIBLE);
+
+    int padding = 75;
+
+    Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+
+    Canvas canvas = new Canvas(bitmap);
+    Drawable bgDrawable = view.getBackground();
+
+    if (bgDrawable != null) {
+      bgDrawable.draw(canvas);
+    } else {
+      view.draw(canvas);
+    }
+
+    Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, size, size, true);
+    int paddedSize = size + (padding * 2);
+    Bitmap paddedBitmap = Bitmap.createBitmap(paddedSize, paddedSize, Bitmap.Config.ARGB_8888);
+
+    Canvas paddedCanvas = new Canvas(paddedBitmap);
+    paddedCanvas.drawBitmap(scaledBitmap, padding, padding, null);
+
+    bg.setVisibility(View.VISIBLE);
+    if (score) scoreView.setVisibility(View.VISIBLE);
+    if (pattern) pattView.setVisibility(View.VISIBLE);
+
+    bitmap.recycle();
+    scaledBitmap.recycle();
+
+    return paddedBitmap;
   }
 }

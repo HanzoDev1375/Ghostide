@@ -2,7 +2,7 @@ package Ninja.coder.Ghostemane.code.marco;
 
 import Ninja.coder.Ghostemane.code.activities.BaseCompat;
 import Ninja.coder.Ghostemane.code.tasks.app.ProgressDialogCompat;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import android.app.ProgressDialog;
 import android.content.res.AssetManager;
@@ -41,7 +41,7 @@ public class FileManagerUtils {
       dialogCompat.setMax(100);
       dialogCompat.show();
       dialogCompat.setProgressDrawable(
-          new ColorDrawable(MaterialColors.getColor(compat, ColorAndroid12.colorOnSurface, 0)));
+          new ColorDrawable(MaterialColors.getColor(compat, ObjectUtils.colorOnSurface, 0)));
       dialogCompat.getWindow().setBackgroundDrawable(custom());
       AssetManager manager = compat.getAssets();
       new Thread(
@@ -109,10 +109,10 @@ public class FileManagerUtils {
         new MaterialShapeDrawable(
             ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 20f).build());
     myShap.setFillColor(
-        ColorStateList.valueOf(MaterialColors.getColor(compat, ColorAndroid12.Back, 0)));
+        ColorStateList.valueOf(MaterialColors.getColor(compat, ObjectUtils.Back, 0)));
     myShap.setStroke(
         0.5f,
-        ColorStateList.valueOf(MaterialColors.getColor(compat, ColorAndroid12.colorOnSurface, 0)));
+        ColorStateList.valueOf(MaterialColors.getColor(compat, ObjectUtils.colorOnSurface, 0)));
     return myShap;
   }
 }

@@ -30,7 +30,7 @@ import Ninja.coder.Ghostemane.code.databinding.TextComposePopupWindowBinding;
 import Ninja.coder.Ghostemane.code.marco.EditorSearcherT;
 import Ninja.coder.Ghostemane.code.marco.SmaliHelper;
 import Ninja.coder.Ghostemane.code.model.TextActionModel;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.annotation.SuppressLint;
 import android.graphics.*;
 import android.content.res.*;
@@ -358,11 +358,11 @@ public class EditorTextActionWindow extends EditorPopupWindow
             ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 20f).build());
     shap.setFillColor(
         ColorStateList.valueOf(
-            MaterialColors.getColor(mEditor.getContext(), ColorAndroid12.Back, 0)));
+            MaterialColors.getColor(mEditor.getContext(), ObjectUtils.Back, 0)));
     shap.setStroke(
         2f,
         ColorStateList.valueOf(
-            MaterialColors.getColor(mEditor.getContext(), ColorAndroid12.TvColor, 0)));
+            MaterialColors.getColor(mEditor.getContext(), ObjectUtils.TvColor, 0)));
     return shap;
   }
 

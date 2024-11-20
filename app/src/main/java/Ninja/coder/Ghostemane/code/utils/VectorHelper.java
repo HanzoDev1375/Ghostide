@@ -102,7 +102,7 @@ public class VectorHelper {
                         color.setText("#".concat(rgs));
                         round.setBackgroundColor(selectedColor);
                         textinput4.setEndIconTintList(ColorStateList.valueOf(selectedColor));
-                        ColorAndroid12.setColorFilter(icon, Color.parseColor("#".concat(rgs)));
+                        ObjectUtils.setColorFilter(icon, Color.parseColor("#".concat(rgs)));
                       })
                   .setNegativeButton("cancel", (d, c) -> {})
                   .build()
@@ -126,7 +126,7 @@ public class VectorHelper {
     sw.setOnCheckedChangeListener(
         (btn, is) -> {
           if (is) {
-            ColorAndroid12.setColorFilter(icon, Color.parseColor(color.getText().toString()));
+            ObjectUtils.setColorFilter(icon, Color.parseColor(color.getText().toString()));
           } else icon.setColorFilter(0);
         });
 

@@ -3,7 +3,7 @@ package Ninja.coder.Ghostemane.code.activities;
 import Ninja.coder.Ghostemane.code.R;
 import Ninja.coder.Ghostemane.code.ServerHost;
 import Ninja.coder.Ghostemane.code.databinding.HtmlrunerBinding;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import Ninja.coder.Ghostemane.code.utils.ThemeUtils;
 import Ninja.coder.Ghostemane.code.widget.GhostWebMaterialDialog;
@@ -175,7 +175,7 @@ public class HtmlRunerActivity extends BaseCompat {
                               tvs.setText(html);
                               tvs.setTextColor(
                                   ColorStateList.valueOf(
-                                      MaterialColors.getColor(tvs, ColorAndroid12.TvColor, 0)));
+                                      MaterialColors.getColor(tvs, ObjectUtils.TvColor, 0)));
                               tvs.setPadding(8, 8, 8, 8);
                               dialog.setCancelable(false);
                               dialog.setView(tvs);
@@ -239,11 +239,11 @@ public class HtmlRunerActivity extends BaseCompat {
   }
 
   private void installToRun() {
-    ColorAndroid12.setFab(bin.Fab);
+    ObjectUtils.setFab(bin.Fab);
     //   bin.web.setCustomDialog();
     bin.Toolbar.setNavigationIcon(R.drawable.arrow_back);
     initWebView();
-    ColorAndroid12.setToolbarinit(bin.Toolbar);
+    ObjectUtils.setToolbarinit(bin.Toolbar);
     if (getIntent().hasExtra("run")) {
       bin.web.loadUrl("file:///".concat(getIntent().getStringExtra("run")));
     }

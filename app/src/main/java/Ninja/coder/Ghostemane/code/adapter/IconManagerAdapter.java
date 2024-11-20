@@ -3,7 +3,7 @@ package Ninja.coder.Ghostemane.code.adapter;
 import Ninja.coder.Ghostemane.code.R;
 import Ninja.coder.Ghostemane.code.glidecompat.GlideCompat;
 import Ninja.coder.Ghostemane.code.model.Icons;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.content.Context;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -173,8 +173,8 @@ public class IconManagerAdapter extends RecyclerView.Adapter<IconManagerAdapter.
         title.setText(name.replace(".svg", ""));
       }
       GlideCompat.LoadSvg(icons.getRootFile().getAbsolutePath(), icon);
-     // ColorAndroid12.setColorFilter(icon);
-      ColorAndroid12.setTextColor(title);
+     // ObjectUtils.setColorFilter(icon);
+      ObjectUtils.setTextColor(title);
     }
   }
 

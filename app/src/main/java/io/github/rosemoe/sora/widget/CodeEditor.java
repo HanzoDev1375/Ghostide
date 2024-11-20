@@ -2118,6 +2118,10 @@ public class CodeEditor extends View
           }
         }
         Span span = spans.get(spanOffset);
+        if (span.drawminiText != null) {
+          drawMiniGraph(canvas, paintingOffset, row, span.drawminiText);
+        }
+
         // Draw by spans
         while (lastVisibleChar > span.column) {
           int spanEnd =
@@ -2332,7 +2336,7 @@ public class CodeEditor extends View
       // Draw hard wrap
       if (lastVisibleChar == columnCount
           && (mNonPrintableOptions & FLAG_DRAW_LINE_SEPARATOR) != 0) {
-        drawMiniGraph(canvas, paintingOffset, row, "⏎");
+        // drawMiniGraph(canvas, paintingOffset, row, "⏎");
       }
 
       if ((mNonPrintableOptions & FLAG_GHOSTWEB) != 0) {

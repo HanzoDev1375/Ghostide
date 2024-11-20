@@ -2,7 +2,7 @@ package Ninja.coder.Ghostemane.code.glidecompat;
 
 import Ninja.coder.Ghostemane.code.ApplicationLoader;
 import Ninja.coder.Ghostemane.code.R;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -242,7 +242,7 @@ public class GlideCompat {
   public static void LoadVector(String path, ImageView c) {
     var vx = new VectorMasterDrawable(ApplicationLoader.getContext(), new File(path));
     if (vx.isVector()) {
-      vx.setColorFilter(MaterialColors.getColor(c, ColorAndroid12.TvColor), PorterDuff.Mode.SRC_IN);
+      vx.setColorFilter(MaterialColors.getColor(c, ObjectUtils.TvColor), PorterDuff.Mode.SRC_IN);
       Glide.with(c.getContext())
           .load(vx)
           .error(R.drawable.errorxml)

@@ -1,7 +1,7 @@
 package Ninja.coder.Ghostemane.code.activities;
 
 import Ninja.coder.Ghostemane.code.R;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -24,6 +24,6 @@ public class MdCodeViewActivity extends AppCompatActivity {
         markdownview.setOpenUrlInBrowser(true);
         markdownview.setMarkDownText(FileUtil.readFile(getIntent().getStringExtra("v")));
         markdownview.setBackgroundTintList(
-                ColorStateList.valueOf(MaterialColors.getColor(markdownview, ColorAndroid12.Back)));
+                ColorStateList.valueOf(MaterialColors.getColor(markdownview, ObjectUtils.Back)));
     }
 }

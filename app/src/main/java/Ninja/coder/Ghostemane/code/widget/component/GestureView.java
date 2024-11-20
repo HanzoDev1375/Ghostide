@@ -1,7 +1,7 @@
 package Ninja.coder.Ghostemane.code.widget.component;
 
 import Ninja.coder.Ghostemane.code.R;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
@@ -36,8 +36,8 @@ public class GestureView extends FrameLayout implements IGestureComponent {
         mProgressPercent = findViewById(R.id.pro_percent);
         mTextPercent = findViewById(R.id.tv_percent);
         mCenterContainer = findViewById(R.id.center_container);
-        ColorAndroid12.setTextColor(mTextPercent);
-        ColorAndroid12.setColorFilter(mIcon);
+        ObjectUtils.setTextColor(mTextPercent);
+        ObjectUtils.setColorFilter(mIcon);
     }
 
     public GestureView(@NonNull Context context) {

@@ -2,7 +2,7 @@ package Ninja.coder.Ghostemane.code.marco;
 
 import Ninja.coder.Ghostemane.code.tasks.AsyncTaskCompat;
 import Ninja.coder.Ghostemane.code.tasks.app.ProgressDialogCompat;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -42,8 +42,8 @@ public class HsiZip extends AsyncTaskCompat<String, Object, Boolean> {
         new MaterialShapeDrawable(
             ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 19f).build());
     shap.setFillColor(
-        ColorStateList.valueOf(MaterialColors.getColor(context, ColorAndroid12.Back, Color.BLACK)));
-    shap.setStroke(1f, MaterialColors.getColor(context, ColorAndroid12.TvColor, Color.RED));
+        ColorStateList.valueOf(MaterialColors.getColor(context, ObjectUtils.Back, Color.BLACK)));
+    shap.setStroke(1f, MaterialColors.getColor(context, ObjectUtils.TvColor, Color.RED));
     progressDialog = new ProgressDialogCompat(context);
     progressDialog.setTitle("در حال استخراج فایل");
     progressDialog.setMessage("لطفاً منتظر بمانید...");

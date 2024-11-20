@@ -1,7 +1,7 @@
 package Ninja.coder.Ghostemane.code.marco;
 
 import Ninja.coder.Ghostemane.code.tasks.AsyncTaskCompat;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -65,7 +65,7 @@ public class HsiPost extends AsyncTaskCompat<String, Object, Boolean> {
         progressDialog.getWindow().setAttributes(layoutParams);
         ProgressBar progressBar = progressDialog.findViewById(android.R.id.progress);
         if (progressBar != null) {
-            progressBar.getProgressDrawable().setColorFilter(ColorAndroid12.TvColor, PorterDuff.Mode.SRC_IN);
+            progressBar.getProgressDrawable().setColorFilter(ObjectUtils.TvColor, PorterDuff.Mode.SRC_IN);
         }
         progressDialog.setMessage("Ziping..");
         Animation fadeOut = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
@@ -213,8 +213,8 @@ public class HsiPost extends AsyncTaskCompat<String, Object, Boolean> {
 
     private GradientDrawable initColor() {
         GradientDrawable g = new GradientDrawable();
-        g.setColor(ColorStateList.valueOf(ColorAndroid12.Back));
-        g.setStroke(1, ColorStateList.valueOf(ColorAndroid12.TvColor));
+        g.setColor(ColorStateList.valueOf(ObjectUtils.Back));
+        g.setStroke(1, ColorStateList.valueOf(ObjectUtils.TvColor));
         g.setCornerRadius(25f);
         return g;
     }

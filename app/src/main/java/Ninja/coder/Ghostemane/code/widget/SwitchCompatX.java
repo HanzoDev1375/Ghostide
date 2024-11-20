@@ -1,6 +1,6 @@
 package Ninja.coder.Ghostemane.code.widget;
 
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -35,26 +35,26 @@ public class SwitchCompatX extends SwitchCompat {
     }
 
     private void ChackColor() {
-        if (ColorAndroid12.Android12)
+        if (ObjectUtils.Android12)
             setThumbTintList(
-                    ColorStateList.valueOf(MaterialColors.getColor(getContext(), ColorAndroid12.SubTitle, 0)));
+                    ColorStateList.valueOf(MaterialColors.getColor(getContext(), ObjectUtils.SubTitle, 0)));
         else setThumbTintList(ColorStateList.valueOf(Color.parseColor("#FF201B16")));
     }
 
     private void NoChackColor() {
         setBackgroundColor(android.R.color.transparent);
-        if (ColorAndroid12.Android12)
+        if (ObjectUtils.Android12)
             setThumbTintList(
-                    ColorStateList.valueOf(MaterialColors.getColor(getContext(), ColorAndroid12.TvColor, 0)));
+                    ColorStateList.valueOf(MaterialColors.getColor(getContext(), ObjectUtils.TvColor, 0)));
         else setThumbTintList(ColorStateList.valueOf(Color.parseColor("#FFFFDCBD")));
     }
 
     private void InitChackColor() {
         getTrackDrawable().setAlpha(0);
         setBackgroundColor(android.R.color.transparent);
-        if (ColorAndroid12.Android12)
+        if (ObjectUtils.Android12)
             setThumbTintList(
-                    ColorStateList.valueOf(MaterialColors.getColor(getContext(), ColorAndroid12.TvColor, 0)));
+                    ColorStateList.valueOf(MaterialColors.getColor(getContext(), ObjectUtils.TvColor, 0)));
         else setThumbTintList(ColorStateList.valueOf(Color.parseColor("#FFFFDCBD")));
     }
 

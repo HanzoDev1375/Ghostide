@@ -1,7 +1,6 @@
 package Ninja.coder.Ghostemane.code.project;
 
 import Ninja.coder.Ghostemane.code.IdeEditor;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import android.app.ProgressDialog;
 import android.content.Context;

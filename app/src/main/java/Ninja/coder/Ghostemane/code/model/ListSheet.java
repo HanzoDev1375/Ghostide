@@ -1,7 +1,7 @@
 package Ninja.coder.Ghostemane.code.model;
 
 import Ninja.coder.Ghostemane.code.R;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.view.Gravity;
@@ -120,8 +120,8 @@ public class ListSheet {
       }
       tv.setEnabled(sheet.getEn() ? true : false);
       img.setColorFilter(
-          MaterialColors.getColor(img, ColorAndroid12.colorOnSurface, 0), PorterDuff.Mode.SRC_IN);
-      tv.setTextColor(MaterialColors.getColor(tv, ColorAndroid12.colorOnSurface, 0));
+          MaterialColors.getColor(img, ObjectUtils.colorOnSurface, 0), PorterDuff.Mode.SRC_IN);
+      tv.setTextColor(MaterialColors.getColor(tv, ObjectUtils.colorOnSurface, 0));
 
       return view;
     }

@@ -25,8 +25,9 @@ import Ninja.coder.Ghostemane.code.project.ProjectManager;
 import Ninja.coder.Ghostemane.code.tasks.app.SassForAndroid;
 import Ninja.coder.Ghostemane.code.terminal.TerminalActivity;
 import Ninja.coder.Ghostemane.code.utils.*;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import Ninja.coder.Ghostemane.code.utils.CompilerUtils;
+import Ninja.coder.Ghostemane.code.utils.DataUtil;
 import Ninja.coder.Ghostemane.code.widget.BlurImage;
 import Ninja.coder.Ghostemane.code.widget.ExrtaFab;
 import android.animation.ObjectAnimator;
@@ -352,7 +353,7 @@ public class CodeEditorActivity extends AppCompatActivity {
                       .y(Math.min(max * max, 6))
                       .setDuration(1000)
                       .start();
-                  ColorAndroid12.showViewWithAnimation(syspiar);
+                  ObjectUtils.showViewWithAnimation(syspiar);
 
                 } else {
                   // Decrease the scale
@@ -367,7 +368,7 @@ public class CodeEditorActivity extends AppCompatActivity {
                       .y(minScale)
                       .setDuration(1000)
                       .start();
-                  ColorAndroid12.hideViewWithAnimation(syspiar, _fab);
+                  ObjectUtils.hideViewWithAnimation(syspiar, _fab);
                 }
               }
             });
@@ -601,7 +602,7 @@ public class CodeEditorActivity extends AppCompatActivity {
     AnimUtils.ClickAnimation(undo);
     AnimUtils.ClickAnimation(redo);
     if (ru.contains("rup")) {
-      ColorAndroid12.tryToRunThemeMaterial(editor);
+      ObjectUtils.tryToRunThemeMaterial(editor);
       CustomToolbar.setBackgroundColor(0xFF201B16);
 
       redo.setColorFilter(0xFFFFDCBD, PorterDuff.Mode.MULTIPLY);
@@ -646,7 +647,7 @@ public class CodeEditorActivity extends AppCompatActivity {
             Typeface.createFromAsset(getAssets(), "fonts/ghostfont.ttf"), Typeface.NORMAL);
 
       } else {
-        _editorsetfontfromfile(setfont.getString("mfont", ""));
+        setFontEditorFromFile(setfont.getString("mfont", ""));
         titleauthor.setTypeface(Typeface.createFromFile(new File(setfont.getString("mfont", ""))));
       }
     } else {
@@ -779,7 +780,7 @@ public class CodeEditorActivity extends AppCompatActivity {
                               String rgs = Integer.toHexString(selectedColor);
                               try {
 
-                                _sysba("#".concat(rgs.replace("#ff", "#")));
+                                setSymbols("#".concat(rgs.replace("#ff", "#")));
                               } catch (Exception exception) {
                                 exception.printStackTrace();
                               }
@@ -999,21 +1000,22 @@ public class CodeEditorActivity extends AppCompatActivity {
     }
   }
 
-  public void _sysba(String _input) {
+  public void setSymbols(String input) {
     var channel = editor.createNewSymbolChannel();
-    channel.insertSymbol(_input, _input.length());
+    channel.insertSymbol(input, input.length());
   }
 
   public void _tabsize(final double _tab) {
     editor.setTabWidth((int) _tab);
   }
 
-  public void _editorsetfontfromfile(final String _files) {
+  public void setFontEditorFromFile(final String _files) {
     editor.setTypefaceText(Typeface.createFromFile(new File(_files)));
     editor.setTypefaceLineNumber(Typeface.createFromFile(new File(_files)));
   }
 
-  public void _fragmentdatapost() {
+  @Deprecated
+  public void setLiveShowFragment() {
     liveViewerDialogFragmentActivityN = new LiveViewerDialogFragmentActivity();
     liveViewerDialogFragmentActivityN.show(getSupportFragmentManager(), "1");
   }
@@ -1032,12 +1034,12 @@ public class CodeEditorActivity extends AppCompatActivity {
               new SyspiarAdapter.OnTabView() {
                 @Override
                 public void TAB(String tab) {
-                  _sysba(tab);
+                  setSymbols(tab);
                 }
 
                 @Override
                 public void POST(String post) {
-                  _sysba(post);
+                  setSymbols(post);
                 }
               },
               editor);
@@ -1470,22 +1472,25 @@ public class CodeEditorActivity extends AppCompatActivity {
 
               // Single tap here.
               if (FileUtil.isExistFile(dataInsert)) {
-                setCodeEditorFileReader(dataInsert);
 
                 shp.edit().putString("positionTabs", String.valueOf((long) (_position))).apply();
                 shp.edit().putString("pos_path", dataInsert).apply();
                 setDistreeView();
                 notifyDataSetChanged();
                 if (FileUtil.isExistFile(dataInsert)) {
-                  setCodeEditorFileReader(dataInsert);
+                  // setCodeEditorFileReader(dataInsert);
 
                   if (dataInsert.equals(shp.getString("pos_path", ""))) {
                     selector.setVisibility(View.VISIBLE);
+                      
                     if (currentTabIndex == _position) {
                       setPowerMenuCallBack(linear5, _data, _position);
                     } else {
                       currentTabIndex = _position;
+                      setCodeEditorFileReader(dataInsert);
                     }
+
+                  //  DataUtil.showMessage(v.getContext(), String.valueOf(_position));
 
                   } else {
                     selector.setVisibility(View.GONE);
@@ -1494,6 +1499,7 @@ public class CodeEditorActivity extends AppCompatActivity {
                 } else {
                   selector.setVisibility(View.GONE);
                 }
+
               } else {
                 var di = new MaterialAlertDialogBuilder(CodeEditorActivity.this);
                 di.setTitle("File not Found!");

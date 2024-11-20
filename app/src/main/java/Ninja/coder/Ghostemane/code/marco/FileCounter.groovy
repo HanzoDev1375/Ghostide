@@ -10,7 +10,7 @@ import java.nio.file.Paths
 import java.util.stream.Collectors
 
 class FileCounter extends AsyncTaskCompat<String, Void, String> {
-    private TextView textView
+    def TextView textView
 
     FileCounter(TextView textView) {
         this.textView = textView

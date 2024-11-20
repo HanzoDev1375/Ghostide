@@ -279,9 +279,9 @@ public class AssetsSoft {
             ShapeAppearanceModel.builder().setAllCorners(CornerFamily.CUT, 14f).build());
     mt.setFillColor(
         ColorStateList.valueOf(
-            MaterialColors.getColor(ApplicationLoader.getContext(), ColorAndroid12.Back, 0)));
+            MaterialColors.getColor(ApplicationLoader.getContext(), ObjectUtils.Back, 0)));
     mt.setStroke(
-        1, MaterialColors.getColor(ApplicationLoader.getContext(), ColorAndroid12.TvColor, 0));
+        1, MaterialColors.getColor(ApplicationLoader.getContext(), ObjectUtils.TvColor, 0));
     return mt;
   }
 

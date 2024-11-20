@@ -2,7 +2,7 @@ package Ninja.coder.Ghostemane.code.databin;
 
 import Ninja.coder.Ghostemane.code.R;
 import Ninja.coder.Ghostemane.code.interfaces.FileCallBack;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.ColorStateList;
@@ -113,7 +113,7 @@ public class FileMaker {
     }
 
     public void codeHelper(TextInputLayout input, String name) {
-        input.setPrefixTextColor(ColorStateList.valueOf(MaterialColors.getColor(input, ColorAndroid12.colorOnSurface, 0)));
+        input.setPrefixTextColor(ColorStateList.valueOf(MaterialColors.getColor(input, ObjectUtils.colorOnSurface, 0)));
         if (name.endsWith(".html")) {
             input.setPrefixText("html");
         } else if (name.endsWith(".js")) {

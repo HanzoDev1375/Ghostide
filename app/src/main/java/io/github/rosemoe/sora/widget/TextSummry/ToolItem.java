@@ -2,7 +2,7 @@ package io.github.rosemoe.sora.widget.TextSummry;
 
 import Ninja.coder.Ghostemane.code.activities.BrowserActivity;
 import Ninja.coder.Ghostemane.code.activities.CodeEditorActivity;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import Ninja.coder.Ghostemane.code.adapter.Recyclerview0Adapter;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -116,8 +116,8 @@ public class ToolItem {
     view.setPadding(8, 8, 8, 8);
     view.setText(text);
     view.setTextSize(SIZEBOOLTEXT);
-    layout.setBackgroundColor(MaterialColors.getColor(context, ColorAndroid12.Back, 0));
-    view.setTextColor(MaterialColors.getColor(context, ColorAndroid12.TvColor, 0));
+    layout.setBackgroundColor(MaterialColors.getColor(context, ObjectUtils.Back, 0));
+    view.setTextColor(MaterialColors.getColor(context, ObjectUtils.TvColor, 0));
     layout.setOrientation(LinearLayout.HORIZONTAL);
     layout.setGravity(Gravity.CENTER);
     layout.addView(view);
@@ -139,8 +139,8 @@ public class ToolItem {
     menu.setShowBackground(false);
     menu.setAutoDismiss(true);
     menu.setTextSize(14);
-    menu.setMenuColor(MaterialColors.getColor(context, ColorAndroid12.Back, 0));
-    menu.setTextColor(MaterialColors.getColor(context, ColorAndroid12.TvColor, 0));
+    menu.setMenuColor(MaterialColors.getColor(context, ObjectUtils.Back, 0));
+    menu.setTextColor(MaterialColors.getColor(context, ObjectUtils.TvColor, 0));
     menu.showAsAnchorRightBottom(view);
     menu.setAnimation(MenuAnimation.ELASTIC_CENTER);
     menu.setHeaderView(getCustomHader("Ninja Helper", context));
@@ -169,7 +169,7 @@ public class ToolItem {
         new MaterialShapeDrawable(
             ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 20).build());
     mshap.setFillColor(
-        ColorStateList.valueOf(MaterialColors.getColor(ctc, ColorAndroid12.ButtonBack, 0)));
+        ColorStateList.valueOf(MaterialColors.getColor(ctc, ObjectUtils.ButtonBack, 0)));
     return (Drawable) mshap;
   }
 

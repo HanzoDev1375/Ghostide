@@ -1,7 +1,7 @@
 package Ninja.coder.Ghostemane.code.adapter;
 
 import Ninja.coder.Ghostemane.code.R;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -84,9 +84,9 @@ public class Recyclerview0Adapter extends RecyclerView.Adapter<Recyclerview0Adap
         } catch (Exception e) {
             c1.setText("c");
         }
-        tv3.setTextColor(MaterialColors.getColor(tv3, ColorAndroid12.colorOnSurface, 0));
+        tv3.setTextColor(MaterialColors.getColor(tv3, ObjectUtils.colorOnSurface, 0));
         text = tv3.getText().toString();
-        c1.setTextColor(MaterialColors.getColor(tv3, ColorAndroid12.colorOnSurface, 0));
+        c1.setTextColor(MaterialColors.getColor(tv3, ObjectUtils.colorOnSurface, 0));
         lib.setBackground(shap());
         main.setOnClickListener(
                 new View.OnClickListener() {
@@ -188,8 +188,8 @@ public class Recyclerview0Adapter extends RecyclerView.Adapter<Recyclerview0Adap
         var shp =
                 new MaterialShapeDrawable(
                         ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 30f).build());
-        shp.setFillColor(ColorStateList.valueOf(MaterialColors.getColor(context, ColorAndroid12.Back, 0)));
-        shp.setStroke(0.5f, ColorStateList.valueOf(MaterialColors.getColor(context, ColorAndroid12.colorOnSurface, 0)));
+        shp.setFillColor(ColorStateList.valueOf(MaterialColors.getColor(context, ObjectUtils.Back, 0)));
+        shp.setStroke(0.5f, ColorStateList.valueOf(MaterialColors.getColor(context, ObjectUtils.colorOnSurface, 0)));
         return shp;
     }
 

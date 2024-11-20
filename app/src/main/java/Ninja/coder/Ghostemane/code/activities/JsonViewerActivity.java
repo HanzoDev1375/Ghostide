@@ -1,7 +1,7 @@
 package Ninja.coder.Ghostemane.code.activities;
 
 import Ninja.coder.Ghostemane.code.R;
-import Ninja.coder.Ghostemane.code.utils.ColorAndroid12;
+import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import Ninja.coder.Ghostemane.code.widget.JsonViewLayout;
 import android.os.Bundle;
 import android.view.View;
@@ -75,8 +75,8 @@ public class JsonViewerActivity extends BaseCompat {
         _fab.setText("Lock View");
 
         progressbar1.setVisibility(View.GONE);
-        ColorAndroid12.setFab(_fab);
-        ColorAndroid12.PrograssBarColor(progressbar1);
+        ObjectUtils.setFab(_fab);
+        ObjectUtils.PrograssBarColor(progressbar1);
     }
 
     public void showMessage(String _s) {
