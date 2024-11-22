@@ -732,6 +732,7 @@ public class HTMLLanguage implements EditorLanguage {
         || ch == '$'
         || ch == '#'
         || ch == '*'
+        || ch == '='
         || MyCharacter.isJavaIdentifierStart(ch);
   }
 

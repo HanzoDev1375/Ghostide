@@ -8,7 +8,6 @@ import androidx.core.graphics.ColorUtils;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
@@ -97,6 +96,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           content instanceof StringBuilder ? (StringBuilder) content : new StringBuilder(content);
       CodePointCharStream stream = CharStreams.fromReader(new StringReader(content.toString()));
       JavaLexer lexer = new JavaLexer(stream);
+      
 
       var classNamePrevious = false;
       Token token, preToken = null, prePreToken = null;
@@ -357,7 +357,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                   || previous == JavaLexer.BOOLEAN) {
                 colorid = EditorColorScheme.javafun;
               }
-              if (previous == JavaLexer.RETURN || previous == JavaLexer.NEW) {
+              if (previous == JavaLexer.RETURN  || previous == JavaLexer.NEW) {
                 colorid = EditorColorScheme.HTML_TAG;
               }
               if (previous == JavaLexer.INT) {
@@ -439,9 +439,9 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 if (currSwitch > maxSwitch) {
                   maxSwitch = currSwitch;
                 }
-                currSwitch = 0; // بازنشانی شمارش برای سطح بعدی
+                currSwitch = 0; 
               }
-              currSwitch++; // افزایش شمارنده برای سطح nesting فعلی
+              currSwitch++; // ا 
               break;
             }
 
@@ -562,14 +562,6 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
 
               super.visit(arg0, arg1);
             }
-
-            @Override
-            public void visit(Parameter arg0, Void arg1) {
-              var li = arg0.getBegin().get().line;
-              var col = arg0.getBegin().get().column;
-              Utils.setSpanEFO(result, li, col + 2, EditorColorScheme.javaparament);
-              super.visit(arg0, arg1);
-            }
           },
           null);
       unusedImport.removeIf(importName -> usedVariables.contains(getSimpleName(importName)));
@@ -633,4 +625,6 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             mapStyle.get("isStrike").booleanValue(),
             mapStyle.get("isLine").booleanValue()));
   }
+
+  
 }

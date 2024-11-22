@@ -17,11 +17,13 @@ public class JavaAutoComplete implements AutoCompleteProvider {
   private JavaCardshorts shortcard;
   private IdeEditor editor;
   boolean isMd = false;
+  
 
   public JavaAutoComplete() {}
 
   public JavaAutoComplete(IdeEditor editor) {
     this.editor = editor;
+    
   }
 
   public void setMd(boolean isMd) {
@@ -63,6 +65,8 @@ public class JavaAutoComplete implements AutoCompleteProvider {
       keywords.addAll(words);
     }
     shortcard = new JavaCardshorts(keywords, prefix);
+    
+
     return keywords;
   }
 

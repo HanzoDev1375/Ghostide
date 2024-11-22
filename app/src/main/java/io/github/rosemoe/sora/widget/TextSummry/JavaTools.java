@@ -4,6 +4,7 @@ import Ninja.coder.Ghostemane.code.IdeEditor;
 import Ninja.coder.Ghostemane.code.config.CreatorComment;
 import Ninja.coder.Ghostemane.code.config.GetterSetterGenerator;
 import Ninja.coder.Ghostemane.code.databinding.MakefolderBinding;
+import Ninja.coder.Ghostemane.code.marco.editorface.ConstructorMaker;
 import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
@@ -59,6 +60,7 @@ public class JavaTools {
             .addItem(new PowerMenuItem("Get and set"))
             .addItem(new PowerMenuItem("String Fog Decoder"))
             .addItem(new PowerMenuItem("CommentCreator"))
+            .addItem(new PowerMenuItem("ConstructorMaker"))
             .setIsMaterial(true)
             .build();
     menu.setMenuRadius(20f);
@@ -100,6 +102,8 @@ public class JavaTools {
             item.StringFog(editor);
           } else if (pos == 10) {
             makeComment(context, editor);
+          }else if(pos == 11){
+            new ConstructorMaker(context,editor.getText().toString(),(IdeEditor)editor);
           }
         });
   }
@@ -174,6 +178,7 @@ public class JavaTools {
         for (var c : cls.getDeclaredClasses()) {
           text += "\n\n" + c.toString();
         }
+        
 
         editor.setText(text);
       }

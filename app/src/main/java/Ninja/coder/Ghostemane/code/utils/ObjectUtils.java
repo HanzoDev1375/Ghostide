@@ -495,7 +495,7 @@ public class ObjectUtils {
     }
   }
 
-  public static Bitmap captureAppIco(View view, int size) {
+  public static Bitmap captureAppIco(View view, int size, int cardRadius) {
     Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
 
     Canvas canvas = new Canvas(bitmap);

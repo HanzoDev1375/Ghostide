@@ -10,6 +10,8 @@ import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
+import io.github.rosemoe.sora.event.ClickEvent;
 import io.github.rosemoe.sora.text.Content;
 import android.os.Handler;
 import android.os.Looper;
@@ -86,14 +88,18 @@ public class IdeEditor extends CodeEditor implements IEditor {
     setLineInfoTextSize(18f);
     setScalable(true);
     setCursorWidth(4.0f);
-
-    setNonPrintablePaintingFlags(
-        FLAG_DRAW_WHITESPACE_LEADING
-            | FLAG_DRAW_WHITESPACE_INNER
-            | FLAG_GHOSTWEB
-            | FLAG_DRAW_WHITESPACE_FOR_EMPTY_LINE);
+    setDividerWidth(19);
+    setPinLineNumber(true);
+    setDividerMargin(10f);
+    setNonPrintablePaintingFlags(FLAG_GHOSTWEB);
+    subscribeEvent(ClickEvent.class, ((event, unsubscribe) -> ta(event)));
     subscribeEvent(ContentChangeEvent.class, ((event, unsubscribe) -> handleContentChange(event)));
     return this;
+  }
+
+  void ta(ClickEvent ev) {
+    
+  //  Toast.makeText(getContext(), ev.getEditor().getText().toString(), 2).show();
   }
 
   public void setFadein() {}
@@ -260,8 +266,6 @@ public class IdeEditor extends CodeEditor implements IEditor {
   public void setErrorCallBack(CallBackErrorManager callBack) {
     this.call = callBack;
   }
-
-  
 
   public interface Result {
     void onTextEnd(String data);

@@ -3155,21 +3155,45 @@ public class CodeEditor extends View
     mPaint.setTextSize(getLineInfoTextSize());
     Paint.FontMetricsInt backupMetrics = mTextMetrics;
     mTextMetrics = mPaint.getFontMetricsInt();
+
+    // تنظیمات مربوط به شکل اشک
     float expand = mDpUnit * 3;
     float textWidth = mPaint.measureText(text);
-    mRect.top = centerY - getRowHeight() / 2f - expand;
-    mRect.bottom = centerY + getRowHeight() / 2f + expand;
-    mRect.right = rightX;
-    mRect.left = rightX - expand * 2 - textWidth;
-    drawColor(canvas, mColors.getColor(EditorColorScheme.LINE_NUMBER_PANEL), mRect);
-    float baseline = centerY - getRowHeight() / 2f + getRowBaseline(0);
-    float centerX = (mRect.left + mRect.right) / 2;
+    float rectHeight = getRowHeight() + expand * 2;
+    float rectWidth = textWidth + expand * 4;
+
+    // محاسبات برای مختصات و رسم شکل اشک
+    float ovalLeft = rightX - rectWidth / 2;
+    float ovalTop = centerY - rectHeight / 2;
+    float ovalRight = rightX + rectWidth / 2;
+    float ovalBottom = centerY + rectHeight / 2;
+
+    // رسم شکل اشک
+    Path path = new Path();
+    path.moveTo(rightX, ovalTop);
+    path.quadTo(ovalRight, ovalBottom, ovalLeft, ovalBottom); // منحنی پایین چپ
+    path.quadTo(rightX, ovalTop, ovalRight, ovalBottom); // منحنی پایین راست
+    path.close();
+
+    drawColor(canvas, mColors.getColor(EditorColorScheme.LINE_NUMBER_PANEL), path);
+
+    // محاسبه خط پایه برای متن
+    float baseline = centerY + getRowHeight() / 2f - mTextMetrics.bottom;
     mPaint.setColor(mColors.getColor(EditorColorScheme.LINE_NUMBER_PANEL_TEXT));
     mPaint.setTextAlign(Paint.Align.CENTER);
-    canvas.drawText(text, centerX, baseline, mPaint);
+    canvas.drawText(text, rightX, baseline, mPaint);
+
     mPaint.setTextAlign(Paint.Align.LEFT);
     mPaint.setTextSize(backupSize);
     mTextMetrics = backupMetrics;
+  }
+
+  protected void drawColor(Canvas canvas, int color, Path path) {
+    // تنظیم رنگ
+    if (mPaint2 != null) mPaint2.setColor(color);
+
+    // پر کردن شکل با رنگ مورد نظر
+    canvas.drawPath(path, mPaint2);
   }
 
   /**

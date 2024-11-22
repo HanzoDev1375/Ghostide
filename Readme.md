@@ -44,7 +44,7 @@
 
 - [x] Support for multiple languages
 - [x] Free App
-- [x] Run Python scripts
+- [x] Run Python & Php scripts
 - [x] pip support (80%)
 - [x] Material Colors
 - [x] Auto-save functionality
@@ -52,7 +52,13 @@
 - [ ] Plugin system (coming soon)
 - [x] HTML file reader
 - [x] Sass and Scss compiler
-- [ ] Java and Kotlin compiler (coming soon)
+- [x] Java fx compiler 
+- [x] Java Helper (90%) (Create constructor,Getter and setter and..)
+- [x] Html lsp(custom mod 50%)
+- [ ] Fast type
+- [ ] Less Compiler
+- [x] Git manager (30%) (Need help)
+- [x] CodeFormatter (60%)
 - [ ] Ruby compiler (coming soon)
 - [x] Physical keyboard support
 
@@ -62,9 +68,11 @@
 
 - [x] HTML
 - [x] CSS
-- [x] JavaScript
+- [x] JavaScript 
+- [x] TypeScript
 - [x] Python
-- [x] PHP
+- [x] Php
+- [x] Sass Scss
 - [x] Java
 - [x] Kotlin
 - [x] Swift
@@ -105,6 +113,9 @@ We invite you to collaborate on Ghost IDE under the following conditions:
 ### Code Snippets
 
 Ghost IDE supports code snippets. Here's an example:
+
+
+## Not implemented
 
 #### FA Json Example:
 

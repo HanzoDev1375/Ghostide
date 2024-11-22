@@ -4,6 +4,7 @@ import io.github.rosemoe.sora.data.CompletionItem;
 import io.github.rosemoe.sora.langs.html.HTMLLanguage;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 
+import io.github.rosemoe.sora.widget.Transilt;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -259,6 +260,49 @@ public class Css3Server {
       for (String color : HTMLLanguage.colorsCss) {
         if (color.startsWith(colorPrefix)) {
           list.add(css(color, htmlconfig.CssColor, propertyName + ": " + color + " ;"));
+        }
+      }
+    }
+    TypeValue(list, prefix);
+  }
+
+  public void TypeValue(List<CompletionItem> list, String prefix) {
+    String propertyName = "";
+
+    if (prefix.startsWith("type=") || prefix.startsWith("type")) {
+      String typePrefix = prefix.substring("type=".length()).trim();
+      String typePr = prefix.substring("type".length()).trim();
+      String[] types = { 
+      "text",      
+    "password",  
+    "email",     
+    "number",    
+    "tel",       
+    "url",       
+    "date",      
+    "time",      
+    "datetime-local", 
+    "color",     
+    "range",     
+    "checkbox",  
+    "radio",     
+    "file",      
+    "hidden",    
+    "search"     
+    };
+
+      for (String type : types) {
+        if (type.startsWith(typePrefix) || type.startsWith(typePr)) {
+          list.add(css(type, "Type", "type=" + "\"" + type + "\""));
+        }
+      }
+      return;
+    }
+    if (prefix.startsWith("lang=")) {
+      String langPrefix = prefix.substring("lang=".length()).trim();
+      for (var it : Transilt.arrf2) {
+        if (it.startsWith(langPrefix)) {
+          list.add(css(it, "Langs", "lang=" + "\"" + it + "\""));
         }
       }
     }

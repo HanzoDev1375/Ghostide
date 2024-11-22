@@ -179,6 +179,7 @@ public class ThemeUtils {
     editor.getColorScheme().setColor(EditorColorScheme.searchcolor4, Color.parseColor("#ACFF22CF"));
     editor.getColorScheme().setColor(EditorColorScheme.searchcolor5, Color.parseColor("#ACB4DA43"));
     editor.getColorScheme().setColor(EditorColorScheme.searchcolor6, Color.parseColor("#ACAA6CFB"));
+    editor.getColorScheme().setColor(EditorColorScheme.LINE_NUMBER_PANEL_TEXT,Color.WHITE);
     return this;
   }
 
