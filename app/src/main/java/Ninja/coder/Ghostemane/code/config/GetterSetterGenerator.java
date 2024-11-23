@@ -66,8 +66,10 @@ public class GetterSetterGenerator {
       Context context, CompilationUnit cu, IdeEditor outputText) {
     MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
     builder.setTitle("Select Fields for Getter/Setter");
+    ScrollView scrollView = new ScrollView(context);
     LinearLayout layout = new LinearLayout(context);
-      layout.setPadding(8,8,8,8);
+
+    layout.setPadding(8, 8, 8, 8);
     layout.setOrientation(LinearLayout.VERTICAL);
     List<CheckBox> checkBoxes = new ArrayList<>();
 
@@ -77,8 +79,9 @@ public class GetterSetterGenerator {
       layout.addView(checkBox);
       checkBoxes.add(checkBox);
     }
+    scrollView.addView(layout);
+    builder.setView(scrollView);
 
-    builder.setView(layout);
     builder.setPositiveButton(
         "Generate",
         (dialog, which) -> {

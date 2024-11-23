@@ -26,53 +26,55 @@ public class FetchTask extends GitTask {
   @Override
   protected Boolean doInBackground(String... params) {
     Git git = GitWrapper.getGit(repo);
-    if (git != null) {
-      try {
-        git.fetch()
-            .setCheckFetchedObjects(true)
-            .setRemote(params[0])
-            .setCredentialsProvider(new UsernamePasswordCredentialsProvider(params[1], params[2]))
-            .setProgressMonitor(
-                new BatchingProgressMonitor() {
-                  @Override
-                  protected void onUpdate(String taskName, int workCurr, Duration arg2) {}
+    if (GitUtils.isGitRepository(repo)) {
+      if (git != null) {
+        try {
+          git.fetch()
+              .setCheckFetchedObjects(true)
+              .setRemote(params[0])
+              .setCredentialsProvider(new UsernamePasswordCredentialsProvider(params[1], params[2]))
+              .setProgressMonitor(
+                  new BatchingProgressMonitor() {
+                    @Override
+                    protected void onUpdate(String taskName, int workCurr, Duration arg2) {}
 
-                  @Override
-                  protected void onEndTask(String taskName, int workCurr, Duration arg2) {}
+                    @Override
+                    protected void onEndTask(String taskName, int workCurr, Duration arg2) {}
 
-                  @Override
-                  protected void onUpdate(
-                      String taskName,
-                      int workCurr,
-                      int workTotal,
-                      int percentDone,
-                      Duration arg4) {
-                    publishProgress(
-                        taskName,
-                        String.valueOf(percentDone),
-                        String.valueOf(workCurr),
-                        String.valueOf(workTotal));
-                  }
+                    @Override
+                    protected void onUpdate(
+                        String taskName,
+                        int workCurr,
+                        int workTotal,
+                        int percentDone,
+                        Duration arg4) {
+                      publishProgress(
+                          taskName,
+                          String.valueOf(percentDone),
+                          String.valueOf(workCurr),
+                          String.valueOf(workTotal));
+                    }
 
-                  @Override
-                  protected void onEndTask(
-                      String taskName,
-                      int workCurr,
-                      int workTotal,
-                      int percentDone,
-                      Duration arg4) {
-                    publishProgress(taskName, String.valueOf(workCurr), String.valueOf(workTotal));
-                  }
-                })
-            .call();
-      } catch (GitAPIException e) {
-        Log.e(TAG, e.toString());
-        return false;
+                    @Override
+                    protected void onEndTask(
+                        String taskName,
+                        int workCurr,
+                        int workTotal,
+                        int percentDone,
+                        Duration arg4) {
+                      publishProgress(
+                          taskName, String.valueOf(workCurr), String.valueOf(workTotal));
+                    }
+                  })
+              .call();
+
+        } catch (GitAPIException e) {
+          Log.e(TAG, e.toString());
+          return false;
+        }
+        return true;
       }
-
-      return true;
     }
-
     return false;
   }
 }

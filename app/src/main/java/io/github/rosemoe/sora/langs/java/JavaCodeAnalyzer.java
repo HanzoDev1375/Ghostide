@@ -47,20 +47,10 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
   private final WeakReference<IdeEditor> mEditorReference;
   private final List<DiagnosticWrapper> mDiagnostics;
   private static final Object OBJECT = new Object();
-  private Set<Integer> usedColors = new HashSet<>();
+  
   private Map<String, Boolean> mapStyle;
 
-  private static final int MAX_BRACE_COUNT = Integer.MAX_VALUE;
-  private static final int[] BRACE_COLORS = {
-    EditorColorScheme.OPERATOR,
-    EditorColorScheme.KEYWORD,
-    EditorColorScheme.ATTRIBUTE_NAME,
-    EditorColorScheme.COLOR_WARNING,
-    EditorColorScheme.HTML_TAG,
-    EditorColorScheme.LITERAL,
-    EditorColorScheme.Ninja,
-    EditorColorScheme.ATTRIBUTE_NAME
-  };
+  
 
   public JavaCodeAnalyzer(IdeEditor editor) {
     mEditorReference = new WeakReference<>(editor);
@@ -92,11 +82,9 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
       if (editor == null) {
         return;
       }
-      StringBuilder text =
-          content instanceof StringBuilder ? (StringBuilder) content : new StringBuilder(content);
+      
       CodePointCharStream stream = CharStreams.fromReader(new StringReader(content.toString()));
       JavaLexer lexer = new JavaLexer(stream);
-      
 
       var classNamePrevious = false;
       Token token, preToken = null, prePreToken = null;
@@ -113,15 +101,14 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
         EditorColorScheme.Ninja,
         EditorColorScheme.KEYWORD
       };
-      int lbraceCount = 0;
-      Stack<Integer> lbraceLevels = new Stack<>();
+      
 
       Stack<BlockLine> stack = new Stack<>();
       TrieTree<Object> tree = new TrieTree<>();
       int type, currSwitch = 1, maxSwitch = 0, previous = 0;
       int lastLine = 1;
       int line, column;
-      var prevIsTagName = false;
+     
       tree.put("String", OBJECT);
       tree.put("Object", OBJECT);
       while (delegate.shouldAnalyze()) {
@@ -134,7 +121,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
         line = token.getLine() - 1;
         type = token.getType();
         String text1 = token.getText();
-        var tokenLength = token.getText().length();
+        
         column = token.getCharPositionInLine();
         if (type == JavaLexer.EOF) {
           lastLine = line;
@@ -328,7 +315,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           case JavaLexer.IDENTIFIER:
             {
               info.addIdentifier(token.getText());
-              boolean isBold, isItalic, isUnderLineMode = false;
+              
               boolean isDot = true;
 
               int colorid = EditorColorScheme.TEXT_NORMAL;
@@ -357,7 +344,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                   || previous == JavaLexer.BOOLEAN) {
                 colorid = EditorColorScheme.javafun;
               }
-              if (previous == JavaLexer.RETURN  || previous == JavaLexer.NEW) {
+              if (previous == JavaLexer.RETURN || previous == JavaLexer.NEW) {
                 colorid = EditorColorScheme.HTML_TAG;
               }
               if (previous == JavaLexer.INT) {
@@ -439,9 +426,9 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 if (currSwitch > maxSwitch) {
                   maxSwitch = currSwitch;
                 }
-                currSwitch = 0; 
+                currSwitch = 0;
               }
-              currSwitch++; // ا 
+              currSwitch++; // ا
               break;
             }
 
@@ -562,6 +549,8 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
 
               super.visit(arg0, arg1);
             }
+
+
           },
           null);
       unusedImport.removeIf(importName -> usedVariables.contains(getSimpleName(importName)));
@@ -586,7 +575,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
       for (var it : mtcall) {
         var li = mlines.get(it);
         var col = mcoloum.get(it);
-        Utils.setSpanEFO(result, li, col + 2, EditorColorScheme.javaoprator);
+        Utils.setSpanEFO(result, li, col + 2, EditorColorScheme.KEYWORD);
       }
 
     } catch (IOException e) {
@@ -625,6 +614,4 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             mapStyle.get("isStrike").booleanValue(),
             mapStyle.get("isLine").booleanValue()));
   }
-
-  
 }

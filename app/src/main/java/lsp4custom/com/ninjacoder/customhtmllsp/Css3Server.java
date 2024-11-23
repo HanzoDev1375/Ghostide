@@ -272,24 +272,24 @@ public class Css3Server {
     if (prefix.startsWith("type=") || prefix.startsWith("type")) {
       String typePrefix = prefix.substring("type=".length()).trim();
       String typePr = prefix.substring("type".length()).trim();
-      String[] types = { 
-      "text",      
-    "password",  
-    "email",     
-    "number",    
-    "tel",       
-    "url",       
-    "date",      
-    "time",      
-    "datetime-local", 
-    "color",     
-    "range",     
-    "checkbox",  
-    "radio",     
-    "file",      
-    "hidden",    
-    "search"     
-    };
+      String[] types = {
+        "text",
+        "password",
+        "email",
+        "number",
+        "tel",
+        "url",
+        "date",
+        "time",
+        "datetime-local",
+        "color",
+        "range",
+        "checkbox",
+        "radio",
+        "file",
+        "hidden",
+        "search"
+      };
 
       for (String type : types) {
         if (type.startsWith(typePrefix) || type.startsWith(typePr)) {

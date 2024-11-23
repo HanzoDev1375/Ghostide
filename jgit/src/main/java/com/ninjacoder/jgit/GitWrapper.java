@@ -197,28 +197,29 @@ public class GitWrapper {
    * @return list of commits
    */
   public static List<RevCommit> getCommits(File repo) {
-    Iterable<RevCommit> log = null;
-    List<RevCommit> revCommits = new ArrayList<>();
-    try {
-      if(repo == null) return null;
-      Git git = getGit(repo);
-      if (git != null) {
-        log = git.log().call();
-      }
-    } catch (GitAPIException e) {
-      Log.e(TAG, e.toString());
+  if (repo == null || !GitUtils.isGitRepository(repo)) return null;
 
-      return null;
+  Iterable<RevCommit> log = null;
+  List<RevCommit> revCommits = new ArrayList<>();
+
+  try {
+    Git git = getGit(repo);
+    if (git != null) {
+      log = git.log().call();
     }
-
-    if (log != null) {
-      for (RevCommit commit : log) {
-        revCommits.add(commit);
-      }
-    }
-
-    return revCommits;
+  } catch (GitAPIException e) {
+    Log.e(TAG, e.toString());
+    return null;
   }
+
+  if (log != null) {
+    for (RevCommit commit : log) {
+      revCommits.add(commit);
+    }
+  }
+
+  return revCommits;
+}
 
   /**
    * git branch

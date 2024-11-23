@@ -2,6 +2,7 @@ package io.github.rosemoe.sora.langs.xml.analyzer;
 
 import io.github.rosemoe.sora.data.Span;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
+import io.github.rosemoe.sora.text.TextStyle;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
 
 import java.util.List;
@@ -124,5 +125,9 @@ public class Utils {
     }
 
     return end;
+  }
+  public static void getSpan(TextAnalyzeResult colors, int line, int column,int color){
+    Span span = Span.obtain(column,TextStyle.makeStyle(color));
+    colors.add(line,span);
   }
 }

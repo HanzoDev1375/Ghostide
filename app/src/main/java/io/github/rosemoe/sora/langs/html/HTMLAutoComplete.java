@@ -127,7 +127,7 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
   }
 
   private CompletionItem getEmmetItemPost(String em, String doc) {
-    final String open = "</".concat(em).concat(">");
+    final String open = "<".concat(em).concat("/>");
     final var item = new CompletionItem(em, doc);
     item.commit = open;
     item.cursorOffset(item.commit.length() - open.length());

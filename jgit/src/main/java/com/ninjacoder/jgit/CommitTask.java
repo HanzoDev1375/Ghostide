@@ -26,7 +26,9 @@ public class CommitTask extends GitTask {
       Git git = GitWrapper.getGit(repo);
       if (git != null) {
 
-        git.commit().setMessage(strings[0]).setCommitter(strings[1], strings[2]).call();
+        if(GitUtils.isGitRepository(repo)) {
+          git.commit().setMessage(strings[0]).setCommitter(strings[1], strings[2]).call();
+        }
       }
     } catch (GitAPIException e) {
       Log.e(TAG, e.toString());
