@@ -13,7 +13,7 @@
     <string name="themebackoup">備份主題</string>
     <string name="logcater">錯誤日誌</string>
     <string name="exitapp">退出程序</string>
-    <string name="geticonmod">象形圖'plami</string>
+    <string name="geticonmod">象形圖 plami</string>
     <string name="exitappmsg">您想退出該計劃嗎？</string>
     <string name="no">好的</string>
     <string name="yes">辛</string>
@@ -93,7 +93,7 @@
     <string name="make_file">建立一個文件</string>
     <string name="make_project">創建一個專案</string>
     <string name="ftp">文件傳輸協定</string>
-    <string name="search_file">文件搜尋（測試版）</string>
+    <string name="search_file">文件搜尋 測試版</string>
     <string name="folder_tree">資料夾樹</string>
     <string name="file_tree">文件樹</string>
     <string name="git_clone">取得克隆</string>

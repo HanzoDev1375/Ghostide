@@ -13,7 +13,7 @@
     <string name="themebackoup">बैकअप थीम</string>
     <string name="logcater">त्रुटि लॉग</string>
     <string name="exitapp">प्रोग्राम से बाहर निकलें</string>
-    <string name="geticonmod">चित्रलेख to'plami</string>
+    <string name="geticonmod">चित्रलेख to plami</string>
     <string name="exitappmsg">क्या आप कार्यक्रम छोड़ना चाहते हैं?</string>
     <string name="no">अच्छा</string>
     <string name="yes">सिम</string>
@@ -95,7 +95,7 @@
     <string name="ftp">एफ़टीपी</string>
     <string name="search_file">फ़ाइल खोज (बीटा)</string>
     <string name="folder_tree">फ़ोल्डर वृक्ष</string>
-    <string name="file_tree">फ़ाइल वृक्ष</string>
+    <string name="file_tree">फाइल वृक्ष</string>
     <string name="git_clone">गेट क्लोन</string>
     <string name="android_module">एंड्रॉइड मॉड्यूलि</string>
     <string name="git_tools">गिट उपकरण</string>
@@ -105,7 +105,7 @@
     <string name="custom_icons">कस्टम चिह्न</string>
     <string name="termthemes">टर्मिनल थीम कॉन्फ़िगर करें</string>
     <string name="scriptcustom">चल रही स्क्रिप्ट कॉन्फ़िगर करें</string>
-    <string name="customthemeapp">ऐप थीम कस्टमाइज़ करें</string>
+    <string name="customthemeapp">ऐप थीम कस्टमाइज़ करें</string> 
     <string name="customchareditor">संपादक कोड के अलग-अलग अक्षर</string>
 
 </resources>
