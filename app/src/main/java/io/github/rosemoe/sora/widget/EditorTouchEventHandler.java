@@ -31,9 +31,11 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.widget.OverScroller;
 
+import android.widget.Toast;
 import io.github.rosemoe.sora.event.ClickEvent;
 import io.github.rosemoe.sora.event.DoubleClickEvent;
 import io.github.rosemoe.sora.event.HandleStateChangeEvent;
+import io.github.rosemoe.sora.event.IconLineNumberEvent;
 import io.github.rosemoe.sora.event.LongPressEvent;
 import io.github.rosemoe.sora.event.ScrollEvent;
 import io.github.rosemoe.sora.event.SelectionChangeEvent;
@@ -343,6 +345,15 @@ public class EditorTouchEventHandler
             this.left = new SelectionHandle(SelectionHandle.LEFT);
             this.right = new SelectionHandle(SelectionHandle.RIGHT);
           }
+          for (var it : mEditor.geticonRect()) {
+            if (it.contains((int) e.getX(), (int) e.getY())) {
+                Toast.makeText(mEditor.getContext(), "آیکون کلیک شد!", Toast.LENGTH_SHORT).show();
+                mEditor.dispatchEvent(new IconLineNumberEvent(mEditor));
+                return true;
+            
+            }
+          }
+
           return true;
         }
       case MotionEvent.ACTION_MOVE:

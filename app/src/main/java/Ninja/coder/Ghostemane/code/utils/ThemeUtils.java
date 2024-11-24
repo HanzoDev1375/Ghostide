@@ -480,7 +480,7 @@ public class ThemeUtils {
   "phpkeyword": "#FFB800",
   "tabback": "#282c34",
   "javafun": "#5DA6E2",
-  "keyword": "#01FF00",
+  "keyword": "#ffff24c8",
   "jsfun": "#FFCC80",
   "auto_comp_panel_corner": "#FF8C00",
   "pycolormatch3": "#FF33FF",

@@ -24,6 +24,8 @@
 package io.github.rosemoe.sora.widget;
 
 import Ninja.coder.Ghostemane.code.utils.DiagnosticsListener;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import androidx.core.graphics.ColorUtils;
 import io.github.rosemoe.sora.event.ColorSchemeUpdateEvent;
 import io.github.rosemoe.sora.text.TextUtils;
@@ -102,7 +104,8 @@ import java.util.*;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.*;
-
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import Ninja.coder.Ghostemane.code.R;
 import io.github.rosemoe.sora.annotations.Experimental;
 import io.github.rosemoe.sora.annotations.UnsupportedUserUsage;
@@ -363,6 +366,7 @@ public class CodeEditor extends View
   private final List<DiagnosticWrapper> mDiagnostics = new ArrayList<>();
   private boolean isBlockLineRpg;
   private String charName = "";
+  private List<Rect> iconRect = new ArrayList<>();
   private Canvas canvas;
 
   public List<DiagnosticWrapper> getDiagnostics() {
@@ -371,6 +375,10 @@ public class CodeEditor extends View
 
   public void setDiagnosticsListener(DiagnosticsListener diagnosticsListener) {
     mDiagnosticsListener = diagnosticsListener;
+  }
+
+  public List<Rect> geticonRect() {
+    return iconRect;
   }
 
   public synchronized void setDiagnostics(List<DiagnosticWrapper> diagnostics) {
@@ -1697,17 +1705,19 @@ public class CodeEditor extends View
       }
 
       if (span.backgroundColorMy != 0) {
+        // تنظیم رنگ پس‌زمینه
         mPaintOther.setColor(span.backgroundColorMy);
-        float cornerRadius = 10; // تعیین شعاع گوشه‌ها
+        float cornerRadius = 10;
 
+        // رسم مستطیل گرد با رنگ پس‌زمینه
         canvas.drawRoundRect(
             new RectF(
                 paintingOffset,
                 getRowTop(row),
                 paintingOffset + width,
                 getRowTop(row) + getRowHeight()),
-            cornerRadius, // شعاع گوشه‌ها
-            cornerRadius, // شعاع گوشه‌ها
+            cornerRadius,
+            cornerRadius,
             mPaintOther);
       }
 
@@ -2181,18 +2191,20 @@ public class CodeEditor extends View
           }
 
           // mPaint.setAlpha(TextStyle.getAlpha(styleBits));
-
           if (span.backgroundColorMy != 0) {
+            // تنظیم رنگ پس‌زمینه
             mPaintOther.setColor(span.backgroundColorMy);
-            float cornerRadius = 10; // تعیین شعاع گوشه‌ها
+            float cornerRadius = 10;
+
+            // رسم مستطیل گرد با رنگ پس‌زمینه
             canvas.drawRoundRect(
                 new RectF(
                     paintingOffset,
                     getRowTop(row),
                     paintingOffset + width,
                     getRowTop(row) + getRowHeight()),
-                cornerRadius, // شعاع گوشه‌ها
-                cornerRadius, // شعاع گوشه‌ها
+                cornerRadius,
+                cornerRadius,
                 mPaintOther);
           }
 
@@ -3511,17 +3523,37 @@ public class CodeEditor extends View
     drawColor(canvas, color, mRect);
   }
 
-  /** Draw single line number */
+  private int ShowIcon;
+
+  public void setShowIcon(int ShowIcon) {
+    this.ShowIcon = ShowIcon;
+  }
+
   protected void drawLineNumber(
       Canvas canvas, int line, int row, float offsetX, float width, int color) {
+
+    // بارگذاری تصویر آیکون
+    Bitmap defaultIconBitmap =
+        BitmapFactory.decodeResource(getResources(), R.drawable.icon_playrow);
+
+    // مقادیر مورد نظر برای اندازه آیکون
+    int desiredWidth = 30;
+    int desiredHeight = 30;
+    Bitmap scaledIconBitmap =
+        Bitmap.createScaledBitmap(defaultIconBitmap, desiredWidth, desiredHeight, true);
+
+    // بررسی اینکه آیا می‌توان خط را رسم کرد
     if (width + offsetX <= 0) {
       return;
     }
+
+    // تنظیمات متن
     if (mPaintOther.getTextAlign() != mLineNumberAlign) {
       mPaintOther.setTextAlign(mLineNumberAlign);
     }
     mPaintOther.setColor(color);
-    // Line number center align to text center
+
+    // محاسبه موقعیت y برای متن
     float y =
         (getRowBottom(row) + getRowTop(row)) / 2f
             - (mLineNumberMetrics.descent - mLineNumberMetrics.ascent) / 2f
@@ -3529,22 +3561,60 @@ public class CodeEditor extends View
             - getOffsetY();
 
     var buffer = TemporaryCharBuffer.obtain(20);
-    line++;
+    line++; // افزایش شماره خط
     int i = stringSize(line);
     Numbers.getChars(line, i, buffer);
 
+    // محاسبه موقعیت x برای شماره خط
+    float lineNumberX;
     switch (mLineNumberAlign) {
       case LEFT:
-        canvas.drawText(buffer, 0, i, offsetX, y, mPaintOther);
+        lineNumberX = offsetX;
         break;
       case RIGHT:
-        canvas.drawText(buffer, 0, i, offsetX + width, y, mPaintOther);
+        lineNumberX = offsetX + width;
         break;
       case CENTER:
-        canvas.drawText(buffer, 0, i, offsetX + (width + mDividerMargin) / 2f, y, mPaintOther);
+        lineNumberX = offsetX + (width + mDividerMargin) / 2f;
+        break;
+      default:
+        lineNumberX = offsetX;
     }
+
+    // رسم شماره خط
+    canvas.drawText(buffer, 0, i, lineNumberX, y, mPaintOther);
+
+    // رسم آیکون در صورت وجود
+    if (scaledIconBitmap != null) {
+      float iconX = lineNumberX + mDividerMargin; // فاصله آیکون از شماره خط
+      float iconY = y - scaledIconBitmap.getHeight() / 2f; // موقعیت عمودی آیکون
+      if (line == ShowIcon) {
+        Paint iconPaint = new Paint();
+        iconPaint.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(scaledIconBitmap, iconX, iconY, iconPaint);
+        Rect iconRects =
+            new Rect(
+                (int) iconX,
+                (int) iconY,
+                (int) (iconX + scaledIconBitmap.getWidth()),
+                (int) (iconY + scaledIconBitmap.getHeight()));
+        iconRect.add(iconRects);
+      }
+    }
+
+    // بازیابی بافر موقت
     TemporaryCharBuffer.recycle(buffer);
   }
+
+  /**
+   * Draw single line number
+   *
+   * <p>Paint iconPaint = new Paint(); iconPaint.setColorFilter(new PorterDuffColorFilter(color,
+   * PorterDuff.Mode.SRC_IN));
+   *
+   * <p>canvas.drawBitmap(scaledIconBitmap, iconX, iconY, iconPaint); // استفاده از paint با فیلتر
+   * رنگ
+   */
 
   /**
    * Draw line number background

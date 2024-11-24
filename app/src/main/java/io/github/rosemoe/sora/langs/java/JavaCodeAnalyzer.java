@@ -47,10 +47,8 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
   private final WeakReference<IdeEditor> mEditorReference;
   private final List<DiagnosticWrapper> mDiagnostics;
   private static final Object OBJECT = new Object();
-  
-  private Map<String, Boolean> mapStyle;
 
-  
+  private Map<String, Boolean> mapStyle;
 
   public JavaCodeAnalyzer(IdeEditor editor) {
     mEditorReference = new WeakReference<>(editor);
@@ -82,7 +80,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
       if (editor == null) {
         return;
       }
-      
+
       CodePointCharStream stream = CharStreams.fromReader(new StringReader(content.toString()));
       JavaLexer lexer = new JavaLexer(stream);
 
@@ -101,14 +99,13 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
         EditorColorScheme.Ninja,
         EditorColorScheme.KEYWORD
       };
-      
 
       Stack<BlockLine> stack = new Stack<>();
       TrieTree<Object> tree = new TrieTree<>();
       int type, currSwitch = 1, maxSwitch = 0, previous = 0;
       int lastLine = 1;
       int line, column;
-     
+
       tree.put("String", OBJECT);
       tree.put("Object", OBJECT);
       while (delegate.shouldAnalyze()) {
@@ -121,7 +118,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
         line = token.getLine() - 1;
         type = token.getType();
         String text1 = token.getText();
-        
+
         column = token.getCharPositionInLine();
         if (type == JavaLexer.EOF) {
           lastLine = line;
@@ -315,7 +312,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           case JavaLexer.IDENTIFIER:
             {
               info.addIdentifier(token.getText());
-              
+
               boolean isDot = true;
 
               int colorid = EditorColorScheme.TEXT_NORMAL;
@@ -549,10 +546,9 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
 
               super.visit(arg0, arg1);
             }
-
-
           },
           null);
+      
       unusedImport.removeIf(importName -> usedVariables.contains(getSimpleName(importName)));
       declaredVariables.removeAll(usedVariables);
 
@@ -566,16 +562,13 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
       for (var unusedVar : declaredVariables) {
         var lines = inline.get(unusedVar);
         var col = incol.get(unusedVar);
-        Utils.setSpanEFO(
-            result,
-            lines.intValue(),
-            col.intValue() + unusedVar.length(),
-            EditorColorScheme.COMMENT);
+        Utils.setSpanEFO(result, lines.intValue(), col.intValue() + 3, EditorColorScheme.COMMENT);
       }
       for (var it : mtcall) {
         var li = mlines.get(it);
         var col = mcoloum.get(it);
         Utils.setSpanEFO(result, li, col + 2, EditorColorScheme.KEYWORD);
+        editor.setShowIcon(li);
       }
 
     } catch (IOException e) {

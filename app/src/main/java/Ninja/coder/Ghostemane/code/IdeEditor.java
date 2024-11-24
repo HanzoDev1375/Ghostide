@@ -92,13 +92,12 @@ public class IdeEditor extends CodeEditor implements IEditor {
     setNonPrintablePaintingFlags(FLAG_GHOSTWEB);
     subscribeEvent(ClickEvent.class, ((event, unsubscribe) -> ta(event)));
     subscribeEvent(ContentChangeEvent.class, ((event, unsubscribe) -> handleContentChange(event)));
+    
 
     return this;
   }
 
-  void ta(ClickEvent ev) {
-    
-  }
+  void ta(ClickEvent ev) {}
 
   public void setFadein() {}
 

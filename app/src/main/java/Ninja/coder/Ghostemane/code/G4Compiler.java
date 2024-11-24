@@ -16,7 +16,7 @@ public class G4Compiler {
   public static void compile(String input, String output, String packages) {
     if (input.endsWith(".g4")) {
       String[] args = {
-        input, "-package", packages, "-Werror", "-Xlog", "-o", output,
+        input, "-package", packages,"-o", output,
       };
       main(args);
       pathOutput = output;
@@ -43,17 +43,36 @@ public class G4Compiler {
 
             @Override
             public void error(ANTLRMessage error) {
-              b.append(error.getErrorType().msg).append("\n");
-              showToast(error.getErrorType().msg);
+              var msg = error.getErrorType().msg;
+              int line = error.line;
+              int col = error.charPosition;
+              var filename = error.fileName;
+              StringBuilder builder = new StringBuilder();
+              builder.append("Code by ghost ide").append('\n');
+              builder.append(msg).append('\n');
+              builder.append("Line : ").append(line).append('\n');
+              builder.append("Col : ").append(col).append('\n');
+              builder.append("FileName : ").append(filename).append('\n');
+              showToast(builder.toString());
               FileUtil.writeFile(
-                  error.getErrorType().msg + "\n line: " + String.valueOf(error.line),
-                  pathOutput + "/error.txt");
+                  "/storage/emulated/0/GhostWebIDE/antlrgrammererr.log", builder.toString());
             }
 
             @Override
-            public void warning(ANTLRMessage war) {
-              //    b.append().append("\n");
-              showToast(war.getErrorType().msg);
+            public void warning(ANTLRMessage error) {
+              var msg = error.getErrorType().msg;
+              int line = error.line;
+              int col = error.charPosition;
+              var filename = error.fileName;
+              StringBuilder builder = new StringBuilder();
+              builder.append("Code by ghost ide").append('\n');
+              builder.append(msg).append('\n');
+              builder.append("Line : ").append(line).append('\n');
+              builder.append("Col : ").append(col).append('\n');
+              builder.append("FileName : ").append(filename).append('\n');
+              showToast(builder.toString());
+              FileUtil.writeFile(
+                  "/storage/emulated/0/GhostWebIDE/antlrgrammerwar.log", builder.toString());
             }
           });
       antlr.processGrammarsOnCommandLine();
