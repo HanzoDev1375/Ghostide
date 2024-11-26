@@ -177,7 +177,7 @@ public class FileIconHelper {
         else fileIconRes = R.drawable.ic_material_html;
       } else fileIconRes = R.drawable.ic_material_html;
     } else if (is("jar")) fileIconRes = R.drawable.ic_material_jar;
-    else if (is("java")) fileIconRes = R.drawable.ic_material_java;
+    else if (is("java") || is("jj")) fileIconRes = R.drawable.ic_material_java;
     else if (is("js")) {
       if (isEnvironmentEnabled) {
         if (fileEnvHelper.nodejs().isNodeJsFile()) fileIconRes = R.drawable.ic_material_nodejs;

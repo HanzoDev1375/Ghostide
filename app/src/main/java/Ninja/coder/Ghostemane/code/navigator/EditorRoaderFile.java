@@ -4,6 +4,7 @@ import Ninja.coder.Ghostemane.code.IdeEditor;
 import Ninja.coder.Ghostemane.code.utils.FileCompatApi28;
 import Ninja.coder.Ghostemane.code.widget.ExrtaFab;
 import android.widget.ProgressBar;
+import io.github.rosemoe.sora.langs.Javacc.JavaccLang;
 import io.github.rosemoe.sora.langs.antlrlang.ANTLRV4Lang;
 import io.github.rosemoe.sora.langs.cpp.CppLanguage;
 import io.github.rosemoe.sora.langs.csharp.CSharpLanguage;
@@ -157,10 +158,12 @@ public class EditorRoaderFile {
       _fab.hide();
       ReadFileCompat(editor, _path, bar);
       editor.setEditorLanguage(new MySqlLang());
-    } else {
-      // ic.setVisibility(View.GONE);
-      _fab.postDelayed(_fab::hide,400);
-    }
+    } else if (_path.endsWith(".jj")) {
+      
+      ReadFileCompat(editor, _path, bar);
+      editor.setEditorLanguage(new JavaccLang(editor));
+      _fab.postDelayed(_fab::show, 400);
+    } else _fab.postDelayed(_fab::hide, 400);
   }
 
   protected static void ReadFileCompat(CodeEditor editor, String path, ProgressBar bar) {

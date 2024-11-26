@@ -18,6 +18,7 @@ import Ninja.coder.Ghostemane.code.compressor.ZxExtractor;
 import Ninja.coder.Ghostemane.code.databin.FileEvent;
 import Ninja.coder.Ghostemane.code.databin.FileMaker;
 import Ninja.coder.Ghostemane.code.databin.RxFileObserver;
+import Ninja.coder.Ghostemane.code.databinding.FiledirBinding;
 import Ninja.coder.Ghostemane.code.marco.editorface.ClassNodePaserImpl;
 import android.util.Log;
 import Ninja.coder.Ghostemane.code.filehelper.CreatorModule;
@@ -88,6 +89,7 @@ import com.google.android.material.color.MaterialColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
+import com.google.android.material.search.SearchBar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
@@ -109,81 +111,37 @@ import java.util.*;
 public class FileManagerActivity extends BaseCompat implements FileManagerAd.onClick {
 
   public String Folder = "";
-
   protected SdCardUtil sd_stor;
-
   protected AlertDialog maindialogPrfex;
-
-  protected NavigationViewCompnet navs;
-
   protected FastScrollerBuilder fast;
-
   protected FileEventUser user;
-
-  private ExtendedFloatingActionButton fabAdd;
-
-  private MaterialToolbar _toolbar;
-
-  private AppBarLayout _app_bar;
-
-  private CoordinatorLayout _coordinator;
-
-  private DrawerLayout _drawer;
-
+  private SearchBar searchbar;
   private double index = 0;
-
   private String staticstring = "";
-
   private double gotoback = 0;
-
   private FileManagerAd fileListItem;
-
   private String CreateFolder = "";
-
   private String GetTab = "";
-
   private String tab = "";
-
   private double n = 0;
-
   private ProjectMaker projectMaker;
-
   private double positionTabs = 0;
-
   protected SharedPreferences gridMode;
-
   private boolean Chack = false;
-
   private boolean staticStorage = false;
-
   private String version = "";
-
   private double post = 0;
-
   private int newpos = 0;
-
+  private FiledirBinding bind;
   private List<String> list = new ArrayList<>();
-
   private List<String> folderList = new ArrayList<>();
-
   private List<String> fileList = new ArrayList<>();
-
   private ArrayList<HashMap<String, Object>> files = new ArrayList<>();
-
   private ArrayList<HashMap<String, Object>> newlistmap = new ArrayList<>();
-
   private ArrayList<String> pv = new ArrayList<>();
-
   private ArrayList<HashMap<String, Object>> upfile = new ArrayList<>();
-
   private ArrayList<HashMap<String, Object>> projectdata = new ArrayList<>();
-
-  private LinearLayout CensractorListView1;
-
-  private RecyclerView recyclerview1, recyclerview2;
-
   private Intent intentgetSettings = new Intent();
-
   private SharedPreferences shp;
 
   private Intent activitiy = new Intent();
@@ -221,49 +179,29 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
   private SharedPreferences zipCuntishen;
 
   private Intent govirwFilm = new Intent();
-
   private SharedPreferences war;
-
   private RequestNetwork CheckNewVersion;
-
   private RequestNetwork.RequestListener UpdateCheck;
-
   private Intent finalintentpostfont = new Intent();
-
   private Intent intentgetLogCat = new Intent();
-
   private SharedPreferences tmp;
-
   private Intent musicShow = new Intent();
-
   private SharedPreferences base;
-
   private SharedPreferences save_path;
-
   private SharedPreferences materialYou;
-
   private SharedPreferences book;
-
   private ArrayList<HashMap<String, Object>> a = new ArrayList<>();
-
   private HashMap<String, Object> mapz32 = new HashMap<>();
-
   private HichemSoftFileUtil utils;
-
   private GridLayoutManager gridLayoutManager;
-
   private SharedPreferences sharedPreferences;
 
-  private CircularProgressIndicator filedir_bar;
-
-  private ViewDownloder downloder;
-
-  private LinearLayout emptyview;
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
     super.onCreate(_savedInstanceState);
-    setContentView(R.layout.filedir);
+    bind = FiledirBinding.inflate(LayoutInflater.from(this));
+    setContentView(bind.getRoot());
     initialize(_savedInstanceState);
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
             == PackageManager.PERMISSION_DENIED
@@ -290,27 +228,18 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
   }
 
   private void initialize(Bundle _savedInstanceState) {
-    navs = findViewById(R.id.navs);
-    fabAdd = findViewById(R.id.fabAdd);
+    
     startService(new Intent(getApplicationContext(), MediaListenerService.class));
-    // from protected NavigationViewCompnet navs;
-    _app_bar = findViewById(R.id._app_bar);
-    _coordinator = findViewById(R.id._coordinator);
-    _toolbar = findViewById(R.id._toolbar);
-    setSupportActionBar(_toolbar);
+    // from protected NavigationViewCompnet bind.navs;
+    
+   // setSupportActionBar(searchbar);
     gridLayoutManager = new GridLayoutManager(this, 1);
     gridMode = getSharedPreferences("gride", Activity.MODE_PRIVATE);
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    getSupportActionBar().setHomeButtonEnabled(true);
-    _drawer = findViewById(R.id._drawer);
-    ActionBarDrawerToggle _toggle =
-        new ActionBarDrawerToggle(
-            FileManagerActivity.this, _drawer, _toolbar, R.string.app_name, R.string.app_name);
-    _drawer.addDrawerListener(_toggle);
-    _toggle.syncState();
-    CensractorListView1 = findViewById(R.id.CensractorListView1);
-    recyclerview1 = findViewById(R.id.recyclerview1);
-    recyclerview2 = findViewById(R.id.recyclerview2);
+//    ActionBarDrawerToggle _toggle =
+//        new ActionBarDrawerToggle(
+//            FileManagerActivity.this, bind.Drawer, searchbar, R.string.app_name, R.string.app_name);
+//    bind.Drawer.addDrawerListener(_toggle);
+//    _toggle.syncState();
     fileListItem = new FileManagerAd(files, FileManagerActivity.this, this);
     shp = getSharedPreferences("shp", Activity.MODE_PRIVATE);
     soglo = getSharedPreferences("soglo", Activity.MODE_PRIVATE);
@@ -325,11 +254,10 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     base = getSharedPreferences("base", Activity.MODE_PRIVATE);
     save_path = getSharedPreferences("save_path", Activity.MODE_PRIVATE);
     materialYou = getSharedPreferences("materialYou", Activity.MODE_PRIVATE);
-    filedir_bar = findViewById(R.id.filedir_bar);
+    
     book = getSharedPreferences("hsipsot4444", Activity.MODE_PRIVATE);
-    downloder = findViewById(R.id.downloder);
-    emptyview = findViewById(R.id.emptyview);
-    WindowsMath(_drawer, _coordinator);
+    
+  //WindowsMath(bind.Drawer, _coordinator);
     BackPressed();
     if (gridMode.contains("gride")) {
       setViewType(ViewType.GRID);
@@ -346,22 +274,22 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
         });
     var helper =
         new RecyclerViewHelper(
-            recyclerview2,
+            bind.recyclerview2,
             new RecyclerViewHelper.CallBackHelper() {
 
               @Override
               public void CallBackLeft(int pos) {
                 MakeZipFileFromThread((int) pos);
-                recyclerview2.getAdapter().notifyDataSetChanged();
+                bind.recyclerview2.getAdapter().notifyDataSetChanged();
               }
 
               @Override
               public void CallBackRight(int pos) {
                 _delFileCustom(pos);
-                recyclerview2.getAdapter().notifyDataSetChanged();
+                bind.recyclerview2.getAdapter().notifyDataSetChanged();
               }
             });
-    recyclerview2.addOnScrollListener(
+    bind.recyclerview2.addOnScrollListener(
         new RecyclerView.OnScrollListener() {
 
           @Override
@@ -373,9 +301,9 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
           public void onScrolled(RecyclerView recyclerView, int _offsetX, int _offsetY) {
             super.onScrolled(recyclerView, _offsetX, _offsetY);
             if (_offsetY > 2) {
-              fabAdd.shrink();
+              bind.fabAdd.shrink();
             } else if (_offsetY < -2) {
-              fabAdd.extend();
+              bind.fabAdd.extend();
             }
           }
         });
@@ -404,13 +332,14 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
               di.setNeutralButton(
                   "Update",
                   (p, d) -> {
-                    downloder.setTitle(upfile.get(0).get("Title").toString());
-                    downloder.setSizeTitle(upfile.get(0).get("sizearm64").toString());
-                    downloder.setVisibility(View.VISIBLE);
-                    fabAdd.setVisibility(View.GONE);
-                    downloder.setOnClick(
+                  
+                    bind.downloder.setTitle(upfile.get(0).get("Title").toString());
+                    bind.downloder.setSizeTitle(upfile.get(0).get("sizearm64").toString());
+                    bind.downloder.setVisibility(View.VISIBLE);
+                    bind.fabAdd.setVisibility(View.GONE);
+                    bind.downloder.setOnClick(
                         v -> {
-                          downloder.setDownload(
+                          bind.downloder.setDownload(
                               upfile.get(0).get("linkarm64").toString(),
                               upfile.get(0).get("appname").toString());
                         });
@@ -464,11 +393,11 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
       fileListItem.setViewType(viewType);
       if (viewType == ViewType.GRID) {
         gridLayoutManager.setSpanCount(2);
-        recyclerview2.setAdapter(fileListItem);
+        bind.recyclerview2.setAdapter(fileListItem);
       } else {
-        recyclerview2.setAdapter(fileListItem);
+        bind.recyclerview2.setAdapter(fileListItem);
         gridLayoutManager.setSpanCount(1);
-        fast = new FastScrollerBuilder(recyclerview2);
+        fast = new FastScrollerBuilder(bind.recyclerview2);
         fast.useMd2Style();
         fast.build();
       }
@@ -503,7 +432,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     } catch (android.content.pm.PackageManager.NameNotFoundException e) {
       showMessage(e.toString());
     }
-    // new FastScrollerBuilder(recyclerview2).useMd2Style().build();
+    // new FastScrollerBuilder(bind.recyclerview2).useMd2Style().build();
     progressDilaog =
         new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
     unzip = new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
@@ -537,28 +466,29 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     // if not allowed
     utils.requestPermissionAllFilesAccess();
     RefreshTabs();
-
-    AnimUtils.Worker(fabAdd);
-    fabAdd.setText("Create");
-    fabAdd.setIconResource(R.drawable.create);
-    ObjectUtils.setFab(fabAdd);
-    fabAdd.setOnClickListener(
+     
+    AnimUtils.Worker(bind.fabAdd);
+    bind.fabAdd.setText("Create");
+    bind.fabAdd.setIconResource(R.drawable.create);
+    ObjectUtils.setFab(bind.fabAdd);
+    bind.fabAdd.setOnClickListener(
         v -> {
           DialogItemSheet();
         });
-    navs.getMenu().add(0, 1, 0, "SanDisk Card").setIcon(R.drawable.drawer_item12);
-    navs.getMenu().add(0, 2, 0, "Java code").setIcon(R.drawable.drawer_item14);
-    navs.getMenu().add(0, 3, 0, "Terminal").setIcon(R.drawable.drawer_item13);
-    navs.getMenu().add(0, 4, 0, "Settings").setIcon(R.drawable.drawer_item15);
-    navs.getMenu().add(0, 5, 0, "LogCat Reader").setIcon(R.drawable.drawer_item6);
-    navs.getMenu().add(0, 6, 0, "Icon Shop").setIcon(R.drawable.icshop);
-    navs.getMenu().add(0, 7, 0, "Update App").setIcon(R.drawable.drawer_item8);
-    navs.getMenu().add(0, 8, 0, "Plugins Manager").setIcon(R.drawable.drawer_item5);
-    navs.getMenu().add(0, 9, 0, "Backup Theme").setIcon(R.drawable.drawer_item7);
-    navs.getMenu().add(0, 10, 0, "Bookmarks (Beta)").setIcon(R.drawable.drawer_item4);
-    navs.getMenu().add(0, 11, 0, "Apk Manager").setIcon(R.drawable.drawer_item3);
-    navs.getMenu().add(0, 12, 0, "About").setIcon(R.drawable.drawer_item11);
-    navs.getMenu().add(0, 13, 0, "Leave").setIcon(R.drawable.drawer_item1);
+    
+    bind.navs.getMenu().add(0, 1, 0, "SanDisk Card").setIcon(R.drawable.drawer_item12);
+    bind.navs.getMenu().add(0, 2, 0, "Java code").setIcon(R.drawable.drawer_item14);
+    bind.navs.getMenu().add(0, 3, 0, "Terminal").setIcon(R.drawable.drawer_item13);
+    bind.navs.getMenu().add(0, 4, 0, "Settings").setIcon(R.drawable.drawer_item15);
+    bind.navs.getMenu().add(0, 5, 0, "LogCat Reader").setIcon(R.drawable.drawer_item6);
+    bind.navs.getMenu().add(0, 6, 0, "Icon Shop").setIcon(R.drawable.icshop);
+    bind.navs.getMenu().add(0, 7, 0, "Update App").setIcon(R.drawable.drawer_item8);
+    bind.navs.getMenu().add(0, 8, 0, "Plugins Manager").setIcon(R.drawable.drawer_item5);
+    bind.navs.getMenu().add(0, 9, 0, "Backup Theme").setIcon(R.drawable.drawer_item7);
+    bind.navs.getMenu().add(0, 10, 0, "Bookmarks (Beta)").setIcon(R.drawable.drawer_item4);
+    bind.navs.getMenu().add(0, 11, 0, "Apk Manager").setIcon(R.drawable.drawer_item3);
+    bind.navs.getMenu().add(0, 12, 0, "About").setIcon(R.drawable.drawer_item11);
+    bind.navs.getMenu().add(0, 13, 0, "Leave").setIcon(R.drawable.drawer_item1);
     DrowerHandler();
   }
 
@@ -587,7 +517,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
             ThreadUtils.runOnUiThread(
                 () -> {
                   fileListItem.search(ser.toString());
-                  recyclerview2.setAdapter(fileListItem);
+                  bind.recyclerview2.setAdapter(fileListItem);
                 });
           }
 
@@ -649,8 +579,8 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
   }
 
   public void reLoadFile(boolean isSortFile) {
-    recyclerview2.setVisibility(View.GONE);
-    filedir_bar.setVisibility(View.VISIBLE);
+    bind.recyclerview2.setVisibility(View.GONE);
+    bind.filedirBar.setVisibility(View.VISIBLE);
     new Thread(
             () -> {
               save_path.edit().putString("path", Folder).apply();
@@ -710,17 +640,17 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
               runOnUiThread(
                   () -> {
                     if (files.isEmpty()) {
-                      emptyview.setVisibility(View.VISIBLE);
-                    } else emptyview.setVisibility(View.GONE);
+                      bind.emptyview.setVisibility(View.VISIBLE);
+                    } else bind.emptyview.setVisibility(View.GONE);
                   });
               runOnUiThread(
                   () -> {
-                    recyclerview2.setVisibility(View.VISIBLE);
-                    filedir_bar.setVisibility(View.GONE);
-                    recyclerview2.setAdapter(fileListItem);
-                    ListSheet.bind(recyclerview2, Folder);
+                    bind.recyclerview2.setVisibility(View.VISIBLE);
+                    bind.filedirBar.setVisibility(View.GONE);
+                    bind.recyclerview2.setAdapter(fileListItem);
+                    ListSheet.bind(bind.recyclerview2, Folder);
                     if (gridLayoutManager != null) {
-                      recyclerview2.setLayoutManager(gridLayoutManager);
+                      bind.recyclerview2.setLayoutManager(gridLayoutManager);
                     }
                   });
             })
@@ -776,9 +706,9 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                           public void onSuccess(String content) {
                             // محتوای فایل با موفقیت خوانده شد
                             Toast.makeText(getApplicationContext(), content, 2).show();
-                            if (recyclerview2 != null) {
+                            if (bind.recyclerview2 != null) {
                               reLoadFile();
-                              recyclerview2.getAdapter().notifyItemChanged(files.size());
+                              bind.recyclerview2.getAdapter().notifyItemChanged(files.size());
                             }
                           }
 
@@ -1348,6 +1278,9 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     if (staticstring.endsWith(".sql")) {
       SendDataFromCodeEditor(newpos, "path", files, newlistmap);
     }
+    if (staticstring.endsWith(".jj")) {
+      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+    }
     if (staticstring.endsWith(".svg")) {
       loadsvg(newpos);
     }
@@ -1781,7 +1714,8 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
               Folder = FileUtil.getExternalStorageDir();
               DataUtil.showMessage(getApplicationContext(), FileUtil.getExternalStorageDir());
               reLoadFile();
-              _drawer.closeDrawer(GravityCompat.START);
+              
+              bind.Drawer.closeDrawer(GravityCompat.START);
             } else {
               staticStorage = true;
               if (sd_stor.hasRealRemovableSdCarde()) {
@@ -1791,17 +1725,17 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                 DataUtil.showMessage(getApplicationContext(), getString(R.string.sdcarderror));
               }
               reLoadFile();
-              _drawer.closeDrawer(GravityCompat.START);
+              bind.Drawer.closeDrawer(GravityCompat.START);
             }
           }
         });
   }
 
   public void DrowerHandler() {
-    navs.bringToFront();
-    navs.setClick(
+    bind.navs.bringToFront();
+    bind.navs.setClick(
         (item) -> {
-          navs.setCheckedItem(item.getItemId());
+          bind.navs.setCheckedItem(item.getItemId());
           switch ((int) item.getItemId()) {
             case 1:
               {
@@ -2221,8 +2155,8 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
           return true;
         case KeyEvent.KEYCODE_D:
           // open drawer
-          if (!_drawer.isOpen()) {
-            _drawer.open();
+          if (!bind.Drawer.isOpen()) {
+            bind.Drawer.open();
           }
           return true;
         case KeyEvent.KEYCODE_J:

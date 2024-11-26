@@ -3,6 +3,7 @@ package Ninja.coder.Ghostemane.code.activities;
 import Ninja.coder.Ghostemane.code.G4Compiler;
 import Ninja.coder.Ghostemane.code.IdeEditor;
 
+import Ninja.coder.Ghostemane.code.JavaCcComplierImpl;
 import Ninja.coder.Ghostemane.code.R;
 import Ninja.coder.Ghostemane.code.RequestNetwork;
 import Ninja.coder.Ghostemane.code.adapter.SyspiarAdapter;
@@ -1303,8 +1304,9 @@ public class CodeEditorActivity extends AppCompatActivity {
                               shp.getString("pos_path", ""),
                               false,
                               false);
-                        } else if (shp.getString("pos_path", "").contains(".cpp")) {
-
+                        } else if (shp.getString("pos_path", "").contains(".jj")) {
+                          var file = new File(shp.getString("pos_path", ""));
+                          JavaCcComplierImpl.main(file.toString(), file.getParent() + "/");
                         }
                       }
                     }
@@ -1482,7 +1484,7 @@ public class CodeEditorActivity extends AppCompatActivity {
 
                   if (dataInsert.equals(shp.getString("pos_path", ""))) {
                     selector.setVisibility(View.VISIBLE);
-                      
+
                     if (currentTabIndex == _position) {
                       setPowerMenuCallBack(linear5, _data, _position);
                     } else {
@@ -1490,7 +1492,7 @@ public class CodeEditorActivity extends AppCompatActivity {
                       setCodeEditorFileReader(dataInsert);
                     }
 
-                  //  DataUtil.showMessage(v.getContext(), String.valueOf(_position));
+                    //  DataUtil.showMessage(v.getContext(), String.valueOf(_position));
 
                   } else {
                     selector.setVisibility(View.GONE);

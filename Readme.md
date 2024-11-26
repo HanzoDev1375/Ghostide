@@ -57,6 +57,7 @@
 - [x] Html lsp(custom mod 50%)
 - [ ] Fast type
 - [ ] Less Compiler
+- [x] JavaCc Compiler
 - [x] Git manager (30%) (Need help)
 - [x] CodeFormatter (60%)
 - [ ] Ruby compiler (coming soon)
@@ -74,6 +75,7 @@
 - [x] Php
 - [x] Sass Scss
 - [x] Java
+- [x] Javacc
 - [x] Kotlin
 - [x] Swift
 - [x] C++
