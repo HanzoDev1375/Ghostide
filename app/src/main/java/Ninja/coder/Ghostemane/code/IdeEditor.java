@@ -4,6 +4,7 @@ import Ninja.coder.Ghostemane.code.config.LOG;
 import Ninja.coder.Ghostemane.code.interfaces.CallBackErrorManager;
 import Ninja.coder.Ghostemane.code.marco.CommentList;
 import Ninja.coder.Ghostemane.code.marco.editorface.IEditor;
+import Ninja.coder.Ghostemane.code.model.FloatingNavigationWindow;
 import Ninja.coder.Ghostemane.code.widget.SymbolInputView;
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -27,6 +28,7 @@ import io.github.rosemoe.sora.event.ContentChangeEvent;
 import io.github.rosemoe.sora.interfaces.EditorLanguage;
 import io.github.rosemoe.sora.langs.xml.XMLLanguage;
 import io.github.rosemoe.sora.langs.xml.XMLLexer;
+import io.github.rosemoe.sora.widget.HtmlHelper;
 import java.io.StringReader;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.Token;
@@ -92,12 +94,18 @@ public class IdeEditor extends CodeEditor implements IEditor {
     setNonPrintablePaintingFlags(FLAG_GHOSTWEB);
     subscribeEvent(ClickEvent.class, ((event, unsubscribe) -> ta(event)));
     subscribeEvent(ContentChangeEvent.class, ((event, unsubscribe) -> handleContentChange(event)));
-    
 
     return this;
   }
 
-  void ta(ClickEvent ev) {}
+  void ta(ClickEvent ev) {
+    if (getEditorLanguage() instanceof HTMLLanguage) {
+
+      var it = new FloatingNavigationWindow(ev.getEditor());
+      it.setText("data " +HtmlHelper.code(ev.getEditor().getText().toString()));
+      it.displayWindow();
+    }
+  }
 
   public void setFadein() {}
 

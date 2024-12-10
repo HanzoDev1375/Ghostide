@@ -70,6 +70,7 @@ public class AmazonClassHelper {
         .start();
   }
 
+  @Deprecated
   public static void getFileJavaAsChild(ImageView imageView, String file) {
 
     String code = FileUtil.readFile(file);
@@ -116,6 +117,7 @@ public class AmazonClassHelper {
     }
   }
 
+  @Deprecated
   public static boolean isModelClass(String javaCode) {
     CompilationUnit cu;
 

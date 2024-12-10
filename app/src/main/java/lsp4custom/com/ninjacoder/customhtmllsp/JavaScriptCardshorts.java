@@ -10,33 +10,33 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class JavaCardshorts extends Css3Server {
+public class JavaScriptCardshorts extends Css3Server {
 
   private List<CompletionItem> item;
-
   private String prf;
 
-  public JavaCardshorts(List<CompletionItem> item, String prf) {
+  public JavaScriptCardshorts(List<CompletionItem> item, String prf) {
     this.item = item;
     this.prf = prf;
     try {
-      asChild();
-    } catch (Exception e) {
+    	asChild();
+    } catch(Exception err) {
+    	
     }
   }
 
   void asChild() throws IOException {
     boolean isLen = prf.length() > 0;
-    List<Map<String, String>> listItem = new ArrayList<>();
-    var inputStream = ApplicationLoader.getContext().getAssets().open("javasnippet.json");
-    listItem =
+    List<Map<String, String>> listScript = new ArrayList<>();
+    var inputstream = ApplicationLoader.getContext().getAssets().open("javascriptsnippet.json");
+    listScript =
         new Gson()
             .fromJson(
-                DataUtil.copyFromInputStream(inputStream),
+                DataUtil.copyFromInputStream(inputstream),
                 new TypeToken<List<Map<String, String>>>() {}.getType());
-    listItem.forEach(
+    listScript.forEach(
         it -> {
-          if (it.get("name").startsWith(prf) && isLen) {
+          if (isLen && prf.startsWith(it.get("name"))) {
             item.add(css(it.get("name"), "Snippet", it.get("snippet")));
           }
         });

@@ -104,12 +104,12 @@ public class TsLang implements EditorLanguage {
 
   @Override
   public CodeAnalyzer getAnalyzer() {
-    return new TsAz();
+    return new TypeScriptCodeAnalyzer();
   }
 
   @Override
   public AutoCompleteProvider getAutoCompleteProvider() {
-    var tsAuto = new JavaAutoComplete();
+    var tsAuto = new TypeScriptAutoComplete();
     tsAuto.setKeywords(list);
     return tsAuto;
   }

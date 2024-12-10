@@ -1,5 +1,6 @@
 package com.quickersilver.themeengine;
 
+import Ninja.coder.Ghostemane.code.utils.AnimUtils;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
@@ -63,6 +64,7 @@ public class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.ViewHolder> 
             checkedPosition = getAdapterPosition();
             binding.colorView.setImageResource(R.drawable.ic_round_check);
             notifyItemChanged(lastCheckedPosition);
+            AnimUtils.Shake(v);
           });
     }
   }

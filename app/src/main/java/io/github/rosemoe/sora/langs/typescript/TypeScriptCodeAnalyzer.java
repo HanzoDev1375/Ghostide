@@ -1,7 +1,6 @@
 package io.github.rosemoe.sora.langs.typescript;
 
 import android.util.Log;
-import io.github.rosemoe.sora.langs.java.JavaAutoComplete;
 import io.github.rosemoe.sora.text.TextStyle;
 import java.util.Stack;
 import io.github.rosemoe.sora.data.BlockLine;
@@ -15,7 +14,7 @@ import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.text.TextAnalyzer;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
 
-public class TsAz implements CodeAnalyzer {
+public class TypeScriptCodeAnalyzer implements CodeAnalyzer {
 
   @Override
   public void analyze(
@@ -31,9 +30,9 @@ public class TsAz implements CodeAnalyzer {
       boolean first = true;
       int lastLine = 1;
       int line, column;
-      JavaAutoComplete auto = new JavaAutoComplete();
+      var auto = new TypeScriptAutoComplete();
       auto.setKeywords(TsLang.list);
-      JavaAutoComplete.Identifiers info = new JavaAutoComplete.Identifiers();
+      TypeScriptAutoComplete.Identifiers info = new TypeScriptAutoComplete.Identifiers();
       info.begin();
       Stack<BlockLine> stack = new Stack<>();
       while (delegate.shouldAnalyze()) {
@@ -320,6 +319,7 @@ public class TsAz implements CodeAnalyzer {
       info.finish();
       result.setExtra(info);
       result.setSuppressSwitch(maxSwitch + 10);
+      
     } catch (IOException e) {
       e.printStackTrace();
       Log.e("TAG", e.getMessage());

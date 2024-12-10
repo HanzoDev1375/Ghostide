@@ -1,3 +1,5 @@
+print(print)
+
 import os
 packs = os.listdir("/data/user/0/Ninja.coder.Ghostemane.code/files/files/usr/lib/python3.11/site-packages")
 if not "termcolor" in packs or not "colorama" in packs or not "prompt_toolkit" in packs or not "git":
@@ -15,13 +17,13 @@ from prompt_toolkit.formatted_text.base import StyleAndTextTuples
 import prompt_toolkit.lexers
 import re
 import subprocess
-import git
+##import git
 
 def makeBanner():
     try:
         from termcolor import colored
         from colorama import init, Fore, Style
-        import git
+       ## import git
 
         init(autoreset=True)
     except ImportError or ModuleNotFoundError:
@@ -462,3 +464,8 @@ except KeyboardInterrupt:
 
 except Exception as E:
     print(f"\001\033[0;38;5;196m\002Local Error: {E}")
+	
+	
+	
+	
+print(print)

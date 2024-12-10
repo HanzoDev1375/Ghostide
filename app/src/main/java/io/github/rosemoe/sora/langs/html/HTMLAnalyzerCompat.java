@@ -339,6 +339,9 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
                   || previous == HTMLLexer.COLONCOLON) {
                 colorid = EditorColorScheme.ATTRIBUTE_NAME;
               }
+              if (previous == HTMLLexer.STRING) {
+                colorid = EditorColorScheme.javastring;
+              }
               if (previous == HTMLLexer.VOID || previous == HTMLLexer.EXTENDS) {
                 colorid = EditorColorScheme.OPERATOR;
               }
@@ -412,9 +415,8 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
           case HTMLLexer.LinkLiteral:
             Span span =
                 Span.obtain(
-                    column, TextStyle.makeStyle(EditorColorScheme.Ninja, 0, true, false, false));
+                    column, TextStyle.makeStyle(EditorColorScheme.Ninja, 0, true, true, false));
             result.addIfNeeded(line, column, EditorColorScheme.Ninja);
-            span.setUnderlineColor(span.getForegroundColorId());
             if (span != null) result.add(line, span);
             break;
           default:

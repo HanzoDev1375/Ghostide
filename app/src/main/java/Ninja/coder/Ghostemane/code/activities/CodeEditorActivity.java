@@ -9,6 +9,7 @@ import Ninja.coder.Ghostemane.code.RequestNetwork;
 import Ninja.coder.Ghostemane.code.adapter.SyspiarAdapter;
 import Ninja.coder.Ghostemane.code.adapter.ToolbarListFileAdapter;
 import Ninja.coder.Ghostemane.code.config.CommonFactoryData;
+import Ninja.coder.Ghostemane.code.config.MenuColorView;
 import Ninja.coder.Ghostemane.code.databinding.Antcomp8lerBinding;
 import Ninja.coder.Ghostemane.code.enums.Mode;
 import Ninja.coder.Ghostemane.code.layoutmanager.LogCatBottomSheet;
@@ -478,6 +479,7 @@ public class CodeEditorActivity extends AppCompatActivity {
     editor.setText(modelEditor.getText());
 
     var editorHelperColor = new EditorHelperColor(editor, badgeview3);
+    MenuColorView.show(badgeview3);
     var size =
         TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
@@ -488,12 +490,12 @@ public class CodeEditorActivity extends AppCompatActivity {
         new CodeEditor.OnKeyboardOperation() {
           @Override
           public void Tab() {
-            Toast.makeText(getApplicationContext(), "This Tab", Toast.LENGTH_SHORT).show();
+          //  Toast.makeText(getApplicationContext(), "This Tab", Toast.LENGTH_SHORT).show();
           }
 
           @Override
           public void Space() {
-            Toast.makeText(getApplicationContext(), "This Space", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(getApplicationContext(), "This Space", Toast.LENGTH_SHORT).show();
           }
 
           @Override
@@ -1480,7 +1482,7 @@ public class CodeEditorActivity extends AppCompatActivity {
                 setDistreeView();
                 notifyDataSetChanged();
                 if (FileUtil.isExistFile(dataInsert)) {
-                  // setCodeEditorFileReader(dataInsert);
+                  setCodeEditorFileReader(dataInsert);
 
                   if (dataInsert.equals(shp.getString("pos_path", ""))) {
                     selector.setVisibility(View.VISIBLE);

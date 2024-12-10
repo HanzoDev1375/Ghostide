@@ -3469,14 +3469,12 @@ public class CodeEditor extends View
     int st = index;
     for (int i = index; i < end; i++) {
       if (src[i] == '\t') {
-        // به جای drawTextRun از drawText استفاده کنید
         canvas.drawText(src, st, i - st, offX, offY, mPaint);
         offX = offX + measureText(line, st, i - st + 1, lineNumber);
         st = i + 1;
       }
     }
     if (st < end) {
-      // بار دیگر استفاده از drawText به جای drawTextRun
       canvas.drawText(src, st, end - st, offX, offY, mPaint);
     }
   }
@@ -4114,7 +4112,7 @@ public class CodeEditor extends View
    *
    * @return 1dp in pixel
    */
-  protected float getDpUnit() {
+  public float getDpUnit() {
     return mDpUnit;
   }
 

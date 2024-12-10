@@ -55,8 +55,6 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     this.files = files;
     this.filteredFiles = files;
     this.click = click;
-
-    
   }
 
   @Override
@@ -112,14 +110,7 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
       }
       if (myfile.toString().endsWith(".xml")) {
         GlideCompat.LoadVector(myfile.toString(), viewHolder.icon);
-        String it = FileUtil.readFile(myfile.toString());
 
-        if (it.equals("<animated-vector")) {
-          AnimatedVectorDrawable v = (AnimatedVectorDrawable) viewHolder.icon.getDrawable();
-          if (v != null) {
-            v.start();
-          }
-        }
       } else if (myfile.toString().endsWith(".mp3")) {
         GlideCompat.GlideLoadMp3(viewHolder.icon, myfile.toString());
       } else if (myfile.toString().endsWith(".svg")) {
@@ -134,8 +125,7 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
         GlideCompat.LoadApkFile(myfile.toString(), viewHolder.icon);
       } else if (myfile.toString().endsWith(".vsix")) {
         GlideCompat.LoadIconVsCode(myfile.toString(), viewHolder.icon);
-      } else if (myfile.toString().endsWith(".java")) {
-        AmazonClassHelper.getFileJavaAsChild(viewHolder.icon, myfile.toString());
+
       } else if (myfile.toString().endsWith(".g4")) {
         AmazonClassHelper.getScanAntlr4Grammer(viewHolder.icon, myfile.toString());
       } else if (myfile.toString().endsWith(".AA")) {

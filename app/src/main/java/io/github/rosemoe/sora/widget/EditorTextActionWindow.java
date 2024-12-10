@@ -86,6 +86,7 @@ public class EditorTextActionWindow extends EditorPopupWindow
   private helper helpers;
   private TextComposePopupWindowBinding bin;
   private boolean isShow = true;
+  private boolean showItems = false;
 
   /**
    * Create a panel for the given editor
@@ -96,116 +97,119 @@ public class EditorTextActionWindow extends EditorPopupWindow
     super(editor, FEATURE_SHOW_OUTSIDE_VIEW_ALLOWED);
     mEditor = editor;
     mHandler = editor.getEventHandler();
-    // Since popup window does provide decor view, we have to pass null to this method
-    model.add(new TextActionModel("Format Code", R.drawable.codeformat));
-    model.add(new TextActionModel("SetAll", R.drawable.dkplayer_ic_action_fullscreen));
-    model.add(new TextActionModel("copy", R.mipmap.mpcopy));
-    model.add(new TextActionModel("cut", R.mipmap.mpcut));
-    model.add(new TextActionModel("past", R.mipmap.mppaste));
-    model.add(new TextActionModel("Duplicate", R.drawable.dkplayer_ic_action_autorenew));
-    model.add(new TextActionModel("delete", R.drawable.delete));
-    model.add(new TextActionModel("tools", R.drawable.cog));
-    bin = TextComposePopupWindowBinding.inflate(LayoutInflater.from(editor.getContext()));
-    adptor =
-        new TextActionAd(
-            model,
-            new TextActionAd.OnItemClick() {
+    setShowItems(true);
+    if (showItems) {
 
-              @Override
-              public void onItemClickChange(int posNow, View myview, ImageView img) {
-                View v = myview;
-                switch (posNow) {
-                  case 0:
-                    {
-                      editor.formatCodeAsync();
-                      dismiss();
-                      break;
-                    }
-                  case 1:
-                    {
-                      editor.selectAll();
-                      show();
-                      break;
-                    }
-                  case 2:
-                    {
-                      editor.copyText();
-                      img.setEnabled(editor.hasClip() && editor.isEditable());
-                      dismiss();
-                      break;
-                    }
-                  case 3:
-                    editor.cutText();
-                    dismiss();
-                    break;
-                  case 4:
-                    editor.pasteText();
-                    dismiss();
-                    break;
-                  case 5:
-                    editor.setDuplicateLine();
-                    dismiss();
-                    break;
-                  case 6:
-                    RomvedText();
-                    dismiss();
-                    break;
-                  case 7:
-                    {
-                      if (editor.getEditorLanguage() instanceof NinjaLang) {
-                        ToolItem item = new ToolItem();
-                        item.BindViewsNinja(v.getContext(), v, editor);
-                      } else if (editor.getEditorLanguage() instanceof HTMLLanguage) {
-                        HtmlTool tool = new HtmlTool();
-                        tool.Tool(v.getContext(), v, editor);
-                      } else if (editor.getEditorLanguage() instanceof JavaLanguage) {
-                        JavaTools toolss = new JavaTools();
-                        var l = "java";
-                        toolss.runs(v.getContext(), v, editor, l);
-                      } else if (editor.getEditorLanguage() instanceof PythonLang) {
-                        PythonTools toolpy = new PythonTools();
-                        toolpy.Tool(v.getContext(), v, editor);
-                      } else if (editor.getEditorLanguage() instanceof JavaScriptLanguage) {
-                        JavaTools toolss = new JavaTools();
-                        var l = "js";
-                        toolss.runs(v.getContext(), v, editor, l);
-                      } else if (editor.getEditorLanguage() instanceof CSS3Language) {
-                        OtherLangs toolss = new OtherLangs();
-                        toolss.run(v.getContext(), editor, v);
-                      } else if (editor.getEditorLanguage() instanceof DartLang) {
-                        OtherLangs toolss = new OtherLangs();
-                        toolss.run(v.getContext(), editor, v);
-                      } else if (editor.getEditorLanguage() instanceof KotlinLanguage) {
-                        KotlinTools tools = new KotlinTools();
-                        tools.run(v.getContext(), editor, v);
-                      } else if (editor.getEditorLanguage() instanceof SMLang) {
-                        SmaliHelper.run(editor, v.getContext());
-                       
+      // Since popup window does provide decor view, we have to pass null to this method
+      model.add(new TextActionModel("Format Code", R.drawable.codeformat));
+      model.add(new TextActionModel("SetAll", R.drawable.dkplayer_ic_action_fullscreen));
+      model.add(new TextActionModel("copy", R.mipmap.mpcopy));
+      model.add(new TextActionModel("cut", R.mipmap.mpcut));
+      model.add(new TextActionModel("past", R.mipmap.mppaste));
+      model.add(new TextActionModel("Duplicate", R.drawable.dkplayer_ic_action_autorenew));
+      model.add(new TextActionModel("delete", R.drawable.delete));
+      model.add(new TextActionModel("tools", R.drawable.cog));
+      bin = TextComposePopupWindowBinding.inflate(LayoutInflater.from(editor.getContext()));
+      adptor =
+          new TextActionAd(
+              model,
+              new TextActionAd.OnItemClick() {
+
+                @Override
+                public void onItemClickChange(int posNow, View myview, ImageView img) {
+                  View v = myview;
+                  switch (posNow) {
+                    case 0:
+                      {
+                        editor.formatCodeAsync();
+                        dismiss();
+                        break;
                       }
+                    case 1:
+                      {
+                        editor.selectAll();
+                        show();
+                        break;
+                      }
+                    case 2:
+                      {
+                        editor.copyText();
+                        img.setEnabled(editor.hasClip() && editor.isEditable());
+                        dismiss();
+                        break;
+                      }
+                    case 3:
+                      editor.cutText();
+                      dismiss();
                       break;
-                    }
+                    case 4:
+                      editor.pasteText();
+                      dismiss();
+                      break;
+                    case 5:
+                      editor.setDuplicateLine();
+                      dismiss();
+                      break;
+                    case 6:
+                      RomvedText();
+                      dismiss();
+                      break;
+                    case 7:
+                      {
+                        if (editor.getEditorLanguage() instanceof NinjaLang) {
+                          ToolItem item = new ToolItem();
+                          item.BindViewsNinja(v.getContext(), v, editor);
+                        } else if (editor.getEditorLanguage() instanceof HTMLLanguage) {
+                          HtmlTool tool = new HtmlTool();
+                          tool.Tool(v.getContext(), v, editor);
+                        } else if (editor.getEditorLanguage() instanceof JavaLanguage) {
+                          JavaTools toolss = new JavaTools();
+                          var l = "java";
+                          toolss.runs(v.getContext(), v, editor, l);
+                        } else if (editor.getEditorLanguage() instanceof PythonLang) {
+                          PythonTools toolpy = new PythonTools();
+                          toolpy.Tool(v.getContext(), v, editor);
+                        } else if (editor.getEditorLanguage() instanceof JavaScriptLanguage) {
+                          JavaTools toolss = new JavaTools();
+                          var l = "js";
+                          toolss.runs(v.getContext(), v, editor, l);
+                        } else if (editor.getEditorLanguage() instanceof CSS3Language) {
+                          OtherLangs toolss = new OtherLangs();
+                          toolss.run(v.getContext(), editor, v);
+                        } else if (editor.getEditorLanguage() instanceof DartLang) {
+                          OtherLangs toolss = new OtherLangs();
+                          toolss.run(v.getContext(), editor, v);
+                        } else if (editor.getEditorLanguage() instanceof KotlinLanguage) {
+                          KotlinTools tools = new KotlinTools();
+                          tools.run(v.getContext(), editor, v);
+                        } else if (editor.getEditorLanguage() instanceof SMLang) {
+                          SmaliHelper.run(editor, v.getContext());
+                        }
+                        break;
+                      }
+                  }
                 }
-              }
-            });
-    bin.rvEditor.setAdapter(adptor);
-    bin.rvEditor.setLayoutManager(new LinearLayoutManager(editor.getContext(),RecyclerView.HORIZONTAL,false));
-    helpers = new helper(editor);
+              });
+      bin.rvEditor.setAdapter(adptor);
+      bin.rvEditor.setLayoutManager(
+          new LinearLayoutManager(editor.getContext(), RecyclerView.HORIZONTAL, false));
+      helpers = new helper(editor);
 
-    MaterialShapeDrawable materialShapeDrawable =
-        new MaterialShapeDrawable(
-            ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 20f).build());
-    EditorColorScheme editorColorScheme = editor.getColorScheme();
-    materialShapeDrawable.setFillColor(
-        ColorStateList.valueOf(editorColorScheme.getColor(EditorColorScheme.AUTO_COMP_PANEL_BG)));
-    materialShapeDrawable.setStroke(
-        2f,
-        ColorStateList.valueOf(
-            editorColorScheme.getColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER)));
-    // cardview1.setBackground(materialShapeDrawable);
-    setContentView(bin.getRoot());
-    getPopup().setAnimationStyle(R.style.hso);
+      MaterialShapeDrawable materialShapeDrawable =
+          new MaterialShapeDrawable(
+              ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 20f).build());
+      EditorColorScheme editorColorScheme = editor.getColorScheme();
+      materialShapeDrawable.setFillColor(
+          ColorStateList.valueOf(editorColorScheme.getColor(EditorColorScheme.AUTO_COMP_PANEL_BG)));
+      materialShapeDrawable.setStroke(
+          2f,
+          ColorStateList.valueOf(
+              editorColorScheme.getColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER)));
+      // cardview1.setBackground(materialShapeDrawable);
+      setContentView(bin.getRoot());
+    }
     setSize(0, (int) (mEditor.getDpUnit() * 50));
-    
+
     getPopup().setBackgroundDrawable(post());
     editor.subscribeEvent(SelectionChangeEvent.class, this);
     editor.subscribeEvent(
@@ -303,10 +307,12 @@ public class EditorTextActionWindow extends EditorPopupWindow
 
   /** Update the state of paste button */
   private void updateBtnState() {
-    bin.getRoot().measure(
-        View.MeasureSpec.makeMeasureSpec(1000000, View.MeasureSpec.AT_MOST),
-        View.MeasureSpec.makeMeasureSpec(100000, View.MeasureSpec.AT_MOST));
-    setSize(Math.min(bin.getRoot().getMeasuredWidth(), (int) (mEditor.getDpUnit() * 230)), getHeight());
+    bin.getRoot()
+        .measure(
+            View.MeasureSpec.makeMeasureSpec(1000000, View.MeasureSpec.AT_MOST),
+            View.MeasureSpec.makeMeasureSpec(100000, View.MeasureSpec.AT_MOST));
+    setSize(
+        Math.min(bin.getRoot().getMeasuredWidth(), (int) (mEditor.getDpUnit() * 230)), getHeight());
   }
 
   @Override
@@ -314,7 +320,6 @@ public class EditorTextActionWindow extends EditorPopupWindow
     updateBtnState();
     super.show();
   }
-
 
   private void KeyBoardUtil() {
     try {
@@ -357,8 +362,7 @@ public class EditorTextActionWindow extends EditorPopupWindow
         new MaterialShapeDrawable(
             ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 20f).build());
     shap.setFillColor(
-        ColorStateList.valueOf(
-            MaterialColors.getColor(mEditor.getContext(), ObjectUtils.Back, 0)));
+        ColorStateList.valueOf(MaterialColors.getColor(mEditor.getContext(), ObjectUtils.Back, 0)));
     shap.setStroke(
         2f,
         ColorStateList.valueOf(
@@ -423,11 +427,21 @@ public class EditorTextActionWindow extends EditorPopupWindow
             cursor.getRightColumn())
         .toString();
   }
-  
-  public void setText(String text){
+
+  public void setText(String text) {
     bin.tooltiem.setVisibility(View.VISIBLE);
     bin.rvEditor.setVisibility(View.GONE);
     bin.tooltiem.setText(text);
     postDisplay();
+  }
+
+  public void showMassges(String text) {
+    TextView txt = new TextView(mEditor.getContext());
+    txt.setText(text);
+    setContentView(txt);
+  }
+
+  public void setShowItems(boolean showItems) {
+    this.showItems = showItems;
   }
 }

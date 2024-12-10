@@ -8,6 +8,7 @@ import androidx.core.graphics.ColorUtils;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
@@ -459,6 +460,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
       Set<String> usedVariables = new HashSet<>();
       Set<String> unusedImport = new HashSet<>();
       Set<String> mtcall = new HashSet<>();
+      Set<String> mtusing = new HashSet<>();
       Map<String, Integer> mlines = new HashMap<>();
       Map<String, Integer> mcoloum = new HashMap<>();
       Map<String, Integer> inline = new HashMap<>();
@@ -546,9 +548,20 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
 
               super.visit(arg0, arg1);
             }
+
+            @Override
+            public void visit(MethodDeclaration arg0, Void arg1) {
+              var variableName = arg0.getNameAsString();
+              int li = arg0.getBegin().get().line;
+              int cl = arg0.getBegin().get().column;
+              mtusing.add(arg0.getNameAsString());
+              inline.put(variableName, li);
+              incol.put(variableName, cl);
+              super.visit(arg0, arg1);
+            }
           },
           null);
-      
+
       unusedImport.removeIf(importName -> usedVariables.contains(getSimpleName(importName)));
       declaredVariables.removeAll(usedVariables);
 
@@ -559,6 +572,14 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             result, myline.intValue(), mycol.intValue() + it.length(), EditorColorScheme.COMMENT);
       }
 
+      mtusing.forEach(
+          it -> {
+            if (it.equals("main")) {
+              var li = inline.get(it);
+              editor.setShowIcon(li.intValue());
+            }
+          });
+
       for (var unusedVar : declaredVariables) {
         var lines = inline.get(unusedVar);
         var col = incol.get(unusedVar);
@@ -568,7 +589,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
         var li = mlines.get(it);
         var col = mcoloum.get(it);
         Utils.setSpanEFO(result, li, col + 2, EditorColorScheme.KEYWORD);
-        editor.setShowIcon(li);
+        
       }
 
     } catch (IOException e) {

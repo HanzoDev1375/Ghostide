@@ -119,7 +119,7 @@ public class FactoryCodeError {
       } else if (editor.getEditorLanguage() instanceof SMLang) {
         Iconnotfound();
       } else if (editor.getEditorLanguage() instanceof TsLang) {
-        Iconnotfound();
+        if (editor != null) new TypeScriptTask().execute(editor.getText().toString());
       } else if (editor.getEditorLanguage() instanceof XMLLanguage) {
         Iconnotfound();
       } else if (editor.getEditorLanguage() instanceof CSharpLanguage) {
@@ -310,6 +310,53 @@ public class FactoryCodeError {
   }
 
   private class JavaTask extends AsyncTaskCompat<String, Void, Boolean> {
+
+    private boolean errorCall = false;
+
+    @MainThread
+    @Override
+    protected void onPreExecute() {
+      call.setImageDrawable(ObjectUtils.getCircularProgress());
+    }
+
+    @Override
+    protected Boolean doInBackground(String... params) {
+
+      try {
+        var input = new ANTLRInputStream(new StringReader(params[0]));
+        var lexer = new Java20Lexer(input);
+        var stream = new CommonTokenStream(lexer);
+        var parser = new Java20Parser(stream);
+
+        var callbackLabel =
+            new Java20ParserBaseListener() {
+              @Override
+              public void visitErrorNode(ErrorNode node) {
+                errorCall = true;
+              }
+            };
+
+        var walk = new ParseTreeWalker();
+        walk.walk(callbackLabel, parser.start_());
+      } catch (Exception err) {
+        // Handle exception if necessary
+      }
+      return errorCall;
+    }
+
+    @Override
+    protected void onPostExecute(Boolean errorCall) {
+      if (errorCall) {
+        call.setImageResource(R.drawable.closehsi);
+        call.setColorFilter(Color.RED);
+      } else {
+        call.setImageResource(R.drawable.ic_palette_check_box);
+        call.setColorFilter(Color.GREEN);
+      }
+    }
+  }
+
+  private class TypeScriptTask extends AsyncTaskCompat<String, Void, Boolean> {
 
     private boolean errorCall = false;
 

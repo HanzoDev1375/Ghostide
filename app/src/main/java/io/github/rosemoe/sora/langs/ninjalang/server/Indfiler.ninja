@@ -40,6 +40,18 @@ public class shr Server{
 				charAt(Hash *32,Hash *32,Hash *32,Hash *32?Hash *32?Hash *32,Hash *32?,Hash *32?Hash *32,Hash *32?Hash *32)[record::Hash]
 			}
 		}
-		
 	}
+  @OverrLoad{
+  
+  void program Uint(object :: (Java)Utit.class::ninja,us::Int){
+  
+      LinketList<Object> map.aslo{ it ->>
+      
+      
+       put("","")
+      
+      
+      }
+    }
+  }  
 }

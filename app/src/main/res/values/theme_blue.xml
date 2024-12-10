@@ -1,7 +1,7 @@
 <resources>
     <style
         name="Theme.ThemeEngine.Blue"
-        parent="Theme.Material3.DayNight.NoActionBar"
+        parent="Theme.Material3.Dark.NoActionBar"
         
     >
         <item name="bottomSheetDialogTheme">@style/ThemeOverlay.App.BottomSheetDialog</item>

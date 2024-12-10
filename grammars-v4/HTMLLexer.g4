@@ -1079,7 +1079,7 @@ CHATREF
    ;
 
 LinkLiteral
-   : ('http' 's'? | 'ftp' | 'file') '://' [a-zA-Z0-9./?=]+
+   : ('http' 's'? | 'ftp' | 'file' | 'content') '://' [a-zA-Z0-9./?=]+
    ;
 
 CSSDOMATTR

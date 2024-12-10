@@ -12,7 +12,8 @@ public enum Theme {
   BLUEDARK(R.style.Theme_ThemeEngine_BlueDark, R.color.bluedark_theme_onPrimary),
   YELLODRAK(R.style.Theme_ThemeEngine_YellowDark, R.color.yellowdark_theme_primary),
   POPDRAK(R.style.Theme_ThemeEngine_DARKVIOLET, R.color.darkviolet_theme_primary),
-  LIGHTBROWN(R.style.Theme_ThemeEngine_LIGHTBROWN, R.color.lightbrown_theme_primary);
+  LIGHTBROWN(R.style.Theme_ThemeEngine_LIGHTBROWN, R.color.lightbrown_theme_primary),
+  CREAM2025(R.style.Theme_ThemeEngine_CreamDark, R.color.md_theme_cream_primary);
 
   @StyleRes private final int themeId;
 

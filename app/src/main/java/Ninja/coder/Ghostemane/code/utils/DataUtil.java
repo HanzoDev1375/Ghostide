@@ -1,6 +1,7 @@
 package Ninja.coder.Ghostemane.code.utils;
 
 import Ninja.coder.Ghostemane.code.ApplicationLoader;
+import Ninja.coder.Ghostemane.code.marco.binder.bindchilder.GhostToast;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -184,7 +185,7 @@ public class DataUtil {
   public static void showKeyboard(Context context) {}
 
   public static void showMessage(Context context, String s) {
-    Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
+    GhostToast.showToast(context,s);
   }
   
  public static void showMessage(String s) {

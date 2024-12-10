@@ -6,12 +6,31 @@ import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 
 import io.github.rosemoe.sora.widget.Transilt;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 public class Css3Server {
   private Random RANDOM = new Random();
   private int COLORS_TO_GENERATE = 20;
+
+  static String[] cssColorAttr = {
+    "color:",
+    "background-color:",
+    "border-color:",
+    "outline-color:",
+    "text-shadow:",
+    "box-shadow:",
+    "fill:",
+    "stroke:",
+    "caret-color:",
+    "column-rule-color:",
+    "mask-border:",
+    "border-top-color:",
+    "border-right-color:",
+    "border-bottom-color:",
+    "border-left-color:",
+  };
   public static final String[] MCSS = {
     "align-content",
     "align-items",
@@ -246,6 +265,30 @@ public class Css3Server {
     }
   }
 
+  void Padding(List<CompletionItem> list, String prefix, String... titles) {
+    for (String title : titles) {
+      if (prefix.startsWith(title)) {
+        String valuePrefix = prefix.substring(title.length()).trim();
+        String numberPart = "";
+        for (int i = 0; i < valuePrefix.length(); i++) {
+          char c = valuePrefix.charAt(i);
+          if (Character.isDigit(c)) {
+            numberPart += c;
+          } else {
+            break;
+          }
+        }
+
+        if (!numberPart.isEmpty()) {
+          for (String value : paddingValues) {
+            list.add(css(title + numberPart + value + ";", "CssPadding"));
+          }
+        }
+        break;
+      }
+    }
+  }
+
   public void installCssColor(List<CompletionItem> list, String prefix) {
 
     String propertyName = "";
@@ -253,6 +296,44 @@ public class Css3Server {
       propertyName = "color";
     } else if (prefix.startsWith("background-color:")) {
       propertyName = "background-color";
+    } else if (prefix.startsWith("border-color:")) {
+      propertyName = "border-color";
+    } else if (prefix.startsWith("outline-color:")) {
+      propertyName = "outline-color";
+    } else if (prefix.startsWith("text-decoration-color:")) {
+      propertyName = "text-decoration-color";
+    } else if (prefix.startsWith("column-rule-color:")) {
+      propertyName = "column-rule-color";
+    } else if (prefix.startsWith("caret-color:")) {
+      propertyName = "caret-color";
+    } else if (prefix.startsWith("background-shadow:")) {
+      propertyName = "background-shadow";
+    } else if (prefix.startsWith("filter:")) {
+      propertyName = "filter";
+    } else if (prefix.startsWith("mask-border:")) {
+      propertyName = "mask-border";
+    } else if (prefix.startsWith("border-top-color:")) {
+      propertyName = "border-top-color";
+    } else if (prefix.startsWith("border-right-color:")) {
+      propertyName = "border-right-color";
+    } else if (prefix.startsWith("border-bottom-color:")) {
+      propertyName = "border-bottom-color";
+    } else if (prefix.startsWith("border-left-color:")) {
+      propertyName = "border-left-color";
+    } else if (prefix.startsWith("text-shadow:")) {
+      propertyName = "text-shadow"; 
+    } else if (prefix.startsWith("box-shadow:")) {
+      propertyName = "box-shadow"; 
+    } else if (prefix.startsWith("filter:")) {
+      propertyName = "filter"; 
+    } else if (prefix.startsWith("border-image-source:")) {
+      propertyName = "border-image-source"; // رنگ برای تصویر مرزی
+    } else if (prefix.startsWith("border-image-slice:")) {
+      propertyName = "border-image-slice"; // برای بخش‌های تصویر مرزی
+    } else if (prefix.startsWith("border-image-width:")) {
+      propertyName = "border-image-width"; // عرض تصویر مرزی
+    } else if (prefix.startsWith("border-image-outset:")) {
+      propertyName = "border-image-outset"; // خارج کردن تصویر مرزی
     }
 
     if (!propertyName.isEmpty()) {
@@ -304,30 +385,6 @@ public class Css3Server {
         if (it.startsWith(langPrefix)) {
           list.add(css(it, "Langs", "lang=" + "\"" + it + "\""));
         }
-      }
-    }
-  }
-
-  void Padding(List<CompletionItem> list, String prefix, String... titles) {
-    for (String title : titles) {
-      if (prefix.startsWith(title)) {
-        String valuePrefix = prefix.substring(title.length()).trim();
-        String numberPart = "";
-        for (int i = 0; i < valuePrefix.length(); i++) {
-          char c = valuePrefix.charAt(i);
-          if (Character.isDigit(c)) {
-            numberPart += c;
-          } else {
-            break;
-          }
-        }
-
-        if (!numberPart.isEmpty()) {
-          for (String value : paddingValues) {
-            list.add(css(title + numberPart + value + ";", "CssPadding"));
-          }
-        }
-        break;
       }
     }
   }

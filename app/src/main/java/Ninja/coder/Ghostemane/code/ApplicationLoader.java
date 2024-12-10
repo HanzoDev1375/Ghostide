@@ -2,6 +2,7 @@ package Ninja.coder.Ghostemane.code;
 
 import Ninja.coder.Ghostemane.code.activities.ErrorManagerActivity;
 import Ninja.coder.Ghostemane.code.utils.AssetsSoft;
+import Ninja.coder.Ghostemane.code.utils.DataUtil;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import Ninja.coder.Ghostemane.code.utils.MobileInfo;
 import android.app.Activity;
@@ -16,12 +17,10 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Process;
 import android.util.Log;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceManager;
 import com.quickersilver.themeengine.ThemeEngine;
 import com.quickersilver.themeengine.ThemeMode;
-import com.xiaoyv.ccompile.CCppEngine;
 import de.larsgrefer.sass.embedded.SassCompiler;
 import de.larsgrefer.sass.embedded.android.AndroidSassCompilerFactory;
 
@@ -93,7 +92,6 @@ public class ApplicationLoader extends Application {
     Analyzercod = getSharedPreferences("Analyzercod", MODE_PRIVATE);
     thememanagersoft = getSharedPreferences("thememanagersoft", MODE_PRIVATE);
     prfns = PreferenceManager.getDefaultSharedPreferences(this);
-    
 
     AssetsSoft soft = new AssetsSoft();
     var iconPath = getFilesDir().getAbsoluteFile() + "/icon.png";
@@ -101,8 +99,7 @@ public class ApplicationLoader extends Application {
       soft.copyOneFileFromAssets("icon.png", getFilesDir().getAbsolutePath() + "/", this);
     }
     try (SassCompiler compiler = AndroidSassCompilerFactory.bundled(this)) {
-      Toast.makeText(getApplicationContext(), compiler.getVersion().toString(), Toast.LENGTH_SHORT)
-          .show();
+      DataUtil.showMessage(getApplicationContext(), compiler.getVersion().toString());
     } catch (Exception err) {
       err.printStackTrace();
     }
@@ -110,10 +107,6 @@ public class ApplicationLoader extends Application {
     themeEngine.setThemeMode(ThemeMode.DARK);
     mApplicationContext = getApplicationContext();
     themeEngine.applyToActivities(this);
-    
-    Toast.makeText(getApplicationContext(), save_path.getString("path",""), Toast.LENGTH_SHORT)
-          .show();
-
     softwareInfo
         .append("SDK: ")
         .append(Build.VERSION.SDK_INT)
@@ -157,12 +150,11 @@ public class ApplicationLoader extends Application {
     try {
       PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), 0);
       String v = info.versionName;
-      Toast.makeText(getApplicationContext(), "Welcom to Ghost web ide " + v, Toast.LENGTH_SHORT)
-          .show();
+      DataUtil.showMessage(getApplicationContext(), "Welcom to Ghost ide " + v);
     } catch (PackageManager.NameNotFoundException err) {
 
     }
-    CCppEngine.install(this);
+    // CCppEngine.install(this);
 
     super.onCreate();
   }
@@ -197,7 +189,8 @@ public class ApplicationLoader extends Application {
   public static SharedPreferences getAnalyzercod() {
     return Analyzercod;
   }
-  public static SharedPreferences getSavePath(){
+
+  public static SharedPreferences getSavePath() {
     return save_path;
   }
 

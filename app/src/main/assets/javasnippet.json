@@ -1,0 +1,154 @@
+[
+    {
+        "name": "helloworld",
+        "snippet": "public class HelloWorld { public static void main(String[] args) { System.out.println(\"Hello, World!\"); } }"
+    },
+    {
+        "name": "arrayexample",
+        "snippet": "int[] arr = {1, 2, 3, 4, 5}; for(int i : arr) { System.out.println(i); }"
+    },
+    {
+        "name": "forloopexample",
+        "snippet": "for(int i = 0; i < 10; i++) { System.out.println(i); }"
+    },
+    {
+        "name": "whileloopexample",
+        "snippet": "int i = 0; while(i < 5) { System.out.println(i); i++; }"
+    },
+    {
+        "name": "dowhileloopexample",
+        "snippet": "int i = 0; do { System.out.println(i); i++; } while(i < 5);"
+    },
+    {
+        "name": "switchstatement",
+        "snippet": "int day = 2; switch(day) { case 1: System.out.println(\"Monday\"); break; case 2: System.out.println(\"Tuesday\"); break; default: System.out.println(\"Invalid day\"); }"
+    },
+    {
+        "name": "arraylistexample",
+        "snippet": "ArrayList<String> list = new ArrayList<>(); list.add(\"Apple\"); list.add(\"Banana\"); System.out.println(list);"
+    },
+    {
+        "name": "hashmapexample",
+        "snippet": "HashMap<String, Integer> map = new HashMap<>(); map.put(\"One\", 1); map.put(\"Two\", 2); System.out.println(map);"
+    },
+    {
+        "name": "stringconcatenation",
+        "snippet": "String firstName = \"John\"; String lastName = \"Doe\"; String fullName = firstName + \" \" + lastName; System.out.println(fullName);"
+    },
+    {
+        "name": "stringbuilderexample",
+        "snippet": "StringBuilder sb = new StringBuilder(); sb.append(\"Hello\").append(\" \").append(\"World\"); System.out.println(sb.toString());"
+    },
+    {
+        "name": "methodexample",
+        "snippet": "public static int add(int a, int b) { return a + b; }"
+    },
+    {
+        "name": "constructorexample",
+        "snippet": "class Person { String name; int age; public Person(String name, int age) { this.name = name; this.age = age; } }"
+    },
+    {
+        "name": "trycatchexample",
+        "snippet": "try { int result = 10 / 0; } catch(ArithmeticException e) { System.out.println(\"Error: \" + e.getMessage()); }"
+    },
+    {
+        "name": "classinheritance",
+        "snippet": "class Animal { void sound() { System.out.println(\"Animal sound\"); } } class Dog extends Animal { void sound() { System.out.println(\"Bark\"); } }"
+    },
+    {
+        "name": "abstractclassexample",
+        "snippet": "abstract class Shape { abstract void draw(); } class Circle extends Shape { void draw() { System.out.println(\"Drawing Circle\"); } }"
+    },
+    {
+        "name": "interfaceexample",
+        "snippet": "interface Animal { void sound(); } class Dog implements Animal { public void sound() { System.out.println(\"Bark\"); } }"
+    },
+    {
+        "name": "lambdaexpression",
+        "snippet": "Runnable r = () -> System.out.println(\"Hello from lambda\"); r.run();"
+    },
+    {
+        "name": "streamfilter",
+        "snippet": "List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5); numbers.stream().filter(n -> n > 3).forEach(System.out::println);"
+    },
+    {
+        "name": "streammap",
+        "snippet": "List<String> names = Arrays.asList(\"John\", \"Jane\", \"Mark\"); names.stream().map(String::toUpperCase).forEach(System.out::println);"
+    },
+    {
+        "name": "threadexample",
+        "snippet": "class MyThread extends Thread { public void run() { System.out.println(\"Thread is running\"); } } MyThread t = new MyThread(); t.start();"
+    },
+    {
+        "name": "filereaderexample",
+        "snippet": "FileReader fr = new FileReader(\"file.txt\"); BufferedReader br = new BufferedReader(fr); String line; while((line = br.readLine()) != null) { System.out.println(line); } br.close();"
+    },
+    {
+        "name": "filewriterexample",
+        "snippet": "FileWriter writer = new FileWriter(\"file.txt\"); writer.write(\"Hello, World!\"); writer.close();"
+    },
+    {
+        "name": "objectserialization",
+        "snippet": "class Person implements Serializable { String name; int age; } Person p = new Person(); p.name = \"John\"; p.age = 30; FileOutputStream fileOut = new FileOutputStream(\"person.ser\"); ObjectOutputStream out = new ObjectOutputStream(fileOut); out.writeObject(p); out.close();"
+    },
+    {
+        "name": "objectdeserialization",
+        "snippet": "FileInputStream fileIn = new FileInputStream(\"person.ser\"); ObjectInputStream in = new ObjectInputStream(fileIn); Person p = (Person) in.readObject(); in.close(); System.out.println(p.name);"
+    },
+    {
+        "name": "comparatorexample",
+        "snippet": "List<Integer> list = Arrays.asList(5, 3, 8, 1); Collections.sort(list, (a, b) -> a - b); System.out.println(list);"
+    },
+    {
+        "name": "simpledateformatexample",
+        "snippet": "SimpleDateFormat sdf = new SimpleDateFormat(\"dd/MM/yyyy\"); Date date = new Date(); System.out.println(sdf.format(date));"
+    },
+    {
+        "name": "mathrandomexample",
+        "snippet": "double randomValue = Math.random(); System.out.println(randomValue);"
+    },
+    {
+        "name": "stringsplitexample",
+        "snippet": "String str = \"apple,banana,orange\"; String[] fruits = str.split(\",\"); for(String fruit : fruits) { System.out.println(fruit); }"
+    },
+    {
+        "name": "stringcontainsexample",
+        "snippet": "String str = \"Hello, World!\"; if(str.contains(\"World\")) { System.out.println(\"Contains World\"); }"
+    },
+    {
+        "name": "stringreplaceexample",
+        "snippet": "String str = \"Hello, World!\"; String replaced = str.replace(\"World\", \"Java\"); System.out.println(replaced);"
+    },
+    {
+        "name": "stringsubstringexample",
+        "snippet": "String str = \"Hello, World!\"; String substr = str.substring(7, 12); System.out.println(substr);"
+    },
+    {
+        "name": "integerparseintexample",
+        "snippet": "String numberStr = \"123\"; int number = Integer.parseInt(numberStr); System.out.println(number);"
+    },
+    {
+        "name": "doubleparsedoubleexample",
+        "snippet": "String numberStr = \"12.34\"; double number = Double.parseDouble(numberStr); System.out.println(number);"
+    },
+    {
+        "name": "arraylistiteration",
+        "snippet": "ArrayList<String> list = new ArrayList<>(); list.add(\"Apple\"); list.add(\"Banana\"); for(String item : list) { System.out.println(item); }"
+    },
+    {
+        "name": "hashsetexample",
+        "snippet": "HashSet<String> set = new HashSet<>(); set.add(\"A\"); set.add(\"B\"); System.out.println(set);"
+    },
+    {
+        "name": "treesetexample",
+        "snippet": "TreeSet<String> set = new TreeSet<>(); set.add(\"Z\"); set.add(\"A\"); System.out.println(set);"
+    },
+    {
+        "name": "priorityqueueexample",
+        "snippet": "PriorityQueue<Integer> pq = new PriorityQueue<>(); pq.add(10); pq.add(5); pq.add(20); System.out.println(pq.poll());"
+    },
+    {
+        "name": "datecomparisionexample",
+        "snippet": "Date date1 = new Date(); Thread.sleep(1000); Date date2 = new Date(); System.out.println(date1.before(date2));"
+    }
+]
