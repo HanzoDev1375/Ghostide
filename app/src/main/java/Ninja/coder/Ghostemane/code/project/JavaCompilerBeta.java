@@ -88,14 +88,14 @@ public class JavaCompilerBeta {
         opt.clear();
         opt.add("-11");
         opt.add("-nowarn");
-        opt.add("-deprecation");
+    //    opt.add("-deprecation");
         opt.add("-d");
         opt.add(FileUtil.getRoot(context).concat("/bin/classes"));
         opt.add("-cp");
         opt.add(FileUtil.getRoot(context).concat("/bin/cp.jar"));
         opt.add("-proc:none");
         opt.add("-sourcepath");
-        opt.add("ignore");
+      //  opt.add("ignore");
         opt.add(
             FileUtil.getRoot(context).concat("/bin/").concat(className).concat(".java"));
 

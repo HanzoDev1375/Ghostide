@@ -1,9 +1,13 @@
 package com.ninjacoder.jgit.fileslide;
 
 import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Toast;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.sidesheet.SideSheetDialog;
+import com.ninjacoder.jgit.databinding.LayoutRvSlideBinding;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,33 +19,57 @@ public class SildeFileManger {
   private Context context;
   private OnItemCallBacks call;
   private int icon;
+  private File file;
+  protected List<SlideModel> model;
+  protected List<File> fileList;
+  private FileSlideAdapter filesilderad;
+  protected LayoutRvSlideBinding rvbind;
 
-  public SildeFileManger(String path, Context context,OnItemCallBacks call,int icon) {
+  public SildeFileManger(String path, Context context, OnItemCallBacks call, int icon) {
     this.path = path;
     this.context = context;
     this.call = call;
     this.icon = icon;
     installData();
   }
-  
-  private void installData(){
-    List<SlideModel> model = new ArrayList<>();
+
+  private void installData() {
+    model = new ArrayList<>();
     SideSheetDialog sh = new SideSheetDialog(context);
-    RecyclerView rv = new RecyclerView(context);
-    sh.setContentView(rv);
+    rvbind = LayoutRvSlideBinding.inflate(LayoutInflater.from(context));
+
+    sh.setContentView(rvbind.getRoot());
     sh.show();
-    var it = getListFile();
-    it.forEach(i ->{
-      model.add(new SlideModel(i,icon));
-    });
-    rv.setAdapter(new FileSlideAdapter(model,call));
-    rv.setLayoutManager(new LinearLayoutManager(context));
+    reloadFile(path);
+
+    rvbind.backclick.setOnClickListener(
+        v -> {
+          if (file != null && !file.getAbsolutePath().equals(path)) {
+            reloadFile(file.getParent());
+          } else Toast.makeText(context, "This root", 2).show();
+        });
+    filesilderad.setCallCustom(
+        new Custom() {
+
+          @Override
+          public void click(File file, int pos, View v) {
+            reloadFile(file.getAbsolutePath());
+          }
+        });
   }
 
-  private List<File> getListFile() {
-    File file = new File(path);
-    File[] arr = file.listFiles();
-    List<File> mfile = new ArrayList<>(Arrays.asList(arr));
-    return mfile;
+  void reloadFile(String path) {
+    file = new File(path);
+    File[] files = file.listFiles();
+    fileList = new ArrayList<>(Arrays.asList(files));
+
+    fileList.forEach(
+        i -> {
+          model.add(new SlideModel(i, icon));
+        });
+    filesilderad = new FileSlideAdapter(model, call);
+    rvbind.rvSlide.setAdapter(filesilderad);
+
+    rvbind.rvSlide.setLayoutManager(new LinearLayoutManager(context));
   }
 }

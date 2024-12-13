@@ -1,15 +1,15 @@
 package Ninja.coder.Ghostemane.code.config;
 
 import Ninja.coder.Ghostemane.code.adapter.FileManagerAd;
+import Ninja.coder.Ghostemane.code.interfaces.OnClickFileSlideSheetCallBack;
 import Ninja.coder.Ghostemane.code.utils.FileUtil;
 import android.content.Context;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.sidesheet.SideSheetDialog;
+import com.ninjacoder.jgit.databinding.LayoutRvSlideBinding;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import java.io.File;
 import java.util.ArrayList;
@@ -21,16 +21,24 @@ import java.util.List;
 public class CommonFactoryData implements FileManagerAd.onClick {
   protected Context context;
   private List<String> list = new ArrayList<>();
-  private List<HashMap<String, Object>> listDir = new ArrayList<>();
-  protected RecyclerView rv;
+  private ArrayList<HashMap<String, Object>> listDir = new ArrayList<>();
   protected FileManagerAd fileManagerAd;
   private CodeEditor editor;
-  private AlertDialog dialogConfig;
+  private SideSheetDialog dialogConfig;
   private static final String TAG = "TAG";
+  private LayoutRvSlideBinding binding;
+  private OnClickFileSlideSheetCallBack listCallBack;
 
   public CommonFactoryData(Context context, CodeEditor editor) {
     this.context = context;
     this.editor = editor;
+
+    binding = LayoutRvSlideBinding.inflate(LayoutInflater.from(context));
+    installDialog();
+  }
+
+  public void setOnClickFileSlideSheetCallBack(OnClickFileSlideSheetCallBack listCallBack) {
+    this.listCallBack = listCallBack;
   }
 
   public void setlistFile(String path) {
@@ -56,18 +64,10 @@ public class CommonFactoryData implements FileManagerAd.onClick {
       position++;
     }
 
-    rv = new RecyclerView(context);
-    ViewGroup.LayoutParams p =
-        new ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-    // for test
-    rv.setLayoutParams(p);
-
     fileManagerAd = new FileManagerAd(listDir, context, this);
-    rv.setAdapter(fileManagerAd);
-    rv.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
-    dialogConfig = new MaterialAlertDialogBuilder(context).setView(rv).create();
-    dialogConfig.show();
+    binding.rvSlide.setAdapter(fileManagerAd);
+    binding.rvSlide.setLayoutManager(
+        new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
   }
 
   @Override
@@ -75,19 +75,28 @@ public class CommonFactoryData implements FileManagerAd.onClick {
     // TODO: Implement this method
     var file = new File(listDir.get(pos).get("path").toString());
     if (file.isDirectory()) {
-        Log.d(TAG,"dont select onClick to path");
+      setlistFile(file.getAbsolutePath());
     } else {
-      var symbol = editor.createNewSymbolChannel();
-      symbol.insertSymbol(file.getName(), file.getName().length() == 0 ? 0 : 1);
-      
-      if (dialogConfig != null) {
-        dialogConfig.dismiss();
-      }
+      if (isTextFile(file.toString()))
+        if (listCallBack != null) {
+          listCallBack.onClickEvent(listDir, pos);
+        }
     }
+  }
+
+  void installDialog() {
+    dialogConfig = new SideSheetDialog(context);
+
+    dialogConfig.setContentView(binding.getRoot());
+    dialogConfig.show();
   }
 
   @Override
   public void onLongClick(View view, int pos) {
-    
+    listCallBack.onLongClick(listDir, pos);
+  }
+
+  private boolean isTextFile(String path) {
+    return path.endsWith(".css"); 
   }
 }

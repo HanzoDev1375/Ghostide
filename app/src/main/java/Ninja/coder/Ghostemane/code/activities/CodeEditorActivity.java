@@ -12,6 +12,8 @@ import Ninja.coder.Ghostemane.code.config.CommonFactoryData;
 import Ninja.coder.Ghostemane.code.config.MenuColorView;
 import Ninja.coder.Ghostemane.code.databinding.Antcomp8lerBinding;
 import Ninja.coder.Ghostemane.code.enums.Mode;
+import Ninja.coder.Ghostemane.code.folder.FileIconHelper;
+import Ninja.coder.Ghostemane.code.interfaces.OnClickFileSlideSheetCallBack;
 import Ninja.coder.Ghostemane.code.layoutmanager.LogCatBottomSheet;
 import Ninja.coder.Ghostemane.code.marco.CharUtil;
 import Ninja.coder.Ghostemane.code.marco.ColorView;
@@ -75,6 +77,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mcal.uidesigner.XmlLayoutDesignActivity;
+import com.ninjacoder.jgit.fileslide.OnItemCallBacks;
+import com.ninjacoder.jgit.fileslide.SildeFileManger;
+import com.ninjacoder.jgit.fileslide.SlideModel;
 import com.skydoves.powermenu.MenuAnimation;
 import com.skydoves.powermenu.OnMenuItemClickListener;
 import com.skydoves.powermenu.PowerMenu;
@@ -479,7 +484,37 @@ public class CodeEditorActivity extends AppCompatActivity {
     editor.setText(modelEditor.getText());
 
     var editorHelperColor = new EditorHelperColor(editor, badgeview3);
-    MenuColorView.show(badgeview3);
+
+    badgeview3.setOnClickListener(
+        __ -> {
+          var data = new CommonFactoryData(CodeEditorActivity.this, editor);
+          var file = new File(shp.getString("pos_path", ""));
+          data.setlistFile(file.getParentFile().toString());
+          Toast.makeText(CodeEditorActivity.this, file.getParentFile().toString(), 2).show();
+          data.setOnClickFileSlideSheetCallBack(
+              new OnClickFileSlideSheetCallBack() {
+
+                @Override
+                public void onClickEvent(ArrayList<HashMap<String, Object>> map, int pos) {
+                  map =
+                      new Gson()
+                          .fromJson(
+                              shp.getString("path",""),
+                              new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
+                  recyclerview1.setAdapter(new Recyclerview1Adapter(map));
+                  recyclerview1.setLayoutManager(
+                      new LinearLayoutManager(
+                          CodeEditorActivity.this, LinearLayoutManager.HORIZONTAL, false));
+                  setCodeEditorFileReader(shp.getString("pos_path", ""));
+                  ((LinearLayoutManager) recyclerview1.getLayoutManager())
+                      .scrollToPositionWithOffset(pos, 0);
+                }
+
+                @Override
+                public void onLongClick(ArrayList<HashMap<String, Object>> map, int pos) {}
+              });
+        });
+
     var size =
         TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
@@ -490,12 +525,12 @@ public class CodeEditorActivity extends AppCompatActivity {
         new CodeEditor.OnKeyboardOperation() {
           @Override
           public void Tab() {
-          //  Toast.makeText(getApplicationContext(), "This Tab", Toast.LENGTH_SHORT).show();
+            //  Toast.makeText(getApplicationContext(), "This Tab", Toast.LENGTH_SHORT).show();
           }
 
           @Override
           public void Space() {
-           // Toast.makeText(getApplicationContext(), "This Space", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(getApplicationContext(), "This Space", Toast.LENGTH_SHORT).show();
           }
 
           @Override
@@ -731,7 +766,6 @@ public class CodeEditorActivity extends AppCompatActivity {
             .addItem(new PowerMenuItem("Save", false, R.drawable.save))
             .addItem(new PowerMenuItem("Save All (Beta)", false, R.drawable.setsavefileall))
             .addItem(new PowerMenuItem("Code nave", false, R.drawable.setsavefileall))
-            .addItem(new PowerMenuItem("File List"))
             .addItem(new PowerMenuItem("Reload Color"))
             .setIsMaterial(true)
             .build();
@@ -827,16 +861,8 @@ public class CodeEditorActivity extends AppCompatActivity {
                       CodeEditorActivity.this, shp.getString("pos_path", ""), editor);
                   break;
                 }
+
               case 6:
-                {
-                  var test = new CommonFactoryData(CodeEditorActivity.this, editor);
-                  var file = new File(shp.getString("pos_path", ""));
-                  test.setlistFile(file.getParentFile().toString());
-                  Toast.makeText(CodeEditorActivity.this, file.getParentFile().toString(), 2)
-                      .show();
-                  break;
-                }
-              case 7:
                 {
                   editor.subscribeEvent(
                       ColorSchemeUpdateEvent.class,

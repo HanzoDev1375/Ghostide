@@ -913,7 +913,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
             (p, d) -> {
               try {
                 new net.lingala.zip4j.ZipFile(_list.get((int) _pos).get(_str).toString())
-                    .extractAll("/storage/emulated/0/GhostWebIDE/");
+                    .extractAll("/storage/emulated/0/GhostWebIDE/theme/");
               } catch (net.lingala.zip4j.exception.ZipException e) {
                 showMessage(e.toString());
               }
@@ -925,7 +925,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
       } else {
         try {
           new net.lingala.zip4j.ZipFile(_list.get((int) _pos).get(_str).toString())
-              .extractAll("/storage/emulated/0/GhostWebIDE/");
+              .extractAll("/storage/emulated/0/GhostWebIDE/theme/");
         } catch (net.lingala.zip4j.exception.ZipException e) {
           showMessage(e.toString());
         }

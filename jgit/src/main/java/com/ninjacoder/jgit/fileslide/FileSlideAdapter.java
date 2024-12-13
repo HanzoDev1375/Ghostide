@@ -12,8 +12,9 @@ public class FileSlideAdapter extends RecyclerView.Adapter<FileSlideAdapter.Hold
   private List<SlideModel> listSlideModel;
   private LayoutFileadSlidesheetBinding bind;
   private OnItemCallBacks call;
+  private Custom custom;
 
-  public FileSlideAdapter(List<SlideModel> listSlideModel,OnItemCallBacks call) {
+  public FileSlideAdapter(List<SlideModel> listSlideModel, OnItemCallBacks call) {
     this.listSlideModel = listSlideModel;
     this.call = call;
   }
@@ -35,15 +36,23 @@ public class FileSlideAdapter extends RecyclerView.Adapter<FileSlideAdapter.Hold
     var it = listSlideModel.get(pos);
     bind.slideFileText.setText(it.getFile().getName());
     bind.slideFileIcon.setImageResource(it.getIcon());
-    bind.getRoot().setOnClickListener(i ->{
-      if(call != null) {
-      	call.onClickItem(holder.getAdapterPosition(),it,i);
-      }
-    });
+    bind.getRoot()
+        .setOnClickListener(
+            i -> {
+              if (it.getFile().isDirectory()) {
+                if (custom != null) custom.click(it.getFile(), holder.getAdapterPosition(), i);
+              } else if (call != null) {
+                call.onClickItem(holder.getAdapterPosition(), it, i);
+              }
+            });
   }
 
   @Override
   public int getItemCount() {
     return listSlideModel.size();
+  }
+
+  public void setCallCustom(Custom custom) {
+    this.custom = custom;
   }
 }
