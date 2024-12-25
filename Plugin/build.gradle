@@ -5,7 +5,7 @@ plugins {
 
 android {
     compileSdk 34
-    namespace "Ninja.coder.Ghostemane.code.PluginManager"
+    namespace "ir.ninjacoder.ghostide.PluginManager"
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 30

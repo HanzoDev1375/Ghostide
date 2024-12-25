@@ -1,6 +1,6 @@
 package io.github.rosemoe.sora.langs.java;
 
-import Ninja.coder.Ghostemane.code.IdeEditor;
+import ir.ninjacoder.ghostide.IdeEditor;
 import android.os.Build;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.StaticJavaParser;

@@ -8,6 +8,7 @@ import io.github.rosemoe.sora.text.TextStyle;
 import java.util.Stack;
 
 import io.github.rosemoe.sora.data.BlockLine;
+import org.antlr.parser.antlr4.ninja.NinjaTest;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
@@ -330,6 +331,9 @@ public class KotilnAnalyzer implements CodeAnalyzer {
       }
       ktinfo.finish();
       result.setExtra(ktinfo);
+      
+      //for testninja lang
+      NinjaTest.main(result,content.toString());
       result.setSuppressSwitch(maxSwitch + 10);
     } catch (IOException e) {
       e.printStackTrace();

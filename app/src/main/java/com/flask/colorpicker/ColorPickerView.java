@@ -16,7 +16,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import Ninja.coder.Ghostemane.code.R;
+import ir.ninjacoder.ghostide.R;
 import com.flask.colorpicker.builder.ColorWheelRendererBuilder;
 import com.flask.colorpicker.builder.PaintBuilder;
 import com.flask.colorpicker.renderer.ColorWheelRenderOption;

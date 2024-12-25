@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Build;
-import Ninja.coder.Ghostemane.code.R;
+import ir.ninjacoder.ghostide.R;
 import android.view.View;
 import android.view.LayoutInflater;
 import android.widget.TextView;

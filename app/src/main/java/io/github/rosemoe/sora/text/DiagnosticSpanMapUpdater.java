@@ -1,6 +1,6 @@
 package io.github.rosemoe.sora.text;
 
-import Ninja.coder.Ghostemane.code.databin.DiagnosticWrapper;
+import ir.ninjacoder.ghostide.databin.DiagnosticWrapper;
 import java.util.List;
 
 public class DiagnosticSpanMapUpdater {

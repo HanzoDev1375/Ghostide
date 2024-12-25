@@ -1,9 +1,9 @@
 package io.github.rosemoe.sora.widget.TextSummry;
 
-import Ninja.coder.Ghostemane.code.activities.BrowserActivity;
-import Ninja.coder.Ghostemane.code.activities.CodeEditorActivity;
-import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
-import Ninja.coder.Ghostemane.code.adapter.Recyclerview0Adapter;
+import ir.ninjacoder.ghostide.activities.BrowserActivity;
+import ir.ninjacoder.ghostide.activities.CodeEditorActivity;
+import ir.ninjacoder.ghostide.utils.ObjectUtils;
+import ir.ninjacoder.ghostide.adapter.Recyclerview0Adapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,7 +13,7 @@ import android.os.Handler;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import Ninja.coder.Ghostemane.code.R;
+import ir.ninjacoder.ghostide.R;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;

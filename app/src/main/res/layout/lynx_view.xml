@@ -40,7 +40,7 @@
 
         </LinearLayout>
 
-        <Ninja.coder.Ghostemane.code.layoutmanager.NestedScrollListView
+        <ir.ninjacoder.ghostide.layoutmanager.NestedScrollListView
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:padding="8dp"

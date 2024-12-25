@@ -32,7 +32,7 @@ import android.util.TypedValue;
 
 import androidx.annotation.NonNull;
 
-import Ninja.coder.Ghostemane.code.R;
+import ir.ninjacoder.ghostide.R;
 import io.github.rosemoe.sora.widget.style.SelectionHandleStyle;
 
 public class HandleStyleDrop implements SelectionHandleStyle {

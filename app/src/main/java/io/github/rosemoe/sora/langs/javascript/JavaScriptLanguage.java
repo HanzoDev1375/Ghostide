@@ -1,6 +1,6 @@
 package io.github.rosemoe.sora.langs.javascript;
 
-import Ninja.coder.Ghostemane.code.ApplicationLoader;
+import ir.ninjacoder.ghostide.ApplicationLoader;
 import android.widget.Toast;
 import com.khubla.antlr4formatter.Antlr4Formatter;
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;

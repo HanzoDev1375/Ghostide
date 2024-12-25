@@ -23,7 +23,7 @@
  */
 package io.github.rosemoe.sora.interfaces;
 
-import Ninja.coder.Ghostemane.code.databin.DiagnosticWrapper;
+import ir.ninjacoder.ghostide.databin.DiagnosticWrapper;
 import java.util.List;
 
 import io.github.rosemoe.sora.text.Content;

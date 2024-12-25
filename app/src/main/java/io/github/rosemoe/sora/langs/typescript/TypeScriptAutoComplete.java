@@ -1,7 +1,7 @@
 package io.github.rosemoe.sora.langs.typescript;
 
 
-import Ninja.coder.Ghostemane.code.IdeEditor;
+import ir.ninjacoder.ghostide.IdeEditor;
 import io.github.rosemoe.sora.data.CompletionItem;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import java.util.ArrayList;

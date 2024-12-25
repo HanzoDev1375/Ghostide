@@ -1,8 +1,8 @@
 package io.github.rosemoe.sora.widget;
 
-import Ninja.coder.Ghostemane.code.ApplicationLoader;
-import Ninja.coder.Ghostemane.code.marco.RegexUtilCompat;
-import Ninja.coder.Ghostemane.code.utils.DataUtil;
+import ir.ninjacoder.ghostide.ApplicationLoader;
+import ir.ninjacoder.ghostide.marco.RegexUtilCompat;
+import ir.ninjacoder.ghostide.utils.DataUtil;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.RectF;

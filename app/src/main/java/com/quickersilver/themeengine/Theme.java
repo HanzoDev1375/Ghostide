@@ -2,7 +2,7 @@ package com.quickersilver.themeengine;
 
 import androidx.annotation.ColorRes;
 import androidx.annotation.StyleRes;
-import Ninja.coder.Ghostemane.code.R;
+import ir.ninjacoder.ghostide.R;
 
 public enum Theme {
   BLUE(R.style.Theme_ThemeEngine_Blue, R.color.blue_theme_primary),

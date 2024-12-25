@@ -10,7 +10,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import Ninja.coder.Ghostemane.code.R;
+import ir.ninjacoder.ghostide.R;
 
 public abstract class AbsCustomSlider extends View {
     protected Bitmap bitmap;

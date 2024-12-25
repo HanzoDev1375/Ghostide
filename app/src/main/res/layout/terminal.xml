@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Ninja.coder.Ghostemane.code.terminal.TermuxActivityRootView
+<ir.ninjacoder.ghostide.terminal.TermuxActivityRootView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
@@ -19,11 +19,11 @@
         android:id="@+id/term"
         />
 
-    <Ninja.coder.Ghostemane.code.terminal.key.VirtualKeysView
+    <ir.ninjacoder.ghostide.terminal.key.VirtualKeysView
         android:layout_height="75dp"
         android:layout_width="match_parent"
         android:layout_gravity="right|bottom"
         android:id="@+id/keysterm"
         />
 
-</Ninja.coder.Ghostemane.code.terminal.TermuxActivityRootView>
+</ir.ninjacoder.ghostide.terminal.TermuxActivityRootView>

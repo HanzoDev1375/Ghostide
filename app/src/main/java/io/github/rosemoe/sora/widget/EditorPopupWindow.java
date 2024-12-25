@@ -32,7 +32,7 @@ import androidx.annotation.NonNull;
 import com.google.android.material.transition.platform.MaterialSharedAxis;
 import java.util.Objects;
 
-import Ninja.coder.Ghostemane.code.R;
+import ir.ninjacoder.ghostide.R;
 import io.github.rosemoe.sora.event.EventReceiver;
 import io.github.rosemoe.sora.event.ScrollEvent;
 

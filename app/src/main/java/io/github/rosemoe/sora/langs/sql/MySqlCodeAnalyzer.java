@@ -1,6 +1,6 @@
 package io.github.rosemoe.sora.langs.sql;
 
-import Ninja.coder.Ghostemane.code.marco.RegexUtilCompat;
+import ir.ninjacoder.ghostide.marco.RegexUtilCompat;
 import android.graphics.Color;
 import androidx.core.graphics.ColorUtils;
 import io.github.rosemoe.sora.data.Span;

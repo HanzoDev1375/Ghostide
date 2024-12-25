@@ -1,7 +1,7 @@
 package io.github.rosemoe.sora.langs.python;
 
-import Ninja.coder.Ghostemane.code.IdeEditor;
-import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
+import ir.ninjacoder.ghostide.IdeEditor;
+import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import android.graphics.RectF;
 import android.os.Handler;
 import android.os.Looper;

@@ -1,6 +1,6 @@
 package io.github.rosemoe.sora.widget;
 
-import Ninja.coder.Ghostemane.code.utils.AnimUtils;
+import ir.ninjacoder.ghostide.utils.AnimUtils;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -16,7 +16,7 @@ import io.github.rosemoe.sora.langs.javascript.JavaScriptLanguage;
 import io.github.rosemoe.sora.langs.kotlin.KotlinLanguage;
 import io.github.rosemoe.sora.langs.php.PHPLanguage;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
-import Ninja.coder.Ghostemane.code.R;
+import ir.ninjacoder.ghostide.R;
 import io.github.rosemoe.sora.data.CompletionItem;
 
 @SuppressWarnings("CanBeFinal")

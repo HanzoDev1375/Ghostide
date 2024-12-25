@@ -23,7 +23,7 @@
  */
 package io.github.rosemoe.sora.widget;
 
-import Ninja.coder.Ghostemane.code.R;
+import ir.ninjacoder.ghostide.R;
 import android.view.Gravity;
 import android.widget.PopupWindow;
 import android.graphics.Color;

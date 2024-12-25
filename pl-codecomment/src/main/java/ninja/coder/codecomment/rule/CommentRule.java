@@ -1,9 +1,9 @@
 package ninja.coder.codecomment.rule;
 
-import Ninja.coder.Ghostemane.code.PluginManager.Plugin;
-import Ninja.coder.Ghostemane.code.PluginManager.isField;
-import Ninja.coder.Ghostemane.code.PluginManager.PluginFactory;
-import Ninja.coder.Ghostemane.code.PluginManager.ismodule;
+import ir.ninjacoder.ghostide.PluginManager.Plugin;
+import ir.ninjacoder.ghostide.PluginManager.isField;
+import ir.ninjacoder.ghostide.PluginManager.PluginFactory;
+import ir.ninjacoder.ghostide.PluginManager.ismodule;
 import android.content.Context;
 import android.os.Build;
 import android.os.Handler;

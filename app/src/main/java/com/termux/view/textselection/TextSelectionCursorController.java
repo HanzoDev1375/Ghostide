@@ -14,7 +14,7 @@ import android.view.View;
 
 import com.termux.terminal.TerminalBuffer;
 import com.termux.terminal.WcWidth;
-import Ninja.coder.Ghostemane.code.R;
+import ir.ninjacoder.ghostide.R;
 import com.termux.view.TerminalView;
 
 public class TextSelectionCursorController implements CursorController {

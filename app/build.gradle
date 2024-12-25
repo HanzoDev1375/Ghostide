@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace "Ninja.coder.Ghostemane.code"
+    namespace "ir.ninjacoder.ghostide"
     compileSdk 34
     
     defaultConfig {
-        applicationId "Ninja.coder.Ghostemane.code"
+        applicationId "ir.ninjacoder.ghostide"
         minSdk 21 
         targetSdk 32
         versionCode 31

@@ -1,7 +1,7 @@
 package lsp4custom.com.ninjacoder.customhtmllsp;
 
-import Ninja.coder.Ghostemane.code.ApplicationLoader;
-import Ninja.coder.Ghostemane.code.utils.DataUtil;
+import ir.ninjacoder.ghostide.ApplicationLoader;
+import ir.ninjacoder.ghostide.utils.DataUtil;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import io.github.rosemoe.sora.data.CompletionItem;

@@ -412,7 +412,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="Ninja.coder.Ghostemane.code.provider"
+            android:authorities="ir.ninjacoder.ghostide.provider"
             android:exported="false"
             android:grantUriPermissions="true"
             
@@ -424,7 +424,7 @@
             />
         </provider>
         <activity
-            android:name="Ninja.coder.Ghostemane.code.keyboard.Setting"
+            android:name="ir.ninjacoder.ghostide.keyboard.Setting"
         >
         </activity>
 
@@ -588,7 +588,7 @@
             </intent-filter>
         </activity-alias>
         <receiver
-            android:name="Ninja.coder.Ghostemane.code.NetworkChangeReceiver"
+            android:name="ir.ninjacoder.ghostide.NetworkChangeReceiver"
             android:enabled="false"
             android:exported="true"
             

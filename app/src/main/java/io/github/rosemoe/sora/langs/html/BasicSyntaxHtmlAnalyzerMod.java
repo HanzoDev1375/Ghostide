@@ -1,6 +1,6 @@
 package io.github.rosemoe.sora.langs.html;
 
-import Ninja.coder.Ghostemane.code.ApplicationLoader;
+import ir.ninjacoder.ghostide.ApplicationLoader;
 import android.util.Log;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 import io.github.rosemoe.sora.langs.xml.analyzer.Utils;

@@ -1,6 +1,6 @@
 package io.github.rosemoe.sora.langs.csharp;
 
-import Ninja.coder.Ghostemane.code.ApplicationLoader;
+import ir.ninjacoder.ghostide.ApplicationLoader;
 import android.graphics.Color;
 import android.util.Log;
 import io.github.rosemoe.sora.data.BlockLine;

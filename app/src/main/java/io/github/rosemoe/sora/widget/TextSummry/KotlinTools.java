@@ -1,8 +1,8 @@
 package io.github.rosemoe.sora.widget.TextSummry;
 
-import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
-import Ninja.coder.Ghostemane.code.IdeEditor;
-import Ninja.coder.Ghostemane.code.marco.HtmlTagView;
+import ir.ninjacoder.ghostide.utils.ObjectUtils;
+import ir.ninjacoder.ghostide.IdeEditor;
+import ir.ninjacoder.ghostide.marco.HtmlTagView;
 import android.view.View;
 import com.google.android.material.color.MaterialColors;
 import com.skydoves.powermenu.MenuAnimation;

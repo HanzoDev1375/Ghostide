@@ -4,7 +4,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-    <Ninja.coder.Ghostemane.code.layoutmanager.SliderCompat
+    <ir.ninjacoder.ghostide.layoutmanager.SliderCompat
             android:id="@+id/slider"
             android:focusable="false"
             android:layout_width="match_parent"

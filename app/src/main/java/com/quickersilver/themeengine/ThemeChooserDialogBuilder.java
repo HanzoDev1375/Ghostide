@@ -8,10 +8,10 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.GridLayoutManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import Ninja.coder.Ghostemane.code.databinding.RecyclerviewBinding;
+import ir.ninjacoder.ghostide.databinding.RecyclerviewBinding;
 import java.util.ArrayList;
 import java.util.List;
-import Ninja.coder.Ghostemane.code.R;
+import ir.ninjacoder.ghostide.R;
 
 /**
  * Builder class to create a Theme Chooser Dialog

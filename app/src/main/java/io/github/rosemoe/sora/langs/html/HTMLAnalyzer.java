@@ -1,6 +1,6 @@
 package io.github.rosemoe.sora.langs.html;
 
-import Ninja.coder.Ghostemane.code.interfaces.CallBackErrorManager;
+import ir.ninjacoder.ghostide.interfaces.CallBackErrorManager;
 import io.github.rosemoe.sora.data.BlockLine;
 import io.github.rosemoe.sora.data.NavigationItem;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;

@@ -1,8 +1,8 @@
 package io.github.rosemoe.sora.langs.java;
 
-import Ninja.coder.Ghostemane.code.IdeEditor;
-import Ninja.coder.Ghostemane.code.databin.DiagnosticWrapper;
-import Ninja.coder.Ghostemane.code.utils.ThemeUtils;
+import ir.ninjacoder.ghostide.IdeEditor;
+import ir.ninjacoder.ghostide.databin.DiagnosticWrapper;
+import ir.ninjacoder.ghostide.utils.ThemeUtils;
 import android.graphics.Color;
 import androidx.core.graphics.ColorUtils;
 import com.github.javaparser.StaticJavaParser;

@@ -1,6 +1,6 @@
 package io.github.rosemoe.sora.langs.ninjalang;
 
-import Ninja.coder.Ghostemane.code.ApplicationLoader;
+import ir.ninjacoder.ghostide.ApplicationLoader;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;

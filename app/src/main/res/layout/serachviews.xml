@@ -82,7 +82,7 @@
                 android:orientation="horizontal"
                 android:id="@+id/linear4">
 
-            <Ninja.coder.Ghostemane.code.layoutmanager.btnCompat
+            <ir.ninjacoder.ghostide.layoutmanager.btnCompat
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:padding="8dp"
@@ -94,7 +94,7 @@
                     android:id="@+id/repall"
                     android:text="repall"/>
 
-            <Ninja.coder.Ghostemane.code.layoutmanager.btnCompat
+            <ir.ninjacoder.ghostide.layoutmanager.btnCompat
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:padding="8dp"
@@ -106,7 +106,7 @@
                     android:id="@+id/rep"
                     android:text="rep"/>
 
-            <Ninja.coder.Ghostemane.code.layoutmanager.btnCompat
+            <ir.ninjacoder.ghostide.layoutmanager.btnCompat
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:padding="8dp"
@@ -118,7 +118,7 @@
                     android:id="@+id/mis"
                     android:text="previous"/>
 
-            <Ninja.coder.Ghostemane.code.layoutmanager.btnCompat
+            <ir.ninjacoder.ghostide.layoutmanager.btnCompat
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:padding="8dp"

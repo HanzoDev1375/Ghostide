@@ -23,7 +23,7 @@
  */
 package io.github.rosemoe.sora.langs.css3;
 
-import Ninja.coder.Ghostemane.code.IdeEditor;
+import ir.ninjacoder.ghostide.IdeEditor;
 import android.util.Log;
 import com.steadystate.css.dom.CSSStyleSheetImpl;
 import com.steadystate.css.format.CSSFormat;

@@ -1,7 +1,7 @@
 print(print)
 
 import os
-packs = os.listdir("/data/user/0/Ninja.coder.Ghostemane.code/files/files/usr/lib/python3.11/site-packages")
+packs = os.listdir("/data/user/0/ir.ninjacoder.ghostide/files/files/usr/lib/python3.11/site-packages")
 if not "termcolor" in packs or not "colorama" in packs or not "prompt_toolkit" in packs or not "git":
     os.system("libpython3.so -m pip install --trusted-host https://pypi.tuna.tsinghua.edu.cn -i https://pypi.tuna.tsinghua.edu.cn/simple/ prompt_toolkit colorama termcolor gitpython")
 import getpass
@@ -435,8 +435,8 @@ class console(object):
     def getPrompt(while_loop_starter: bool = False):
         
         cwd = console.getCwd()
-        if cwd.startswith("/data/data/Ninja.coder.Ghostemane.code/files"):
-            cwd = cwd.replace("/data/data/Ninja.coder.Ghostemane.code/files", "~")
+        if cwd.startswith("/data/data/ir.ninjacoder.ghostide/files"):
+            cwd = cwd.replace("/data/data/ir.ninjacoder.ghostide/files", "~")
         elif cwd.startswith(f"C:\\Users\\{getpass.getuser()}"):
             cwd = cwd.replace(f"C:\\Users\\{getpass.getuser()}", "~")
         else:

@@ -23,14 +23,14 @@
  */
 package io.github.rosemoe.sora.widget;
 
-import Ninja.coder.Ghostemane.code.IdeEditor;
-import Ninja.coder.Ghostemane.code.R;
-import Ninja.coder.Ghostemane.code.adapter.TextActionAd;
-import Ninja.coder.Ghostemane.code.databinding.TextComposePopupWindowBinding;
-import Ninja.coder.Ghostemane.code.marco.EditorSearcherT;
-import Ninja.coder.Ghostemane.code.marco.SmaliHelper;
-import Ninja.coder.Ghostemane.code.model.TextActionModel;
-import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
+import ir.ninjacoder.ghostide.IdeEditor;
+import ir.ninjacoder.ghostide.R;
+import ir.ninjacoder.ghostide.adapter.TextActionAd;
+import ir.ninjacoder.ghostide.databinding.TextComposePopupWindowBinding;
+import ir.ninjacoder.ghostide.marco.EditorSearcherT;
+import ir.ninjacoder.ghostide.marco.SmaliHelper;
+import ir.ninjacoder.ghostide.model.TextActionModel;
+import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import android.annotation.SuppressLint;
 import android.graphics.*;
 import android.content.res.*;

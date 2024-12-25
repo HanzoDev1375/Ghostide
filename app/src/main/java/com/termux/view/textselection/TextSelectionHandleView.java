@@ -12,7 +12,7 @@ import android.view.ViewParent;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
 
-import Ninja.coder.Ghostemane.code.R;
+import ir.ninjacoder.ghostide.R;
 import com.termux.view.TerminalView;
 
 @SuppressLint("ViewConstructor")

@@ -27,7 +27,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <Ninja.coder.Ghostemane.code.widget.component.fastscrollcompat.FastScrollNestedScrollView
+    <ir.ninjacoder.ghostide.widget.component.fastscrollcompat.FastScrollNestedScrollView
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -146,6 +146,6 @@
 
         </LinearLayout>
 
-    </Ninja.coder.Ghostemane.code.widget.component.fastscrollcompat.FastScrollNestedScrollView>
+    </ir.ninjacoder.ghostide.widget.component.fastscrollcompat.FastScrollNestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

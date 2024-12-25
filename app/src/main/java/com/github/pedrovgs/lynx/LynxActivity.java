@@ -20,7 +20,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import Ninja.coder.Ghostemane.code.R;
+import ir.ninjacoder.ghostide.R;
 
 /**
  * Activity created to show a LynxView with "match_parent" configuration for LynxView

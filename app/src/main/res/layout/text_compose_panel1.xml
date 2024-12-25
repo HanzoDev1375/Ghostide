@@ -11,7 +11,7 @@
             android:orientation="vertical"
             android:id="@+id/cardview1">
 
-        <Ninja.coder.Ghostemane.code.widget.ScrollViewCustom
+        <ir.ninjacoder.ghostide.widget.ScrollViewCustom
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent">
 
@@ -114,7 +114,7 @@
 
             </LinearLayout>
 
-        </Ninja.coder.Ghostemane.code.widget.ScrollViewCustom>
+        </ir.ninjacoder.ghostide.widget.ScrollViewCustom>
 
     </LinearLayout>
 

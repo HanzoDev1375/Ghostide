@@ -1,7 +1,7 @@
 package io.github.rosemoe.sora.langs.xml;
 
-import Ninja.coder.Ghostemane.code.ApplicationLoader;
-import Ninja.coder.Ghostemane.code.utils.DataUtil;
+import ir.ninjacoder.ghostide.ApplicationLoader;
+import ir.ninjacoder.ghostide.utils.DataUtil;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import io.github.rosemoe.sora.data.CompletionItem;
@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import lsp4custom.com.ninjacoder.customhtmllsp.Css3Server;
 
 public class XMLAutoComplete implements AutoCompleteProvider {
 
@@ -29,21 +30,7 @@ public class XMLAutoComplete implements AutoCompleteProvider {
      * for (var tag : HTMLLanguage.TAGS) if (tag.startsWith(prefix)) items.add(tagAsCompletion(tag,
      * "Html Tag"));
      */
-    for (var widgetss : XmlApi.widget) {
-      if (widgetss.startsWith(prefix)) {
-        items.add(tagAsCompletion(widgetss, "Xml Widget"));
-      }
-    }
-    for (var permissionss : XmlApi.permission) {
-      if (permissionss.startsWith(prefix)) {
-        items.add(tagAsCompletion1(permissionss, "Xml Permission"));
-      }
-    }
-    for (var ser : XmlApi.service) {
-      if (ser.startsWith(prefix)) {
-        items.add(tagAsCompletion2(ser, "Xml Service"));
-      }
-    }
+    new Css3Server().toAndroidManifestXml(items,prefix);
     setString(items);
 
     return items;

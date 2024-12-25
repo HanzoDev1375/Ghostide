@@ -65,48 +65,48 @@
                 android:id="@+id/layoutChilderHelper"
                 >
 
-                <Ninja.coder.Ghostemane.code.config.SwitchMaterialPrf
+                <ir.ninjacoder.ghostide.config.SwitchMaterialPrf
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:id="@+id/MaterialYou"
                     />
 
-                <Ninja.coder.Ghostemane.code.config.SwitchMaterialPrf
+                <ir.ninjacoder.ghostide.config.SwitchMaterialPrf
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:id="@+id/effect"
                     />
 
-                <Ninja.coder.Ghostemane.code.config.SwitchMaterialPrf
+                <ir.ninjacoder.ghostide.config.SwitchMaterialPrf
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:id="@+id/gridmod"
                     />
 
-                <Ninja.coder.Ghostemane.code.config.SwitchMaterialPrf
+                <ir.ninjacoder.ghostide.config.SwitchMaterialPrf
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:id="@+id/walpapers"
                     />
 
-                <Ninja.coder.Ghostemane.code.config.SwitchMaterialPrf
+                <ir.ninjacoder.ghostide.config.SwitchMaterialPrf
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:id="@+id/deftheme"
                     />
 
-                <Ninja.coder.Ghostemane.code.config.SwitchMaterialPrf
+                <ir.ninjacoder.ghostide.config.SwitchMaterialPrf
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:id="@+id/autoSaveText"
                     />
 
-                <Ninja.coder.Ghostemane.code.config.SwitchMaterialPrf
+                <ir.ninjacoder.ghostide.config.SwitchMaterialPrf
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:id="@+id/codeAZ"
                     />
-                <Ninja.coder.Ghostemane.code.config.SwitchMaterialPrf
+                <ir.ninjacoder.ghostide.config.SwitchMaterialPrf
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:id="@+id/liveModel"

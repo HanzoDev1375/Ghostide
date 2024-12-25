@@ -1,6 +1,6 @@
 package io.github.rosemoe.sora.langs.python;
 
-import Ninja.coder.Ghostemane.code.IdeEditor;
+import ir.ninjacoder.ghostide.IdeEditor;
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 import io.github.rosemoe.sora.interfaces.EditorLanguage;

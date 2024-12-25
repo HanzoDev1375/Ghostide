@@ -1,6 +1,6 @@
 package io.github.rosemoe.sora.widget.commentRule;
 
-import Ninja.coder.Ghostemane.code.utils.FileUtil;
+import ir.ninjacoder.ghostide.utils.FileUtil;
 import android.util.Log;
 import com.google.gson.Gson;
 

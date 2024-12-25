@@ -3,7 +3,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-    <Ninja.coder.Ghostemane.code.widget.PraramnetLayoutNinja
+    <ir.ninjacoder.ghostide.widget.PraramnetLayoutNinja
             android:id="@+id/linear1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -29,5 +29,5 @@
                         android:textColor="#FFDCBD"/>
             </LinearLayout>
         </ScrollView>
-    </Ninja.coder.Ghostemane.code.widget.PraramnetLayoutNinja>
+    </ir.ninjacoder.ghostide.widget.PraramnetLayoutNinja>
 </LinearLayout>

@@ -27,7 +27,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.github.pedrovgs.lynx.LynxConfig;
-import Ninja.coder.Ghostemane.code.R;
+import ir.ninjacoder.ghostide.R;
 import com.github.pedrovgs.lynx.model.Trace;
 import com.github.pedrovgs.lynx.model.TraceLevel;
 import com.google.android.material.card.MaterialCardView;

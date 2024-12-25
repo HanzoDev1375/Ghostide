@@ -76,7 +76,7 @@ public class ApkInstallerCompat extends AsyncTask<Void, Integer, String> {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
       intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
       apkUri =
-          FileProvider.getUriForFile(mContext, "Ninja.coder.Ghostemane.code.provider", mApkFile);
+          FileProvider.getUriForFile(mContext, "ir.ninjacoder.ghostide.provider", mApkFile);
     } else {
       apkUri = Uri.fromFile(mApkFile);
     }

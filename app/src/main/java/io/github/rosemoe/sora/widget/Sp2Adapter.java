@@ -1,6 +1,6 @@
 package io.github.rosemoe.sora.widget;
 
-import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
+import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import com.google.android.material.color.MaterialColors;
 import android.content.res.ColorStateList;
 import android.content.Context;
@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import Ninja.coder.Ghostemane.code.R;
+import ir.ninjacoder.ghostide.R;
 import android.widget.LinearLayout;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;

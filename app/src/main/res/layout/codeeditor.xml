@@ -33,7 +33,7 @@
             
         >
 
-            <Ninja.coder.Ghostemane.code.widget.PraramnetLayoutNinja
+            <ir.ninjacoder.ghostide.widget.PraramnetLayoutNinja
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
                 android:gravity="center_vertical"
@@ -202,7 +202,7 @@
                     
                 >
 
-                    <Ninja.coder.Ghostemane.code.IdeEditor
+                    <ir.ninjacoder.ghostide.IdeEditor
                         android:layout_height="match_parent"
                         android:layout_width="match_parent"
                         android:gravity="left|top"
@@ -345,7 +345,7 @@
 
                             </LinearLayout>
 
-                            <Ninja.coder.Ghostemane.code.marco.GhostWebEditorSearch
+                            <ir.ninjacoder.ghostide.marco.GhostWebEditorSearch
                                 android:layout_height="match_parent"
                                 android:layout_width="wrap_content"
                                 android:padding="8dp"
@@ -367,13 +367,13 @@
 
                 </LinearLayout>
 
-            </Ninja.coder.Ghostemane.code.widget.PraramnetLayoutNinja>
+            </ir.ninjacoder.ghostide.widget.PraramnetLayoutNinja>
 
         </LinearLayout>
 
     </LinearLayout>
 
-    <Ninja.coder.Ghostemane.code.widget.ExrtaFab
+    <ir.ninjacoder.ghostide.widget.ExrtaFab
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_marginBottom="44dp"

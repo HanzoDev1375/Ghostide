@@ -1,8 +1,8 @@
 package io.github.rosemoe.sora.langs.php;
 
-import Ninja.coder.Ghostemane.code.IdeEditor;
-import Ninja.coder.Ghostemane.code.marco.RegexUtilCompat;
-import Ninja.coder.Ghostemane.code.utils.FileUtil;
+import ir.ninjacoder.ghostide.IdeEditor;
+import ir.ninjacoder.ghostide.marco.RegexUtilCompat;
+import ir.ninjacoder.ghostide.utils.FileUtil;
 import android.graphics.Color;
 import androidx.core.graphics.ColorUtils;
 import io.github.rosemoe.sora.data.Span;

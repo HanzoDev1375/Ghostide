@@ -1,11 +1,11 @@
 package io.github.rosemoe.sora.widget.TextSummry;
 
-import Ninja.coder.Ghostemane.code.IdeEditor;
-import Ninja.coder.Ghostemane.code.config.CreatorComment;
-import Ninja.coder.Ghostemane.code.config.GetterSetterGenerator;
-import Ninja.coder.Ghostemane.code.databinding.MakefolderBinding;
-import Ninja.coder.Ghostemane.code.marco.editorface.ConstructorMaker;
-import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
+import ir.ninjacoder.ghostide.IdeEditor;
+import ir.ninjacoder.ghostide.config.CreatorComment;
+import ir.ninjacoder.ghostide.config.GetterSetterGenerator;
+import ir.ninjacoder.ghostide.databinding.MakefolderBinding;
+import ir.ninjacoder.ghostide.marco.editorface.ConstructorMaker;
+import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;

@@ -19,14 +19,14 @@ import com.google.android.material.shape.CornerFamily;
 import com.google.android.material.shape.ShapeAppearanceModel;
 import com.google.android.material.shape.MaterialShapeDrawable;
 import com.google.gson.Gson;
-import Ninja.coder.Ghostemane.code.utils.FileUtil;
+import ir.ninjacoder.ghostide.utils.FileUtil;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import Ninja.coder.Ghostemane.code.R;
+import ir.ninjacoder.ghostide.R;
 import io.github.rosemoe.sora.data.CompletionItem;
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
 import io.github.rosemoe.sora.text.CharPosition;

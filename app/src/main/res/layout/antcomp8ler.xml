@@ -100,7 +100,7 @@
                      android:textColor="?@attr/colorSecondary"
                      android:focusable="true"
                      android:id="@+id/etpa"
-                     android:text="Ninja.coder.Ghostemane.code" />
+                     android:text="ir.ninjacoder.ghostide" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

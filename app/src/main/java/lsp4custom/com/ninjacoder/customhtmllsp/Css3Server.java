@@ -1,14 +1,20 @@
 package lsp4custom.com.ninjacoder.customhtmllsp;
 
+import ir.ninjacoder.ghostide.ApplicationLoader;
 import io.github.rosemoe.sora.data.CompletionItem;
 import io.github.rosemoe.sora.langs.html.HTMLLanguage;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 
 import io.github.rosemoe.sora.widget.Transilt;
+import java.io.InputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import org.jsoup.Jsoup;
 
 public class Css3Server {
   private Random RANDOM = new Random();
@@ -321,11 +327,11 @@ public class Css3Server {
     } else if (prefix.startsWith("border-left-color:")) {
       propertyName = "border-left-color";
     } else if (prefix.startsWith("text-shadow:")) {
-      propertyName = "text-shadow"; 
+      propertyName = "text-shadow";
     } else if (prefix.startsWith("box-shadow:")) {
-      propertyName = "box-shadow"; 
+      propertyName = "box-shadow";
     } else if (prefix.startsWith("filter:")) {
-      propertyName = "filter"; 
+      propertyName = "filter";
     } else if (prefix.startsWith("border-image-source:")) {
       propertyName = "border-image-source"; // رنگ برای تصویر مرزی
     } else if (prefix.startsWith("border-image-slice:")) {
@@ -347,30 +353,73 @@ public class Css3Server {
     TypeValue(list, prefix);
   }
 
+  public void toAndroidManifestXml(List<CompletionItem> list, String prefix) {
+
+    String propeName = "";
+    if (prefix.startsWith("name=")) {
+      propeName = "name";
+    }
+    if (!propeName.isEmpty()) {
+      String typePrefix = prefix.substring(propeName.length() + 1).trim();
+      for (var it : PermissionGroup.values()) {
+        if (it.name().startsWith(typePrefix)) {
+          list.add(css(it.name(), it.name(), "android:name=" + "\"" + it.getConstant() + "\""));
+        }
+      }
+    }
+  }
+
+  public void toJavaLspDemo(List<CompletionItem> list, String prefix)  {
+    
+  }
+
+  private String convertStreamToString(InputStream is) {
+    BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+    StringBuilder sb = new StringBuilder();
+    String line;
+
+    try {
+      while ((line = reader.readLine()) != null) {
+        sb.append(line);
+        sb.append('\n');
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        is.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+    return sb.toString();
+  }
+
+  private String[] types = {
+    "text",
+    "password",
+    "email",
+    "number",
+    "tel",
+    "url",
+    "date",
+    "time",
+    "datetime-local",
+    "color",
+    "range",
+    "checkbox",
+    "radio",
+    "file",
+    "hidden",
+    "search"
+  };
+
   public void TypeValue(List<CompletionItem> list, String prefix) {
     String propertyName = "";
 
     if (prefix.startsWith("type=") || prefix.startsWith("type")) {
       String typePrefix = prefix.substring("type=".length()).trim();
       String typePr = prefix.substring("type".length()).trim();
-      String[] types = {
-        "text",
-        "password",
-        "email",
-        "number",
-        "tel",
-        "url",
-        "date",
-        "time",
-        "datetime-local",
-        "color",
-        "range",
-        "checkbox",
-        "radio",
-        "file",
-        "hidden",
-        "search"
-      };
 
       for (String type : types) {
         if (type.startsWith(typePrefix) || type.startsWith(typePr)) {

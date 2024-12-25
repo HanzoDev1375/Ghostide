@@ -3,7 +3,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-    <Ninja.coder.Ghostemane.code.layoutmanager.CardKshow
+    <ir.ninjacoder.ghostide.layoutmanager.CardKshow
             android:id="@+id/card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,5 +38,5 @@
                     android:src="@drawable/save"
                     android:scaleType="centerInside"/>
         </LinearLayout>
-    </Ninja.coder.Ghostemane.code.layoutmanager.CardKshow>
+    </ir.ninjacoder.ghostide.layoutmanager.CardKshow>
 </LinearLayout>

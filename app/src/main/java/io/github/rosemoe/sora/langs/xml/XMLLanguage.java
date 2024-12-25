@@ -109,6 +109,7 @@ public class XMLLanguage implements EditorLanguage {
                 || ch == '<'
                 || ch == '?'
                 || ch == '#'
+                || ch == '='
                 || ch == '(';
     }
 

@@ -1,6 +1,6 @@
 package com.flask.colorpicker.builder;
 
-import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
+import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import androidx.appcompat.app.AlertDialog;
@@ -23,7 +23,7 @@ import com.google.android.material.shape.ShapeAppearanceModel;
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorChangedListener;
 import com.flask.colorpicker.OnColorSelectedListener;
-import Ninja.coder.Ghostemane.code.R;
+import ir.ninjacoder.ghostide.R;
 import com.flask.colorpicker.Utils;
 import com.flask.colorpicker.renderer.ColorWheelRenderer;
 import com.flask.colorpicker.slider.AlphaSlider;

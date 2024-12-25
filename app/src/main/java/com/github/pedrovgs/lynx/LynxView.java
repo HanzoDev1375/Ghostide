@@ -16,8 +16,8 @@
 
 package com.github.pedrovgs.lynx;
 
-import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
-import Ninja.coder.Ghostemane.code.layoutmanager.NestedScrollListView;
+import ir.ninjacoder.ghostide.utils.ObjectUtils;
+import ir.ninjacoder.ghostide.layoutmanager.NestedScrollListView;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -40,7 +40,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import Ninja.coder.Ghostemane.code.R;
+import ir.ninjacoder.ghostide.R;
 import androidx.annotation.CheckResult;
 import com.blankj.utilcode.util.ClipboardUtils;
 import com.github.pedrovgs.lynx.model.AndroidMainThread;

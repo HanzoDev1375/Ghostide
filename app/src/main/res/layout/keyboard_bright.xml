@@ -5,7 +5,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
-    <Ninja.coder.Ghostemane.code.keyboard.Keyboard_View
+    <ir.ninjacoder.ghostide.keyboard.Keyboard_View
             android:id="@+id/KeyboardView"
             android:background="@color/Background_bright"
             android:layout_width="fill_parent"

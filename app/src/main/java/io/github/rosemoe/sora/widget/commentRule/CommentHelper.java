@@ -1,7 +1,7 @@
 package io.github.rosemoe.sora.widget.commentRule;
 
-import Ninja.coder.Ghostemane.code.PluginManager.Plugin;
-import Ninja.coder.Ghostemane.code.PluginManager.PluginFactory;
+import ir.ninjacoder.ghostide.PluginManager.Plugin;
+import ir.ninjacoder.ghostide.PluginManager.PluginFactory;
 import io.github.rosemoe.sora.text.Content;
 import io.github.rosemoe.sora.text.Cursor;
 import io.github.rosemoe.sora.widget.CodeEditor;

@@ -31,28 +31,28 @@
             android:layout_weight="1"
     >
 
-        <Ninja.coder.Ghostemane.code.keyboard.SwatchView
+        <ir.ninjacoder.ghostide.keyboard.SwatchView
                 android:id="@+id/swatchView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:radialMargin="16dp"
         />
 
-        <Ninja.coder.Ghostemane.code.keyboard.HueSatView
+        <ir.ninjacoder.ghostide.keyboard.HueSatView
                 android:id="@+id/hueSatView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
         />
     </FrameLayout>
 
-    <Ninja.coder.Ghostemane.code.keyboard.ValueView
+    <ir.ninjacoder.ghostide.keyboard.ValueView
             android:id="@+id/valueView"
             android:layout_width="match_parent"
             android:layout_height="36dp"
             android:layout_marginTop="16dp"
     />
 
-    <Ninja.coder.Ghostemane.code.keyboard.AlphaView
+    <ir.ninjacoder.ghostide.keyboard.AlphaView
             android:id="@+id/alphaView"
             android:layout_width="match_parent"
             android:layout_height="36dp"

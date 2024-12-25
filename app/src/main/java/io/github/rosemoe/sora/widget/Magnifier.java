@@ -42,7 +42,7 @@ import android.widget.PopupWindow;
 
 import androidx.annotation.RequiresApi;
 
-import Ninja.coder.Ghostemane.code.R;
+import ir.ninjacoder.ghostide.R;
 
 /**
  * Magnifier specially designed for CodeEditor

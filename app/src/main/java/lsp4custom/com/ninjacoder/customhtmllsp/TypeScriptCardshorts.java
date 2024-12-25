@@ -5,9 +5,9 @@ import io.github.rosemoe.sora.data.CompletionItem;
 import java.io.IOException;
 import java.util.Map;
 import java.util.ArrayList;
-import Ninja.coder.Ghostemane.code.ApplicationLoader;
+import ir.ninjacoder.ghostide.ApplicationLoader;
 import com.google.gson.Gson;
-import Ninja.coder.Ghostemane.code.utils.DataUtil;
+import ir.ninjacoder.ghostide.utils.DataUtil;
 import com.google.common.reflect.TypeToken;
 
 public class TypeScriptCardshorts extends Css3Server{

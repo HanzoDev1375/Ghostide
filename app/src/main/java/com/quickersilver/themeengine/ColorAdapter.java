@@ -1,11 +1,11 @@
 package com.quickersilver.themeengine;
 
-import Ninja.coder.Ghostemane.code.utils.AnimUtils;
+import ir.ninjacoder.ghostide.utils.AnimUtils;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
-import Ninja.coder.Ghostemane.code.databinding.ItemColorBinding;
-import Ninja.coder.Ghostemane.code.R;
+import ir.ninjacoder.ghostide.databinding.ItemColorBinding;
+import ir.ninjacoder.ghostide.R;
 import java.util.List;
 
 public class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.ViewHolder> {

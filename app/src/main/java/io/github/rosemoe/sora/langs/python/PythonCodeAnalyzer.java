@@ -1,6 +1,6 @@
 package io.github.rosemoe.sora.langs.python;
 
-import Ninja.coder.Ghostemane.code.IdeEditor;
+import ir.ninjacoder.ghostide.IdeEditor;
 import android.graphics.Color;
 import android.util.Log;
 

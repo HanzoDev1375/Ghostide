@@ -23,7 +23,7 @@
  */
 package io.github.rosemoe.sora.widget;
 
-import Ninja.coder.Ghostemane.code.utils.DiagnosticsListener;
+import ir.ninjacoder.ghostide.utils.DiagnosticsListener;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import androidx.core.graphics.ColorUtils;
@@ -31,7 +31,7 @@ import io.github.rosemoe.sora.event.ColorSchemeUpdateEvent;
 import io.github.rosemoe.sora.text.TextUtils;
 import kotlin.text.StringsKt;
 import java.io.File;
-import Ninja.coder.Ghostemane.code.databin.DiagnosticWrapper;
+import ir.ninjacoder.ghostide.databin.DiagnosticWrapper;
 import android.util.TypedValue;
 import android.util.TypedValue;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -106,7 +106,7 @@ import java.util.TimerTask;
 import java.util.regex.*;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import Ninja.coder.Ghostemane.code.R;
+import ir.ninjacoder.ghostide.R;
 import io.github.rosemoe.sora.annotations.Experimental;
 import io.github.rosemoe.sora.annotations.UnsupportedUserUsage;
 import io.github.rosemoe.sora.data.BlockLine;
@@ -603,6 +603,10 @@ public class CodeEditor extends View
 
   public void setKeyboardOperation(OnKeyboardOperation enters) {
     this.enters = enters;
+  }
+  
+  public Layout getLayout(){
+    return mLayout;
   }
 
   public void setCommentJava() {

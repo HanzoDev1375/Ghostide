@@ -38,7 +38,7 @@
                     style="?android:progressBarStyleHorizontal"
                     android:id="@+id/bar"/>
 
-            <Ninja.coder.Ghostemane.code.layoutmanager.WebViewCompatGhostWeb
+            <ir.ninjacoder.ghostide.layoutmanager.WebViewCompatGhostWeb
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:id="@+id/myweb"/>

@@ -5,7 +5,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-    <Ninja.coder.Ghostemane.code.keyboard.ColorPickerView
+    <ir.ninjacoder.ghostide.keyboard.ColorPickerView
             android:id="@+id/colorPicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

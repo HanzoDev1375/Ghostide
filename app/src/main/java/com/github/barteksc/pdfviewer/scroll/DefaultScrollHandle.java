@@ -6,7 +6,7 @@ import com.google.android.material.shape.CornerFamily;
 import com.google.android.material.shape.MaterialShapeDrawable;
 import com.google.android.material.shape.ShapeAppearanceModel;
 //import pdf.view.R;
-import Ninja.coder.Ghostemane.code.R;
+import ir.ninjacoder.ghostide.R;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;

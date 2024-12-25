@@ -1,6 +1,6 @@
 package io.github.rosemoe.sora.langs.Javacc;
 
-import Ninja.coder.Ghostemane.code.IdeEditor;
+import ir.ninjacoder.ghostide.IdeEditor;
 import android.util.Log;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 import io.github.rosemoe.sora.langs.java.JavaAutoComplete;

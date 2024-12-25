@@ -1,5 +1,5 @@
 // Generated from /storage/emulated/0/AndroidIDEProjects/Ghost-web-ide/grammars-v4/phpgrammer/PhpLexer.g4 by ANTLR 4.13.1
-package Ninja.coder.Ghostemane.code;
+package ir.ninjacoder.ghostide;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;

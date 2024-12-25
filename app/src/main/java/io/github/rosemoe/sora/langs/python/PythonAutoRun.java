@@ -1,6 +1,6 @@
 package io.github.rosemoe.sora.langs.python;
 
-import Ninja.coder.Ghostemane.code.utils.FileUtil;
+import ir.ninjacoder.ghostide.utils.FileUtil;
 import java.io.File;
 import lsp4custom.com.ninjacoder.customhtmllsp.CodeSnippet;
 import android.util.Log;

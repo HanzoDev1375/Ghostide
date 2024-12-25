@@ -23,7 +23,7 @@
  */
 package io.github.rosemoe.sora.widget;
 
-import Ninja.coder.Ghostemane.code.marco.ColorCompat;
+import ir.ninjacoder.ghostide.marco.ColorCompat;
 import android.graphics.Color;
 import android.util.SparseIntArray;
 

@@ -1,6 +1,6 @@
 package io.github.rosemoe.sora.langs.properties;
 
-import Ninja.coder.Ghostemane.code.config.JacksonFormatter;
+import ir.ninjacoder.ghostide.config.JacksonFormatter;
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 import io.github.rosemoe.sora.interfaces.EditorLanguage;

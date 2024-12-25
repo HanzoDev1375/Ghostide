@@ -19,6 +19,7 @@ import io.github.rosemoe.sora.text.LineNumberCalculator;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.text.TextAnalyzer;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
+import org.antlr.parser.antlr4.ninja.NinjaTest;
 
 /**
  * @author NinjaCoder
@@ -376,6 +377,7 @@ public class NinjaCodeAnalyzer implements CodeAnalyzer {
       }
     }
     identifiers.finish();
+    NinjaTest.main(result,content.toString());
     result.determine(line);
     result.setExtra(identifiers);
     result.setSuppressSwitch(maxSwitch + 10);

@@ -5,10 +5,10 @@ import android.view.View;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
-import Ninja.coder.Ghostemane.code.utils.ObjectUtils;
+import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import com.google.android.material.color.MaterialColors;
 import com.skydoves.powermenu.MenuAnimation;
-import Ninja.coder.Ghostemane.code.marco.HtmlTagView;
+import ir.ninjacoder.ghostide.marco.HtmlTagView;
 import io.github.rosemoe.sora.widget.Transilt;
 
 import java.io.Serializable;

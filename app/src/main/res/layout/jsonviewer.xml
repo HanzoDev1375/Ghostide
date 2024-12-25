@@ -20,7 +20,7 @@
                     android:padding="8dp"
                     android:indeterminate="true"
                     style="?android:progressBarStyleHorizontal"/>
-            <Ninja.coder.Ghostemane.code.widget.JsonViewLayout
+            <ir.ninjacoder.ghostide.widget.JsonViewLayout
                     android:id="@+id/go"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

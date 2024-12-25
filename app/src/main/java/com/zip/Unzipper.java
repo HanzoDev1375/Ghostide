@@ -20,7 +20,7 @@ import java.util.Map;
 // import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import Ninja.coder.Ghostemane.code.R;
+import ir.ninjacoder.ghostide.R;
 
 public class Unzipper {
 
