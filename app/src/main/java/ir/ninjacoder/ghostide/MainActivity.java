@@ -6,24 +6,15 @@ import ir.ninjacoder.ghostide.activities.FileManagerActivity;
 import ir.ninjacoder.ghostide.databinding.MainBinding;
 import ir.ninjacoder.ghostide.utils.AssetsSoft;
 import ir.ninjacoder.ghostide.utils.FileUtil;
-import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.Settings;
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.*;
-import androidx.core.content.ContextCompat;
-import android.content.pm.PackageManager;
-import androidx.core.app.ActivityCompat;
 import com.hzy.lib7z.IExtractCallback;
 import com.hzy.lib7z.Z7Extractor;
 
-import com.xiaoyv.ccompile.CCppEngine;
 import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -45,36 +36,12 @@ public class MainActivity extends BaseCompat {
     super.onCreate(_savedInstanceState);
     setContentView(bind.getRoot());
     initialize(_savedInstanceState);
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-      if (!Environment.isExternalStorageManager()) {
-        try {
-          Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
-          Uri uri = Uri.fromParts("package", getPackageName(), null);
-          intent.setData(uri);
-          startActivity(intent);
-        } catch (Exception ex) {
-          Intent intent = new Intent();
-          intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-          startActivity(intent);
-        }
-      } else {
-        tryToRunApp();
-      }
-    } else {
-      if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-          == PackageManager.PERMISSION_DENIED) {
-        ActivityCompat.requestPermissions(
-            this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, 1000);
-      } else {
-        tryToRunApp();
-      }
-    }
   }
 
   private void initialize(Bundle _savedInstanceState) {
     iconSpash = getSharedPreferences("iconSpash", MODE_PRIVATE);
     setac = getSharedPreferences("setac", MODE_PRIVATE);
+    tryToRunApp();
   }
 
   private void tryToRunApp() {

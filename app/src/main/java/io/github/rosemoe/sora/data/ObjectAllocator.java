@@ -27,54 +27,54 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * An object provider for speed improvement
- * Now meaningless because it is not as well as it expected
+ * An object provider for speed improvement Now meaningless because it is not as well as it expected
  *
  * @author Rose
  */
 public class ObjectAllocator {
 
-    private static final int RECYCLE_LIMIT = 1024 * 8;
-    private static List<BlockLine> blockLines;
-    private static List<BlockLine> tempArray;
+  private static final int RECYCLE_LIMIT = 1024 * 8;
+  private static List<BlockLine> blockLines;
+  private static List<BlockLine> tempArray;
 
-    public static void recycleBlockLines(List<BlockLine> src) {
-        if (src == null) {
-            return;
-        }
-        if (blockLines == null) {
-            blockLines = src;
-            return;
-        }
-        int size = blockLines.size();
-        int sizeAnother = src.size();
-        while (sizeAnother > 0 && size < RECYCLE_LIMIT) {
-            size++;
-            sizeAnother--;
-            var obj = src.get(sizeAnother);
-            obj.clear();
-            blockLines.add(obj);
-        }
-        src.clear();
-        synchronized (ObjectAllocator.class) {
-            tempArray = src;
-        }
+  public static void recycleBlockLines(List<BlockLine> src) {
+    if (src == null) {
+      return;
     }
-
-    public static List<BlockLine> obtainList() {
-        List<BlockLine> temp = null;
-        synchronized (ObjectAllocator.class) {
-            temp = tempArray;
-            tempArray = null;
-        }
-        if (temp == null) {
-            temp = new ArrayList<>(128);
-        }
-        return temp;
+    if (blockLines == null) {
+      blockLines = src;
+      return;
     }
-
-    public static BlockLine obtainBlockLine() {
-        return (blockLines == null || blockLines.isEmpty()) ? new BlockLine() : blockLines.remove(blockLines.size() - 1);
+    int size = blockLines.size();
+    int sizeAnother = src.size();
+    while (sizeAnother > 0 && size < RECYCLE_LIMIT) {
+      size++;
+      sizeAnother--;
+      var obj = src.get(sizeAnother);
+      obj.clear();
+      blockLines.add(obj);
     }
+    src.clear();
+    synchronized (ObjectAllocator.class) {
+      tempArray = src;
+    }
+  }
 
+  public static List<BlockLine> obtainList() {
+    List<BlockLine> temp = null;
+    synchronized (ObjectAllocator.class) {
+      temp = tempArray;
+      tempArray = null;
+    }
+    if (temp == null) {
+      temp = new ArrayList<>(128);
+    }
+    return temp;
+  }
+
+  public static BlockLine obtainBlockLine() {
+    return (blockLines == null || blockLines.isEmpty())
+        ? new BlockLine()
+        : blockLines.remove(blockLines.size() - 1);
+  }
 }

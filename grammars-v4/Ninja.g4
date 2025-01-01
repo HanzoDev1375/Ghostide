@@ -2,7 +2,23 @@ grammar Ninja;
 // Parser Rules
 
 install
-   : EOF? # installRule
+   : user* EOF # installRule
+   ;
+
+user
+   : forsteament
+   | ifsteament
+   | pwdstemant
+   | coordinatedstemant
+   | setstement
+   | getstement
+   | classorinterfacePaser
+   | trystemant
+   | hanlderstemant
+   | opentagid
+   | hashcomment
+   | runruner
+   | asloruner
    ;
 
 forsteament

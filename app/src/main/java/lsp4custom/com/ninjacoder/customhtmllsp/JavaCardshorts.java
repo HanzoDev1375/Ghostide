@@ -1,6 +1,7 @@
 package lsp4custom.com.ninjacoder.customhtmllsp;
 
 import ir.ninjacoder.ghostide.ApplicationLoader;
+import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.utils.DataUtil;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
@@ -13,12 +14,14 @@ import java.util.Map;
 public class JavaCardshorts extends Css3Server {
 
   private List<CompletionItem> item;
+  private IdeEditor editor;
 
   private String prf;
 
-  public JavaCardshorts(List<CompletionItem> item, String prf) {
+  public JavaCardshorts(List<CompletionItem> item, String prf, IdeEditor editor) {
     this.item = item;
     this.prf = prf;
+    this.editor = editor;
     try {
       asChild();
     } catch (Exception e) {
@@ -40,5 +43,6 @@ public class JavaCardshorts extends Css3Server {
             item.add(css(it.get("name"), "Snippet", it.get("snippet")));
           }
         });
+    
   }
 }

@@ -1,8 +1,17 @@
 package ir.ninjacoder.ghostide.Welcome;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.os.Environment;
+import android.provider.Settings;
+import android.net.Uri;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.activities.StreamSoftAppActivity;
 import ir.ninjacoder.ghostide.tasks.app.ProgressDialogCompat;
+import ir.ninjacoder.ghostide.utils.DataUtil;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.utils.FileUtil;
 import ir.ninjacoder.ghostide.utils.ThemeUtils;
@@ -40,6 +49,14 @@ public class SplashWord extends AppIntro2 {
         getFilesDir().getAbsolutePath() + File.separator + "lib" + File.separator + "libx265.so";
     var ghostPath = "/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost";
     var ghostStyle = "/storage/emulated/0/GhostWebIDE/theme/style.ghost";
+
+    TestFragment t1 = TestFragment.newIns("theme.json", "Permissions", "Submit all files", true);
+    t1.setCallBack(
+        () -> {
+          runtimePermissions();
+        });
+
+    addSlide(t1);
 
     TestFragment t2 =
         TestFragment.newIns(
@@ -116,7 +133,6 @@ public class SplashWord extends AppIntro2 {
             + "gcc"
             + File.separator
             + "plugin_version";
-    
 
     setTransformer(AppIntroPageTransformerType.Zoom.INSTANCE);
     showStatusBar(true);
@@ -185,5 +201,33 @@ public class SplashWord extends AppIntro2 {
                   });
             })
         .start();
+  }
+
+  void runtimePermissions() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      if (!Environment.isExternalStorageManager()) {
+        try {
+          Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+          Uri uri = Uri.fromParts("package", getPackageName(), null);
+          intent.setData(uri);
+          startActivity(intent);
+        } catch (Exception ex) {
+          Intent intent = new Intent();
+          intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+          startActivity(intent);
+        }
+      }
+    } else { 
+      
+      
+      if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+          == PackageManager.PERMISSION_DENIED) {
+        ActivityCompat.requestPermissions(
+            this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, 1000);
+
+      } else {
+        DataUtil.showMessage(getApplicationContext(), "Permissions failure");
+      }
+    }
   }
 }

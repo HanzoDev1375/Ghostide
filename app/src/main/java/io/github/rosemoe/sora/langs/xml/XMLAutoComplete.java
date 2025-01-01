@@ -31,7 +31,7 @@ public class XMLAutoComplete implements AutoCompleteProvider {
      * "Html Tag"));
      */
     new Css3Server().toAndroidManifestXml(items,prefix);
-    setString(items);
+  //  setString(items);
 
     return items;
   }

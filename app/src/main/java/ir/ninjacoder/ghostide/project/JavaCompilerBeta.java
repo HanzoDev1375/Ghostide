@@ -52,15 +52,14 @@ public class JavaCompilerBeta {
       @Override
       protected String doInBackground(String... params) {
         // Prepare files and directories
-        
+
         FileUtil.deleteFile(FileUtil.getRoot(context).concat("/bin/"));
         FileUtil.makeDir(FileUtil.getRoot(context).concat("/bin/"));
 
         // Write inputs to a file named after the class name
         try {
           String fileName = className + ".java";
-          FileUtil.writeFile(
-              FileUtil.getRoot(context).concat("/bin/").concat(fileName), inputs);
+          FileUtil.writeFile(FileUtil.getRoot(context).concat("/bin/").concat(fileName), inputs);
         } catch (Exception e) {
           e.printStackTrace();
           return "Error writing Java file: " + e.getMessage();
@@ -88,16 +87,15 @@ public class JavaCompilerBeta {
         opt.clear();
         opt.add("-11");
         opt.add("-nowarn");
-    //    opt.add("-deprecation");
+        opt.add("-deprecation");
         opt.add("-d");
         opt.add(FileUtil.getRoot(context).concat("/bin/classes"));
         opt.add("-cp");
         opt.add(FileUtil.getRoot(context).concat("/bin/cp.jar"));
         opt.add("-proc:none");
         opt.add("-sourcepath");
-      //  opt.add("ignore");
-        opt.add(
-            FileUtil.getRoot(context).concat("/bin/").concat(className).concat(".java"));
+        opt.add("ignore");
+        opt.add(FileUtil.getRoot(context).concat("/bin/").concat(className).concat(".java"));
 
         StringBuilder compileErrors = new StringBuilder();
 
@@ -243,7 +241,7 @@ public class JavaCompilerBeta {
   }
 
   // Method to extract class name from the input Java code using JavaParser
-  private static String extractFirstClassName(String javaCode) {
+  public static String extractFirstClassName(String javaCode) {
     try {
       CompilationUnit cu = StaticJavaParser.parse(javaCode);
       // پیدا کردن اولین کلاس

@@ -1,11 +1,16 @@
 package lsp4custom.com.ninjacoder.customhtmllsp;
 
+import android.util.Log;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 import ir.ninjacoder.ghostide.ApplicationLoader;
 import io.github.rosemoe.sora.data.CompletionItem;
 import io.github.rosemoe.sora.langs.html.HTMLLanguage;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 
 import io.github.rosemoe.sora.widget.Transilt;
+import ir.ninjacoder.ghostide.utils.DataUtil;
+import ir.ninjacoder.ghostide.utils.FileUtil;
 import java.io.InputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -13,6 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import org.jsoup.Jsoup;
 
@@ -367,11 +373,39 @@ public class Css3Server {
         }
       }
     }
+    try {
+      toAndroidAttr(list, prefix);
+    } catch (Exception e) {
+      Log.e("Error to load", e.getMessage());
+    }
   }
 
-  public void toJavaLspDemo(List<CompletionItem> list, String prefix)  {
-    
+  void toAndroidAttr(List<CompletionItem> list, String prefix) throws Exception {
+    String propName = "";
+    if (prefix.startsWith("name=")) {
+      propName = "name";
+    }
+    var openFile = ApplicationLoader.getContext().getAssets().open("android.R.attrs.json");
+    List<Map<String, String>> itemReadattr = new ArrayList<>();
+    itemReadattr =
+        new Gson()
+            .fromJson(
+                DataUtil.copyFromInputStream(openFile),
+                new TypeToken<List<Map<String, String>>>() {}.getType());
+    if (!propName.isEmpty()) {
+      var typePrfex = prefix.substring(propName.length() + 1).trim();
+      for (var it : itemReadattr) {
+        var isname = it.containsKey("names") ? it.get("names") : "Not found";
+        var issince = it.containsKey("since") ? it.get("since") : "";
+        var isdeprecated = it.containsKey("deprecated") ? it.get("deprecated") : "";
+        if (isname.startsWith(typePrfex)) {
+          list.add(css(isname, isname +" " + issince, "name= " + "\"" +"@android/attr:"+ isname + "\""));
+        }
+      }
+    }
   }
+
+  public void toJavaLspDemo(List<CompletionItem> list, String prefix) {}
 
   private String convertStreamToString(InputStream is) {
     BufferedReader reader = new BufferedReader(new InputStreamReader(is));

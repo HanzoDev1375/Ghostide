@@ -1,6 +1,8 @@
 package ir.ninjacoder.ghostide.activities;
 
+import android.os.Handler;
 import ir.ninjacoder.ghostide.marco.WallpaperParallaxEffect;
+import ir.ninjacoder.ghostide.utils.EdgeToEdgeUtils;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.utils.FileUtil;
 import ir.ninjacoder.ghostide.utils.ReSizeApp;
@@ -74,6 +76,11 @@ public class BaseCompat extends AppCompatActivity {
       getWindow().setStatusBarColor(MaterialColors.getColor(this, ObjectUtils.Back, 0));
 
     setBackGroundIsMobile();
+    //bad work to Android 14& 15
+    // EdgeToEdgeUtils.applyEdgeToEdge(
+        // this,
+        // EdgeToEdgeUtils.DEFAULT_STATUS_BAR_STYLE,
+        // EdgeToEdgeUtils.DEFAULT_NAVIGATION_BAR_STYLE);
   }
 
   private BaseCompat initErrorDialogpackageAPP() {
@@ -273,7 +280,7 @@ public class BaseCompat extends AppCompatActivity {
   }
 
   public BaseCompat colorPrograssBar(ProgressBar bar) {
-    
+
     bar.setIndeterminateDrawable(ObjectUtils.getCircularProgress());
     return this;
   }
@@ -422,9 +429,16 @@ public class BaseCompat extends AppCompatActivity {
       Log.e("Error Theme not Setup ", err.getLocalizedMessage());
     }
   }
-  public void loadAnim(Intent o){
-    var op = ActivityOptions.makeCustomAnimation(this,android.R.anim.fade_in,android.R.anim.fade_out);
-    if(op == null) return;
-    startActivity(o,op.toBundle());
+
+  public void loadAnim(Intent o) {
+    var op =
+        ActivityOptions.makeCustomAnimation(this, android.R.anim.fade_in, android.R.anim.fade_out);
+    if (op == null) return;
+    startActivity(o, op.toBundle());
+  }
+
+  public void postInTime(Runnable rub) {
+    var handler = new Handler(getMainLooper());
+    handler.postAtTime(rub, 2000);
   }
 }

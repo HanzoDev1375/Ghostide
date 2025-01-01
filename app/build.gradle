@@ -187,4 +187,6 @@ dependencies {
     implementation("com.github.jsqlparser:jsqlparser:5.0")
     // https://mvnrepository.com/artifact/com.diogonunes/JColor
     implementation("com.diogonunes:JColor:5.5.1")
+    // https://mvnrepository.com/artifact/com.google.guava/guava
+    
 }

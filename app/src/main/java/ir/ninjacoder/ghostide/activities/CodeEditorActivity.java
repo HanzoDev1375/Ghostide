@@ -202,8 +202,6 @@ public class CodeEditorActivity extends AppCompatActivity {
   private SharedPreferences t;
   private SharedPreferences thememanagersoft;
   private SharedPreferences sf;
-  private LiveViewerDialogFragmentActivity liveViewerDialogFragmentActivityN;
-  private FragmentManager LiveviewebDialogFragmentActivityFM;
   private GhostWebEditorSearch ghost_searchs;
   private int tabPos = -1;
   private EditorViewModel modelEditor;
@@ -1049,8 +1047,7 @@ public class CodeEditorActivity extends AppCompatActivity {
 
   @Deprecated
   public void setLiveShowFragment() {
-    liveViewerDialogFragmentActivityN = new LiveViewerDialogFragmentActivity();
-    liveViewerDialogFragmentActivityN.show(getSupportFragmentManager(), "1");
+    
   }
 
   public void Symbloinit() {
