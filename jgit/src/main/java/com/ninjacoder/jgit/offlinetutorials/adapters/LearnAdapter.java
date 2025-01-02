@@ -22,15 +22,15 @@ public class LearnAdapter extends RecyclerView.Adapter<LearnAdapter.Holders> {
   }
 
   public static class Holders extends RecyclerView.ViewHolder {
-    public Holders(LayoutLrAdBinding view) {
-      super(view.getRoot());
+    public Holders(View view) {
+      super(view);
     }
   }
 
   @Override
   public Holders onCreateViewHolder(ViewGroup parant, int viewType) {
     bind = LayoutLrAdBinding.inflate(LayoutInflater.from(parant.getContext()));
-    return new Holders(bind);
+    return new Holders(bind.getRoot());
   }
 
   @Override

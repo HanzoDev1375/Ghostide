@@ -5,6 +5,8 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  release:
+    types: [published]
 
 jobs:
   build:
@@ -58,3 +60,15 @@ jobs:
       with:
         name: app-release-arm64
         path: app/build/outputs/apk/arm64/release/app-arm64-release.apk
+
+    - name: Release APKs on GitHub
+      if: github.event_name == 'release'
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          app/build/outputs/apk/arm32/release/app-arm32-release.apk
+          app/build/outputs/apk/arm64/release/app-arm64-release.apk
+          app/build/outputs/apk/arm32/debug/app-arm32-debug.apk
+          app/build/outputs/apk/arm64/debug/app-arm64-debug.apk
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
