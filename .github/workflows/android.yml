@@ -71,4 +71,4 @@ jobs:
           app/build/outputs/apk/arm32/debug/app-arm32-debug.apk
           app/build/outputs/apk/arm64/debug/app-arm64-debug.apk
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
