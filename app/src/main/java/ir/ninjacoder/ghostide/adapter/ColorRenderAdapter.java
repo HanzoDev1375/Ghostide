@@ -21,56 +21,55 @@ import java.util.HashMap;
 
 public class ColorRenderAdapter extends BaseAdapter {
 
-    ArrayList<HashMap<String, Object>> _data;
-    Context context;
+  ArrayList<HashMap<String, Object>> _data;
+  Context context;
 
-    public ColorRenderAdapter(ArrayList<HashMap<String, Object>> _arr, Context context) {
-        _data = _arr;
-        this.context = context;
+  public ColorRenderAdapter(ArrayList<HashMap<String, Object>> _arr, Context context) {
+    _data = _arr;
+    this.context = context;
+  }
 
-    }
+  @Override
+  public int getCount() {
+    return _data.size();
+  }
 
-    @Override
-    public int getCount() {
-        return _data.size();
-    }
+  @Override
+  public HashMap<String, Object> getItem(int _index) {
+    return _data.get(_index);
+  }
 
-    @Override
-    public HashMap<String, Object> getItem(int _index) {
-        return _data.get(_index);
-    }
+  @Override
+  public long getItemId(int _index) {
+    return _index;
+  }
 
-    @Override
-    public long getItemId(int _index) {
-        return _index;
-    }
+  @Override
+  public View getView(final int _position, View _v, ViewGroup _container) {
 
-    @Override
-    public View getView(final int _position, View _v, ViewGroup _container) {
+    View _view = LayoutInflater.from(context).inflate(R.layout.lbs, null);
 
-        View _view = LayoutInflater.from(context).inflate(R.layout.lbs, null);
+    LinearLayout rooti = _view.findViewById(R.id.rooti);
 
-        LinearLayout rooti = _view.findViewById(R.id.rooti);
+    LinearLayout getTag = _view.findViewById(R.id.getTag);
+    TextView titleview = _view.findViewById(R.id.titleview);
+    TextView normaltext = _view.findViewById(R.id.normaltext);
 
-        LinearLayout getTag = _view.findViewById(R.id.getTag);
-        TextView titleview = _view.findViewById(R.id.titleview);
-        TextView normaltext = _view.findViewById(R.id.normaltext);
+    normaltext.setText(_data.get(_position).get("colorBind").toString());
+    titleview.setText(normaltext.getText().toString().substring(0, 1));
+    getTag.setBackground(getShape(getTag));
+    titleview.setTextColor(Color.parseColor(_data.get(_position).get("colorBind").toString()));
+    normaltext.setTextColor(Color.parseColor(_data.get(_position).get("colorBind").toString()));
 
-        normaltext.setText(_data.get(_position).get("colorBind").toString());
-        titleview.setText(normaltext.getText().toString().substring(0, 1));
-        getTag.setBackground(getShape(getTag));
-        titleview.setTextColor(Color.parseColor(_data.get(_position).get("colorBind").toString()));
-        normaltext.setTextColor(Color.parseColor(_data.get(_position).get("colorBind").toString()));
+    return _view;
+  }
 
-        return _view;
-    }
-
-    private MaterialShapeDrawable getShape(View v) {
-        MaterialShapeDrawable shapeDrawable =
-                new MaterialShapeDrawable(
-                        ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 18).build());
-        shapeDrawable.setFillColor(
-                ColorStateList.valueOf(MaterialColors.getColor(v, ObjectUtils.Back, 0)));
-        return shapeDrawable;
-    }
+  private MaterialShapeDrawable getShape(View v) {
+    MaterialShapeDrawable shapeDrawable =
+        new MaterialShapeDrawable(
+            ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 18).build());
+    shapeDrawable.setFillColor(
+        ColorStateList.valueOf(MaterialColors.getColor(v, ObjectUtils.Back, 0)));
+    return shapeDrawable;
+  }
 }

@@ -36,7 +36,7 @@ public class CommentRule implements PluginFactory {
     pl = new Plugin(nameM, true, this);
     var myfile = new File(home);
     pl.setFile(myfile);
-    copyJson("comment.json", "/storage/emulated/0/ghostweb/comment/comment.json");
+    copyJson("comment.json", "/storage/emulated/0/ghostweb/comment/");
     synchronized (Gson.class) {
       try {
         gson = new Gson();
@@ -87,13 +87,17 @@ public class CommentRule implements PluginFactory {
 
   @isField(api = Build.VERSION_CODES.KITKAT)
   public String getJavaEnd() {
-    return getValueFromMap("javaend");
+    return "*/";
   }
+  
+   /* dd*/
 
   @isField(api = Build.VERSION_CODES.KITKAT)
   public String getJavaStart() {
-    return getValueFromMap("javastart");
+    return "/*";
   }
+  
+
 
   public synchronized String readFile(String path) {
 

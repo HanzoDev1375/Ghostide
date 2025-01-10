@@ -8,11 +8,11 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.os.Looper;
 import com.android.tools.r8.D8;
+import com.google.android.material.color.MaterialColors;
 import com.google.android.material.shape.CornerFamily;
 import com.google.android.material.shape.MaterialShapeDrawable;
 import com.google.android.material.shape.ShapeAppearanceModel;
 import java.util.ArrayList;
-
 public class R8Tools {
 
   public void onlyCompile(String input, String output, int api, Context context,OnItemChange item) {
@@ -21,8 +21,8 @@ public class R8Tools {
     dialog.setMessage("It may take a few minutes depending on your DEX");
     dialog.setCancelable(false);
     MaterialShapeDrawable shap = new MaterialShapeDrawable(ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED,20f).build());
-    shap.setFillColor(ColorStateList.valueOf(Color.parseColor("#FF0D1423")));
-    shap.setStroke(0.5f,ColorStateList.valueOf(Color.parseColor("#FF2EDCFF")));
+    shap.setFillColor(ColorStateList.valueOf(MaterialColors.getColor(context,com.google.android.material.R.attr.colorSurface,0)));
+    shap.setStroke(0.5f,MaterialColors.getColor(context,com.google.android.material.R.attr.colorPrimary,0));
     dialog.getWindow().setBackgroundDrawable(shap);
     dialog.show();
     

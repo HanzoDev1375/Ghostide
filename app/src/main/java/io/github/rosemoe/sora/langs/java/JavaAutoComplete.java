@@ -69,16 +69,16 @@ public class JavaAutoComplete implements AutoCompleteProvider {
       Collections.sort(words, CompletionItem.COMPARATOR_BY_NAME);
       keywords.addAll(words);
     }
-    shortcard = new JavaCardshorts(keywords, prefix,editor);
+    shortcard = new JavaCardshorts(keywords, prefix, editor);
     JavaToGsonHelper.installFormSora(keywords);
-
+    
     it = keywords;
     try {
       new Css3Server().toJavaLspDemo(keywords, prefix);
     } catch (Exception err) {
       LOG.error("ErrorOpenXmlFile", err.getLocalizedMessage());
     }
-    
+
     return keywords;
   }
 
@@ -115,4 +115,6 @@ public class JavaAutoComplete implements AutoCompleteProvider {
       return identifiers;
     }
   }
+
+  
 }

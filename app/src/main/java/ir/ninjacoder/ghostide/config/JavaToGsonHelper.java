@@ -1,6 +1,6 @@
 package ir.ninjacoder.ghostide.config;
 
-import ir.ninjacoder.ghostide.ApplicationLoader;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.utils.FileUtil;
 import android.util.Log;
 import com.github.javaparser.StaticJavaParser;
@@ -77,14 +77,14 @@ public class JavaToGsonHelper {
         null);
     List<Map<String, String>> listItem = new ArrayList<>();
     listItem.add(map);
-    var context = ApplicationLoader.getContext().getDataDir() + "/";
+    var context = GhostIdeAppLoader.getContext().getDataDir() + "/";
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
     FileUtil.writeFile(context + "data.json", gson.toJson(listItem));
   }
 
   public static void installFormSora(List<CompletionItem> item) {
     // item.add(new CompletionItem("classorinterface",map.get("classorinterface")));
-    var path = ApplicationLoader.getContext().getDataDir() + "/" + "data.json";
+    var path = GhostIdeAppLoader.getContext().getDataDir() + "/" + "data.json";
     List<Map<String, String>> listasMap = new ArrayList<>();
     new Gson()
         .fromJson(FileUtil.readFile(path), new TypeToken<List<Map<String, String>>>() {}.getType());

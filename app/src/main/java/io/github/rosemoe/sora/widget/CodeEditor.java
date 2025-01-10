@@ -23,6 +23,7 @@
  */
 package io.github.rosemoe.sora.widget;
 
+import io.github.rosemoe.sora.event.TextSizeChangeEvent;
 import ir.ninjacoder.ghostide.utils.DiagnosticsListener;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -604,8 +605,8 @@ public class CodeEditor extends View
   public void setKeyboardOperation(OnKeyboardOperation enters) {
     this.enters = enters;
   }
-  
-  public Layout getLayout(){
+
+  public Layout getLayout() {
     return mLayout;
   }
 
@@ -1341,6 +1342,8 @@ public class CodeEditor extends View
     mGraphMetrics = mPaintGraph.getFontMetricsInt();
     invalidateHwRenderer();
     updateTimestamp();
+    var oldTextSize = getTextSizePx();
+    dispatchEvent(new TextSizeChangeEvent(this, oldTextSize, size));
   }
 
   /**

@@ -1,6 +1,6 @@
 package ir.ninjacoder.ghostide.adapter;
 
-import ir.ninjacoder.ghostide.ApplicationLoader;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.utils.FileUtil;
@@ -77,7 +77,7 @@ public class SyspiarAdapter extends RecyclerView.Adapter<SyspiarAdapter.ViewHold
             } else {
               sysbarInsertId.setText(_data.get((int) _position).get("post").toString());
               if (tabview == null) {
-                ApplicationLoader.getEditor().appendText("4");
+                GhostIdeAppLoader.getEditor().appendText("4");
               }
               tabview.POST(sysbarInsertId.getText().toString());
               Log.e("POST", sysbarInsertId.getText().toString());
@@ -85,23 +85,23 @@ public class SyspiarAdapter extends RecyclerView.Adapter<SyspiarAdapter.ViewHold
           }
         });
     try {
-      if (ApplicationLoader.getsetFont().contains("mfont")) {
-        if (!FileUtil.isFile(ApplicationLoader.getsetFont().getString("mfont", ""))) {
-          DataUtil.showMessage(ApplicationLoader.getContext(), "Custom Font Not Found");
+      if (GhostIdeAppLoader.getsetFont().contains("mfont")) {
+        if (!FileUtil.isFile(GhostIdeAppLoader.getsetFont().getString("mfont", ""))) {
+          DataUtil.showMessage(GhostIdeAppLoader.getContext(), "Custom Font Not Found");
           sysbarInsertId.setTypeface(
               Typeface.createFromAsset(
-                  ApplicationLoader.getContext().getAssets(), "fonts/ghostfont.ttf"),
+                  GhostIdeAppLoader.getContext().getAssets(), "fonts/ghostfont.ttf"),
               0);
         } else {
 
           sysbarInsertId.setTypeface(
               Typeface.createFromFile(
-                  new File(ApplicationLoader.getsetFont().getString("mfont", ""))));
+                  new File(GhostIdeAppLoader.getsetFont().getString("mfont", ""))));
         }
       } else {
         sysbarInsertId.setTypeface(
             Typeface.createFromAsset(
-                ApplicationLoader.getContext().getAssets(), "fonts/ghostfont.ttf"),
+                GhostIdeAppLoader.getContext().getAssets(), "fonts/ghostfont.ttf"),
             0);
       }
     } catch (Exception e) {
@@ -151,7 +151,7 @@ public class SyspiarAdapter extends RecyclerView.Adapter<SyspiarAdapter.ViewHold
             return false;
           }
         });
-    if (ApplicationLoader.getRu().contains("rub")) {
+    if (GhostIdeAppLoader.getRu().contains("rub")) {
       sysbarInsertId.setTextColor(0xFFC4A68A);
     } else {
     }

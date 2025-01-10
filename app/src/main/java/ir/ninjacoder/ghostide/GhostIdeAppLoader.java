@@ -26,7 +26,7 @@ import de.larsgrefer.sass.embedded.android.AndroidSassCompilerFactory;
 
 import java.util.Calendar;
 
-public class ApplicationLoader extends Application {
+public class GhostIdeAppLoader extends Application {
   // from terminal
   // recreate()
   private static SharedPreferences prfns;
@@ -40,7 +40,7 @@ public class ApplicationLoader extends Application {
   private static Context mApplicationContext;
   private static Activity activity;
   private static IdeEditor editor;
-  private static ApplicationLoader loader;
+  private static GhostIdeAppLoader loader;
   protected SharedPreferences mt300;
   private Thread.UncaughtExceptionHandler uncaughtExceptionHandler;
   private StringBuilder softwareInfo = new StringBuilder();
@@ -54,7 +54,7 @@ public class ApplicationLoader extends Application {
     return activity;
   }
 
-  public static ApplicationLoader getInstance() {
+  public static GhostIdeAppLoader getInstance() {
     return loader;
   }
 

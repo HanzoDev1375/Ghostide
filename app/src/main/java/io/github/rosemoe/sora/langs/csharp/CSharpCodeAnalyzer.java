@@ -1,6 +1,6 @@
 package io.github.rosemoe.sora.langs.csharp;
 
-import ir.ninjacoder.ghostide.ApplicationLoader;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import android.graphics.Color;
 import android.util.Log;
 import io.github.rosemoe.sora.data.BlockLine;
@@ -313,7 +313,7 @@ public class CSharpCodeAnalyzer implements CodeAnalyzer {
       result.determine(lastline);
       result.setExtra(info);
       try {
-        if (ApplicationLoader.getAnalyzercod().getBoolean("Analyzercod", false) == true) {
+        if (GhostIdeAppLoader.getAnalyzercod().getBoolean("Analyzercod", false) == true) {
           var antlrinputstream = new ANTLRInputStream(content.toString());
           var lexer = new CSharpLexer(antlrinputstream);
           var stream = new CommonTokenStream(lexer);

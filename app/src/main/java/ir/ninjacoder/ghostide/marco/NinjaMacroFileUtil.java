@@ -1,6 +1,6 @@
 package ir.ninjacoder.ghostide.marco;
 
-import ir.ninjacoder.ghostide.ApplicationLoader;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
@@ -63,13 +63,13 @@ public class NinjaMacroFileUtil {
     }
 
     protected static boolean isShow() {
-        InputMethodManager imm = (InputMethodManager) ApplicationLoader.getContext()
+        InputMethodManager imm = (InputMethodManager) GhostIdeAppLoader.getContext()
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         return imm.isAcceptingText();
     }
 
     protected static void hiden() {
-        InputMethodManager hiden = (InputMethodManager) ApplicationLoader.getContext()
+        InputMethodManager hiden = (InputMethodManager) GhostIdeAppLoader.getContext()
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         hiden.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
     }

@@ -12,7 +12,7 @@ public class JavaCcComplierImpl {
     String[] item = {"-JDK_VERSION=1.8", "-OUTPUT_DIRECTORY=" + output, "-STATIC=false", input};
     new TaskCompileJavacc().execute(item);
     for (var it : item) {
-      // Toast.makeText(ApplicationLoader.getContext(),it,2).show();
+      // Toast.makeText(GhostIdeAppLoader.getContext(),it,2).show();
     }
   }
 
@@ -21,7 +21,7 @@ public class JavaCcComplierImpl {
     @Override
     protected Integer doInBackground(String[] params) {
       try {
-        return JavaCcCompiler.mainProgram(params, ApplicationLoader.getContext());
+        return JavaCcCompiler.mainProgram(params, GhostIdeAppLoader.getContext());
       } catch (Exception err) {
         return -1;
       }
@@ -29,7 +29,7 @@ public class JavaCcComplierImpl {
 
     @Override
     protected void onPostExecute(Integer result) {
-      Context ctx = ApplicationLoader.getContext();
+      Context ctx = GhostIdeAppLoader.getContext();
       Toast.makeText(ctx, String.valueOf(result), 2).show();
     }
   }

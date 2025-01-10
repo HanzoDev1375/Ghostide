@@ -1,6 +1,6 @@
 package ir.ninjacoder.ghostide.keyboard;
 
-import ir.ninjacoder.ghostide.ApplicationLoader;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -33,13 +33,13 @@ public class MyKeyboard extends Keyboard {
 
     Key key = new Key(resources, row, i, i2, xmlResourceParser);
     SharedPreferences sharedPref =
-        PreferenceManager.getDefaultSharedPreferences(ApplicationLoader.getContext());
+        PreferenceManager.getDefaultSharedPreferences(GhostIdeAppLoader.getContext());
 
     row.verticalGap = getPrefInt(sharedPref, "Vertical", 1);
 
-    int ramin = ApplicationLoader.getContext().getResources().getConfiguration().orientation;
+    int ramin = GhostIdeAppLoader.getContext().getResources().getConfiguration().orientation;
     if (ramin == Configuration.ORIENTATION_LANDSCAPE) {
-      if (PreferenceManager.getDefaultSharedPreferences(ApplicationLoader.getContext())
+      if (PreferenceManager.getDefaultSharedPreferences(GhostIdeAppLoader.getContext())
           .getBoolean("Height", true)) {
         row.defaultHeight = getPrefInt(sharedPref, "Height_2", 70);
         key.height = getPrefInt(sharedPref, "Height_2", 70);
@@ -47,7 +47,7 @@ public class MyKeyboard extends Keyboard {
 
       }
     } else {
-      if (PreferenceManager.getDefaultSharedPreferences(ApplicationLoader.getContext())
+      if (PreferenceManager.getDefaultSharedPreferences(GhostIdeAppLoader.getContext())
           .getBoolean("Height", true)) {
         row.defaultHeight = getPrefInt(sharedPref, "Height_1", 110);
         key.height = getPrefInt(sharedPref, "Height_1", 110);

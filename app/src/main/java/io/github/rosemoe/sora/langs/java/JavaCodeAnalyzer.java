@@ -48,6 +48,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
   private final WeakReference<IdeEditor> mEditorReference;
   private final List<DiagnosticWrapper> mDiagnostics;
   private static final Object OBJECT = new Object();
+  
 
   private Map<String, Boolean> mapStyle;
 
@@ -477,6 +478,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 declaredVariables.add(variableName);
                 inline.put(variableName, line);
                 incol.put(variableName, column);
+               
               }
               super.visit(fieldDeclaration, arg);
             }
@@ -543,6 +545,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               var col = arg0.getBegin().get().column;
               mlines.put(names, li);
               mcoloum.put(names, col);
+             
 
               // Utils.setSpanEFO(result, li, col + 2, EditorColorScheme.COMMENT);
 
@@ -558,6 +561,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               inline.put(variableName, li);
               incol.put(variableName, cl);
               super.visit(arg0, arg1);
+               
             }
           },
           null);
@@ -589,7 +593,6 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
         var li = mlines.get(it);
         var col = mcoloum.get(it);
         Utils.setSpanEFO(result, li, col + 2, EditorColorScheme.KEYWORD);
-        
       }
 
     } catch (IOException e) {

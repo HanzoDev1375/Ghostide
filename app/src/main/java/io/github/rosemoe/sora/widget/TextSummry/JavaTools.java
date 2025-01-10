@@ -3,6 +3,7 @@ package io.github.rosemoe.sora.widget.TextSummry;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.config.CreatorComment;
 import ir.ninjacoder.ghostide.config.GetterSetterGenerator;
+import ir.ninjacoder.ghostide.config.JavaPaserUtils;
 import ir.ninjacoder.ghostide.databinding.MakefolderBinding;
 import ir.ninjacoder.ghostide.marco.editorface.ConstructorMaker;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
@@ -46,7 +47,7 @@ public class JavaTools {
   }
 
   public void runs(Context context, View view, CodeEditor editor, String langName) {
-
+    var javaPaserTools = new JavaPaserUtils((IdeEditor) editor);
     PowerMenu menu =
         new PowerMenu.Builder(context)
             .addItem(new PowerMenuItem("Un Comment Long"))
@@ -54,13 +55,17 @@ public class JavaTools {
             .addItem(new PowerMenuItem("Long Comment"))
             .addItem(new PowerMenuItem("UnComment"))
             .addItem(new PowerMenuItem("Share Text"))
-            .addItem(new PowerMenuItem("Add to collection"))
-            .addItem(new PowerMenuItem("ExtractJavaClass"))
+            .addItem(new PowerMenuItem("addNullCheck"))
+            .addItem(new PowerMenuItem("addInstance"))
             .addItem(new PowerMenuItem("Translate"))
-            .addItem(new PowerMenuItem("Get and set"))
+            .addItem(new PowerMenuItem("GetterSetter"))
             .addItem(new PowerMenuItem("String Fog Decoder"))
             .addItem(new PowerMenuItem("CommentCreator"))
             .addItem(new PowerMenuItem("ConstructorMaker"))
+            .addItem(new PowerMenuItem("addThrows"))
+            .addItem(new PowerMenuItem("addTrycatch"))
+            .addItem(new PowerMenuItem("addIfStatement"))
+            
             .setIsMaterial(true)
             .build();
     menu.setMenuRadius(20f);
@@ -91,9 +96,9 @@ public class JavaTools {
           } else if (pos == 4) {
             shareText(editor);
           } else if (pos == 5) {
-
+            javaPaserTools.addNullCheck();
           } else if (pos == 6) {
-            bindList(editor, context);
+            javaPaserTools.addInstance();
           } else if (pos == 7) {
             Transilt.Start(editor);
           } else if (pos == 8) {
@@ -102,8 +107,14 @@ public class JavaTools {
             item.StringFog(editor);
           } else if (pos == 10) {
             makeComment(context, editor);
-          }else if(pos == 11){
-            new ConstructorMaker(context,editor.getText().toString(),(IdeEditor)editor);
+          } else if (pos == 11) {
+            new ConstructorMaker(context, editor.getText().toString(), (IdeEditor) editor);
+          } else if (pos == 12) {
+            javaPaserTools.addThrowsToMethod();
+          } else if (pos == 13) {
+            javaPaserTools.addTrycatch();
+          }else if(pos == 14) {
+          	javaPaserTools.addIfStatement();
           }
         });
   }
@@ -178,7 +189,6 @@ public class JavaTools {
         for (var c : cls.getDeclaredClasses()) {
           text += "\n\n" + c.toString();
         }
-        
 
         editor.setText(text);
       }
@@ -224,7 +234,6 @@ public class JavaTools {
 
     listView.setOnItemClickListener(
         (parent, view, position, __) -> {
-          
           var get = itemFull.get(position);
           installextractJavaClass(context, editor, get);
         });

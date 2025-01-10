@@ -6,17 +6,15 @@
      android:minHeight="40dp"
      android:padding="2dp">
 
-    <TextView
-         android:layout_height="wrap_content"
-         android:layout_width="wrap_content"
+    <View
+         android:layout_height="20dp"
+         android:layout_width="20dp"
+         android:visibility="visible"
          android:gravity="center"
          android:layout_centerVertical="true"
-         android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
          android:layout_marginHorizontal="8dp"
-         android:textSize="13sp"
          android:paddingHorizontal="4dp"
-         android:id="@+id/item_icon"
-         android:text="A" />
+         android:id="@+id/item_icon" />
 
     <TextView
          android:layout_height="wrap_content"
@@ -47,11 +45,11 @@
     <TextView
          android:layout_height="wrap_content"
          android:layout_width="wrap_content"
+         android:visibility="invisible"
          android:layout_marginEnd="2dp"
          android:ellipsize="end"
          android:textSize="11sp"
          android:layout_alignParentEnd="true"
-         android:visibility="invisible"
          android:textColor="?attr/colorSecondaryVariant"
          android:id="@+id/item_type"
          android:text="Tag" />

@@ -5,7 +5,7 @@ import io.github.rosemoe.sora.data.CompletionItem;
 import java.io.IOException;
 import java.util.Map;
 import java.util.ArrayList;
-import ir.ninjacoder.ghostide.ApplicationLoader;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import com.google.gson.Gson;
 import ir.ninjacoder.ghostide.utils.DataUtil;
 import com.google.common.reflect.TypeToken;
@@ -28,7 +28,7 @@ public class TypeScriptCardshorts extends Css3Server{
   void asChild() throws IOException {
     boolean isLen = prf.length() > 0;
     List<Map<String, String>> listScript = new ArrayList<>();
-    var inputstream = ApplicationLoader.getContext().getAssets().open("typescriptsnippet.java");
+    var inputstream = GhostIdeAppLoader.getContext().getAssets().open("typescriptsnippet.java");
     listScript =
         new Gson()
             .fromJson(

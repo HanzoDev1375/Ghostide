@@ -1,6 +1,6 @@
 package ir.ninjacoder.ghostide.activities;
 
-import ir.ninjacoder.ghostide.ApplicationLoader;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.adapter.ListAppIconAd;
 import ir.ninjacoder.ghostide.config.AppIconManager;
@@ -821,9 +821,9 @@ public class SettingAppActivity extends BaseCompat {
               dialog.setPositiveButton(
                   "OK",
                   (position, theme) -> {
-                    ApplicationLoader.getThemeEngine().setStaticTheme(theme);
+                    GhostIdeAppLoader.getThemeEngine().setStaticTheme(theme);
                     themeEngine.setStaticTheme(theme);
-                    ((ApplicationLoader) getApplicationContext()).onThemeChange();
+                    ((GhostIdeAppLoader) getApplicationContext()).onThemeChange();
                     recreate();
                     finishAffinity();
                   });
@@ -832,8 +832,8 @@ public class SettingAppActivity extends BaseCompat {
                   "Default",
                   (param1, param2) -> {
                     themeEngine.resetTheme();
-                    ApplicationLoader.getThemeEngine().resetTheme();
-                    ((ApplicationLoader) getApplicationContext()).onThemeChange();
+                    GhostIdeAppLoader.getThemeEngine().resetTheme();
+                    ((GhostIdeAppLoader) getApplicationContext()).onThemeChange();
                     recreate();
                   });
               dialog.create().show();

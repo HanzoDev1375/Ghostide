@@ -1,6 +1,6 @@
 package ir.ninjacoder.ghostide.config;
 
-import ir.ninjacoder.ghostide.ApplicationLoader;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -19,7 +19,7 @@ public class SaveRecyclerViewScrollbar implements LifecycleObserver {
 
   public SaveRecyclerViewScrollbar(
       GridLayoutManager grid, Lifecycle lifecycle, RecyclerView recyclerView) {
-    this.prefs = ApplicationLoader.getContext().getSharedPreferences(key, Activity.MODE_PRIVATE);
+    this.prefs = GhostIdeAppLoader.getContext().getSharedPreferences(key, Activity.MODE_PRIVATE);
     this.grid = grid;
     this.recyclerView = recyclerView;
     lifecycle.addObserver(this);

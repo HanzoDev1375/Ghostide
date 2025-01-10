@@ -159,7 +159,7 @@ public class FileIconHelper {
     else if (is("as")) fileIconRes = R.drawable.ic_material_actionscript;
     else if (is("bat")) fileIconRes = R.drawable.ic_material_console;
     else if (is("c")) fileIconRes = R.drawable.ic_material_c;
-    else if(is("cs")) fileIconRes = R.drawable.ic_material_csharp;
+    else if (is("cs")) fileIconRes = R.drawable.ic_material_csharp;
     else if (is("cpp") || is("cc") || is("h") || is("cxx"))
       fileIconRes = R.drawable.ic_material_cpp;
     else if (is("csharp")) fileIconRes = R.drawable.ic_material_csharp;

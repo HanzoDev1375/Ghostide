@@ -1,6 +1,6 @@
 package ir.ninjacoder.ghostide.utils;
 
-import ir.ninjacoder.ghostide.ApplicationLoader;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.marco.binder.bindchilder.GhostToast;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -189,7 +189,7 @@ public class DataUtil {
   }
   
  public static void showMessage(String s) {
-    Toast.makeText(ApplicationLoader.getContext(), s, Toast.LENGTH_SHORT).show();
+    Toast.makeText(GhostIdeAppLoader.getContext(), s, Toast.LENGTH_SHORT).show();
   }
   
   public static int getLocationX(View view) {

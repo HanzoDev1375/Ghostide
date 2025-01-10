@@ -1,6 +1,6 @@
 package ir.ninjacoder.ghostide.utils;
 
-import ir.ninjacoder.ghostide.ApplicationLoader;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -225,51 +225,51 @@ public class AssetsSoft {
 
   public void z() {
     try {
-      InputStream temp7zStream = ApplicationLoader.getContext().getAssets().open("python.7z");
+      InputStream temp7zStream = GhostIdeAppLoader.getContext().getAssets().open("python.7z");
       File file =
-          new File(ApplicationLoader.getContext().getFilesDir().getAbsolutePath() + "/python.7z");
+          new File(GhostIdeAppLoader.getContext().getFilesDir().getAbsolutePath() + "/python.7z");
       file.createNewFile();
       Files.copy(temp7zStream, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
       unzipCompat(
-          file.getAbsolutePath(), ApplicationLoader.getContext().getFilesDir().getAbsolutePath());
+          file.getAbsolutePath(), GhostIdeAppLoader.getContext().getFilesDir().getAbsolutePath());
       file.delete();
       temp7zStream.close();
-      // Toast.makeText(ApplicationLoader.getContext(), "unZipet " + file.getName(), 2).show();
+      // Toast.makeText(GhostIdeAppLoader.getContext(), "unZipet " + file.getName(), 2).show();
     } catch (IOException err) {
-      Toast.makeText(ApplicationLoader.getContext(), err.getMessage(), 2).show();
+      Toast.makeText(GhostIdeAppLoader.getContext(), err.getMessage(), 2).show();
     }
   }
 
   public void php() {
     try {
-      InputStream temp7zStream = ApplicationLoader.getContext().getAssets().open("libs.7z");
+      InputStream temp7zStream = GhostIdeAppLoader.getContext().getAssets().open("libs.7z");
       File file =
-          new File(ApplicationLoader.getContext().getFilesDir().getAbsolutePath() + "/libs.7z");
+          new File(GhostIdeAppLoader.getContext().getFilesDir().getAbsolutePath() + "/libs.7z");
       file.createNewFile();
       Files.copy(temp7zStream, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
       unzipCompat(
-          file.getAbsolutePath(), ApplicationLoader.getContext().getFilesDir().getAbsolutePath());
+          file.getAbsolutePath(), GhostIdeAppLoader.getContext().getFilesDir().getAbsolutePath());
       file.delete();
       temp7zStream.close();
-      // Toast.makeText(ApplicationLoader.getContext(), "unZipet " + file.getName(), 2).show();
+      // Toast.makeText(GhostIdeAppLoader.getContext(), "unZipet " + file.getName(), 2).show();
     } catch (IOException err) {
-      Toast.makeText(ApplicationLoader.getContext(), err.getMessage(), 2).show();
+      Toast.makeText(GhostIdeAppLoader.getContext(), err.getMessage(), 2).show();
     }
   }
 
   public void unZipGcc() {
     try {
-      InputStream temp7zStream = ApplicationLoader.getContext().getAssets().open("gcc.zip");
+      InputStream temp7zStream = GhostIdeAppLoader.getContext().getAssets().open("gcc.zip");
       File file =
-          new File(ApplicationLoader.getContext().getFilesDir().getAbsolutePath() + "/gcc.zip");
+          new File(GhostIdeAppLoader.getContext().getFilesDir().getAbsolutePath() + "/gcc.zip");
       file.createNewFile();
       Files.copy(temp7zStream, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-      unzip(file.getAbsolutePath(), ApplicationLoader.getContext().getFilesDir().getAbsolutePath());
+      unzip(file.getAbsolutePath(), GhostIdeAppLoader.getContext().getFilesDir().getAbsolutePath());
       file.delete();
       temp7zStream.close();
-      //	Toast.makeText(ApplicationLoader.getContext(), "unZipet " + file.getName(), 2).show();
+      //	Toast.makeText(GhostIdeAppLoader.getContext(), "unZipet " + file.getName(), 2).show();
     } catch (IOException err) {
-      Toast.makeText(ApplicationLoader.getContext(), err.getMessage(), 2).show();
+      Toast.makeText(GhostIdeAppLoader.getContext(), err.getMessage(), 2).show();
     }
   }
 
@@ -279,15 +279,15 @@ public class AssetsSoft {
             ShapeAppearanceModel.builder().setAllCorners(CornerFamily.CUT, 14f).build());
     mt.setFillColor(
         ColorStateList.valueOf(
-            MaterialColors.getColor(ApplicationLoader.getContext(), ObjectUtils.Back, 0)));
+            MaterialColors.getColor(GhostIdeAppLoader.getContext(), ObjectUtils.Back, 0)));
     mt.setStroke(
-        1, MaterialColors.getColor(ApplicationLoader.getContext(), ObjectUtils.TvColor, 0));
+        1, MaterialColors.getColor(GhostIdeAppLoader.getContext(), ObjectUtils.TvColor, 0));
     return mt;
   }
 
   private void unzipCompat(String input, String output) {
     AlertDialog dialog =
-        new MaterialAlertDialogBuilder(ApplicationLoader.getContext())
+        new MaterialAlertDialogBuilder(GhostIdeAppLoader.getContext())
             .setTitle("")
             .setPositiveButton("ok", null)
             .setCancelable(false)
@@ -315,7 +315,7 @@ public class AssetsSoft {
 
                       @Override
                       public void onProgress(String arg0, long arg1) {
-                        ((AppCompatActivity) ApplicationLoader.getContext())
+                        ((AppCompatActivity) GhostIdeAppLoader.getContext())
                             .runOnUiThread(
                                 new Runnable() {
                                   @Override
@@ -334,7 +334,7 @@ public class AssetsSoft {
 
                       @Override
                       public void onSucceed() {
-                        ((AppCompatActivity) ApplicationLoader.getContext())
+                        ((AppCompatActivity) GhostIdeAppLoader.getContext())
                             .runOnUiThread(
                                 new Runnable() {
                                   @Override

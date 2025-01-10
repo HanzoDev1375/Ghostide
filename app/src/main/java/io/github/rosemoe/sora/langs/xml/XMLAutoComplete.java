@@ -1,6 +1,6 @@
 package io.github.rosemoe.sora.langs.xml;
 
-import ir.ninjacoder.ghostide.ApplicationLoader;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.utils.DataUtil;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
@@ -81,7 +81,7 @@ public class XMLAutoComplete implements AutoCompleteProvider {
   public void setString(List<CompletionItem> items) {
     if (en) {
       try {
-        InputStream inputstream1 = ApplicationLoader.getContext().getAssets().open("colorsar.json");
+        InputStream inputstream1 = GhostIdeAppLoader.getContext().getAssets().open("colorsar.json");
         xmlHelper =
             new Gson()
                 .fromJson(

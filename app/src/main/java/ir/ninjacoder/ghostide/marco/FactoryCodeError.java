@@ -1,6 +1,6 @@
 package ir.ninjacoder.ghostide.marco;
 
-import ir.ninjacoder.ghostide.ApplicationLoader;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
@@ -84,7 +84,7 @@ public class FactoryCodeError {
    * هماهنگ نباشد تحلیل کردن کد به درستی پیش نمیرود
    */
   public void run() {
-    if (ApplicationLoader.getAnalyzercod().getBoolean("Analyzercod", false) == true) {
+    if (GhostIdeAppLoader.getAnalyzercod().getBoolean("Analyzercod", false) == true) {
 
       if (editor.getEditorLanguage() instanceof CSS3Language) {
         Iconnotfound();

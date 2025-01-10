@@ -1,6 +1,6 @@
 package io.github.rosemoe.sora.widget;
 
-import ir.ninjacoder.ghostide.ApplicationLoader;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.marco.RegexUtilCompat;
 import ir.ninjacoder.ghostide.utils.DataUtil;
 import android.graphics.Canvas;
@@ -123,7 +123,7 @@ public class ListCss3Color {
     if (using) {
 
       try {
-        var input = ApplicationLoader.getContext().getAssets().open("colors.json");
+        var input = GhostIdeAppLoader.getContext().getAssets().open("colors.json");
         colorList =
             new Gson()
                 .fromJson(

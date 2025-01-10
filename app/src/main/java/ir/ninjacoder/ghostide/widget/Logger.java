@@ -1,6 +1,6 @@
 package ir.ninjacoder.ghostide.widget;
 
-import ir.ninjacoder.ghostide.ApplicationLoader;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import android.content.Context;
 import android.content.Intent;
 
@@ -56,7 +56,7 @@ public class Logger {
     };
 
     public static void broadcastLog(String log) {
-        Context context = ApplicationLoader.getContext();
+        Context context = GhostIdeAppLoader.getContext();
 
         var intent = new Intent();
         intent.setAction("com.sketchware.remod.ACTION_NEW_DEBUG_LOG");

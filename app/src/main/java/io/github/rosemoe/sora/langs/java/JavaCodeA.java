@@ -1,6 +1,6 @@
 package io.github.rosemoe.sora.langs.java;
 
-import ir.ninjacoder.ghostide.ApplicationLoader;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 import io.github.rosemoe.sora.langs.xml.analyzer.Utils;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
@@ -26,7 +26,7 @@ public class JavaCodeA implements CodeAnalyzer {
     /// test
 
     try {
-      if (ApplicationLoader.getAnalyzercod().getBoolean("Analyzercod", false) == true) {
+      if (GhostIdeAppLoader.getAnalyzercod().getBoolean("Analyzercod", false) == true) {
 
         ANTLRInputStream input = new ANTLRInputStream(content.toString());
         Java20Lexer lexer = new Java20Lexer(input);

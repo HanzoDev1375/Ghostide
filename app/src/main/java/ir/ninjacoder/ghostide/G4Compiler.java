@@ -92,6 +92,6 @@ public class G4Compiler {
   }
 
   static void showToast(String s) {
-    Toast.makeText(ApplicationLoader.getContext(), s, 2).show();
+    Toast.makeText(GhostIdeAppLoader.getContext(), s, 2).show();
   }
 }

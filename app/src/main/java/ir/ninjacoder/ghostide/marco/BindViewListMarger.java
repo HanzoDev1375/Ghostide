@@ -1,6 +1,6 @@
 package ir.ninjacoder.ghostide.marco;
 
-import ir.ninjacoder.ghostide.ApplicationLoader;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.folder.FileEnvironmentHelper;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
@@ -71,7 +71,7 @@ public class BindViewListMarger {
     }
 
     public static void runfromFile(TextView view) {
-        if (ApplicationLoader.getVb().contains("HsiGamer")) {
+        if (GhostIdeAppLoader.getVb().contains("HsiGamer")) {
 
             var token = view.getText().toString();
 

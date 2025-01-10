@@ -1,6 +1,6 @@
 package ir.ninjacoder.ghostide.utils;
 
-import ir.ninjacoder.ghostide.ApplicationLoader;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.glidecompat.GlideCompat;
 import ir.ninjacoder.ghostide.widget.GhostWebMaterialDialog;
@@ -360,9 +360,9 @@ public class VectorHelper {
   public static String getVersion() {
     try {
       PackageInfo info =
-          ApplicationLoader.getContext()
+          GhostIdeAppLoader.getContext()
               .getPackageManager()
-              .getPackageInfo(ApplicationLoader.getContext().getPackageName(), 0);
+              .getPackageInfo(GhostIdeAppLoader.getContext().getPackageName(), 0);
       String v = info.versionName;
       return v;
     } catch (PackageManager.NameNotFoundException err) {

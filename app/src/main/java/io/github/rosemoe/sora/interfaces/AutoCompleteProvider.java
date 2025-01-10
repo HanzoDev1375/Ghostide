@@ -23,6 +23,7 @@
  */
 package io.github.rosemoe.sora.interfaces;
 
+import io.github.rosemoe.sora.widget.CodeEditor;
 import java.util.List;
 
 import io.github.rosemoe.sora.data.CompletionItem;
@@ -35,16 +36,17 @@ import io.github.rosemoe.sora.text.TextAnalyzeResult;
  */
 public interface AutoCompleteProvider {
 
-    /**
-     * Analyze auto complete items
-     *
-     * @param prefix        The prefix of input to match
-     * @param analyzeResult Last analyze result
-     * @param line          The line of cursor
-     * @param column        The column of cursor
-     * @return Analyzed items
-     */
-    List<CompletionItem> getAutoCompleteItems(String prefix, TextAnalyzeResult analyzeResult, int line, int column);
+  /**
+   * Analyze auto complete items
+   *
+   * @param prefix The prefix of input to match
+   * @param analyzeResult Last analyze result
+   * @param line The line of cursor
+   * @param column The column of cursor
+   * @return Analyzed items
+   */
+  List<CompletionItem> getAutoCompleteItems(
+      String prefix, TextAnalyzeResult analyzeResult, int line, int column);
 
+  default void getCodeEditor(CodeEditor editor) {}
 }
-

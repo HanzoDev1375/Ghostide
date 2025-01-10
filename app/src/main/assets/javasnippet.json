@@ -154,5 +154,9 @@
   {
     "name": "log",
     "snippet": "Log.e(TAG, \"e\");"
+  },
+  {
+    "name": "instance",
+    "snippet": "private static YourClass INSTANCE;\n\n    public static YourClass getInstance() {\n        if (INSTANCE == null) {\n            INSTANCE = new YourClass();\n        }\n        return INSTANCE;\n    }"
   }
 ]

@@ -1,6 +1,6 @@
 package io.github.rosemoe.sora.langs.javascript;
 
-import ir.ninjacoder.ghostide.ApplicationLoader;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import android.widget.Toast;
 import com.khubla.antlr4formatter.Antlr4Formatter;
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
@@ -75,7 +75,7 @@ public class JavaScriptLanguage implements EditorLanguage {
       };
 
   public JavaScriptLanguage() {
-    Toast.makeText(ApplicationLoader.getContext(), "Start Server Language", 2).show();
+    Toast.makeText(GhostIdeAppLoader.getContext(), "Start Server Language", 2).show();
   }
 
   @Override

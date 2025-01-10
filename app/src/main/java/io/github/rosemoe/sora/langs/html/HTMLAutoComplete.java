@@ -1,6 +1,6 @@
 package io.github.rosemoe.sora.langs.html;
 
-import ir.ninjacoder.ghostide.ApplicationLoader;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -49,7 +49,7 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
     pathz = new ArrayList<>();
     keyhtml = new ListKeyword();
     save_path =
-        ApplicationLoader.getContext().getSharedPreferences("save_path", Activity.MODE_PRIVATE);
+        GhostIdeAppLoader.getContext().getSharedPreferences("save_path", Activity.MODE_PRIVATE);
   }
 
   @Override
@@ -211,7 +211,10 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
 
   public String getLoramRandom(int count) {
     StringBuilder builder = new StringBuilder();
-    String[] lorams = {"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud ", "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud "};
+    String[] lorams = {
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud ",
+      "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud "
+    };
     Random random = new Random();
     for (int i = 0; i < count; i++) {
       int index = random.nextInt(lorams.length);
@@ -244,7 +247,7 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
       </style>
 
       """;
-      items.add(new CompletionItem(cssCode, "CssWord","Style"));
+      items.add(new CompletionItem(cssCode, "CssWord", "Style"));
     }
     // open list path
     if ("./".startsWith(prefix) && prefix.length() > 0) {

@@ -1,6 +1,6 @@
 package ir.ninjacoder.ghostide.terminal;
 
-import ir.ninjacoder.ghostide.ApplicationLoader;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.activities.BaseCompat;
 import ir.ninjacoder.ghostide.marco.CommentList;
@@ -272,7 +272,7 @@ public class TerminalActivity extends BaseCompat implements TerminalViewClient {
   }
 
   public void setFontSize(int value, boolean apply) {
-    ApplicationLoader.getPrefManager().getString(KEY_FONT_SIZE, String.valueOf(value));
+    GhostIdeAppLoader.getPrefManager().getString(KEY_FONT_SIZE, String.valueOf(value));
     if (apply) {
       terminals.setTextSize(getFontSize());
     }
@@ -284,7 +284,7 @@ public class TerminalActivity extends BaseCompat implements TerminalViewClient {
     try {
       fontSize =
           Integer.parseInt(
-              ApplicationLoader.getPrefManager()
+              GhostIdeAppLoader.getPrefManager()
                   .getString(KEY_FONT_SIZE, String.valueOf(DEFAULT_FONT_SIZE)));
     } catch (NumberFormatException err) {
       fontSize = DEFAULT_FONT_SIZE;
@@ -325,7 +325,7 @@ public class TerminalActivity extends BaseCompat implements TerminalViewClient {
 
     setFontSize(16, false);
 
-    if (ApplicationLoader.getPrefManager()
+    if (GhostIdeAppLoader.getPrefManager()
         .getString(KEY_FONT_SIZE, "<not_available>")
         .equals("<not_available>")) {
       setFontSize(defaultFontSize, false);

@@ -1,6 +1,6 @@
 package ir.ninjacoder.ghostide.utils;
 
-import ir.ninjacoder.ghostide.ApplicationLoader;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.utils.FileUtil;
 import ir.ninjacoder.ghostide.widget.ExrtaFab;
@@ -85,7 +85,7 @@ public class ObjectUtils {
   }
 
   public static void setToolbarinit(Toolbar toolbar) {
-    if (ApplicationLoader.getThememanagersoft().contains("thememanagersoft")) {
+    if (GhostIdeAppLoader.getThememanagersoft().contains("thememanagersoft")) {
 
       toolbar.setBackgroundColor(android.R.color.transparent);
       toolbar.setTitleTextColor(MaterialColors.getColor(toolbar, TvColor));
@@ -337,7 +337,7 @@ public class ObjectUtils {
   }
 
   public static int getColors(int color) {
-    return MaterialColors.getColor(ApplicationLoader.getContext(), color, 0);
+    return MaterialColors.getColor(GhostIdeAppLoader.getContext(), color, 0);
   }
 
   static int get(int color, IdeEditor editor) {
@@ -454,7 +454,7 @@ public class ObjectUtils {
   }
 
   public static Drawable getCircularProgress() {
-    var app = new CircularProgressDrawable(ApplicationLoader.getContext());
+    var app = new CircularProgressDrawable(GhostIdeAppLoader.getContext());
     app.setStrokeWidth(6f);
     app.setCenterRadius(10f);
     app.setArrowEnabled(true);

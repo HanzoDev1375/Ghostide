@@ -1,6 +1,6 @@
 package io.github.rosemoe.sora.langs.ninjalang;
 
-import ir.ninjacoder.ghostide.ApplicationLoader;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -14,10 +14,10 @@ public class ImportList {
 
     public static List<String> getImports() {
         try {
-            PackageManager packageManager = ApplicationLoader.getContext().getPackageManager();
+            PackageManager packageManager = GhostIdeAppLoader.getContext().getPackageManager();
             PackageInfo packageInfo =
                     packageManager.getPackageInfo(
-                            ApplicationLoader.getContext().getPackageName(), PackageManager.GET_META_DATA);
+                            GhostIdeAppLoader.getContext().getPackageName(), PackageManager.GET_META_DATA);
             ActivityInfo[] activities = packageInfo.activities;
             if (activities != null) {
                 for (ActivityInfo activity : activities) {

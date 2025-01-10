@@ -5,18 +5,17 @@ import ir.ninjacoder.ghostide.config.AmazonClassHelper;
 import ir.ninjacoder.ghostide.databin.FileMaker;
 import ir.ninjacoder.ghostide.folder.FileHelper;
 import ir.ninjacoder.ghostide.folder.FileIconHelper;
+import ir.ninjacoder.ghostide.folder.FileIconHelperPath;
 import ir.ninjacoder.ghostide.glidecompat.GlideCompat;
 import ir.ninjacoder.ghostide.interfaces.FileCallBack;
 import ir.ninjacoder.ghostide.marco.FileCounter;
 import ir.ninjacoder.ghostide.marco.binder.BinderRecyclerview1;
-import ir.ninjacoder.ghostide.marco.editorface.ClassNodePaserImpl;
 import ir.ninjacoder.ghostide.utils.AnimUtils;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.utils.FileUtil;
 import ir.ninjacoder.ghostide.utils.MFileClass;
 import ir.ninjacoder.ghostide.widget.component.fastscrollcompat.PopupTextProvider;
 import android.content.Context;
-import android.graphics.drawable.AnimatedVectorDrawable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,33 +80,31 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     AnimUtils.Sacla(viewHolder.itemView);
     setSettingTextView(viewHolder.folderName);
     var myfile = new File(filteredFiles.get(pos).get("path").toString());
-    viewHolder.folderName.setText(myfile.getName());
-    FileIconHelper fileIconHelper = new FileIconHelper(myfile.toString());
-    viewHolder.icon.setImageResource(fileIconHelper.getFileIcon());
-    fileIconHelper.setDynamicFolderEnabled(true);
-
-    fileIconHelper.setEnvironmentEnabled(true);
-    if (FileUtil.isDirectory(filteredFiles.get(pos).get("path").toString())) {
-      Folder = true;
-      Files = false;
-      fileIconHelper.bindIcon(viewHolder.icon);
-      FileCounter mfileC = new FileCounter(viewHolder.tvTools);
-      mfileC.execute(myfile.toString());
+    if (FileUtil.isDirectory(myfile.toString())) {
       if (viewType == ViewType.ROW) {
         viewHolder.icon.setPadding(8, 8, 8, 8);
         ObjectUtils.shp(viewHolder.icon);
       }
-
-      viewHolder.tvTools.setText("");
-    } else if (FileUtil.isExistFile(filteredFiles.get(pos).get("path").toString())) {
-      viewHolder.icon.setPadding(0, 0, 0, 0);
+      FileCounter mfileC = new FileCounter(viewHolder.tvTools);
+      mfileC.execute(myfile.toString());
+    } else {
       getTime(myfile.toString(), viewHolder.tvTools);
       viewHolder.icon.setBackgroundColor(0);
+      viewHolder.icon.setPadding(0, 0, 0, 0);
+    }
+    viewHolder.folderName.setText(myfile.getName());
+    if (FileUtil.isExistFile(FileIconHelperPath.ICON_PATH + "/ic_material_folder.png")) {
+
+      FileIconHelperPath fileIconPath = new FileIconHelperPath(myfile.toString());
+      fileIconPath.bind(viewHolder.icon);
+      fileIconPath.setDynamicFolderEnabled(true);
+      fileIconPath.setEnvironmentEnabled(true);
       if (BinderRecyclerview1.TaskVideo(myfile.toString())) {
         GlideCompat.GlideNormal(viewHolder.icon, myfile.toString());
       } else if (BinderRecyclerview1.PhotoView(myfile.toString())) {
         GlideCompat.GlideNormal(viewHolder.icon, myfile.toString());
       }
+
       if (myfile.toString().endsWith(".xml")) {
         GlideCompat.LoadVector(myfile.toString(), viewHolder.icon);
 
@@ -131,8 +128,52 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
       } else if (myfile.toString().endsWith(".AA")) {
         GlideCompat.LoadIconTheme(myfile.toString(), viewHolder.icon);
       }
-    }
 
+    } else {
+      FileIconHelper fileIconHelper = new FileIconHelper(myfile.toString());
+      viewHolder.icon.setImageResource(fileIconHelper.getFileIcon());
+      fileIconHelper.setDynamicFolderEnabled(true);
+      fileIconHelper.bindIcon(viewHolder.icon);
+      fileIconHelper.setEnvironmentEnabled(true);
+      if (FileUtil.isDirectory(filteredFiles.get(pos).get("path").toString())) {
+        Folder = true;
+        Files = false;
+
+        viewHolder.tvTools.setText("");
+      } else if (FileUtil.isExistFile(filteredFiles.get(pos).get("path").toString())) {
+        viewHolder.icon.setPadding(0, 0, 0, 0);
+        getTime(myfile.toString(), viewHolder.tvTools);
+        viewHolder.icon.setBackgroundColor(0);
+        if (BinderRecyclerview1.TaskVideo(myfile.toString())) {
+          GlideCompat.GlideNormal(viewHolder.icon, myfile.toString());
+        } else if (BinderRecyclerview1.PhotoView(myfile.toString())) {
+          GlideCompat.GlideNormal(viewHolder.icon, myfile.toString());
+        }
+        if (myfile.toString().endsWith(".xml")) {
+          GlideCompat.LoadVector(myfile.toString(), viewHolder.icon);
+
+        } else if (myfile.toString().endsWith(".mp3")) {
+          GlideCompat.GlideLoadMp3(viewHolder.icon, myfile.toString());
+        } else if (myfile.toString().endsWith(".svg")) {
+          GlideCompat.LoadSvg(myfile.toString(), viewHolder.icon);
+        } else if (myfile.toString().endsWith(".pdf")) {
+          try {
+            GlideCompat.loadImgPdf(myfile, viewHolder.icon);
+          } catch (IOException err) {
+            viewHolder.icon.setImageResource(R.drawable.ic_material_pdf);
+          }
+        } else if (myfile.toString().endsWith(".apk")) {
+          GlideCompat.LoadApkFile(myfile.toString(), viewHolder.icon);
+        } else if (myfile.toString().endsWith(".vsix")) {
+          GlideCompat.LoadIconVsCode(myfile.toString(), viewHolder.icon);
+
+        } else if (myfile.toString().endsWith(".g4")) {
+          AmazonClassHelper.getScanAntlr4Grammer(viewHolder.icon, myfile.toString());
+        } else if (myfile.toString().endsWith(".AA")) {
+          GlideCompat.LoadIconTheme(myfile.toString(), viewHolder.icon);
+        }
+      }
+    }
     viewHolder.itemView.setClickable(true);
   }
 

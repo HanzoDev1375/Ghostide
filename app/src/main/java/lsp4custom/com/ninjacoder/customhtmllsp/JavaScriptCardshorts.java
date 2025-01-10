@@ -1,6 +1,6 @@
 package lsp4custom.com.ninjacoder.customhtmllsp;
 
-import ir.ninjacoder.ghostide.ApplicationLoader;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.utils.DataUtil;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
@@ -28,7 +28,7 @@ public class JavaScriptCardshorts extends Css3Server {
   void asChild() throws IOException {
     boolean isLen = prf.length() > 0;
     List<Map<String, String>> listScript = new ArrayList<>();
-    var inputstream = ApplicationLoader.getContext().getAssets().open("javascriptsnippet.json");
+    var inputstream = GhostIdeAppLoader.getContext().getAssets().open("javascriptsnippet.json");
     listScript =
         new Gson()
             .fromJson(

@@ -3,7 +3,7 @@ package lsp4custom.com.ninjacoder.customhtmllsp;
 import android.util.Log;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
-import ir.ninjacoder.ghostide.ApplicationLoader;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import io.github.rosemoe.sora.data.CompletionItem;
 import io.github.rosemoe.sora.langs.html.HTMLLanguage;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
@@ -385,7 +385,7 @@ public class Css3Server {
     if (prefix.startsWith("name=")) {
       propName = "name";
     }
-    var openFile = ApplicationLoader.getContext().getAssets().open("android.R.attrs.json");
+    var openFile = GhostIdeAppLoader.getContext().getAssets().open("android.R.attrs.json");
     List<Map<String, String>> itemReadattr = new ArrayList<>();
     itemReadattr =
         new Gson()

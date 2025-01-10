@@ -1,6 +1,6 @@
 package io.github.rosemoe.sora.langs.html;
 
-import ir.ninjacoder.ghostide.ApplicationLoader;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import android.util.Log;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 import io.github.rosemoe.sora.langs.xml.analyzer.Utils;
@@ -22,7 +22,7 @@ public class BasicSyntaxHtmlAnalyzerMod implements CodeAnalyzer {
       CharSequence content,
       TextAnalyzeResult result,
       TextAnalyzer.AnalyzeThread.Delegate delegate) {
-    if (ApplicationLoader.getAnalyzercod().getBoolean("Analyzercod", false) == true) {
+    if (GhostIdeAppLoader.getAnalyzercod().getBoolean("Analyzercod", false) == true) {
 
       try {
         var doc = Jsoup.parse(content.toString());

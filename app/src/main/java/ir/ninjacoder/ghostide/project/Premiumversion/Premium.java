@@ -1,6 +1,6 @@
 package ir.ninjacoder.ghostide.project.Premiumversion;
 
-import ir.ninjacoder.ghostide.ApplicationLoader;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import android.widget.LinearLayout;
 import static android.widget.LinearLayout.LayoutParams.MATCH_PARENT;
 import static android.widget.LinearLayout.LayoutParams.WRAP_CONTENT;
@@ -14,7 +14,7 @@ public class Premium {
   public static boolean isPaymenthasbeenmade = false;
 
   public static void ShowDialog() {
-    var context = ApplicationLoader.getContext();
+    var context = GhostIdeAppLoader.getContext();
     LinearLayout layout = new LinearLayout(context, null);
     var allParam = new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT);
     layout.setPadding(8, 8, 8, 8);

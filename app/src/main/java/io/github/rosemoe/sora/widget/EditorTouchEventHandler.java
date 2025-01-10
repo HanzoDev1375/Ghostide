@@ -347,10 +347,8 @@ public class EditorTouchEventHandler
           }
           for (var it : mEditor.geticonRect()) {
             if (it.contains((int) e.getX(), (int) e.getY())) {
-                Toast.makeText(mEditor.getContext(), "آیکون کلیک شد!", Toast.LENGTH_SHORT).show();
-                mEditor.dispatchEvent(new IconLineNumberEvent(mEditor));
-                return true;
-            
+              mEditor.dispatchEvent(new IconLineNumberEvent(mEditor, e.getX(), e.getY()));
+              return true;
             }
           }
 

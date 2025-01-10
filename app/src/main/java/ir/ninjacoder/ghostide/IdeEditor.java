@@ -1,10 +1,11 @@
 package ir.ninjacoder.ghostide;
 
+import android.content.SharedPreferences;
+import io.github.rosemoe.sora.event.TextSizeChangeEvent;
 import ir.ninjacoder.ghostide.config.LOG;
 import ir.ninjacoder.ghostide.interfaces.CallBackErrorManager;
 import ir.ninjacoder.ghostide.marco.CommentList;
 import ir.ninjacoder.ghostide.marco.editorface.IEditor;
-import ir.ninjacoder.ghostide.model.FloatingNavigationWindow;
 import ir.ninjacoder.ghostide.widget.SymbolInputView;
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -28,7 +29,6 @@ import io.github.rosemoe.sora.event.ContentChangeEvent;
 import io.github.rosemoe.sora.interfaces.EditorLanguage;
 import io.github.rosemoe.sora.langs.xml.XMLLanguage;
 import io.github.rosemoe.sora.langs.xml.XMLLexer;
-import io.github.rosemoe.sora.widget.HtmlHelper;
 import java.io.StringReader;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.Token;
@@ -52,6 +52,7 @@ public class IdeEditor extends CodeEditor implements IEditor {
   private boolean isSoftKbdEnabled;
   private CommentList listitem;
   private ToolTipHelper toolTipHelper;
+  private SharedPreferences saveTextSize ;
 
   // for test
   private Pattern URL_PATTERN =
@@ -93,11 +94,26 @@ public class IdeEditor extends CodeEditor implements IEditor {
     setDividerMargin(30f);
     setNonPrintablePaintingFlags(FLAG_GHOSTWEB);
     subscribeEvent(ClickEvent.class, ((event, unsubscribe) -> ta(event)));
-    subscribeEvent(ContentChangeEvent.class, ((event, unsubscribe) -> handleContentChange(event)));
+    //subscribeEvent(ContentChangeEvent.class, ((event, unsubscribe) -> handleContentChange(event)));
+    subscribeEvent(TextSizeChangeEvent.class, ((event, unsubscribe) -> textSize(event)));
+    saveTextSize = getContext().getSharedPreferences("saveItem",Context.MODE_PRIVATE);
+    var getSize = saveTextSize.getFloat("newTextSize",16);
+    if(saveTextSize != null) {
+    	setTextSizePx(getSize);
+    }
 
     return this;
   }
 
+  void textSize(TextSizeChangeEvent e){
+    var builder = new StringBuilder();
+    builder.append("oldTextSize: ").append(e.getOldTextSize()).append("\n");
+    builder.append("newTextSize: ").append(e.getNewTextSize()).append("\n");
+    SharedPreferences.Editor edit = saveTextSize.edit();
+    edit.putFloat("newTextSize",e.getNewTextSize());
+    edit.apply();
+  }
+  
   void ta(ClickEvent ev) {
     //    if (getEditorLanguage() instanceof HTMLLanguage) {
 

@@ -1,5 +1,6 @@
 package io.github.rosemoe.sora.widget;
 
+import com.ninjacoder.jgit.CircleDrawable;
 import ir.ninjacoder.ghostide.utils.AnimUtils;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -10,11 +11,6 @@ import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.TypedValue;
 import android.view.*;
-import io.github.rosemoe.sora.langs.html.HTMLLanguage;
-import io.github.rosemoe.sora.langs.java.JavaLanguage;
-import io.github.rosemoe.sora.langs.javascript.JavaScriptLanguage;
-import io.github.rosemoe.sora.langs.kotlin.KotlinLanguage;
-import io.github.rosemoe.sora.langs.php.PHPLanguage;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 import ir.ninjacoder.ghostide.R;
 import io.github.rosemoe.sora.data.CompletionItem;
@@ -22,7 +18,9 @@ import io.github.rosemoe.sora.data.CompletionItem;
 @SuppressWarnings("CanBeFinal")
 public class CustomAdGhostWeb extends EditorCompletionAdapter {
   protected HTMLConstants htmlconfig;
-  protected TextView item_icon, item_label, item_desc, item_type;
+  protected TextView  item_label, item_desc, item_type;
+  View item_icon;
+  
   private io.github.rosemoe.sora.widget.TextSummry.TextUtils textUtils;
 
   public CustomAdGhostWeb() {
@@ -63,11 +61,11 @@ public class CustomAdGhostWeb extends EditorCompletionAdapter {
     item_label.setText(label);
     item_type.setText(item.desc);
     item_desc.setText(item.commit);
-    item_icon.setText(item.label.substring(0, 1));
+    ///  item_icon.setText(item.label.substring(0, 1));
     item_icon.setPadding(9, 9, 9, 9);
     item_label.setTextColor(getThemeColor(EditorColorScheme.ATTRIBUTE_VALUE));
     item_desc.setTextColor(getThemeColor(EditorColorScheme.ATTRIBUTE_VALUE));
-    item_icon.setTextColor(getThemeColor(EditorColorScheme.ATTRIBUTE_VALUE));
+  //  item_icon.setTextColor(getThemeColor(EditorColorScheme.ATTRIBUTE_VALUE));
     item_type.setTextColor(getThemeColor(EditorColorScheme.ATTRIBUTE_VALUE));
     AnimUtils.Sacla(view);
     if (item.desc.equals(htmlconfig.HTMLTAG)) {
@@ -77,26 +75,15 @@ public class CustomAdGhostWeb extends EditorCompletionAdapter {
     } else if (item.desc.equals(htmlconfig.PhpKeys)) {
       item_desc.setText(HtmlHelper.getHelpPhp(item.label));
     } else if (item.desc.equals(htmlconfig.RandomColor)) {
-      AnimUtils.AutoColorSynchronizedfromTxt(Color.parseColor(label.toString()), item_icon);
       item_icon.setBackgroundColor(Color.parseColor(label.toString()));
     } else {
       item_desc.setText(item.desc);
     }
     var editor = getEditor();
-    if (editor.getEditorLanguage() instanceof HTMLLanguage) {
-      //  item_icon.setBackground(colorSet("#FFD67600"));
-    } else if (editor.getEditorLanguage() instanceof JavaScriptLanguage) {
-      item_icon.setBackground(colorSet("#FFFFA940"));
-    } else if (editor.getEditorLanguage() instanceof PHPLanguage) {
-      item_icon.setBackground(colorSet("#FF1B6BFF"));
-    } else if (editor.getEditorLanguage() instanceof JavaLanguage) {
-      item_desc.setText(HtmlHelper.getHelpJava(item.label));
-      item_icon.setBackground(colorSet("#ff720100"));
-    } else if (editor.getEditorLanguage() instanceof KotlinLanguage) {
-      item_desc.setText(HtmlHelper.getHelpKotlin(item.label));
-      item_icon.setBackground(colorSet("#FF9A530B"));
-    }
-
+    
+    // فلن یک رنگ ثابت میدم
+     item_icon.setBackground(new CircleDrawable(getThemeColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER),true,item.label));
+  
     view.setTag(pos);
     return view;
   }

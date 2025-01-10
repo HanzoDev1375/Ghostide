@@ -1,6 +1,6 @@
 package ir.ninjacoder.ghostide.glidecompat;
 
-import ir.ninjacoder.ghostide.ApplicationLoader;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import android.content.Context;
@@ -181,7 +181,7 @@ public class GlideCompat {
       Color.parseColor("#FFFF84D6"),
       Color.parseColor("#FFFF84B3")
     };
-    CircularProgressDrawable app = new CircularProgressDrawable(ApplicationLoader.getContext());
+    CircularProgressDrawable app = new CircularProgressDrawable(GhostIdeAppLoader.getContext());
     app.setStrokeWidth(10f);
     app.setCenterRadius(20f);
     app.setColorSchemeColors(apl);
@@ -240,7 +240,7 @@ public class GlideCompat {
   }
 
   public static void LoadVector(String path, ImageView c) {
-    var vx = new VectorMasterDrawable(ApplicationLoader.getContext(), new File(path));
+    var vx = new VectorMasterDrawable(GhostIdeAppLoader.getContext(), new File(path));
     if (vx.isVector()) {
       vx.setColorFilter(MaterialColors.getColor(c, ObjectUtils.TvColor), PorterDuff.Mode.SRC_IN);
       Glide.with(c.getContext())
