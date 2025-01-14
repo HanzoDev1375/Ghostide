@@ -5,9 +5,7 @@ import ir.ninjacoder.ghostide.activities.BrowserActivity;
 import ir.ninjacoder.ghostide.adapter.ColorRenderAdapter;
 import ir.ninjacoder.ghostide.adapter.JavaASmailAd;
 import ir.ninjacoder.ghostide.config.ChlidJavaList;
-
-import ir.ninjacoder.ghostide.model.CodeNavigationInfo;
-import ir.ninjacoder.ghostide.navigator.SmaliParser;
+import ir.ninjacoder.ghostide.model.JavaModel;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.utils.FileUtil;
 import android.content.Context;
@@ -35,12 +33,10 @@ import com.skydoves.powermenu.MenuBaseAdapter;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
 import io.github.rosemoe.sora.langs.java.JavaLanguage;
-import io.github.rosemoe.sora.langs.smali.SMLang;
 import io.github.rosemoe.sora.langs.xml.XMLLanguage;
 import io.github.rosemoe.sora.widget.CodeEditor;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -365,29 +361,22 @@ public class ColorView {
             new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         rv.setLayoutParams(param);
-        
-        ChlidJavaList javaList = new ChlidJavaList(editor.getText().toString());
-        List<String> mylist = javaList.getAllMethod();
-        List<String> myField = javaList.getAllFileds();
-        List<String> MyEnum = javaList.getAllEnum();
-        List<String> myVar = javaList.getAllVariable();
-        List<String> vaset = new ArrayList<>();
-        vaset.addAll(mylist);
-        vaset.addAll(myField);
-        vaset.addAll(MyEnum);
-        vaset.addAll(myVar);
+        List<JavaModel> list = new ArrayList<>();
+        ChlidJavaList javaList = new ChlidJavaList(editor.getText().toString(), list);
+
         var ad =
             new JavaASmailAd(
-                vaset,
+                list,
                 new JavaASmailAd.OnClickItem() {
 
                   @Override
-                  public void onClick(String info, View v, int pos) {
+                  public void onClick(JavaModel info, View v, int pos) {
                     try {
-                      editor.getSearcher().search(info);
+                      editor.getSearcher().search(info.getCode());
                       editor.getSearcher().gotoNext();
                     } catch (Exception err) {
                       err.printStackTrace();
+                      editor.getSearcher().stopSearch();
                     }
                   }
                 });

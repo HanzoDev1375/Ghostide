@@ -1,5 +1,14 @@
 package ir.ninjacoder.ghostide.utils;
 
+import android.Manifest;
+import android.os.Environment;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import android.content.pm.PackageManager;
+import androidx.core.app.ActivityCompat;
+import android.content.Intent;
+import android.provider.Settings;
+import android.net.Uri;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.utils.FileUtil;
@@ -110,8 +119,7 @@ public class ObjectUtils {
 
     if (window != null) {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        //   window.setStatusBarColor(MaterialColors.getColor(window.getContext(), Back,
-        // Color.BLACK));
+
         window.setNavigationBarColor(
             MaterialColors.getColor(window.getContext(), Back, Color.BLACK));
       }
@@ -434,7 +442,7 @@ public class ObjectUtils {
               view.setTranslationY(0);
             }
           });
-      animator.start(); // Start the animation
+      animator.start();
     }
   }
 
@@ -449,7 +457,7 @@ public class ObjectUtils {
               view.postDelayed(() -> view.setVisibility(View.GONE), 300);
             }
           });
-      animator.start(); // Start the animation
+      animator.start();
     }
   }
 
@@ -547,5 +555,35 @@ public class ObjectUtils {
     scaledBitmap.recycle();
 
     return paddedBitmap;
+  }
+
+  public static boolean checkAndRequestFullStoragePermission(AppCompatActivity app) {
+    var context = GhostIdeAppLoader.getContext();
+    if (Environment.isExternalStorageManager()) {
+      return true;
+    } else if (ContextCompat.checkSelfPermission(app, Manifest.permission.READ_EXTERNAL_STORAGE)
+        == PackageManager.PERMISSION_GRANTED) {
+      return true;
+    } else {
+
+      if (ActivityCompat.shouldShowRequestPermissionRationale(
+          app, Manifest.permission.READ_EXTERNAL_STORAGE)) {}
+
+      ActivityCompat.requestPermissions(
+          app, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, 1000);
+
+      try {
+        Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+        Uri uri = Uri.fromParts("package", context.getPackageName(), null);
+        intent.setData(uri);
+        context.startActivity(intent);
+      } catch (Exception ex) {
+        Intent intent = new Intent();
+        intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+        context.startActivity(intent);
+      }
+
+      return false;
+    }
   }
 }

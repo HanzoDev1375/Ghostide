@@ -50,7 +50,12 @@ public class SplashWord extends AppIntro2 {
     var ghostPath = "/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost";
     var ghostStyle = "/storage/emulated/0/GhostWebIDE/theme/style.ghost";
 
-    TestFragment t1 = TestFragment.newIns("theme.json", "Permissions", "Submit all files", true);
+    TestFragment t1 =
+        TestFragment.newIns(
+            "theme.json",
+            "Permissions",
+            "Submit all files",
+            ObjectUtils.checkAndRequestFullStoragePermission(this));
     t1.setCallBack(
         () -> {
           runtimePermissions();
@@ -75,7 +80,7 @@ public class SplashWord extends AppIntro2 {
           FileUtil.makeDir("/storage/emulated/0/ghostweb/icon/svg");
           FileUtil.makeDir("/storage/emulated/0/GhostWebIDE/font");
           FileUtil.makeDir("/storage/emulated/0/GhostWebIDE/apk");
-
+          FileUtil.makeDir("/storage/emulated/0/GhostWebIDE/appicon");
           try {
             if (!FileUtil.isExistFile(ghostPath)) {
               ThemeUtils.winterToPath();
@@ -217,9 +222,8 @@ public class SplashWord extends AppIntro2 {
           startActivity(intent);
         }
       }
-    } else { 
-      
-      
+    } else {
+
       if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
           == PackageManager.PERMISSION_DENIED) {
         ActivityCompat.requestPermissions(

@@ -1,112 +1,84 @@
 package ir.ninjacoder.ghostide.config;
 
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.body.AnnotationDeclaration;
+import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.expr.TypeExpr;
+import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import ir.ninjacoder.ghostide.model.JavaModel;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ChlidJavaList {
 
   private String code;
+  private List<JavaModel> listJava = new ArrayList<>();
 
-  public ChlidJavaList(String code) {
+  public ChlidJavaList(String code, List<JavaModel> listJava) {
     this.code = code;
+    this.listJava = listJava;
+    run();
   }
 
-  public List<String> getAllMethod() {
-    List<String> child = new ArrayList<>();
-
-    CompilationUnit cu = StaticJavaParser.parse(code);
-    VoidVisitorAdapter<Void> methodNameVisitor =
+  void run() {
+    var cu = StaticJavaParser.parse(code);
+    cu.accept(
         new VoidVisitorAdapter<Void>() {
           @Override
           public void visit(MethodDeclaration n, Void arg) {
             super.visit(n, arg);
-            // چاپ نام توابع
-            System.out.println("Method Name: " + n.getNameAsString());
-            child.add(n.getNameAsString());
+            listJava.add(new JavaModel("Method ", n.getNameAsString()));
           }
-        };
-    methodNameVisitor.visit(cu, null);
 
-    return child;
-  }
-
-  public List<String> getAllEnum() {
-    List<String> child = new ArrayList<>();
-
-    CompilationUnit cu = StaticJavaParser.parse(code);
-    VoidVisitorAdapter<Void> methodNameVisitor =
-        new VoidVisitorAdapter<Void>() {
           @Override
           public void visit(EnumDeclaration n, Void arg) {
             super.visit(n, arg);
-            // چاپ نام توابع
-            System.out.println("" + n.getNameAsString());
-            child.add(n.getNameAsString());
+            listJava.add(new JavaModel("Enum ", n.getNameAsString()));
           }
-        };
-    methodNameVisitor.visit(cu, null);
 
-    return child;
-  }
-
-  public List<String> getAllVariable() {
-    List<String> child = new ArrayList<>();
-
-    CompilationUnit cu = StaticJavaParser.parse(code);
-    VoidVisitorAdapter<Void> methodNameVisitor =
-        new VoidVisitorAdapter<Void>() {
           @Override
           public void visit(VariableDeclarator n, Void arg) {
             super.visit(n, arg);
-            // چاپ نام توابع
-            System.out.println("Variable Name: " + n.getNameAsString());
-
-            child.add(n.getNameAsString());
+            listJava.add(new JavaModel("Variable ", n.getNameAsString()));
           }
-        };
-    methodNameVisitor.visit(cu, null);
 
-    return child;
-  }
+          @Override
+          public void visit(AnnotationDeclaration n, Void arg1) {
+            super.visit(n, arg1);
+            listJava.add(new JavaModel("Annotation ", n.getNameAsString()));
+          }
 
-  public List<String> getAllFileds() {
-    List<String> child = new ArrayList<>();
+          @Override
+          public void visit(ClassOrInterfaceType n, Void arg1) {
+            super.visit(n, arg1);
+            listJava.add(new JavaModel("Class ", n.getNameAsString()));
+          }
 
-    CompilationUnit cu = StaticJavaParser.parse(code);
-    FieldNameVisitor fieldNameVisitor = new FieldNameVisitor();
-    fieldNameVisitor.visit(cu, null);
-    List<String> fields = fieldNameVisitor.getFields();
+          @Override
+          public void visit(ConstructorDeclaration n, Void arg1) {
+            super.visit(n, arg1);
+            listJava.add(new JavaModel("Constructor ", n.getNameAsString()));
+          }
 
-    System.out.println("Fields:");
-    for (String field : fields) {
+          @Override
+          public void visit(PackageDeclaration n, Void arg1) {
+            super.visit(n, arg1);
+            listJava.add(new JavaModel("Package ", n.getNameAsString()));
+          }
 
-      child.add(field);
-    }
+          @Override
+          public void visit(TypeParameter n, Void arg1) {
+            super.visit(n, arg1);
 
-    return child;
-  }
-
-  class FieldNameVisitor extends VoidVisitorAdapter<Void> {
-    private List<String> fields = new ArrayList<>();
-
-    @Override
-    public void visit(FieldDeclaration n, Void arg) {
-      super.visit(n, arg);
-      for (VariableDeclarator var : n.getVariables()) {
-        System.out.println("Field Name: " + var.getNameAsString());
-        fields.add(var.getNameAsString());
-      }
-    }
-
-    public List<String> getFields() {
-      return fields;
-    }
+            listJava.add(new JavaModel("TypeParameter ", n.getNameAsString()));
+          }
+        },
+        null);
   }
 }

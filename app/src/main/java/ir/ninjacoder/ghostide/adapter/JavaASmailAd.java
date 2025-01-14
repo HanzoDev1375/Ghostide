@@ -6,19 +6,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
+import ir.ninjacoder.ghostide.model.JavaModel;
+import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import java.util.List;
 
 public class JavaASmailAd extends RecyclerView.Adapter<JavaASmailAd.Holder> {
-  protected List<String> codeInfo;
+  protected List<JavaModel> codeInfo;
   protected OnClickItem item;
 
-  public JavaASmailAd(List<String> codeInfo, OnClickItem item) {
+  public JavaASmailAd(List<JavaModel> codeInfo, OnClickItem item) {
     this.codeInfo = codeInfo;
     this.item = item;
   }
 
   public interface OnClickItem {
-    public void onClick(String info, View v, int pos);
+    public void onClick(JavaModel info, View v, int pos);
   }
 
   @Override
@@ -30,9 +32,10 @@ public class JavaASmailAd extends RecyclerView.Adapter<JavaASmailAd.Holder> {
   public void onBindViewHolder(Holder holder, int pos) {
     var iritem = codeInfo.get(holder.getAdapterPosition());
     /** holder match */
-    holder.tvnormaltext.setText(iritem);
+    holder.tvnormaltext.setText(iritem.getCode());
     holder.itemView.setOnClickListener(v -> item.onClick(iritem,v,holder.getAdapterPosition()));
-    holder.tvtitle.setText(holder.tvnormaltext.getText().toString().substring(0,1));
+    holder.tvtitle.setText(iritem.getName().substring(0,1));
+    ObjectUtils.shapeView(holder.tvtitle);
   }
 
   @Override

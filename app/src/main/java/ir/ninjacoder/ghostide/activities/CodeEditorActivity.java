@@ -762,7 +762,7 @@ public class CodeEditorActivity extends AppCompatActivity {
   public void _managerpanel(final View _view) {
     pvr =
         new PowerMenu.Builder(CodeEditorActivity.this)
-            .addItem(new PowerMenuItem("Search Text", true, R.drawable.textsearch))
+            .addItem(new PowerMenuItem("Search Text", false, R.drawable.textsearch))
             .addItem(new PowerMenuItem("Color", false, R.drawable.color))
             .addItem(new PowerMenuItem("Log cat", false, R.drawable.codeformat))
             .addItem(new PowerMenuItem("Save", false, R.drawable.save))
