@@ -1,5 +1,6 @@
 package ir.ninjacoder.ghostide.config;
 
+import android.graphics.Color;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
@@ -33,50 +34,49 @@ public class ChlidJavaList {
           @Override
           public void visit(MethodDeclaration n, Void arg) {
             super.visit(n, arg);
-            listJava.add(new JavaModel("Method ", n.getNameAsString()));
+            listJava.add(new JavaModel("Method ", n.getNameAsString(),Color.YELLOW));
           }
 
           @Override
           public void visit(EnumDeclaration n, Void arg) {
             super.visit(n, arg);
-            listJava.add(new JavaModel("Enum ", n.getNameAsString()));
+            listJava.add(new JavaModel("Enum ", n.getNameAsString(),Color.parseColor("#FFFF3784")));
           }
 
           @Override
           public void visit(VariableDeclarator n, Void arg) {
             super.visit(n, arg);
-            listJava.add(new JavaModel("Variable ", n.getNameAsString()));
+            listJava.add(new JavaModel("Variable ", n.getNameAsString(),Color.parseColor("#FFFF8737")));
           }
 
           @Override
           public void visit(AnnotationDeclaration n, Void arg1) {
             super.visit(n, arg1);
-            listJava.add(new JavaModel("Annotation ", n.getNameAsString()));
+            listJava.add(new JavaModel("Annotation ", n.getNameAsString(),Color.parseColor("#FFFFD437")));
           }
 
           @Override
           public void visit(ClassOrInterfaceType n, Void arg1) {
             super.visit(n, arg1);
-            listJava.add(new JavaModel("Class ", n.getNameAsString()));
+            listJava.add(new JavaModel("Class ", n.getNameAsString(),Color.BLUE));
           }
 
           @Override
           public void visit(ConstructorDeclaration n, Void arg1) {
             super.visit(n, arg1);
-            listJava.add(new JavaModel("Constructor ", n.getNameAsString()));
+            listJava.add(new JavaModel("Constructor ", n.getNameAsString(),Color.CYAN));
           }
 
           @Override
           public void visit(PackageDeclaration n, Void arg1) {
             super.visit(n, arg1);
-            listJava.add(new JavaModel("Package ", n.getNameAsString()));
+            listJava.add(new JavaModel("Package ", n.getNameAsString(),Color.RED));
           }
 
           @Override
           public void visit(TypeParameter n, Void arg1) {
             super.visit(n, arg1);
-
-            listJava.add(new JavaModel("TypeParameter ", n.getNameAsString()));
+            listJava.add(new JavaModel("TypeParameter ", n.getNameAsString(),Color.CYAN));
           }
         },
         null);

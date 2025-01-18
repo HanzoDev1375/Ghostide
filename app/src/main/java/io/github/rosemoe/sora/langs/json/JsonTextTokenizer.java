@@ -298,8 +298,6 @@ public class JsonTextTokenizer {
     }
   }
 
-  
-
   protected Tokens scanIdentifier(char ch) {
     TrieTree.Node<Tokens> n = keywords.root.map.get(ch);
     boolean isClassName = Character.isUpperCase(ch);
@@ -502,5 +500,9 @@ public class JsonTextTokenizer {
     offset = 0;
     currToken = Tokens.WHITESPACE;
     bufferLen = src.length();
+  }
+
+  public CharSequence getSource() {
+    return this.source;
   }
 }

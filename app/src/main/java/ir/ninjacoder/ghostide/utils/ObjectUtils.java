@@ -558,7 +558,7 @@ public class ObjectUtils {
   }
 
   public static boolean checkAndRequestFullStoragePermission(AppCompatActivity app) {
-    var context = GhostIdeAppLoader.getContext();
+    var context = app;
     if (Environment.isExternalStorageManager()) {
       return true;
     } else if (ContextCompat.checkSelfPermission(app, Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -576,9 +576,11 @@ public class ObjectUtils {
         Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
         Uri uri = Uri.fromParts("package", context.getPackageName(), null);
         intent.setData(uri);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
       } catch (Exception ex) {
         Intent intent = new Intent();
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
         context.startActivity(intent);
       }

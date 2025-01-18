@@ -196,7 +196,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
   private GridLayoutManager gridLayoutManager;
   private SharedPreferences sharedPreferences;
 
-
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
     super.onCreate(_savedInstanceState);
@@ -228,18 +227,19 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
   }
 
   private void initialize(Bundle _savedInstanceState) {
-    
+
     startService(new Intent(getApplicationContext(), MediaListenerService.class));
     // from protected NavigationViewCompnet bind.navs;
-    
-   // setSupportActionBar(searchbar);
+
+    // setSupportActionBar(searchbar);
     gridLayoutManager = new GridLayoutManager(this, 1);
     gridMode = getSharedPreferences("gride", Activity.MODE_PRIVATE);
-//    ActionBarDrawerToggle _toggle =
-//        new ActionBarDrawerToggle(
-//            FileManagerActivity.this, bind.Drawer, searchbar, R.string.app_name, R.string.app_name);
-//    bind.Drawer.addDrawerListener(_toggle);
-//    _toggle.syncState();
+    //    ActionBarDrawerToggle _toggle =
+    //        new ActionBarDrawerToggle(
+    //            FileManagerActivity.this, bind.Drawer, searchbar, R.string.app_name,
+    // R.string.app_name);
+    //    bind.Drawer.addDrawerListener(_toggle);
+    //    _toggle.syncState();
     fileListItem = new FileManagerAd(files, FileManagerActivity.this, this);
     shp = getSharedPreferences("shp", Activity.MODE_PRIVATE);
     soglo = getSharedPreferences("soglo", Activity.MODE_PRIVATE);
@@ -254,10 +254,10 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     base = getSharedPreferences("base", Activity.MODE_PRIVATE);
     save_path = getSharedPreferences("save_path", Activity.MODE_PRIVATE);
     materialYou = getSharedPreferences("materialYou", Activity.MODE_PRIVATE);
-    
+
     book = getSharedPreferences("hsipsot4444", Activity.MODE_PRIVATE);
-    
-  //WindowsMath(bind.Drawer, _coordinator);
+
+    // WindowsMath(bind.Drawer, _coordinator);
     BackPressed();
     if (gridMode.contains("gride")) {
       setViewType(ViewType.GRID);
@@ -332,7 +332,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
               di.setNeutralButton(
                   "Update",
                   (p, d) -> {
-                  
                     bind.downloder.setTitle(upfile.get(0).get("Title").toString());
                     bind.downloder.setSizeTitle(upfile.get(0).get("sizearm64").toString());
                     bind.downloder.setVisibility(View.VISIBLE);
@@ -466,7 +465,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     // if not allowed
     utils.requestPermissionAllFilesAccess();
     RefreshTabs();
-     
+
     AnimUtils.Worker(bind.fabAdd);
     bind.fabAdd.setText("Create");
     bind.fabAdd.setIconResource(R.drawable.create);
@@ -475,7 +474,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
         v -> {
           DialogItemSheet();
         });
-    
+
     bind.navs.getMenu().add(0, 1, 0, "SanDisk Card").setIcon(R.drawable.drawer_item12);
     bind.navs.getMenu().add(0, 2, 0, "Java code").setIcon(R.drawable.drawer_item14);
     bind.navs.getMenu().add(0, 3, 0, "Terminal").setIcon(R.drawable.drawer_item13);
@@ -1236,9 +1235,13 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     if (staticstring.endsWith(".cpp")) {
       SendDataFromCodeEditor(newpos, "path", files, newlistmap);
     }
+    if (staticstring.endsWith(".dex")) {
+      loadjadx();
+    }
     if (staticstring.endsWith(".py")) {
       SendDataFromCodeEditor(newpos, "path", files, newlistmap);
     }
+
     if (staticstring.endsWith(".ghost")) {
       /// SendDataFromCodeEditor(newpos, "path", files, newlistmap);
       var it = new Intent();
@@ -1544,7 +1547,22 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
             apkInstaller.execute();
           }
         });
+    builder.setNegativeButton(
+        "decompiler",
+        (d, c) -> {
+          loadjadx();
+        });
     builder.show();
+  }
+
+  void loadjadx() {
+    new JadxDecompiler(
+        this,
+        staticstring,
+        Folder + "/",
+        (it) -> {
+          reLoadFile();
+        });
   }
 
   public void _targz(final String _in, final String _ou) {
@@ -1714,7 +1732,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
               Folder = FileUtil.getExternalStorageDir();
               DataUtil.showMessage(getApplicationContext(), FileUtil.getExternalStorageDir());
               reLoadFile();
-              
+
               bind.Drawer.closeDrawer(GravityCompat.START);
             } else {
               staticStorage = true;

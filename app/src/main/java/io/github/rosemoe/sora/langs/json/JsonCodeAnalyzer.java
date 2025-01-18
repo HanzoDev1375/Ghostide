@@ -98,7 +98,7 @@ public class JsonCodeAnalyzer implements CodeAnalyzer {
           if (RegexUtilCompat.RegexSelect(
               "(\\#[a-zA-F0-9]{8})|(\\#[a-zA-F0-9]{6})|(\\#[a-zA-F0-9]{3})", content.toString())) {
             var colors = result;
-            String colorString = content.toString();
+            String colorString = tokenizer.getSource().toString();
             var text1 = colorString;
             if (colorString.length() == 4) { // اگر رنگ سه رقمی باشد
               String red = colorString.substring(1, 2);
@@ -215,10 +215,29 @@ public class JsonCodeAnalyzer implements CodeAnalyzer {
         case LBRACE:
           {
             classNamePrevious = false;
-            result.addIfNeeded(
-                line,
-                column,
-                TextStyle.makeStyle(EditorColorScheme.BLOCK_LINE, 0, true, false, false));
+            var colorid = EditorColorScheme.BLOCK_LINE;
+            switch (stack.size()) {
+              case 1:
+                colorid = EditorColorScheme.ATTRIBUTE_NAME;
+                break;
+              case 2:
+                colorid = EditorColorScheme.ATTRIBUTE_VALUE;
+                break;
+              case 3:
+                colorid = EditorColorScheme.HTML_TAG;
+                break;
+              case 4:
+                colorid = EditorColorScheme.LITERAL;
+                break;
+              case 5:
+                colorid = EditorColorScheme.KEYWORD;
+                break;
+              case 6:
+                colorid = EditorColorScheme.javafun;
+                break;
+            }
+
+            result.addIfNeeded(line, column, TextStyle.makeStyle(colorid, 0, true, false, false));
             if (stack.isEmpty()) {
               if (currSwitch > maxSwitch) {
                 maxSwitch = currSwitch;
@@ -235,10 +254,29 @@ public class JsonCodeAnalyzer implements CodeAnalyzer {
         case RBRACE:
           {
             classNamePrevious = false;
-            result.addIfNeeded(
-                line,
-                column,
-                TextStyle.makeStyle(EditorColorScheme.BLOCK_LINE, 0, true, false, false));
+            var colorids = EditorColorScheme.BLOCK_LINE;
+            switch (stack.size()) {
+              case 1:
+                colorids = EditorColorScheme.ATTRIBUTE_NAME;
+                break;
+              case 2:
+                colorids = EditorColorScheme.ATTRIBUTE_VALUE;
+                break;
+              case 3:
+                colorids = EditorColorScheme.HTML_TAG;
+                break;
+              case 4:
+                colorids = EditorColorScheme.LITERAL;
+                break;
+              case 5:
+                colorids = EditorColorScheme.KEYWORD;
+                break;
+              case 6:
+                colorids = EditorColorScheme.javafun;
+                break;
+              
+            }
+            result.addIfNeeded(line, column, TextStyle.makeStyle(colorids, 0, true, false, false));
             if (!stack.isEmpty()) {
               BlockLine block = stack.pop();
               block.endLine = line;

@@ -46,6 +46,10 @@ public class FileEnvironmentHelper {
     return new AndroidDevHelper(this);
   }
 
+  public NinjaProjectHelper ninjaprojects() {
+    return new NinjaProjectHelper(this);
+  }
+
   public boolean isNpmPackageJson() {
     return nodejs().isNodeJsPackageJsonFile()
         | angularjs().isAngularJsPackageJsonFile()
@@ -55,6 +59,10 @@ public class FileEnvironmentHelper {
 
   public boolean isLicenseFile() {
     return isFileHasKeyRegex(filePath, "(?i)license(\\.(txt|md))?");
+  }
+
+  public boolean isdrawableFolder() {
+    return isFolderKeyRegex(filePath, "(drawable).*");
   }
 
   public boolean isSrcDirectory() {
@@ -103,6 +111,11 @@ public class FileEnvironmentHelper {
 
   public boolean isAlarmsDirectory() {
     return isFileHasKeyName(filePath, "Alarms", false, false);
+  }
+
+  public boolean isNinjaProjectx() {
+    return isFileHasKeyName(filePath, "apps", false, false)
+        || isFileHasKeyName(filePath, "ninjas", false, false);
   }
 
   public boolean isAppIcon() {
@@ -180,6 +193,15 @@ public class FileEnvironmentHelper {
     String fileName = file.getName();
     return fileName.matches(regex);
   }
+  
+  public boolean isFolderKeyRegex(String filePath,String regex){
+    File file = new File(filePath);
+    if(!file.isDirectory()) return false;
+    var get = file.getName();
+    return get.matches(regex);
+  }
+
+  
 
   public boolean isFileHasKeyName(
       String filePath, String name, boolean isDir, boolean isIgnoreCase) {
@@ -322,6 +344,18 @@ public class FileEnvironmentHelper {
 
     public boolean isAndroidDevDirectory() {
       return AndroidDevDetector.isAndroidDevDirectory(instance.filePath);
+    }
+  }
+
+  public static class NinjaProjectHelper {
+    private FileEnvironmentHelper ev;
+
+    public NinjaProjectHelper(FileEnvironmentHelper ev) {
+      this.ev = ev;
+    }
+
+    public boolean isNinjaDev() {
+      return NinjaProjectDetector.isNinjaLang(ev.filePath);
     }
   }
 }

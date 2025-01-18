@@ -89,7 +89,6 @@ public class FileIconHelperPath {
     check();
   }
 
-  
   public void bind(ImageView imageView) {
     // بارگذاری تصویر با Glide از مسیر فایل
     Glide.with(imageView.getContext())
@@ -168,6 +167,8 @@ public class FileIconHelperPath {
           fileIconPath = ICON_PATH + "/ic_material_folder_android.png";
         else if (fileEnvHelper.git().isGitDirectory())
           fileIconPath = ICON_PATH + "/ic_material_folder_git.png";
+        else if (fileEnvHelper.isdrawableFolder())
+          fileIconPath = ICON_PATH + "/ic_material_android_drawable.png";
       } catch (Exception err) {
         fileIconPath = ICON_PATH + "/ic_material_folder.png";
       }

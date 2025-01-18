@@ -102,6 +102,7 @@ public class FileIconHelper {
           fileIconRes = R.drawable.ic_material_folder_git;
         else if (fileEnvHelper.ghost().isGhostFile()) fileIconRes = R.drawable.app_icon;
         else if (fileEnvHelper.ghost().isAppLego()) fileIconRes = R.drawable.vector_folder_ghostweb;
+        else if (fileEnvHelper.ninjaprojects().isNinjaDev()) fileIconRes = R.drawable.ghosticons;
       } else {
         if (fileEnvHelper.isJavaDirectory()) fileIconRes = R.drawable.ic_material_folder_java;
         else if (fileEnvHelper.isJavascriptDirectory())
@@ -136,6 +137,7 @@ public class FileIconHelper {
         else if (fileEnvHelper.isWebDirectory()) fileIconRes = R.drawable.folder_views;
         else if (fileEnvHelper.isAntlr4Directory()) fileIconRes = R.drawable.folder_ansible;
         else if (fileEnvHelper.isToolsDirectory()) fileIconRes = R.drawable.folder_tools;
+        else if (fileEnvHelper.isNinjaProjectx()) fileIconRes = R.drawable.ghosticonred;
       }
     } else {
       if (FileUtil.isFileHidden(filePath)) fileIconRes = R.drawable.ic_material_folder_secure;

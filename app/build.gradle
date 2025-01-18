@@ -47,6 +47,7 @@ android {
         exclude "about_files/LICENSE-2.0.txt"
         exclude "plugin.xml"
         exclude "plugin.properties"
+        exclude "baksmali.properties"
     }
     lintOptions {
         checkReleaseBuilds false
@@ -115,7 +116,7 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
     implementation("com.google.code.gson:gson:2.11.0")
-
+    def jadxVersion = "1.5.1"
     implementation project(path: ":Plugin")
     implementation project(path: ":pl-codecomment") 	
     implementation project(path: ":jgit")
@@ -188,5 +189,6 @@ dependencies {
     // https://mvnrepository.com/artifact/com.diogonunes/JColor
     implementation("com.diogonunes:JColor:5.5.1")
     // https://mvnrepository.com/artifact/com.google.guava/guava
-    
+    implementation("io.github.skylot:jadx-core:$jadxVersion")
+    implementation("io.github.skylot:jadx-dex-input:$jadxVersion")
 }

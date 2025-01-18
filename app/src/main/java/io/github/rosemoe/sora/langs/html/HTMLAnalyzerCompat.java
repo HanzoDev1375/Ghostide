@@ -1,5 +1,6 @@
 package io.github.rosemoe.sora.langs.html;
 
+import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.marco.RegexUtilCompat;
 import android.graphics.Color;
@@ -377,33 +378,81 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
               result.addIfNeeded(line, column, colorid);
               break;
             }
+          case HTMLLexer.HTMLRGB:
+            ListCss3Color.getHexColor(token, line, column, result);
+            // result.addIfNeeded(line, column, EditorColorScheme.COLOR_DEBUG);
+            break;
+          case HTMLLexer.HSL:
+            ListCss3Color.getHslColor(token, line, column, result);
+            break;
           case HTMLLexer.LBRACE:
-            //  result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
             if (stack.isEmpty()) {
               if (currSwitch > maxSwitch) {
                 maxSwitch = currSwitch;
               }
-              currSwitch = 0;
+              currSwitch = 0; // ریست کردن currSwitch
             }
             currSwitch++;
             BlockLine block = result.obtainNewBlock();
             block.startLine = line;
             block.startColumn = column;
+            // max level 8x
+            var colorid = EditorColorScheme.htmlblocknormal;
+            if (stack.size() == 1) {
+              colorid = EditorColorScheme.ATTRIBUTE_NAME;
+            } else if (stack.size() == 2) {
+              colorid = EditorColorScheme.ATTRIBUTE_VALUE;
+            } else if (stack.size() == 3) {
+              colorid = EditorColorScheme.HTML_TAG;
+            } else if (stack.size() == 4) {
+              colorid = EditorColorScheme.htmlattr;
+            } else if (stack.size() == 5) {
+              colorid = EditorColorScheme.htmlattrname;
+            } else if (stack.size() == 6) {
+              colorid = EditorColorScheme.pycolormatch1;
+            } else if (stack.size() == 7) {
+              colorid = EditorColorScheme.pycolormatch2;
+            } else if (stack.size() == 8) {
+              colorid = EditorColorScheme.pycolormatch3;
+            } else colorid = EditorColorScheme.htmlblocknormal;
             stack.push(block);
-            result.addIfNeeded(line, column, EditorColorScheme.htmlblocknormal);
-            break;
-          case HTMLLexer.RBRACE:
-            if (!stack.isEmpty()) {
-              BlockLine b = stack.pop();
-              b.endLine = line;
-              b.endColumn = column;
 
-              if (b.startLine != b.endLine) {
-                result.addBlockLine(b);
-              }
-            }
-            result.addIfNeeded(line, column, EditorColorScheme.htmlblocknormal);
+            result.addIfNeeded(line, column, colorid);
             break;
+
+          case HTMLLexer.RBRACE:
+            {
+              if (!stack.isEmpty()) {
+                BlockLine b = stack.pop();
+                b.endLine = line;
+                b.endColumn = column;
+
+                if (b.startLine != b.endLine || b.startColumn != b.endColumn) {
+                  result.addBlockLine(b);
+                }
+              }
+              // اضافه کردن رنگ برای RBRACE
+              var colorres = EditorColorScheme.htmlblocknormal;
+              if (stack.size() == 1) {
+                colorres = EditorColorScheme.ATTRIBUTE_NAME;
+              } else if (stack.size() == 2) {
+                colorres = EditorColorScheme.ATTRIBUTE_VALUE;
+              } else if (stack.size() == 3) {
+                colorres = EditorColorScheme.HTML_TAG;
+              } else if (stack.size() == 4) {
+                colorres = EditorColorScheme.htmlattr;
+              } else if (stack.size() == 5) {
+                colorres = EditorColorScheme.htmlattrname;
+              } else if (stack.size() == 6) {
+                colorres = EditorColorScheme.pycolormatch1;
+              } else if (stack.size() == 7) {
+                colorres = EditorColorScheme.pycolormatch2;
+              } else if (stack.size() == 8) {
+                colorres = EditorColorScheme.pycolormatch3;
+              } else colorres = EditorColorScheme.htmlblocknormal;
+              result.addIfNeeded(line, column, colorres);
+              break;
+            }
           case HTMLLexer.COLORSSS:
             result.addIfNeeded(
                 line,

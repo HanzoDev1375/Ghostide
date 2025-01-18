@@ -1098,3 +1098,42 @@ CSSDOMATTR
    | 'ch'
    ;
 
+fragment INEGETRGB
+   : [0-9]+
+   ;
+
+HTMLRGB
+   : 'rgb(' INEGETRGB ',' INEGETRGB ',' INEGETRGB ')'
+   | 'hsl(' INEGETRGB ',' INEGETRGB ',' INEGETRGB ')'
+   ;
+   //hsl(300, 10%, 300%,1)
+   
+HSL
+   : 'hsl(' HUE ',' SATURATION ',' LIGHTNESS (',' ALPHA)? ')'
+   ;
+
+fragment HUE
+   : INTS
+   ;
+
+fragment SATURATION
+   : INTS '%'
+   ;
+
+fragment LIGHTNESS
+   : INTS '%'
+   ;
+
+fragment ALPHA
+   : FLOATS
+   ;
+
+fragment INTS
+   : [0-9]+
+   ;
+
+fragment FLOATS
+   : [0-1]? '.' [0-9]+
+   | [0-1]
+   ;
+
