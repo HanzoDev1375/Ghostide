@@ -52,7 +52,7 @@ public class SplashWord extends AppIntro2 {
 
     TestFragment t1 =
         TestFragment.newIns(
-            "theme.json",
+            "prm.json",
             "Permissions",
             "Submit all files",
             ObjectUtils.checkAndRequestFullStoragePermission(this));
