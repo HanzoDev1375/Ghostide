@@ -1,5 +1,7 @@
 package io.github.rosemoe.sora.langs.json;
 
+import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.marco.RegexUtilCompat;
 import android.graphics.Color;
 import android.util.Log;
@@ -215,29 +217,6 @@ public class JsonCodeAnalyzer implements CodeAnalyzer {
         case LBRACE:
           {
             classNamePrevious = false;
-            var colorid = EditorColorScheme.BLOCK_LINE;
-            switch (stack.size()) {
-              case 1:
-                colorid = EditorColorScheme.ATTRIBUTE_NAME;
-                break;
-              case 2:
-                colorid = EditorColorScheme.ATTRIBUTE_VALUE;
-                break;
-              case 3:
-                colorid = EditorColorScheme.HTML_TAG;
-                break;
-              case 4:
-                colorid = EditorColorScheme.LITERAL;
-                break;
-              case 5:
-                colorid = EditorColorScheme.KEYWORD;
-                break;
-              case 6:
-                colorid = EditorColorScheme.javafun;
-                break;
-            }
-
-            result.addIfNeeded(line, column, TextStyle.makeStyle(colorid, 0, true, false, false));
             if (stack.isEmpty()) {
               if (currSwitch > maxSwitch) {
                 maxSwitch = currSwitch;
@@ -245,38 +224,23 @@ public class JsonCodeAnalyzer implements CodeAnalyzer {
               currSwitch = 0;
             }
             currSwitch++;
+
             BlockLine block = result.obtainNewBlock();
             block.startLine = line;
             block.startColumn = column;
+            var colorid = EditorColorScheme.htmlblocknormal;
+
+            if (GhostIdeAppLoader.getPrefManager().getBoolean("breaks", false) == true)
+              colorid = HTMLConstants.get(stack.size());
+            else colorid = EditorColorScheme.htmlblocknormal;
+            result.addIfNeeded(line, column, TextStyle.makeStyle(colorid, 0, true, false, false));
             stack.push(block);
             break;
           }
         case RBRACE:
           {
             classNamePrevious = false;
-            var colorids = EditorColorScheme.BLOCK_LINE;
-            switch (stack.size()) {
-              case 1:
-                colorids = EditorColorScheme.ATTRIBUTE_NAME;
-                break;
-              case 2:
-                colorids = EditorColorScheme.ATTRIBUTE_VALUE;
-                break;
-              case 3:
-                colorids = EditorColorScheme.HTML_TAG;
-                break;
-              case 4:
-                colorids = EditorColorScheme.LITERAL;
-                break;
-              case 5:
-                colorids = EditorColorScheme.KEYWORD;
-                break;
-              case 6:
-                colorids = EditorColorScheme.javafun;
-                break;
-              
-            }
-            result.addIfNeeded(line, column, TextStyle.makeStyle(colorids, 0, true, false, false));
+
             if (!stack.isEmpty()) {
               BlockLine block = stack.pop();
               block.endLine = line;
@@ -285,6 +249,11 @@ public class JsonCodeAnalyzer implements CodeAnalyzer {
                 result.addBlockLine(block);
               }
             }
+            var colorres = EditorColorScheme.htmlblocknormal;
+            if (GhostIdeAppLoader.getPrefManager().getBoolean("breaks", false) == true)
+              colorres = HTMLConstants.get(stack.size());
+            else colorres = EditorColorScheme.htmlblocknormal;
+            result.addIfNeeded(line, column, TextStyle.makeStyle(colorres, 0, true, false, false));
             break;
           }
         case CHARACTER_LITERAL:

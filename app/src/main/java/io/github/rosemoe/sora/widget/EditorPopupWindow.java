@@ -26,7 +26,7 @@ package io.github.rosemoe.sora.widget;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.PopupWindow;
-
+import android.transition.Transition;
 import androidx.annotation.NonNull;
 
 import com.google.android.material.transition.platform.MaterialSharedAxis;
@@ -242,9 +242,12 @@ public class EditorPopupWindow {
   }
 
   void customAnimByMaterial() {
-    var enter = new MaterialSharedAxis(MaterialSharedAxis.Z, true);
+    Transition enter = new MaterialSharedAxis(MaterialSharedAxis.Z, true);
+    enter.setDuration(200);
     mWindow.setEnterTransition(enter);
-    var exit = new MaterialSharedAxis(MaterialSharedAxis.Z, false);
+    Transition exit = new MaterialSharedAxis(MaterialSharedAxis.Z, false);
+    exit.setDuration(200);
     mWindow.setExitTransition(exit);
+    
   }
 }

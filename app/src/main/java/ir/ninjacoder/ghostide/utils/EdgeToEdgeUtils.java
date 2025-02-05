@@ -28,6 +28,7 @@ import com.google.android.material.color.MaterialColors;
  * @see <a
  *     href="https://github.com/material-components/material-components-android/blob/master/lib/java/com/google/android/material/internal/EdgeToEdgeUtils.java">EdgeToEdgeUtils.java</a>
  */
+@Deprecated
 public class EdgeToEdgeUtils {
 
   private static final int EDGE_TO_EDGE_BAR_ALPHA = 128;

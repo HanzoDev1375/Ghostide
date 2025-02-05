@@ -29,15 +29,15 @@ public class Utils {
           if (last.column <= column - 1 && span.column >= column - 1) {
             span.problemFlags = Span.FLAG_ERROR;
             last.problemFlags = Span.FLAG_ERROR;
-        //    span.style = EditorColorScheme.PROBLEM_ERROR;
-           // last.style = EditorColorScheme.PROBLEM_ERROR;
+            //    span.style = EditorColorScheme.PROBLEM_ERROR;
+            // last.style = EditorColorScheme.PROBLEM_ERROR;
             end[1] = last.column;
             break;
           }
         }
         if (i == spans.size() - 1 && span.column <= column - 1) {
           span.problemFlags = Span.FLAG_ERROR;
-      //    span.style = EditorColorScheme.PROBLEM_ERROR;
+          //    span.style = EditorColorScheme.PROBLEM_ERROR;
           end[1] = span.column;
           break;
         }
@@ -49,6 +49,10 @@ public class Utils {
   }
 
   public static int[] setWaringSpan(TextAnalyzeResult colors, int line, int column) {
+    return setWaringSpan(colors, line, column, EditorColorScheme.PROBLEM_WARNING);
+  }
+
+  public static int[] setWaringSpan(TextAnalyzeResult colors, int line, int column, int mcolor) {
     int lineCount = colors.getSpanMap().size();
     int realLine = line - 1;
     List<Span> spans = colors.getSpanMap().get(Math.min(realLine, lineCount - 1));
@@ -57,7 +61,7 @@ public class Utils {
     end[0] = Math.min(realLine, lineCount - 1);
 
     if (realLine >= lineCount) {
-      Span span = Span.obtain(0, EditorColorScheme.PROBLEM_WARNING);
+      Span span = Span.obtain(0, mcolor);
       span.problemFlags = Span.FLAG_WARNING;
       colors.add(realLine, span);
       end[0]++;
@@ -69,15 +73,15 @@ public class Utils {
           if (last.column <= column - 1 && span.column >= column - 1) {
             span.problemFlags = Span.FLAG_WARNING;
             last.problemFlags = Span.FLAG_WARNING;
-           // span.style = EditorColorScheme.PROBLEM_WARNING;
-          //  last.style = EditorColorScheme.PROBLEM_WARNING;
+             span.style = mcolor;
+             last.style = mcolor;
             end[1] = last.column;
             break;
           }
         }
         if (i == spans.size() - 1 && span.column <= column - 1) {
           span.problemFlags = Span.FLAG_WARNING;
-      //    span.style = EditorColorScheme.PROBLEM_WARNING;
+           span.style = mcolor;
           end[1] = span.column;
           break;
         }
@@ -87,7 +91,8 @@ public class Utils {
 
     return end;
   }
-  public static int[] setSpanEFO(TextAnalyzeResult colors, int line, int column,int coloruser) {
+
+  public static int[] setSpanEFO(TextAnalyzeResult colors, int line, int column, int coloruser) {
     int lineCount = colors.getSpanMap().size();
     int realLine = line - 1;
     List<Span> spans = colors.getSpanMap().get(Math.min(realLine, lineCount - 1));
@@ -126,8 +131,9 @@ public class Utils {
 
     return end;
   }
-  public static void getSpan(TextAnalyzeResult colors, int line, int column,int color){
-    Span span = Span.obtain(column,TextStyle.makeStyle(color));
-    colors.add(line,span);
+
+  public static void getSpan(TextAnalyzeResult colors, int line, int column, int color) {
+    Span span = Span.obtain(column, TextStyle.makeStyle(color));
+    colors.add(line, span);
   }
 }

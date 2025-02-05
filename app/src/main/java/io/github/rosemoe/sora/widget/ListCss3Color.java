@@ -144,6 +144,37 @@ public class ListCss3Color {
     }
     // getHslColor(token,line,column,result);
   }
+  
+  
+
+  public static void setColorBinery(Token token, int line, int column, TextAnalyzeResult result) {
+    var text = token.getText();
+    try {
+      int color ;
+      
+      if (text.startsWith("0x")) {
+         color = (int) Long.parseLong(text.substring(2),16);
+        result.addIfNeeded(line, column, EditorColorScheme.TEXT_NORMAL);
+        Span span =
+            Span.obtain(
+                column + 1,
+                ColorUtils.calculateLuminance(color) > 0.5
+                    ? EditorColorScheme.black
+                    : EditorColorScheme.white);
+        span.setBackgroundColorMy(color);
+        result.add(line, span);
+        Span middle = Span.obtain(column + text.length() - 1, EditorColorScheme.LITERAL);
+        middle.setBackgroundColorMy(Color.TRANSPARENT);
+        result.add(line, middle);
+        Span end =
+            Span.obtain(column + text.length(), TextStyle.makeStyle(EditorColorScheme.TEXT_NORMAL));
+        end.setBackgroundColorMy(Color.TRANSPARENT);
+        result.add(line, end);
+      }
+    } catch (Exception e) {
+
+    }
+  }
 
   public static void getHslColor(Token token, int line, int column, TextAnalyzeResult result) {
     var text1 = token.getText();
@@ -222,10 +253,10 @@ public class ListCss3Color {
           colors.add(line, endSpan);
 
         } else {
-         // throw new IllegalArgumentException("Invalid HSL format");
+          // throw new IllegalArgumentException("Invalid HSL format");
         }
       } else {
-       // throw new IllegalArgumentException("Unsupported color format");
+        // throw new IllegalArgumentException("Unsupported color format");
       }
 
     } catch (Exception e) {
@@ -283,5 +314,4 @@ public class ListCss3Color {
     Matcher matcher = pattern.matcher(text);
     return matcher.matches();
   }
-
 }

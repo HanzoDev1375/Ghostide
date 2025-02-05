@@ -42,7 +42,7 @@ import java.util.List;
 
 import static android.os.Build.VERSION.SDK_INT;
 
-public class HichemSoftFileUtil {
+public class AndroidUriFileUtil {
 
     private static final String PRIMARY_VOLUME_NAME = "primary";
     public static String SHARED_KEY = "uri_tree_paths";
@@ -58,7 +58,7 @@ public class HichemSoftFileUtil {
     private int qqwe02 = 0;
     private StringBuilder stringBuilder;
 
-    public HichemSoftFileUtil(SharedPreferences sharedPreferences, Activity activity) {
+    public AndroidUriFileUtil(SharedPreferences sharedPreferences, Activity activity) {
         this.sharedPreferences = sharedPreferences;
         this.activity = activity;
     }
@@ -152,7 +152,7 @@ public class HichemSoftFileUtil {
         else return File.separator;
     }
 
-    public HichemSoftFileUtil addUri(Uri uri, String path) {
+    public AndroidUriFileUtil addUri(Uri uri, String path) {
         HashMap hashMap = new HashMap();
         hashMap.put(KEY_PATH, path.replaceAll("/", ""));
         hashMap.put(KEY_URI, uri.toString());
@@ -175,7 +175,7 @@ public class HichemSoftFileUtil {
         return pathSelected;
     }
 
-    public HichemSoftFileUtil saveData() {
+    public AndroidUriFileUtil saveData() {
         if (listMap != null && listMap.size() > 0) {
             String dataJson = new Gson().toJson(listMap);
             sharedPreferences.edit().putString(SHARED_KEY, dataJson).apply();
@@ -195,7 +195,7 @@ public class HichemSoftFileUtil {
         return null;
     }
 
-    public HichemSoftFileUtil loadData() {
+    public AndroidUriFileUtil loadData() {
         if (sharedPreferences != null && sharedPreferences.contains(SHARED_KEY) &&
                 !sharedPreferences.getString(SHARED_KEY, "").isEmpty()) {
             String data = sharedPreferences.getString(SHARED_KEY, "");

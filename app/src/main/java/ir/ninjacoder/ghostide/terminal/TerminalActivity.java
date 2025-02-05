@@ -148,6 +148,7 @@ public class TerminalActivity extends BaseCompat implements TerminalViewClient {
               @Override
               public Integer getTerminalCursorStyle() {
                 return TerminalEmulator.DEFAULT_TERMINAL_CURSOR_STYLE;
+                
               }
 
               @Override
@@ -190,6 +191,7 @@ public class TerminalActivity extends BaseCompat implements TerminalViewClient {
     }
     terminals.setTextSize(SizeUtils.dp2px(12f));
     terminals.setKeepScreenOn(true);
+    
 
     terminalSession.titleChanged("1", shell);
 

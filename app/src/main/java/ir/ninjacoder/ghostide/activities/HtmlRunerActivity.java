@@ -3,6 +3,7 @@ package ir.ninjacoder.ghostide.activities;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.ServerHost;
 import ir.ninjacoder.ghostide.databinding.HtmlrunerBinding;
+import ir.ninjacoder.ghostide.enums.ErudaThemes;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.utils.FileUtil;
 import ir.ninjacoder.ghostide.utils.ThemeUtils;
@@ -47,6 +48,8 @@ public class HtmlRunerActivity extends BaseCompat {
   private Intent send = new Intent();
   private boolean isInspectEnabled = false;
   private boolean isShowingDialog = false;
+  private SharedPreferences saveThemeEruda;
+  private ErudaThemes theme;
   protected HtmlrunerBinding bin;
 
   @Override
@@ -55,6 +58,7 @@ public class HtmlRunerActivity extends BaseCompat {
     bin = HtmlrunerBinding.inflate(getLayoutInflater());
     setContentView(bin.getRoot());
     findAndMatchIdInview();
+
     installToRun();
   }
 
@@ -70,6 +74,8 @@ public class HtmlRunerActivity extends BaseCompat {
         });
     qo = getSharedPreferences("qo", Activity.MODE_PRIVATE);
     databind();
+    saveThemeEruda = getSharedPreferences("it", MODE_PRIVATE);
+    theme = getThemes();
     reloadConsoleJs();
 
     bin.web.setWebChromeClient(
@@ -423,6 +429,7 @@ public class HtmlRunerActivity extends BaseCompat {
 
   public void reloadConsoleJs() {
     String erudaPath = "file:///android_asset/eruda.js";
+    String themeName = theme.getThemeName();
     String js =
         "(function(){"
             + "var script = document.createElement('script');"
@@ -438,7 +445,9 @@ public class HtmlRunerActivity extends BaseCompat {
             + "\n"
             + "transparency: 1,"
             + "\n"
-            + "theme: 'Material Darker'"
+            + "theme: '"
+            + themeName
+            + "'"
             + "\n"
             + "}"
             + "\n"
@@ -580,5 +589,9 @@ public class HtmlRunerActivity extends BaseCompat {
       }
     }
     return super.onKeyDown(data, key);
+  }
+
+  private ErudaThemes getThemes() {
+    return ErudaThemes.valueOf(saveThemeEruda.getString("it", ErudaThemes.DARK.name()));
   }
 }

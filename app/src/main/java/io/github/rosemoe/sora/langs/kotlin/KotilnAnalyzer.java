@@ -5,6 +5,8 @@ import android.util.Log;
 import io.github.rosemoe.sora.data.Span;
 import io.github.rosemoe.sora.text.TextStyle;
 
+import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import java.util.Stack;
 
 import io.github.rosemoe.sora.data.BlockLine;
@@ -24,7 +26,7 @@ import io.github.rosemoe.sora.widget.EditorColorScheme;
 import org.antlr.v4.runtime.TokenSource;
 
 public class KotilnAnalyzer implements CodeAnalyzer {
-  
+
   @Override
   public void analyze(
       CharSequence content,
@@ -283,13 +285,11 @@ public class KotilnAnalyzer implements CodeAnalyzer {
                   || typemode == KotlinLexer.IN) {
                 color = EditorColorScheme.LITERAL;
               }
-              
 
               result.addIfNeeded(line, column, color);
               break;
             }
           case KotlinLexer.LCURL:
-            result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
             if (stack.isEmpty()) {
               if (currSwitch > maxSwitch) {
                 maxSwitch = currSwitch;
@@ -300,10 +300,20 @@ public class KotilnAnalyzer implements CodeAnalyzer {
             BlockLine block = result.obtainNewBlock();
             block.startLine = line;
             block.startColumn = column;
+            var colorid = EditorColorScheme.htmlblocknormal;
+
+            if (GhostIdeAppLoader.getPrefManager().getBoolean("breaks", false) == true)
+              colorid = HTMLConstants.get(stack.size());
+            else colorid = EditorColorScheme.htmlblocknormal;
             stack.push(block);
+            result.addIfNeeded(line, column, colorid);
             break;
           case KotlinLexer.RCURL:
-            result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
+            var colorres = EditorColorScheme.htmlblocknormal;
+            if (GhostIdeAppLoader.getPrefManager().getBoolean("breaks", false) == true)
+              colorres = HTMLConstants.get(stack.size());
+            else colorres = EditorColorScheme.htmlblocknormal;
+            result.addIfNeeded(line, column, colorres);
             if (!stack.isEmpty()) {
               BlockLine b = stack.pop();
               b.endLine = line;
@@ -331,9 +341,9 @@ public class KotilnAnalyzer implements CodeAnalyzer {
       }
       ktinfo.finish();
       result.setExtra(ktinfo);
-      
-      //for testninja lang
-      NinjaTest.main(result,content.toString());
+
+      // for testninja lang
+      NinjaTest.main(result, content.toString());
       result.setSuppressSwitch(maxSwitch + 10);
     } catch (IOException e) {
       e.printStackTrace();

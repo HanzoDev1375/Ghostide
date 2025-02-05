@@ -8,6 +8,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.expr.AssignExpr;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
@@ -222,5 +223,16 @@ public class JavaPaserUtils {
       e.printStackTrace();
       return "Main"; // در صورت خطا، یک مقدار پیش‌فرض برگردانید
     }
+  }
+
+  public static boolean getDeprecated(NodeList<AnnotationExpr> node) {
+    return node.stream().anyMatch(a -> a.getNameAsString().equals("Deprecated"));
+  }
+
+  public static boolean getCustomAnnotationExpr(NodeList<AnnotationExpr> node, String key) {
+    return node.stream().anyMatch(i -> i.getNameAsString().equals(key));
+  }
+  public static boolean getRegexAnnotation(NodeList<AnnotationExpr> expr){
+    return expr.stream().anyMatch(it -> it.getNameAsString().matches("[a-zA-Z]+"));
   }
 }

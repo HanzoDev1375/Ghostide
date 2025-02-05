@@ -1,6 +1,12 @@
 package io.github.rosemoe.sora.langs.java;
 
+import com.github.javaparser.ast.body.ConstructorDeclaration;
+import com.github.javaparser.ast.expr.ClassExpr;
+import io.github.rosemoe.sora.widget.ListCss3Color;
+import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.IdeEditor;
+import ir.ninjacoder.ghostide.config.JavaPaserUtils;
 import ir.ninjacoder.ghostide.databin.DiagnosticWrapper;
 import ir.ninjacoder.ghostide.utils.ThemeUtils;
 import android.graphics.Color;
@@ -38,6 +44,7 @@ import org.antlr.v4.runtime.CodePointCharStream;
 import org.antlr.v4.runtime.Token;
 import java.io.IOException;
 import java.io.StringReader;
+import androidx.annotation.NonNull;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.text.TextAnalyzer;
@@ -48,7 +55,6 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
   private final WeakReference<IdeEditor> mEditorReference;
   private final List<DiagnosticWrapper> mDiagnostics;
   private static final Object OBJECT = new Object();
-  
 
   private Map<String, Boolean> mapStyle;
 
@@ -106,7 +112,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
       TrieTree<Object> tree = new TrieTree<>();
       int type, currSwitch = 1, maxSwitch = 0, previous = 0;
       int lastLine = 1;
-      int line, column;
+      int line = 1, column = 0;
 
       tree.put("String", OBJECT);
       tree.put("Object", OBJECT);
@@ -179,7 +185,6 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             classNamePrevious = true;
             break;
           case JavaLexer.DECIMAL_LITERAL:
-          case JavaLexer.HEX_LITERAL:
           case JavaLexer.OCT_LITERAL:
           case JavaLexer.BINARY_LITERAL:
           case JavaLexer.FLOAT_LITERAL:
@@ -384,9 +389,9 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 colorid = EditorColorScheme.javafun;
               }
 
-              if (token.getText().equals("System")) {
+              if (editor.getText().equals("int")) {
                 Span span = Span.obtain(column, TextStyle.makeStyle(EditorColorScheme.javafun));
-                span.setBackgroundColorMy(Color.BLACK);
+                span.setBackgroundColorMy(Color.parseColor("#F40000"));
                 span.setDrawminiText("System::");
                 result.add(line, span);
               }
@@ -394,6 +399,10 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               get(colorid, line, column, result);
               break;
             }
+
+          case JavaLexer.HEX_LITERAL:
+            ListCss3Color.setColorBinery(token, line, column, result);
+            break;
 
           case JavaLexer.RBRACE:
             {
@@ -406,7 +415,11 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 }
               }
               var lists = result.getBlocks();
-              int colorid = EditorColorScheme.TEXT_NORMAL;
+              var colorid = EditorColorScheme.htmlblocknormal;
+
+              if (GhostIdeAppLoader.getPrefManager().getBoolean("breaks", false) == true)
+                colorid = HTMLConstants.get(stack.size());
+              else colorid = EditorColorScheme.htmlblocknormal;
               result.addIfNeeded(line, column, colorid);
               break;
             }
@@ -416,10 +429,14 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               BlockLine block = result.obtainNewBlock();
               block.startLine = line;
               block.startColumn = column;
-              stack.push(block); // اضافه کردن بلوک به استک
+              // اضافه کردن بلوک به استک
               var lists = result.getBlocks();
-              int colorid = EditorColorScheme.TEXT_NORMAL;
-              result.addIfNeeded(line, column, colorid);
+              var colorres = EditorColorScheme.htmlblocknormal;
+              if (GhostIdeAppLoader.getPrefManager().getBoolean("breaks", false) == true)
+                colorres = HTMLConstants.get(stack.size());
+              else colorres = EditorColorScheme.htmlblocknormal;
+              stack.push(block);
+              result.addIfNeeded(line, column, colorres);
               // بررسی maxSwitch
               if (stack.isEmpty()) {
                 if (currSwitch > maxSwitch) {
@@ -473,12 +490,11 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             public void visit(FieldDeclaration fieldDeclaration, Void arg) {
               for (VariableDeclarator variable : fieldDeclaration.getVariables()) {
                 String variableName = variable.getNameAsString();
-                int line = variable.getBegin().get().line;
+                int line = variable.getBegin().get().line - 1;
                 int column = variable.getBegin().get().column;
                 declaredVariables.add(variableName);
                 inline.put(variableName, line);
                 incol.put(variableName, column);
-               
               }
               super.visit(fieldDeclaration, arg);
             }
@@ -487,11 +503,14 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             public void visit(VariableDeclarationExpr variableDeclarationExpr, Void arg) {
               for (VariableDeclarator variable : variableDeclarationExpr.getVariables()) {
                 String variableName = variable.getNameAsString();
-                int line = variable.getBegin().get().line;
+                int line = variable.getBegin().get().line - 1;
                 int column = variable.getBegin().get().column;
                 declaredVariables.add(variableName);
                 inline.put(variableName, line);
                 incol.put(variableName, column);
+                // tesing
+                if (JavaPaserUtils.getRegexAnnotation(variableDeclarationExpr.getAnnotations()))
+                  Utils.setWaringSpan(result, line, column, EditorColorScheme.green);
               }
               super.visit(variableDeclarationExpr, arg);
             }
@@ -505,7 +524,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             @Override
             public void visit(ImportDeclaration dec, Void arg) {
               String importName = dec.getNameAsString();
-              int line = dec.getBegin().get().line;
+              int line = dec.getBegin().get().line - 1;
               int column = dec.getBegin().get().column;
               inline.put(importName, line);
               incol.put(importName, column);
@@ -522,7 +541,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
 
             @Override
             public void visit(TypeExpr arg0, Void arg1) {
-              var l = arg0.getBegin().get().line;
+              var l = arg0.getBegin().get().line - 1;
               var c = arg0.getBegin().get().column;
               Utils.setSpanEFO(result, l, c + 1, EditorColorScheme.javastring);
               super.visit(arg0, arg1);
@@ -530,7 +549,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
 
             @Override
             public void visit(TypeParameter arg0, Void arg1) {
-              var l = arg0.getBegin().get().line;
+              var l = arg0.getBegin().get().line - 1;
               var c = arg0.getBegin().get().column;
               Utils.setSpanEFO(result, l, c + 1, EditorColorScheme.javatype);
               super.visit(arg0, arg1);
@@ -545,7 +564,6 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               var col = arg0.getBegin().get().column;
               mlines.put(names, li);
               mcoloum.put(names, col);
-             
 
               // Utils.setSpanEFO(result, li, col + 2, EditorColorScheme.COMMENT);
 
@@ -560,8 +578,25 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               mtusing.add(arg0.getNameAsString());
               inline.put(variableName, li);
               incol.put(variableName, cl);
+              if (JavaPaserUtils.getDeprecated(arg0.getAnnotations()))
+                Utils.setWaringSpan(result, li, cl + 1);
+              if (JavaPaserUtils.getCustomAnnotationExpr(arg0.getAnnotations(), "NonNull")
+                  && variableName.startsWith("_")) {
+                Utils.setWaringSpan(result, li, cl + 1, EditorColorScheme.HTML_TAG);
+              }
               super.visit(arg0, arg1);
-               
+            }
+
+            @Override
+            public void visit(ConstructorDeclaration arg0, Void arg1) {
+              int lines = arg0.getBegin().get().line;
+              int colz = arg0.getBegin().get().column;
+              if (JavaPaserUtils.getDeprecated(arg0.getAnnotations()))
+                Utils.setWaringSpan(result, lines, colz + 1);
+              if (JavaPaserUtils.getCustomAnnotationExpr(arg0.getAnnotations(), "NonNull"))
+                Utils.setWaringSpan(result, lines, colz + 1, EditorColorScheme.HTML_TAG);
+
+              super.visit(arg0, arg1);
             }
           },
           null);

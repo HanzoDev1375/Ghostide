@@ -571,18 +571,17 @@ public class ObjectUtils {
 
       ActivityCompat.requestPermissions(
           app, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, 1000);
-
-      try {
-        Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
-        Uri uri = Uri.fromParts("package", context.getPackageName(), null);
-        intent.setData(uri);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
-      } catch (Exception ex) {
-        Intent intent = new Intent();
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-        context.startActivity(intent);
+      if (Android12) {
+        try {
+          Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+          Uri uri = Uri.fromParts("package", context.getPackageName(), null);
+          intent.setData(uri);
+          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+          context.startActivity(intent);
+          return true;
+        } catch (Exception ex) {
+          Log.e("Error runtime premisssion: ", ex.getLocalizedMessage());
+        }
       }
 
       return false;

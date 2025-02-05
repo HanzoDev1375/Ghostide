@@ -1,6 +1,7 @@
 package ir.ninjacoder.ghostide;
 
 import ir.ninjacoder.ghostide.activities.ErrorManagerActivity;
+import ir.ninjacoder.ghostide.config.PrfnsUtil;
 import ir.ninjacoder.ghostide.utils.AssetsSoft;
 import ir.ninjacoder.ghostide.utils.DataUtil;
 import ir.ninjacoder.ghostide.utils.FileUtil;
@@ -92,6 +93,7 @@ public class GhostIdeAppLoader extends Application {
     Analyzercod = getSharedPreferences("Analyzercod", MODE_PRIVATE);
     thememanagersoft = getSharedPreferences("thememanagersoft", MODE_PRIVATE);
     prfns = PreferenceManager.getDefaultSharedPreferences(this);
+    
 
     AssetsSoft soft = new AssetsSoft();
     var iconPath = getFilesDir().getAbsoluteFile() + "/icon.png";

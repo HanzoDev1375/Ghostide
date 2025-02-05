@@ -24,6 +24,8 @@
 package io.github.rosemoe.sora.widget;
 
 import io.github.rosemoe.sora.event.TextSizeChangeEvent;
+import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.utils.DiagnosticsListener;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -3023,13 +3025,21 @@ public class CodeEditor extends View
           mRect.right = centerX + mDpUnit * mBlockLineWidth / 2;
 
           if (!isBlockLineRpg) {
-            drawColor(
-                canvas,
-                mColors.getColor(
-                    curr == cursorIdx
-                        ? EditorColorScheme.BLOCK_LINE_CURRENT
-                        : EditorColorScheme.BLOCK_LINE),
-                mRect);
+            if (GhostIdeAppLoader.getPrefManager().getBoolean("breaks", false) == true) {
+              drawColor(
+                  canvas,
+                  mColors.getColor(
+                      curr == cursorIdx ? HTMLConstants.get(cursorIdx) : HTMLConstants.get(blocks.size())),
+                  mRect);
+
+            } else
+              drawColor(
+                  canvas,
+                  mColors.getColor(
+                      curr == cursorIdx
+                          ? EditorColorScheme.BLOCK_LINE_CURRENT
+                          : EditorColorScheme.BLOCK_LINE),
+                  mRect);
           } else {
             drawColor(canvas, mColors.getColor(getRandomColor()), mRect);
           }

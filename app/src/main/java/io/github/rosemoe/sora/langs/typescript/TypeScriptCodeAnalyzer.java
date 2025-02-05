@@ -2,6 +2,7 @@ package io.github.rosemoe.sora.langs.typescript;
 
 import android.util.Log;
 import io.github.rosemoe.sora.text.TextStyle;
+import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 import java.util.Stack;
 import io.github.rosemoe.sora.data.BlockLine;
 import org.antlr.v4.runtime.CharStreams;
@@ -57,7 +58,6 @@ public class TypeScriptCodeAnalyzer implements CodeAnalyzer {
             break;
 
           case TypeScriptLexer.CloseBrace:
-            result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
             if (!stack.isEmpty()) {
               BlockLine b = stack.pop();
               b.endLine = line;
@@ -66,9 +66,10 @@ public class TypeScriptCodeAnalyzer implements CodeAnalyzer {
                 result.addBlockLine(b);
               }
             }
+            int colorids = HTMLConstants.get(stack.size());
+            result.addIfNeeded(line, column, colorids);
             break;
           case TypeScriptLexer.OpenBrace:
-            result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
             if (stack.isEmpty()) {
               if (currSwitch > maxSwitch) {
                 maxSwitch = currSwitch;
@@ -79,6 +80,8 @@ public class TypeScriptCodeAnalyzer implements CodeAnalyzer {
             BlockLine block = result.obtainNewBlock();
             block.startLine = line;
             block.startColumn = column;
+            int colorid1 = HTMLConstants.get(stack.size());
+            result.addIfNeeded(line, column, colorid1);
             stack.push(block);
             break;
           case TypeScriptLexer.RegularExpressionLiteral:
@@ -319,7 +322,7 @@ public class TypeScriptCodeAnalyzer implements CodeAnalyzer {
       info.finish();
       result.setExtra(info);
       result.setSuppressSwitch(maxSwitch + 10);
-      
+
     } catch (IOException e) {
       e.printStackTrace();
       Log.e("TAG", e.getMessage());

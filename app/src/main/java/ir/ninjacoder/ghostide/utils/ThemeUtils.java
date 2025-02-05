@@ -76,6 +76,15 @@ public class ThemeUtils {
     getColor(imap, editor, "keyword", EditorColorScheme.KEYWORD, "#ff1081");
     getColor(imap, editor, "print", EditorColorScheme.print, "#ffa801");
     getColor(imap, editor, "ninja", EditorColorScheme.Ninja, "#ffe200");
+    getColor(imap, editor, "breaklevel1", EditorColorScheme.breaklevel1, "#ff5733");
+    getColor(imap, editor, "breaklevel2", EditorColorScheme.breaklevel2, "#33c4ff");
+    getColor(imap, editor, "breaklevel3", EditorColorScheme.breaklevel3, "#75ff33");
+    getColor(imap, editor, "breaklevel4", EditorColorScheme.breaklevel4, "#ff33a1");
+    getColor(imap, editor, "breaklevel5", EditorColorScheme.breaklevel5, "#ffd633");
+    getColor(imap, editor, "breaklevel6", EditorColorScheme.breaklevel6, "#ff8c33");
+    getColor(imap, editor, "breaklevel7", EditorColorScheme.breaklevel7, "#3347ff");
+    getColor(imap, editor, "breaklevel8", EditorColorScheme.breaklevel8, "#ec33ff");
+
     getColor(imap, editor, "auto_comp_panel_bg", EditorColorScheme.AUTO_COMP_PANEL_BG, "#ff000000");
     getColor(
         imap,
@@ -165,6 +174,8 @@ public class ThemeUtils {
     editor.getColorScheme().setColor(EditorColorScheme.black, ColorCompat.BLACK);
     editor.getColorScheme().setColor(EditorColorScheme.blanchedalmond, ColorCompat.BLANCHEDALMOND);
     editor.getColorScheme().setColor(EditorColorScheme.blue, ColorCompat.BLUE);
+    editor.getColorScheme().setColor(EditorColorScheme.green,Color.GREEN);
+    editor.getColorScheme().setColor(EditorColorScheme.orange,ColorCompat.ORANGE);
     editor.getColorScheme().setColor(EditorColorScheme.blueviolet, ColorCompat.BLUEVIOLET);
     editor.getColorScheme().setColor(EditorColorScheme.brown, ColorCompat.BROWN);
     editor.getColorScheme().setColor(EditorColorScheme.white, ColorCompat.WHITE);
@@ -179,7 +190,7 @@ public class ThemeUtils {
     editor.getColorScheme().setColor(EditorColorScheme.searchcolor4, Color.parseColor("#ACFF22CF"));
     editor.getColorScheme().setColor(EditorColorScheme.searchcolor5, Color.parseColor("#ACB4DA43"));
     editor.getColorScheme().setColor(EditorColorScheme.searchcolor6, Color.parseColor("#ACAA6CFB"));
-    editor.getColorScheme().setColor(EditorColorScheme.LINE_NUMBER_PANEL_TEXT,Color.WHITE);
+    editor.getColorScheme().setColor(EditorColorScheme.LINE_NUMBER_PANEL_TEXT, Color.WHITE);
     return this;
   }
 
@@ -390,7 +401,14 @@ public class ThemeUtils {
     map.put("tscolormatch5", "#ACAA6C");
     map.put("tscolormatch6", "#B06DFF");
     map.put("tscolormatch7", "#FF7E1A");
-
+    map.put("breaklevel1", "#FF5733");
+    map.put("breaklevel2", "#33FF57");
+    map.put("breaklevel3", "#3357FF");
+    map.put("breaklevel4", "#FF33A1");
+    map.put("breaklevel5", "#FFF733");
+    map.put("breaklevel6", "#FF8C33");
+    map.put("breaklevel7", "#33FFF5");
+    map.put("breaklevel8", "#F1C40F");
     return map;
   }
 
@@ -554,7 +572,16 @@ public class ThemeUtils {
   "tscolormatch4": "#1FA3A5",
   "tscolormatch5": "#FFFB8C",
   "tscolormatch6": "#C1AEFF",
-  "tscolormatch7": "#FFCEFF7F"
+  "tscolormatch7": "#FFCEFF7F",
+
+      "breaklevel1": "#FF5733",
+  "breaklevel2": "#33FF57",
+  "breaklevel3": "#FF33A7",
+  "breaklevel4": "#3357FF",
+  "breaklevel5": "#FFD733",
+  "breaklevel6": "#FF33FF",
+  "breaklevel7": "#57FF33",
+  "breaklevel8": "#FFD733"
 }
     """;
   }

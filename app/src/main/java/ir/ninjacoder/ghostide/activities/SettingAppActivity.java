@@ -4,6 +4,7 @@ import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.adapter.ListAppIconAd;
 import ir.ninjacoder.ghostide.config.AppIconManager;
+import ir.ninjacoder.ghostide.config.PrfnsUtil;
 import ir.ninjacoder.ghostide.config.SwitchMaterialPrf;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.utils.DataUtil;
@@ -77,7 +78,8 @@ public class SettingAppActivity extends BaseCompat {
       deftheme,
       autoSaveText,
       codeAZ,
-      livemodel;
+      livemodel,
+      breaklevelmodel;
   private ObjectAnimator mdownObjectAnimator = new ObjectAnimator();
   private TimerTask timer;
   private SharedPreferences getvb,
@@ -98,6 +100,7 @@ public class SettingAppActivity extends BaseCompat {
     super.onCreate(_savedInstanceState);
     setContentView(R.layout.settingapp);
     initialize(_savedInstanceState);
+    PrfnsUtil.init(this);
   }
 
   public int colors() {
@@ -113,16 +116,15 @@ public class SettingAppActivity extends BaseCompat {
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     getSupportActionBar().setHomeButtonEnabled(true);
     _toolbar.setNavigationOnClickListener(
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View _v) {
-            onBackPressed();
-          }
+        (i) -> {
+          onBackPressed();
         });
     themeEngine = ThemeEngine.getInstance(this);
     themeEngine.setThemeMode(ThemeMode.DARK);
     themeEngine.applyToActivity(this);
     bar = findViewById(R.id.bar);
+    breaklevelmodel = findViewById(R.id.breaklevelmodel);
+
     getvb = getSharedPreferences("getvb", Activity.MODE_PRIVATE);
     getDrak = getSharedPreferences("getDrak", Activity.MODE_PRIVATE);
     war = getSharedPreferences("war", Activity.MODE_PRIVATE);
@@ -162,6 +164,8 @@ public class SettingAppActivity extends BaseCompat {
     livemodel.setDescription(getString(R.string.sheetsub));
     autoSaveText.setTitle(getString(R.string.autoSaveText_title));
     autoSaveText.setDescription(getString(R.string.autoSaveText_description));
+    breaklevelmodel.setTitle("BreakLevelModel");
+    breaklevelmodel.setDescription("setBreakLevelModel Live Style");
 
     _toolbar.setOnApplyWindowInsetsListener(
         new View.OnApplyWindowInsetsListener() {
@@ -480,6 +484,11 @@ public class SettingAppActivity extends BaseCompat {
             ru.edit().putBoolean("live", false).apply();
           }
         });
+    breaklevelmodel.setSwitchChangedListener(
+        (bin, is) -> {
+          if (is) GhostIdeAppLoader.getPrefManager().edit().putBoolean("breaks", true).apply();
+          else GhostIdeAppLoader.getPrefManager().edit().putBoolean("breaks", false).apply();
+        });
 
     StartLuncherApp();
   }
@@ -558,6 +567,10 @@ public class SettingAppActivity extends BaseCompat {
       livemodel.setValue(true);
     } else livemodel.setValue(false);
 
+    if (GhostIdeAppLoader.getPrefManager().getBoolean("breaks", false) == true) {
+      breaklevelmodel.setValue(true);
+    } else breaklevelmodel.setValue(false);
+
     if (Analyzercod.getBoolean("Analyzercod", false) == true) codeAZ.setValue(true);
     else codeAZ.setValue(false);
 
@@ -578,8 +591,7 @@ public class SettingAppActivity extends BaseCompat {
     ViewGroup viewGroup = findViewById(android.R.id.content);
     View dialogview =
         getLayoutInflater().inflate(R.layout.layout_editor_size_blur, viewGroup, false);
-    ir.ninjacoder.ghostide.layoutmanager.SliderCompat slider =
-        dialogview.findViewById(R.id.slider);
+    ir.ninjacoder.ghostide.layoutmanager.SliderCompat slider = dialogview.findViewById(R.id.slider);
     di.setTitle("Blur Size");
     di.setMessage("Set Number 1~25");
     if (thememanagersoft != null) {
@@ -960,11 +972,9 @@ public class SettingAppActivity extends BaseCompat {
           final Handler handler = new Handler(Looper.getMainLooper());
           handler.postDelayed(
               () -> {
-
-                  if (getvb.contains("Script") && !getvb.getString("Script", "").equals("")) {
-                    edit.setText(getvb.getString("Script", ""));
-                  }
-                
+                if (getvb.contains("Script") && !getvb.getString("Script", "").equals("")) {
+                  edit.setText(getvb.getString("Script", ""));
+                }
               },
               100);
           input.setHint("Select Property theme");

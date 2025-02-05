@@ -115,6 +115,7 @@ public class EditorColorScheme {
 
   /** Color Text Custom ad Ghost web ide */
   public static final int TEXTCOLORINIER = 401;
+
   public static final int TEXTCOLORHDER = 402;
   public static final int TEXTCOLORFORGRAND = 403;
   public static final int TEXTCOLORIGOR = 404;
@@ -334,6 +335,16 @@ public class EditorColorScheme {
   public static final int tscolormatch5 = 27301;
   public static final int tscolormatch6 = 72630;
   public static final int tscolormatch7 = 48284;
+
+  // braket
+  public static final int breaklevel1 = 20189;
+  public static final int breaklevel2 = 4820;
+  public static final int breaklevel3 = 23189;
+  public static final int breaklevel4 = 27493;
+  public static final int breaklevel5 = 94733;
+  public static final int breaklevel6 = 6727;
+  public static final int breaklevel7 = 24702;
+  public static final int breaklevel8 = 3749;
 
   /** Min pre-defined color id */
   protected static final int START_COLOR_ID = 1;

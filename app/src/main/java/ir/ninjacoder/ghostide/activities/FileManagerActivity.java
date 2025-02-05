@@ -192,7 +192,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
   private SharedPreferences book;
   private ArrayList<HashMap<String, Object>> a = new ArrayList<>();
   private HashMap<String, Object> mapz32 = new HashMap<>();
-  private HichemSoftFileUtil utils;
+  private AndroidUriFileUtil utils;
   private GridLayoutManager gridLayoutManager;
   private SharedPreferences sharedPreferences;
 
@@ -461,7 +461,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
         });
     startService(new Intent(this, FileEventUser.class));
     sharedPreferences = getSharedPreferences("fileSp", Context.MODE_PRIVATE);
-    utils = new HichemSoftFileUtil(sharedPreferences, FileManagerActivity.this).loadData();
+    utils = new AndroidUriFileUtil(sharedPreferences, FileManagerActivity.this).loadData();
     // if not allowed
     utils.requestPermissionAllFilesAccess();
     RefreshTabs();

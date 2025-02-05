@@ -19,7 +19,7 @@ public class ColorCompat {
     public static final int BLUE = Color.BLUE;
     public static final int TEAL = 0xff008080;
     public static final int AQUA = 0xff00ffff;
-    public static final int ORANGE = 0xffffa500;
+    public static final int ORANGE = Color.parseColor("#ffffa500");
     public static final int ALICEBLUE = 0xFFF0F8FF;
     public static final int ANTIQUEWHITE = 0xfffaebd7;
     public static final int AQUAMARINE = 0xff7fffd4;

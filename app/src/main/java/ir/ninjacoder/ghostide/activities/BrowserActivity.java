@@ -8,7 +8,6 @@ import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
@@ -29,7 +28,9 @@ public class BrowserActivity extends BaseCompat implements NetworkChangeReceiver
   protected WebViewCompatGhostWeb view;
   protected AppBarLayout appbar;
   protected MaterialToolbar toolbar;
+  
   private NetworkChangeReceiver networkChangeReceiver;
+  
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
@@ -41,6 +42,7 @@ public class BrowserActivity extends BaseCompat implements NetworkChangeReceiver
     appbar = findViewById(R.id.appbar);
     toolbar = findViewById(R.id.toolbar);
     emptyView = findViewById(R.id.emptyView);
+    
     setSupportActionBar(toolbar);
     installLoder();
     callBack();
@@ -159,4 +161,6 @@ public class BrowserActivity extends BaseCompat implements NetworkChangeReceiver
     view.setVisibility(View.GONE);
     bar.setVisibility(View.GONE);
   }
+
+  
 }

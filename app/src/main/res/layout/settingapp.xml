@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:id="@+id/_coordinator"
-    >
+    
+>
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_height="wrap_content"
@@ -14,7 +15,8 @@
         android:background="#03FFFFFF"
         android:stateListAnimator="@null"
         android:id="@+id/_app_bar"
-        >
+        
+    >
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_height="?attr/collapsingToolbarLayoutMediumSize"
@@ -29,7 +31,8 @@
             app:titleCollapseMode="scale"
             app:expandedTitleTextColor="?attr/colorOnSurface"
             app:collapsedTitleTextColor="?attr/colorOnSurface"
-            >
+            
+        >
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:layout_height="?attr/actionBarSize"
@@ -39,7 +42,7 @@
                 app:layout_collapseMode="pin"
                 android:paddingStart="24dp"
                 android:id="@+id/_toolbar"
-                />
+                ></com.google.android.material.appbar.MaterialToolbar>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -50,67 +53,78 @@
         android:layout_width="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:id="@+id/bar"
-        >
+        
+    >
 
         <LinearLayout
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:orientation="vertical"
-            >
+            
+        >
 
             <LinearLayout
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:orientation="vertical"
                 android:id="@+id/layoutChilderHelper"
-                >
+                
+            >
 
                 <ir.ninjacoder.ghostide.config.SwitchMaterialPrf
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:id="@+id/MaterialYou"
-                    />
+                    ></ir.ninjacoder.ghostide.config.SwitchMaterialPrf>
 
                 <ir.ninjacoder.ghostide.config.SwitchMaterialPrf
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:id="@+id/effect"
-                    />
+                    ></ir.ninjacoder.ghostide.config.SwitchMaterialPrf>
 
                 <ir.ninjacoder.ghostide.config.SwitchMaterialPrf
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:id="@+id/gridmod"
-                    />
+                    ></ir.ninjacoder.ghostide.config.SwitchMaterialPrf>
 
                 <ir.ninjacoder.ghostide.config.SwitchMaterialPrf
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:id="@+id/walpapers"
-                    />
+                    ></ir.ninjacoder.ghostide.config.SwitchMaterialPrf>
 
                 <ir.ninjacoder.ghostide.config.SwitchMaterialPrf
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:id="@+id/deftheme"
-                    />
+                    ></ir.ninjacoder.ghostide.config.SwitchMaterialPrf>
 
                 <ir.ninjacoder.ghostide.config.SwitchMaterialPrf
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:id="@+id/autoSaveText"
-                    />
+                    ></ir.ninjacoder.ghostide.config.SwitchMaterialPrf>
 
                 <ir.ninjacoder.ghostide.config.SwitchMaterialPrf
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:id="@+id/codeAZ"
-                    />
+                    ></ir.ninjacoder.ghostide.config.SwitchMaterialPrf>
                 <ir.ninjacoder.ghostide.config.SwitchMaterialPrf
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:id="@+id/liveModel"
-                    />
+                    ></ir.ninjacoder.ghostide.config.SwitchMaterialPrf>
+ 
+
+                <ir.ninjacoder.ghostide.config.SwitchMaterialPrf
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:id="@+id/breaklevelmodel"
+                    ></ir.ninjacoder.ghostide.config.SwitchMaterialPrf>
+
 
             </LinearLayout>
 
@@ -118,13 +132,13 @@
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:id="@+id/rvtools"
-                />
+                ></androidx.recyclerview.widget.RecyclerView>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:id="@+id/rvsetting"
-                />
+                ></androidx.recyclerview.widget.RecyclerView>
 
         </LinearLayout>
 

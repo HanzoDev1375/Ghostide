@@ -1,7 +1,9 @@
 package io.github.rosemoe.sora.langs.html;
 
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.IdeEditor;
+import ir.ninjacoder.ghostide.config.PrfnsUtil;
 import ir.ninjacoder.ghostide.marco.RegexUtilCompat;
 import android.graphics.Color;
 import androidx.core.graphics.ColorUtils;
@@ -398,23 +400,10 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
             block.startColumn = column;
             // max level 8x
             var colorid = EditorColorScheme.htmlblocknormal;
-            if (stack.size() == 1) {
-              colorid = EditorColorScheme.ATTRIBUTE_NAME;
-            } else if (stack.size() == 2) {
-              colorid = EditorColorScheme.ATTRIBUTE_VALUE;
-            } else if (stack.size() == 3) {
-              colorid = EditorColorScheme.HTML_TAG;
-            } else if (stack.size() == 4) {
-              colorid = EditorColorScheme.htmlattr;
-            } else if (stack.size() == 5) {
-              colorid = EditorColorScheme.htmlattrname;
-            } else if (stack.size() == 6) {
-              colorid = EditorColorScheme.pycolormatch1;
-            } else if (stack.size() == 7) {
-              colorid = EditorColorScheme.pycolormatch2;
-            } else if (stack.size() == 8) {
-              colorid = EditorColorScheme.pycolormatch3;
-            } else colorid = EditorColorScheme.htmlblocknormal;
+
+            if (GhostIdeAppLoader.getPrefManager().getBoolean("breaks", false) == true)
+              colorid = HTMLConstants.get(stack.size());
+            else colorid = EditorColorScheme.htmlblocknormal;
             stack.push(block);
 
             result.addIfNeeded(line, column, colorid);
@@ -432,24 +421,11 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
                 }
               }
               // اضافه کردن رنگ برای RBRACE
+
               var colorres = EditorColorScheme.htmlblocknormal;
-              if (stack.size() == 1) {
-                colorres = EditorColorScheme.ATTRIBUTE_NAME;
-              } else if (stack.size() == 2) {
-                colorres = EditorColorScheme.ATTRIBUTE_VALUE;
-              } else if (stack.size() == 3) {
-                colorres = EditorColorScheme.HTML_TAG;
-              } else if (stack.size() == 4) {
-                colorres = EditorColorScheme.htmlattr;
-              } else if (stack.size() == 5) {
-                colorres = EditorColorScheme.htmlattrname;
-              } else if (stack.size() == 6) {
-                colorres = EditorColorScheme.pycolormatch1;
-              } else if (stack.size() == 7) {
-                colorres = EditorColorScheme.pycolormatch2;
-              } else if (stack.size() == 8) {
-                colorres = EditorColorScheme.pycolormatch3;
-              } else colorres = EditorColorScheme.htmlblocknormal;
+              if (GhostIdeAppLoader.getPrefManager().getBoolean("breaks", false) == true)
+                colorres = HTMLConstants.get(stack.size());
+              else colorres = EditorColorScheme.htmlblocknormal;
               result.addIfNeeded(line, column, colorres);
               break;
             }

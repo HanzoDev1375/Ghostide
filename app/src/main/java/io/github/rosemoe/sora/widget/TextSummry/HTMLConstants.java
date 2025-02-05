@@ -26,46 +26,52 @@ public class HTMLConstants {
 
     switch (i) {
       case 1:
-        mcolorid2 = EditorColorScheme.ATTRIBUTE_VALUE;
+        mcolorid2 = EditorColorScheme.breaklevel1;
         break;
       case 2:
-        mcolorid2 = EditorColorScheme.AUTO_COMP_PANEL_CORNER;
+        mcolorid2 = EditorColorScheme.breaklevel2;
         break;
       case 3:
-        mcolorid2 = EditorColorScheme.HTML_TAG;
+        mcolorid2 = EditorColorScheme.breaklevel3;
         break;
       case 4:
-        mcolorid2 = EditorColorScheme.KEYWORD;
+        mcolorid2 = EditorColorScheme.breaklevel4;
         break;
       case 5:
-        mcolorid2 = EditorColorScheme.Ninja;
+        mcolorid2 = EditorColorScheme.breaklevel5;
         break;
       case 6:
-        mcolorid2 = EditorColorScheme.OPERATOR;
+        mcolorid2 = EditorColorScheme.breaklevel6;
         break;
       case 7:
-        mcolorid2 = EditorColorScheme.javafun;
+        mcolorid2 = EditorColorScheme.breaklevel7;
         break;
       case 8:
-        mcolorid2 = EditorColorScheme.javafield;
+        mcolorid2 = EditorColorScheme.breaklevel8;
         break;
       case 9:
-        mcolorid2 = EditorColorScheme.javakeyword;
+        mcolorid2 = EditorColorScheme.breaklevel1;
         break;
       case 10:
-        mcolorid2 = EditorColorScheme.javanumber;
+        mcolorid2 = EditorColorScheme.breaklevel2;
         break;
       case 11:
-        mcolorid2 = EditorColorScheme.phpattr;
+        mcolorid2 = EditorColorScheme.breaklevel3;
         break;
       case 12:
-        mcolorid2 = EditorColorScheme.phpcolormatch1;
+        mcolorid2 = EditorColorScheme.breaklevel4;
         break;
       case 13:
-        mcolorid2 = EditorColorScheme.phpcolormatch2;
+        mcolorid2 = EditorColorScheme.breaklevel6;
         break;
       case 14:
-        mcolorid2 = EditorColorScheme.phpcolormatch3;
+        mcolorid2 = EditorColorScheme.breaklevel1;
+        break;
+      case 15:
+        mcolorid2 = EditorColorScheme.breaklevel7;
+        break;
+      case 16:
+        mcolorid2 = EditorColorScheme.breaklevel8;
         break;
       default:
         mcolorid2 = EditorColorScheme.htmlblocknormal; // رنگ پیش‌فرض
