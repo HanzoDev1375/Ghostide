@@ -29,7 +29,8 @@ public class MySqlCodeAnalyzer implements CodeAnalyzer {
       int line, column;
       var previous = -1;
       var lastLine = 1;
-      var type = 0;
+      int type;
+      boolean frist = false;
 
       while (delegate.shouldAnalyze()) {
         token = lexer.nextToken();
@@ -47,7 +48,7 @@ public class MySqlCodeAnalyzer implements CodeAnalyzer {
         }
         switch (type) {
           case MySqlLexer.SPACE:
-            result.addNormalIfNull();
+            if (frist) result.addNormalIfNull();
             break;
           case MySqlLexer.COMMENT:
           case MySqlLexer.SPEC_MYSQL_COMMENT:
@@ -716,8 +717,7 @@ public class MySqlCodeAnalyzer implements CodeAnalyzer {
             break;
 
           case MySqlLexer.ERROR_RECONGNIGION:
-            get(result, EditorColorScheme.TEXT_NORMAL, false, false, line, column);
-            int[] ab = Utils.setErrorSpan(result, line, column);
+            get(result, EditorColorScheme.KEYWORD, false, false, line, column);
             break;
           case MySqlLexer.CHARSET_REVERSE_QOUTE_STRING:
             get(result, EditorColorScheme.LITERAL, true, true, line, column);
@@ -728,9 +728,10 @@ public class MySqlCodeAnalyzer implements CodeAnalyzer {
             break;
         }
 
-        if (type != MySqlLexer.SPACE) {
-          previous = type;
-        }
+//        if (type != MySqlLexer.SPACE) {
+//          previous = type;
+//        }
+        frist = true;
         result.determine(lastLine);
       }
 

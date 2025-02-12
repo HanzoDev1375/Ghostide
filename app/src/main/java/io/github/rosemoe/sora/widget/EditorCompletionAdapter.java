@@ -85,7 +85,6 @@ public abstract class EditorCompletionAdapter extends BaseAdapter implements Ada
    */
   @NonNull
   protected CodeEditor getEditor() {
-
     return window.getEditor();
   }
 

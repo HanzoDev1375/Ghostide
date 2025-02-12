@@ -16,6 +16,7 @@ import io.github.rosemoe.sora.text.TextStyle;
 import io.github.rosemoe.sora.widget.ListCss3Color;
 import java.util.Stack;
 import io.github.rosemoe.sora.data.BlockLine;
+import lsp4custom.com.ninjacoder.customhtmllsp.PhpFun;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
 import org.antlr.v4.runtime.Token;
@@ -53,6 +54,8 @@ public class PHPCodeAnalyzer implements CodeAnalyzer {
       CodePointCharStream stream = CharStreams.fromReader(new StringReader(content.toString()));
       htmlCodeAnalyzer = new BasicSyntaxPullAnalyzer();
       HTMLLexer lexer = new HTMLLexer(stream);
+      HTMLAutoComplete.Identifiers ind = new HTMLAutoComplete.Identifiers();
+      ind.begin();
       var classNamePrevious = false;
       Token token, preToken = null, prePreToken = null;
       boolean first = true;
@@ -310,6 +313,12 @@ public class PHPCodeAnalyzer implements CodeAnalyzer {
           case HTMLLexer.SLASH_CLOSE:
             result.addIfNeeded(line, column, EditorColorScheme.phpsymbol);
             break;
+          case HTMLLexer.PhpFuns:
+            result.addIfNeeded(
+                line,
+                column,
+                TextStyle.makeStyle(EditorColorScheme.phpcolormatch3, 0, true, false, false));
+            break;
 
             /// '</'
           case HTMLLexer.OPEN_SLASH:
@@ -329,6 +338,7 @@ public class PHPCodeAnalyzer implements CodeAnalyzer {
           case HTMLLexer.IDENTIFIER:
             {
               int colorid = EditorColorScheme.TEXT_NORMAL;
+              ind.addIdentifier(token.getText());
               boolean isBold, isItalic, isUnderLineMode = false;
               if (previous == HTMLLexer.AT) {
                 colorid = EditorColorScheme.phpsymbol;
@@ -376,6 +386,10 @@ public class PHPCodeAnalyzer implements CodeAnalyzer {
               if (previous == HTMLLexer.COLON) {
                 colorid = EditorColorScheme.phpcolormatch6;
               }
+              if (previous == HTMLLexer.LPAREN) {
+                colorid = EditorColorScheme.phpcolormatch5;
+              }
+
               ListCss3Color.initColor(token, line, column, result, true);
               result.addIfNeeded(line, column, colorid);
               break;
@@ -439,6 +453,8 @@ public class PHPCodeAnalyzer implements CodeAnalyzer {
         first = false;
       }
       result.determine(lastLine);
+      result.setExtra(ind);
+      ind.finish();
     } catch (IOException e) {
       e.printStackTrace();
       Log.e("TAG", e.getMessage());

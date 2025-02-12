@@ -36,12 +36,7 @@ public class ToolTipHelper extends EditorPopupWindow {
     this.editor = editor;
     setContentView(onCreateContentView(editor.getContext()));
     this.text = onCreateTextView();
-
-    editor.subscribeEvent(
-        SelectionChangeEvent.class,
-        (event, unsubscribe) -> {
-          displayWindow();
-        });
+    displayWindow();
   }
 
   private static int getFeatureFlags() {
@@ -53,7 +48,6 @@ public class ToolTipHelper extends EditorPopupWindow {
   }
 
   public void setText(String text1) {
-
     text.setText(text1);
   }
 

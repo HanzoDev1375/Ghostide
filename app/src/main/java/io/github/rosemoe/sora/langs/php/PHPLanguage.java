@@ -686,9 +686,11 @@ public class PHPLanguage implements EditorLanguage {
   @Override
   public boolean isAutoCompleteChar(char ch) {
     return MyCharacter.isJavaIdentifierPart(ch)
-        || "123456789".indexOf(ch) != -1
+        || Character.isDigit(ch)
         || ch == '?'
-        || ch == '.';
+        || ch == '.'
+        || ch == '_'
+        || ch == '$';
   }
 
   @Override
@@ -701,7 +703,7 @@ public class PHPLanguage implements EditorLanguage {
     @Override
     public boolean matchesRequirement(String beforeText, String afterText) {
       return beforeText.endsWith("{") && afterText.startsWith("}")
-          || beforeText.endsWith("?>") && afterText.startsWith("<?");
+          || beforeText.endsWith("?>") && afterText.startsWith("<?php");
     }
 
     @Override
@@ -725,7 +727,7 @@ public class PHPLanguage implements EditorLanguage {
     @Override
     public boolean matchesRequirement(String beforeText, String afterText) {
       String trim = beforeText.trim();
-      if (!trim.startsWith("<") || !trim.startsWith("<?")) {
+      if (!trim.startsWith("<") || !trim.startsWith("<?php")) {
         return false;
       }
       if (!trim.endsWith(">") || !trim.endsWith("?>")) {

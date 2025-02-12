@@ -24,6 +24,7 @@
 package io.github.rosemoe.sora.widget;
 
 import io.github.rosemoe.sora.event.TextSizeChangeEvent;
+import io.github.rosemoe.sora.graphics.BubbleHelper;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.utils.DiagnosticsListener;
@@ -371,9 +372,19 @@ public class CodeEditor extends View
   private String charName = "";
   private List<Rect> iconRect = new ArrayList<>();
   private Canvas canvas;
+  private List<Integer> lineSize = new ArrayList<>();
 
   public List<DiagnosticWrapper> getDiagnostics() {
     return mDiagnostics;
+  }
+
+  public List<Integer> getLineSize() {
+
+    return lineSize;
+  }
+
+  public void setLineSize(List<Integer> lineSize) {
+    this.lineSize = lineSize;
   }
 
   public void setDiagnosticsListener(DiagnosticsListener diagnosticsListener) {
@@ -1521,6 +1532,14 @@ public class CodeEditor extends View
             canvas,
             currentLineBgColor,
             (int) postDrawCurrentLines.get(i),
+            (int) (textOffset + getOffsetX() - mDividerMargin));
+      }
+
+      for (int i = 0; i < lineSize.size(); ++i) {
+        drawRowBackground(
+            canvas,
+            lineSize.size() == 0 ? android.graphics.Color.TRANSPARENT : currentLineBgColor,
+            (int) i,
             (int) (textOffset + getOffsetX() - mDividerMargin));
       }
       drawDivider(
@@ -3029,7 +3048,9 @@ public class CodeEditor extends View
               drawColor(
                   canvas,
                   mColors.getColor(
-                      curr == cursorIdx ? HTMLConstants.get(cursorIdx) : HTMLConstants.get(blocks.size())),
+                      curr == cursorIdx
+                          ? HTMLConstants.get(cursorIdx)
+                          : HTMLConstants.get(blocks.size())),
                   mRect);
 
             } else
@@ -3090,6 +3111,16 @@ public class CodeEditor extends View
     if (isHorizontalScrollBarEnabled() && !isWordwrap() && getScrollMaxX() > getWidth() * 3 / 4) {
       drawScrollBarTrackHorizontal(canvas);
       drawScrollBarHorizontal(canvas);
+    }
+  }
+
+  protected void drawScrollBarTrackHorizontal(Canvas canvas) {
+    if (mEventHandler.holdHorizontalScrollBar()) {
+      mRect.top = getHeight() - mDpUnit * 10;
+      mRect.bottom = getHeight();
+      mRect.right = getWidth();
+      mRect.left = 0;
+      drawColor(canvas, mColors.getColor(EditorColorScheme.SCROLL_BAR_TRACK), mRect);
     }
   }
 
@@ -3179,71 +3210,39 @@ public class CodeEditor extends View
     if (!mDisplayLnPanel) {
       return;
     }
+
     String text = mLnTip + (1 + getFirstVisibleLine());
     float backupSize = mPaint.getTextSize();
     mPaint.setTextSize(getLineInfoTextSize());
     Paint.FontMetricsInt backupMetrics = mTextMetrics;
     mTextMetrics = mPaint.getFontMetricsInt();
-
-    // تنظیمات مربوط به شکل اشک
     float expand = mDpUnit * 3;
     float textWidth = mPaint.measureText(text);
-    float rectHeight = getRowHeight() + expand * 2;
-    float rectWidth = textWidth + expand * 4;
 
-    // محاسبات برای مختصات و رسم شکل اشک
-    float ovalLeft = rightX - rectWidth / 2;
-    float ovalTop = centerY - rectHeight / 2;
-    float ovalRight = rightX + rectWidth / 2;
-    float ovalBottom = centerY + rectHeight / 2;
+    // تعیین مرزها
+    mRect.top = centerY - getRowHeight() / 2f - expand;
+    mRect.bottom = centerY + getRowHeight() / 2f + expand;
+    mRect.right = rightX;
+    mRect.left = rightX - expand * 2 - textWidth;
 
-    // رسم شکل اشک
-    Path path = new Path();
-    path.moveTo(rightX, ovalTop);
-    path.quadTo(ovalRight, ovalBottom, ovalLeft, ovalBottom); // منحنی پایین چپ
-    path.quadTo(rightX, ovalTop, ovalRight, ovalBottom); // منحنی پایین راست
-    path.close();
+    // ایجاد حباب با استفاده از BubbleHelper
+    BubbleHelper.buildBubblePath(mPath, mRect);
 
-    drawColor(canvas, mColors.getColor(EditorColorScheme.LINE_NUMBER_PANEL), path);
+    // ترسیم حباب
+    drawColor(canvas, mColors.getColor(EditorColorScheme.LINE_NUMBER_PANEL), mRect);
 
-    // محاسبه خط پایه برای متن
-    float baseline = centerY + getRowHeight() / 2f - mTextMetrics.bottom;
+    float baseline = centerY - getRowHeight() / 2f + getRowBaseline(0);
+    float centerX = (mRect.left + mRect.right) / 2;
     mPaint.setColor(mColors.getColor(EditorColorScheme.LINE_NUMBER_PANEL_TEXT));
     mPaint.setTextAlign(Paint.Align.CENTER);
-    canvas.drawText(text, rightX, baseline, mPaint);
+    canvas.drawText(text, centerX, baseline, mPaint);
+
+    // ترسیم Path حباب
+    canvas.drawPath(mPath, mPaint);
 
     mPaint.setTextAlign(Paint.Align.LEFT);
     mPaint.setTextSize(backupSize);
     mTextMetrics = backupMetrics;
-  }
-
-  protected void drawColor(Canvas canvas, int color, Path path) {
-    // تنظیم رنگ
-    if (mPaint2 != null) mPaint2.setColor(color);
-
-    // پر کردن شکل با رنگ مورد نظر
-    canvas.drawPath(path, mPaint2);
-  }
-
-  /**
-   * Draw horizontal scroll bar track
-   *
-   * @param canvas Canvas to draw
-   */
-  protected void drawScrollBarTrackHorizontal(Canvas canvas) {
-    if (mEventHandler.holdHorizontalScrollBar()) {
-      mRect.top = getHeight() - mDpUnit * 10;
-      mRect.bottom = getHeight();
-      mRect.right = getWidth();
-      mRect.left = 30;
-      float cornerRadius = 20f; // Adjust the radius as needed
-      Path path = new Path();
-      path.addRoundRect(new RectF(mRect), cornerRadius, cornerRadius, Path.Direction.CW);
-      canvas.clipPath(path);
-      mPaint.setColor(mColors.getColor(EditorColorScheme.SCROLL_BAR_TRACK));
-      canvas.drawRoundRect(mRect, 20f, 20f, mPaint);
-      // drawColor(canvas, mColors.getColor(EditorColorScheme.SCROLL_BAR_TRACK), mRect);
-    }
   }
 
   /**

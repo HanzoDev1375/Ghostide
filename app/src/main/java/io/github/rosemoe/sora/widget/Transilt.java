@@ -31,6 +31,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.function.ToDoubleBiFunction;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /*
  *  Code by Ninja coder And Hsham soft
@@ -117,6 +119,96 @@ public class Transilt {
   };
   private static ArrayList<String> aa = new ArrayList<>(Arrays.asList(arrf));
   private static ArrayList<String> cc = new ArrayList<>(Arrays.asList(arrf2));
+
+  public static void StartbyJsonObject(CodeEditor editor, String keyObject) {
+    AlertDialog dialog =
+        new MaterialAlertDialogBuilder(editor.getContext())
+            .setTitle(getTitle())
+            .setPositiveButton("ok", (ccc, ddd) -> {})
+            .setView(R.layout.finalmotargem)
+            .setNegativeButton("ترجمه", (xx, ff) -> {})
+            .create();
+
+    dialog.setOnShowListener(
+        (var) -> {
+          TextInputLayout input = (TextInputLayout) dialog.findViewById(R.id.input);
+          TextInputEditText result = (TextInputEditText) dialog.findViewById(R.id.result);
+          Spinner sp1 = (Spinner) dialog.findViewById(R.id.sp1);
+          Spinner sp2 = (Spinner) dialog.findViewById(R.id.sp2);
+          Button postViter = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+          Button inittor = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+
+          // فرض کنید jsonObject به شیء JSON شما اشاره کند
+          JSONObject jsonObject = new JSONObject();
+          // پر کردن jsonObject با داده‌ها
+          try {
+            // مقدار را از متن انتخاب شده دریافت کنید
+            String selectedText = editor.getSelectedText();
+            if (selectedText != null && !selectedText.isEmpty()) {
+              jsonObject.put(keyObject, selectedText); // مقدار انتخاب شده به عنوان مقدار
+            } else {
+              Toast.makeText(editor.getContext(), "متنی انتخاب نشده است", Toast.LENGTH_SHORT)
+                  .show();
+              return; // اگر متنی انتخاب نشده باشد، عملیات متوقف خواهد شد
+            }
+          } catch (JSONException e) {
+            e.printStackTrace();
+          }
+
+          // تنظیم آداپترهای اسپینرها و سایر عملیات
+          sp1.setAdapter(new Sp1Adapter(mao, editor.getContext()));
+          sp2.setAdapter(new Sp2Adapter(mao, editor.getContext()));
+
+          postViter.setEnabled(!editor.getText().toString().isEmpty());
+
+          postViter.setOnClickListener(
+              view -> {
+                dialog.dismiss();
+                SnackbarUtils.with(view)
+                    .setMessage(getMassges())
+                    .setMessageColor(Color.BLUE)
+                    .setBgColor(Color.BLACK)
+                    .setDuration(200)
+                    .show();
+              });
+
+          inittor.setOnClickListener(
+              view -> {
+                // دریافت مقدار از jsonObject با استفاده از کلید
+                String valueToTranslate;
+                try {
+                  valueToTranslate = jsonObject.getString(keyObject); // مقدار مربوط به کلید
+                } catch (JSONException e) {
+                  Toast.makeText(editor.getContext(), "خطا در دریافت مقدار", Toast.LENGTH_SHORT)
+                      .show();
+                  return;
+                }
+
+                // ایجاد API ترجمه
+                TranslateAPI translateAPI =
+                    new TranslateAPI(
+                        cc.get(sp1.getSelectedItemPosition()),
+                        cc.get(sp2.getSelectedItemPosition()).toLowerCase(),
+                        valueToTranslate // مقدار دریافت شده از JSON
+                        );
+
+                translateAPI.setTranslateListener(
+                    new TranslateAPI.TranslateListener() {
+                      @Override
+                      public void onSuccess(String translatedText) {
+                        result.setText(translatedText);
+                      }
+
+                      @Override
+                      public void onFailure(String ErrorText) {
+                        Toast.makeText(editor.getContext(), ErrorText, Toast.LENGTH_SHORT).show();
+                      }
+                    });
+              });
+        });
+
+    dialog.show();
+  }
 
   public static void Start(CodeEditor editor) {
 

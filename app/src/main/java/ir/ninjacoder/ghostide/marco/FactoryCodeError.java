@@ -1,5 +1,8 @@
 package ir.ninjacoder.ghostide.marco;
 
+import com.blankj.utilcode.util.ThreadUtils;
+import io.github.rosemoe.sora.widget.tooltip.ToolItemPop;
+import io.github.rosemoe.sora.widget.tooltip.ToolTipHelper;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.R;
@@ -7,7 +10,6 @@ import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
-import android.view.View;
 import android.widget.ImageView;
 import androidx.annotation.MainThread;
 import com.ninjacoder.jgit.AsyncTaskCompat;
@@ -42,6 +44,7 @@ import io.github.rosemoe.sora.langs.python.PythonLexer;
 import io.github.rosemoe.sora.langs.python.PythonParser;
 import io.github.rosemoe.sora.langs.python.PythonParserBaseListener;
 import java.io.StringReader;
+import java.util.List;
 import org.antlr.parser.antlr4.csharp.CSharpLexer;
 import org.antlr.parser.antlr4.csharp.CSharpParser;
 import org.antlr.parser.antlr4.csharp.CSharpParserBaseListener;
@@ -313,6 +316,13 @@ public class FactoryCodeError {
 
     private boolean errorCall = false;
 
+    private ErrorNode errorNode;
+    private ToolItemPop tooltipHelper;
+
+    public JavaTask() {
+      tooltipHelper = new ToolItemPop(editor);
+    }
+
     @MainThread
     @Override
     protected void onPreExecute() {
@@ -333,6 +343,7 @@ public class FactoryCodeError {
               @Override
               public void visitErrorNode(ErrorNode node) {
                 errorCall = true;
+                errorNode = node;
               }
             };
 
@@ -349,6 +360,17 @@ public class FactoryCodeError {
       if (errorCall) {
         call.setImageResource(R.drawable.closehsi);
         call.setColorFilter(Color.RED);
+        if (tooltipHelper != null) {
+          var builder = new StringBuilder();
+          builder.append("Error: ").append(errorNode.getSymbol().getText()).append('\n');
+          builder
+              .append("Line: ")
+              .append(String.valueOf(errorNode.getSymbol().getLine()))
+              .append('\n');
+
+          tooltipHelper.run(builder.toString());
+        }
+
       } else {
         call.setImageResource(R.drawable.ic_palette_check_box);
         call.setColorFilter(Color.GREEN);
@@ -359,6 +381,13 @@ public class FactoryCodeError {
   private class TypeScriptTask extends AsyncTaskCompat<String, Void, Boolean> {
 
     private boolean errorCall = false;
+    private ErrorNode errorNode; // تغییر نام به یک متغیر سراسری
+    List<Integer> mlist = editor.getLineSize();
+    private ToolTipHelper tooltipHelper;
+
+    public TypeScriptTask() {
+      tooltipHelper = new ToolTipHelper(editor);
+    }
 
     @MainThread
     @Override
@@ -368,7 +397,6 @@ public class FactoryCodeError {
 
     @Override
     protected Boolean doInBackground(String... params) {
-
       try {
         var input = new ANTLRInputStream(new StringReader(params[0]));
         var lexer = new Java20Lexer(input);
@@ -380,6 +408,7 @@ public class FactoryCodeError {
               @Override
               public void visitErrorNode(ErrorNode node) {
                 errorCall = true;
+                errorNode = node; // ذخیره خطا در متغیر سراسری
               }
             };
 
@@ -396,7 +425,20 @@ public class FactoryCodeError {
       if (errorCall) {
         call.setImageResource(R.drawable.closehsi);
         call.setColorFilter(Color.RED);
+        int line = errorNode.getSymbol().getLine(); // استفاده از متغیر سراسری
+        mlist.add(line);
+        if (tooltipHelper != null) {
+          var builder = new StringBuilder();
+          builder.append("Error: ").append(errorNode.getSymbol().getText()).append('\n');
+          builder
+              .append("Line: ")
+              .append(String.valueOf(errorNode.getSymbol().getLine()))
+              .append('\n');
+
+          tooltipHelper.setText(builder.toString());
+        }
       } else {
+        mlist.clear();
         call.setImageResource(R.drawable.ic_palette_check_box);
         call.setColorFilter(Color.GREEN);
       }

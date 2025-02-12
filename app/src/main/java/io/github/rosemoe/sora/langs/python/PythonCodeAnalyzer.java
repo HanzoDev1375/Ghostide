@@ -1,5 +1,6 @@
 package io.github.rosemoe.sora.langs.python;
 
+import io.github.rosemoe.sora.data.Span;
 import ir.ninjacoder.ghostide.IdeEditor;
 import android.graphics.Color;
 import android.util.Log;
@@ -111,6 +112,7 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
           case PythonLexer.NOT:
           case PythonLexer.OR:
           case PythonLexer.PASS:
+            
             result.addIfNeeded(
                 line,
                 column,

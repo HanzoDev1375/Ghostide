@@ -35,7 +35,8 @@ public class KotilnKeys {
     "when",
     "while",
     "public",
-    "inner"
+    "inner",
+    "suspend"
   };
 
   public static final List<String> sampel() {

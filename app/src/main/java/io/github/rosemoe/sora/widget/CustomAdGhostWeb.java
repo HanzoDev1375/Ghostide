@@ -18,9 +18,9 @@ import io.github.rosemoe.sora.data.CompletionItem;
 @SuppressWarnings("CanBeFinal")
 public class CustomAdGhostWeb extends EditorCompletionAdapter {
   protected HTMLConstants htmlconfig;
-  protected TextView  item_label, item_desc, item_type;
+  protected TextView item_label, item_desc, item_type;
   View item_icon;
-  
+
   private io.github.rosemoe.sora.widget.TextSummry.TextUtils textUtils;
 
   public CustomAdGhostWeb() {
@@ -65,7 +65,7 @@ public class CustomAdGhostWeb extends EditorCompletionAdapter {
     item_icon.setPadding(9, 9, 9, 9);
     item_label.setTextColor(getThemeColor(EditorColorScheme.ATTRIBUTE_VALUE));
     item_desc.setTextColor(getThemeColor(EditorColorScheme.ATTRIBUTE_VALUE));
-  //  item_icon.setTextColor(getThemeColor(EditorColorScheme.ATTRIBUTE_VALUE));
+    //  item_icon.setTextColor(getThemeColor(EditorColorScheme.ATTRIBUTE_VALUE));
     item_type.setTextColor(getThemeColor(EditorColorScheme.ATTRIBUTE_VALUE));
     AnimUtils.Sacla(view);
     if (item.desc.equals(htmlconfig.HTMLTAG)) {
@@ -80,10 +80,12 @@ public class CustomAdGhostWeb extends EditorCompletionAdapter {
       item_desc.setText(item.desc);
     }
     var editor = getEditor();
-    
+
     // فلن یک رنگ ثابت میدم
-     item_icon.setBackground(new CircleDrawable(getThemeColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER),true,item.label));
-  
+    item_icon.setBackground(
+        new CircleDrawable(
+            getThemeColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER), true, item.label));
+
     view.setTag(pos);
     return view;
   }

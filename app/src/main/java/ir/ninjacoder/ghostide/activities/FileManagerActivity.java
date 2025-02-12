@@ -1235,6 +1235,10 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     if (staticstring.endsWith(".cpp")) {
       SendDataFromCodeEditor(newpos, "path", files, newlistmap);
     }
+    if (staticstring.endsWith(".frag")) {
+      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+    }
+
     if (staticstring.endsWith(".dex")) {
       loadjadx();
     }

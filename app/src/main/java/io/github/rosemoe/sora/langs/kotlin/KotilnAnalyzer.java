@@ -3,6 +3,7 @@ package io.github.rosemoe.sora.langs.kotlin;
 import android.graphics.Color;
 import android.util.Log;
 import io.github.rosemoe.sora.data.Span;
+import io.github.rosemoe.sora.langs.xml.analyzer.Utils;
 import io.github.rosemoe.sora.text.TextStyle;
 
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
@@ -10,10 +11,11 @@ import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import java.util.Stack;
 
 import io.github.rosemoe.sora.data.BlockLine;
-import org.antlr.parser.antlr4.ninja.NinjaTest;
+import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
+import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 
 import java.io.IOException;
@@ -24,6 +26,8 @@ import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.text.TextAnalyzer;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
 import org.antlr.v4.runtime.TokenSource;
+import org.antlr.v4.runtime.tree.ErrorNode;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 public class KotilnAnalyzer implements CodeAnalyzer {
 
@@ -69,7 +73,7 @@ public class KotilnAnalyzer implements CodeAnalyzer {
             result.addIfNeeded(
                 line,
                 column,
-                TextStyle.makeStyle(EditorColorScheme.ATTRIBUTE_NAME, 0, true, false, true));
+                TextStyle.makeStyle(EditorColorScheme.javaoprator, 0, true, false, false));
 
             break;
           case KotlinLexer.ANNOTATION:
@@ -147,7 +151,7 @@ public class KotilnAnalyzer implements CodeAnalyzer {
             result.addIfNeeded(
                 line,
                 column,
-                TextStyle.makeStyle(EditorColorScheme.KEYWORD, 0, true, false, false));
+                TextStyle.makeStyle(EditorColorScheme.javaoprator, 0, true, false, false));
             break;
           case KotlinLexer.RealLiteral:
           case KotlinLexer.FloatLiteral:
@@ -160,7 +164,7 @@ public class KotilnAnalyzer implements CodeAnalyzer {
           case KotlinLexer.NullLiteral:
           case KotlinLexer.CharacterLiteral:
           case KotlinLexer.HexLiteral:
-            Span span = Span.obtain(column, EditorColorScheme.LITERAL);
+            Span span = Span.obtain(column, EditorColorScheme.javatype);
             if (token.getType() == KotlinLexer.HexLiteral) {
               try {
                 span.setUnderlineColor(Integer.parseInt(token.getText(), 16));
@@ -172,7 +176,7 @@ public class KotilnAnalyzer implements CodeAnalyzer {
             result.addIfNeeded(
                 line,
                 column,
-                TextStyle.makeStyle(EditorColorScheme.KEYWORD, 0, true, false, false));
+                TextStyle.makeStyle(EditorColorScheme.javatype, 0, true, false, false));
             break;
           case KotlinLexer.QUOTE_OPEN:
           case KotlinLexer.TRIPLE_QUOTE_OPEN:
@@ -189,7 +193,7 @@ public class KotilnAnalyzer implements CodeAnalyzer {
             result.addIfNeeded(
                 line,
                 column,
-                TextStyle.makeStyle(EditorColorScheme.HTML_TAG, 0, true, false, false));
+                TextStyle.makeStyle(EditorColorScheme.javanumber, 0, true, false, false));
             break;
           case KotlinLexer.RESERVED:
           case KotlinLexer.DOT:
@@ -239,7 +243,7 @@ public class KotilnAnalyzer implements CodeAnalyzer {
             result.addIfNeeded(
                 line,
                 column,
-                TextStyle.makeStyle(EditorColorScheme.OPERATOR, 0, true, false, false));
+                TextStyle.makeStyle(EditorColorScheme.javaparament, 0, true, false, false));
             break;
           case KotlinLexer.LineComment:
           case KotlinLexer.ShebangLine:
@@ -254,13 +258,14 @@ public class KotilnAnalyzer implements CodeAnalyzer {
           case KotlinLexer.Identifier:
             {
               int color = EditorColorScheme.TEXT_NORMAL;
+              boolean isbold = false, isItalic = false;
               ktinfo.addIdentifier(token.getText());
               int typemode = previous.getType();
               if (typemode == KotlinLexer.AT) {
                 color = EditorColorScheme.ATTRIBUTE_NAME;
               }
               if (typemode == KotlinLexer.HASH) {
-                color = EditorColorScheme.OPERATOR;
+                color = EditorColorScheme.javaoprator;
               }
               if (typemode == KotlinLexer.DOT) {
                 color = EditorColorScheme.HTML_TAG;
@@ -285,44 +290,72 @@ public class KotilnAnalyzer implements CodeAnalyzer {
                   || typemode == KotlinLexer.IN) {
                 color = EditorColorScheme.LITERAL;
               }
+              if (typemode == KotlinLexer.VAL || typemode == KotlinLexer.VAR) {
+                color = EditorColorScheme.javatype;
+                isItalic = true;
+              }
+              if (token.getText().equals("apply") || token.getText().equals("let")) {
+                color = EditorColorScheme.Ninja;
+                isbold = true;
+              }
+              if (token.getText().equals("field")) {
+                isbold = true;
+                color = EditorColorScheme.TEXT_NORMAL;
+              }
+              if (token.getText().equals("run")
+                  || token.getText().equals("aslo")
+                  || token.getText().equals("launch")) {
+                isbold = true;
+                color = EditorColorScheme.javafield;
+              }
 
-              result.addIfNeeded(line, column, color);
+              result.addIfNeeded(
+                  line, column, TextStyle.makeStyle(color, 0, isbold, isItalic, false));
               break;
             }
           case KotlinLexer.LCURL:
-            if (stack.isEmpty()) {
-              if (currSwitch > maxSwitch) {
-                maxSwitch = currSwitch;
+            {
+              BlockLine block = result.obtainNewBlock();
+              block.startLine = line;
+              block.startColumn = column;
+              // اضافه کردن بلوک به استک
+              var lists = result.getBlocks();
+              var colorres = EditorColorScheme.htmlblocknormal;
+              if (GhostIdeAppLoader.getPrefManager().getBoolean("breaks", false) == true)
+                colorres = HTMLConstants.get(stack.size());
+              else colorres = EditorColorScheme.htmlblocknormal;
+              stack.push(block);
+              result.addIfNeeded(line, column, colorres);
+              // بررسی maxSwitch
+              if (stack.isEmpty()) {
+                if (currSwitch > maxSwitch) {
+                  maxSwitch = currSwitch;
+                }
+                currSwitch = 0;
               }
-              currSwitch = 0;
+              currSwitch++; // ا
+              break;
             }
-            currSwitch++;
-            BlockLine block = result.obtainNewBlock();
-            block.startLine = line;
-            block.startColumn = column;
-            var colorid = EditorColorScheme.htmlblocknormal;
 
-            if (GhostIdeAppLoader.getPrefManager().getBoolean("breaks", false) == true)
-              colorid = HTMLConstants.get(stack.size());
-            else colorid = EditorColorScheme.htmlblocknormal;
-            stack.push(block);
-            result.addIfNeeded(line, column, colorid);
-            break;
           case KotlinLexer.RCURL:
-            var colorres = EditorColorScheme.htmlblocknormal;
-            if (GhostIdeAppLoader.getPrefManager().getBoolean("breaks", false) == true)
-              colorres = HTMLConstants.get(stack.size());
-            else colorres = EditorColorScheme.htmlblocknormal;
-            result.addIfNeeded(line, column, colorres);
-            if (!stack.isEmpty()) {
-              BlockLine b = stack.pop();
-              b.endLine = line;
-              b.endColumn = column;
-              if (b.startLine != b.endLine) {
-                result.addBlockLine(b);
+            {
+              if (!stack.isEmpty()) {
+                BlockLine b = stack.pop();
+                b.endLine = line;
+                b.endColumn = column;
+                if (b.startLine != b.endLine) {
+                  result.addBlockLine(b); // اضافه کردن بلوک به نتایج
+                }
               }
+              var lists = result.getBlocks();
+              var colorid = EditorColorScheme.htmlblocknormal;
+
+              if (GhostIdeAppLoader.getPrefManager().getBoolean("breaks", false) == true)
+                colorid = HTMLConstants.get(stack.size());
+              else colorid = EditorColorScheme.htmlblocknormal;
+              result.addIfNeeded(line, column, colorid);
+              break;
             }
-            break;
           default:
             result.addIfNeeded(line, column, EditorColorScheme.TEXT_NORMAL);
             break;
@@ -341,10 +374,36 @@ public class KotilnAnalyzer implements CodeAnalyzer {
       }
       ktinfo.finish();
       result.setExtra(ktinfo);
-
-      // for testninja lang
-      NinjaTest.main(result, content.toString());
       result.setSuppressSwitch(maxSwitch + 10);
+
+      if (GhostIdeAppLoader.getAnalyzercod().getBoolean("Analyzercod", false) == true) {
+        var antlrinputStream = new ANTLRInputStream(content.toString());
+        var mlexer = new KotlinLexer(antlrinputStream);
+        var streams = new CommonTokenStream(mlexer);
+        var paser = new KotlinParser(streams);
+        var base =
+            new KotlinParserBaseListener() {
+              @Override
+              public void visitErrorNode(ErrorNode node) {
+                Utils.setErrorSpan(
+                    result,
+                    node.getSymbol().getLine(),
+                    node.getSymbol().getCharPositionInLine() + 1);
+                super.visitErrorNode(node);
+              }
+
+              @Override
+              public void enterBlock(KotlinParser.BlockContext ctx) {
+                if (ctx.statements().isEmpty()) {
+                  Utils.setWaringSpan(
+                      result,
+                      ctx.LCURL().getSymbol().getLine(),
+                      ctx.LCURL().getSymbol().getCharPositionInLine());
+                }
+              }
+            };
+        ParseTreeWalker.DEFAULT.walk(base, paser.kotlinFile());
+      }
     } catch (IOException e) {
       e.printStackTrace();
       Log.e("TAG", e.getMessage());

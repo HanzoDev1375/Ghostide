@@ -1,7 +1,9 @@
 package io.github.rosemoe.sora.langs.java;
 
 import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.expr.ClassExpr;
+import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.TryStmt;
 import io.github.rosemoe.sora.widget.ListCss3Color;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
@@ -44,7 +46,6 @@ import org.antlr.v4.runtime.CodePointCharStream;
 import org.antlr.v4.runtime.Token;
 import java.io.IOException;
 import java.io.StringReader;
-import androidx.annotation.NonNull;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.text.TextAnalyzer;
@@ -112,7 +113,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
       TrieTree<Object> tree = new TrieTree<>();
       int type, currSwitch = 1, maxSwitch = 0, previous = 0;
       int lastLine = 1;
-      int line = 1, column = 0;
+      int line, column;
 
       tree.put("String", OBJECT);
       tree.put("Object", OBJECT);
@@ -490,12 +491,21 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             public void visit(FieldDeclaration fieldDeclaration, Void arg) {
               for (VariableDeclarator variable : fieldDeclaration.getVariables()) {
                 String variableName = variable.getNameAsString();
-                int line = variable.getBegin().get().line - 1;
+                int line = variable.getBegin().get().line ;
                 int column = variable.getBegin().get().column;
                 declaredVariables.add(variableName);
                 inline.put(variableName, line);
                 incol.put(variableName, column);
+
+                Utils.setSpanEFO(
+                    result,
+                    variable.getName().getBegin().get().line,
+                    variable.getName().getBegin().get().column ,
+                    EditorColorScheme.javafield,
+                    true,
+                    false);
               }
+
               super.visit(fieldDeclaration, arg);
             }
 
@@ -512,6 +522,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 if (JavaPaserUtils.getRegexAnnotation(variableDeclarationExpr.getAnnotations()))
                   Utils.setWaringSpan(result, line, column, EditorColorScheme.green);
               }
+
               super.visit(variableDeclarationExpr, arg);
             }
 
@@ -529,6 +540,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               inline.put(importName, line);
               incol.put(importName, column);
               unusedImport.add(importName);
+
               super.visit(dec, arg);
             }
 
@@ -584,6 +596,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                   && variableName.startsWith("_")) {
                 Utils.setWaringSpan(result, li, cl + 1, EditorColorScheme.HTML_TAG);
               }
+
               super.visit(arg0, arg1);
             }
 
@@ -596,6 +609,25 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               if (JavaPaserUtils.getCustomAnnotationExpr(arg0.getAnnotations(), "NonNull"))
                 Utils.setWaringSpan(result, lines, colz + 1, EditorColorScheme.HTML_TAG);
 
+              super.visit(arg0, arg1);
+            }
+
+            @Override
+            public void visit(Parameter arg0, Void arg1) {
+              int myline = arg0.getBegin().get().line;
+              int mycolums = arg0.getBegin().get().column;
+              Utils.setSpanEFO(result, myline, mycolums, EditorColorScheme.KEYWORD, false, true);
+
+              super.visit(arg0, arg1);
+            }
+
+            @Override
+            public void visit(BlockStmt arg0, Void arg1) {
+              if (arg0.getStatements().isEmpty()) {
+                var lines1 = arg0.getBegin().get().line;
+                var columns1 = arg0.getBegin().get().column;
+                Utils.setWaringSpan(result, lines1, columns1 + 1, EditorColorScheme.javakeyword);
+              }
               super.visit(arg0, arg1);
             }
           },
@@ -616,6 +648,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             if (it.equals("main")) {
               var li = inline.get(it);
               editor.setShowIcon(li.intValue());
+            } else {
             }
           });
 

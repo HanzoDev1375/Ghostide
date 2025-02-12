@@ -12,8 +12,6 @@ import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 import io.github.rosemoe.sora.widget.commentRule.AppConfig;
-import java.io.File;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import lsp4custom.com.ninjacoder.customhtmllsp.PhpFun;
 
 public class HTMLAutoComplete implements AutoCompleteProvider {
   protected HTMLConstants htmlconfig;
@@ -249,19 +248,7 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
       """;
       items.add(new CompletionItem(cssCode, "CssWord", "Style"));
     }
-    // open list path
-    if ("./".startsWith(prefix) && prefix.length() > 0) {
-      File fileOrgi = new File(save_path.getString("path", ""));
-      File[] arryfile = fileOrgi.listFiles();
-      List<File> listFile = new ArrayList<>(Arrays.asList(arryfile));
-      listFile.forEach(
-          it -> {
-            items.add(
-                new CompletionItem(
-                    it.isDirectory() ? it.getPath() : it.getName(),
-                    it.isDirectory() ? "Dir" : "File"));
-          });
-    }
+    
 
     keyhtml.installFromSora(items, prefix);
     keyhtml.installHtmlAttr(items, prfex);
@@ -270,6 +257,7 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
     keyhtml.intallCss3Color(items, prfex);
     keyhtml.installCssPadding(items, prfex);
     keyhtml.randomColor(items, prfex);
+
     for (String ddd : HTMLLanguage.JS)
       if (ddd.startsWith(prefix)) items.add(dddAsCompletion(ddd, htmlconfig.JsKey));
     for (String classapp : HTMLLanguage.EmtClass)
@@ -299,9 +287,9 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
         }
       }
     }
-    for (String phpfuns : PHPLanguage.phpFuns) {
+    for (String phpfuns : PhpFun.item) {
       if (phpfuns.startsWith(prefix)) {
-        items.add(dddAsCompletion(phpfuns, htmlconfig.PhpFun));
+        items.add(dddAsCompletion(phpfuns + "()".trim(), htmlconfig.PhpFun));
       }
     }
     for (var it : PHPLanguage.key) {
@@ -467,7 +455,7 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
         for (String tag : validTags) {
           api = tag;
           for (int i = 1; i <= num; i++) { // از 1 شروع و تا عدد موجود تکرار می‌کنیم
-            openingTags.append("<" + api.replace("#", "") + " class=\"" + name + "\">"); // خروجی
+            openingTags.append("<" + api.replace("#", "") + " id=\"" + name + "\">"); // خروجی
             closingTags.insert(0, "</" + api.replace("#", "") + ">");
           }
         }

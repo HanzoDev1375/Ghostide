@@ -91,8 +91,12 @@ public class Utils {
 
     return end;
   }
+  
+  public static int[]setSpanEFO(TextAnalyzeResult colors, int line, int column, int coloruser){
+    return setSpanEFO(colors,line,column,coloruser,false,false);
+  }
 
-  public static int[] setSpanEFO(TextAnalyzeResult colors, int line, int column, int coloruser) {
+  public static int[] setSpanEFO(TextAnalyzeResult colors, int line, int column, int coloruser,boolean isbold,boolean isitalic) {
     int lineCount = colors.getSpanMap().size();
     int realLine = line - 1;
     List<Span> spans = colors.getSpanMap().get(Math.min(realLine, lineCount - 1));
@@ -101,14 +105,16 @@ public class Utils {
     end[0] = Math.min(realLine, lineCount - 1);
 
     if (realLine >= lineCount) {
-      Span span = Span.obtain(0, coloruser);
+      Span span = Span.obtain(0, TextStyle.makeStyle(coloruser,0,isbold,isitalic,false));
       span.problemFlags = 0;
+      
       colors.add(realLine, span);
       end[0]++;
     } else {
       Span last = null;
       for (int i = 0; i < spans.size(); i++) {
         Span span = spans.get(i);
+        span.setDrawminiText("Test");
         if (last != null) {
           if (last.column <= column - 1 && span.column >= column - 1) {
             span.problemFlags = 0;

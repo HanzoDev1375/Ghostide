@@ -1,5 +1,6 @@
 package ir.ninjacoder.ghostide.navigator;
 
+import io.github.rosemoe.sora.langs.glsllang.GLSLLang;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.utils.FileCompatApi28;
 import ir.ninjacoder.ghostide.widget.ExrtaFab;
@@ -132,7 +133,7 @@ public class EditorRoaderFile {
       editor.setEditorLanguage(new DartLang());
     } else if (_path.endsWith(".kt")) {
       ReadFileCompat(editor, _path, bar);
-      _fab.postDelayed(_fab::show, 400);
+      _fab.postDelayed(_fab::hide, 400);
       editor.setEditorLanguage(new KotlinLanguage());
     } else if (_path.endsWith(".groovy") || _path.endsWith(".gradle")) {
       ReadFileCompat(editor, _path, bar);
@@ -159,10 +160,14 @@ public class EditorRoaderFile {
       ReadFileCompat(editor, _path, bar);
       editor.setEditorLanguage(new MySqlLang());
     } else if (_path.endsWith(".jj")) {
-      
+
       ReadFileCompat(editor, _path, bar);
       editor.setEditorLanguage(new JavaccLang(editor));
       _fab.postDelayed(_fab::show, 400);
+    } else if (_path.endsWith(".frag")) {
+      ReadFileCompat(editor, _path, bar);
+      editor.setEditorLanguage(new GLSLLang());
+      _fab.postDelayed(_fab::hide, 400);
     } else _fab.postDelayed(_fab::hide, 400);
   }
 

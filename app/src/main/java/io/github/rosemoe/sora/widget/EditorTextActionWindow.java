@@ -23,6 +23,7 @@
  */
 package io.github.rosemoe.sora.widget;
 
+import io.github.rosemoe.sora.langs.json.JsonLanguage;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.adapter.TextActionAd;
@@ -184,9 +185,14 @@ public class EditorTextActionWindow extends EditorPopupWindow
                           tools.run(v.getContext(), editor, v);
                         } else if (editor.getEditorLanguage() instanceof SMLang) {
                           SmaliHelper.run(editor, v.getContext());
+                        } else if (editor.getEditorLanguage() instanceof JsonLanguage) {
+                          JsonTools.run((IdeEditor) editor,v,v.getContext());
+                        } else {
+                          Toast.makeText(editor.getContext(), "Tools your lang not found", 2)
+                              .show();
                         }
-                        break;
                       }
+                      break;
                   }
                 }
               });

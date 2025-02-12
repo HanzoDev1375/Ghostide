@@ -150,6 +150,13 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
           case HTMLLexer.NULL_LITERAL:
             result.addIfNeeded(line, column, EditorColorScheme.jsoprator);
             break;
+
+          case HTMLLexer.PhpFuns:
+            result.addIfNeeded(
+                line,
+                column,
+                TextStyle.makeStyle(EditorColorScheme.phpcolormatch3, 0, true, false, false));
+            break;
           case HTMLLexer.STRING:
           case HTMLLexer.CHATREF:
             {

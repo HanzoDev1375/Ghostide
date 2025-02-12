@@ -9,6 +9,8 @@ import androidx.core.app.ActivityCompat;
 import android.content.Intent;
 import android.provider.Settings;
 import android.net.Uri;
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.ImportDeclaration;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.utils.FileUtil;
@@ -72,6 +74,7 @@ public class ObjectUtils {
   public static int ColorFilter = R.attr.colorOnPrimaryContainer;
   public static int TvColorFab = R.attr.colorOnSecondaryFixed;
   public static int colorOnSurface = R.attr.colorOnSurface;
+  public static String name = "";
 
   public static void setColorBackground(View view) {
 
@@ -586,5 +589,50 @@ public class ObjectUtils {
 
       return false;
     }
+  }
+
+  public static String getClassNameFormImport(String code) {
+    if (code.length() > 0) {
+      var cu = StaticJavaParser.parse(code);
+      if (cu != null) {
+        cu.findAll(ImportDeclaration.class)
+            .forEach(
+                it -> {
+                  name = it.getName().getIdentifier();
+                });
+      }
+    }
+    return name;
+  }
+
+  public static String findClassData(String code) throws Exception {
+    Class cls = Class.forName(getClassNameFormImport(code));
+    String text = cls.getName();
+    text += "\n\n// Annotations (if it's empty means there's nothing)";
+    for (var a : cls.getDeclaredAnnotations()) {
+      text += "\n\n" + a.toString();
+    }
+
+    text += "\n\n// Fields (if it's empty means there's nothing)";
+    for (var f : cls.getDeclaredFields()) {
+      text += "\n\n" + f.toString();
+    }
+
+    text += "\n\n// Constructors (if it's empty means there's nothing)";
+    for (var c : cls.getDeclaredConstructors()) {
+      text += "\n\n" + c.toString();
+    }
+
+    text += "\n\n// Methods (if it's empty means there's nothing)";
+    for (var m : cls.getDeclaredMethods()) {
+      text += "\n\n" + m.toString();
+    }
+
+    text += "\n\n// Classes (if it's empty means there's nothing)";
+    for (var c : cls.getDeclaredClasses()) {
+      text += "\n\n" + c.toString();
+    }
+
+    return text;
   }
 }

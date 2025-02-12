@@ -1,11 +1,15 @@
 package ir.ninjacoder.ghostide;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import io.github.rosemoe.sora.event.LongPressEvent;
 import io.github.rosemoe.sora.event.TextSizeChangeEvent;
+import io.github.rosemoe.sora.langs.java.JavaLanguage;
 import ir.ninjacoder.ghostide.config.LOG;
 import ir.ninjacoder.ghostide.interfaces.CallBackErrorManager;
 import ir.ninjacoder.ghostide.marco.CommentList;
 import ir.ninjacoder.ghostide.marco.editorface.IEditor;
+import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.widget.SymbolInputView;
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -30,6 +34,7 @@ import io.github.rosemoe.sora.interfaces.EditorLanguage;
 import io.github.rosemoe.sora.langs.xml.XMLLanguage;
 import io.github.rosemoe.sora.langs.xml.XMLLexer;
 import java.io.StringReader;
+import java.util.List;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.Token;
 import java.util.ArrayList;
@@ -52,7 +57,7 @@ public class IdeEditor extends CodeEditor implements IEditor {
   private boolean isSoftKbdEnabled;
   private CommentList listitem;
   private ToolTipHelper toolTipHelper;
-  private SharedPreferences saveTextSize ;
+  private SharedPreferences saveTextSize;
 
   // for test
   private Pattern URL_PATTERN =
@@ -94,26 +99,42 @@ public class IdeEditor extends CodeEditor implements IEditor {
     setDividerMargin(30f);
     setNonPrintablePaintingFlags(FLAG_GHOSTWEB);
     subscribeEvent(ClickEvent.class, ((event, unsubscribe) -> ta(event)));
-    //subscribeEvent(ContentChangeEvent.class, ((event, unsubscribe) -> handleContentChange(event)));
+    // subscribeEvent(ContentChangeEvent.class, ((event, unsubscribe) ->
+    // handleContentChange(event)));
     subscribeEvent(TextSizeChangeEvent.class, ((event, unsubscribe) -> textSize(event)));
-    saveTextSize = getContext().getSharedPreferences("saveItem",Context.MODE_PRIVATE);
-    var getSize = saveTextSize.getFloat("newTextSize",16);
-    if(saveTextSize != null) {
-    	setTextSizePx(getSize);
+    subscribeEvent(LongPressEvent.class, (ev, un) -> setLongEvent(ev));
+    saveTextSize = getContext().getSharedPreferences("saveItem", Context.MODE_PRIVATE);
+    var getSize = saveTextSize.getFloat("newTextSize", 16);
+    if (saveTextSize != null) {
+      setTextSizePx(getSize);
     }
+    
 
     return this;
   }
 
-  void textSize(TextSizeChangeEvent e){
+  void textSize(TextSizeChangeEvent e) {
     var builder = new StringBuilder();
     builder.append("oldTextSize: ").append(e.getOldTextSize()).append("\n");
     builder.append("newTextSize: ").append(e.getNewTextSize()).append("\n");
     SharedPreferences.Editor edit = saveTextSize.edit();
-    edit.putFloat("newTextSize",e.getNewTextSize());
+    edit.putFloat("newTextSize", e.getNewTextSize());
     edit.apply();
   }
-  
+
+  void setLongEvent(LongPressEvent ev) {
+    try {
+      if (getEditorLanguage() instanceof JavaLanguage) {
+        new MaterialAlertDialogBuilder(getContext())
+            .setTitle("ff")
+            .setMessage(ObjectUtils.findClassData(getText().toString()))
+            .show();
+      }
+    } catch (Exception e) {
+
+    }
+  }
+
   void ta(ClickEvent ev) {
     //    if (getEditorLanguage() instanceof HTMLLanguage) {
 

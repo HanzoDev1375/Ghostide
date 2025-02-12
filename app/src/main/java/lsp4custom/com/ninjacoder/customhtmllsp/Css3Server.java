@@ -10,17 +10,16 @@ import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 
 import io.github.rosemoe.sora.widget.Transilt;
 import ir.ninjacoder.ghostide.utils.DataUtil;
-import ir.ninjacoder.ghostide.utils.FileUtil;
 import java.io.InputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import org.jsoup.Jsoup;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Css3Server {
   private Random RANDOM = new Random();
@@ -357,7 +356,12 @@ public class Css3Server {
       }
     }
     TypeValue(list, prefix);
-    new KeyWordConst().cssFont(list,prefix);
+    try {
+      toMaterialize(list, prefix);
+    } catch (Exception err) {
+
+    }
+    new KeyWordConst().cssFont(list, prefix);
   }
 
   public void toAndroidManifestXml(List<CompletionItem> list, String prefix) {
@@ -381,6 +385,30 @@ public class Css3Server {
     }
   }
 
+  void toMaterialize(List<CompletionItem> list, String prefix) throws Exception {
+    String regex = "\\.(?!\\d)([\\w-]+)";
+    String propName = "";
+    List<Materialize> item = new ArrayList<>();
+
+    if (prefix.startsWith("class=")) {
+      propName = "class";
+    }
+    var inputStream = GhostIdeAppLoader.getContext().getAssets().open("materialize.min.css");
+    Pattern pattern = Pattern.compile(regex);
+    Matcher matcher = pattern.matcher(DataUtil.copyFromInputStream(inputStream));
+    while (matcher.find()) {
+      item.add(new Materialize("materialize", matcher.group(1)));
+    }
+    if (!propName.isEmpty()) {
+      String typePrefix = prefix.substring(propName.length() + 1).trim();
+      for (var it : item) {
+        if (it.getId().startsWith(typePrefix)) {
+          list.add(css("class=" + "\"" + it.getId() + "\"", it.getName()));
+        }
+      }
+    }
+  }
+
   void toAndroidAttr(List<CompletionItem> list, String prefix) throws Exception {
     String propName = "";
     if (prefix.startsWith("name=")) {
@@ -400,7 +428,7 @@ public class Css3Server {
         var issince = it.containsKey("since") ? it.get("since") : "";
         var isdeprecated = it.containsKey("deprecated") ? it.get("deprecated") : "";
         if (isname.startsWith(typePrfex)) {
-          list.add(css(isname, isname +" " + issince, "name= " + "\"" +"@android/attr:"+ isname + "\""));
+          list.add(css("name= " + "\"" + "@android/attr:" + isname + "\"", isname + " " + issince));
         }
       }
     }
@@ -458,7 +486,7 @@ public class Css3Server {
 
       for (String type : types) {
         if (type.startsWith(typePrefix) || type.startsWith(typePr)) {
-          list.add(css(type, "Type", "type=" + "\"" + type + "\""));
+          list.add(css("type=" + "\"" + type + "\"", "Type"));
         }
       }
       return;
@@ -467,7 +495,7 @@ public class Css3Server {
       String langPrefix = prefix.substring("lang=".length()).trim();
       for (var it : Transilt.arrf2) {
         if (it.startsWith(langPrefix)) {
-          list.add(css(it, "Langs", "lang=" + "\"" + it + "\""));
+          list.add(css("lang=" + "\"" + it + "\"", "Langs"));
         }
       }
     }
@@ -483,8 +511,8 @@ public class Css3Server {
     return item;
   }
 
-  public CompletionItem css(String attr, String desc) {
-    final var item = new CompletionItem(attr, desc);
+  public CompletionItem css(String data, String val) {
+    final var item = new CompletionItem(data, val);
     item.cursorOffset(item.commit.length() - 1);
     return item;
   }
