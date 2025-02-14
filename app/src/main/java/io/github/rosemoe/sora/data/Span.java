@@ -268,4 +268,8 @@ public class Span {
   public void setDrawminiText(String drawminiText) {
     this.drawminiText = drawminiText;
   }
+
+  
+
+  
 }

@@ -1,5 +1,6 @@
 
 
+
 MERGE INTO bq_test_ds.transactions_v3 sl_existing
     USING ( WITH sl_incoming AS (
                     WITH cte AS (
@@ -9,7 +10,7 @@ MERGE INTO bq_test_ds.transactions_v3 sl_existing
                                     , 'CA' AS location_info
                                     , 'Dua' AS seller_info  )
                     SELECT *
-                    FROM cte ) /* All line present in the source with their key */ SELECT   sl_incoming.transaction_id AS sl_pseudo_transaction_id
+                    FROM cte ) SELECT   s/* All line present in the source with their key */l_incoming.transaction_id AS sl_pseudo_transaction_id
                                         , sl_incoming.*
             FROM sl_incoming
                 LEFT JOIN bq_test_ds.transactions_v3 sl_existing
@@ -17,8 +18,8 @@ MERGE INTO bq_test_ds.transactions_v3 sl_existing
                             AND sl_existing.end_ts IS NULL )
             WHERE sl_existing.`transaction_id` IS NULL
                 OR sl_existing.transaction_date < sl_incoming.transaction_date
-            UNION ALL  /* All line present in the source and target that are current in the target */
-            SELECT  NULL AS sl_pseudo_transaction_id
+            UNION ALL
+            SELECT  N/* All line present in the source and target that are current in the target */ULL AS sl_pseudo_transaction_id
                     , sl_incoming.*
             FROM sl_incoming
                 INNER JOIN bq_test_ds.transactions_v3 sl_existing

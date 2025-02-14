@@ -373,6 +373,7 @@ public class CodeEditor extends View
   private List<Rect> iconRect = new ArrayList<>();
   private Canvas canvas;
   private List<Integer> lineSize = new ArrayList<>();
+  private String minidraw;
 
   public List<DiagnosticWrapper> getDiagnostics() {
     return mDiagnostics;
@@ -393,6 +394,14 @@ public class CodeEditor extends View
 
   public List<Rect> geticonRect() {
     return iconRect;
+  }
+
+  public String getMinidraw() {
+    return this.minidraw;
+  }
+
+  public void setMinidraw(String minidraw) {
+    this.minidraw = minidraw;
   }
 
   public synchronized void setDiagnostics(List<DiagnosticWrapper> diagnostics) {
@@ -1774,6 +1783,10 @@ public class CodeEditor extends View
             mPaintOther);
       }
 
+//      if (span.drawminiText != null) {
+//        drawMiniGraph(canvas, paintingOffset, row, span.drawminiText);
+//      }
+
       // Draw underline
       if (span.underlineColor != 0) {
         mRect.bottom = getRowBottom(row) - mDpUnit * 2;
@@ -2160,6 +2173,9 @@ public class CodeEditor extends View
           drawMiniGraph(canvas, paintingOffset, row, span.drawminiText);
         }
 
+        if (minidraw != null) {
+          drawMiniGraph(canvas, paintingOffset, row, minidraw);
+        }
         // Draw by spans
         while (lastVisibleChar > span.column) {
           int spanEnd =
@@ -2203,6 +2219,9 @@ public class CodeEditor extends View
 
             lastStyle = styleBits;
           }
+//          if (span.drawminiText != null) {
+//            drawMiniGraph(canvas, paintingOffset, row, span.drawminiText);
+//          }
 
           int backgroundColorId = span.getBackgroundColorId();
           if (backgroundColorId != 0) {
@@ -2572,8 +2591,16 @@ public class CodeEditor extends View
     // Draw
     mPaintGraph.setColor(mColors.getColor(EditorColorScheme.KEYWORD));
     mPaintGraph.setTypeface(getTypefaceText());
+
+    // محاسبه عرض متن
+    float textWidth = mPaintGraph.measureText(graph);
+
+    // محاسبه مکان برای راست‌چین کردن متن
     float baseline = getRowBottom(row) - getOffsetY() - mGraphMetrics.descent;
-    canvas.drawText(graph, 0, graph.length(), offset, baseline, mPaintGraph);
+    float xPosition = offset - textWidth; // تغییر به سمت راست
+
+    // رسم متن
+    canvas.drawText(graph, xPosition, baseline, mPaintGraph);
   }
 
   /** Draw non-printable characters */

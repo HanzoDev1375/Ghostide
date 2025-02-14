@@ -308,6 +308,10 @@ public class KotilnAnalyzer implements CodeAnalyzer {
                 isbold = true;
                 color = EditorColorScheme.javafield;
               }
+              if(token.getText().equals("main")){
+                isbold = true;
+                color = EditorColorScheme.javafun;
+              }
 
               result.addIfNeeded(
                   line, column, TextStyle.makeStyle(color, 0, isbold, isItalic, false));

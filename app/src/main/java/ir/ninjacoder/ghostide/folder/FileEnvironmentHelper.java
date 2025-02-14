@@ -66,6 +66,11 @@ public class FileEnvironmentHelper {
   }
 
   public boolean isSrcDirectory() {
+    final String[] srcmodel = {"src", "srcs", "source", "sources", "code"};
+
+    for (var it : srcmodel) {
+      if (isFileHasKeyName(filePath, it, false, false)) return true;
+    }
     return isFileHasKeyName(filePath, "src", false, true);
   }
 
@@ -98,6 +103,38 @@ public class FileEnvironmentHelper {
   }
 
   public boolean isPicturesDirectory() {
+
+    final String[] iconPath = {
+      "_images",
+      "_image",
+      "_imgs",
+      "_img",
+      "images",
+      "image",
+      "imgs",
+      "img",
+      "icons",
+      "icon",
+      "icos",
+      "ico",
+      "figures",
+      "figure",
+      "figs",
+      "fig",
+      "screenshot",
+      "screenshots",
+      "screengrab",
+      "screengrabs",
+      "pic",
+      "pics",
+      "picture",
+      "pictures"
+    };
+    for (var it : iconPath) {
+      if (isFileHasKeyName(filePath, it, false, false)) {
+        return true;
+      }
+    }
     return isFileHasKeyName(filePath, "Pictures", false, false);
   }
 
@@ -133,7 +170,12 @@ public class FileEnvironmentHelper {
   }
 
   public boolean isCssDirectory() {
-    return isFileHasKeyName(filePath, "css", false, true);
+
+    final String[] cssFolders = {"css", "stylesheet", "stylesheets", "style", "styles"};
+    for (var it : cssFolders) {
+      if (isFileHasKeyName(filePath, it)) return true;
+    }
+    return false;
   }
 
   public boolean isPhpDirectory() {
@@ -141,7 +183,11 @@ public class FileEnvironmentHelper {
   }
 
   public boolean isPythonDirectory() {
-    return isFileHasKeyName(filePath, "python", false, true);
+    String[] pythonFolder = {"python", "__pycache__"};
+    for (var it : pythonFolder) {
+      if (isFileHasKeyName(filePath, it)) return true;
+    }
+    return false;
   }
 
   public boolean isJsonDirectory() {
@@ -174,8 +220,13 @@ public class FileEnvironmentHelper {
   }
 
   public boolean isWebDirectory() {
-    return isFileHasKeyName(filePath, "web", false, false)
-        || isFileHasKeyName(filePath, "html", false, false);
+    final String[] webFolders = {
+      "_site", "www", "wwwroot", "web", "website", "site", "browser", "browsers"
+    };
+    for (var it : webFolders) {
+      if (isFileHasKeyName(filePath, it, false, false)) return true;
+    }
+    return isFileHasKeyName(filePath, "web", false, false);
   }
 
   public boolean isAntlr4Directory() {
@@ -184,6 +235,10 @@ public class FileEnvironmentHelper {
   }
 
   public boolean isToolsDirectory() {
+    final String[] folderTheme = {"themes", "theme", "color", "colors", "design", "designs"};
+    for (var it : folderTheme) {
+      if (isFileHasKeyName(filePath, it, false, false)) return true;
+    }
     return isFileHasKeyName(filePath, "theme", false, false);
   }
 
@@ -193,15 +248,13 @@ public class FileEnvironmentHelper {
     String fileName = file.getName();
     return fileName.matches(regex);
   }
-  
-  public boolean isFolderKeyRegex(String filePath,String regex){
+
+  public boolean isFolderKeyRegex(String filePath, String regex) {
     File file = new File(filePath);
-    if(!file.isDirectory()) return false;
+    if (!file.isDirectory()) return false;
     var get = file.getName();
     return get.matches(regex);
   }
-
-  
 
   public boolean isFileHasKeyName(
       String filePath, String name, boolean isDir, boolean isIgnoreCase) {
@@ -209,6 +262,10 @@ public class FileEnvironmentHelper {
     if (isDir) if (file.isDirectory()) return false;
     String fileName = file.getName();
     return isIgnoreCase ? fileName.equalsIgnoreCase(name) : fileName.equals(name);
+  }
+
+  boolean isFileHasKeyName(String filePath, String name) {
+    return isFileHasKeyName(filePath, name, false, false);
   }
 
   public static class ReadmeHelper {

@@ -65,6 +65,7 @@ public class JavaTools {
             .addItem(new PowerMenuItem("addThrows"))
             .addItem(new PowerMenuItem("addTrycatch"))
             .addItem(new PowerMenuItem("addIfStatement"))
+            .addItem(new PowerMenuItem("fix import"))
             
             .setIsMaterial(true)
             .build();
@@ -115,6 +116,8 @@ public class JavaTools {
             javaPaserTools.addTrycatch();
           }else if(pos == 14) {
           	javaPaserTools.addIfStatement();
+          }else if(pos == 15){
+            editor.setText(JavaPaserUtils.processCode(editor.getText().toString()));
           }
         });
   }

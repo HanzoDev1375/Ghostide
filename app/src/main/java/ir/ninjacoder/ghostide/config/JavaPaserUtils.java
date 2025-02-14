@@ -29,10 +29,17 @@ import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.IdeEditor;
+import ir.ninjacoder.ghostide.utils.DataUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Map;
+import com.google.gson.Gson;
+import com.google.common.reflect.TypeToken;
 
 public class JavaPaserUtils {
 
@@ -232,7 +239,79 @@ public class JavaPaserUtils {
   public static boolean getCustomAnnotationExpr(NodeList<AnnotationExpr> node, String key) {
     return node.stream().anyMatch(i -> i.getNameAsString().equals(key));
   }
-  public static boolean getRegexAnnotation(NodeList<AnnotationExpr> expr){
+
+  public static boolean getRegexAnnotation(NodeList<AnnotationExpr> expr) {
     return expr.stream().anyMatch(it -> it.getNameAsString().matches("[a-zA-Z]+"));
+  }
+
+  public static String processCode(String code) {
+    CompilationUnit cu = StaticJavaParser.parse(code);
+    Set<String> typesToImport = new HashSet<>();
+    cu.findAll(FieldDeclaration.class)
+        .forEach(
+            field -> {
+              field
+                  .getVariables()
+                  .forEach(
+                      variable -> {
+                        String typeName =
+                            variable.getType().asString(); // .replaceFirst("\\<\\w+\\>","");
+                        typeName = getBaseTypeName(typeName);
+
+                        if (!isPrimitiveType(typeName) && !hasImport(cu, typeName)) {
+                          typesToImport.add(typeName);
+                        }
+                      });
+            });
+    for (String type : typesToImport) {
+      String fullTypeName = getFullTypeName(type);
+      if (!fullTypeName.isEmpty() && !hasImport(cu, fullTypeName)) {
+        cu.addImport(fullTypeName);
+      }
+    }
+    return cu.toString();
+  }
+
+  private static String getBaseTypeName(String typeName) {
+    while (typeName.contains("<")) {
+      typeName = typeName.substring(0, typeName.indexOf("<"));
+    }
+    return typeName;
+  }
+
+  private static boolean isPrimitiveType(String typeName) {
+    return typeName.equals("int")
+        || typeName.equals("long")
+        || typeName.equals("short")
+        || typeName.equals("byte")
+        || typeName.equals("double")
+        || typeName.equals("float")
+        || typeName.equals("char")
+        || typeName.equals("boolean")
+        || typeName.equals("void");
+  }
+
+  private static boolean hasImport(CompilationUnit cu, String typeName) {
+    return cu.getImports().stream()
+        .anyMatch(importDeclaration -> importDeclaration.getNameAsString().equals(typeName));
+  }
+
+  static String getFullTypeName(String type) {
+    try {
+      var stream = GhostIdeAppLoader.getContext().getAssets().open("class_info.json");
+      List<Map<String, String>> map = new ArrayList<>();
+      map =
+          new Gson()
+              .fromJson(
+                  DataUtil.copyFromInputStream(stream),
+                  new TypeToken<List<Map<String, String>>>() {}.getType());
+      for (var it : map) {
+
+        if (type.equals(it.get("class_name"))) return it.get("full_package");
+      }
+    } catch (Exception err) {
+
+    }
+    return type;
   }
 }

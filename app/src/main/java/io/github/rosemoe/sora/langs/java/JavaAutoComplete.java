@@ -1,15 +1,20 @@
 package io.github.rosemoe.sora.langs.java;
 
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.config.JavaToGsonHelper;
 import ir.ninjacoder.ghostide.config.LOG;
 import io.github.rosemoe.sora.data.CompletionItem;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
+import ir.ninjacoder.ghostide.utils.DataUtil;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
+import java.util.Map;
 import lsp4custom.com.ninjacoder.customhtmllsp.Css3Server;
 import lsp4custom.com.ninjacoder.customhtmllsp.JavaCardshorts;
 import lsp4custom.com.ninjacoder.customhtmllsp.TypeScriptCardshorts;
@@ -71,7 +76,9 @@ public class JavaAutoComplete implements AutoCompleteProvider {
     }
     shortcard = new JavaCardshorts(keywords, prefix, editor);
     JavaToGsonHelper.installFormSora(keywords);
+
     
+
     it = keywords;
     try {
       new Css3Server().toJavaLspDemo(keywords, prefix);
@@ -115,6 +122,4 @@ public class JavaAutoComplete implements AutoCompleteProvider {
       return identifiers;
     }
   }
-
-  
 }

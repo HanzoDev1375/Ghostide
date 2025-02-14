@@ -59,7 +59,8 @@ public class BasicSyntaxPullAnalyzer implements CodeAnalyzer {
           }
           errLine = xmlPullParser.getLineNumber();
           errColumn = xmlPullParser.getColumnNumber();
-          int[] end = Utils.setErrorSpan(colors, errLine, errColumn);
+          ///   int[] end = Utils.setErrorSpan(colors, errLine, errColumn);
+          Utils.setSpanFlagError(colors, errLine);
         }
       }
     } catch (Exception e) {

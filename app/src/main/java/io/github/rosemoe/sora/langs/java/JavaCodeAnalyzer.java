@@ -3,7 +3,6 @@ package io.github.rosemoe.sora.langs.java;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.TryStmt;
 import io.github.rosemoe.sora.widget.ListCss3Color;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
@@ -390,11 +389,15 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 colorid = EditorColorScheme.javafun;
               }
 
-              if (editor.getText().equals("int")) {
+              if (editor.getText().equals("res")) {
                 Span span = Span.obtain(column, TextStyle.makeStyle(EditorColorScheme.javafun));
                 span.setBackgroundColorMy(Color.parseColor("#F40000"));
                 span.setDrawminiText("System::");
                 result.add(line, span);
+              }
+
+              if (token.getText().equals("main")) {
+                colorid = EditorColorScheme.green;
               }
 
               get(colorid, line, column, result);
@@ -491,7 +494,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             public void visit(FieldDeclaration fieldDeclaration, Void arg) {
               for (VariableDeclarator variable : fieldDeclaration.getVariables()) {
                 String variableName = variable.getNameAsString();
-                int line = variable.getBegin().get().line ;
+                int line = variable.getBegin().get().line;
                 int column = variable.getBegin().get().column;
                 declaredVariables.add(variableName);
                 inline.put(variableName, line);
@@ -500,7 +503,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 Utils.setSpanEFO(
                     result,
                     variable.getName().getBegin().get().line,
-                    variable.getName().getBegin().get().column ,
+                    variable.getName().getBegin().get().column,
                     EditorColorScheme.javafield,
                     true,
                     false);
@@ -535,7 +538,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             @Override
             public void visit(ImportDeclaration dec, Void arg) {
               String importName = dec.getNameAsString();
-              int line = dec.getBegin().get().line - 1;
+              int line = dec.getBegin().get().line ;
               int column = dec.getBegin().get().column;
               inline.put(importName, line);
               incol.put(importName, column);
@@ -596,6 +599,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                   && variableName.startsWith("_")) {
                 Utils.setWaringSpan(result, li, cl + 1, EditorColorScheme.HTML_TAG);
               }
+              
 
               super.visit(arg0, arg1);
             }
@@ -647,8 +651,11 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           it -> {
             if (it.equals("main")) {
               var li = inline.get(it);
+              var col = incol.get(it);
               editor.setShowIcon(li.intValue());
+              Utils.setSpanFlag(result,li.intValue(),0,"Main Method -> ");
             } else {
+              editor.setShowIcon(0);
             }
           });
 

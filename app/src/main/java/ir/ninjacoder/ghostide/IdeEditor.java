@@ -109,7 +109,6 @@ public class IdeEditor extends CodeEditor implements IEditor {
       setTextSizePx(getSize);
     }
     
-
     return this;
   }
 
