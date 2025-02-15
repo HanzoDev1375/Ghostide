@@ -1,5 +1,6 @@
 package io.github.rosemoe.sora.langs.java;
 
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.stmt.BlockStmt;
@@ -476,7 +477,9 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
 
       result.determine(lastLine);
       result.setExtra(info);
-
+      ParserConfiguration config = new ParserConfiguration();
+      config.setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
+      StaticJavaParser.setConfiguration(config);
       var cu = StaticJavaParser.parse(content.toString());
       Set<String> declaredVariables = new HashSet<>();
       Set<String> usedVariables = new HashSet<>();
@@ -538,7 +541,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             @Override
             public void visit(ImportDeclaration dec, Void arg) {
               String importName = dec.getNameAsString();
-              int line = dec.getBegin().get().line ;
+              int line = dec.getBegin().get().line;
               int column = dec.getBegin().get().column;
               inline.put(importName, line);
               incol.put(importName, column);
@@ -556,7 +559,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
 
             @Override
             public void visit(TypeExpr arg0, Void arg1) {
-              var l = arg0.getBegin().get().line - 1;
+              var l = arg0.getBegin().get().line;
               var c = arg0.getBegin().get().column;
               Utils.setSpanEFO(result, l, c + 1, EditorColorScheme.javastring);
               super.visit(arg0, arg1);
@@ -564,27 +567,11 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
 
             @Override
             public void visit(TypeParameter arg0, Void arg1) {
-              var l = arg0.getBegin().get().line - 1;
+              var l = arg0.getBegin().get().line ;
               var c = arg0.getBegin().get().column;
               Utils.setSpanEFO(result, l, c + 1, EditorColorScheme.javatype);
               super.visit(arg0, arg1);
             }
-
-            @Override
-            public void visit(MethodCallExpr arg0, Void arg1) {
-              String names = arg0.getNameAsString();
-              mtcall.add(names);
-
-              var li = arg0.getBegin().get().line;
-              var col = arg0.getBegin().get().column;
-              mlines.put(names, li);
-              mcoloum.put(names, col);
-
-              // Utils.setSpanEFO(result, li, col + 2, EditorColorScheme.COMMENT);
-
-              super.visit(arg0, arg1);
-            }
-
             @Override
             public void visit(MethodDeclaration arg0, Void arg1) {
               var variableName = arg0.getNameAsString();
@@ -599,7 +586,6 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                   && variableName.startsWith("_")) {
                 Utils.setWaringSpan(result, li, cl + 1, EditorColorScheme.HTML_TAG);
               }
-              
 
               super.visit(arg0, arg1);
             }
@@ -619,7 +605,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             @Override
             public void visit(Parameter arg0, Void arg1) {
               int myline = arg0.getBegin().get().line;
-              int mycolums = arg0.getBegin().get().column;
+              int mycolums = arg0.getBegin().get().column +3;
               Utils.setSpanEFO(result, myline, mycolums, EditorColorScheme.KEYWORD, false, true);
 
               super.visit(arg0, arg1);
@@ -653,22 +639,17 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               var li = inline.get(it);
               var col = incol.get(it);
               editor.setShowIcon(li.intValue());
-              Utils.setSpanFlag(result,li.intValue(),0,"Main Method -> ");
             } else {
               editor.setShowIcon(0);
             }
           });
 
-      for (var unusedVar : declaredVariables) {
-        var lines = inline.get(unusedVar);
-        var col = incol.get(unusedVar);
-        Utils.setSpanEFO(result, lines.intValue(), col.intValue() + 3, EditorColorScheme.COMMENT);
-      }
-      for (var it : mtcall) {
-        var li = mlines.get(it);
-        var col = mcoloum.get(it);
-        Utils.setSpanEFO(result, li, col + 2, EditorColorScheme.KEYWORD);
-      }
+//      for (var unusedVar : declaredVariables) {
+//        var lines = inline.get(unusedVar);
+//        var col = incol.get(unusedVar);
+//        Utils.setSpanEFO(result, lines.intValue(), col.intValue() + 3, EditorColorScheme.COMMENT);
+//      }
+      
 
     } catch (IOException e) {
       e.printStackTrace();
