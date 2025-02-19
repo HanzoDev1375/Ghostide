@@ -39,7 +39,7 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
     try {
 
       CodePointCharStream stream = CharStreams.fromReader(new StringReader(content.toString()));
-      var lexer = new PythonLexer(stream);
+      var lexer = new PythonLexerCompat(stream);
       var auto = new PythonAutoComplete();
       auto.setKeywords(PythonLang.keywords);
       var info = new PythonAutoComplete.Identifiers();
@@ -58,165 +58,184 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
       while (delegate.shouldAnalyze()) {
         token = lexer.nextToken();
         if (token == null) break;
-        if (token.getType() == PythonLexer.EOF) {
+        if (token.getType() == PythonLexerCompat.EOF) {
           lastLine = token.getLine() - 1;
           break;
         }
         line = token.getLine() - 1;
         type = token.getType();
         column = token.getCharPositionInLine();
-        if (type == PythonLexer.EOF) {
+        if (type == PythonLexerCompat.EOF) {
           lastLine = line;
           break;
         }
 
         switch (type) {
-          case PythonLexer.WS:
-            //   case PythonLexer.NEWLINE:
+          case PythonLexerCompat.WS:
+            //   case PythonLexerCompat.NEWLINE:
             if (first) {
               result.addNormalIfNull();
             }
             break;
-          case PythonLexer.AND:
-          case PythonLexer.AS:
-          case PythonLexer.ASYNC:
-          case PythonLexer.AWAIT:
-          case PythonLexer.BREAK:
-          case PythonLexer.CLASS:
-          case PythonLexer.CONTINUE:
-          case PythonLexer.DEF:
-          case PythonLexer.DEL:
-          case PythonLexer.ELIF:
-          case PythonLexer.ELSE:
-          case PythonLexer.EXCEPT:
-          case PythonLexer.FALSE:
-          case PythonLexer.FINALLY:
-          case PythonLexer.FOR:
-          case PythonLexer.GLOBAL:
-          case PythonLexer.IF:
-          case PythonLexer.IMPORT:
-          case PythonLexer.IN:
-          case PythonLexer.IS:
-          case PythonLexer.RAISE:
-          case PythonLexer.RETURN:
-          case PythonLexer.TRUE:
-          case PythonLexer.TRY:
-          case PythonLexer.WITH:
-          case PythonLexer.YIELD:
-          case PythonLexer.FROM:
-          case PythonLexer.WHILE:
-          case PythonLexer.ASSERT:
-          case PythonLexer.LAMBDA:
-          case PythonLexer.NONE:
-          case PythonLexer.NONLOCAL:
-          case PythonLexer.NOT:
-          case PythonLexer.OR:
-          case PythonLexer.PASS:
-            
+          case PythonLexerCompat.AND:
+          case PythonLexerCompat.AS:
+          case PythonLexerCompat.ASYNC:
+          case PythonLexerCompat.AWAIT:
+          case PythonLexerCompat.BREAK:
+          case PythonLexerCompat.CLASS:
+          case PythonLexerCompat.CONTINUE:
+          case PythonLexerCompat.DEF:
+          case PythonLexerCompat.DEL:
+          case PythonLexerCompat.ELIF:
+          case PythonLexerCompat.ELSE:
+          case PythonLexerCompat.EXCEPT:
+          case PythonLexerCompat.FALSE:
+          case PythonLexerCompat.FINALLY:
+          case PythonLexerCompat.FOR:
+          case PythonLexerCompat.GLOBAL:
+          case PythonLexerCompat.IF:
+          case PythonLexerCompat.IMPORT:
+          case PythonLexerCompat.IN:
+          case PythonLexerCompat.IS:
+          case PythonLexerCompat.RAISE:
+          case PythonLexerCompat.RETURN:
+          case PythonLexerCompat.TRUE:
+          case PythonLexerCompat.TRY:
+          case PythonLexerCompat.WITH:
+          case PythonLexerCompat.YIELD:
+          case PythonLexerCompat.FROM:
+          case PythonLexerCompat.WHILE:
+          case PythonLexerCompat.ASSERT:
+          case PythonLexerCompat.LAMBDA:
+          case PythonLexerCompat.NONE:
+          case PythonLexerCompat.NONLOCAL:
+          case PythonLexerCompat.NOT:
+          case PythonLexerCompat.OR:
+          case PythonLexerCompat.PASS:
+          case PythonLexerCompat.NAME_OR_TYPE:
+          case PythonLexerCompat.NAME_OR_MATCH:
+          case PythonLexerCompat.NAME_OR_CASE:
+            //    case PythonLexerCompat.NAME_OR_WILDCARD:
             result.addIfNeeded(
                 line,
                 column,
                 TextStyle.makeStyle(EditorColorScheme.pykeyword, 0, true, false, false));
             break;
-          case PythonLexer.DOT:
+          case PythonLexerCompat.DOT:
 
-          case PythonLexer.STAR:
-          case PythonLexer.COMMA:
-          case PythonLexer.LBRACE:
-          case PythonLexer.RBRACE:
-          case PythonLexer.LPAR:
-          case PythonLexer.LSQB:
-          case PythonLexer.RPAR:
-          case PythonLexer.RSQB:
-          case PythonLexer.VBAR:
-          case PythonLexer.EQUAL:
-          case PythonLexer.PERCENT:
-          case PythonLexer.EQEQUAL:
-          case PythonLexer.NOTEQUAL:
-          case PythonLexer.LESSEQUAL:
-          case PythonLexer.GREATEREQUAL:
-          case PythonLexer.TILDE:
-          case PythonLexer.CIRCUMFLEX:
-          case PythonLexer.LEFTSHIFT:
-          case PythonLexer.RIGHTSHIFT:
-          case PythonLexer.DOUBLESTAR:
-          case PythonLexer.PLUSEQUAL:
-          case PythonLexer.MINEQUAL:
-          case PythonLexer.STAREQUAL:
-          case PythonLexer.SLASHEQUAL:
-          case PythonLexer.PERCENTEQUAL:
-          case PythonLexer.AMPEREQUAL:
-          case PythonLexer.VBAREQUAL:
-          case PythonLexer.CIRCUMFLEXEQUAL:
-          case PythonLexer.LEFTSHIFTEQUAL:
-          case PythonLexer.RIGHTSHIFTEQUAL:
-          case PythonLexer.DOUBLESTAREQUAL:
-          case PythonLexer.DOUBLESLASH:
-          case PythonLexer.DOUBLESLASHEQUAL:
-          case PythonLexer.AT:
-          case PythonLexer.ATEQUAL:
-          case PythonLexer.RARROW:
-          case PythonLexer.ELLIPSIS:
-          case PythonLexer.COLONEQUAL:
-          case PythonLexer.EXCLAMATION:
+          case PythonLexerCompat.STAR:
+          case PythonLexerCompat.COMMA:
+          case PythonLexerCompat.LBRACE:
+          case PythonLexerCompat.RBRACE:
+          case PythonLexerCompat.LPAR:
+          case PythonLexerCompat.LSQB:
+          case PythonLexerCompat.RPAR:
+          case PythonLexerCompat.RSQB:
+          case PythonLexerCompat.VBAR:
+          case PythonLexerCompat.EQUAL:
+          case PythonLexerCompat.PERCENT:
+          case PythonLexerCompat.EQEQUAL:
+          case PythonLexerCompat.NOTEQUAL:
+          case PythonLexerCompat.LESSEQUAL:
+          case PythonLexerCompat.GREATEREQUAL:
+          case PythonLexerCompat.TILDE:
+          case PythonLexerCompat.CIRCUMFLEX:
+          case PythonLexerCompat.LEFTSHIFT:
+          case PythonLexerCompat.RIGHTSHIFT:
+          case PythonLexerCompat.DOUBLESTAR:
+          case PythonLexerCompat.PLUSEQUAL:
+          case PythonLexerCompat.MINEQUAL:
+          case PythonLexerCompat.STAREQUAL:
+          case PythonLexerCompat.SLASHEQUAL:
+          case PythonLexerCompat.PERCENTEQUAL:
+          case PythonLexerCompat.AMPEREQUAL:
+          case PythonLexerCompat.VBAREQUAL:
+          case PythonLexerCompat.CIRCUMFLEXEQUAL:
+          case PythonLexerCompat.LEFTSHIFTEQUAL:
+          case PythonLexerCompat.RIGHTSHIFTEQUAL:
+          case PythonLexerCompat.DOUBLESTAREQUAL:
+          case PythonLexerCompat.DOUBLESLASH:
+          case PythonLexerCompat.DOUBLESLASHEQUAL:
+          case PythonLexerCompat.AT:
+          case PythonLexerCompat.ATEQUAL:
+          case PythonLexerCompat.RARROW:
+          case PythonLexerCompat.ELLIPSIS:
+          case PythonLexerCompat.COLONEQUAL:
+          case PythonLexerCompat.EXCLAMATION:
             result.addIfNeeded(
                 line,
                 column,
                 TextStyle.makeStyle(EditorColorScheme.pysymbol, 0, true, false, false));
             break;
 
-          case PythonLexer.STRING:
+          case PythonLexerCompat.STRING:
             int colors = EditorColorScheme.pystring;
             result.addIfNeeded(line, column, TextStyle.makeStyle(colors, 0, true, false, false));
             break;
-          case PythonLexer.NUMBER:
+          case PythonLexerCompat.NUMBER:
             result.addIfNeeded(
                 line,
                 column,
                 TextStyle.makeStyle(EditorColorScheme.pynumber, 0, true, false, false));
             break;
-          case PythonLexer.NAME:
+          case PythonLexerCompat.FSTRING:
+            result.addIfNeeded(line, column, EditorColorScheme.ATTRIBUTE_VALUE);
+            break;
+
+          case PythonLexerCompat.IDENTIFIER:
             {
               int colorid = EditorColorScheme.TEXT_NORMAL;
               boolean isBold = false;
               boolean isUnderLine = false;
               info.addIdentifier(token.getText());
-              if (previous == PythonLexer.CLASS) {
+              if (previous == PythonLexerCompat.CLASS) {
                 colorid = EditorColorScheme.pycolormatch1;
                 isBold = true;
                 isUnderLine = false;
               }
-              if (previous == PythonLexer.DEF) {
+              if (previous == PythonLexerCompat.DEF) {
                 colorid = EditorColorScheme.pycolormatch2;
               }
-              if (previous == PythonLexer.IF) {
+              if (previous == PythonLexerCompat.IF) {
                 colorid = EditorColorScheme.pycolormatch3;
                 isBold = true;
                 isUnderLine = false;
               }
-              if (previous == PythonLexer.FROM) {
+              if (previous == PythonLexerCompat.FROM) {
                 colorid = EditorColorScheme.pycolormatch3;
                 isBold = false;
                 isUnderLine = false;
               }
-              if (previous == PythonLexer.IMPORT) {
+              if (previous == PythonLexerCompat.IMPORT) {
                 colorid = EditorColorScheme.pycolormatch3;
                 isBold = false;
                 isUnderLine = false;
               }
-              if (previous == PythonLexer.EQUAL) {
+              if (previous == PythonLexerCompat.EQUAL) {
                 colorid = EditorColorScheme.pycolormatch1;
                 isUnderLine = false;
                 isBold = true;
               }
-              if (previous == PythonLexer.OR
-                  || previous == PythonLexer.DOT
-                  || previous == PythonLexer.RETURN
-                  || previous == PythonLexer.YIELD
-                  || previous == PythonLexer.COLON) {
+              if (previous == PythonLexerCompat.AT) {
+                colorid = EditorColorScheme.pysymbol;
+                isBold = true;
+              }
+              if (previous == PythonLexerCompat.OR
+                  || previous == PythonLexerCompat.DOT
+                  || previous == PythonLexerCompat.RETURN
+                  || previous == PythonLexerCompat.YIELD
+                  || previous == PythonLexerCompat.COLON) {
                 colorid = EditorColorScheme.pycolormatch2;
                 isBold = true;
                 isUnderLine = false;
+              }
+              if (token.getText().equals("print")) {
+                colorid = EditorColorScheme.gold;
+                isBold = true;
+              }
+              if (token.getText().equals("self")) {
+                colorid = EditorColorScheme.green;
+                isBold = true;
               }
 
               result.addIfNeeded(
@@ -224,10 +243,9 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
               break;
             }
 
-          case PythonLexer.COMMENT:
+          case PythonLexerCompat.COMMENT:
             result.addIfNeeded(line, column, EditorColorScheme.COMMENT);
             break;
-
           default:
             result.addIfNeeded(line, column, EditorColorScheme.TEXT_NORMAL);
             prevIsTagName = false;
@@ -236,7 +254,7 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
         }
 
         first = false;
-        if (type != PythonLexer.WS) {
+        if (type != PythonLexerCompat.WS) {
           previous = type;
         }
       }

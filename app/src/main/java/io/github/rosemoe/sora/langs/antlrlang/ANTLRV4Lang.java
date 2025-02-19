@@ -14,6 +14,7 @@ import io.github.rosemoe.sora.interfaces.EditorLanguage;
 
 import java.io.StringReader;
 
+import org.antlr.parser.antlr4.ANTLRv4Lexer;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.Token;
 

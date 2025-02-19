@@ -40,29 +40,19 @@ public class JavaLanguage implements EditorLanguage {
     auto.setMd(true);
     String[] combinedArray = new String[keywords.length + JavaCardshorts.objectNames.length];
     System.arraycopy(keywords, 0, combinedArray, 0, keywords.length);
-    System.arraycopy(JavaCardshorts.objectNames, 0, combinedArray, keywords.length, JavaCardshorts.objectNames.length);
+    System.arraycopy(
+        JavaCardshorts.objectNames,
+        0,
+        combinedArray,
+        keywords.length,
+        JavaCardshorts.objectNames.length);
     auto.setKeywords(combinedArray);
     return auto;
   }
 
   @Override
   public boolean isAutoCompleteChar(char ch) {
-    return Character.isLetter(ch)
-        || Character.isDigit(ch)
-        || ch == '<'
-        || ch == '/'
-        || ch == ':'
-        || ch == '.'
-        || ch == '!'
-        || ch == '<'
-        || ch == '?'
-        || ch == '-'
-        || ch == '+'
-        || ch == '$'
-        || ch == '#'
-        || ch == '*'
-        || MyCharacter.isJavaIdentifierStart(ch)
-        || MyCharacter.isJavaIdentifierPart(ch);
+    return MyCharacter.isJavaIdentifierPart(ch) || Character.isLetter(ch) || Character.isDigit(ch);
   }
 
   @Override

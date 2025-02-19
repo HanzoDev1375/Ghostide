@@ -1,4 +1,4 @@
-// Generated from ./ANTLRv4Parser.g4 by ANTLR 4.13.1
+// Generated from /storage/emulated/0/apk/grammars-v4-master/antlr/antlr4/ANTLRv4Parser.g4 by ANTLR 4.13.1
 package org.antlr.parser.antlr4;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -398,16 +398,6 @@ public interface ANTLRv4ParserListener extends ParseTreeListener {
 	 */
 	void exitLexerElement(ANTLRv4Parser.LexerElementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ANTLRv4Parser#labeledLexerElement}.
-	 * @param ctx the parse tree
-	 */
-	void enterLabeledLexerElement(ANTLRv4Parser.LabeledLexerElementContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ANTLRv4Parser#labeledLexerElement}.
-	 * @param ctx the parse tree
-	 */
-	void exitLabeledLexerElement(ANTLRv4Parser.LabeledLexerElementContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link ANTLRv4Parser#lexerBlock}.
 	 * @param ctx the parse tree
 	 */
@@ -487,6 +477,26 @@ public interface ANTLRv4ParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitElement(ANTLRv4Parser.ElementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ANTLRv4Parser#predicateOptions}.
+	 * @param ctx the parse tree
+	 */
+	void enterPredicateOptions(ANTLRv4Parser.PredicateOptionsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ANTLRv4Parser#predicateOptions}.
+	 * @param ctx the parse tree
+	 */
+	void exitPredicateOptions(ANTLRv4Parser.PredicateOptionsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ANTLRv4Parser#predicateOption}.
+	 * @param ctx the parse tree
+	 */
+	void enterPredicateOption(ANTLRv4Parser.PredicateOptionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ANTLRv4Parser#predicateOption}.
+	 * @param ctx the parse tree
+	 */
+	void exitPredicateOption(ANTLRv4Parser.PredicateOptionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ANTLRv4Parser#labeledElement}.
 	 * @param ctx the parse tree
@@ -608,15 +618,15 @@ public interface ANTLRv4ParserListener extends ParseTreeListener {
 	 */
 	void exitCharacterRange(ANTLRv4Parser.CharacterRangeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ANTLRv4Parser#terminal}.
+	 * Enter a parse tree produced by {@link ANTLRv4Parser#terminalDef}.
 	 * @param ctx the parse tree
 	 */
-	void enterTerminal(ANTLRv4Parser.TerminalContext ctx);
+	void enterTerminalDef(ANTLRv4Parser.TerminalDefContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ANTLRv4Parser#terminal}.
+	 * Exit a parse tree produced by {@link ANTLRv4Parser#terminalDef}.
 	 * @param ctx the parse tree
 	 */
-	void exitTerminal(ANTLRv4Parser.TerminalContext ctx);
+	void exitTerminalDef(ANTLRv4Parser.TerminalDefContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ANTLRv4Parser#elementOptions}.
 	 * @param ctx the parse tree

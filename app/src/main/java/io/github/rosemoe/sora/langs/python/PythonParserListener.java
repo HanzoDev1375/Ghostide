@@ -1,4 +1,4 @@
-// Generated from /storage/emulated/0/cdm/grammars-v4/python/python3_12_1/PythonParser.g4 by ANTLR 4.13.1
+// Generated from /storage/emulated/0/apktest/ANTLR4-parser-for-Python-3.13-main/PythonParser.g4 by ANTLR 4.13.1
 package io.github.rosemoe.sora.langs.python;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -47,16 +47,6 @@ public interface PythonParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitFunc_type(PythonParser.Func_typeContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link PythonParser#fstring_input}.
-	 * @param ctx the parse tree
-	 */
-	void enterFstring_input(PythonParser.Fstring_inputContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link PythonParser#fstring_input}.
-	 * @param ctx the parse tree
-	 */
-	void exitFstring_input(PythonParser.Fstring_inputContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PythonParser#statements}.
 	 * @param ctx the parse tree
@@ -1038,6 +1028,26 @@ public interface PythonParserListener extends ParseTreeListener {
 	 */
 	void exitType_param_bound(PythonParser.Type_param_boundContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link PythonParser#type_param_default}.
+	 * @param ctx the parse tree
+	 */
+	void enterType_param_default(PythonParser.Type_param_defaultContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PythonParser#type_param_default}.
+	 * @param ctx the parse tree
+	 */
+	void exitType_param_default(PythonParser.Type_param_defaultContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PythonParser#type_param_starred_default}.
+	 * @param ctx the parse tree
+	 */
+	void enterType_param_starred_default(PythonParser.Type_param_starred_defaultContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PythonParser#type_param_starred_default}.
+	 * @param ctx the parse tree
+	 */
+	void exitType_param_starred_default(PythonParser.Type_param_starred_defaultContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link PythonParser#expressions}.
 	 * @param ctx the parse tree
 	 */
@@ -1938,53 +1948,23 @@ public interface PythonParserListener extends ParseTreeListener {
 	 */
 	void exitFunc_type_comment(PythonParser.Func_type_commentContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PythonParser#soft_kw_type}.
+	 * Enter a parse tree produced by {@link PythonParser#name_except_underscore}.
 	 * @param ctx the parse tree
 	 */
-	void enterSoft_kw_type(PythonParser.Soft_kw_typeContext ctx);
+	void enterName_except_underscore(PythonParser.Name_except_underscoreContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link PythonParser#soft_kw_type}.
+	 * Exit a parse tree produced by {@link PythonParser#name_except_underscore}.
 	 * @param ctx the parse tree
 	 */
-	void exitSoft_kw_type(PythonParser.Soft_kw_typeContext ctx);
+	void exitName_except_underscore(PythonParser.Name_except_underscoreContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PythonParser#soft_kw_match}.
+	 * Enter a parse tree produced by {@link PythonParser#name}.
 	 * @param ctx the parse tree
 	 */
-	void enterSoft_kw_match(PythonParser.Soft_kw_matchContext ctx);
+	void enterName(PythonParser.NameContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link PythonParser#soft_kw_match}.
+	 * Exit a parse tree produced by {@link PythonParser#name}.
 	 * @param ctx the parse tree
 	 */
-	void exitSoft_kw_match(PythonParser.Soft_kw_matchContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link PythonParser#soft_kw_case}.
-	 * @param ctx the parse tree
-	 */
-	void enterSoft_kw_case(PythonParser.Soft_kw_caseContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link PythonParser#soft_kw_case}.
-	 * @param ctx the parse tree
-	 */
-	void exitSoft_kw_case(PythonParser.Soft_kw_caseContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link PythonParser#soft_kw_wildcard}.
-	 * @param ctx the parse tree
-	 */
-	void enterSoft_kw_wildcard(PythonParser.Soft_kw_wildcardContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link PythonParser#soft_kw_wildcard}.
-	 * @param ctx the parse tree
-	 */
-	void exitSoft_kw_wildcard(PythonParser.Soft_kw_wildcardContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link PythonParser#soft_kw__not__wildcard}.
-	 * @param ctx the parse tree
-	 */
-	void enterSoft_kw__not__wildcard(PythonParser.Soft_kw__not__wildcardContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link PythonParser#soft_kw__not__wildcard}.
-	 * @param ctx the parse tree
-	 */
-	void exitSoft_kw__not__wildcard(PythonParser.Soft_kw__not__wildcardContext ctx);
+	void exitName(PythonParser.NameContext ctx);
 }

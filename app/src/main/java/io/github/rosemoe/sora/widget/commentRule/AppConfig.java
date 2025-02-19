@@ -120,3 +120,12 @@ public class AppConfig {
         this.ShowHomeNewAc = ShowHomeNewAc;
     }
 }
+
+    // public static boolean isAarch64() {
+        // return Arrays.asList(Build.SUPPORTED_ABIS).contains("arm64-v8a");
+    // }
+
+    // public static boolean isArmv7a() {
+        // return Arrays.asList(Build.SUPPORTED_ABIS).contains("armeabi-v7a");
+    // }
+

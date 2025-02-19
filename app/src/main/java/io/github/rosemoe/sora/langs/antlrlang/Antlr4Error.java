@@ -33,7 +33,8 @@ public class Antlr4Error implements CodeAnalyzer {
             public void visitErrorNode(ErrorNode node) {
               int line = node.getSymbol().getLine();
               int col = node.getSymbol().getCharPositionInLine();
-              int[] err = Utils.setErrorSpan(result, line, col);
+              int text = node.getText().length();
+              int[] err = Utils.setErrorSpan(result, line, col + text);
             }
           };
       var walk = new ParseTreeWalker();

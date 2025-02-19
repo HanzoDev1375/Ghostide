@@ -1,8 +1,10 @@
 package io.github.rosemoe.sora.langs.java;
 
 import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import io.github.rosemoe.sora.widget.ListCss3Color;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
@@ -294,7 +296,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           case JavaLexer.ELLIPSIS:
           case JavaLexer.DOT:
             if (previous == JavaLexer.IDENTIFIER) {
-              get(EditorColorScheme.ATTRIBUTE_VALUE, line, column, result);
+              get(EditorColorScheme.red, line, column, result);
             }
             get(EditorColorScheme.TEXT_NORMAL, line, column, result);
             break;
@@ -312,6 +314,12 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             break;
           case JavaLexer.BLOCK_COMMENT:
           case JavaLexer.LINE_COMMENT:
+            if (previous == JavaLexer.AT) {
+              result.addIfNeeded(
+                  line,
+                  column,
+                  TextStyle.makeStyle(EditorColorScheme.javafield,0,false,true,false));
+            }
             result.addIfNeeded(line, column, EditorColorScheme.COMMENT);
             break;
           case JavaLexer.AT:
@@ -399,6 +407,13 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
 
               if (token.getText().equals("main")) {
                 colorid = EditorColorScheme.green;
+              }
+              if (token.getText().equals("author")) {
+                colorid = EditorColorScheme.red;
+              }
+
+              if (token.getText().equals(String.valueOf(JavaLexer.AT).concat("px"))) {
+                colorid = EditorColorScheme.red;
               }
 
               get(colorid, line, column, result);
@@ -567,11 +582,12 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
 
             @Override
             public void visit(TypeParameter arg0, Void arg1) {
-              var l = arg0.getBegin().get().line ;
+              var l = arg0.getBegin().get().line;
               var c = arg0.getBegin().get().column;
               Utils.setSpanEFO(result, l, c + 1, EditorColorScheme.javatype);
               super.visit(arg0, arg1);
             }
+
             @Override
             public void visit(MethodDeclaration arg0, Void arg1) {
               var variableName = arg0.getNameAsString();
@@ -605,7 +621,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             @Override
             public void visit(Parameter arg0, Void arg1) {
               int myline = arg0.getBegin().get().line;
-              int mycolums = arg0.getBegin().get().column +3;
+              int mycolums = arg0.getBegin().get().column + 3;
               Utils.setSpanEFO(result, myline, mycolums, EditorColorScheme.KEYWORD, false, true);
 
               super.visit(arg0, arg1);
@@ -618,6 +634,15 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 var columns1 = arg0.getBegin().get().column;
                 Utils.setWaringSpan(result, lines1, columns1 + 1, EditorColorScheme.javakeyword);
               }
+              super.visit(arg0, arg1);
+            }
+
+            @Override
+            public void visit(JavadocComment arg0, Void arg1) {
+              var i = arg0.getBegin().get().line;
+              var c = arg0.getBegin().get().column;
+              Utils.setSpanEFO(result, i, c, EditorColorScheme.COMMENT);
+
               super.visit(arg0, arg1);
             }
           },
@@ -644,12 +669,12 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             }
           });
 
-//      for (var unusedVar : declaredVariables) {
-//        var lines = inline.get(unusedVar);
-//        var col = incol.get(unusedVar);
-//        Utils.setSpanEFO(result, lines.intValue(), col.intValue() + 3, EditorColorScheme.COMMENT);
-//      }
-      
+      //      for (var unusedVar : declaredVariables) {
+      //        var lines = inline.get(unusedVar);
+      //        var col = incol.get(unusedVar);
+      //        Utils.setSpanEFO(result, lines.intValue(), col.intValue() + 3,
+      // EditorColorScheme.COMMENT);
+      //      }
 
     } catch (IOException e) {
       e.printStackTrace();

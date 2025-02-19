@@ -4,6 +4,7 @@ import android.util.Log;
 import io.github.rosemoe.sora.text.TextStyle;
 import java.util.Stack;
 import io.github.rosemoe.sora.data.BlockLine;
+import org.antlr.parser.antlr4.ANTLRv4Lexer;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
 import org.antlr.v4.runtime.Token;
@@ -96,7 +97,7 @@ public class ANTLRV4CodeAnalyzer implements CodeAnalyzer {
             result.addIfNeeded(
                 line,
                 column,
-                TextStyle.makeStyle(EditorColorScheme.COLOR_ERROR, 0, true, false, false));
+                TextStyle.makeStyle(EditorColorScheme.javafield, 0, true, false, false));
 
             break;
 

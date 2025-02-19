@@ -1,4 +1,4 @@
-// Generated from /storage/emulated/0/cdm/grammars-v4/python/python3_12_1/PythonParser.g4 by ANTLR 4.13.1
+// Generated from /storage/emulated/0/apktest/ANTLR4-parser-for-Python-3.13-main/PythonParser.g4 by ANTLR 4.13.1
 package io.github.rosemoe.sora.langs.python;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -60,18 +60,6 @@ public class PythonParserBaseListener implements PythonParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitFunc_type(PythonParser.Func_typeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterFstring_input(PythonParser.Fstring_inputContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitFstring_input(PythonParser.Fstring_inputContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1253,6 +1241,30 @@ public class PythonParserBaseListener implements PythonParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterType_param_default(PythonParser.Type_param_defaultContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitType_param_default(PythonParser.Type_param_defaultContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterType_param_starred_default(PythonParser.Type_param_starred_defaultContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitType_param_starred_default(PythonParser.Type_param_starred_defaultContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterExpressions(PythonParser.ExpressionsContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -2333,61 +2345,25 @@ public class PythonParserBaseListener implements PythonParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSoft_kw_type(PythonParser.Soft_kw_typeContext ctx) { }
+	@Override public void enterName_except_underscore(PythonParser.Name_except_underscoreContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSoft_kw_type(PythonParser.Soft_kw_typeContext ctx) { }
+	@Override public void exitName_except_underscore(PythonParser.Name_except_underscoreContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSoft_kw_match(PythonParser.Soft_kw_matchContext ctx) { }
+	@Override public void enterName(PythonParser.NameContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSoft_kw_match(PythonParser.Soft_kw_matchContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSoft_kw_case(PythonParser.Soft_kw_caseContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSoft_kw_case(PythonParser.Soft_kw_caseContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSoft_kw_wildcard(PythonParser.Soft_kw_wildcardContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSoft_kw_wildcard(PythonParser.Soft_kw_wildcardContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSoft_kw__not__wildcard(PythonParser.Soft_kw__not__wildcardContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSoft_kw__not__wildcard(PythonParser.Soft_kw__not__wildcardContext ctx) { }
+	@Override public void exitName(PythonParser.NameContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

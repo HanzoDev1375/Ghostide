@@ -67,7 +67,7 @@ public class ColorCompat {
     public static final int FORESTGREEN = 0x228b22;
     public static final int GAINSBORO = 0xdcdcdc;
     public static final int GHOSTWHITE = 0xf8f8ff;
-    public static final int GOLD = 0xffd700;
+    public static final int GOLD = Color.parseColor("#ffffd700");
     public static final int GOLDENROD = 0xdaa520;
     public static final int GREENYELLOW = 0xadff2f;
     public static final int GREY = 0x808080;

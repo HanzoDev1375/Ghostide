@@ -34,7 +34,7 @@ public class SassForAndroid {
     try (var compiler = AndroidSassCompilerFactory.bundled(context)) {
       CompileSuccess sb = compiler.compileFile(input);
       StringBuilder b = new StringBuilder();
-      b.append(compiler.getVersion().toString()).append("\n");
+     // b.append(compiler.getVersion().toString()).append("\n");
       b.append(sb.getCss()).append("\n");
       return b.toString();
     } catch (Exception err) {

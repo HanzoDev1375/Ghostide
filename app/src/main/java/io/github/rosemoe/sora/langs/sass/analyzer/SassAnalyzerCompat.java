@@ -2,6 +2,9 @@ package io.github.rosemoe.sora.langs.sass.analyzer;
 
 import android.util.Log;
 import io.github.rosemoe.sora.langs.sass.ScssLexer;
+import io.github.rosemoe.sora.langs.sass.ScssParser;
+import io.github.rosemoe.sora.langs.sass.ScssParserBaseListener;
+import io.github.rosemoe.sora.langs.xml.analyzer.Utils;
 import io.github.rosemoe.sora.text.TextStyle;
 
 import java.util.Stack;
@@ -9,6 +12,7 @@ import java.util.Stack;
 import io.github.rosemoe.sora.data.BlockLine;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
+import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 
 import java.io.IOException;
@@ -18,6 +22,8 @@ import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.text.TextAnalyzer;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
+import org.antlr.v4.runtime.tree.ErrorNode;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 public class SassAnalyzerCompat implements CodeAnalyzer {
 
@@ -39,6 +45,7 @@ public class SassAnalyzerCompat implements CodeAnalyzer {
       int lastLine = 1;
       int line, column;
       var prevIsTagName = false;
+      int pre = -1;
 
       while (delegate.shouldAnalyze()) {
         token = lexer.nextToken();
@@ -194,14 +201,49 @@ public class SassAnalyzerCompat implements CodeAnalyzer {
               result.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
               break;
             }
+          case ScssLexer.Ident:
+            {
+              int color = EditorColorScheme.TEXT_NORMAL;
+
+              if (token.getText().matches("\\b[a-z-]+\\:")) {
+                color = EditorColorScheme.javatype;
+              }
+              if (pre == ScssLexer.Dollar) {
+                color = EditorColorScheme.javafun;
+              }
+
+              result.addIfNeeded(line, column, color);
+              break;
+            }
           default:
             result.addIfNeeded(line, column, EditorColorScheme.TEXT_NORMAL);
             prevIsTagName = false;
             classNamePrevious = false;
             break;
         }
+
+        if (token.getType() != ScssLexer.Space) {
+          pre = token.getType();
+        }
         first = false;
       }
+      ScssLexer mlexer =
+          new ScssLexer(CharStreams.fromReader(new StringReader(content.toString())));
+      CommonTokenStream streams = new CommonTokenStream(mlexer);
+      ScssParser parser = new ScssParser(streams);
+      ScssParserBaseListener base =
+          new ScssParserBaseListener() {
+            @Override
+            public void visitErrorNode(ErrorNode node) {
+              int mline = node.getSymbol().getLine();
+              int col = node.getSymbol().getCharPositionInLine();
+              var texts = node.getSymbol().getText();
+              Utils.setErrorSpan(result, mline, col + texts.length());
+              super.visitErrorNode(node);
+            }
+        
+          };
+      ParseTreeWalker.DEFAULT.walk(base, parser.stylesheet());
       result.determine(lastLine);
 
     } catch (IOException e) {

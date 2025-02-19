@@ -172,6 +172,7 @@ public class ThemeUtils {
     editor.getColorScheme().setColor(EditorColorScheme.beige, ColorCompat.BEIGE);
     editor.getColorScheme().setColor(EditorColorScheme.bisque, ColorCompat.BISQUE);
     editor.getColorScheme().setColor(EditorColorScheme.black, ColorCompat.BLACK);
+    editor.getColorScheme().setColor(EditorColorScheme.gold,ColorCompat.GOLD);
     editor.getColorScheme().setColor(EditorColorScheme.blanchedalmond, ColorCompat.BLANCHEDALMOND);
     editor.getColorScheme().setColor(EditorColorScheme.blue, ColorCompat.BLUE);
     editor.getColorScheme().setColor(EditorColorScheme.green,Color.GREEN);

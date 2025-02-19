@@ -138,7 +138,7 @@ public class CodeEditorActivity extends AppCompatActivity {
   private LinearLayout newLayoutSymbolBar;
   private LinearLayout CustomToolbar;
   private ProgressBar progressbar1;
-
+  
   private RecyclerView recyclerview1;
   private RecyclerView dir;
   private LinearLayout divar;
@@ -583,8 +583,8 @@ public class CodeEditorActivity extends AppCompatActivity {
           var iscode = new FactoryCodeError(editor, iconAuthor);
           undo.setEnabled(editor.canUndo());
           redo.setEnabled(editor.canRedo());
-          iscode.run();
           
+          iscode.run();
         });
 
     if (sve.contains("getAutoSave")) {
@@ -592,6 +592,7 @@ public class CodeEditorActivity extends AppCompatActivity {
         editor.subscribeEvent(
             ContentChangeEvent.class,
             (event, subscribe) -> {
+              
               /// Code for saving file
               FileUtil.writeFile(shp.getString("pos_path", ""), editor.getText().toString());
             });
@@ -848,12 +849,13 @@ public class CodeEditorActivity extends AppCompatActivity {
               case 3:
                 {
                   saveFileByIo();
+                  
                   break;
                 }
               case 4:
                 {
                   setAllSaveFile(Coordinator);
-
+                  
                   break;
                 }
               case 5:
@@ -1046,9 +1048,7 @@ public class CodeEditorActivity extends AppCompatActivity {
   }
 
   @Deprecated
-  public void setLiveShowFragment() {
-    
-  }
+  public void setLiveShowFragment() {}
 
   public void Symbloinit() {
     try {
@@ -1443,11 +1443,11 @@ public class CodeEditorActivity extends AppCompatActivity {
     public void onBindViewHolder(
         ViewHolder _holder, @SuppressLint("RecyclerView") final int _position) {
       View _view = _holder.itemView;
-      final LinearLayout linear1 = _view.findViewById(R.id.linear1);
-      final LinearLayout linear5 = _view.findViewById(R.id.linear5);
-      final LinearLayout selector = _view.findViewById(R.id.selector);
-      final ImageView imageview2 = _view.findViewById(R.id.imageview2);
-      final TextView textview1 = _view.findViewById(R.id.textview1);
+       LinearLayout linear1 = _view.findViewById(R.id.linear1);
+       LinearLayout linear5 = _view.findViewById(R.id.linear5);
+       LinearLayout selector = _view.findViewById(R.id.selector);
+       ImageView imageview2 = _view.findViewById(R.id.imageview2);
+       TextView textview1 = _view.findViewById(R.id.textview1);
       pos10 = _position;
       RecyclerView.LayoutParams _lp =
           new RecyclerView.LayoutParams(
@@ -1470,6 +1470,7 @@ public class CodeEditorActivity extends AppCompatActivity {
             imap.containsKey("displaytextcolortab")
                 ? Color.parseColor(imap.get("displaytextcolortab").toString())
                 : Color.parseColor("#1C1C1C");
+
         textview1.setTextColor(colorTabText);
         selector.setBackground(shap.getCustomShape(colorTab, ShapeName.LINEROUND));
         textview1.setText(dataChange);

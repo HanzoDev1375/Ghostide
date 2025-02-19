@@ -1,4 +1,4 @@
-// Generated from ./ANTLRv4Parser.g4 by ANTLR 4.13.1
+// Generated from /storage/emulated/0/apk/grammars-v4-master/antlr/antlr4/ANTLRv4Parser.g4 by ANTLR 4.13.1
 package org.antlr.parser.antlr4;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -485,18 +485,6 @@ public class ANTLRv4ParserBaseListener implements ANTLRv4ParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLabeledLexerElement(ANTLRv4Parser.LabeledLexerElementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLabeledLexerElement(ANTLRv4Parser.LabeledLexerElementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterLexerBlock(ANTLRv4Parser.LexerBlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -588,6 +576,30 @@ public class ANTLRv4ParserBaseListener implements ANTLRv4ParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitElement(ANTLRv4Parser.ElementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPredicateOptions(ANTLRv4Parser.PredicateOptionsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPredicateOptions(ANTLRv4Parser.PredicateOptionsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPredicateOption(ANTLRv4Parser.PredicateOptionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPredicateOption(ANTLRv4Parser.PredicateOptionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -737,13 +749,13 @@ public class ANTLRv4ParserBaseListener implements ANTLRv4ParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTerminal(ANTLRv4Parser.TerminalContext ctx) { }
+	@Override public void enterTerminalDef(ANTLRv4Parser.TerminalDefContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTerminal(ANTLRv4Parser.TerminalContext ctx) { }
+	@Override public void exitTerminalDef(ANTLRv4Parser.TerminalDefContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
