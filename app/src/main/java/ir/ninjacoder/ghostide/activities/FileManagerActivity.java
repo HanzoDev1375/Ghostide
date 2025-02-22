@@ -2057,89 +2057,94 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                 nodeChild.setMode(ClassNodePaserImpl.ModeUser.DIALOG);
                 break;
               }
+            
           }
         });
   }
 
   public void setItemSheetOld(int _position, final View _view) {
-    var bottomSheetDialog = new BottomSheetDialog(FileManagerActivity.this);
-    View bottomSheetView;
-    bottomSheetView = getLayoutInflater().inflate(R.layout.layout_dir_sheet, null);
-    bottomSheetDialog.setContentView(bottomSheetView);
-    LinearLayout re = (LinearLayout) bottomSheetView.findViewById(R.id.re);
-    LinearLayout del = (LinearLayout) bottomSheetView.findViewById(R.id.del);
-    LinearLayout pr = (LinearLayout) bottomSheetView.findViewById(R.id.pr);
-    LinearLayout sh = (LinearLayout) bottomSheetView.findViewById(R.id.sh);
-    LinearLayout zp = (LinearLayout) bottomSheetView.findViewById(R.id.zp);
-    LinearLayout mark = (LinearLayout) bottomSheetView.findViewById(R.id.mark);
-    re.setOnClickListener(
-        new View.OnClickListener() {
 
-          public void onClick(View v) {
-            bottomSheetDialog.dismiss();
-            setRenameFile(_position);
+    var sheet = new ListSheet();
+    sheet.setSheetDialog(this);
+    sheet.addItem("add toZip", R.drawable.zip_box);
+    sheet.addItem("share", R.drawable.share);
+    sheet.addItem("Add to Project", R.drawable.unzip);
+    sheet.addItem("Rename", R.drawable.rename);
+    sheet.addItem("ReomvedFile", R.drawable.delete);
+    sheet.addItem("AddBookMark", R.drawable.ic_bookmark_white);
+    sheet.addItem("RenameJavaCode?", R.drawable.ic_material_java);
+    sheet.setOnItemClickLabe(
+        (pos_) -> {
+          switch (pos_) {
+            case 0:
+              {
+                MakeZipFileFromThreads(_position);
+                sheet.getDismiss(true);
+                break;
+              }
+            case 1:
+              {
+                var fileShareManager = new FileShareManager(FileManagerActivity.this);
+                File file = new File(files.get((int) _position).get("path").toString());
+                try {
+                  fileShareManager.shareFile(file);
+                } catch (Exception e) {
+                  e.printStackTrace();
+                }
+                sheet.getDismiss(true);
+                break;
+              }
+            case 2:
+              {
+                MakeZipFileFromThreads(_position);
+                sheet.getDismiss(true);
+                break;
+              }
+            case 3:
+              {
+                setRenameFile(_position);
+                sheet.getDismiss(true);
+                break;
+              }
+            case 4:
+              {
+                _delFileCustom(_position);
+                sheet.getDismiss(true);
+                break;
+              }
+            case 5:
+              {
+                if (book.getString("hsipsot4444", "").equals("")) {
+                  book.edit().putString("hsipsot4444", "[]").apply();
+                } else {
+                  a =
+                      new Gson()
+                          .fromJson(
+                              book.getString("hsipsot4444", ""),
+                              new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
+                  mapz32 = new HashMap<>();
+                  mapz32.put("list", files.get((int) _position).get("path").toString());
+                  a.add(mapz32);
+                  book.edit().putString("hsipsot4444", new Gson().toJson(a)).apply();
+                  showMessage("Added!");
+                }
+                sheet.getDismiss(true);
+                break;
+              }
+            case 6:
+              {
+                ColorView.renameJavaFileImpl(
+                    FileManagerActivity.this,
+                    files.get(_position).get("path").toString(),
+                    Folder ,
+                    () -> {
+                      reLoadFile();
+                    });
+                sheet.getDismiss(true);
+                break;
+              }
           }
         });
-    del.setOnClickListener(
-        new View.OnClickListener() {
-
-          public void onClick(View v) {
-            _delFileCustom(_position);
-            bottomSheetDialog.dismiss();
-          }
-        });
-    pr.setOnClickListener(
-        new View.OnClickListener() {
-
-          public void onClick(View v) {
-            MakeZipFileFromThread(_position);
-            bottomSheetDialog.dismiss();
-          }
-        });
-    sh.setOnClickListener(
-        new View.OnClickListener() {
-
-          public void onClick(View v) {
-            var fileShareManager = new FileShareManager(FileManagerActivity.this);
-            File file = new File(files.get((int) _position).get("path").toString());
-            try {
-              fileShareManager.shareFile(file);
-            } catch (Exception e) {
-              e.printStackTrace();
-            }
-            bottomSheetDialog.dismiss();
-          }
-        });
-    zp.setOnClickListener(
-        new View.OnClickListener() {
-
-          public void onClick(View v) {
-            MakeZipFileFromThreads(_position);
-            bottomSheetDialog.dismiss();
-          }
-        });
-    mark.setOnClickListener(
-        new View.OnClickListener() {
-
-          public void onClick(View v) {
-            if (book.getString("hsipsot4444", "").equals("")) {
-              book.edit().putString("hsipsot4444", "[]").apply();
-            } else {
-              a =
-                  new Gson()
-                      .fromJson(
-                          book.getString("hsipsot4444", ""),
-                          new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
-              mapz32 = new HashMap<>();
-              mapz32.put("list", files.get((int) _position).get("path").toString());
-              a.add(mapz32);
-              book.edit().putString("hsipsot4444", new Gson().toJson(a)).apply();
-              showMessage("Added!");
-            }
-            bottomSheetDialog.dismiss();
-          }
-        });
-    bottomSheetDialog.show();
   }
 
   public void setDialogGitDownload() {

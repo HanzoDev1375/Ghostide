@@ -317,11 +317,8 @@ public class FactoryCodeError {
     private boolean errorCall = false;
 
     private ErrorNode errorNode;
-    private ToolItemPop tooltipHelper;
 
-    public JavaTask() {
-      tooltipHelper = new ToolItemPop(editor);
-    }
+    public JavaTask() {}
 
     @MainThread
     @Override
@@ -360,16 +357,6 @@ public class FactoryCodeError {
       if (errorCall) {
         call.setImageResource(R.drawable.closehsi);
         call.setColorFilter(Color.RED);
-        if (tooltipHelper != null) {
-          var builder = new StringBuilder();
-          builder.append("Error: ").append(errorNode.getSymbol().getText()).append('\n');
-          builder
-              .append("Line: ")
-              .append(String.valueOf(errorNode.getSymbol().getLine()))
-              .append('\n');
-
-          tooltipHelper.run(builder.toString());
-        }
 
       } else {
         call.setImageResource(R.drawable.ic_palette_check_box);
@@ -382,12 +369,7 @@ public class FactoryCodeError {
 
     private boolean errorCall = false;
     private ErrorNode errorNode; // تغییر نام به یک متغیر سراسری
-    List<Integer> mlist = editor.getLineSize();
-    private ToolTipHelper tooltipHelper;
-
-    public TypeScriptTask() {
-      tooltipHelper = new ToolTipHelper(editor);
-    }
+    public TypeScriptTask() {}
 
     @MainThread
     @Override
@@ -425,22 +407,12 @@ public class FactoryCodeError {
       if (errorCall) {
         call.setImageResource(R.drawable.closehsi);
         call.setColorFilter(Color.RED);
-        int line = errorNode.getSymbol().getLine(); // استفاده از متغیر سراسری
-        mlist.add(line);
-        if (tooltipHelper != null) {
-          var builder = new StringBuilder();
-          builder.append("Error: ").append(errorNode.getSymbol().getText()).append('\n');
-          builder
-              .append("Line: ")
-              .append(String.valueOf(errorNode.getSymbol().getLine()))
-              .append('\n');
+        
 
-          tooltipHelper.setText(builder.toString());
-        }
       } else {
-        mlist.clear();
         call.setImageResource(R.drawable.ic_palette_check_box);
         call.setColorFilter(Color.GREEN);
+        
       }
     }
   }

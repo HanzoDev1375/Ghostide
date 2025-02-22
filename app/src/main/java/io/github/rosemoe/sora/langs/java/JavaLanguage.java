@@ -13,6 +13,7 @@ import io.github.rosemoe.sora.interfaces.NewlineHandler;
 import io.github.rosemoe.sora.langs.internal.MyCharacter;
 import io.github.rosemoe.sora.text.TextUtils;
 import io.github.rosemoe.sora.widget.SymbolPairMatch;
+import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import lsp4custom.com.ninjacoder.customhtmllsp.JavaCardshorts;
 
 public class JavaLanguage implements EditorLanguage {
@@ -38,15 +39,21 @@ public class JavaLanguage implements EditorLanguage {
   public AutoCompleteProvider getAutoCompleteProvider() {
     JavaAutoComplete auto = new JavaAutoComplete();
     auto.setMd(true);
-    String[] combinedArray = new String[keywords.length + JavaCardshorts.objectNames.length];
-    System.arraycopy(keywords, 0, combinedArray, 0, keywords.length);
-    System.arraycopy(
-        JavaCardshorts.objectNames,
-        0,
-        combinedArray,
-        keywords.length,
-        JavaCardshorts.objectNames.length);
-    auto.setKeywords(combinedArray);
+    
+    
+    try {
+      String[] combinedArray = new String[keywords.length + ObjectUtils.getClassNameObject().length];
+      System.arraycopy(keywords, 0, combinedArray, 0, keywords.length);
+      System.arraycopy(
+          ObjectUtils.getClassNameObject(),
+          0,
+          combinedArray,
+          keywords.length,
+          ObjectUtils.getClassNameObject().length);
+      auto.setKeywords(combinedArray);
+    } catch (Exception err) {
+
+    }
     return auto;
   }
 

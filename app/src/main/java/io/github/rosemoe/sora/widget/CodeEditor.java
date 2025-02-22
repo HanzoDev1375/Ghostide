@@ -372,22 +372,12 @@ public class CodeEditor extends View
   private String charName = "";
   private List<Rect> iconRect = new ArrayList<>();
   private Canvas canvas;
-  private List<Integer> lineSize = new ArrayList<>();
   private String minidraw;
 
   public List<DiagnosticWrapper> getDiagnostics() {
     return mDiagnostics;
   }
-
-  public List<Integer> getLineSize() {
-
-    return lineSize;
-  }
-
-  public void setLineSize(List<Integer> lineSize) {
-    this.lineSize = lineSize;
-  }
-
+  
   public void setDiagnosticsListener(DiagnosticsListener diagnosticsListener) {
     mDiagnosticsListener = diagnosticsListener;
   }
@@ -1543,14 +1533,6 @@ public class CodeEditor extends View
             (int) postDrawCurrentLines.get(i),
             (int) (textOffset + getOffsetX() - mDividerMargin));
       }
-
-      for (int i = 0; i < lineSize.size(); ++i) {
-        drawRowBackground(
-            canvas,
-            lineSize.size() == 0 ? android.graphics.Color.TRANSPARENT : currentLineBgColor,
-            (int) i,
-            (int) (textOffset + getOffsetX() - mDividerMargin));
-      }
       drawDivider(
           canvas, lineNumberWidth + mDividerMargin, color.getColor(EditorColorScheme.LINE_DIVIDER));
       for (int i = 0; i < postDrawLineNumbers.size(); i++) {
@@ -1783,9 +1765,9 @@ public class CodeEditor extends View
             mPaintOther);
       }
 
-//      if (span.drawminiText != null) {
-//        drawMiniGraph(canvas, paintingOffset, row, span.drawminiText);
-//      }
+      //      if (span.drawminiText != null) {
+      //        drawMiniGraph(canvas, paintingOffset, row, span.drawminiText);
+      //      }
 
       // Draw underline
       if (span.underlineColor != 0) {
@@ -2219,9 +2201,9 @@ public class CodeEditor extends View
 
             lastStyle = styleBits;
           }
-//          if (span.drawminiText != null) {
-//            drawMiniGraph(canvas, paintingOffset, row, span.drawminiText);
-//          }
+          //          if (span.drawminiText != null) {
+          //            drawMiniGraph(canvas, paintingOffset, row, span.drawminiText);
+          //          }
 
           int backgroundColorId = span.getBackgroundColorId();
           if (backgroundColorId != 0) {
@@ -3565,25 +3547,23 @@ public class CodeEditor extends View
   }
 
   private int ShowIcon;
+  private int iconRes = R.drawable.icon_playrow;
 
   public void setShowIcon(int ShowIcon) {
     this.ShowIcon = ShowIcon;
   }
 
+  public void setIconLineNumber(int iconRes) {
+    this.iconRes = iconRes;
+  }
+
   protected void drawLineNumber(
       Canvas canvas, int line, int row, float offsetX, float width, int color) {
-
-    // بارگذاری تصویر آیکون
-    Bitmap defaultIconBitmap =
-        BitmapFactory.decodeResource(getResources(), R.drawable.icon_playrow);
-
-    // مقادیر مورد نظر برای اندازه آیکون
+    Bitmap defaultIconBitmap = BitmapFactory.decodeResource(getResources(), iconRes);
     int desiredWidth = 30;
     int desiredHeight = 30;
     Bitmap scaledIconBitmap =
         Bitmap.createScaledBitmap(defaultIconBitmap, desiredWidth, desiredHeight, true);
-
-    // بررسی اینکه آیا می‌توان خط را رسم کرد
     if (width + offsetX <= 0) {
       return;
     }
@@ -3593,8 +3573,6 @@ public class CodeEditor extends View
       mPaintOther.setTextAlign(mLineNumberAlign);
     }
     mPaintOther.setColor(color);
-
-    // محاسبه موقعیت y برای متن
     float y =
         (getRowBottom(row) + getRowTop(row)) / 2f
             - (mLineNumberMetrics.descent - mLineNumberMetrics.ascent) / 2f
@@ -3602,11 +3580,9 @@ public class CodeEditor extends View
             - getOffsetY();
 
     var buffer = TemporaryCharBuffer.obtain(20);
-    line++; // افزایش شماره خط
+    line++;
     int i = stringSize(line);
     Numbers.getChars(line, i, buffer);
-
-    // محاسبه موقعیت x برای شماره خط
     float lineNumberX;
     switch (mLineNumberAlign) {
       case LEFT:
@@ -3625,9 +3601,9 @@ public class CodeEditor extends View
     // رسم شماره خط
     canvas.drawText(buffer, 0, i, lineNumberX, y, mPaintOther);
 
-    // رسم آیکون در صورت وجود
+    // رسم آیکون در صورت وجود با فاصله بیشتر از شماره خط
     if (scaledIconBitmap != null) {
-      float iconX = lineNumberX + mDividerMargin; // فاصله آیکون از شماره خط
+      float iconX = lineNumberX + mDividerMargin + 10; // افزایش فاصله آیکون از شماره خط
       float iconY = y - scaledIconBitmap.getHeight() / 2f; // موقعیت عمودی آیکون
       if (line == ShowIcon) {
         Paint iconPaint = new Paint();

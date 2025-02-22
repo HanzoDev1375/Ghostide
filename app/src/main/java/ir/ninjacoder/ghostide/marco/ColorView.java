@@ -1,10 +1,17 @@
 package ir.ninjacoder.ghostide.marco;
 
+import android.util.Log;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import ir.ninjacoder.ghostide.databinding.MakefolderBinding;
+import java.io.FileOutputStream;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.activities.BrowserActivity;
 import ir.ninjacoder.ghostide.adapter.ColorRenderAdapter;
 import ir.ninjacoder.ghostide.adapter.JavaASmailAd;
 import ir.ninjacoder.ghostide.config.ChlidJavaList;
+import ir.ninjacoder.ghostide.interfaces.JavaClassPaster;
 import ir.ninjacoder.ghostide.model.JavaModel;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.utils.FileUtil;
@@ -37,6 +44,7 @@ import io.github.rosemoe.sora.langs.xml.XMLLanguage;
 import io.github.rosemoe.sora.widget.CodeEditor;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -443,5 +451,67 @@ public class ColorView {
     public int getCount() {
       return data.size();
     }
+  }
+
+  static void renameJavaFile(String oldFilePath, String newFilePath, JavaClassPaster classPast) {
+    if (!oldFilePath.endsWith(".java") || !newFilePath.endsWith(".java")) {
+      Log.w("File not Found ", "this file not java");
+      return;
+    }
+
+    File oldFile = new File(oldFilePath);
+    if (!oldFile.exists() || !oldFile.canRead()) {
+      Log.w("Rename Error", "Old file does not exist or cannot be read");
+      return;
+    }
+
+    try {
+      CompilationUnit cu = StaticJavaParser.parse(oldFile);
+
+      String newClassName =
+          newFilePath.substring(
+              newFilePath.lastIndexOf(File.separator) + 1, newFilePath.length() - 5);
+      cu.findAll(ClassOrInterfaceDeclaration.class)
+          .forEach(
+              clazz -> {
+                clazz.setName(newClassName);
+              });
+
+      File newFile = new File(newFilePath);
+      try (FileOutputStream fos = new FileOutputStream(newFile)) {
+        fos.write(cu.toString().getBytes());
+      }
+
+      classPast.past();
+    } catch (IOException e) {
+      Log.e("ErrorJavaRenameClass : ", e.getMessage());
+    }
+  }
+
+  public static void renameJavaFileImpl(
+      Context context, String fileInput, String output, JavaClassPaster past) {
+    MakefolderBinding binding = MakefolderBinding.inflate(LayoutInflater.from(context));
+    binding.editor.setText(""); // Reset the text editor if necessary
+
+    new MaterialAlertDialogBuilder(context)
+        .setTitle("Java Rename Class ")
+        .setView(binding.getRoot())
+        .setPositiveButton(
+            android.R.string.ok,
+            (dialog, which) -> {
+              String existingText =
+                  binding.editor.getText().toString().trim(); // Get the new class name
+              if (existingText.isEmpty()) {
+                Toast.makeText(context, "Please enter a valid class name.", Toast.LENGTH_SHORT)
+                    .show();
+                return;
+              }
+
+              // Create new file name with the output directory and new class name
+              String newFileName = output + File.separator + existingText + ".java";
+              Log.d("Renaming File", "Renaming from: " + fileInput + " to: " + newFileName);
+              renameJavaFile(fileInput, newFileName, past);
+            })
+        .show();
   }
 }

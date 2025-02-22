@@ -13,6 +13,7 @@ import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.ImportDeclaration;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.IdeEditor;
+import ir.ninjacoder.ghostide.model.ObjectClassName;
 import ir.ninjacoder.ghostide.utils.FileUtil;
 import ir.ninjacoder.ghostide.widget.ExrtaFab;
 import android.animation.Animator;
@@ -59,6 +60,12 @@ import android.graphics.Canvas;
 import android.graphics.Path;
 import android.graphics.RectF;
 import java.io.IOException;
+import java.io.InputStream;
+import com.google.gson.Gson;
+import java.lang.reflect.Type;
+import com.google.common.reflect.TypeToken;
+import java.util.List;
+import java.io.InputStreamReader;
 
 public class ObjectUtils {
   public static boolean Android12 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S;
@@ -634,5 +641,22 @@ public class ObjectUtils {
     }
 
     return text;
+  }
+
+  public static String[] getClassNamesFromJson(InputStream jsonInputStream) {
+    Gson gson = new Gson();
+    Type listType = new TypeToken<List<ObjectClassName>>() {}.getType();
+    List<ObjectClassName> classNames =
+        gson.fromJson(new InputStreamReader(jsonInputStream), listType);
+    String[] classNameArray = new String[classNames.size()];
+    for (int i = 0; i < classNames.size(); i++) {
+      classNameArray[i] = classNames.get(i).getClassName();
+    }
+    return classNameArray;
+  }
+
+  public static String[] getClassNameObject() throws Exception {
+    return getClassNamesFromJson(
+        GhostIdeAppLoader.getContext().getAssets().open("class_info.json"));
   }
 }
