@@ -23,6 +23,7 @@ public class JavaAutoComplete implements AutoCompleteProvider {
   boolean isMd = false;
   private List<CompletionItem> it;
   private String prf;
+  private String[] name;
 
   public JavaAutoComplete() {}
 
@@ -39,6 +40,12 @@ public class JavaAutoComplete implements AutoCompleteProvider {
     mKeywordsAreLowCase = false;
   }
 
+  public void setKeywords(String[] keywords, String[] name) {
+    mKeywords = keywords;
+    mKeywordsAreLowCase = false;
+    this.name = name;
+  }
+
   @Override
   public List<CompletionItem> getAutoCompleteItems(
       String prefix, TextAnalyzeResult analyzeResult, int line, int column) {
@@ -51,7 +58,7 @@ public class JavaAutoComplete implements AutoCompleteProvider {
     if (keywordArray != null) {
       for (String kw : keywordArray) {
         if (kw.startsWith(match)) {
-          keywords.add(new CompletionItem(kw, "Java keyword"));
+          keywords.add(new CompletionItem(kw, "Java Keyword"));
         }
       }
     }
@@ -79,12 +86,8 @@ public class JavaAutoComplete implements AutoCompleteProvider {
       LOG.error("ErrorOpenXmlFile", err.getLocalizedMessage());
     }
 
-    
-
     return keywords;
   }
-
-  
 
   public void setTsCardshorts() {
     new TypeScriptCardshorts(it, prf);

@@ -655,6 +655,23 @@ public class ObjectUtils {
     return classNameArray;
   }
 
+  public static String[] getFull_packageFromJson(InputStream jsonInputStream) {
+    Gson gson = new Gson();
+    Type listType = new TypeToken<List<ObjectClassName>>() {}.getType();
+    List<ObjectClassName> classNames =
+        gson.fromJson(new InputStreamReader(jsonInputStream), listType);
+    String[] classNameArray = new String[classNames.size()];
+    for (int i = 0; i < classNames.size(); i++) {
+      classNameArray[i] = classNames.get(i).getFull_package();
+    }
+    return classNameArray;
+  }
+
+  public static String[] getFull_package() throws Exception {
+    return getFull_packageFromJson(
+        GhostIdeAppLoader.getContext().getAssets().open("class_info.json"));
+  }
+
   public static String[] getClassNameObject() throws Exception {
     return getClassNamesFromJson(
         GhostIdeAppLoader.getContext().getAssets().open("class_info.json"));
