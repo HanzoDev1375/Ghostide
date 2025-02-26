@@ -138,7 +138,7 @@ public class CodeEditorActivity extends AppCompatActivity {
   private LinearLayout newLayoutSymbolBar;
   private LinearLayout CustomToolbar;
   private ProgressBar progressbar1;
-  
+
   private RecyclerView recyclerview1;
   private RecyclerView dir;
   private LinearLayout divar;
@@ -583,7 +583,7 @@ public class CodeEditorActivity extends AppCompatActivity {
           var iscode = new FactoryCodeError(editor, iconAuthor);
           undo.setEnabled(editor.canUndo());
           redo.setEnabled(editor.canRedo());
-          
+
           iscode.run();
         });
 
@@ -592,7 +592,7 @@ public class CodeEditorActivity extends AppCompatActivity {
         editor.subscribeEvent(
             ContentChangeEvent.class,
             (event, subscribe) -> {
-              
+
               /// Code for saving file
               FileUtil.writeFile(shp.getString("pos_path", ""), editor.getText().toString());
             });
@@ -849,13 +849,13 @@ public class CodeEditorActivity extends AppCompatActivity {
               case 3:
                 {
                   saveFileByIo();
-                  
+
                   break;
                 }
               case 4:
                 {
                   setAllSaveFile(Coordinator);
-                  
+
                   break;
                 }
               case 5:
@@ -1314,14 +1314,18 @@ public class CodeEditorActivity extends AppCompatActivity {
                           getmd.setClass(getApplicationContext(), TerminalActivity.class);
                           getmd.putExtra("phpcode", shp.getString("pos_path", ""));
                           startActivity(getmd);
-                        } else if (shp.getString("pos_path", "").contains(".scss")
-                            || shp.getString("pos_path", "").contains(".sass")) {
+                        } else if (shp.getString("pos_path", "").contains(".scss")) {
 
                           SassForAndroid.run(
                               CodeEditorActivity.this,
                               shp.getString("pos_path", ""),
                               shp.getString("pos_path", ""));
 
+                        } else if (shp.getString("pos_path", "").contains(".sass")) {
+                          SassForAndroid.run(
+                              CodeEditorActivity.this,
+                              shp.getString("pos_path", ""),
+                              shp.getString("pos_path", ""));
                         } else if (shp.getString("pos_path", "").contains(".java")) {
 
                           JavaCompilerBeta.run(
@@ -1443,11 +1447,11 @@ public class CodeEditorActivity extends AppCompatActivity {
     public void onBindViewHolder(
         ViewHolder _holder, @SuppressLint("RecyclerView") final int _position) {
       View _view = _holder.itemView;
-       LinearLayout linear1 = _view.findViewById(R.id.linear1);
-       LinearLayout linear5 = _view.findViewById(R.id.linear5);
-       LinearLayout selector = _view.findViewById(R.id.selector);
-       ImageView imageview2 = _view.findViewById(R.id.imageview2);
-       TextView textview1 = _view.findViewById(R.id.textview1);
+      LinearLayout linear1 = _view.findViewById(R.id.linear1);
+      LinearLayout linear5 = _view.findViewById(R.id.linear5);
+      LinearLayout selector = _view.findViewById(R.id.selector);
+      ImageView imageview2 = _view.findViewById(R.id.imageview2);
+      TextView textview1 = _view.findViewById(R.id.textview1);
       pos10 = _position;
       RecyclerView.LayoutParams _lp =
           new RecyclerView.LayoutParams(

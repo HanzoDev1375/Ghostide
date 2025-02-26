@@ -141,7 +141,6 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
                 TextStyle.makeStyle(EditorColorScheme.jskeyword, 0, true, false, false, false));
             break;
           case HTMLLexer.DECIMAL_LITERAL:
-          case HTMLLexer.HEX_LITERAL:
           case HTMLLexer.OCT_LITERAL:
           case HTMLLexer.BINARY_LITERAL:
           case HTMLLexer.FLOAT_LITERAL:
@@ -157,6 +156,26 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
                 column,
                 TextStyle.makeStyle(EditorColorScheme.phpcolormatch3, 0, true, false, false));
             break;
+          case HTMLLexer.HEX_LITERAL:
+            {
+              Span span =
+                  Span.obtain(
+                      column, TextStyle.makeStyle(EditorColorScheme.black, 0, false, true, false));
+              span.setBackgroundColorMy(Color.WHITE);
+              result.add(line, span);
+
+              Span middle = Span.obtain(column + token.getText().length(), EditorColorScheme.LITERAL);
+              middle.setBackgroundColorMy(Color.TRANSPARENT);
+              result.add(line, middle);
+
+              Span end =
+                  Span.obtain(
+                      column + token.getText().length(), TextStyle.makeStyle(EditorColorScheme.TEXT_NORMAL));
+              end.setBackgroundColorMy(Color.TRANSPARENT);
+              result.add(line, end);
+
+              break;
+            }
           case HTMLLexer.STRING:
           case HTMLLexer.CHATREF:
             {
@@ -333,6 +352,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
             {
               int colorid = EditorColorScheme.TEXT_NORMAL;
               info.addIdentifier(token.getText());
+              boolean isHexColor = false;
               boolean isBold, isItalic, isUnderLineMode = false;
 
               if (previous == HTMLLexer.AT) {
@@ -375,14 +395,21 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
                 colorid = EditorColorScheme.OPERATOR;
               }
               if (previous == HTMLLexer.SUB) {
-                colorid = EditorColorScheme.HTML_TAG;
+                colorid = EditorColorScheme.htmlsymbol;
+                isHexColor = false;
               }
               if (previous == HTMLLexer.DOLLAR) {
                 // $php
                 colorid = EditorColorScheme.ATTRIBUTE_VALUE;
               }
+              if (previous == HTMLLexer.DOT) {
+                /// def code result -> Java.user();
+                colorid = EditorColorScheme.javafun;
+              }
 
-              ListCss3Color.initColor(token, line, column, result, true);
+              /// این ویژگی به علت مصرف زیاد رم متوقف شد اما همچنان میتوانید در برنامه خودتان از این
+              // ویژگی استفاده کنید...
+              //// ListCss3Color.initColor(token, line, column, result, true);
 
               result.addIfNeeded(line, column, colorid);
               break;

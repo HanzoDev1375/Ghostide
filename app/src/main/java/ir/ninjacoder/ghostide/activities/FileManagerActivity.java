@@ -1220,7 +1220,10 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     if (staticstring.endsWith(".c")) {
       SendDataFromCodeEditor(newpos, "path", files, newlistmap);
     }
-    if (staticstring.endsWith(".scss") || staticstring.endsWith(".sass")) {
+    if (staticstring.endsWith(".scss")) {
+      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+    }
+    if (staticstring.endsWith(".sass")) {
       SendDataFromCodeEditor(newpos, "path", files, newlistmap);
     }
     if (staticstring.endsWith(".cs")) {
@@ -2057,7 +2060,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                 nodeChild.setMode(ClassNodePaserImpl.ModeUser.DIALOG);
                 break;
               }
-            
           }
         });
   }
@@ -2136,7 +2138,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                 ColorView.renameJavaFileImpl(
                     FileManagerActivity.this,
                     files.get(_position).get("path").toString(),
-                    Folder ,
+                    Folder,
                     () -> {
                       reLoadFile();
                     });

@@ -130,6 +130,7 @@ dependencies {
     implementation project(path: ":vectormaster")
     implementation project(path: ":eclipse-standalone")
     implementation project(path: ":android-tools")
+    implementation project(path: ":prograsssheetlib")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.2")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-properties:2.14.2")
     implementation("com.squareup:javapoet:1.13.0")

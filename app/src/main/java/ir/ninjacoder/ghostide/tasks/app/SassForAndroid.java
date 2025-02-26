@@ -1,5 +1,6 @@
 package ir.ninjacoder.ghostide.tasks.app;
 
+import android.widget.Toast;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.utils.FileUtil;
 import ir.ninjacoder.ghostide.utils.ThemeUtils;
@@ -34,7 +35,7 @@ public class SassForAndroid {
     try (var compiler = AndroidSassCompilerFactory.bundled(context)) {
       CompileSuccess sb = compiler.compileFile(input);
       StringBuilder b = new StringBuilder();
-     // b.append(compiler.getVersion().toString()).append("\n");
+      // b.append(compiler.getVersion().toString()).append("\n");
       b.append(sb.getCss()).append("\n");
       return b.toString();
     } catch (Exception err) {
@@ -105,7 +106,9 @@ public class SassForAndroid {
           () -> {
             if (input.contains(".sass")) {
               FileUtil.writeFile(output.replace(".sass", ".css"), cssContent);
+              Toast.makeText(context, "File saved: " + output.replace(".sass ", ".css"), 1).show();
             } else if (output.contains(".scss")) {
+              Toast.makeText(context, "File saved: " + output.replace(".scss ", ".css"), 1).show();
               FileUtil.writeFile(output.replace(".scss", ".css"), cssContent);
             }
           });

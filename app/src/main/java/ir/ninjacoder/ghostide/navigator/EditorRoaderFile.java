@@ -54,7 +54,8 @@ public class EditorRoaderFile {
     } else if (_path.endsWith(".cpp")
         || _path.endsWith(".cxx")
         || _path.endsWith(".cc")
-        || _path.endsWith(".h")) {
+        || _path.endsWith(".h")
+        || _path.endsWith(".hpp")) {
       editor.setEditorLanguage(new CppLanguage());
       _fab.postDelayed(_fab::show, 400);
       ReadFileCompat(editor, _path, bar);
@@ -67,9 +68,11 @@ public class EditorRoaderFile {
       editor.setEditorLanguage(new JavaScriptLanguage());
       ReadFileCompat(editor, _path, bar);
       _fab.postDelayed(_fab::show, 400);
-    } else if (_path.endsWith(".scss") || _path.endsWith(".sass")) {
+    } else if (_path.endsWith(".scss")) {
       ReadFileCompat(editor, _path, bar);
-      editor.setEditorLanguage(new SassLangCompat());
+      var it = new SassLangCompat();
+      it.setSassMod(false);
+      editor.setEditorLanguage(it);
       _fab.postDelayed(_fab::show, 300);
     } else if (_path.endsWith(".c")) {
       ReadFileCompat(editor, _path, bar);
@@ -168,6 +171,12 @@ public class EditorRoaderFile {
       ReadFileCompat(editor, _path, bar);
       editor.setEditorLanguage(new GLSLLang());
       _fab.postDelayed(_fab::hide, 400);
+    } else if (_path.endsWith(".sass")) {
+      var scssLang = new SassLangCompat();
+      scssLang.setSassMod(true);
+      editor.setEditorLanguage(scssLang);
+      _fab.postDelayed(_fab::show, 400);
+      ReadFileCompat(editor, _path, bar);
     } else _fab.postDelayed(_fab::hide, 400);
   }
 

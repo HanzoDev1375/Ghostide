@@ -1,12 +1,16 @@
 package io.github.rosemoe.sora.langs.sass.analyzer;
 
 import android.util.Log;
+import de.larsgrefer.sass.embedded.SassCompilationFailedException;
+import de.larsgrefer.sass.embedded.SassCompiler;
+import de.larsgrefer.sass.embedded.android.AndroidSassCompilerFactory;
 import io.github.rosemoe.sora.langs.sass.ScssLexer;
 import io.github.rosemoe.sora.langs.sass.ScssParser;
 import io.github.rosemoe.sora.langs.sass.ScssParserBaseListener;
 import io.github.rosemoe.sora.langs.xml.analyzer.Utils;
 import io.github.rosemoe.sora.text.TextStyle;
 
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import java.util.Stack;
 
 import io.github.rosemoe.sora.data.BlockLine;
@@ -26,6 +30,7 @@ import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 public class SassAnalyzerCompat implements CodeAnalyzer {
+  private boolean isSassMod = true;
 
   @Override
   public void analyze(
@@ -147,7 +152,7 @@ public class SassAnalyzerCompat implements CodeAnalyzer {
           case ScssLexer.Rbrack:
           case ScssLexer.Dot:
           case ScssLexer.Comma:
-            /// case ScssLexer.Colon:
+          case ScssLexer.Colon:
           case ScssLexer.Semi:
           case ScssLexer.Tilde:
           case ScssLexer.Under:
@@ -205,12 +210,13 @@ public class SassAnalyzerCompat implements CodeAnalyzer {
             {
               int color = EditorColorScheme.TEXT_NORMAL;
 
-              if (token.getText().matches("\\b[a-z-]+\\:")) {
+              if (pre == ScssLexer.Colon) {
                 color = EditorColorScheme.javatype;
               }
               if (pre == ScssLexer.Dollar) {
                 color = EditorColorScheme.javafun;
               }
+              if (token.getText().equals("red")) color = EditorColorScheme.red;
 
               result.addIfNeeded(line, column, color);
               break;
@@ -227,28 +233,24 @@ public class SassAnalyzerCompat implements CodeAnalyzer {
         }
         first = false;
       }
-      ScssLexer mlexer =
-          new ScssLexer(CharStreams.fromReader(new StringReader(content.toString())));
-      CommonTokenStream streams = new CommonTokenStream(mlexer);
-      ScssParser parser = new ScssParser(streams);
-      ScssParserBaseListener base =
-          new ScssParserBaseListener() {
-            @Override
-            public void visitErrorNode(ErrorNode node) {
-              int mline = node.getSymbol().getLine();
-              int col = node.getSymbol().getCharPositionInLine();
-              var texts = node.getSymbol().getText();
-              Utils.setErrorSpan(result, mline, col + texts.length());
-              super.visitErrorNode(node);
-            }
-        
-          };
-      ParseTreeWalker.DEFAULT.walk(base, parser.stylesheet());
-      result.determine(lastLine);
+      try (SassCompiler compiler =
+          AndroidSassCompilerFactory.bundled(GhostIdeAppLoader.getContext())) {
+        if (isSassMod) compiler.compileSassString(content.toString());
+        else compiler.compileScssString(content.toString());
+      } catch (SassCompilationFailedException e) {
+
+        int lines = e.getCompileFailure().getSpan().getStart().getLine();
+        int columnz = e.getCompileFailure().getSpan().getStart().getColumn();
+        Utils.setErrorSpan(result, lines, columnz + 1);
+      }
 
     } catch (IOException e) {
       e.printStackTrace();
       Log.e("TAG", e.getMessage());
     }
+  }
+
+  public void setSassMod(boolean isSass) {
+    this.isSassMod = isSass;
   }
 }

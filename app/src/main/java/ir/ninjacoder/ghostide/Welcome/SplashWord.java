@@ -10,38 +10,35 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.activities.StreamSoftAppActivity;
-import ir.ninjacoder.ghostide.tasks.app.ProgressDialogCompat;
 import ir.ninjacoder.ghostide.utils.DataUtil;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.utils.FileUtil;
 import ir.ninjacoder.ghostide.utils.ThemeUtils;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import com.github.appintro.AppIntro2;
 import com.github.appintro.AppIntroPageTransformerType;
 import com.hzy.lib7z.IExtractCallback;
 import com.hzy.lib7z.Z7Extractor;
-import com.xiaoyv.ccompile.CCppEngine;
+import ir.ninjacoder.prograsssheet.PrograssSheet;
+import ir.ninjacoder.prograsssheet.enums.StateMod;
 import java.io.File;
 
 public class SplashWord extends AppIntro2 {
-  protected ProgressDialogCompat dialog;
+  protected PrograssSheet dialog;
 
   @Override
   public void onCreate(Bundle arg0) {
     super.onCreate(arg0);
     // TODO: Implement this method
-    dialog = new ProgressDialogCompat(this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
+    dialog = new PrograssSheet(this);
+    dialog.setMode(StateMod.PROGRASSV);
+    dialog.setCancelable(false);
 
-    ObjectUtils.shapeViews(dialog.getWindow().getDecorView());
-    dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-    dialog.setTitle("Loading....");
     var mypath = getFilesDir().getAbsolutePath() + "/" + "databins";
     var pythonPath =
         getFilesDir().getAbsolutePath() + File.separator + "files" + File.separator + "env.sh";
@@ -186,7 +183,7 @@ public class SplashWord extends AppIntro2 {
                     public void onProgress(String s, long tr) {
                       runOnUiThread(
                           () -> {
-                            dialog.setProgress((int) tr);
+                            dialog.setPrograss((int)tr,false);
                           });
                     }
 
@@ -194,6 +191,7 @@ public class SplashWord extends AppIntro2 {
                     public void onStart() {
                       runOnUiThread(
                           () -> {
+                            
                             dialog.setTitle("Start...");
                           });
                     }

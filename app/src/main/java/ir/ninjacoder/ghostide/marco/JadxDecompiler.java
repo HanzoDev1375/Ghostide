@@ -1,11 +1,11 @@
 package ir.ninjacoder.ghostide.marco;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 import ir.ninjacoder.ghostide.interfaces.OnJadxCallBack;
 import ir.ninjacoder.ghostide.tasks.AsyncTaskCompat;
-import ir.ninjacoder.ghostide.tasks.app.ProgressDialogCompat;
+import ir.ninjacoder.prograsssheet.PrograssSheet;
+import ir.ninjacoder.prograsssheet.enums.StateMod;
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -37,7 +37,7 @@ public class JadxDecompiler {
   private static class DecompileTask extends AsyncTaskCompat<Void, Integer, String> {
     private Context context;
     private String apkFile;
-    private ProgressDialogCompat progressDialog;
+    private PrograssSheet progressDialog;
     private OnJadxCallBack jadxcallBack;
     private String output;
 
@@ -52,8 +52,8 @@ public class JadxDecompiler {
     @Override
     protected void onPreExecute() {
       super.onPreExecute();
-      progressDialog = new ProgressDialogCompat(context, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
-      progressDialog.setMessage("Decompiling...");
+      progressDialog = new PrograssSheet(context);
+      progressDialog.setMode(StateMod.PROGRASSV);
       progressDialog.setCancelable(false);
       progressDialog.show();
     }
@@ -83,18 +83,17 @@ public class JadxDecompiler {
 
         try (jadx.api.JadxDecompiler jadx = new jadx.api.JadxDecompiler(jadxArgs)) {
           jadx.load();
-          int fileCount = 0;
-
-          // Count decompiled files
-          fileCount = jadx.getClasses().size();
-
-          // Save the decompiled files
           jadx.save();
+          jadx.save(
+              1000,
+              (i, total) -> {
+                publishProgress((int) total);
+              });
 
           // Publish progress
-          publishProgress(fileCount);
+          //   publishProgress(fileCount);
 
-          return "Decompilation Complete. Total Decompiled Files: " + fileCount;
+          return "Decompilation Complete. Total Decompiled Files: ";
         }
       } catch (Throwable e) {
         return "Decompile error: " + e.getMessage();
@@ -104,7 +103,8 @@ public class JadxDecompiler {
     @Override
     protected void onProgressUpdate(Integer... values) {
       super.onProgressUpdate(values);
-      progressDialog.setMessage("Decompiling... " + values[0] + " files processed.");
+      progressDialog.setTitle("Decompiling... " + values[0] + " files processed.");
+      progressDialog.setPrograss(values[0], false);
     }
 
     @Override

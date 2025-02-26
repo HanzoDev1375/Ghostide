@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ir.ninjacoder.ghostide.terminal.TermuxActivityRootView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
     android:id="@+id/rootPos"
-    >
+    
+>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/terminaltab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabGravity="fill"
+        app:tabMode="fixed"
+        app:tabIndicatorHeight="3dp"
+        app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
+        ></com.google.android.material.tabs.TabLayout>
 
     <com.termux.view.TerminalView
         android:layout_height="match_parent"
@@ -17,13 +29,13 @@
         android:importantForAutofill="no"
         android:autofillHints="password"
         android:id="@+id/term"
-        />
+        ></com.termux.view.TerminalView>
 
     <ir.ninjacoder.ghostide.terminal.key.VirtualKeysView
         android:layout_height="75dp"
         android:layout_width="match_parent"
         android:layout_gravity="right|bottom"
         android:id="@+id/keysterm"
-        />
+        ></ir.ninjacoder.ghostide.terminal.key.VirtualKeysView>
 
 </ir.ninjacoder.ghostide.terminal.TermuxActivityRootView>

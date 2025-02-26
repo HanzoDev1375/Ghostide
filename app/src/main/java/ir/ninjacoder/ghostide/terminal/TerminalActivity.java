@@ -3,6 +3,7 @@ package ir.ninjacoder.ghostide.terminal;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.activities.BaseCompat;
+import ir.ninjacoder.ghostide.databinding.TerminalBinding;
 import ir.ninjacoder.ghostide.marco.CommentList;
 import ir.ninjacoder.ghostide.terminal.key.VirtualKeysView;
 import ir.ninjacoder.ghostide.terminal.key.VirtualKeyButton;
@@ -55,12 +56,15 @@ public class TerminalActivity extends BaseCompat implements TerminalViewClient {
   private float terminalTextSize = 24f;
   private final float minTextSize = 10.0f;
   private final float maxTextSize = 40.0f;
+  private TerminalBinding bind;
+  private TerminalTabSeasonImpl tabimpl;
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
     getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
     super.onCreate(_savedInstanceState);
-    setContentView(R.layout.terminal);
+    bind = TerminalBinding.inflate(getLayoutInflater());
+    setContentView(bind.getRoot());
     initialize(_savedInstanceState);
     initializeLogic();
   }
@@ -70,11 +74,12 @@ public class TerminalActivity extends BaseCompat implements TerminalViewClient {
   }
 
   private void initialize(Bundle _savedInstanceState) {
-    terminals = findViewById(R.id.term);
-    keys = findViewById(R.id.keysterm);
-    layoutRoot = findViewById(R.id.rootPos);
+    terminals = bind.term;
+    keys = bind.keysterm;
+    layoutRoot = bind.getRoot();
     layoutRoot.setActivity(this);
     layoutRoot.setOnApplyWindowInsetsListener(new TermuxActivityRootView.WindowInsetsListener());
+    tabimpl = new TerminalTabSeasonImpl(bind.terminaltab);
   }
 
   public boolean isVisible() {
