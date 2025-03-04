@@ -19,15 +19,14 @@ import ir.ninjacoder.prograsssheet.enums.StateMod;
 
 public class PrograssSheet {
   private Context context;
-  private BottomSheetDialog dialog;
+  private Sheet dialog;
   private LayoutDialogsheetPrograssBinding bindig;
   private StateMod mod = StateMod.PROGRASSV;
 
   public PrograssSheet(Context context) {
     this.context = context;
     bindig = LayoutDialogsheetPrograssBinding.inflate(LayoutInflater.from(context));
-    dialog = new BottomSheetDialog(context);
-    dialog.setContentView(bindig.getRoot());
+    dialog = new Sheet(context);
     bindig.bar.setTrackThickness(12);
     setMode(mod);
   }
@@ -40,7 +39,7 @@ public class PrograssSheet {
   public PrograssSheet setTitle(String text) {
     if (mod == StateMod.PROGRASSH) {
       bindig.sheettitle.setText(text);
-    } else if(mod == StateMod.PROGRASSV) bindig.sheettitlev.setText(text);
+    } else if (mod == StateMod.PROGRASSV) bindig.sheettitlev.setText(text);
     return this;
   }
 
@@ -51,12 +50,12 @@ public class PrograssSheet {
 
     return this;
   }
-  
-  public PrograssSheet setTitleColor(int color){
-    if(mod == StateMod.PROGRASSH) {
-    	  bindig.sheettitle.setTextColor(color);
-    }else bindig.sheettitlev.setTextColor(color);
-    
+
+  public PrograssSheet setTitleColor(int color) {
+    if (mod == StateMod.PROGRASSH) {
+      bindig.sheettitle.setTextColor(color);
+    } else bindig.sheettitlev.setTextColor(color);
+
     return this;
   }
 
@@ -131,5 +130,17 @@ public class PrograssSheet {
     } else bindig.barv.setProgressTintList(ColorStateList.valueOf(color));
 
     return this;
+  }
+
+  class Sheet extends CustomSheet {
+
+    public Sheet(Context c) {
+      super(c);
+    }
+
+    @Override
+    public View getView() {
+      return bindig.getRoot();
+    }
   }
 }

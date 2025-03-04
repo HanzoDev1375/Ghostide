@@ -56,7 +56,6 @@ public class ColorPickerDialogBuilder {
     private ColorPickerDialogBuilder(Context context, int theme) {
 
         di = new MaterialAlertDialogBuilder(context);
-        di.setBackground(ObjectUtils.getColor(context, 20));
         pickerContainer = new LinearLayout(context);
         pickerContainer.setOrientation(LinearLayout.VERTICAL);
         pickerContainer.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);

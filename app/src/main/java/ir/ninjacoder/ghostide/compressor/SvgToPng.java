@@ -1,8 +1,6 @@
 package ir.ninjacoder.ghostide.compressor;
 
 import ir.ninjacoder.ghostide.tasks.AsyncTaskCompat;
-import ir.ninjacoder.ghostide.tasks.app.ProgressDialogCompat;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
@@ -16,6 +14,7 @@ import com.google.android.material.shape.CornerFamily;
 import com.google.android.material.shape.MaterialShapeDrawable;
 import com.google.android.material.shape.ShapeAppearanceModel;
 
+import ir.ninjacoder.prograsssheet.PrograssSheet;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -24,7 +23,7 @@ public class SvgToPng extends AsyncTaskCompat<Void, Void, Void> {
   private Context context;
   private File svgFile;
   private File pngFile;
-  private ProgressDialogCompat progressDialog;
+  private PrograssSheet progressDialog;
   private OnConversionListener listener;
   private float width = -1f;
   private float height = -1f;
@@ -55,12 +54,11 @@ public class SvgToPng extends AsyncTaskCompat<Void, Void, Void> {
     MaterialShapeDrawable mshap =
         new MaterialShapeDrawable(
             ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 20f).build());
-    progressDialog = new ProgressDialogCompat(context, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
-    progressDialog.setMessage("Converting SVG to PNG...");
+    progressDialog = new PrograssSheet(context);
+    progressDialog.setTitle("Converting SVG to PNG...");
     progressDialog.setCancelable(false);
     mshap.setFillColor(ColorStateList.valueOf(this.backgroundColor));
     mshap.setStroke(1f, Color.parseColor("#FFFFBB8E"));
-    progressDialog.getWindow().getDecorView().setBackground(mshap);
     progressDialog.show();
   }
 

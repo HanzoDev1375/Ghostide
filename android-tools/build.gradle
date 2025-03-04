@@ -7,7 +7,7 @@ android {
     namespace "ninjacoder.ghostide.androidtools.r8.android"
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 32
     }
     buildTypes {
         release {
@@ -26,7 +26,7 @@ dependencies {
     implementation("com.android.tools:r8:8.3.37")
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("com.google.android.material:material:1.12.0")
+    implementation("com.google.android.material:material:1.13.0-alpha11")
     // https://mvnrepository.com/artifact/org.eclipse.jdt.core.compiler/batch
     // implementation "org.eclipse.jdt.core.compiler:batch:3.7.0"
 }

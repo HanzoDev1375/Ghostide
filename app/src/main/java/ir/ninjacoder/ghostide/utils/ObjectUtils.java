@@ -9,6 +9,8 @@ import androidx.core.app.ActivityCompat;
 import android.content.Intent;
 import android.provider.Settings;
 import android.net.Uri;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.ImportDeclaration;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
@@ -675,5 +677,27 @@ public class ObjectUtils {
   public static String[] getClassNameObject() throws Exception {
     return getClassNamesFromJson(
         GhostIdeAppLoader.getContext().getAssets().open("class_info.json"));
+  }
+
+  /**
+   * using in code like recyclerview1.addOnScrollListener(new RecyclerView.OnScrollListener()
+   * { @Override public void onScrollStateChanged(RecyclerView recyclerView, int _scrollState) {
+   * super.onScrollStateChanged(recyclerView, _scrollState); LinearLayoutManager layoutManager =
+   * note: adding int to local var in activity your app code by ninja coder int p =
+   * ObjectUtils.getPositionRecyclerView
+   *
+   * <p>} @Override public void onScrolled(RecyclerView recyclerView, int _offsetX, int _offsetY) {
+   * super.onScrolled(recyclerView, _offsetX, _offsetY);
+   *
+   * <p>} });
+   */
+  public static int getPositionRecyclerView(RecyclerView rv) {
+    GridLayoutManager layoutManager = rv.getLayoutManager();
+    return layoutManager.findFirstVisibleItemPosition();
+  }
+
+  public static void setRecyclerViewPosition(RecyclerView rv) {
+    ((GridLayoutManager) rv.getLayoutManager())
+        .scrollToPositionWithOffset(getPositionRecyclerView(rv), 1);
   }
 }

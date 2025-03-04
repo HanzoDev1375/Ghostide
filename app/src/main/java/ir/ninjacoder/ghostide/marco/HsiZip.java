@@ -1,18 +1,9 @@
 package ir.ninjacoder.ghostide.marco;
 
 import ir.ninjacoder.ghostide.tasks.AsyncTaskCompat;
-import ir.ninjacoder.ghostide.tasks.app.ProgressDialogCompat;
-import ir.ninjacoder.ghostide.utils.ObjectUtils;
-import ir.ninjacoder.ghostide.utils.FileUtil;
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
-import com.google.android.material.color.MaterialColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.shape.CornerFamily;
-import com.google.android.material.shape.MaterialShapeDrawable;
-import com.google.android.material.shape.ShapeAppearanceModel;
-
+import ir.ninjacoder.prograsssheet.PrograssSheet;
 import java.io.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -20,7 +11,7 @@ import java.util.zip.ZipInputStream;
 public class HsiZip extends AsyncTaskCompat<String, Object, Boolean> {
 
   private Context context;
-  private ProgressDialogCompat progressDialog;
+  private PrograssSheet progressDialog;
   private String destDirectory = "";
   private OnCallBack call;
 
@@ -38,19 +29,8 @@ public class HsiZip extends AsyncTaskCompat<String, Object, Boolean> {
   @Override
   protected void onPreExecute() {
     super.onPreExecute();
-    MaterialShapeDrawable shap =
-        new MaterialShapeDrawable(
-            ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 19f).build());
-    shap.setFillColor(
-        ColorStateList.valueOf(MaterialColors.getColor(context, ObjectUtils.Back, Color.BLACK)));
-    shap.setStroke(1f, MaterialColors.getColor(context, ObjectUtils.TvColor, Color.RED));
-    progressDialog = new ProgressDialogCompat(context);
-    progressDialog.setTitle("در حال استخراج فایل");
-    progressDialog.setMessage("لطفاً منتظر بمانید...");
-    progressDialog.setIndeterminate(false);
-    progressDialog.setMax(100);
-    progressDialog.getWindow().getDecorView().setBackground(shap);
-    progressDialog.setProgressStyle(ProgressDialogCompat.STYLE_HORIZONTAL);
+    progressDialog = new PrograssSheet(context);
+    progressDialog.setTitle("Loading...");
     progressDialog.setCancelable(false);
     progressDialog.show();
 
@@ -109,9 +89,9 @@ public class HsiZip extends AsyncTaskCompat<String, Object, Boolean> {
   @Override
   protected void onProgressUpdate(Object... values) {
     int progress = (int) values[0];
-    progressDialog.setProgress(progress);
+    progressDialog.setPrograss(progress,false);
     String filePath = (String) values[1];
-    progressDialog.setMessage("در حال استخراج \n " + filePath.trim());
+    progressDialog.setTitle("UnZip file -> " + filePath.trim());
   }
 
   @Override

@@ -24,6 +24,7 @@
 package io.github.rosemoe.sora.widget;
 
 import android.animation.ValueAnimator;
+import android.view.animation.DecelerateInterpolator;
 
 /**
  * Helper class for cursor animation in editor
@@ -104,6 +105,10 @@ public class CursorAnimator implements ValueAnimator.AnimatorUpdateListener {
         ValueAnimator.ofFloat(
             startBottom,
             editor.mLayout.getCharLayoutOffset(line, editor.getText().getColumnCount(line))[0]);
+    animatorX.setInterpolator(new DecelerateInterpolator());
+    animatorY.setInterpolator(new DecelerateInterpolator());
+    animatorBackground.setInterpolator(new DecelerateInterpolator());
+    animatorBgBottom.setInterpolator(new DecelerateInterpolator());
 
     animatorX.addUpdateListener(this);
 

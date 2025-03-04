@@ -1,25 +1,19 @@
 package ir.ninjacoder.ghostide.project;
 
-import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.utils.FileUtil;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.TextView;
 import com.android.tools.r8.D8;
 import com.github.javaparser.StaticJavaParser;
-import com.google.android.material.color.MaterialColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import dalvik.system.DexClassLoader;
-import io.github.rosemoe.sora.widget.schemes.SchemePurple;
+import ir.ninjacoder.prograsssheet.PrograssSheet;
 import java.util.Optional;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import ninjacoder.ghostide.androidtools.r8.android.JarPackager;
@@ -28,8 +22,6 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class JavaCompilerBeta {
-
-  protected static ProgressDialog pr;
   private static String dirPath = "/storage/emulated/0/GhostWebIDE/java/";
 
   public static void run(Context context, String inputs) {
@@ -37,14 +29,14 @@ public class JavaCompilerBeta {
     final String className = extractFirstClassName(inputs);
 
     new AsyncTask<String, String, String>() {
-      ProgressDialog pr;
+      PrograssSheet pr;
       long ecjTime, dxTime;
       ArrayList<String> opt = new ArrayList<>();
 
       @Override
       protected void onPreExecute() {
-        pr = new ProgressDialog(context);
-        pr.setMessage("Running...");
+        pr = new PrograssSheet(context);
+        pr.setTitle ("Running...");
         pr.setCancelable(false);
         pr.show();
       }
@@ -149,7 +141,7 @@ public class JavaCompilerBeta {
 
       @Override
       protected void onProgressUpdate(String... values) {
-        pr.setMessage(values[0]);
+        pr.setTitle (values[0]);
       }
 
       @Override
