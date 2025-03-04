@@ -41,7 +41,6 @@ public class AmazonClassHelper {
               }
             })
         .start();
-        CommandCompat
   }
 
   public static void getScanAntlr4Grammer(ImageView imageView, String file) {
