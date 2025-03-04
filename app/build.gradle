@@ -148,7 +148,7 @@ dependencies {
     implementation("org.eclipse.jgit:org.eclipse.jgit:6.8.0.202311291450-r")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("androidx.activity:activity:1.9.0")
-    implementation("androidx.appcompat:appcompat:1.7.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.google.android.material:material:1.13.0-alpha11")
     implementation("org.nanohttpd:nanohttpd-webserver:2.3.1")

@@ -691,13 +691,13 @@ public class ObjectUtils {
    *
    * <p>} });
    */
-  public static int getPositionRecyclerView(RecyclerView rv) {
-    GridLayoutManager layoutManager = rv.getLayoutManager();
-    return layoutManager.findFirstVisibleItemPosition();
-  }
+  // public static int getPositionRecyclerView(RecyclerView rv) {
+  //  GridLayoutManager layoutManager = (GridLayoutManager) rv.getLayoutManager();
+  // return layoutManager.findFirstVisibleItemPosition();
+  // }
 
-  public static void setRecyclerViewPosition(RecyclerView rv) {
-    ((GridLayoutManager) rv.getLayoutManager())
-        .scrollToPositionWithOffset(getPositionRecyclerView(rv), 1);
-  }
+  // public static void setRecyclerViewPosition(RecyclerView rv) {
+  //   ((GridLayoutManager) rv.getLayoutManager())
+  //      .scrollToPositionWithOffset(getPositionRecyclerView(rv), 1);
+  // }
 }
