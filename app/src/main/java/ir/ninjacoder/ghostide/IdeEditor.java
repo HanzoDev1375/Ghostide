@@ -1,7 +1,6 @@
 package ir.ninjacoder.ghostide;
 
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import io.github.rosemoe.sora.event.LongPressEvent;
 import io.github.rosemoe.sora.event.TextSizeChangeEvent;
 import io.github.rosemoe.sora.langs.java.JavaLanguage;
@@ -34,7 +33,6 @@ import io.github.rosemoe.sora.interfaces.EditorLanguage;
 import io.github.rosemoe.sora.langs.xml.XMLLanguage;
 import io.github.rosemoe.sora.langs.xml.XMLLexer;
 import java.io.StringReader;
-import java.util.List;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.Token;
 import java.util.ArrayList;

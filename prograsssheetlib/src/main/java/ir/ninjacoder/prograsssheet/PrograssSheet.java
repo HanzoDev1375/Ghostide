@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import androidx.annotation.StringRes;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import ir.ninjacoder.prograsssheet.databinding.LayoutDialogsheetPrograssBinding;
@@ -22,6 +23,7 @@ public class PrograssSheet {
   private Sheet dialog;
   private LayoutDialogsheetPrograssBinding bindig;
   private StateMod mod = StateMod.PROGRASSV;
+  private boolean statemodel = false;
 
   public PrograssSheet(Context context) {
     this.context = context;
@@ -132,6 +134,25 @@ public class PrograssSheet {
     return this;
   }
 
+  public boolean isClearDialog() {
+    dialog
+        .getBehavior()
+        .addBottomSheetCallback(
+            new BottomSheetBehavior.BottomSheetCallback() {
+
+              @Override
+              public void onSlide(View arg0, float arg1) {}
+
+              @Override
+              public void onStateChanged(View arg0, int state) {
+                if (state == BottomSheetBehavior.STATE_HIDDEN) {
+                  statemodel = true;
+                }
+              }
+            });
+    return statemodel;
+  }
+
   class Sheet extends CustomSheet {
 
     public Sheet(Context c) {
@@ -142,5 +163,13 @@ public class PrograssSheet {
     public View getView() {
       return bindig.getRoot();
     }
+  }
+
+  public boolean getStatemodel() {
+    return this.statemodel;
+  }
+
+  public void setStatemodel(boolean statemodel) {
+    this.statemodel = statemodel;
   }
 }
