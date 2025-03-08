@@ -67,8 +67,6 @@ public class KotilnAnalyzer implements CodeAnalyzer {
           case KotlinLexer.WS:
             if (first) result.addNormalIfNull();
             break;
-
-          case KotlinLexer.AT_WS:
           case KotlinLexer.AT:
             result.addIfNeeded(
                 line,
@@ -109,17 +107,11 @@ public class KotilnAnalyzer implements CodeAnalyzer {
           case KotlinLexer.TAILREC:
           case KotlinLexer.VARARG:
           case KotlinLexer.WHERE:
-
-          case KotlinLexer.EXPECT:
-          case KotlinLexer.ACTUAL:
-
           case KotlinLexer.CONST:
           case KotlinLexer.SUSPEND:
           case KotlinLexer.RETURN_AT:
           case KotlinLexer.CONTINUE_AT:
           case KotlinLexer.BREAK_AT:
-          case KotlinLexer.THIS_AT:
-          case KotlinLexer.SUPER_AT:
           case KotlinLexer.PACKAGE:
           case KotlinLexer.CLASS:
           case KotlinLexer.INTERFACE:
@@ -212,8 +204,6 @@ public class KotilnAnalyzer implements CodeAnalyzer {
           case KotlinLexer.DECR:
           case KotlinLexer.CONJ:
           case KotlinLexer.DISJ:
-          case KotlinLexer.EXCL_WS:
-          case KotlinLexer.EXCL_NO_WS:
           case KotlinLexer.COLON:
           case KotlinLexer.SEMICOLON:
           case KotlinLexer.ASSIGNMENT:
@@ -227,8 +217,6 @@ public class KotilnAnalyzer implements CodeAnalyzer {
           case KotlinLexer.RANGE:
           case KotlinLexer.COLONCOLON:
           case KotlinLexer.DOUBLE_SEMICOLON:
-          case KotlinLexer.QUEST_WS:
-          case KotlinLexer.QUEST_NO_WS:
           case KotlinLexer.LANGLE:
           case KotlinLexer.RANGLE:
           case KotlinLexer.LE:

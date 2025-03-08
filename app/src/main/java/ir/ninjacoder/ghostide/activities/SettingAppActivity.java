@@ -6,6 +6,7 @@ import ir.ninjacoder.ghostide.adapter.ListAppIconAd;
 import ir.ninjacoder.ghostide.config.AppIconManager;
 import ir.ninjacoder.ghostide.config.PrfnsUtil;
 import ir.ninjacoder.ghostide.config.SwitchMaterialPrf;
+import ir.ninjacoder.ghostide.filehelper.IconCursorImpl;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.utils.DataUtil;
 import ir.ninjacoder.ghostide.widget.GhostWebMaterialDialog;
@@ -581,6 +582,8 @@ public class SettingAppActivity extends BaseCompat {
     fb.add("");
     fb.add("");
     fb.add("");
+    fb.add("");
+    fb.add("");
     grids.setValue(gridMode.contains("gride"));
     rvsetting.setAdapter(new Recyclerview2Adapter(fb));
     rvsetting.setLayoutManager(new LinearLayoutManager(this));
@@ -854,6 +857,14 @@ public class SettingAppActivity extends BaseCompat {
       if (_position == 5) {
         textview1.setText(getString(R.string.customchareditor));
         _view.setOnClickListener(v -> getCustomChar());
+        imageview1.setImageResource(0);
+      }
+      if (_position == 6) {
+        textview1.setText("Icon CursorEditor");
+        _view.setOnClickListener(
+            g -> {
+              new IconCursorImpl(SettingAppActivity.this);
+            });
         imageview1.setImageResource(0);
       }
     }

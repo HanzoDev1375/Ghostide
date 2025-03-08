@@ -7,6 +7,9 @@ import io.github.rosemoe.sora.interfaces.NewlineHandler;
 import io.github.rosemoe.sora.langs.internal.MyCharacter;
 import io.github.rosemoe.sora.text.TextUtils;
 import java.io.StringReader;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.CharStreams;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -77,7 +80,7 @@ public class KotlinLanguage implements EditorLanguage {
 
   @Override
   public CharSequence format(CharSequence text) {
-    return javaFormat(text.toString());
+    return ktformat(text.toString());
   }
 
   @Override
@@ -221,6 +224,16 @@ public class KotlinLanguage implements EditorLanguage {
   public String javaFormat(String text) {
     return formattingProcess(
         Arrays.stream(text.split("\n")).map(s -> s.trim()).collect(Collectors.joining("\n")));
+  }
+
+  public String ktformat(String text) {
+     CharStream charStream = CharStreams.fromString(text);
+     KotlinLexer lexer = new KotlinLexer(charStream);
+     CommonTokenStream tokens = new CommonTokenStream(lexer);
+     KotlinParser parser = new KotlinParser(tokens);
+     ParseTree tree = parser.kotlinFile();
+     KotlinVisitor visitor = new KotlinVisitor();
+     return visitor.visit(tree);
   }
 
   class BraceHandler implements NewlineHandler {

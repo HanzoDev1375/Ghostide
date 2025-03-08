@@ -31,7 +31,7 @@ import io.github.rosemoe.sora.util.IntPair;
  * @author Rose Warning:The cursor position will update automatically when the content has been
  *     changed by other way
  */
-public final class Cursor {
+public  class Cursor {
 
   private final Content mContent;
   private final CachedIndexer mIndexer;

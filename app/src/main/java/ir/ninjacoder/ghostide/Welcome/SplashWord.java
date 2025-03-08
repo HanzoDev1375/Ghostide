@@ -183,7 +183,7 @@ public class SplashWord extends AppIntro2 {
                     public void onProgress(String s, long tr) {
                       runOnUiThread(
                           () -> {
-                            dialog.setPrograss((int)tr,false);
+                            dialog.setPrograss((int) tr, false);
                           });
                     }
 
@@ -191,7 +191,6 @@ public class SplashWord extends AppIntro2 {
                     public void onStart() {
                       runOnUiThread(
                           () -> {
-                            
                             dialog.setTitle("Start...");
                           });
                     }
@@ -221,14 +220,16 @@ public class SplashWord extends AppIntro2 {
         }
       }
     } else {
-
       if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-          == PackageManager.PERMISSION_DENIED) {
+              == PackageManager.PERMISSION_DENIED
+          || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+              == PackageManager.PERMISSION_DENIED) {
         ActivityCompat.requestPermissions(
-            this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, 1000);
-
-      } else {
-        DataUtil.showMessage(getApplicationContext(), "Permissions failure");
+            this,
+            new String[] {
+              Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE
+            },
+            1000);
       }
     }
   }
