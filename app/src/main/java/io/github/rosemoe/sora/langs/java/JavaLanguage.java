@@ -39,10 +39,10 @@ public class JavaLanguage implements EditorLanguage {
   public AutoCompleteProvider getAutoCompleteProvider() {
     JavaAutoComplete auto = new JavaAutoComplete();
     auto.setMd(true);
-    
-    
+
     try {
-      String[] combinedArray = new String[keywords.length + ObjectUtils.getClassNameObject().length ];
+      String[] combinedArray =
+          new String[keywords.length + ObjectUtils.getClassNameObject().length];
       System.arraycopy(keywords, 0, combinedArray, 0, keywords.length);
       System.arraycopy(
           ObjectUtils.getClassNameObject(),
@@ -50,7 +50,9 @@ public class JavaLanguage implements EditorLanguage {
           combinedArray,
           keywords.length,
           ObjectUtils.getClassNameObject().length);
-      auto.setKeywords(combinedArray,ObjectUtils.getFull_package());
+      boolean isJavaKeyword = keywords.length > 0;
+      auto.setKeywords(combinedArray, isJavaKeyword ? "JavaKeyWords" : "JavaClass");
+
     } catch (Exception err) {
 
     }

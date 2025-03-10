@@ -1,5 +1,6 @@
 package ir.ninjacoder.ghostide.activities;
 
+import io.github.rosemoe.sora.langs.html.HTMLLanguage;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.databinding.ThemepreviewLayoutBinding;
 import ir.ninjacoder.ghostide.marco.ideColors.IdeColorCompat;
@@ -58,7 +59,8 @@ public class ThemePreviewActivity extends BaseCompat {
     bind.fab.setOnClickListener(
         c -> {
           loadTheme = new LoadTheme();
-          loadTheme.runinSheet(ThemePreviewActivity.this, bind.editor);
+          loadTheme.runinSheet(
+              ThemePreviewActivity.this, bind.editor, getIntent().getStringExtra("keyitem"));
         });
   }
 
@@ -81,6 +83,7 @@ public class ThemePreviewActivity extends BaseCompat {
     FakeAd() {
       fakeitem.add("Ninjacoder.java");
       fakeitem.add("Test.py");
+      fakeitem.add("Index.html");
       fakeitem.add("Rubypy.py");
       fakeitem.add("termuxitem.sh");
       fakeitem.add("build.json");
@@ -152,15 +155,56 @@ public class ThemePreviewActivity extends BaseCompat {
         case "Ninjacoder.java":
           bind.editor.setEditorLanguage(new JavaLanguage(bind.editor));
           return """
-                public class MainActivity extends AppCompatActivity {
+               import java.io.File;
+               import android.util.Log;
+
+                public class NinjaCoder extends AppCompatActivity {
+
+                    private File file;
 
                     @Override
                     protected void onCreate(Bundle _savedInstanceState) {
                         super.onCreate(_savedInstanceState);
                         setContentView(R.layout.main);
                     }
+                    public void setFile() {
+                      file = new File("/sdcard/");
+                      if(file.isFile) Log.e("this not file","");
+                    }
                 }
                 """;
+        case "Index.html":
+          bind.editor.setEditorLanguage(new HTMLLanguage(bind.editor));
+          return """
+        <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Document</title>
+                <style>
+        
+                        h1{
+                            color:#fff029;
+                            background-color: #000;
+                            text-align: center;
+                            padding:0px;
+                            margin:0px;
+                        }
+                    </style>
+            </head>
+            <body>
+                <h1>hello ninja coder</h1>
+            </body>
+            <script>
+                function mains(){
+                    console.log("hello word ");
+                }
+                mains()
+            </script>
+        </html>
+        
+          """;
+
         case "Test.py":
           bind.editor.setEditorLanguage(new PythonLang(bind.editor));
           return """

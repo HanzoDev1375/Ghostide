@@ -1,17 +1,23 @@
 package ir.ninjacoder.ghostide.model;
 
+import android.view.LayoutInflater;
+import android.view.View;
+import com.google.gson.GsonBuilder;
+import com.ninjacoder.jgit.databinding.SearchLayoutBinderBinding;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.adapter.ThemeAdapter;
 import ir.ninjacoder.ghostide.utils.FileUtil;
 import android.content.Context;
-import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.blankj.utilcode.util.ThreadUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.EditText;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,20 +25,26 @@ import java.util.List;
 import java.util.Map;
 
 public class LoadTheme {
-
-  protected static final String ThemePath =
-      "/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost";
   private Map<String, Object> map = new HashMap<>();
   private HashMap<String, Object> add = new HashMap<>();
   private HashMap<String, Object> file = new HashMap<>();
 
   private List<String> key = new ArrayList<>();
   private List<HashMap<String, Object>> list = new ArrayList<>();
+  private List<HashMap<String, Object>> filteredList = new ArrayList<>();
+  private SearchLayoutBinderBinding bind;
+
+  private ThemeAdapter adapter;
 
   public void runinSheet(Context context, IdeEditor editor) {
-    RecyclerView listview = new RecyclerView(context);
+    runinSheet(context, editor, "/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost");
+  }
+
+  public void runinSheet(Context context, IdeEditor editor, String pathuser) {
+      bind = SearchLayoutBinderBinding.inflate(LayoutInflater.from(context));
+    RecyclerView listview = bind.rvsearchmain;
     MaterialAlertDialogBuilder sheet = new MaterialAlertDialogBuilder(context);
-    sheet.setTitle("Theme Maanager");
+    sheet.setTitle("Theme Manager");
     sheet.setPositiveButton("dismiss", null);
     sheet.setCancelable(false);
 
@@ -41,29 +53,23 @@ public class LoadTheme {
         (c, d) -> {
           try {
             file = new HashMap<>();
-            for (int f = 0; f < (int) (list.size()); f++) {
-              file.put(
-                  list.get((int) f).get("key").toString(), list.get((int) f).get("hex").toString());
+            for (int f = 0; f < list.size(); f++) {
+              file.put(list.get(f).get("key").toString(), list.get(f).get("hex").toString());
             }
-            FileUtil.writeFile(
-                "/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost",
-                new Gson().toJson(file));
-            ThreadUtils.runOnUiThread(() -> {
-              ((AppCompatActivity)context).recreate();
-            });
+            var gson = new GsonBuilder().setPrettyPrinting().create();
+            FileUtil.writeFile(pathuser, gson.toJson(file));
+            ThreadUtils.runOnUiThread(
+                () -> {
+                  editor.invalidate();
+                });
 
           } catch (Exception err) {
             err.printStackTrace();
           }
         });
-
-    RecyclerView.LayoutParams param =
-        new RecyclerView.LayoutParams(
-            RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT);
-
-    if (listview != null) {
-      sheet.setView(listview);
-    }
+    EditText searchEditText = bind.searchbar.getEditText();
+    searchEditText.setHint("Search...");
+    sheet.setView(bind.getRoot());
     if (sheet != null) {
       sheet.show();
     }
@@ -71,20 +77,52 @@ public class LoadTheme {
       map =
           new Gson()
               .fromJson(
-                  new FileReader(ThemePath), new TypeToken<HashMap<String, Object>>() {}.getType());
+                  new FileReader(pathuser), new TypeToken<HashMap<String, Object>>() {}.getType());
       getAllKeysFromMap(map, key);
-      for (int i = 0; i < (int) (key.size()); i++) {
+      for (int i = 0; i < key.size(); i++) {
         add = new HashMap<>();
-        add.put("hex", map.get(key.get((int) i)).toString());
-        add.put("key", key.get((int) i));
+        add.put("hex", map.get(key.get(i)).toString());
+        add.put("key", key.get(i));
         list.add(add);
       }
+      bind.emptyviewtree.setVisibility(list.isEmpty() ? View.VISIBLE  : View.GONE);
+      filteredList.addAll(list);
       listview.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
-      listview.setAdapter(new ThemeAdapter(list, editor));
+      adapter = new ThemeAdapter(filteredList, editor);
+      listview.setAdapter(adapter);
+      searchEditText.addTextChangedListener(
+          new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+              filter(charSequence.toString());
+              adapter.setSearchText(charSequence.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
+          });
 
     } catch (Exception e) {
-
+      e.printStackTrace();
     }
+  }
+
+  private void filter(String text) {
+    filteredList.clear();
+    if (text.isEmpty()) {
+      filteredList.addAll(list);
+    } else {
+      text = text.toLowerCase();
+      for (HashMap<String, Object> item : list) {
+        if (item.get("key").toString().toLowerCase().contains(text)) {
+          filteredList.add(item);
+        }
+      }
+    }
+    adapter.notifyDataSetChanged();
   }
 
   public void getAllKeysFromMap(Map<String, Object> map, List<String> output) {

@@ -8,6 +8,7 @@ import ir.ninjacoder.ghostide.config.LOG;
 import ir.ninjacoder.ghostide.interfaces.CallBackErrorManager;
 import ir.ninjacoder.ghostide.marco.CommentList;
 import ir.ninjacoder.ghostide.marco.editorface.IEditor;
+import ir.ninjacoder.ghostide.utils.DataUtil;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.widget.SymbolInputView;
 import android.content.Context;
@@ -128,7 +129,7 @@ public class IdeEditor extends CodeEditor implements IEditor {
             .show();
       }
     } catch (Exception e) {
-
+      DataUtil.showMessage(getContext(),e.getMessage());
     }
   }
 

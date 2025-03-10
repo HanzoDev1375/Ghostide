@@ -1,5 +1,7 @@
 package io.github.rosemoe.sora.langs.html;
 
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -12,6 +14,7 @@ import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 import io.github.rosemoe.sora.widget.commentRule.AppConfig;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -76,7 +79,6 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
       Collections.sort(words, CompletionItem.COMPARATOR_BY_NAME);
       items.addAll(words);
     }
-
     // Test
 
     return items;
@@ -248,7 +250,6 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
       """;
       items.add(new CompletionItem(cssCode, "CssWord", "Style"));
     }
-    
 
     keyhtml.installFromSora(items, prefix);
     keyhtml.installHtmlAttr(items, prfex);

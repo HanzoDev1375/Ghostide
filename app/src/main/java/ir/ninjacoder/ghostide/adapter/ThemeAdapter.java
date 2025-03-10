@@ -1,5 +1,6 @@
 package ir.ninjacoder.ghostide.adapter;
 
+
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.R;
 import android.graphics.Color;
@@ -9,7 +10,6 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -17,17 +17,23 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
-import java.util.ArrayList;
+import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import java.util.HashMap;
 import java.util.List;
 
 public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> {
   private List<HashMap<String, Object>> listMap;
   private IdeEditor editor;
+  private String searchText = "";
 
-  public ThemeAdapter(List<HashMap<String, Object>> listMap,IdeEditor editor) {
+  public ThemeAdapter(List<HashMap<String, Object>> listMap, IdeEditor editor) {
     this.listMap = listMap;
     this.editor = editor;
+  }
+
+  public void setSearchText(String searchText) {
+    this.searchText = searchText;
+    notifyDataSetChanged();
   }
 
   @NonNull
@@ -46,7 +52,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> 
     holder.id.setText(currentItem.get("key").toString());
     holder.sub.setBackground(db(currentItem.get("hex").toString()));
     holder.tv.setText(currentItem.get("hex").toString());
-
+    ObjectUtils.setHighlightSearchText(holder.id, currentItem.get("key").toString(), searchText);
     holder.itemView.setOnClickListener(
         v -> {
           ColorPickerDialogBuilder.with(holder.tv.getContext())
@@ -65,7 +71,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> 
                     handler.postDelayed(
                         () -> {
                           listMap.get(position).put("hex", holder.tv.getText().toString());
-                          
+
                           notifyDataSetChanged();
                         },
                         100);
@@ -98,6 +104,5 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> 
       tv = itemView.findViewById(R.id.name);
       id = itemView.findViewById(R.id.idcolor);
     }
-    
   }
 }

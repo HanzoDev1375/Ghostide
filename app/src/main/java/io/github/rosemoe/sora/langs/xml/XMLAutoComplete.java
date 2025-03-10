@@ -7,8 +7,9 @@ import com.google.gson.Gson;
 import io.github.rosemoe.sora.data.CompletionItem;
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
-
+import com.google.gson.annotations.SerializedName;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,20 +20,25 @@ public class XMLAutoComplete implements AutoCompleteProvider {
   public boolean en = true;
   String docxml = "";
   private List<CompletionItem> items;
+  private String prefix;
   private ArrayList<HashMap<String, Object>> xmlHelper = new ArrayList<>();
 
   @Override
   public List<CompletionItem> getAutoCompleteItems(
       String prefix, TextAnalyzeResult analyzeResult, int line, int column) {
     items = new ArrayList<>();
+    prefix = prefix;
 
     /**
      * for (var tag : HTMLLanguage.TAGS) if (tag.startsWith(prefix)) items.add(tagAsCompletion(tag,
      * "Html Tag"));
      */
-    new Css3Server().toAndroidManifestXml(items,prefix);
-  //  setString(items);
-
+    new Css3Server().toAndroidManifestXml(items, prefix);
+    //  setString(items);
+    try {
+      setAttrJson(prefix);
+    } catch (Exception err) {
+    }
     return items;
   }
 
@@ -78,27 +84,23 @@ public class XMLAutoComplete implements AutoCompleteProvider {
     return item;
   }
 
-  public void setString(List<CompletionItem> items) {
-    if (en) {
-      try {
-        InputStream inputstream1 = GhostIdeAppLoader.getContext().getAssets().open("colorsar.json");
-        xmlHelper =
-            new Gson()
-                .fromJson(
-                    DataUtil.copyFromInputStream(inputstream1),
-                    new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
+  void setAttrJson(String prefix) throws Exception {
+    var input = GhostIdeAppLoader.getContext().getAssets().open("android.R.attrs.json");
+    Gson gson = new Gson();
+    var type = new TypeToken<List<Attrs>>() {}.getType();
+    List<Attrs> listattr = gson.fromJson(new InputStreamReader(input), type);
+    for (var it : listattr) {
+      if (it.getNames().startsWith(prefix))
+        items.add(new CompletionItem(it.getNames(), "Android attr"));
+    }
+  }
 
-        for (int i = 0; i < xmlHelper.size(); ++i) {
+  class Attrs {
+    @SerializedName("names")
+    String names;
 
-          items.add(
-              CodeSampel(
-                  xmlHelper.get(i).get("colorname").toString(),
-                  "Color Material",
-                  xmlHelper.get(i).get("cdmtext").toString()));
-        }
-      } catch (Exception err) {
-        err.printStackTrace();
-      }
+    public String getNames() {
+      return names;
     }
   }
 

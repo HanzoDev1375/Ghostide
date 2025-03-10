@@ -586,5 +586,9 @@
   {
     "colorName": "yellowgreen",
     "cssColor": "#9acd32"
+  },
+  {
+    "colorName":"drakheil",
+    "cssColor":"#340171"
   }
 ]

@@ -15,7 +15,7 @@
 
 parser grammar KotlinParser;
 
-@header {package com.levelrin.antlr.generated;}
+/////@header {package com.levelrin.antlr.generated;}
 
 options {
     tokenVocab = KotlinLexer;
@@ -149,9 +149,18 @@ enumEntry
     ;
 
 functionDeclaration
-    : modifierList? FUN (NL* type NL* DOT)? (NL* typeParameters)? (NL* receiverType NL* DOT)? (
+    // Original:
+    // modifierList? FUN (NL* type NL* DOT)? (NL* typeParameters)? (NL* receiverType NL* DOT)? (
+    //     NL* identifier
+    // )? NL* functionValueParameters (NL* COLON NL* type)? (NL* typeConstraints)? (NL* functionBody)?
+    : modifierList? FUN firstTypeOfFuncDeclaration? (NL* typeParameters)? (NL* receiverType NL* DOT)? (
         NL* identifier
     )? NL* functionValueParameters (NL* COLON NL* type)? (NL* typeConstraints)? (NL* functionBody)?
+    ;
+
+// This is a rule that we created for easier parsing.
+firstTypeOfFuncDeclaration
+    : NL* type NL* DOT
     ;
 
 functionValueParameters

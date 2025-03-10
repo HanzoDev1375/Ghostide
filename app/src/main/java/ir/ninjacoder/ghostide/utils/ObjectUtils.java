@@ -2,6 +2,8 @@ package ir.ninjacoder.ghostide.utils;
 
 import android.Manifest;
 import android.os.Environment;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import android.content.pm.PackageManager;
@@ -691,13 +693,31 @@ public class ObjectUtils {
    *
    * <p>} });
    */
-  // public static int getPositionRecyclerView(RecyclerView rv) {
-  //  GridLayoutManager layoutManager = (GridLayoutManager) rv.getLayoutManager();
-  // return layoutManager.findFirstVisibleItemPosition();
-  // }
+  public static int getPositionRecyclerView(RecyclerView rv) {
+    GridLayoutManager layoutManager = (GridLayoutManager) rv.getLayoutManager();
+    return layoutManager.findFirstVisibleItemPosition();
+  }
 
-  // public static void setRecyclerViewPosition(RecyclerView rv) {
-  //   ((GridLayoutManager) rv.getLayoutManager())
-  //      .scrollToPositionWithOffset(getPositionRecyclerView(rv), 1);
-  // }
+  public static void setRecyclerViewPosition(RecyclerView rv) {
+    ((GridLayoutManager) rv.getLayoutManager())
+        .scrollToPositionWithOffset(getPositionRecyclerView(rv), 1);
+  }
+
+  public static void setHighlightSearchText(TextView textView, String fullText, String searchText) {
+    if (searchText.isEmpty()) {
+      textView.setText(fullText);
+      return;
+    }
+    var spannableString = new SpannableString(fullText);
+    int startPos = fullText.toLowerCase().indexOf(searchText.toLowerCase());
+    int endPos = startPos + searchText.length();
+    if (startPos != -1) {
+      spannableString.setSpan(
+          new ForegroundColorSpan(Color.CYAN),
+          startPos,
+          endPos,
+          SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
+    textView.setText(spannableString);
+  }
 }
