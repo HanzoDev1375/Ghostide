@@ -1,4 +1,4 @@
-// Generated from /storage/emulated/0/ApkRepacker/kotlin-stylerin-main/src/main/antlr/KotlinParser.g4 by ANTLR 4.13.1
+// Generated from /storage/emulated/0/apk/py/kotlin-stylerin-main/src/main/antlr/KotlinParser.g4 by ANTLR 4.13.1
 package io.github.rosemoe.sora.langs.kotlin;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -784,6 +784,12 @@ public interface KotlinParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitModifierList(KotlinParser.ModifierListContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link KotlinParser#annotationsOrModifier}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAnnotationsOrModifier(KotlinParser.AnnotationsOrModifierContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link KotlinParser#modifier}.
 	 * @param ctx the parse tree

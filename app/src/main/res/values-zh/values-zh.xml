@@ -107,5 +107,6 @@
     <string name="scriptcustom">配置運行腳本</string>
     <string name="customthemeapp">自訂應用程式主題</string>
     <string name="customchareditor">編輯器代碼的不同字符</string>
-
+    <string name="cursoreditoricon">图标光标编辑器</string>
+    <string name="backgroundimageeditor">背景图像</string>
 </resources>

@@ -3706,3 +3706,28 @@ fragment FLOATS
    | [0-1]
    ;
 
+NEWLINE
+   : '\n' (SPACE? (DIV
+   {_input.LA(1) != '/'}?)+)?
+   | '\r\n' (SPACE? (DIV
+   {_input.LA(1) != '/'}?)+)?
+   | '\r' (SPACE? (DIV
+   {_input.LA(1) != '/'}?)+)?
+   ;
+
+SPACE
+   : (' ' | '\t')+
+   ;
+
+TEXT_CONTENT
+   : ~ [\n\r\t @*{}/a-zA-Z]+
+   ;
+
+JAVADOC_START
+   : '/**' DIV*
+   ;
+
+JAVADOC_END
+   : SPACE? DIV* '*/'
+   ;
+

@@ -1,5 +1,6 @@
 package ir.ninjacoder.ghostide.adapter;
 
+import android.content.SharedPreferences;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.config.AmazonClassHelper;
 import ir.ninjacoder.ghostide.databin.FileMaker;
@@ -48,12 +49,14 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
   protected HashMap<String, Object> name = new HashMap<>();
   private List<HashMap<String, Object>> files = new ArrayList<>();
   protected GridLayoutManager g;
+  private SharedPreferences prf;
 
   public FileManagerAd(List<HashMap<String, Object>> files, Context context, onClick click) {
     this.context = context;
     this.files = files;
     this.filteredFiles = files;
     this.click = click;
+    prf = context.getSharedPreferences("iconpath", Context.MODE_PRIVATE);
   }
 
   @Override
@@ -93,6 +96,7 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
       viewHolder.icon.setPadding(0, 0, 0, 0);
     }
     viewHolder.folderName.setText(myfile.getName());
+
     if (FileUtil.isExistFile(FileIconHelperPath.ICON_PATH + "/ic_material_folder.png")) {
 
       FileIconHelperPath fileIconPath = new FileIconHelperPath(myfile.toString());
@@ -108,12 +112,8 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
       if (myfile.toString().endsWith(".xml")) {
         GlideCompat.LoadVector(myfile.toString(), viewHolder.icon);
 
-      } else if (myfile.toString().endsWith(".mp3")) {
-        viewHolder.icon.setImageResource(R.drawable.musico);
       } else if (myfile.toString().endsWith(".svg")) {
         GlideCompat.LoadSvg(myfile.toString(), viewHolder.icon);
-      } else if (myfile.toString().endsWith(".pdf")) {
-        viewHolder.icon.setImageResource(R.drawable.ic_material_pdf);
       } else if (myfile.toString().endsWith(".apk")) {
         GlideCompat.LoadApkFile(myfile.toString(), viewHolder.icon);
       } else if (myfile.toString().endsWith(".g4")) {
@@ -145,12 +145,8 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
         if (myfile.toString().endsWith(".xml")) {
           GlideCompat.LoadVector(myfile.toString(), viewHolder.icon);
 
-        } else if (myfile.toString().endsWith(".mp3")) {
-          viewHolder.icon.setImageResource(R.drawable.musico);
         } else if (myfile.toString().endsWith(".svg")) {
           GlideCompat.LoadSvg(myfile.toString(), viewHolder.icon);
-        } else if (myfile.toString().endsWith(".pdf")) {
-          viewHolder.icon.setImageResource(R.drawable.ic_material_pdf);
         } else if (myfile.toString().endsWith(".apk")) {
           GlideCompat.LoadApkFile(myfile.toString(), viewHolder.icon);
         } else if (myfile.toString().endsWith(".g4")) {
@@ -160,6 +156,7 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
         }
       }
     }
+
     viewHolder.itemView.setClickable(true);
   }
 
@@ -217,22 +214,7 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
         });
   }
 
-  public void search(String query) {
-    if (query.length() > 0) {
-      List<HashMap<String, Object>> result = new ArrayList<>();
-      for (HashMap<String, Object> file : this.files) {
-        if (file.get("path").toString().toLowerCase().contains(query.toLowerCase())) {
-          result.add(file);
-        }
-      }
-
-      this.filteredFiles = result;
-      notifyDataSetChanged();
-    } else {
-      this.filteredFiles = this.files;
-      notifyDataSetChanged();
-    }
-  }
+  public void search(String query) {}
 
   private void getTime(String path, TextView view) {
     try {
@@ -277,6 +259,7 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
       roots.setOnClickListener(
           c -> {
             click.onClick(c, getPosition());
+            AnimUtils.ClickAnimation(itemView);
           });
       roots.setOnLongClickListener(
           v -> {

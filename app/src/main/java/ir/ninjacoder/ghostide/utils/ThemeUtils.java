@@ -172,11 +172,11 @@ public class ThemeUtils {
     editor.getColorScheme().setColor(EditorColorScheme.beige, ColorCompat.BEIGE);
     editor.getColorScheme().setColor(EditorColorScheme.bisque, ColorCompat.BISQUE);
     editor.getColorScheme().setColor(EditorColorScheme.black, ColorCompat.BLACK);
-    editor.getColorScheme().setColor(EditorColorScheme.gold,ColorCompat.GOLD);
+    editor.getColorScheme().setColor(EditorColorScheme.gold, ColorCompat.GOLD);
     editor.getColorScheme().setColor(EditorColorScheme.blanchedalmond, ColorCompat.BLANCHEDALMOND);
     editor.getColorScheme().setColor(EditorColorScheme.blue, ColorCompat.BLUE);
-    editor.getColorScheme().setColor(EditorColorScheme.green,Color.GREEN);
-    editor.getColorScheme().setColor(EditorColorScheme.orange,ColorCompat.ORANGE);
+    editor.getColorScheme().setColor(EditorColorScheme.green, Color.GREEN);
+    editor.getColorScheme().setColor(EditorColorScheme.orange, ColorCompat.ORANGE);
     editor.getColorScheme().setColor(EditorColorScheme.blueviolet, ColorCompat.BLUEVIOLET);
     editor.getColorScheme().setColor(EditorColorScheme.brown, ColorCompat.BROWN);
     editor.getColorScheme().setColor(EditorColorScheme.white, ColorCompat.WHITE);
@@ -192,6 +192,7 @@ public class ThemeUtils {
     editor.getColorScheme().setColor(EditorColorScheme.searchcolor5, Color.parseColor("#ACB4DA43"));
     editor.getColorScheme().setColor(EditorColorScheme.searchcolor6, Color.parseColor("#ACAA6CFB"));
     editor.getColorScheme().setColor(EditorColorScheme.LINE_NUMBER_PANEL_TEXT, Color.WHITE);
+
     return this;
   }
 
@@ -254,7 +255,6 @@ public class ThemeUtils {
       Activity c, HashMap<String, Object> imap, String datatype, View object, int color) {
     object.setBackgroundColor(
         imap.containsKey(datatype) ? Color.parseColor(imap.get(datatype).toString()) : 0xFF281B26);
-
     return this;
   }
 
@@ -264,6 +264,12 @@ public class ThemeUtils {
         map.containsKey(datatype) ? Color.parseColor(map.get(datatype).toString()) : 0xFFDE7CD1,
         PorterDuff.Mode.MULTIPLY);
 
+    return this;
+  }
+
+  public ThemeUtils addWindowsNavColor(Activity app, HashMap<String, Object> map, String key) {
+//    ObjectUtils.setNavColor(
+//        map.containsKey(key) ? Color.parseColor(map.get(key).toString()) : Color.TRANSPARENT,app);
     return this;
   }
 

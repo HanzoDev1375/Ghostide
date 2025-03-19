@@ -107,5 +107,6 @@
     <string name="scriptcustom">चल रही स्क्रिप्ट कॉन्फ़िगर करें</string>
     <string name="customthemeapp">ऐप थीम कस्टमाइज़ करें</string> 
     <string name="customchareditor">संपादक कोड के अलग-अलग अक्षर</string>
-
+    <string name="cursoreditoricon">आइकन कर्सर संपादक </string>
+    <string name="backgroundimageeditor">पृष्ठभूमि छवि </string>
 </resources>

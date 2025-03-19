@@ -199,4 +199,6 @@
     <string name="scriptcustom">Custom Script</string>
     <string name="customthemeapp">Custom Theme App</string>
     <string name="customchareditor">Custom Character Editor</string>
+    <string name="cursoreditoricon">Icon CursorEditor</string>
+    <string name="backgroundimageeditor">Background Image</string>
 </resources>

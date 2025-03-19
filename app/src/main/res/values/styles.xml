@@ -3,7 +3,6 @@
     <style
         name="MyAlertDialogStyle"
         parent="Theme.AppCompat.Light.Dialog.Alert"
-        
     >
         <item name="android:background">#FF201B16</item>
         <item name="android:textColorPrimary">#ffFFDCBD</item>
@@ -11,7 +10,6 @@
     <style
         name="Theme.Transparent"
         parent="android:Theme"
-        
     >
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">#00000000</item>
@@ -23,7 +21,6 @@
     <style
         name="fab_square"
         parent="ShapeAppearance.MaterialComponents.SmallComponent"
-        
     >
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">20dp</item>
@@ -31,7 +28,6 @@
     <style
         name="Cut"
         parent="ShapeAppearance.MaterialComponents.SmallComponent"
-        
     >
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">20dp</item>
@@ -39,7 +35,6 @@
     <style
         name="Ghostwebfabstyle"
         parent=""
-        
     >
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50dp</item>
@@ -47,7 +42,6 @@
     <style
         name="AppTheme.Theme.Transparent"
         parent="AppTheme"
-        
     >
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">#00000000</item>
@@ -59,7 +53,6 @@
     <style
         name="AppTheme"
         parent="Theme.Material3.Dark.NoActionBar"
-        
     >
         <item name="bottomSheetDialogTheme">@style/ThemeOverlay.App.BottomSheetDialog</item>
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialAlertDialog</item>
@@ -117,14 +110,12 @@
     <style
         name="TextAppearance.App.BodyLarge"
         parent="TextAppearance.Material3.BodyLarge"
-        
     >
         <item name="android:textColor">?attr/colorPrimary</item>
     </style>
     <style
         name="AppTheme.FullScreen"
         parent="AppTheme"
-        
     >
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -133,7 +124,6 @@
     <style
         name="CustomToolbar"
         parent="Widget.Material3.Toolbar"
-        
     >
         <item name="colorSurface">#00000000</item>
         <item name="colorOnSurface">#00000000</item>
@@ -141,7 +131,6 @@
     <style
         name="PostData"
         parent="AppTheme"
-        
     >
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
@@ -150,14 +139,12 @@
     <style
         name="AppTheme.AppBarOverlay"
         parent="ThemeOverlay.Material3.Dark.ActionBar"
-        
     >
         <item name="android:color">@android:color/transparent</item>
     </style>
     <style
         name="ThemeOverlay.App.BottomSheetDialog"
         parent="ThemeOverlay.Material3.BottomSheetDialog"
-        
     >
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="bottomSheetStyle">@style/ModalBottomSheetDialog</item>
@@ -173,7 +160,6 @@
     <style
         name="Apple"
         parent="AppTheme"
-        
     >
         <item name="android:textColor">?attr/colorPrimary</item>
         <item name="android:textColorSecondary">?attr/colorPrimary</item>
@@ -194,12 +180,10 @@
     <style
         name="AppTheme.PopupOverlay"
         parent="ThemeOverlay.Material3.Dark"
-        
     />
     <style
         name="ModalBottomSheetDialog"
         parent="Widget.Material3.BottomSheet.Modal"
-        
     >
         <item name="backgroundTint">?@attr/colorSurface</item>
         <item name="shapeAppearance">@style/ShapeAppearance.App.LargeComponent</item>
@@ -207,7 +191,6 @@
     <style
         name="ShapeAppearance.App.LargeComponent"
         parent="ShapeAppearance.Material3.LargeComponent"
-        
     >
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">30dp</item>
@@ -215,14 +198,12 @@
     <style
         name="ThemeOverlay.App.MaterialAlertDialog"
         parent="ThemeOverlay.Material3.MaterialAlertDialog"
-        
     >
         <item name="alertDialogStyle">@style/MaterialAlertDialog.App</item>
     </style>
     <style
         name="MaterialAlertDialog.App"
         parent="MaterialAlertDialog.Material3"
-        
     >
         <item name="shapeAppearance">@style/ShapeAppearance.App.MediumComponent</item>
         <item name="android:textColorPrimary">?attr/colorPrimary</item>
@@ -234,9 +215,19 @@
     <style
         name="ShapeAppearance.App.MediumComponent"
         parent="ShapeAppearance.Material3.MediumComponent"
-        
     >
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">20dp</item>
+    </style>
+    <style
+        name="AppTheme.TabLayout"
+        parent="Widget.Material3.TabLayout">
+        <item name="tabIndicatorAnimationMode">elastic</item>
+        <item name="tabIndicatorFullWidth">false</item>
+        <item name="tabIndicatorGravity">bottom</item>
+        <item name="tabIndicatorHeight">3dp</item>
+        <item name="tabMode">scrollable</item>
+        <item name="tabMaxWidth">0px</item>
+        <item name="tabInlineLabel">true</item>
     </style>
 </resources>

@@ -1,6 +1,7 @@
 package ir.ninjacoder.ghostide.utils;
 
 import android.Manifest;
+import android.app.Activity;
 import android.os.Environment;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.ImportDeclaration;
+import com.google.android.material.tabs.TabLayout;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.model.ObjectClassName;
@@ -73,6 +75,7 @@ import java.io.InputStreamReader;
 
 public class ObjectUtils {
   public static boolean Android12 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S;
+  public static boolean Api28 = Build.VERSION.SDK_INT >= 28;
   public static int Back = R.attr.colorSurface;
   public static int colorAccent = R.attr.colorAccent;
   public static int TvColor = R.attr.colorPrimary;
@@ -96,6 +99,10 @@ public class ObjectUtils {
 
     if (view != null)
       view.getDecorView().setBackgroundColor(MaterialColors.getColor(view.getContext(), Back, 0));
+  }
+
+  public static void setNavColor(int color, Activity app) {
+    if (Api28) app.getWindow().setNavigationBarDividerColor(color);
   }
 
   public static void setTextColor(TextView v) {
@@ -719,5 +726,25 @@ public class ObjectUtils {
           SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
     textView.setText(spannableString);
+  }
+
+  public static void addStarToTab(int pos, TabLayout tab) {
+    var getIndexTab = tab.getTabAt(pos);
+    if (getIndexTab != null) {
+      String tabText = getIndexTab.getText().toString();
+      if (!tabText.startsWith("*")) {
+        getIndexTab.setText("*" + tabText);
+      }
+    }
+  }
+
+  public static void removedStarToTab(int pos, TabLayout tab) {
+    var getIndexTab = tab.getTabAt(pos);
+    if (getIndexTab != null) {
+      String tabText = getIndexTab.getText().toString();
+      if (tabText.startsWith("*")) {
+        getIndexTab.setText(tabText.substring(1));
+      }
+    }
   }
 }

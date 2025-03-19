@@ -34,6 +34,7 @@ public class SplashWord extends AppIntro2 {
   @Override
   public void onCreate(Bundle arg0) {
     super.onCreate(arg0);
+    runtimePermissions();
     // TODO: Implement this method
     dialog = new PrograssSheet(this);
     dialog.setMode(StateMod.PROGRASSV);

@@ -182,5 +182,4 @@ public class Music {
   public void setSpeed(double speed) {
     setSpeed((float) speed);
   }
-
 }

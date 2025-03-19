@@ -2,6 +2,7 @@ package ir.ninjacoder.ghostide.widget;
 
 import android.app.WallpaperManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -13,6 +14,9 @@ import android.renderscript.ScriptIntrinsicBlur;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import ir.ninjacoder.ghostide.glidecompat.GlideCompat;
 import java.io.File;
 import java.io.FileInputStream;
 
@@ -30,7 +34,7 @@ public class BlurImage {
         ImageView imageView = (ImageView) view;
         imageView.setImageBitmap(bitmapBlur);
       } else {
-        Drawable drawable = new BitmapDrawable(context.getResources(),bitmapBlur);
+        Drawable drawable = new BitmapDrawable(context.getResources(), bitmapBlur);
         view.setBackgroundDrawable(drawable);
       }
     } catch (Exception e) {
@@ -59,9 +63,11 @@ public class BlurImage {
       throw new RuntimeException(e);
     }
   }
-  
+
   public static void setBlurInWallpaperMobile(Context context, float blurRadius, ImageView view) {
     try {
+      SharedPreferences getvb ;
+      getvb = context.getSharedPreferences("getvb", Context.MODE_PRIVATE);
       WallpaperManager wallpaperManager = WallpaperManager.getInstance(context);
 
       if (wallpaperManager == null) {
@@ -76,12 +82,15 @@ public class BlurImage {
 
       Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
       Bitmap bitMapBlur = new BlurImage().blur(context, bitmap, blurRadius);
-      view.setImageDrawable(new BitmapDrawable(context.getResources(), bitMapBlur));
+      Glide.with(context)
+          .load(getvb.getString("dir", ""))
+          .diskCacheStrategy(DiskCacheStrategy.NONE)
+          .error(new BitmapDrawable(context.getResources(), bitMapBlur))
+          .into(view);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
   }
-
 
   public Bitmap blur(Context context, Bitmap image, float blurRadius) {
     if (null == image) return null;

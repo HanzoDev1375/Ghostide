@@ -107,5 +107,6 @@
     <string name="scriptcustom">Ishlayotgan skriptni sozlang</string>
     <string name="customthemeapp">Ilova mavzusini sozlang</string>
     <string name="customchareditor">Tahrirlovchi kodining alohida harflari</string>
-
+    <string name="cursoreditoricon">Belgilar kursori muharriri</string>
+    <string name="backgroundimageeditor">Fon rasmi</string>
 </resources>

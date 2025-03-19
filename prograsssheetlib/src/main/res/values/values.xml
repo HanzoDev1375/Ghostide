@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="AnimatedEditText">
+        <attr
+                name="animationType"
+                format="enum">
+            <enum
+                    name="fromBottom"
+                    value="0" />
+            <enum
+                    name="fromRight"
+                    value="1" />
+            <enum
+                    name="fromMiddle"
+                    value="2" />
+            <enum
+                    name="popIn"
+                    value="3" />
+            <enum
+                    name="none"
+                    value="-1" />
+        </attr>
+        <attr
+                name="textMask"
+                format="string" />
+        <attr
+                name="animateTextClear"
+                format="boolean" />
+        <attr
+                name="animateCursor"
+                format="boolean" />
+    </declare-styleable>
+        <color name="pin_normal">#ffffff</color>
+</resources>

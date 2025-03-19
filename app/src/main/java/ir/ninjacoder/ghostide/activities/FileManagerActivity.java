@@ -221,12 +221,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     // setSupportActionBar(searchbar);
     gridLayoutManager = new GridLayoutManager(this, 1);
     gridMode = getSharedPreferences("gride", Activity.MODE_PRIVATE);
-    //    ActionBarDrawerToggle _toggle =
-    //        new ActionBarDrawerToggle(
-    //            FileManagerActivity.this, bind.Drawer, searchbar, R.string.app_name,
-    // R.string.app_name);
-    //    bind.Drawer.addDrawerListener(_toggle);
-    //    _toggle.syncState();
     fileListItem = new FileManagerAd(files, FileManagerActivity.this, this);
     shp = getSharedPreferences("shp", Activity.MODE_PRIVATE);
     soglo = getSharedPreferences("soglo", Activity.MODE_PRIVATE);
@@ -415,7 +409,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
               .getPackageManager()
               .getPackageInfo(getApplicationContext().getPackageName(), 0);
       version = pInfo.versionName;
-    } catch (android.content.pm.PackageManager.NameNotFoundException e) {
+    } catch (PackageManager.NameNotFoundException e) {
       showMessage(e.toString());
     }
     // new FastScrollerBuilder(bind.recyclerview2).useMd2Style().build();
@@ -728,25 +722,9 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                     CharSequence _param1, int _param2, int _param3, int _param4) {}
 
                 @Override
-                public void afterTextChanged(android.text.Editable _param1) {}
+                public void afterTextChanged(Editable _param1) {}
               });
         });
-    final View view = dialog.getWindow().getDecorView();
-    dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-    view.setScaleX(0f);
-    view.setScaleY(0f);
-    final ObjectAnimator alertAnim = new ObjectAnimator();
-    final ObjectAnimator alertAnim1 = new ObjectAnimator();
-    alertAnim.setTarget(view);
-    alertAnim.setPropertyName("scaleX");
-    alertAnim.setFloatValues((float) (1));
-    alertAnim.setDuration((int) (250));
-    alertAnim.start();
-    alertAnim1.setTarget(view);
-    alertAnim1.setPropertyName("scaleY");
-    alertAnim1.setFloatValues((float) (1));
-    alertAnim1.setDuration((int) (250));
-    alertAnim1.start();
     dialog.show();
   }
 

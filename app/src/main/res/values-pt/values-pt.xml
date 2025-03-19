@@ -10,19 +10,48 @@
     <string name="dkplayer_continue_play">Continuar reprodução</string>
     <string name="dkplayer_wifi_tip">Wi-Fi não disponível</string>
     <string name="word_separators">.,;:!?\10()[]*&amp;@{}/&lt;&gt;_+=|</string>
-    <item name="paste" type="string">Colar</item>
-    <item name="copy" type="string">Copiar</item>
-    <item name="selectAll" type="string" formatted="true">Selecionar tudo</item>
-    <item name="saveToProject" type="string" translatable="false">Salvar no projeto</item>
-    <item name="cut" type="string">Cortar</item>
-    <item name="last" type="string">Último</item>
-    <item name="next" type="string">Próximo</item>
-    <item name="replace" type="string">Substituir</item>
-    <item name="replaceAll" type="string">Substituir tudo</item>
-    <item name="replacement" type="string">Substituição</item>
-    <item name="cancel" type="string">Cancelar</item>
-    <item name="text_to_search" type="string">Texto para pesquisa</item>
-    <item name="more" type="string" translatable="false">Mais</item>
+    <item
+            name="paste"
+            type="string">Colar</item>
+    <item
+            name="copy"
+            type="string">Copiar</item>
+    <item
+            name="selectAll"
+            type="string"
+            formatted="true">Selecionar tudo</item>
+    <item
+            name="saveToProject"
+            type="string"
+            translatable="false">Salvar no projeto</item>
+    <item
+            name="cut"
+            type="string">Cortar</item>
+    <item
+            name="last"
+            type="string">Último</item>
+    <item
+            name="next"
+            type="string">Próximo</item>
+    <item
+            name="replace"
+            type="string">Substituir</item>
+    <item
+            name="replaceAll"
+            type="string">Substituir tudo</item>
+    <item
+            name="replacement"
+            type="string">Substituição</item>
+    <item
+            name="cancel"
+            type="string">Cancelar</item>
+    <item
+            name="text_to_search"
+            type="string">Texto para pesquisa</item>
+    <item
+            name="more"
+            type="string"
+            translatable="false">Mais</item>
     <string name="sting">Configurações do aplicativo</string>
     <string name="java">Código Java</string>
     <string name="googleplay">Adicione uma estrela ao meu app no Myket</string>
@@ -108,4 +137,6 @@
     <string name="settings_display_row">Exibir linha de números</string>
     <string name="settings_keyboard_height">Altura do teclado</string>
     <string name="drawer_subtitles">O IDE completo</string>
+    <string name="cursoreditoricon">Ícone CursorEditor</string>
+    <string name="backgroundimageeditor">Imagem de fundo</string>
 </resources>

@@ -107,5 +107,6 @@
     <string name="scriptcustom">Настройте запущенный скрипт</string>
     <string name="customthemeapp">Настройте тему приложения</string>
     <string name="customchareditor">Отдельные буквы кода редактора</string>
-
+    <string name="cursoreditoricon">Значок курсораРедактор</string>
+    <string name="backgroundimageeditor">Фоновое изображение </string>
 </resources>

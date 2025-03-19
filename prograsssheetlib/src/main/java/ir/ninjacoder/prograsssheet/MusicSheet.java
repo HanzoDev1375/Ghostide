@@ -201,7 +201,15 @@ public class MusicSheet implements Slider.OnChangeListener {
   @Override
   public void onValueChange(Slider arg0, float progressValue, boolean arg2) {
     if (md != null && arg2) {
-      md.seekTo((int)progressValue * 90);
+      md.seekTo((int) progressValue * 90);
+    }
+  }
+
+  public void setMusicDead() {
+    if (md != null) {
+      md.pause();
+      md.release();
+      md = null;
     }
   }
 }

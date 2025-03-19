@@ -7,7 +7,6 @@
     android:orientation="vertical"
     android:fitsSystemWindows="true"
     android:id="@+id/rootPos"
-    
 >
 
     <com.google.android.material.tabs.TabLayout
@@ -18,7 +17,7 @@
         app:tabMode="fixed"
         app:tabIndicatorHeight="3dp"
         app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
-        ></com.google.android.material.tabs.TabLayout>
+    />
 
     <com.termux.view.TerminalView
         android:layout_height="match_parent"
@@ -29,13 +28,13 @@
         android:importantForAutofill="no"
         android:autofillHints="password"
         android:id="@+id/term"
-        ></com.termux.view.TerminalView>
+    />
 
     <ir.ninjacoder.ghostide.terminal.key.VirtualKeysView
         android:layout_height="75dp"
         android:layout_width="match_parent"
         android:layout_gravity="right|bottom"
         android:id="@+id/keysterm"
-        ></ir.ninjacoder.ghostide.terminal.key.VirtualKeysView>
+    />
 
 </ir.ninjacoder.ghostide.terminal.TermuxActivityRootView>

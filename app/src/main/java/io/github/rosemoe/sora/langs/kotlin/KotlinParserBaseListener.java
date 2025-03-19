@@ -1,4 +1,4 @@
-// Generated from /storage/emulated/0/ApkRepacker/kotlin-stylerin-main/src/main/antlr/KotlinParser.g4 by ANTLR 4.13.1
+// Generated from /storage/emulated/0/apk/py/kotlin-stylerin-main/src/main/antlr/KotlinParser.g4 by ANTLR 4.13.1
 package io.github.rosemoe.sora.langs.kotlin;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -1560,6 +1560,18 @@ public class KotlinParserBaseListener implements KotlinParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitModifierList(KotlinParser.ModifierListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAnnotationsOrModifier(KotlinParser.AnnotationsOrModifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnnotationsOrModifier(KotlinParser.AnnotationsOrModifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

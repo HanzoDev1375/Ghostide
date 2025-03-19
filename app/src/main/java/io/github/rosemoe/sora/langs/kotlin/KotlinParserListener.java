@@ -1,4 +1,4 @@
-// Generated from /storage/emulated/0/ApkRepacker/kotlin-stylerin-main/src/main/antlr/KotlinParser.g4 by ANTLR 4.13.1
+// Generated from /storage/emulated/0/apk/py/kotlin-stylerin-main/src/main/antlr/KotlinParser.g4 by ANTLR 4.13.1
 package io.github.rosemoe.sora.langs.kotlin;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -1297,6 +1297,16 @@ public interface KotlinParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitModifierList(KotlinParser.ModifierListContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link KotlinParser#annotationsOrModifier}.
+	 * @param ctx the parse tree
+	 */
+	void enterAnnotationsOrModifier(KotlinParser.AnnotationsOrModifierContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link KotlinParser#annotationsOrModifier}.
+	 * @param ctx the parse tree
+	 */
+	void exitAnnotationsOrModifier(KotlinParser.AnnotationsOrModifierContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link KotlinParser#modifier}.
 	 * @param ctx the parse tree

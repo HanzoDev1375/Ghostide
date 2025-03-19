@@ -1,5 +1,7 @@
 package io.github.rosemoe.sora.langs.kotlin;
 
+
+import java.util.ArrayList;
 import java.util.List;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
@@ -110,7 +112,7 @@ public final class KotlinVisitor extends KotlinParserBaseVisitor<String> {
         final KotlinParser.TypeAliasContext typeAliasContext = context.typeAlias();
         final StringBuilder text = new StringBuilder();
         if (classDeclarationContext != null) {
-            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitTopLevelObject -> classDeclaration");
+            text.append(this.visit(classDeclarationContext));
         } else if (objectDeclarationContext != null) {
             throw new UnsupportedOperationException("The following parsing path is not supported yet: visitTopLevelObject -> objectDeclaration");
         } else if (functionDeclarationContext != null) {
@@ -119,6 +121,461 @@ public final class KotlinVisitor extends KotlinParserBaseVisitor<String> {
             throw new UnsupportedOperationException("The following parsing path is not supported yet: visitTopLevelObject -> propertyDeclaration");
         } else if (typeAliasContext != null) {
             throw new UnsupportedOperationException("The following parsing path is not supported yet: visitTopLevelObject -> typeAlias");
+        }
+        return text.toString();
+    }
+
+    @Override
+    public String visitClassDeclaration(final KotlinParser.ClassDeclarationContext context) {
+        final KotlinParser.ModifierListContext modifierListContext = context.modifierList();
+        final TerminalNode classTerminal = context.CLASS();
+        final TerminalNode interfaceTerminal = context.INTERFACE();
+        final KotlinParser.SimpleIdentifierContext simpleIdentifierContext = context.simpleIdentifier();
+        final KotlinParser.TypeParametersContext typeParametersContext = context.typeParameters();
+        final KotlinParser.PrimaryConstructorContext primaryConstructorContext = context.primaryConstructor();
+        final TerminalNode colonTerminal = context.COLON();
+        final KotlinParser.DelegationSpecifiersContext delegationSpecifiersContext = context.delegationSpecifiers();
+        final KotlinParser.TypeConstraintsContext typeConstraintsContext = context.typeConstraints();
+        final KotlinParser.ClassBodyContext classBodyContext = context.classBody();
+        final KotlinParser.EnumClassBodyContext enumClassBodyContext = context.enumClassBody();
+        final StringBuilder text = new StringBuilder();
+        if (modifierListContext != null) {
+            text.append(this.visit(modifierListContext))
+                .append(' ');
+        }
+        if (classTerminal != null) {
+            text.append(this.visit(classTerminal));
+        } else if (interfaceTerminal != null) {
+            text.append(this.visit(interfaceTerminal));
+        }
+        text.append(' ')
+            .append(this.visit(simpleIdentifierContext));
+        if (typeParametersContext != null) {
+            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitClassDeclaration -> typeParameters");
+        }
+        if (primaryConstructorContext != null) {
+            text.append(this.visit(primaryConstructorContext));
+        }
+        if (colonTerminal != null) {
+            text.append(' ')
+                .append(this.visit(colonTerminal))
+                .append(' ')
+                .append(this.visit(delegationSpecifiersContext));
+        }
+        if (typeConstraintsContext != null) {
+            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitClassDeclaration -> typeConstraints");
+        }
+        if (classBodyContext != null) {
+            text.append(' ')
+                .append(this.visit(classBodyContext));
+        } else if (enumClassBodyContext != null) {
+            text.append(' ')
+                .append(this.visit(enumClassBodyContext));
+        }
+        return text.toString();
+    }
+
+    @Override
+    public String visitEnumClassBody(final KotlinParser.EnumClassBodyContext context) {
+        final TerminalNode lcurlTerminal = context.LCURL();
+        final KotlinParser.EnumEntriesContext enumEntriesContext = context.enumEntries();
+        final TerminalNode semicolonTerminal = context.SEMICOLON();
+        // todo: use `classMemberDeclarationContexts` with tests.
+        final List<KotlinParser.ClassMemberDeclarationContext> classMemberDeclarationContexts = context.classMemberDeclaration();
+        final TerminalNode rcurlTerminal = context.RCURL();
+        final StringBuilder text = new StringBuilder();
+        text.append(this.visit(lcurlTerminal));
+        this.currentIndentLevel++;
+        this.appendNewLinesAndIndent(text, 2);
+        if (enumEntriesContext != null) {
+            text.append(this.visit(enumEntriesContext));
+        }
+        if (semicolonTerminal != null) {
+            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitEnumClassBody -> semicolon");
+        }
+        this.currentIndentLevel--;
+        this.appendNewLinesAndIndent(text, 2);
+        text.append(this.visit(rcurlTerminal));
+        return text.toString();
+    }
+
+    @Override
+    public String visitEnumEntries(final KotlinParser.EnumEntriesContext context) {
+        final List<KotlinParser.EnumEntryContext> enumEntryContexts = context.enumEntry();
+        final TerminalNode semicolonTerminal = context.SEMICOLON();
+        final StringBuilder text = new StringBuilder();
+        for (int index = 0; index < enumEntryContexts.size(); index++) {
+            final KotlinParser.EnumEntryContext enumEntry = enumEntryContexts.get(index);
+            text.append(this.visit(enumEntry));
+            if (index < enumEntryContexts.size() - 1) {
+                this.appendNewLinesAndIndent(text, 1);
+            }
+        }
+        if (semicolonTerminal != null) {
+            throw new UnsupportedOperationException("The following parsing path is not uspported yet: visitEnumEntries -> semicolon");
+        }
+        return text.toString();
+    }
+
+    @Override
+    public String visitEnumEntry(final KotlinParser.EnumEntryContext context) {
+        final List<KotlinParser.AnnotationsContext> annotationsContexts = context.annotations();
+        final KotlinParser.SimpleIdentifierContext simpleIdentifierContext = context.simpleIdentifier();
+        final KotlinParser.ValueArgumentsContext valueArgumentsContext = context.valueArguments();
+        final KotlinParser.ClassBodyContext classBodyContext = context.classBody();
+        final TerminalNode commaTerminal = context.COMMA();
+        final StringBuilder text = new StringBuilder();
+        if (!annotationsContexts.isEmpty()) {
+            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitEnumEntry -> annotations");
+        }
+        text.append(this.visit(simpleIdentifierContext));
+        if (valueArgumentsContext != null) {
+            text.append(this.visit(valueArgumentsContext));
+        }
+        if (classBodyContext != null) {
+            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitEnumEntry -> classBody");
+        }
+        if (commaTerminal != null) {
+            text.append(this.visit(commaTerminal));
+        }
+        return text.toString();
+    }
+
+    @Override
+    public String visitPrimaryConstructor(final KotlinParser.PrimaryConstructorContext context) {
+        final KotlinParser.ModifierListContext modifierListContext = context.modifierList();
+        final TerminalNode constructorTerminal = context.CONSTRUCTOR();
+        final KotlinParser.ClassParametersContext classParametersContext = context.classParameters();
+        final StringBuilder text = new StringBuilder();
+        if (modifierListContext != null) {
+            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitPrimaryConstructor -> modifierList");
+        }
+        if (constructorTerminal != null) {
+            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitPrimaryConstructor -> constructor");
+        }
+        text.append(this.visit(classParametersContext));
+        return text.toString();
+    }
+
+    @Override
+    public String visitClassParameters(final KotlinParser.ClassParametersContext context) {
+        final TerminalNode lparenTerminal = context.LPAREN();
+        final List<KotlinParser.ClassParameterContext> classParameterContexts = context.classParameter();
+        final List<TerminalNode> commaTerminals = context.COMMA();
+        final TerminalNode rparenTerminal = context.RPAREN();
+        final StringBuilder text = new StringBuilder();
+        text.append(this.visit(lparenTerminal));
+        if (!classParameterContexts.isEmpty()) {
+            final KotlinParser.ClassParameterContext firstClassParameter = classParameterContexts.get(0);
+            text.append(this.visit(firstClassParameter));
+            for (int index = 1; index < classParameterContexts.size(); index++) {
+                final TerminalNode commaTerminal = commaTerminals.get(index - 1);
+                final KotlinParser.ClassParameterContext classParameterContext = classParameterContexts.get(index);
+                text.append(this.visit(commaTerminal))
+                    .append(' ')
+                    .append(this.visit(classParameterContext));
+            }
+            if (classParameterContexts.size() == commaTerminals.size()) {
+                final TerminalNode commaTerminal = commaTerminals.get(commaTerminals.size() - 1);
+                text.append(this.visit(commaTerminal));
+            }
+        }
+        text.append(this.visit(rparenTerminal));
+        return text.toString();
+    }
+
+    @Override
+    public String visitClassParameter(final KotlinParser.ClassParameterContext context) {
+        final KotlinParser.ModifierListContext modifierListContext = context.modifierList();
+        final TerminalNode valTerminal = context.VAL();
+        final TerminalNode varTerminal = context.VAR();
+        final KotlinParser.SimpleIdentifierContext simpleIdentifierContext = context.simpleIdentifier();
+        final TerminalNode colonTerminal = context.COLON();
+        final KotlinParser.TypeContext typeContext = context.type();
+        final TerminalNode assignmentTerminal = context.ASSIGNMENT();
+        // todo: use `expressionContext` with tests.
+        final KotlinParser.ExpressionContext expressionContext = context.expression();
+        final StringBuilder text = new StringBuilder();
+        if (modifierListContext != null) {
+            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitClassParameter -> modifierList");
+        }
+        if (valTerminal != null) {
+            text.append(this.visit(valTerminal))
+                .append(' ');
+        } else if (varTerminal != null) {
+            text.append(this.visit(varTerminal))
+                .append(' ');
+        }
+        text.append(this.visit(simpleIdentifierContext))
+            .append(this.visit(colonTerminal))
+            .append(' ')
+            .append(this.visit(typeContext));
+        if (assignmentTerminal != null) {
+            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitClassParameter -> assignment");
+        }
+        return text.toString();
+    }
+
+    @Override
+    public String visitDelegationSpecifiers(final KotlinParser.DelegationSpecifiersContext context) {
+        final List<KotlinParser.AnnotationsContext> annotationsContexts = context.annotations();
+        final List<KotlinParser.DelegationSpecifierContext> delegationSpecifierContexts = context.delegationSpecifier();
+        final List<TerminalNode> commaTerminals = context.COMMA();
+        final StringBuilder text = new StringBuilder();
+        if (!annotationsContexts.isEmpty()) {
+            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitDelegationSpecifiers -> annotations");
+        }
+        final KotlinParser.DelegationSpecifierContext firstDelegationSpecifierContext = delegationSpecifierContexts.get(0);
+        text.append(this.visit(firstDelegationSpecifierContext));
+        if (!commaTerminals.isEmpty()) {
+            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitDelegationSpecifiers -> comma");
+        }
+        return text.toString();
+    }
+
+    @Override
+    public String visitDelegationSpecifier(final KotlinParser.DelegationSpecifierContext context) {
+        final KotlinParser.ConstructorInvocationContext constructorInvocationContext = context.constructorInvocation();
+        final KotlinParser.UserTypeContext userTypeContext = context.userType();
+        final KotlinParser.ExplicitDelegationContext explicitDelegationContext = context.explicitDelegation();
+        final StringBuilder text = new StringBuilder();
+        if (constructorInvocationContext != null) {
+            text.append(this.visit(constructorInvocationContext));
+        } else if (userTypeContext != null) {
+            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitDelegationSpecifier -> userType");
+        } else if (explicitDelegationContext != null) {
+            text.append(this.visit(explicitDelegationContext));
+        }
+        return text.toString();
+    }
+
+    @Override
+    public String visitExplicitDelegation(final KotlinParser.ExplicitDelegationContext context) {
+        final KotlinParser.UserTypeContext userTypeContext = context.userType();
+        final TerminalNode byTerminal = context.BY();
+        final KotlinParser.ExpressionContext expressionContext = context.expression();
+        final StringBuilder text = new StringBuilder();
+        text.append(this.visit(userTypeContext))
+            .append(' ')
+            .append(this.visit(byTerminal))
+            .append(' ')
+            .append(this.visit(expressionContext));
+        return text.toString();
+    }
+
+    @Override
+    public String visitConstructorInvocation(final KotlinParser.ConstructorInvocationContext context) {
+        final KotlinParser.UserTypeContext userTypeContext = context.userType();
+        final KotlinParser.CallSuffixContext callSuffixContext = context.callSuffix();
+        final StringBuilder text = new StringBuilder();
+        text.append(this.visit(userTypeContext))
+            .append(this.visit(callSuffixContext));
+        return text.toString();
+    }
+
+    @Override
+    public String visitModifierList(final KotlinParser.ModifierListContext context) {
+        final List<KotlinParser.AnnotationsOrModifierContext> annotationsOrModifierContexts = context.annotationsOrModifier();
+        final StringBuilder text = new StringBuilder();
+        for (int index = 0; index < annotationsOrModifierContexts.size(); index++) {
+            final KotlinParser.AnnotationsOrModifierContext annotationsOrModifierContext = annotationsOrModifierContexts.get(index);
+            text.append(this.visit(annotationsOrModifierContext));
+            if (index < annotationsOrModifierContexts.size() - 1) {
+                text.append(' ');
+            }
+        }
+        return text.toString();
+    }
+
+    @Override
+    public String visitAnnotationsOrModifier(final KotlinParser.AnnotationsOrModifierContext context) {
+        final KotlinParser.AnnotationsContext annotationsContext = context.annotations();
+        final KotlinParser.ModifierContext modifierContext = context.modifier();
+        final StringBuilder text = new StringBuilder();
+        if (annotationsContext != null) {
+            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitAnnotationsOrModifier -> annotations");
+        } else if (modifierContext != null) {
+            text.append(this.visit(modifierContext));
+        }
+        return text.toString();
+    }
+
+    @Override
+    public String visitModifier(final KotlinParser.ModifierContext context) {
+        final KotlinParser.ClassModifierContext classModifierContext = context.classModifier();
+        final KotlinParser.MemberModifierContext memberModifierContext = context.memberModifier();
+        final KotlinParser.VisibilityModifierContext visibilityModifierContext = context.visibilityModifier();
+        final KotlinParser.VarianceAnnotationContext varianceAnnotationContext = context.varianceAnnotation();
+        final KotlinParser.FunctionModifierContext functionModifierContext = context.functionModifier();
+        final KotlinParser.PropertyModifierContext propertyModifierContext = context.propertyModifier();
+        final KotlinParser.InheritanceModifierContext inheritanceModifierContext = context.inheritanceModifier();
+        final KotlinParser.ParameterModifierContext parameterModifierContext = context.parameterModifier();
+        final KotlinParser.TypeParameterModifierContext typeParameterModifierContext = context.typeParameterModifier();
+        final StringBuilder text = new StringBuilder();
+        if (classModifierContext != null) {
+            text.append(this.visit(classModifierContext));
+        } else if (memberModifierContext != null) {
+            text.append(this.visit(memberModifierContext));
+        } else if (visibilityModifierContext != null) {
+            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitModifier -> visibilityModifier");
+        } else if (varianceAnnotationContext != null) {
+            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitModifier -> varianceAnnotation");
+        } else if (functionModifierContext != null) {
+            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitModifier -> functionModifier");
+        } else if (propertyModifierContext != null) {
+            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitModifier -> propertyModifier");
+        } else if (inheritanceModifierContext != null) {
+            text.append(this.visit(inheritanceModifierContext));
+        } else if (parameterModifierContext != null) {
+            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitModifier -> parameterModifier");
+        } else if (typeParameterModifierContext != null) {
+            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitModifier -> typeParameterModifier");
+        }
+        return text.toString();
+    }
+
+    @Override
+    public String visitClassModifier(final KotlinParser.ClassModifierContext context) {
+        final TerminalNode enumTerminal = context.ENUM();
+        final TerminalNode sealedTerminal = context.SEALED();
+        final TerminalNode annotationTerminal = context.ANNOTATION();
+        final TerminalNode dataTerminal = context.DATA();
+        final TerminalNode innerTerminal = context.INNER();
+        final StringBuilder text = new StringBuilder();
+        if (enumTerminal != null) {
+            text.append(this.visit(enumTerminal));
+        } else if (sealedTerminal != null) {
+            text.append(this.visit(sealedTerminal));
+        } else if (annotationTerminal != null) {
+            text.append(this.visit(annotationTerminal));
+        } else if (dataTerminal != null) {
+            text.append(this.visit(dataTerminal));
+        } else if (innerTerminal != null) {
+            text.append(this.visit(innerTerminal));
+        }
+        return text.toString();
+    }
+
+    @Override
+    public String visitMemberModifier(final KotlinParser.MemberModifierContext context) {
+        final TerminalNode overrideTerminal = context.OVERRIDE();
+        final TerminalNode lateinitTerminal = context.LATEINIT();
+        final StringBuilder text = new StringBuilder();
+        if (overrideTerminal != null) {
+            text.append(this.visit(overrideTerminal));
+        } else if (lateinitTerminal != null) {
+            text.append(this.visit(lateinitTerminal));
+        }
+        return text.toString();
+    }
+
+    @Override
+    public String visitInheritanceModifier(final KotlinParser.InheritanceModifierContext context) {
+        final TerminalNode abstractTerminal = context.ABSTRACT();
+        final TerminalNode finalTerminal = context.FINAL();
+        final TerminalNode openTerminal = context.OPEN();
+        final StringBuilder text = new StringBuilder();
+        if (abstractTerminal != null) {
+            text.append(this.visit(abstractTerminal));
+        } else if (finalTerminal != null) {
+            text.append(this.visit(finalTerminal));
+        } else if (openTerminal != null) {
+            text.append(this.visit(openTerminal));
+        }
+        return text.toString();
+    }
+
+    @Override
+    public String visitClassBody(final KotlinParser.ClassBodyContext context) {
+        final TerminalNode lcurlTerminal = context.LCURL();
+        final List<KotlinParser.ClassMemberDeclarationContext> classMemberDeclarationContexts = context.classMemberDeclaration();
+        final TerminalNode rcurlTerminal = context.RCURL();
+        final StringBuilder text = new StringBuilder();
+        text.append(this.visit(lcurlTerminal));
+        this.currentIndentLevel++;
+        this.appendNewLinesAndIndent(text, 2);
+        for (int index = 0, size = classMemberDeclarationContexts.size(); index < size; index++) {
+            final KotlinParser.ClassMemberDeclarationContext classMemberDeclarationContext = classMemberDeclarationContexts.get(index);
+            text.append(this.visit(classMemberDeclarationContext));
+            if (index < classMemberDeclarationContexts.size() - 1) {
+                this.appendNewLinesAndIndent(text, 2);
+            }
+        }
+        this.currentIndentLevel--;
+        this.appendNewLinesAndIndent(text, 2);
+        text.append(this.visit(rcurlTerminal));
+        return text.toString();
+    }
+
+    @Override
+    public String visitClassMemberDeclaration(final KotlinParser.ClassMemberDeclarationContext context) {
+        final KotlinParser.ClassDeclarationContext classDeclarationContext = context.classDeclaration();
+        final KotlinParser.FunctionDeclarationContext functionDeclarationContext = context.functionDeclaration();
+        final KotlinParser.ObjectDeclarationContext objectDeclarationContext = context.objectDeclaration();
+        final KotlinParser.CompanionObjectContext companionObjectContext = context.companionObject();
+        final KotlinParser.PropertyDeclarationContext propertyDeclarationContext = context.propertyDeclaration();
+        final KotlinParser.AnonymousInitializerContext anonymousInitializerContext = context.anonymousInitializer();
+        final KotlinParser.SecondaryConstructorContext secondaryConstructorContext = context.secondaryConstructor();
+        final KotlinParser.TypeAliasContext typeAliasContext = context.typeAlias();
+        final StringBuilder text = new StringBuilder();
+        if (classDeclarationContext != null) {
+            text.append(this.visit(classDeclarationContext));
+        } else if (functionDeclarationContext != null) {
+            text.append(this.visit(functionDeclarationContext));
+        } else if (objectDeclarationContext != null) {
+            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitClassMemberDeclaration -> objectDeclaration");
+        } else if (companionObjectContext != null) {
+            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitClassMemberDeclaration -> companionObject");
+        } else if (propertyDeclarationContext != null) {
+            text.append(this.visit(propertyDeclarationContext));
+        } else if (anonymousInitializerContext != null) {
+            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitClassMemberDeclaration -> anonymousInitializer");
+        } else if (secondaryConstructorContext != null) {
+            text.append(this.visit(secondaryConstructorContext));
+        } else if (typeAliasContext != null) {
+            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitClassMemberDeclaration -> typeAlias");
+        }
+        return text.toString();
+    }
+
+    @Override
+    public String visitSecondaryConstructor(final KotlinParser.SecondaryConstructorContext context) {
+        final KotlinParser.ModifierListContext modifierListContext = context.modifierList();
+        final TerminalNode constructorTerminal = context.CONSTRUCTOR();
+        final KotlinParser.FunctionValueParametersContext functionValueParametersContext = context.functionValueParameters();
+        final TerminalNode colonTerminal = context.COLON();
+        final KotlinParser.ConstructorDelegationCallContext constructorDelegationCallContext = context.constructorDelegationCall();
+        final KotlinParser.BlockContext blockContext = context.block();
+        final StringBuilder text = new StringBuilder();
+        if (modifierListContext != null) {
+            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitSecondaryConstructor -> modifierList");
+        }
+        text.append(this.visit(constructorTerminal))
+            .append(this.visit(functionValueParametersContext));
+        if (colonTerminal != null) {
+            text.append(' ')
+                .append(this.visit(colonTerminal))
+                .append(' ')
+                .append(this.visit(constructorDelegationCallContext));
+        }
+        if (blockContext != null) {
+            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitSecondaryConstructor -> block");
+        }
+        return text.toString();
+    }
+
+    @Override
+    public String visitConstructorDelegationCall(final KotlinParser.ConstructorDelegationCallContext context) {
+        final TerminalNode thisTerminal = context.THIS();
+        final KotlinParser.ValueArgumentsContext valueArgumentsContext = context.valueArguments();
+        final TerminalNode superTerminal = context.SUPER();
+        final StringBuilder text = new StringBuilder();
+        if (thisTerminal != null) {
+            text.append(this.visit(thisTerminal))
+                .append(this.visit(valueArgumentsContext));
+        } else if (superTerminal != null) {
+            text.append(this.visit(superTerminal))
+                .append(this.visit(valueArgumentsContext));
         }
         return text.toString();
     }
@@ -140,7 +597,8 @@ public final class KotlinVisitor extends KotlinParserBaseVisitor<String> {
         final KotlinParser.FunctionBodyContext functionBodyContext = context.functionBody();
         final StringBuilder text = new StringBuilder();
         if (modifierListContext != null) {
-            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitFunctionDeclaration -> modifierList");
+            text.append(this.visit(modifierListContext))
+                .append(' ');
         }
         if (firstTypeOfFuncDeclarationContext != null) {
             throw new UnsupportedOperationException("The following parsing path is not supported yet: visitFunctionDeclaration -> firstTypeOfFuncDeclaration");
@@ -248,7 +706,7 @@ public final class KotlinVisitor extends KotlinParserBaseVisitor<String> {
         if (classDeclarationContext != null) {
             throw new UnsupportedOperationException("The following parsing path is not supported yet: visitDeclaration -> classDeclaration");
         } else if (functionDeclarationContext != null) {
-            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitDeclaration -> functionDeclaration");
+            text.append(this.visit(functionDeclarationContext));
         } else if (propertyDeclarationContext != null) {
             text.append(this.visit(propertyDeclarationContext));
         } else if (typeAliasContext != null) {
@@ -673,10 +1131,7 @@ public final class KotlinVisitor extends KotlinParserBaseVisitor<String> {
         } else if (callableReferenceContext != null) {
             throw new UnsupportedOperationException("The following parsing path is not supported yet: visitPostfixUnaryExpression -> callableReference");
         }
-        if (postfixUnaryOperationContexts.size() > 1) {
-            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitPostfixUnaryExpression -> postfixUnaryOperationContexts.size() > 1");
-        } else if (postfixUnaryOperationContexts.size() == 1) {
-            final KotlinParser.PostfixUnaryOperationContext postfixUnaryOperationContext = postfixUnaryOperationContexts.get(0);
+        for (final KotlinParser.PostfixUnaryOperationContext postfixUnaryOperationContext : postfixUnaryOperationContexts) {
             text.append(this.visit(postfixUnaryOperationContext));
         }
         return text.toString();
@@ -690,7 +1145,6 @@ public final class KotlinVisitor extends KotlinParserBaseVisitor<String> {
         final KotlinParser.CallSuffixContext callSuffixContext = context.callSuffix();
         final KotlinParser.ArrayAccessContext arrayAccessContext = context.arrayAccess();
         final KotlinParser.MemberAccessOperatorContext memberAccessOperatorContext = context.memberAccessOperator();
-        // todo: use `postfixUnaryExpressionContext` with tests.
         final KotlinParser.PostfixUnaryExpressionContext postfixUnaryExpressionContext = context.postfixUnaryExpression();
         final StringBuilder text = new StringBuilder();
         if (incrTerminal != null) {
@@ -704,7 +1158,24 @@ public final class KotlinVisitor extends KotlinParserBaseVisitor<String> {
         } else if (arrayAccessContext != null) {
             throw new UnsupportedOperationException("The following parsing path is not supported yet: visitPostfixUnaryOperation -> arrayAccess");
         } else if (memberAccessOperatorContext != null) {
-            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitPostfixUnaryOperation -> memberAccessOperator");
+            text.append(this.visit(memberAccessOperatorContext))
+                .append(this.visit(postfixUnaryExpressionContext));
+        }
+        return text.toString();
+    }
+
+    @Override
+    public String visitMemberAccessOperator(final KotlinParser.MemberAccessOperatorContext context) {
+        final TerminalNode dotTerminal = context.DOT();
+        final TerminalNode questTerminal = context.QUEST();
+        final StringBuilder text = new StringBuilder();
+        if (questTerminal == null) {
+            // DOT
+            text.append(this.visit(dotTerminal));
+        } else {
+            // QUEST DOT
+            text.append(this.visit(questTerminal))
+                .append(this.visit(dotTerminal));
         }
         return text.toString();
     }
@@ -721,12 +1192,67 @@ public final class KotlinVisitor extends KotlinParserBaseVisitor<String> {
         } else if (valueArgumentsContext != null) {
             // valueArguments annotatedLambda*
             text.append(this.visit(valueArgumentsContext));
-            if (!annotatedLambdaContexts.isEmpty()) {
+            if (annotatedLambdaContexts.size() == 1) {
+                final KotlinParser.AnnotatedLambdaContext annotatedLambdaContext = annotatedLambdaContexts.get(0);
+                text.append(' ')
+                    .append(this.visit(annotatedLambdaContext));
+            } else if (annotatedLambdaContexts.size() > 1) {
                 throw new UnsupportedOperationException("The following parsing path is not supported yet: visitCallSuffix -> valueArguments annotatedLambda+");
             }
         } else if (!annotatedLambdaContexts.isEmpty()) {
             // annotatedLambda+
-            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitCallSuffix -> annotatedLambda+");
+            if (annotatedLambdaContexts.size() == 1) {
+                final KotlinParser.AnnotatedLambdaContext annotatedLambdaContext = annotatedLambdaContexts.get(0);
+                text.append(' ')
+                    .append(this.visit(annotatedLambdaContext));
+            } else if (annotatedLambdaContexts.size() > 1) {
+                throw new UnsupportedOperationException("The following parsing path is not supported yet: visitCallSuffix -> annotatedLambda+");
+            }
+        }
+        return text.toString();
+    }
+
+    @Override
+    public String visitAnnotatedLambda(final KotlinParser.AnnotatedLambdaContext context) {
+        final List<KotlinParser.UnescapedAnnotationContext> unescapedAnnotationContexts = context.unescapedAnnotation();
+        final TerminalNode labelDefinitionTerminal = context.LabelDefinition();
+        final KotlinParser.FunctionLiteralContext functionLiteralContext = context.functionLiteral();
+        final StringBuilder text = new StringBuilder();
+        if (!unescapedAnnotationContexts.isEmpty()) {
+            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitAnnotatedLambda -> unescapedAnnotation");
+        }
+        if (labelDefinitionTerminal != null) {
+            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitAnnotatedLambda -> labelDefinition");
+        }
+        text.append(this.visit(functionLiteralContext));
+        return text.toString();
+    }
+
+    @Override
+    public String visitFunctionLiteral(final KotlinParser.FunctionLiteralContext context) {
+        final List<KotlinParser.AnnotationsContext> annotationsContexts = context.annotations();
+        final TerminalNode lcurlTerminal = context.LCURL();
+        final KotlinParser.StatementsContext statementsContext = context.statements();
+        final TerminalNode rcurlTerminal = context.RCURL();
+        final KotlinParser.LambdaParametersContext lambdaParametersContext = context.lambdaParameters();
+        // todo: use `arrowTerminal` with tests.
+        final TerminalNode arrowTerminal = context.ARROW();
+        final StringBuilder text = new StringBuilder();
+        if (!annotationsContexts.isEmpty()) {
+            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitFunctionLiteral -> annotations");
+        }
+        if (lambdaParametersContext == null) {
+            // LCURL NL* statements NL* RCURL
+            text.append(this.visit(lcurlTerminal));
+            this.currentIndentLevel++;
+            this.appendNewLinesAndIndent(text, 2);
+            text.append(this.visit(statementsContext));
+            this.currentIndentLevel--;
+            this.appendNewLinesAndIndent(text, 2);
+            text.append(this.visit(rcurlTerminal));
+        } else {
+            // LCURL NL* lambdaParameters NL* ARROW NL* statements NL* RCURL
+            throw new UnsupportedOperationException("The following parsing path is not supported yet: visitFunctionLiteral-> LCURL NL* lambdaParameters NL* ARROW NL* statements NL* RCURL");
         }
         return text.toString();
     }
@@ -752,7 +1278,7 @@ public final class KotlinVisitor extends KotlinParserBaseVisitor<String> {
             }
         }
         // (NL* COMMA)?
-        if (valueArgumentContexts.size() == commaTerminals.size()) {
+        if (!valueArgumentContexts.isEmpty() && valueArgumentContexts.size() == commaTerminals.size()) {
             throw new UnsupportedOperationException("The following parsing path is not supported yet: visitValueArguments -> (NL* COMMA)?");
         }
         text.append(this.visit(rparenTerminal));
