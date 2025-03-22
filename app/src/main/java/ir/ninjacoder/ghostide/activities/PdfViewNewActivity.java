@@ -1,6 +1,9 @@
 package ir.ninjacoder.ghostide.activities;
 
+import android.view.Menu;
+import android.view.MenuItem;
 import ir.ninjacoder.ghostide.R;
+import ir.ninjacoder.ghostide.databin.PdfToPng;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.utils.FileUtil;
 import ir.ninjacoder.ghostide.utils.DataUtil;
@@ -108,9 +111,8 @@ public class PdfViewNewActivity extends BaseCompat {
     ObjectUtils.setToolbarinit(mtoolbar);
   }
 
-  @Deprecated
   public void showMessage(String _s) {
-    Toast.makeText(getApplicationContext(), _s, Toast.LENGTH_SHORT).show();
+    DataUtil.showMessage(getApplicationContext(), _s);
   }
 
   protected void setMetaDataPdf() {
@@ -209,9 +211,7 @@ public class PdfViewNewActivity extends BaseCompat {
               public void loadComplete(int totalpages) {
                 var di = new GhostWebMaterialDialog(PdfViewNewActivity.this);
                 di.setTitle("Pdf Loadet");
-                di.setMessage(
-                    "Read in Pdf to : "
-                        .concat(path.toString()));
+                di.setMessage("Read in Pdf to : ".concat(path.toString()));
                 di.setIcon(R.drawable.pdfview);
                 di.setPositiveButton("ok", (p1, d2) -> {});
 
@@ -235,5 +235,30 @@ public class PdfViewNewActivity extends BaseCompat {
               }
             })
         .load();
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    // TODO: Implement this method
+    menu.add("info")
+        .setIcon(R.drawable.information)
+        .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+    return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    // TODO: Implement this method
+
+    if (item.getItemId() == 0) {
+      if (getIntent().hasExtra("pdf")) {
+        File file = new File(getIntent().getStringExtra("pdf"));
+        PdfToPng.savePdfCoverToDirectory(
+            file.toString(), file.getParent() + "/", PdfViewNewActivity.this);
+      } else {
+
+      }
+    }
+    return super.onOptionsItemSelected(item);
   }
 }

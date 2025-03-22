@@ -24,6 +24,7 @@
 package io.github.rosemoe.sora.widget;
 
 import io.github.rosemoe.sora.langs.json.JsonLanguage;
+import io.github.rosemoe.sora.langs.xml.XMLLanguage;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.adapter.TextActionAd;
@@ -186,7 +187,9 @@ public class EditorTextActionWindow extends EditorPopupWindow
                         } else if (editor.getEditorLanguage() instanceof SMLang) {
                           SmaliHelper.run(editor, v.getContext());
                         } else if (editor.getEditorLanguage() instanceof JsonLanguage) {
-                          JsonTools.run((IdeEditor) editor,v,v.getContext());
+                          JsonTools.run((IdeEditor) editor, v, v.getContext());
+                        } else if (editor.getEditorLanguage() instanceof XMLLanguage) {
+                          new ToolItem().bindXml(v.getContext(), editor, v);
                         } else {
                           Toast.makeText(editor.getContext(), "Tools your lang not found", 2)
                               .show();

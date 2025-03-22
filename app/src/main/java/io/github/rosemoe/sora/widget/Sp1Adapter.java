@@ -1,17 +1,15 @@
 package io.github.rosemoe.sora.widget;
 
+import ir.ninjacoder.ghostide.databinding.KthBinding;
+import ir.ninjacoder.ghostide.utils.AnimUtils;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.widget.TextView;
-import android.widget.ImageView;
 import com.google.android.material.color.MaterialColors;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import ir.ninjacoder.ghostide.R;
-import android.widget.LinearLayout;
 import android.view.LayoutInflater;
 
 import android.view.ViewGroup;
@@ -20,46 +18,37 @@ import android.widget.BaseAdapter;
 
 public class Sp1Adapter extends BaseAdapter {
 
-    ArrayList<HashMap<String, Object>> _data;
-    Context context;
+  private KthBinding binding;
+  private ArrayList<HashMap<String, Object>> data;
+  private Context context;
+  public Sp1Adapter(ArrayList<HashMap<String, Object>> data, Context context) {
+    this.data = data;
+    this.context = context;
+  }
 
-    public Sp1Adapter(ArrayList<HashMap<String, Object>> _arr, Context context) {
-        _data = _arr;
-        this.context = context;
-    }
+  @Override
+  public int getCount() {
+    return data.size();
+  }
 
-    @Override
-    public int getCount() {
-        return _data.size();
-    }
+  @Override
+  public HashMap<String, Object> getItem(int index) {
+    return data.get(index);
+  }
 
-    @Override
-    public HashMap<String, Object> getItem(int _index) {
-        return _data.get(_index);
-    }
+  @Override
+  public long getItemId(int index) {
+    return index;
+  }
 
-    @Override
-    public long getItemId(int _index) {
-        return _index;
-    }
-
-    @Override
-    public View getView(final int _position, View _v, ViewGroup _container) {
-        LayoutInflater _inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View _view = _v;
-        if (_view == null) {
-            _view = _inflater.inflate(R.layout.kth, null);
-        }
-
-        final LinearLayout linear1 = _view.findViewById(R.id.linear1);
-        final ImageView imageview1 = _view.findViewById(R.id.imageview1);
-        final TextView textview1 = _view.findViewById(R.id.textview1);
-
-        textview1.setText(_data.get((int) _position).get("key").toString());
-        textview1.setTextColor(ColorStateList.valueOf(MaterialColors.getColor(textview1, ObjectUtils.TvColor)));
-        ObjectUtils.setColorFilter(imageview1);
-        ObjectUtils.shapeViews(linear1);
-        return _view;
-
-    }
+  @Override
+  public View getView(final int position, View v, ViewGroup container) {
+    binding = KthBinding.inflate(LayoutInflater.from(container.getContext()));
+    var get = data.get(position).get("key").toString();
+    binding.textview1.setText(get);
+    binding.textview1.setTextColor(
+        ColorStateList.valueOf(MaterialColors.getColor(binding.textview1, ObjectUtils.TvColor)));
+        AnimUtils.Sacla(binding.getRoot());
+    return binding.getRoot();
+  }
 }

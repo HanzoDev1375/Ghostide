@@ -53,7 +53,7 @@ public class SplashWord extends AppIntro2 {
             "prm.json",
             "Permissions",
             "Submit all files",
-            ObjectUtils.checkAndRequestFullStoragePermission(this));
+            true);
     t1.setCallBack(
         () -> {
           runtimePermissions();

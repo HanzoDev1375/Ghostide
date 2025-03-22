@@ -1,7 +1,9 @@
 package io.github.rosemoe.sora.widget.TextSummry;
 
+import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.activities.BrowserActivity;
 import ir.ninjacoder.ghostide.activities.CodeEditorActivity;
+import ir.ninjacoder.ghostide.databin.XmlTranslator;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.adapter.Recyclerview0Adapter;
 import android.content.Context;
@@ -185,9 +187,7 @@ public class ToolItem {
     }
   }
 
-  public void GotoListFile(List<CompletionItem> item, ArrayList<String> paths) {
-    
-  }
+  public void GotoListFile(List<CompletionItem> item, ArrayList<String> paths) {}
 
   public void StringFog(CodeEditor editor) {
     StringFog(editor, "\"(.*?)\"");
@@ -287,5 +287,29 @@ public class ToolItem {
     if (dialog != null) {
       dialog.show();
     }
+  }
+
+  public void bindXml(Context context, CodeEditor editor, View view) {
+    PowerMenu menu =
+        new PowerMenu.Builder(context)
+            .addItem(new PowerMenuItem("translateXml"))
+            .setIsMaterial(true)
+            .build();
+    menu.setShowBackground(false);
+    menu.setMenuColor(MaterialColors.getColor(context, ObjectUtils.Back, 0));
+    menu.setTextColor(MaterialColors.getColor(context, ObjectUtils.TvColor, 0));
+    menu.setAnimation(MenuAnimation.FADE);
+    menu.setAutoDismiss(true);
+    menu.setOnMenuItemClickListener(
+        (i, c) -> {
+          switch (i) {
+            case 0:
+              new XmlTranslator((IdeEditor) editor, context);
+              editor.getTextActionWindow().dismiss();
+              menu.dismiss();
+              break;
+          }
+        });
+    menu.showAsDropDown(view);
   }
 }

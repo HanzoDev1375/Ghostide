@@ -88,6 +88,8 @@ import com.ninjacoder.jgit.GsonToClass;
 import com.ninjacoder.jgit.childer.TextFindListener;
 import io.reactivex.rxjava3.core.Observable;
 import ir.ninjacoder.prograsssheet.MusicSheet;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import ninjacoder.ghostide.androidtools.r8.android.R8Tools;
 import storage.sdcard.SdCardUtil;
@@ -98,14 +100,12 @@ import java.util.*;
 public class FileManagerActivity extends BaseCompat implements FileManagerAd.onClick {
 
   public String Folder = "";
-  protected SdCardUtil sd_stor;
+  protected SdCardUtil externalspace;
   protected AlertDialog maindialogPrfex;
   protected FastScrollerBuilder fast;
   protected FileEventUser user;
   private SearchBar searchbar;
-  private double index = 0;
   private String staticstring = "";
-  private double gotoback = 0;
   private FileManagerAd fileListItem;
   private String CreateFolder = "";
   private String GetTab = "";
@@ -384,13 +384,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     }
   }
 
-  public void sendFilePathToReceiver(String filePath) {
-    FilePostBroadcastReceiver files = new FilePostBroadcastReceiver();
-    IntentFilter intentFilter = new IntentFilter();
-    intentFilter.addAction("Ninja.coder.code.Ghostemane.SEND_FILE_PATH");
-    registerReceiver(files, intentFilter);
-  }
-
   private void initStartApp() {
     getWindow()
         .setSoftInputMode(
@@ -428,7 +421,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     u.setColor(0xFF2B2122);
     u.setCornerRadius(25);
     u.setStroke(1, 0xFFF8B09A);
-    sd_stor = new SdCardUtil(this);
+    externalspace = new SdCardUtil(this);
     if (getIntent().hasExtra("bookmarkDir")) {
       Folder = getIntent().getStringExtra("bookmarkDir");
       reLoadFile();
@@ -472,43 +465,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     DrowerHandler();
   }
 
-  public void FilterFile() {
-    var view = LayoutInflater.from(this).inflate(R.layout.reminderlist, null, false);
-    var dialog = new DialogUtil(this);
-    dialog.setTitle("Filter List");
-    dialog.setPositiveButton("close", null);
-    dialog.setView(view);
-    if (dialog != null) {
-      dialog.build();
-    }
-    TextInputEditText et = view.findViewById(R.id.ed_filter);
-    TextInputLayout layout = view.findViewById(R.id.input);
-    layout.setEndIconVisible(false);
-    layout.setEndIconMinSize(10);
-    layout.setEndIconScaleType(ImageView.ScaleType.CENTER_INSIDE);
-    layout.setEndIconDrawable(R.drawable.deletear);
-    layout.setEndIconOnClickListener(v -> et.getText().clear());
-    sendFilePathToReceiver(Folder);
-    et.addTextChangedListener(
-        new TextWatcher() {
-
-          @Override
-          public void onTextChanged(CharSequence ser, int arg1, int arg2, int arg3) {
-            ThreadUtils.runOnUiThread(
-                () -> {
-                  fileListItem.search(ser.toString());
-                  bind.recyclerview2.setAdapter(fileListItem);
-                });
-          }
-
-          @Override
-          public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {}
-
-          @Override
-          public void afterTextChanged(Editable arg0) {}
-        });
-  }
-
   public void BackPressed() {
     getOnBackPressedDispatcher()
         .addCallback(
@@ -517,27 +473,19 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
 
               @Override
               public void handleOnBackPressed() {
-                if (sd_stor.hasRealRemovableSdCarde()) {
+                if (externalspace.hasRealRemovableSdCarde()) {
                   if (Folder.equals(FileUtil.getExternalStorageDir())
-                      || Folder.equals(sd_stor.getExtSdPath())) {
-                    gotoback++;
-                    if (gotoback == 3) {
-                      Chack = false;
-                      finishAffinity();
-                    }
+                      || Folder.equals(externalspace.getExtSdPath())) {
+                    finishAffinity();
                   } else {
-                    Folder = Folder.substring((int) (0), (int) (Folder.lastIndexOf("/")));
+                    Folder = Folder.substring(0, Folder.lastIndexOf("/"));
                     reLoadFile();
                   }
                 } else {
                   if (Folder.equals(FileUtil.getExternalStorageDir())) {
-                    gotoback++;
-                    if (gotoback == 3) {
-                      Chack = false;
-                      finishAffinity();
-                    }
+                    finishAffinity();
                   } else {
-                    Folder = Folder.substring((int) (0), (int) (Folder.lastIndexOf("/")));
+                    Folder = Folder.substring(0, Folder.lastIndexOf("/"));
                     reLoadFile();
                   }
                 }
@@ -561,80 +509,79 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
   public void reLoadFile(boolean isSortFile) {
     bind.recyclerview2.setVisibility(View.GONE);
     bind.filedirBar.setVisibility(View.VISIBLE);
-    new Thread(
-            () -> {
-              save_path.edit().putString("path", Folder).apply();
-              list.clear();
-              files.clear();
-              folderList.clear();
-              fileList.clear();
-              FileUtil.listDir(Folder, list);
-              Collections.sort(list, String.CASE_INSENSITIVE_ORDER);
-              GetTab = Folder;
-              index = 0;
-              if (isSortFile) {
-                Collections.sort(
-                    list,
-                    (f1, f2) -> {
-                      if (f1 == f2) return 0;
-                      if (FileUtil.isDirectory(f1) && FileUtil.isFile(f2)) return -1;
-                      if (FileUtil.isFile(f1) && FileUtil.isDirectory(f2)) return 1;
-                      return f1.compareToIgnoreCase(f2);
-                    });
-              }
-              list.forEach(
-                  item -> {
-                    if (FileUtil.isDirectory(item)) {
-                      folderList.add(item);
-                    } else {
-                      fileList.add(item);
-                    }
-                  });
-              List<HashMap<String, Object>> folderItems =
-                  folderList.stream()
-                      .map(
-                          item -> {
-                            HashMap<String, Object> _item = new HashMap<>();
-                            _item.put("path", item);
-                            return _item;
-                          })
-                      .filter(
-                          item -> {
-                            String path = (String) item.get("path");
-                            return !path.isEmpty() && !new File(path).isHidden();
-                          })
-                      .collect(Collectors.toList());
-              files.addAll(folderItems);
-              fileList.forEach(
-                  item -> {
-                    HashMap<String, Object> _item = new HashMap<>();
-                    _item.put("path", item);
-                    files.add(_item);
-                  });
-              try {
-              } catch (Exception e) {
-                runOnUiThread(
-                    () ->
-                        DataUtil.showMessage(getApplicationContext(), "Error to " + e.toString()));
-              }
-              runOnUiThread(
-                  () -> {
-                    if (files.isEmpty()) {
-                      bind.emptyview.setVisibility(View.VISIBLE);
-                    } else bind.emptyview.setVisibility(View.GONE);
-                  });
-              runOnUiThread(
-                  () -> {
-                    bind.recyclerview2.setVisibility(View.VISIBLE);
-                    bind.filedirBar.setVisibility(View.GONE);
-                    bind.recyclerview2.setAdapter(fileListItem);
-                    ListSheet.bind(bind.recyclerview2, Folder);
-                    if (gridLayoutManager != null) {
-                      bind.recyclerview2.setLayoutManager(gridLayoutManager);
-                    }
-                  });
-            })
-        .start();
+    ExecutorService executor = Executors.newSingleThreadExecutor();
+    executor.execute(
+        () -> {
+          save_path.edit().putString("path", Folder).apply();
+          list.clear();
+          files.clear();
+          folderList.clear();
+          fileList.clear();
+          FileUtil.listDir(Folder, list);
+          Collections.sort(list, String.CASE_INSENSITIVE_ORDER);
+          GetTab = Folder;
+          if (isSortFile) {
+            Collections.sort(
+                list,
+                (f1, f2) -> {
+                  if (f1 == f2) return 0;
+                  if (FileUtil.isDirectory(f1) && FileUtil.isFile(f2)) return -1;
+                  if (FileUtil.isFile(f1) && FileUtil.isDirectory(f2)) return 1;
+                  return f1.compareToIgnoreCase(f2);
+                });
+          }
+          list.forEach(
+              item -> {
+                if (FileUtil.isDirectory(item)) {
+                  folderList.add(item);
+                } else {
+                  fileList.add(item);
+                }
+              });
+          List<HashMap<String, Object>> folderItems =
+              folderList.stream()
+                  .map(
+                      item -> {
+                        HashMap<String, Object> _item = new HashMap<>();
+                        _item.put("path", item);
+                        return _item;
+                      })
+                  .filter(
+                      item -> {
+                        String path = (String) item.get("path");
+                        return !path.isEmpty() && !new File(path).isHidden();
+                      })
+                  .collect(Collectors.toList());
+          files.addAll(folderItems);
+          fileList.forEach(
+              item -> {
+                HashMap<String, Object> _item = new HashMap<>();
+                _item.put("path", item);
+                files.add(_item);
+              });
+          try {
+          } catch (Exception e) {
+            runOnUiThread(
+                () -> DataUtil.showMessage(getApplicationContext(), "Error to " + e.toString()));
+          }
+          runOnUiThread(
+              () -> {
+                if (files.isEmpty()) {
+                  bind.emptyview.setVisibility(View.VISIBLE);
+                } else bind.emptyview.setVisibility(View.GONE);
+              });
+          runOnUiThread(
+              () -> {
+                bind.recyclerview2.setVisibility(View.VISIBLE);
+                bind.filedirBar.setVisibility(View.GONE);
+                bind.recyclerview2.setAdapter(fileListItem);
+                ListSheet.bind(bind.recyclerview2, Folder);
+                if (gridLayoutManager != null) {
+                  bind.recyclerview2.setLayoutManager(gridLayoutManager);
+                }
+              });
+        });
+    executor.shutdown();
   }
 
   void reLoadFile() {
@@ -1707,9 +1654,9 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
               bind.Drawer.closeDrawer(GravityCompat.START);
             } else {
               staticStorage = true;
-              if (sd_stor.hasRealRemovableSdCarde()) {
-                Folder = sd_stor.getExtSdPath();
-                DataUtil.showMessage(getApplicationContext(), sd_stor.getExtSdPath());
+              if (externalspace.hasRealRemovableSdCarde()) {
+                Folder = externalspace.getExtSdPath();
+                DataUtil.showMessage(getApplicationContext(), externalspace.getExtSdPath());
               } else {
                 DataUtil.showMessage(getApplicationContext(), getString(R.string.sdcarderror));
               }
