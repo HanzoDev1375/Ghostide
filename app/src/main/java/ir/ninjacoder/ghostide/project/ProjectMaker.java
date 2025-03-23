@@ -26,13 +26,14 @@ import android.widget.EditText;
 import androidx.appcompat.app.AlertDialog;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.textfield.TextInputLayout;
+import ir.ninjacoder.prograsssheet.PrograssSheet;
 import java.io.File;
 
 public class ProjectMaker {
 
   public String projectPath;
   private Context context;
-  private ProgressDialogCompat unzip;
+  private PrograssSheet unzip;
   private OnDoneWork work;
 
   public ProjectMaker(String projectPath, Context context, OnDoneWork work) {
@@ -183,9 +184,8 @@ public class ProjectMaker {
     new AsyncTaskCompat<String, String, String>() {
       @Override
       protected void onPreExecute() {
-        unzip = new ProgressDialogCompat(context);
-        unzip.setTitle("installLibrary");
-        unzip.setMessage("Task Runing Install LocalLibrary...");
+        unzip = new PrograssSheet(context);
+        unzip.setTitle  ("installLibrary");
         unzip.show();
       }
 

@@ -1,34 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="AnimatedEditText">
+    <!-- res/values/attrs.xml -->
+    <declare-styleable name="PreferenceSwitchGroup">
         <attr
-                name="animationType"
+                name="modBackground"
                 format="enum">
             <enum
-                    name="fromBottom"
+                    name="none"
                     value="0" />
             <enum
-                    name="fromRight"
+                    name="top" 
                     value="1" />
             <enum
-                    name="fromMiddle"
+                    name="middle"
                     value="2" />
             <enum
-                    name="popIn"
+                    name="bottom"
                     value="3" />
-            <enum
-                    name="none"
-                    value="-1" />
         </attr>
-        <attr
-                name="textMask"
-                format="string" />
-        <attr
-                name="animateTextClear"
-                format="boolean" />
-        <attr
-                name="animateCursor"
-                format="boolean" />
     </declare-styleable>
-        <color name="pin_normal">#ffffff</color>
 </resources>

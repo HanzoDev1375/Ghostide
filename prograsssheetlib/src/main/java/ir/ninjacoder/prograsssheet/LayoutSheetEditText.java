@@ -24,6 +24,7 @@ public class LayoutSheetEditText implements TextWatcher {
   private Sheet dialog;
   private SharedPreferences prf;
   private boolean isAnim = false;
+    
 
   private StateInputType input = StateInputType.TEXT;
 
@@ -32,8 +33,8 @@ public class LayoutSheetEditText implements TextWatcher {
     bind = LayoutEdittextSheetBinding.inflate(LayoutInflater.from(context));
     dialog = new Sheet(context);
     prf = context.getSharedPreferences("key", Context.MODE_PRIVATE);
-   // bind.etanim.addTextChangedListener(this);
-  //  bind.etanim.setText(loadSaveText());
+    bind.etanim.addTextChangedListener(this);
+    bind.etanim.setText(loadSaveText());
     var et = bind.etanim;
     switch (input) {
       case TEXT:
@@ -55,7 +56,7 @@ public class LayoutSheetEditText implements TextWatcher {
         et.setInputType(InputType.TYPE_CLASS_TEXT);
     }
     setIsAnim(true);
-  //  bind.btnok.setEnabled(isEmptyText() ? false : true);
+     bind.btnok.setEnabled(isEmptyText() ? false : true);
   }
 
   public LayoutSheetEditText setTitle(@StringRes int title) {
@@ -75,7 +76,6 @@ public class LayoutSheetEditText implements TextWatcher {
 
   public LayoutSheetEditText setnoClick(View.OnClickListener click) {
     bind.btnno.setOnClickListener(click);
-    
     return this;
   }
 

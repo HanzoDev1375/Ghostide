@@ -1,36 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:orientation="vertical">
+<com.google.android.material.card.MaterialCardView
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:layout_height="wrap_content"
+     android:layout_width="match_parent"
+     android:gravity="center"
+     android:layout_margin="8dp"
+     android:padding="8dp"
+     app:strokeWidth="1dp">
 
     <LinearLayout
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:gravity="center_horizontal"
-            android:padding="8dp"
-            android:orientation="vertical"
-            android:id="@+id/root_layout_project">
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:gravity="center"
+         android:padding="8dp"
+         android:orientation="vertical"
+         android:id="@+id/root_layout_project">
 
         <ImageView
-                android:layout_height="100dp"
-                android:layout_width="150dp"
-                android:src="@drawable/projecthtml"
-                android:scaleType="centerInside"
-                android:focusable="false"
-                android:id="@+id/icon_project_name"/>
+             android:layout_height="40dp"
+             android:layout_width="40dp"
+             android:layout_marginBottom="5dp"
+             android:src="@drawable/projecthtml"
+             android:scaleType="centerInside"
+             android:layout_marginTop="5dp"
+             android:id="@+id/icon_project_name" />
 
         <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:padding="8dp"
-                android:textSize="16sp"
-                android:textColor="#FDA893"
-                android:focusable="false"
-                android:id="@+id/tv_model_item_project"
-                android:text="WebProject"/>
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:padding="8dp"
+             android:textSize="16sp"
+             android:id="@+id/tv_model_item_project"
+             android:text="WebProject" />
 
     </LinearLayout>
 
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>

@@ -1,159 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    android:orientation="vertical"
-    >
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     android:orientation="vertical">
 
     <com.google.android.material.bottomsheet.BottomSheetDragHandleView
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_marginTop="3dp"
-        android:layout_gravity="center_horizontal"
-        ></com.google.android.material.bottomsheet.BottomSheetDragHandleView>
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:layout_marginTop="3dp"
+         android:layout_gravity="center_horizontal" />
 
     <LinearLayout
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:gravity="center_horizontal|center_vertical"
-        android:orientation="vertical"
-        android:layout_gravity="center_horizontal"
-        >
+         android:layout_height="match_parent"
+         android:layout_width="match_parent"
+         android:gravity="center_horizontal|center_vertical"
+         android:orientation="vertical"
+         android:layout_gravity="center_horizontal">
 
         <com.google.android.material.card.MaterialCardView
-            android:layout_height="250dp"
-            android:layout_width="250dp"
-            app:strokeColor="@android:color/transparent"
-            android:layout_marginTop="8dp"
-            app:cardForegroundColor="@android:color/transparent"
-            >
+             android:layout_height="300dp"
+             android:layout_width="300dp"
+             app:strokeColor="@android:color/transparent"
+             android:layout_marginTop="8dp"
+             app:cardForegroundColor="@android:color/transparent">
 
             <ImageView
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:scaleType="fitXY"
-                android:id="@+id/musicicon"
-                android:layout_gravity="center_horizontal|center_vertical"
-                ></ImageView>
+                 android:layout_height="match_parent"
+                 android:layout_width="match_parent"
+                 android:scaleType="fitXY"
+                 android:id="@+id/musicicon"
+                 android:layout_gravity="center_horizontal|center_vertical" />
 
         </com.google.android.material.card.MaterialCardView>
 
         <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:padding="8dp"
-            android:textSize="18sp"
-            android:layout_marginTop="5dp"
-            android:focusable="false"
-            android:id="@+id/titlemusic"
-            android:text="Title"
-            android:layout_gravity="center_horizontal|center_vertical"
-            ></TextView>
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:layout_marginBottom="5dp"
+             android:padding="8dp"
+             android:textSize="18sp"
+             android:layout_marginTop="5dp"
+             android:focusable="false"
+             android:id="@+id/titlemusic"
+             android:text="Title"
+             android:layout_gravity="center_horizontal|center_vertical" />
 
         <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:padding="8dp"
-            android:textSize="14sp"
-            android:focusable="false"
-            android:id="@+id/submusic"
-            android:text="TextView"
-            android:layout_gravity="center_horizontal|center_vertical"
-            ></TextView>
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:layout_marginBottom="6dp"
+             android:padding="8dp"
+             android:textSize="14sp"
+             android:focusable="false"
+             android:id="@+id/submusic"
+             android:text="TextView"
+             android:layout_gravity="center_horizontal|center_vertical" />
 
         <LinearLayout
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:gravity="center"
-            android:orientation="horizontal"
-            >
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:gravity="center"
+             android:orientation="horizontal">
 
             <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:textSize="14sp"
-                android:layout_marginStart="7dp"
-                android:text="100"
-                android:id="@+id/tvtr"
-                ></TextView>
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:textSize="14sp"
+                 android:layout_marginStart="7dp"
+                 android:text="100"
+                 android:id="@+id/tvtr" />
 
             <com.google.android.material.slider.Slider
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_weight="1.0"
-                android:value="0.0"
-                style="@style/Widget.Material3.Slider.Legacy"
-                app:trackHeight="5dp"
-                app:thumbHeight="20dp"
-                app:thumbWidth="20dp"
-                app:labelBehavior="gone"
-                android:id="@+id/musicseekbar"
-                ></com.google.android.material.slider.Slider>
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 app:thumbWidth="20dp"
+                 app:thumbHeight="20dp"
+                 android:value="0.0"
+                 style="@style/Widget.Material3.Slider.Legacy"
+                 app:trackHeight="5dp"
+                 app:labelBehavior="gone"
+                 android:layout_weight="1.0"
+                 android:id="@+id/musicseekbar" />
 
             <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_marginEnd="7dp"
-                android:textSize="14sp"
-                android:text="200"
-                android:id="@+id/tvname"
-                ></TextView>
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:layout_marginEnd="7dp"
+                 android:textSize="14sp"
+                 android:text="200"
+                 android:id="@+id/tvname" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_height="100dp"
-            android:layout_width="match_parent"
-            android:gravity="center_horizontal|center_vertical"
-            android:padding="8dp"
-            android:orientation="horizontal"
-            >
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:gravity="center"
+             android:padding="24dp"
+             android:orientation="horizontal">
 
-            <ImageView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:scaleType="centerInside"
-                android:background="?@attr/selectableItemBackground"
-                android:tint="?attr/colorPrimary"
-                app:srcCompat="@drawable/musicprevious"
-                android:layout_weight="1"
-                android:id="@+id/pre"
-                ></ImageView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_height="60dp"
-                android:layout_width="60dp"
-                app:strokeColor="@android:color/transparent"
-                app:cardBackgroundColor="?@attr/colorOnPrimary"
-                >
+            <LinearLayout
+                 android:layout_height="50dp"
+                 android:layout_width="50dp"
+                 android:layout_marginEnd="40dp"
+                 android:background="?attr/selectableItemBackgroundBorderless">
 
                 <ImageView
-                    android:layout_height="match_parent"
-                    android:layout_width="match_parent"
-                    android:src="@drawable/musicplay"
-                    android:scaleType="centerInside"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:id="@+id/play"
-                    ></ImageView>
+                     android:layout_height="match_parent"
+                     android:layout_width="match_parent"
+                     android:scaleType="centerInside"
+                     android:tint="?attr/colorPrimary"
+                     android:background="?attr/selectableItemBackgroundBorderless"
+                     app:srcCompat="@drawable/musicprevious"
+                     android:id="@+id/pre" />
+
+            </LinearLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                 android:layout_height="70dp"
+                 android:layout_width="70dp"
+                 android:layout_marginEnd="24dp"
+                 app:strokeColor="@android:color/transparent"
+                 app:cardBackgroundColor="@android:color/transparent"
+                 android:id="@+id/cardmusic">
+
+                <ImageView
+                     android:layout_height="match_parent"
+                     android:layout_width="match_parent"
+                     android:src="@drawable/musicplay"
+                     android:scaleType="centerInside"
+                     android:tint="?attr/colorOnPrimary"
+                     android:id="@+id/play" />
 
             </com.google.android.material.card.MaterialCardView>
 
-            <ImageView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:scaleType="centerInside"
-                android:background="?@attr/selectableItemBackground"
-                android:tint="?attr/colorPrimary"
-                app:srcCompat="@drawable/musicnext"
-                android:layout_weight="1"
-                android:id="@+id/next"
-                ></ImageView>
+            <LinearLayout
+                 android:layout_height="50dp"
+                 android:layout_width="50dp"
+                 android:background="?attr/selectableItemBackgroundBorderless"
+                 android:layout_marginStart="20dp">
+
+                <ImageView
+                     android:layout_height="match_parent"
+                     android:layout_width="match_parent"
+                     android:scaleType="centerInside"
+                     android:tint="?attr/colorPrimary"
+                     app:srcCompat="@drawable/musicnext"
+                     android:id="@+id/next" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

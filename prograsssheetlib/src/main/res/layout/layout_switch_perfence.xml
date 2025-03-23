@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_height="wrap_content"
+     android:layout_width="match_parent"
+     android:id="@+id/root">
+
+    <ImageView
+         android:layout_height="18dp"
+         android:layout_width="18dp"
+         android:scaleType="centerInside"
+         android:layout_centerVertical="true"
+         android:layout_marginRight="5dp"
+         android:layout_marginLeft="16dp"
+         android:id="@+id/preference_icon" />
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:layout_toLeftOf="@id/preference_switch"
+         android:layout_toRightOf="@id/preference_icon"
+         android:textSize="16sp"
+         android:text="text"
+         android:layout_marginLeft="8dp"
+         android:layout_marginRight="16dp"
+         android:textColor="?colorOnSurface"
+         android:layout_marginTop="12dp"
+         android:id="@+id/preference_name" />
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:layout_marginBottom="16dp"
+         android:layout_below="@id/preference_name"
+         android:layout_toLeftOf="@id/preference_switch"
+         android:layout_toRightOf="@id/preference_icon"
+         android:textSize="14sp"
+         android:text="test"
+         android:layout_marginLeft="8dp"
+         android:layout_marginRight="16dp"
+         android:textColor="?colorOnSurfaceVariant"
+         android:layout_marginTop="4dp"
+         android:id="@+id/preference_description" />
+
+    <com.google.android.material.materialswitch.MaterialSwitch
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:clickable="false"
+         android:layout_centerVertical="true"
+         android:layout_marginRight="16dp"
+         android:layout_alignParentRight="true"
+         android:focusable="false"
+         android:id="@+id/preference_switch" />
+
+</RelativeLayout>

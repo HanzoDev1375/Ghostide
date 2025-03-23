@@ -1,53 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:orientation="vertical">
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_height="wrap_content"
+     android:layout_width="match_parent"
+     android:orientation="vertical">
 
     <LinearLayout
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:padding="8dp"
-            android:orientation="vertical"
-            android:id="@+id/linear1">
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:padding="8dp"
+         android:orientation="vertical">
 
         <com.google.android.material.textfield.TextInputLayout
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:layout_marginBottom="2dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:id="@+id/input_projectName">
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_marginBottom="2dp"
+             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+             android:id="@+id/input_projectName">
 
             <com.google.android.material.textfield.TextInputEditText
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:hint="project name"
-                    android:padding="8dp"
-                    android:textColorHint="#ffffff"
-                    android:textSize="14sp"
-                    android:textColor="#ffffff"/>
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:hint="project name"
+                 android:padding="8dp"
+                 android:textColorHint="#ffffff"
+                 android:textSize="14sp"
+                 android:textColor="#ffffff" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:layout_marginBottom="2dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_marginTop="2dp"
-                android:id="@+id/input_packagename">
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_marginBottom="2dp"
+             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+             android:layout_marginTop="2dp"
+             android:id="@+id/input_packagename">
 
             <com.google.android.material.textfield.TextInputEditText
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:hint="package name"
-                    android:padding="8dp"
-                    android:textColorHint="#ffffff"
-                    android:textSize="14sp"
-                    android:textColor="#ffffff"/>
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:hint="package name"
+                 android:padding="8dp"
+                 android:textColorHint="#ffffff"
+                 android:textSize="14sp"
+                 android:textColor="#ffffff" />
 
         </com.google.android.material.textfield.TextInputLayout>
+
+        <CheckBox
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:visibility="gone"
+             android:layout_marginTop="10dp"
+             android:id="@+id/boxmod" />
 
     </LinearLayout>
 

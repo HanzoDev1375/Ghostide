@@ -47,6 +47,8 @@ import com.quickersilver.themeengine.ThemeMode;
 import dev.trindadedev.lib.ui.components.preference.adapter.ItemLayoutAdapterMod;
 import dev.trindadedev.lib.ui.components.preference.adapter.LayoutModel;
 import ir.ninjacoder.prograsssheet.LayoutSheetEditText;
+import ir.ninjacoder.prograsssheet.perfence.PerfenceLayoutSubTitle;
+import ir.ninjacoder.prograsssheet.perfence.PreferenceSwitchGroup;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -71,9 +73,9 @@ public class SettingAppActivity extends BaseCompat {
   private ArrayList<HashMap<String, Object>> c2 = new ArrayList<>();
   private List<HashMap<String, Object>> map = new ArrayList<>();
   private NestedScrollView bar;
-  private RecyclerView rvsetting, rvtools;
+  private RecyclerView rvsetting;
   private Intent intent = new Intent();
-  private SwitchMaterialPrf materialYous,
+  private PreferenceSwitchGroup materialYous,
       effect,
       grids,
       walpapersystem,
@@ -96,6 +98,7 @@ public class SettingAppActivity extends BaseCompat {
       gridMode,
       Analyzercod,
       iconSpash;
+  private PerfenceLayoutSubTitle themecustom, blurmod, windowsize;
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
@@ -114,6 +117,9 @@ public class SettingAppActivity extends BaseCompat {
     _app_bar = findViewById(R.id._app_bar);
     _coordinator = findViewById(R.id._coordinator);
     _toolbar = findViewById(R.id._toolbar);
+    themecustom = findViewById(R.id.themecustom);
+    blurmod = findViewById(R.id.blurmod);
+    windowsize = findViewById(R.id.windowsize);
     setSupportActionBar(_toolbar);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     getSupportActionBar().setHomeButtonEnabled(true);
@@ -147,7 +153,6 @@ public class SettingAppActivity extends BaseCompat {
     deftheme = findViewById(R.id.deftheme);
     autoSaveText = findViewById(R.id.autoSaveText);
     rvsetting = findViewById(R.id.rvsetting);
-    rvtools = findViewById(R.id.rvtools);
     codeAZ = findViewById(R.id.codeAZ);
     codeAZ.setTitle(getString(R.string.codeaztitles));
     codeAZ.setDescription(getString(R.string.codeazsubtitle));
@@ -179,115 +184,89 @@ public class SettingAppActivity extends BaseCompat {
             return insets;
           }
         });
+    windowsize.setDescription(getString(R.string.customwindowsdesc));
+    windowsize.setTitle(getString(R.string.customwindows));
 
-    List<LayoutModel> layoutModel = new ArrayList<>();
-    layoutModel.add(
-        new LayoutModel(getString(R.string.customwindowsdesc), getString(R.string.customwindows)));
-    layoutModel.add(
-        new LayoutModel(getString(R.string.customthemesub), getString(R.string.customthemetitle)));
-
-    layoutModel.add(
-        new LayoutModel(
-            getString(R.string.customblursizesubtitle), getString(R.string.customblursizetitle)));
-    var it =
-        new ItemLayoutAdapterMod(
-            layoutModel,
-            new ItemLayoutAdapterMod.CallBackLabel() {
-
-              @Override
-              public void click(View v, int pos) {
-                switch (pos) {
-                  case 0:
-                    {
-                      var di = new GhostWebMaterialDialog(SettingAppActivity.this);
-                      ViewGroup viewGroup = findViewById(android.R.id.content);
-                      View dialogview =
-                          getLayoutInflater().inflate(R.layout.lifesacel, viewGroup, false);
-                      RadioButton r1 = dialogview.findViewById(R.id.r1);
-                      RadioButton r2 = dialogview.findViewById(R.id.r2);
-                      RadioButton r3 = dialogview.findViewById(R.id.r3);
-                      di.setPositiveButton(
-                          "OK",
-                          (p1, d2) -> {
-                            int selectedValue = 1;
-                            r1.setOnCheckedChangeListener(
-                                (cdmnull, isCh) -> {
-                                  if (sf.getInt("sd100", 1) == 1) {
-                                    sf.edit().putInt("sd100", 1).apply();
-
-                                  } else {
-                                    sf.edit().remove("sd100");
-                                  }
-                                });
-                            r2.setOnCheckedChangeListener(
-                                (cdmnull, isCh) -> {
-                                  if (sf.getInt("sd100", 1) == 2) {
-                                    sf.edit().putInt("sd100", 2).apply();
-
-                                  } else {
-                                    sf.edit().remove("sd100");
-                                  }
-                                });
-                            r3.setOnCheckedChangeListener(
-                                (cdmnull, isCh) -> {
-                                  if (sf.getInt("sd100", 1) == 3) {
-                                    sf.edit().putInt("sd100", 3).apply();
-
-                                  } else {
-                                    sf.edit().remove("sd100");
-                                  }
-                                });
-
-                            if (r1.isChecked()) {
-                              selectedValue = 1;
-                            } else if (r2.isChecked()) {
-                              selectedValue = 2;
-                            } else if (r3.isChecked()) {
-                              selectedValue = 3;
-                            }
-
-                            sf.edit().putInt("sd100", selectedValue).apply();
-                          });
+    themecustom.setTitle(getString(R.string.customthemetitle));
+    themecustom.setDescription(getString(R.string.customthemesub));
+    blurmod.setTitle(getString(R.string.customblursizesubtitle));
+    blurmod.setDescription(getString(R.string.customblursizetitle));
+    themecustom.setOnClickListener(
+        v -> {
+          customDataRow(
+              "Custom Theme", "Select Theme in format .ghost", "themes", thememanagersoft);
+        });
+    blurmod.setOnClickListener(c -> _blursize());
+    windowsize.setOnClickListener(
+        v -> {
+          var di = new GhostWebMaterialDialog(SettingAppActivity.this);
+          ViewGroup viewGroup = findViewById(android.R.id.content);
+          View dialogview = getLayoutInflater().inflate(R.layout.lifesacel, viewGroup, false);
+          RadioButton r1 = dialogview.findViewById(R.id.r1);
+          RadioButton r2 = dialogview.findViewById(R.id.r2);
+          RadioButton r3 = dialogview.findViewById(R.id.r3);
+          di.setPositiveButton(
+              "OK",
+              (p1, d2) -> {
+                int selectedValue = 1;
+                r1.setOnCheckedChangeListener(
+                    (cdmnull, isCh) -> {
                       if (sf.getInt("sd100", 1) == 1) {
-                        r1.setChecked(true);
-                        r2.setChecked(false);
-                        r3.setChecked(false);
-                      } else if (sf.getInt("sd100", 1) == 2) {
-                        r2.setChecked(true);
-                        r1.setChecked(false);
-                        r3.setChecked(false);
-                      } else if (sf.getInt("sd100", 1) == 3) {
-                        r3.setChecked(true);
-                        r1.setChecked(false);
-                        r2.setChecked(false);
+                        sf.edit().putInt("sd100", 1).apply();
+
                       } else {
-                        r2.setChecked(false);
-                        r1.setChecked(false);
-                        r3.setChecked(false);
+                        sf.edit().remove("sd100");
                       }
-                      di.setView(dialogview);
-                      di.show();
-                      break;
-                    }
-                  case 1:
-                    {
-                      customDataRow(
-                          "Custom Theme",
-                          "Select Theme in format .ghost",
-                          "themes",
-                          thememanagersoft);
-                      break;
-                    }
-                  case 2:
-                    {
-                      _blursize();
-                      break;
-                    }
+                    });
+                r2.setOnCheckedChangeListener(
+                    (cdmnull, isCh) -> {
+                      if (sf.getInt("sd100", 1) == 2) {
+                        sf.edit().putInt("sd100", 2).apply();
+
+                      } else {
+                        sf.edit().remove("sd100");
+                      }
+                    });
+                r3.setOnCheckedChangeListener(
+                    (cdmnull, isCh) -> {
+                      if (sf.getInt("sd100", 1) == 3) {
+                        sf.edit().putInt("sd100", 3).apply();
+
+                      } else {
+                        sf.edit().remove("sd100");
+                      }
+                    });
+
+                if (r1.isChecked()) {
+                  selectedValue = 1;
+                } else if (r2.isChecked()) {
+                  selectedValue = 2;
+                } else if (r3.isChecked()) {
+                  selectedValue = 3;
                 }
-              }
-            });
-    rvtools.setAdapter(it);
-    rvtools.setLayoutManager(new LinearLayoutManager(this));
+
+                sf.edit().putInt("sd100", selectedValue).apply();
+              });
+          if (sf.getInt("sd100", 1) == 1) {
+            r1.setChecked(true);
+            r2.setChecked(false);
+            r3.setChecked(false);
+          } else if (sf.getInt("sd100", 1) == 2) {
+            r2.setChecked(true);
+            r1.setChecked(false);
+            r3.setChecked(false);
+          } else if (sf.getInt("sd100", 1) == 3) {
+            r3.setChecked(true);
+            r1.setChecked(false);
+            r2.setChecked(false);
+          } else {
+            r2.setChecked(false);
+            r1.setChecked(false);
+            r3.setChecked(false);
+          }
+          di.setView(dialogview);
+          di.show();
+        });
     thememanagersoft.registerOnSharedPreferenceChangeListener(
         new SharedPreferences.OnSharedPreferenceChangeListener() {
 

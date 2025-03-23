@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_height="wrap_content"
+     android:layout_width="match_parent"
+     android:layout_marginBottom="2dp"
+     android:padding="6dp"
+     android:orientation="vertical"
+     android:id="@+id/preference">
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:layout_marginBottom="4dp"
+         android:ellipsize="end"
+         android:textSize="16sp"
+         android:singleLine="true"
+         android:layout_marginLeft="5dp"
+         android:layout_marginTop="2dp"
+         android:text="hello word im title"
+         android:id="@+id/preference_title" />
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:ellipsize="end"
+         android:textSize="13sp"
+         android:layout_marginLeft="5dp"
+         android:singleLine="true"
+         android:text="hello im subTitle in setting prf like for me "
+         android:id="@+id/description" />
+
+</LinearLayout>
