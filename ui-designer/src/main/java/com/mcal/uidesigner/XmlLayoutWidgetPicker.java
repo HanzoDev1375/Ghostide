@@ -27,6 +27,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 import com.mcal.uidesigner.appwizard.AppWizardDesignActivity;
@@ -664,7 +665,9 @@ public class XmlLayoutWidgetPicker {
         "app:boxStrokeErrorColor",
         "#ff2390",
         "app:boxStrokeColor",
-        "#490180","app:boxStrokeWidth","1dp"),
+        "#490180",
+        "app:boxStrokeWidth",
+        "1dp"),
 
     MaterialSwitch(
         "Material Switch",
@@ -687,10 +690,14 @@ public class XmlLayoutWidgetPicker {
         "Google Material",
         "com.google.android.material.radiobutton.MaterialRadioButton"),
 
-    MaterialProgressBar(
+    MaterialLinearProgressIndicator(
         "ProgressBar",
         "Google Material",
         "com.google.android.material.progressindicator.LinearProgressIndicator",
+        "android:layout_width",
+        WRAPCONTENT,
+        "android:layout_height",
+        WRAPCONTENT,
         "android:indeterminate",
         "true"),
     MaterialChipGroup(
@@ -720,8 +727,29 @@ public class XmlLayoutWidgetPicker {
         "android:layout_height",
         WRAPCONTENT,
         "android:indeterminate",
-        "true");
-
+        "true"),
+    MaterialBottomNavigationView(
+        "BottomNavigationView",
+        "Google Material",
+        "com.google.android.material.bottomnavigation.BottomNavigationView",
+        "android:layout_width",
+        WRAPCONTENT,
+        "android:layout_height",
+        WRAPCONTENT,
+        "app:menu",
+        "@menu/designer_options_menu"),
+    MaterialDivider(
+        "MaterialDivider",
+        "Google Material",
+        "com.google.android.material.divider.MaterialDivider",
+        "android:layout_width",
+        MATCHPARANT,
+        "android:layout_height",
+        WRAPCONTENT,
+        "app:dividerInsetStart",
+        "16dp",
+        "app:dividerInsetEnd",
+        "16dp");
     private final Map<String, String> attributes;
     private final String category;
     private final String elementName;

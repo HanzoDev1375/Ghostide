@@ -1,6 +1,8 @@
 package ir.ninjacoder.ghostide;
 
 import android.content.SharedPreferences;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 import io.github.rosemoe.sora.event.LongPressEvent;
 import io.github.rosemoe.sora.event.TextSizeChangeEvent;
 import io.github.rosemoe.sora.langs.java.JavaLanguage;
@@ -8,6 +10,7 @@ import ir.ninjacoder.ghostide.config.LOG;
 import ir.ninjacoder.ghostide.interfaces.CallBackErrorManager;
 import ir.ninjacoder.ghostide.marco.CommentList;
 import ir.ninjacoder.ghostide.marco.editorface.IEditor;
+import ir.ninjacoder.ghostide.model.ObjectClassName;
 import ir.ninjacoder.ghostide.utils.DataUtil;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.widget.SymbolInputView;
@@ -33,7 +36,9 @@ import io.github.rosemoe.sora.event.ContentChangeEvent;
 import io.github.rosemoe.sora.interfaces.EditorLanguage;
 import io.github.rosemoe.sora.langs.xml.XMLLanguage;
 import io.github.rosemoe.sora.langs.xml.XMLLexer;
+import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.util.List;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.Token;
 import java.util.ArrayList;
@@ -92,14 +97,12 @@ public class IdeEditor extends CodeEditor implements IEditor {
     showSoftInput();
     setLineInfoTextSize(18f);
     setScalable(true);
-    setCursorWidth(5.3f);
     setDividerWidth(19);
     setPinLineNumber(true);
     setDividerMargin(30f);
     setNonPrintablePaintingFlags(FLAG_GHOSTWEB);
     subscribeEvent(ClickEvent.class, ((event, unsubscribe) -> ta(event)));
-    // subscribeEvent(ContentChangeEvent.class, ((event, unsubscribe) ->
-    // handleContentChange(event)));
+    subscribeEvent(ContentChangeEvent.class, ((event, unsubscribe) -> handleContentChange(event)));
     subscribeEvent(TextSizeChangeEvent.class, ((event, unsubscribe) -> textSize(event)));
     subscribeEvent(LongPressEvent.class, (ev, un) -> setLongEvent(ev));
     saveTextSize = getContext().getSharedPreferences("saveItem", Context.MODE_PRIVATE);
@@ -107,30 +110,18 @@ public class IdeEditor extends CodeEditor implements IEditor {
     if (saveTextSize != null) {
       setTextSizePx(getSize);
     }
-    
+
     return this;
   }
 
   void textSize(TextSizeChangeEvent e) {
-    var builder = new StringBuilder();
-    builder.append("oldTextSize: ").append(e.getOldTextSize()).append("\n");
-    builder.append("newTextSize: ").append(e.getNewTextSize()).append("\n");
     SharedPreferences.Editor edit = saveTextSize.edit();
     edit.putFloat("newTextSize", e.getNewTextSize());
     edit.apply();
   }
 
   void setLongEvent(LongPressEvent ev) {
-    try {
-      if (getEditorLanguage() instanceof JavaLanguage) {
-        new MaterialAlertDialogBuilder(getContext())
-            .setTitle("ff")
-            .setMessage(ObjectUtils.findClassData(getText().toString()))
-            .show();
-      }
-    } catch (Exception e) {
-      DataUtil.showMessage(getContext(),e.getMessage());
-    }
+    
   }
 
   void ta(ClickEvent ev) {

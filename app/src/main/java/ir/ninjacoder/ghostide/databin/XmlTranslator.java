@@ -133,9 +133,10 @@ public class XmlTranslator {
       translatedXml.append(translatedString).append("\n");
     }
     translatedXml.append("</resources>");
-
+   
     outputEditText.setText("");
-    outputEditText.insertText(translatedXml.toString(), translatedXml.toString().length());
+    outputEditText.insertText(translatedXml.toString(),0);
+   
   }
 
   public boolean isXmlLang() {

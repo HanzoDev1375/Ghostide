@@ -318,7 +318,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               result.addIfNeeded(
                   line,
                   column,
-                  TextStyle.makeStyle(EditorColorScheme.javafield,0,false,true,false));
+                  TextStyle.makeStyle(EditorColorScheme.javafield, 0, false, true, false));
             }
             result.addIfNeeded(line, column, EditorColorScheme.COMMENT);
             break;
@@ -492,190 +492,185 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
 
       result.determine(lastLine);
       result.setExtra(info);
-      ParserConfiguration config = new ParserConfiguration();
-      config.setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
-      StaticJavaParser.setConfiguration(config);
-      var cu = StaticJavaParser.parse(content.toString());
-      Set<String> declaredVariables = new HashSet<>();
-      Set<String> usedVariables = new HashSet<>();
-      Set<String> unusedImport = new HashSet<>();
-      Set<String> mtcall = new HashSet<>();
-      Set<String> mtusing = new HashSet<>();
-      Map<String, Integer> mlines = new HashMap<>();
-      Map<String, Integer> mcoloum = new HashMap<>();
-      Map<String, Integer> inline = new HashMap<>();
-      Map<String, Integer> incol = new HashMap<>();
 
-      cu.accept(
-          new VoidVisitorAdapter<Void>() {
-            @Override
-            public void visit(FieldDeclaration fieldDeclaration, Void arg) {
-              for (VariableDeclarator variable : fieldDeclaration.getVariables()) {
-                String variableName = variable.getNameAsString();
-                int line = variable.getBegin().get().line;
-                int column = variable.getBegin().get().column;
-                declaredVariables.add(variableName);
-                inline.put(variableName, line);
-                incol.put(variableName, column);
+      // fast read();
 
-                Utils.setSpanEFO(
-                    result,
-                    variable.getName().getBegin().get().line,
-                    variable.getName().getBegin().get().column,
-                    EditorColorScheme.javafield,
-                    true,
-                    false);
-              }
+      try {
+        if (GhostIdeAppLoader.getAnalyzercod().getBoolean("Analyzercod", false) == true) {
 
-              super.visit(fieldDeclaration, arg);
-            }
+          ParserConfiguration config = new ParserConfiguration();
+          config.setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
+          StaticJavaParser.setConfiguration(config);
+          var cu = StaticJavaParser.parse(content.toString());
+          Set<String> declaredVariables = new HashSet<>();
+          Set<String> usedVariables = new HashSet<>();
+          Set<String> unusedImport = new HashSet<>();
+          Set<String> mtcall = new HashSet<>();
+          Set<String> mtusing = new HashSet<>();
+          Map<String, Integer> mlines = new HashMap<>();
+          Map<String, Integer> mcoloum = new HashMap<>();
+          Map<String, Integer> inline = new HashMap<>();
+          Map<String, Integer> incol = new HashMap<>();
 
-            @Override
-            public void visit(VariableDeclarationExpr variableDeclarationExpr, Void arg) {
-              for (VariableDeclarator variable : variableDeclarationExpr.getVariables()) {
-                String variableName = variable.getNameAsString();
-                int line = variable.getBegin().get().line - 1;
-                int column = variable.getBegin().get().column;
-                declaredVariables.add(variableName);
-                inline.put(variableName, line);
-                incol.put(variableName, column);
-                // tesing
-                if (JavaPaserUtils.getRegexAnnotation(variableDeclarationExpr.getAnnotations()))
-                  Utils.setWaringSpan(result, line, column, EditorColorScheme.green);
-              }
+          cu.accept(
+              new VoidVisitorAdapter<Void>() {
+                @Override
+                public void visit(FieldDeclaration fieldDeclaration, Void arg) {
+                  for (VariableDeclarator variable : fieldDeclaration.getVariables()) {
+                    String variableName = variable.getNameAsString();
+                    int line = variable.getBegin().get().line;
+                    int column = variable.getBegin().get().column;
+                    declaredVariables.add(variableName);
+                    inline.put(variableName, line);
+                    incol.put(variableName, column);
 
-              super.visit(variableDeclarationExpr, arg);
-            }
+                    Utils.setSpanEFO(
+                        result,
+                        variable.getName().getBegin().get().line,
+                        variable.getName().getBegin().get().column,
+                        EditorColorScheme.javafield,
+                        true,
+                        false);
+                  }
 
-            @Override
-            public void visit(NameExpr nameExpr, Void arg) {
-              usedVariables.add(nameExpr.getNameAsString());
-              super.visit(nameExpr, arg);
-            }
+                  super.visit(fieldDeclaration, arg);
+                }
 
-            @Override
-            public void visit(ImportDeclaration dec, Void arg) {
-              String importName = dec.getNameAsString();
-              int line = dec.getBegin().get().line;
-              int column = dec.getBegin().get().column;
-              inline.put(importName, line);
-              incol.put(importName, column);
-              unusedImport.add(importName);
+                @Override
+                public void visit(VariableDeclarationExpr variableDeclarationExpr, Void arg) {
+                  for (VariableDeclarator variable : variableDeclarationExpr.getVariables()) {
+                    String variableName = variable.getNameAsString();
+                    int line = variable.getBegin().get().line - 1;
+                    int column = variable.getBegin().get().column;
+                    declaredVariables.add(variableName);
+                    inline.put(variableName, line);
+                    incol.put(variableName, column);
+                    // tesing
+                    if (JavaPaserUtils.getRegexAnnotation(variableDeclarationExpr.getAnnotations()))
+                      Utils.setWaringSpan(result, line, column, EditorColorScheme.green);
+                  }
 
-              super.visit(dec, arg);
-            }
+                  super.visit(variableDeclarationExpr, arg);
+                }
 
-            @Override
-            public void visit(ObjectCreationExpr objectCreationExpr, Void arg) {
-              String className = objectCreationExpr.getType().getNameAsString();
-              usedVariables.add(className);
-              super.visit(objectCreationExpr, arg);
-            }
+                @Override
+                public void visit(NameExpr nameExpr, Void arg) {
+                  usedVariables.add(nameExpr.getNameAsString());
+                  super.visit(nameExpr, arg);
+                }
 
-            @Override
-            public void visit(TypeExpr arg0, Void arg1) {
-              var l = arg0.getBegin().get().line;
-              var c = arg0.getBegin().get().column;
-              Utils.setSpanEFO(result, l, c + 1, EditorColorScheme.javastring);
-              super.visit(arg0, arg1);
-            }
+                @Override
+                public void visit(ImportDeclaration dec, Void arg) {
+                  String importName = dec.getNameAsString();
+                  int line = dec.getBegin().get().line;
+                  int column = dec.getBegin().get().column;
+                  inline.put(importName, line);
+                  incol.put(importName, column);
+                  unusedImport.add(importName);
 
-            @Override
-            public void visit(TypeParameter arg0, Void arg1) {
-              var l = arg0.getBegin().get().line;
-              var c = arg0.getBegin().get().column;
-              Utils.setSpanEFO(result, l, c + 1, EditorColorScheme.javatype);
-              super.visit(arg0, arg1);
-            }
+                  super.visit(dec, arg);
+                }
 
-            @Override
-            public void visit(MethodDeclaration arg0, Void arg1) {
-              var variableName = arg0.getNameAsString();
-              int li = arg0.getBegin().get().line;
-              int cl = arg0.getBegin().get().column;
-              mtusing.add(arg0.getNameAsString());
-              inline.put(variableName, li);
-              incol.put(variableName, cl);
-              if (JavaPaserUtils.getDeprecated(arg0.getAnnotations()))
-                Utils.setWaringSpan(result, li, cl + 1);
-              if (JavaPaserUtils.getCustomAnnotationExpr(arg0.getAnnotations(), "NonNull")
-                  && variableName.startsWith("_")) {
-                Utils.setWaringSpan(result, li, cl + 1, EditorColorScheme.HTML_TAG);
-              }
+                @Override
+                public void visit(ObjectCreationExpr objectCreationExpr, Void arg) {
+                  String className = objectCreationExpr.getType().getNameAsString();
+                  usedVariables.add(className);
+                  super.visit(objectCreationExpr, arg);
+                }
 
-              super.visit(arg0, arg1);
-            }
+                @Override
+                public void visit(TypeExpr arg0, Void arg1) {
+                  var l = arg0.getBegin().get().line;
+                  var c = arg0.getBegin().get().column;
+                  Utils.setSpanEFO(result, l, c + 1, EditorColorScheme.javastring);
+                  super.visit(arg0, arg1);
+                }
 
-            @Override
-            public void visit(ConstructorDeclaration arg0, Void arg1) {
-              int lines = arg0.getBegin().get().line;
-              int colz = arg0.getBegin().get().column;
-              if (JavaPaserUtils.getDeprecated(arg0.getAnnotations()))
-                Utils.setWaringSpan(result, lines, colz + 1);
-              if (JavaPaserUtils.getCustomAnnotationExpr(arg0.getAnnotations(), "NonNull"))
-                Utils.setWaringSpan(result, lines, colz + 1, EditorColorScheme.HTML_TAG);
+                @Override
+                public void visit(TypeParameter arg0, Void arg1) {
+                  var l = arg0.getBegin().get().line;
+                  var c = arg0.getBegin().get().column;
+                  Utils.setSpanEFO(result, l, c + 1, EditorColorScheme.javatype);
+                  super.visit(arg0, arg1);
+                }
 
-              super.visit(arg0, arg1);
-            }
+                @Override
+                public void visit(MethodDeclaration arg0, Void arg1) {
+                  var variableName = arg0.getNameAsString();
+                  int li = arg0.getBegin().get().line;
+                  int cl = arg0.getBegin().get().column;
+                  mtusing.add(arg0.getNameAsString());
+                  inline.put(variableName, li);
+                  incol.put(variableName, cl);
+                  if (JavaPaserUtils.getDeprecated(arg0.getAnnotations()))
+                    Utils.setWaringSpan(result, li, cl + 1);
+                  
 
-            @Override
-            public void visit(Parameter arg0, Void arg1) {
-              int myline = arg0.getBegin().get().line;
-              int mycolums = arg0.getBegin().get().column + 3;
-              Utils.setSpanEFO(result, myline, mycolums, EditorColorScheme.KEYWORD, false, true);
+                  super.visit(arg0, arg1);
+                }
 
-              super.visit(arg0, arg1);
-            }
+                @Override
+                public void visit(ConstructorDeclaration arg0, Void arg1) {
+                  int lines = arg0.getBegin().get().line;
+                  int colz = arg0.getBegin().get().column;
+                  if (JavaPaserUtils.getDeprecated(arg0.getAnnotations()))
+                    Utils.setWaringSpan(result, lines, colz + 1);
+                  if (JavaPaserUtils.getCustomAnnotationExpr(arg0.getAnnotations(), "NonNull"))
+                    Utils.setWaringSpan(result, lines, colz + 1, EditorColorScheme.HTML_TAG);
 
-            @Override
-            public void visit(BlockStmt arg0, Void arg1) {
-              if (arg0.getStatements().isEmpty()) {
-                var lines1 = arg0.getBegin().get().line;
-                var columns1 = arg0.getBegin().get().column;
-                Utils.setWaringSpan(result, lines1, columns1 + 1, EditorColorScheme.javakeyword);
-              }
-              super.visit(arg0, arg1);
-            }
+                  super.visit(arg0, arg1);
+                }
 
-            @Override
-            public void visit(JavadocComment arg0, Void arg1) {
-              var i = arg0.getBegin().get().line;
-              var c = arg0.getBegin().get().column;
-              Utils.setSpanEFO(result, i, c, EditorColorScheme.COMMENT);
+                @Override
+                public void visit(Parameter arg0, Void arg1) {
+                  int myline = arg0.getBegin().get().line;
+                  int mycolums = arg0.getBegin().get().column + 3;
+                  Utils.setSpanEFO(
+                      result, myline, mycolums, EditorColorScheme.KEYWORD, false, true);
 
-              super.visit(arg0, arg1);
-            }
-          },
-          null);
+                  super.visit(arg0, arg1);
+                }
 
-      unusedImport.removeIf(importName -> usedVariables.contains(getSimpleName(importName)));
-      declaredVariables.removeAll(usedVariables);
+                @Override
+                public void visit(BlockStmt arg0, Void arg1) {
+                  if (arg0.getStatements().isEmpty()) {
+                    var lines1 = arg0.getBegin().get().line;
+                    var columns1 = arg0.getBegin().get().column;
+                    Utils.setWaringSpan(
+                        result, lines1, columns1 + 1, EditorColorScheme.javakeyword);
+                  }
+                  super.visit(arg0, arg1);
+                }
 
-      for (var it : unusedImport) {
-        var myline = inline.get(it);
-        var mycol = incol.get(it);
-        Utils.setSpanEFO(
-            result, myline.intValue(), mycol.intValue() + it.length(), EditorColorScheme.COMMENT);
+                @Override
+                public void visit(JavadocComment arg0, Void arg1) {
+                  var i = arg0.getBegin().get().line;
+                  var c = arg0.getBegin().get().column;
+                  Utils.setSpanEFO(result, i, c, EditorColorScheme.COMMENT);
+
+                  super.visit(arg0, arg1);
+                }
+              },
+              null);
+
+          unusedImport.removeIf(importName -> usedVariables.contains(getSimpleName(importName)));
+          declaredVariables.removeAll(usedVariables);
+
+          for (var it : unusedImport) {
+            var myline = inline.get(it);
+            var mycol = incol.get(it);
+            Utils.setSpanEFO(
+                result,
+                myline.intValue(),
+                mycol.intValue() + it.length(),
+                EditorColorScheme.COMMENT,
+                false,
+                true);
+          }
+        }
+      } catch (Exception err) {
+
       }
-
-      mtusing.forEach(
-          it -> {
-            if (it.equals("main")) {
-              var li = inline.get(it);
-              var col = incol.get(it);
-              editor.setShowIcon(li.intValue());
-            } else {
-              editor.setShowIcon(0);
-            }
-          });
-
-      //      for (var unusedVar : declaredVariables) {
-      //        var lines = inline.get(unusedVar);
-      //        var col = incol.get(unusedVar);
-      //        Utils.setSpanEFO(result, lines.intValue(), col.intValue() + 3,
-      // EditorColorScheme.COMMENT);
-      //      }
-
     } catch (IOException e) {
       e.printStackTrace();
       Log.e("TAG", e.getMessage());

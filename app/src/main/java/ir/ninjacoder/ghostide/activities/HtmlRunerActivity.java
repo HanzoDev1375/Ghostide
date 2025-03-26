@@ -52,14 +52,19 @@ public class HtmlRunerActivity extends BaseCompat {
   private ErudaThemes theme;
   protected HtmlrunerBinding bin;
 
+
   @Override
-  protected void onCreate(Bundle _savedInstanceState) {
-    super.onCreate(_savedInstanceState);
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
     bin = HtmlrunerBinding.inflate(getLayoutInflater());
     setContentView(bin.getRoot());
     findAndMatchIdInview();
-
     installToRun();
+  }
+
+  @Override
+  public void onBackPressed() {
+    supportFinishAfterTransition();
   }
 
   private void findAndMatchIdInview() {

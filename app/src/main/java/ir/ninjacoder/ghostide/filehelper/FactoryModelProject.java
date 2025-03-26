@@ -1,5 +1,6 @@
 package ir.ninjacoder.ghostide.filehelper;
 
+import android.text.TextUtils;
 import android.widget.CheckBox;
 import com.blankj.utilcode.util.ResourceUtils;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -185,9 +186,6 @@ public class FactoryModelProject implements ProjectManagerAdapter.OnProjectClick
               .setVisibility(View.GONE); // مخفی کردن فیلد package name
 
           var btn = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-          var shap = new ShapeAppearanceModel.Builder();
-          shap.setAllCorners(CornerFamily.ROUNDED, 20f);
-          projectName.setShapeAppearanceModel(shap.build());
 
           btn.setOnClickListener(
               c -> {
@@ -312,9 +310,6 @@ public class FactoryModelProject implements ProjectManagerAdapter.OnProjectClick
               .setVisibility(View.GONE); // مخفی کردن فیلد package name
 
           var btn = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-          var shap = new ShapeAppearanceModel.Builder();
-          shap.setAllCorners(CornerFamily.ROUNDED, 20f);
-          projectName.setShapeAppearanceModel(shap.build());
 
           btn.setOnClickListener(
               c -> {
@@ -402,9 +397,6 @@ public class FactoryModelProject implements ProjectManagerAdapter.OnProjectClick
               .setVisibility(View.GONE); // مخفی کردن فیلد package name
 
           var btn = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-          var shap = new ShapeAppearanceModel.Builder();
-          shap.setAllCorners(CornerFamily.ROUNDED, 20f);
-          projectName.setShapeAppearanceModel(shap.build());
 
           btn.setOnClickListener(
               c -> {
@@ -544,12 +536,17 @@ public class FactoryModelProject implements ProjectManagerAdapter.OnProjectClick
           TextInputLayout packageName = dialog.findViewById(R.id.input_packagename);
           projectName.setHint("project name");
           packageName.setHint("package name (e.g., com.example.app)");
-
+          if (!packageName
+              .getEditText()
+              .getText()
+              .toString()
+              .matches("^[a-z][a-z0-9_]*(\\.[a-z0-9_]+)+[0-9a-z_]$")) {
+            packageName.setError("Error The project name package is not valid.");
+          }
+          if (!TextUtils.isEmpty(packageName.getEditText().getText().toString())) {
+            packageName.setError("Error package name is Empty");
+          }
           var btn = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-          var shap = new ShapeAppearanceModel.Builder();
-          shap.setAllCorners(CornerFamily.ROUNDED, 20f);
-          projectName.setShapeAppearanceModel(shap.build());
-          packageName.setShapeAppearanceModel(shap.build());
 
           btn.setOnClickListener(
               c -> {
@@ -817,9 +814,6 @@ public class FactoryModelProject implements ProjectManagerAdapter.OnProjectClick
               .setVisibility(View.GONE); // مخفی کردن فیلد package name
 
           var btn = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-          var shap = new ShapeAppearanceModel.Builder();
-          shap.setAllCorners(CornerFamily.ROUNDED, 20f);
-          projectName.setShapeAppearanceModel(shap.build());
 
           btn.setOnClickListener(
               c -> {
@@ -979,9 +973,6 @@ public class FactoryModelProject implements ProjectManagerAdapter.OnProjectClick
               .setVisibility(View.GONE); // مخفی کردن فیلد package name
 
           var btn = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-          var shap = new ShapeAppearanceModel.Builder();
-          shap.setAllCorners(CornerFamily.ROUNDED, 20f);
-          projectName.setShapeAppearanceModel(shap.build());
 
           btn.setOnClickListener(
               c -> {
@@ -1162,17 +1153,22 @@ public class FactoryModelProject implements ProjectManagerAdapter.OnProjectClick
           TextInputLayout packageName = dialog.findViewById(R.id.input_packagename);
           projectName.setHint("project name");
           packageName.setHint("package name (e.g., com.example.app)");
-
+          if (!packageName
+              .getEditText()
+              .getText()
+              .toString()
+              .matches("^[a-z][a-z0-9_]*(\\.[a-z0-9_]+)+[0-9a-z_]$")) {
+            packageName.setError("Error The project name package is not valid.");
+          }
+          if (!TextUtils.isEmpty(packageName.getEditText().getText().toString())) {
+            packageName.setError("Error package name is Empty");
+          }
           CheckBox kotlinCheckBox = dialog.findViewById(R.id.boxmod);
           kotlinCheckBox.setVisibility(View.VISIBLE);
           kotlinCheckBox.setText("Use Kotlin");
           kotlinCheckBox.setChecked(true);
 
           var btn = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-          var shap = new ShapeAppearanceModel.Builder();
-          shap.setAllCorners(CornerFamily.ROUNDED, 20f);
-          projectName.setShapeAppearanceModel(shap.build());
-          packageName.setShapeAppearanceModel(shap.build());
 
           btn.setOnClickListener(
               c -> {

@@ -1,5 +1,6 @@
 package ir.ninjacoder.ghostide.terminal;
 
+import android.util.Log;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.activities.BaseCompat;
@@ -213,9 +214,8 @@ public class TerminalActivity extends BaseCompat implements TerminalViewClient {
                 CommentList.getRunPhpCommand(
                     getApplicationContext(), new File(getIntent().getStringExtra("phpcode")));
             terminals.mTermSession.write(php + '\r');
-          } else if (getIntent().hasExtra("cpp")) {
-            
-          } else {
+            Log.d("run php from : ",php);
+          }else {
             if (getvb.contains("Script")) {
               var code =
                   CommandCompat.INSTANCE.getInterpreterCommand(

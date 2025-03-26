@@ -624,7 +624,7 @@ public class ObjectUtils {
   }
 
   public static String findClassData(String code) throws Exception {
-    Class cls = Class.forName(getClassNameFormImport(code));
+    Class cls = Class.forName(code);
     String text = cls.getName();
     text += "\n\n// Annotations (if it's empty means there's nothing)";
     for (var a : cls.getDeclaredAnnotations()) {

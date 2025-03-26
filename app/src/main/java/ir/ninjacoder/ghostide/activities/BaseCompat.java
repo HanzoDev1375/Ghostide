@@ -1,8 +1,8 @@
 package ir.ninjacoder.ghostide.activities;
 
 import android.os.Handler;
+import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.marco.WallpaperParallaxEffect;
-import ir.ninjacoder.ghostide.utils.EdgeToEdgeUtils;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.utils.FileUtil;
 import ir.ninjacoder.ghostide.utils.ReSizeApp;
@@ -62,7 +62,6 @@ public class BaseCompat extends AppCompatActivity {
   protected void onCreate(@Nullable Bundle saveInStatous) {
     super.onCreate(saveInStatous);
     initErrorDialogpackageAPP();
-    AppMozer();
     thememanagersoft = getSharedPreferences("thememanagersoft", MODE_PRIVATE);
 
     initParseWallpapaer();
@@ -76,11 +75,11 @@ public class BaseCompat extends AppCompatActivity {
       getWindow().setStatusBarColor(MaterialColors.getColor(this, ObjectUtils.Back, 0));
 
     setBackGroundIsMobile();
-    //bad work to Android 14& 15
+    // bad work to Android 14& 15
     // EdgeToEdgeUtils.applyEdgeToEdge(
-        // this,
-        // EdgeToEdgeUtils.DEFAULT_STATUS_BAR_STYLE,
-        // EdgeToEdgeUtils.DEFAULT_NAVIGATION_BAR_STYLE);
+    // this,
+    // EdgeToEdgeUtils.DEFAULT_STATUS_BAR_STYLE,
+    // EdgeToEdgeUtils.DEFAULT_NAVIGATION_BAR_STYLE);
   }
 
   private BaseCompat initErrorDialogpackageAPP() {
@@ -294,33 +293,6 @@ public class BaseCompat extends AppCompatActivity {
     return this;
   }
 
-  private void AppMozer() {
-    String packageName = "HR.Blockly";
-    PackageManager packageManager = getPackageManager();
-    try {
-      packageManager.getPackageInfo(packageName, 0);
-      DialogUnsitallApp(packageName);
-    } catch (PackageManager.NameNotFoundException e) {
-
-    }
-  }
-
-  private void DialogUnsitallApp(String packageName) {
-    MaterialAlertDialogBuilder di = new MaterialAlertDialogBuilder(BaseCompat.this);
-    di.setTitle("حذف برنامه مضر");
-    di.setMessage(
-        "ببخشید برنامه با نام (بلاکلی) یک بدافزار است که اطلاعات شما را سرقت میکند لطفا برای حذف برنامه گزینه حذف را بزنید.");
-    di.setCancelable(false);
-    di.setPositiveButton(
-        "حذف",
-        (p1, d2) -> {
-          Uri packageURI = Uri.parse("package:".concat(packageName));
-          Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, packageURI);
-          startActivity(uninstallIntent);
-        });
-    di.show();
-  }
-
   public void initParseWallpapaer() {
 
     effect = new WallpaperParallaxEffect(this);
@@ -334,20 +306,7 @@ public class BaseCompat extends AppCompatActivity {
     effect.setEnabled(thememanagersoft.contains("effect") ? true : false);
   }
 
-  public interface BaseInterfaceCompat {
-    int result();
-
-    void RoadFile(File f);
-
-    void nullU();
-  }
-
-  public void getGitHub() {
-    var i = new Intent();
-    i.setData(Uri.parse("https://github.com/appt2/Ghost-web-ide"));
-    i.setAction(Intent.ACTION_VIEW);
-    startActivity(i);
-  }
+  
 
   public void setLink(String site) {
     var i = new Intent();
@@ -431,9 +390,11 @@ public class BaseCompat extends AppCompatActivity {
   }
 
   public void loadAnim(Intent o) {
-    var op =
-        ActivityOptions.makeCustomAnimation(this, android.R.anim.fade_in, android.R.anim.fade_out);
+    var op = ActivityOptions.makeCustomAnimation(this, R.anim.fadecompatin, R.anim.fadecompatout);
     if (op == null) return;
+    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+    	op.setPendingIntentBackgroundActivityLaunchAllowed(true);
+    }
     startActivity(o, op.toBundle());
   }
 
