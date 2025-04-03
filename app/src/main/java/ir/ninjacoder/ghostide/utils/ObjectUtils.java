@@ -84,6 +84,7 @@ public class ObjectUtils {
   public static int ColorAConNormal = R.attr.colorControlActivated;
   public static int SubTitle = R.attr.colorPrimaryFixedDim;
   public static int ButtonBack = R.attr.colorSecondary;
+  public static int colorOnPrimaryFixed = R.attr.colorOnPrimaryFixed;
   public static int FabBack = R.attr.colorOnPrimary;
   public static int ColorFilter = R.attr.colorOnPrimaryContainer;
   public static int TvColorFab = R.attr.colorOnSecondaryFixed;

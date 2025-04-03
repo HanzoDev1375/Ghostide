@@ -1,5 +1,6 @@
 package ir.ninjacoder.ghostide.activities;
 
+import android.transition.Explode;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.ServerHost;
 import ir.ninjacoder.ghostide.databinding.HtmlrunerBinding;
@@ -52,19 +53,17 @@ public class HtmlRunerActivity extends BaseCompat {
   private ErudaThemes theme;
   protected HtmlrunerBinding bin;
 
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+    getWindow().setAllowEnterTransitionOverlap(true);
+    getWindow().setExitTransition(new Explode());
+    getWindow().setEnterTransition(new Explode());
+    getWindow().setReenterTransition(new Explode());
+    super.onCreate(savedInstanceState); 
     bin = HtmlrunerBinding.inflate(getLayoutInflater());
     setContentView(bin.getRoot());
     findAndMatchIdInview();
     installToRun();
-  }
-
-  @Override
-  public void onBackPressed() {
-    supportFinishAfterTransition();
   }
 
   private void findAndMatchIdInview() {

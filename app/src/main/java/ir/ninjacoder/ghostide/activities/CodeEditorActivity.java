@@ -1,32 +1,24 @@
 package ir.ninjacoder.ghostide.activities;
 
 import android.content.res.ColorStateList;
-import android.text.Html;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayout.Tab;
 import ir.ninjacoder.ghostide.G4Compiler;
 import ir.ninjacoder.ghostide.IdeEditor;
-
 import ir.ninjacoder.ghostide.JavaCcComplierImpl;
 import ir.ninjacoder.ghostide.R;
-import ir.ninjacoder.ghostide.RequestNetwork;
 import ir.ninjacoder.ghostide.adapter.SyspiarAdapter;
 import ir.ninjacoder.ghostide.adapter.ToolbarListFileAdapter;
-import ir.ninjacoder.ghostide.config.CommonFactoryData;
 import ir.ninjacoder.ghostide.config.JavaToGsonHelper;
-import ir.ninjacoder.ghostide.config.MenuColorView;
 import ir.ninjacoder.ghostide.databinding.Antcomp8lerBinding;
+import ir.ninjacoder.ghostide.editor.EditorUtil;
 import ir.ninjacoder.ghostide.enums.Mode;
-import ir.ninjacoder.ghostide.folder.FileIconHelper;
-import ir.ninjacoder.ghostide.interfaces.OnClickFileSlideSheetCallBack;
 import ir.ninjacoder.ghostide.layoutmanager.LogCatBottomSheet;
 import ir.ninjacoder.ghostide.marco.CharUtil;
 import ir.ninjacoder.ghostide.marco.ColorView;
 import ir.ninjacoder.ghostide.marco.FactoryCodeError;
 import ir.ninjacoder.ghostide.marco.GhostWebEditorSearch;
 import ir.ninjacoder.ghostide.marco.WallpaperParallaxEffect;
-import ir.ninjacoder.ghostide.marco.ideColors.IdeColorCompat;
 import ir.ninjacoder.ghostide.model.EditorViewModel;
 import ir.ninjacoder.ghostide.navigator.EditorHelperColor;
 import ir.ninjacoder.ghostide.navigator.EditorRoaderFile;
@@ -41,7 +33,6 @@ import ir.ninjacoder.ghostide.utils.DataUtil;
 import ir.ninjacoder.ghostide.widget.BlurImage;
 import ir.ninjacoder.ghostide.widget.ExrtaFab;
 import android.animation.ObjectAnimator;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.*;
 import android.graphics.Color;
@@ -49,7 +40,6 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.net.Uri;
@@ -65,11 +55,8 @@ import android.view.animation.ScaleAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -83,17 +70,12 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mcal.uidesigner.XmlLayoutDesignActivity;
-import com.ninjacoder.jgit.fileslide.OnItemCallBacks;
-import com.ninjacoder.jgit.fileslide.SildeFileManger;
-import com.ninjacoder.jgit.fileslide.SlideModel;
 import com.skydoves.powermenu.MenuAnimation;
 import com.skydoves.powermenu.OnMenuItemClickListener;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
-import io.github.rosemoe.sora.event.ColorSchemeUpdateEvent;
 import io.github.rosemoe.sora.event.ContentChangeEvent;
 import io.github.rosemoe.sora.langs.html.HTMLLanguage;
-import io.github.rosemoe.sora.text.Cursor;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.EditorAutoCompleteWindow;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
@@ -102,10 +84,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Timer;
 import java.util.TimerTask;
-import ninja.coder.appuploader.utils.ShapeUtils;
-import ninja.coder.appuploader.utils.ShapeName;
 
 public class CodeEditorActivity extends BaseCompat {
 
@@ -156,10 +135,7 @@ public class CodeEditorActivity extends BaseCompat {
   private RecyclerView syspiar;
   private final Intent intentaddFile = new Intent();
   private final Intent htmlrus = new Intent();
-  private SharedPreferences word;
-  private SharedPreferences line;
-  private SharedPreferences shp;
-  private SharedPreferences qo;
+  private SharedPreferences word, line, shp, qo, savecursor;
   private AlertDialog.Builder myDialog;
   private final Intent res = new Intent();
   private TimerTask ask;
@@ -205,6 +181,7 @@ public class CodeEditorActivity extends BaseCompat {
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
+    getWindow().setAllowReturnTransitionOverlap(true);
     super.onCreate(_savedInstanceState);
     setContentView(R.layout.codeeditor);
     initialize(_savedInstanceState);
@@ -256,10 +233,11 @@ public class CodeEditorActivity extends BaseCompat {
     ghost_searchs = findViewById(R.id.editor_ser);
     ghost_searchs.hide();
     syspiar = findViewById(R.id.syspiar);
-    word = getSharedPreferences("word", Activity.MODE_PRIVATE);
-    line = getSharedPreferences("line", Activity.MODE_PRIVATE);
-    shp = getSharedPreferences("shp", Activity.MODE_PRIVATE);
-    qo = getSharedPreferences("qo", Activity.MODE_PRIVATE);
+    savecursor = getSharedPreferences("editor", MODE_PRIVATE);
+    word = getSharedPreferences("word", MODE_PRIVATE);
+    line = getSharedPreferences("line", MODE_PRIVATE);
+    shp = getSharedPreferences("shp", MODE_PRIVATE);
+    qo = getSharedPreferences("qo", MODE_PRIVATE);
     myDialog = new AlertDialog.Builder(this);
     di = new AlertDialog.Builder(this);
     vb = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -291,7 +269,7 @@ public class CodeEditorActivity extends BaseCompat {
     ghostIcon = findViewById(R.id.icon_backgroundghost);
     var mRootView = getWindow().getDecorView();
     syspiar.setVisibility(View.GONE);
-
+    EditorUtil.restorecursor(editor, this, savecursor);
     mRootView
         .getViewTreeObserver()
         .addOnGlobalLayoutListener(
@@ -672,22 +650,6 @@ public class CodeEditorActivity extends BaseCompat {
     }
   }
 
-  @Override
-  public void onSaveInstanceState(@NonNull Bundle outState) {
-    super.onSaveInstanceState(outState);
-    try {
-      if (outState != null) {
-        Cursor cursor = editor.getCursor();
-        outState.putInt(IdeEditor.EDITOR_LEFT_LINE_KEY, cursor.getLeftLine());
-        outState.putInt(IdeEditor.EDITOR_LEFT_COLUMN_KEY, cursor.getLeftColumn());
-        outState.putInt(IdeEditor.EDITOR_RIGHT_LINE_KEY, cursor.getRightLine());
-        outState.putInt(IdeEditor.EDITOR_RIGHT_COLUMN_KEY, cursor.getRightColumn());
-      }
-    } catch (Exception err) {
-
-    }
-  }
-
   public void setManagerpanel(final View _view) {
     pvr =
         new PowerMenu.Builder(CodeEditorActivity.this)
@@ -805,6 +767,7 @@ public class CodeEditorActivity extends BaseCompat {
           String fileContent = editor.getText().toString();
           FileUtil.writeFile(selectedFilePath, fileContent);
           ClickItemChildAnimation(editor);
+          EditorUtil.savecursor(editor, this, savecursor);
         }
       } catch (Exception e) {
         DataUtil.showMessage(getApplicationContext(), "Error not File saved!");
@@ -1014,6 +977,7 @@ public class CodeEditorActivity extends BaseCompat {
                     setCodeEditorFileReader(filePath);
                     ClickItemChildAnimation(tabs.view);
                     ClickItemChildAnimation(editor);
+                    EditorUtil.savecursor(editor, CodeEditorActivity.this, savecursor);
                   }
                 }
               }
@@ -1079,9 +1043,6 @@ public class CodeEditorActivity extends BaseCompat {
     editor.setTypefaceText(Typeface.createFromFile(new File(_files)));
     editor.setTypefaceLineNumber(Typeface.createFromFile(new File(_files)));
   }
-
-  @Deprecated
-  public void setLiveShowFragment() {}
 
   public void Symbloinit() {
     try {
@@ -1300,5 +1261,12 @@ public class CodeEditorActivity extends BaseCompat {
     }
 
     return super.onKeyDown(data, key);
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    EditorUtil.savecursor(editor, CodeEditorActivity.this, savecursor);
+    // TODO: Implement this method
   }
 }

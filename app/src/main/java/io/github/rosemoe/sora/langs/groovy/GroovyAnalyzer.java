@@ -235,11 +235,7 @@ public class GroovyAnalyzer implements CodeAnalyzer {
 
           case GroovyLexer.IDENTIFIER:
             {
-              int color = EditorColorScheme.TEXT_NORMAL;
-              if (previous == GroovyLexer.DOT) color = EditorColorScheme.javafield;
-              if (previous == GroovyLexer.AT) color = EditorColorScheme.AUTO_COMP_PANEL_BG;
-              if (previous == GroovyLexer.VOID) color = EditorColorScheme.javafield;
-              result.addIfNeeded(line, column, color);
+              result.addIfNeeded(line, column, EditorColorScheme.TEXT_NORMAL);
               break;
             }
 
@@ -250,7 +246,7 @@ public class GroovyAnalyzer implements CodeAnalyzer {
                 b.endLine = line;
                 b.endColumn = column;
                 if (b.startLine != b.endLine) {
-                  result.addBlockLine(b); // اضافه کردن بلوک به نتایج
+                  result.addBlockLine(b);
                 }
               }
               var lists = result.getBlocks();

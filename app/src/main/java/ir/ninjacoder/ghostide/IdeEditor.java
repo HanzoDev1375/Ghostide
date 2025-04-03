@@ -7,6 +7,7 @@ import io.github.rosemoe.sora.event.LongPressEvent;
 import io.github.rosemoe.sora.event.TextSizeChangeEvent;
 import io.github.rosemoe.sora.langs.java.JavaLanguage;
 import ir.ninjacoder.ghostide.config.LOG;
+import ir.ninjacoder.ghostide.editor.EditorUtil;
 import ir.ninjacoder.ghostide.interfaces.CallBackErrorManager;
 import ir.ninjacoder.ghostide.marco.CommentList;
 import ir.ninjacoder.ghostide.marco.editorface.IEditor;
@@ -69,10 +70,7 @@ public class IdeEditor extends CodeEditor implements IEditor {
           "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)");
   // test
   private SymbolInputView mSymbolInputView;
-  public static final String EDITOR_LEFT_LINE_KEY = "line";
-  public static final String EDITOR_LEFT_COLUMN_KEY = "column";
-  public static final String EDITOR_RIGHT_LINE_KEY = "rightLine";
-  public static final String EDITOR_RIGHT_COLUMN_KEY = "rightColumn";
+  
 
   public IdeEditor(Context context) {
     super(context);
@@ -110,6 +108,7 @@ public class IdeEditor extends CodeEditor implements IEditor {
     if (saveTextSize != null) {
       setTextSizePx(getSize);
     }
+        EditorUtil.setClick(this);
 
     return this;
   }
@@ -379,28 +378,6 @@ public class IdeEditor extends CodeEditor implements IEditor {
   }
 
   public void restoreState(@NonNull Bundle savedInstanceState) {
-
-    try {
-      if (savedInstanceState != null) {
-
-        int leftLine = savedInstanceState.getInt(EDITOR_LEFT_LINE_KEY, 0);
-        int leftColumn = savedInstanceState.getInt(EDITOR_LEFT_COLUMN_KEY, 0);
-        int rightLine = savedInstanceState.getInt(EDITOR_RIGHT_LINE_KEY, 0);
-        int rightColumn = savedInstanceState.getInt(EDITOR_RIGHT_COLUMN_KEY, 0);
-
-        Content text = getText();
-        if (leftLine > text.getLineCount() || rightLine > text.getLineCount()) {
-          return;
-        }
-        if (leftLine != rightLine && leftColumn != rightColumn) {
-          setSelectionRegion(leftLine, leftColumn, rightLine, rightColumn, true);
-        } else {
-          setSelection(leftLine, leftColumn);
-        }
-      }
-    } catch (Exception err) {
-      Log.e("EditorBindError ", err.getLocalizedMessage());
-    }
   }
 
   public int getLineCountes() {

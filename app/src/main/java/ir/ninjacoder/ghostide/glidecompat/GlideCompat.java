@@ -1,5 +1,6 @@
 package ir.ninjacoder.ghostide.glidecompat;
 
+import android.net.Uri;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
@@ -24,7 +25,6 @@ import com.blankj.utilcode.util.ThreadUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.MultiTransformation;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.caverock.androidsvg.SVG;
 import com.google.android.material.color.MaterialColors;
 import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable;
@@ -42,10 +42,17 @@ public class GlideCompat {
     Glide.with(imageView.getContext())
         .load(new File(path))
         .placeholder(CircelPrograssBar())
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
-        .priority(Priority.HIGH)
-        .error(R.drawable.default_image)
+        .error(R.drawable.ic_material_csharp)
         .transform(new RoundedCornersTransformation(RenderSize()))
+        .into(imageView);
+  }
+
+  public static void GlideNormalUrl(ImageView imageView, String path) {
+    Glide.with(imageView.getContext())
+        .load(Uri.parse(path))
+        .placeholder(CircelPrograssBar())
+        .error(R.drawable.ic_material_csharp)
+        // .transform(new RoundedCornersTransformation(RenderSize()))
         .into(imageView);
   }
 
@@ -54,8 +61,6 @@ public class GlideCompat {
         .load(path)
         .placeholder(CircelPrograssBar())
         .error(R.drawable.default_image)
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
-        .priority(Priority.HIGH)
         .transform(new RoundedCornersTransformation(RenderSize()))
         .into(imageView);
   }
@@ -64,8 +69,6 @@ public class GlideCompat {
     Glide.with(imageView.getContext())
         .load(new File(path))
         .placeholder(CircelPrograssBar())
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
-        .priority(Priority.HIGH)
         .transform(new RoundedCornersTransformation(0))
         .into(imageView);
   }
@@ -97,8 +100,6 @@ public class GlideCompat {
                                 .load(bitmap)
                                 .placeholder(CircelPrograssBar())
                                 .error(R.drawable.musico)
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .priority(Priority.HIGH)
                                 .transform(new RoundedCornersTransformation(RenderSize()))
                                 .into(img);
                           } else {
@@ -124,8 +125,6 @@ public class GlideCompat {
     Glide.with(imageView.getContext())
         .load(path)
         .placeholder(CircelPrograssBar())
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
-        .priority(Priority.HIGH)
         .error(R.drawable.keyboardlisnertalluserpost_4)
         .transform(new RoundedCornersTransformation(RenderSize()))
         .into(imageView);
@@ -136,9 +135,7 @@ public class GlideCompat {
         .load(new File(string))
         .placeholder(CircelPrograssBar())
         .transform(new RoundedCornersTransformation(RenderSize()))
-        .priority(Priority.HIGH)
         .error(R.drawable.keyboardlisnertalluserpost_4)
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
         .into(imageView);
   }
 
@@ -147,8 +144,6 @@ public class GlideCompat {
         .load(new File(string))
         .placeholder(CircelPrograssBar())
         .transform(new RoundedCornersTransformation(RenderSize()))
-        .priority(Priority.HIGH)
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
         .error(R.drawable.close)
         .into(imageView);
     getSizeImage(string, textView);
@@ -160,8 +155,6 @@ public class GlideCompat {
         .transform(new RoundedCornersTransformation(RenderSize()))
         .error(R.drawable.close)
         .placeholder(CircelPrograssBar())
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
-        .priority(Priority.HIGH)
         .into(imageView);
     textView.setText(getVideoWhich(string).concat(",".concat(getVideohighlights(string))));
   }
@@ -219,8 +212,6 @@ public class GlideCompat {
           .load(bitmap)
           .transform(new RoundedCornersTransformation(RenderSize()))
           .placeholder(CircelPrograssBar())
-          .diskCacheStrategy(DiskCacheStrategy.ALL)
-          .priority(Priority.HIGH)
           .error(android.R.drawable.gallery_thumb)
           .into(imageView);
     } finally {
@@ -248,8 +239,6 @@ public class GlideCompat {
           .error(R.drawable.errorxml)
           .transform(new RoundedCornersTransformation(RenderSize()))
           .placeholder(CircelPrograssBar())
-          .diskCacheStrategy(DiskCacheStrategy.ALL)
-          .priority(Priority.HIGH)
           .into(c);
     } else {
       c.setImageResource(R.drawable.errorxml);
@@ -263,8 +252,6 @@ public class GlideCompat {
           .error(R.drawable.ic_material_android)
           .transform(new RoundedCornersTransformation(RenderSize()))
           .placeholder(CircelPrograssBar())
-          .diskCacheStrategy(DiskCacheStrategy.ALL)
-          .priority(Priority.HIGH)
           .into(img);
       //      packageInfo = null;
       //      packageManager = null;
@@ -280,13 +267,12 @@ public class GlideCompat {
           .error(R.drawable.ic_material_android)
           .transform(new RoundedCornersTransformation(RenderSize()))
           .placeholder(CircelPrograssBar())
-          .diskCacheStrategy(DiskCacheStrategy.ALL)
-          .priority(Priority.HIGH)
           .into(img);
     } catch (Exception err) {
       img.setImageResource(R.drawable.ic_material_android);
     }
   }
+
   protected static int RenderSize() {
     return 25;
   }
@@ -297,10 +283,9 @@ public class GlideCompat {
         .error(R.drawable.errorxml)
         //       .transform(new RoundedCornersTransformation(RenderSize()))
         .placeholder(CircelPrograssBar())
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
-        .priority(Priority.NORMAL)
         .into(c);
   }
+
   protected static Drawable loadSvg(String path) {
     Drawable drawable = null;
     try {
@@ -313,13 +298,13 @@ public class GlideCompat {
     }
     return drawable;
   }
+
   public static void LoadIconTheme(String file, ImageView v) {
     Glide.with(v.getContext())
         .asBitmap()
         .load(getIconSwbFile(file, "icon.png"))
         .transform(new RoundedCornersTransformation(RenderSize()))
         .error(R.drawable.file)
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
         .priority(Priority.NORMAL)
         .into(v);
   }
@@ -340,7 +325,6 @@ public class GlideCompat {
         .load(getIconSwbFile(file, mypath))
         .transform(new RoundedCornersTransformation(RenderSize()))
         .error(R.drawable.file)
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
         .priority(Priority.NORMAL)
         .into(img);
   }
@@ -375,7 +359,6 @@ public class GlideCompat {
     Glide.with(v.getContext())
         .load(path)
         .error(R.drawable.errorxml)
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
         .priority(Priority.NORMAL)
         .transform(new MultiTransformation<>(new BlurTransformation(24)))
         .into(v);
@@ -387,7 +370,6 @@ public class GlideCompat {
         .load(decodeBitmapFromZip(pathFile, nameIcon))
         .transform(new RoundedCornersTransformation(RenderSize()))
         .error(R.drawable.ic_material_image)
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
         .priority(Priority.NORMAL)
         .into(img);
   }
@@ -401,7 +383,6 @@ public class GlideCompat {
           .load(draw)
           .transform(new RoundedCornersTransformation(RenderSize()))
           .error(R.drawable.greendraw)
-          .diskCacheStrategy(DiskCacheStrategy.ALL)
           .priority(Priority.NORMAL)
           .into(icon);
     } catch (Exception err) {
@@ -417,7 +398,6 @@ public class GlideCompat {
           .load(draw)
           .transform(new RoundedCornersTransformation(RenderSize()))
           .error(R.drawable.ic_material_image)
-          .diskCacheStrategy(DiskCacheStrategy.ALL)
           .placeholder(CircelPrograssBar())
           .priority(Priority.NORMAL)
           .into(img);

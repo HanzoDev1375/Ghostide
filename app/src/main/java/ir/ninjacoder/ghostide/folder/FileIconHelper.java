@@ -138,6 +138,9 @@ public class FileIconHelper {
         else if (fileEnvHelper.isAntlr4Directory()) fileIconRes = R.drawable.folder_ansible;
         else if (fileEnvHelper.isToolsDirectory()) fileIconRes = R.drawable.folder_tools;
         else if (fileEnvHelper.isNinjaProjectx()) fileIconRes = R.drawable.ghosticonred;
+        else if (fileEnvHelper.isdrawableFolder()) fileIconRes = R.drawable.ic_material_drawable;
+        else if (fileEnvHelper.isLayoutFolder()) fileIconRes = R.drawable.ic_material_folder_layout;
+        else if (fileEnvHelper.isValueFolder()) fileIconRes = R.drawable.ic_material_values;
       }
     } else {
       if (FileUtil.isFileHidden(filePath)) fileIconRes = R.drawable.ic_material_folder_secure;

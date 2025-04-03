@@ -52,6 +52,8 @@ public class Content implements CharSequence {
   private UndoManager mUndoManager;
   private Cursor mCursor;
   private LineRemoveListener mLineListener;
+  private int scrollX;
+  private int scrollY;
 
   /** This constructor will create a Content object with no text */
   public Content() {
@@ -69,6 +71,8 @@ public class Content implements CharSequence {
       src = "";
     }
     mTextLength = 0;
+    scrollX = 0;
+    scrollY = 0;
     mNestedBatchEdit = 0;
     mLines = new ArrayList<>(getInitialLineCapacity());
     mLines.add(new ContentLine());
@@ -801,5 +805,21 @@ public class Content implements CharSequence {
     } catch (Exception e) {
       return null;
     }
+  }
+
+  public int getScrollX() {
+    return this.scrollX;
+  }
+
+  public void setScrollX(int scrollX) {
+    this.scrollX = scrollX;
+  }
+
+  public int getScrollY() {
+    return this.scrollY;
+  }
+
+  public void setScrollY(int scrollY) {
+    this.scrollY = scrollY;
   }
 }

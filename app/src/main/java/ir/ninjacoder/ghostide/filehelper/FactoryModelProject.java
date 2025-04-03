@@ -536,16 +536,7 @@ public class FactoryModelProject implements ProjectManagerAdapter.OnProjectClick
           TextInputLayout packageName = dialog.findViewById(R.id.input_packagename);
           projectName.setHint("project name");
           packageName.setHint("package name (e.g., com.example.app)");
-          if (!packageName
-              .getEditText()
-              .getText()
-              .toString()
-              .matches("^[a-z][a-z0-9_]*(\\.[a-z0-9_]+)+[0-9a-z_]$")) {
-            packageName.setError("Error The project name package is not valid.");
-          }
-          if (!TextUtils.isEmpty(packageName.getEditText().getText().toString())) {
-            packageName.setError("Error package name is Empty");
-          }
+          FileNio.verifyPackageNameImpl(packageName);
           var btn = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
 
           btn.setOnClickListener(
@@ -1153,16 +1144,7 @@ public class FactoryModelProject implements ProjectManagerAdapter.OnProjectClick
           TextInputLayout packageName = dialog.findViewById(R.id.input_packagename);
           projectName.setHint("project name");
           packageName.setHint("package name (e.g., com.example.app)");
-          if (!packageName
-              .getEditText()
-              .getText()
-              .toString()
-              .matches("^[a-z][a-z0-9_]*(\\.[a-z0-9_]+)+[0-9a-z_]$")) {
-            packageName.setError("Error The project name package is not valid.");
-          }
-          if (!TextUtils.isEmpty(packageName.getEditText().getText().toString())) {
-            packageName.setError("Error package name is Empty");
-          }
+          FileNio.verifyPackageNameImpl(packageName);
           CheckBox kotlinCheckBox = dialog.findViewById(R.id.boxmod);
           kotlinCheckBox.setVisibility(View.VISIBLE);
           kotlinCheckBox.setText("Use Kotlin");

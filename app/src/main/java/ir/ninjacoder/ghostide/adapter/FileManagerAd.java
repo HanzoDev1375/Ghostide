@@ -65,14 +65,26 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
 
   @Override
   public VH onCreateViewHolder(ViewGroup parnt, int viewt) {
-    View view =
-        LayoutInflater.from(parnt.getContext())
-            .inflate(
-                viewt == ViewType.ROW.getValue()
-                    ? R.layout.folder_remster
-                    : R.layout.folder_layout_grid,
-                parnt,
-                false);
+    View view = null;
+    switch (viewType) {
+      case ROW:
+        {
+          view =
+              LayoutInflater.from(parnt.getContext())
+                  .inflate(R.layout.folder_remster, parnt, false);
+          break;
+        }
+      case GRID:
+        {
+          view =
+              LayoutInflater.from(parnt.getContext())
+                  .inflate(R.layout.folder_layout_grid, parnt, false);
+          break;
+        }
+      default:
+        view =
+            LayoutInflater.from(parnt.getContext()).inflate(R.layout.folder_remster, parnt, false);
+    }
     return new VH(view);
   }
 
@@ -125,8 +137,9 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
       FileIconHelper fileIconHelper = new FileIconHelper(myfile.toString());
       viewHolder.icon.setImageResource(fileIconHelper.getFileIcon());
       fileIconHelper.setDynamicFolderEnabled(true);
-      fileIconHelper.bindIcon(viewHolder.icon);
       fileIconHelper.setEnvironmentEnabled(true);
+      fileIconHelper.bindIcon(viewHolder.icon);
+
       if (FileUtil.isDirectory(filteredFiles.get(pos).get("path").toString())) {
         Folder = true;
         Files = false;

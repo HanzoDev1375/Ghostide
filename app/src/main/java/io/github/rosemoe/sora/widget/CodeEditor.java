@@ -377,7 +377,7 @@ public class CodeEditor extends View
   public List<DiagnosticWrapper> getDiagnostics() {
     return mDiagnostics;
   }
-  
+
   public void setDiagnosticsListener(DiagnosticsListener diagnosticsListener) {
     mDiagnosticsListener = diagnosticsListener;
   }
@@ -435,6 +435,13 @@ public class CodeEditor extends View
   /** Hide completion window later */
   protected void hideCompletionWindow() {
     mCompletionWindow.hide();
+  }
+
+  @Override
+  protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+    super.onScrollChanged(l, t, oldl, oldt);
+    mText.setScrollX(l);
+    mText.setScrollY(t);
   }
 
   public File getCurrentFile() {
@@ -3054,13 +3061,7 @@ public class CodeEditor extends View
 
           if (!isBlockLineRpg) {
             if (GhostIdeAppLoader.getPrefManager().getBoolean("breaks", false) == true) {
-              drawColor(
-                  canvas,
-                  mColors.getColor(
-                      curr == cursorIdx
-                          ? HTMLConstants.get(cursorIdx)
-                          : HTMLConstants.get(blocks.size())),
-                  mRect);
+              drawColor(canvas, mColors.getColor(HTMLConstants.get(mm)), mRect);
 
             } else
               drawColor(

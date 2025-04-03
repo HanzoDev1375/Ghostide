@@ -40,21 +40,21 @@ public class JavaAutoComplete implements AutoCompleteProvider {
     mKeywords = keywords;
     mKeywordsAreLowCase = false;
   }
-    public void setKeywords(String[] keywords,String name) {
+
+  public void setKeywords(String[] keywords, String name) {
     mKeywords = keywords;
     mKeywordsAreLowCase = false;
     this.name = name;
   }
-    
 
   @Override
   public List<CompletionItem> getAutoCompleteItems(
       String prefix, TextAnalyzeResult analyzeResult, int line, int column) {
     keywords = new ArrayList<>();
     final String[] keywordArray = mKeywords;
-    final boolean lowCase = mKeywordsAreLowCase;
     prf = prefix;
     String match = prefix;
+
     if (keywordArray != null) {
       for (String kw : keywordArray) {
         if (kw.startsWith(match)) {
@@ -62,6 +62,7 @@ public class JavaAutoComplete implements AutoCompleteProvider {
         }
       }
     }
+
     Collections.sort(keywords, CompletionItem.COMPARATOR_BY_NAME);
 
     Object extra = analyzeResult.getExtra();
@@ -76,14 +77,13 @@ public class JavaAutoComplete implements AutoCompleteProvider {
       Collections.sort(words, CompletionItem.COMPARATOR_BY_NAME);
       keywords.addAll(words);
     }
+
     shortcard = new JavaCardshorts(keywords, prefix, editor);
     JavaToGsonHelper.installFormSora(keywords);
 
     it = keywords;
     try {
       new Css3Server().toJavaLspDemo(keywords, prefix);
-      /// test read class info
-
     } catch (Exception err) {
       LOG.error("ErrorOpenXmlFile", err.getLocalizedMessage());
     }
@@ -96,7 +96,6 @@ public class JavaAutoComplete implements AutoCompleteProvider {
   }
 
   public static class Identifiers {
-
     private static final Object SIGN = new Object();
     private final List<String> identifiers = new ArrayList<>();
     private HashMap<String, Object> cache;

@@ -2,7 +2,8 @@ package ir.ninjacoder.ghostide.adapter;
 
 public enum ViewType {
   ROW(0),
-  GRID(1);
+  GRID(1),
+  MOERNGRIDE(2);
 
   private int value;
 

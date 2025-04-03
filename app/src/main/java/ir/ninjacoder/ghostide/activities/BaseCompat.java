@@ -1,7 +1,7 @@
 package ir.ninjacoder.ghostide.activities;
 
 import android.os.Handler;
-import ir.ninjacoder.ghostide.R;
+import android.transition.Explode;
 import ir.ninjacoder.ghostide.marco.WallpaperParallaxEffect;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.utils.FileUtil;
@@ -12,7 +12,6 @@ import android.animation.ObjectAnimator;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -306,8 +305,6 @@ public class BaseCompat extends AppCompatActivity {
     effect.setEnabled(thememanagersoft.contains("effect") ? true : false);
   }
 
-  
-
   public void setLink(String site) {
     var i = new Intent();
     i.setData(Uri.parse(site));
@@ -390,10 +387,13 @@ public class BaseCompat extends AppCompatActivity {
   }
 
   public void loadAnim(Intent o) {
-    var op = ActivityOptions.makeCustomAnimation(this, R.anim.fadecompatin, R.anim.fadecompatout);
+    var op = ActivityOptions.makeSceneTransitionAnimation(this);
+    getWindow().setExitTransition(new Explode());
+    getWindow().setEnterTransition(new Explode());
+    getWindow().setReenterTransition(new Explode());
     if (op == null) return;
-    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-    	op.setPendingIntentBackgroundActivityLaunchAllowed(true);
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+      op.setPendingIntentBackgroundActivityLaunchAllowed(true);
     }
     startActivity(o, op.toBundle());
   }

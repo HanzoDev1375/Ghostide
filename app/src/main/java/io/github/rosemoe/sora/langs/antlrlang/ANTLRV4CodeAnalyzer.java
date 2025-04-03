@@ -1,5 +1,6 @@
 package io.github.rosemoe.sora.langs.antlrlang;
 
+import android.graphics.Color;
 import android.util.Log;
 import io.github.rosemoe.sora.text.TextStyle;
 import java.util.Stack;
@@ -196,6 +197,7 @@ public class ANTLRV4CodeAnalyzer implements CodeAnalyzer {
                   || previous == ANTLRv4Lexer.PARSER
                   || previous == ANTLRv4Lexer.GRAMMAR) {
                 color = EditorColorScheme.OPERATOR;
+                
                 isBold = true;
               }
 

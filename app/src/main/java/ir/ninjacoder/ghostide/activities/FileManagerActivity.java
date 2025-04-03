@@ -9,6 +9,7 @@ import ir.ninjacoder.ghostide.PluginManager.IntentHelper;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.RequestNetwork;
 import ir.ninjacoder.ghostide.RequestNetworkController;
+import ir.ninjacoder.ghostide.Store.StoreAcitvity;
 import ir.ninjacoder.ghostide.adapter.FileManagerAd;
 import ir.ninjacoder.ghostide.adapter.ViewType;
 import ir.ninjacoder.ghostide.compressor.TarGzExtractor;
@@ -462,6 +463,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     bind.navs.getMenu().add(0, 11, 0, "Apk Manager").setIcon(R.drawable.drawer_item3);
     bind.navs.getMenu().add(0, 12, 0, "About").setIcon(R.drawable.drawer_item11);
     bind.navs.getMenu().add(0, 13, 0, "Leave").setIcon(R.drawable.drawer_item1);
+    bind.navs.getMenu().add(0, 14, 0, "test");
     DrowerHandler();
   }
 
@@ -1754,6 +1756,11 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
             case 13:
               {
                 finishAffinity();
+                break;
+              }
+            case 14:
+              {
+                startActivity(new Intent(getApplicationContext(), StoreAcitvity.class));
                 break;
               }
           }
