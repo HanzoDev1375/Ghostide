@@ -127,10 +127,13 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
         GlideCompat.LoadSvg(myfile.toString(), viewHolder.icon);
       } else if (myfile.toString().endsWith(".apk")) {
         GlideCompat.LoadApkFile(myfile.toString(), viewHolder.icon);
-      } else if (myfile.toString().endsWith(".g4")) {
-        AmazonClassHelper.getScanAntlr4Grammer(viewHolder.icon, myfile.toString());
       } else if (myfile.toString().endsWith(".AA")) {
         GlideCompat.LoadIconTheme(myfile.toString(), viewHolder.icon);
+      } else if (myfile.toString().endsWith(".mp3")) {
+        GlideCompat.GlideLoadMp3(viewHolder.icon, myfile.toString());
+      } else if (myfile.toString().endsWith(".pdf")) {
+
+        GlideCompat.loadImgPdf(myfile.toString(), viewHolder.icon);
       }
 
     } else {
@@ -161,10 +164,12 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
           GlideCompat.LoadSvg(myfile.toString(), viewHolder.icon);
         } else if (myfile.toString().endsWith(".apk")) {
           GlideCompat.LoadApkFile(myfile.toString(), viewHolder.icon);
-        } else if (myfile.toString().endsWith(".g4")) {
-          AmazonClassHelper.getScanAntlr4Grammer(viewHolder.icon, myfile.toString());
         } else if (myfile.toString().endsWith(".AA")) {
           GlideCompat.LoadIconTheme(myfile.toString(), viewHolder.icon);
+        } else if (myfile.toString().endsWith(".mp3")) {
+          GlideCompat.GlideLoadMp3(viewHolder.icon, myfile.toString());
+        } else if (myfile.toString().endsWith(".pdf")) {
+          GlideCompat.loadImgPdf(myfile.toString(), viewHolder.icon);
         }
       }
     }

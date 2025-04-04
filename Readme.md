@@ -32,13 +32,6 @@
 - **[Telegram Group](https://t.me/ghost_web_ide)**
 - **[Telegram Channel](https://t.me/Ghostwebide)**
 
----
-
-### Participate in the program
-
-- To participate, due to the complexity of the program, sufficient knowledge is required, so if you understand Java well, you can participate in the program🥰♥
-- Dear friends who participate in the program, at least 10 commits, can use the source of the program in their own programs, such as Python and php and...🌹
-- It should be noted that the copyright of Ghostide is reserved and it is not necessary to mention that we appreciate you for participating in my program ❤🙏🏻
 
 ### Features
 

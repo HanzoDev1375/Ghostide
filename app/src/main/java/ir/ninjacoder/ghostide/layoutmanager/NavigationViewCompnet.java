@@ -57,15 +57,17 @@ public class NavigationViewCompnet extends NavigationView {
       var it = new GitHubProfileView(getContext(), icon, title, subtitle);
       icon.setOnClickListener(
           v -> {
-            icon.setOnLongClickListener(
-                v33 -> {
-                  new MaterialAlertDialogBuilder(getContext())
-                      .setTitle("Log out??")
-                      .setPositiveButton("yes", (r, __) -> it.logout())
-                      .show();
+            it.show();
+          });
 
-                  return false;
-                });
+      icon.setOnLongClickListener(
+          v33 -> {
+            new MaterialAlertDialogBuilder(getContext())
+                .setTitle("Log out??")
+                .setPositiveButton("yes", (r, __) -> it.logout())
+                .show();
+
+            return false;
           });
     } catch (Exception err) {
       Log.e("Error ", err.getMessage());

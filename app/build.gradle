@@ -140,6 +140,7 @@ dependencies {
     implementation("net.lingala.zip4j:zip4j:2.11.5")
     implementation("com.github.skydoves:powermenu:2.2.4")
     implementation("com.caverock:androidsvg:1.4")
+    annotationProcessor("com.github.bumptech.glide:compiler:5.0.0-rc01")
     implementation("com.github.bumptech.glide:avif-integration:5.0.0-rc01")
     implementation("com.github.bumptech.glide:recyclerview-integration:5.0.0-rc01")
     implementation("com.github.bumptech.glide:glide:5.0.0-rc01")

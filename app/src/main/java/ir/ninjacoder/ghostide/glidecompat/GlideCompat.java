@@ -3,6 +3,9 @@ package ir.ninjacoder.ghostide.glidecompat;
 import android.net.Uri;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.R;
+import ir.ninjacoder.ghostide.glidecompat.glideapk.ApkIconLoaderModel;
+import ir.ninjacoder.ghostide.glidecompat.musicglide.Mp3CoverModel;
+import ir.ninjacoder.ghostide.glidecompat.pdfglide.PdfModelView;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -13,15 +16,11 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PictureDrawable;
-import android.graphics.pdf.PdfRenderer;
 import android.media.MediaMetadataRetriever;
-import android.os.ParcelFileDescriptor;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.*;
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
-import com.blankj.utilcode.util.ThreadUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.MultiTransformation;
@@ -30,7 +29,6 @@ import com.google.android.material.color.MaterialColors;
 import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.ZipEntry;
@@ -74,51 +72,12 @@ public class GlideCompat {
   }
 
   public static void GlideLoadMp3(ImageView img, String path) {
-    Log.d("AlbumPic", "Path: " + path);
-
-    new Thread(
-            new Runnable() {
-              @Override
-              public void run() {
-                try {
-                  MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-                  retriever.setDataSource(path);
-                  final byte[] art = retriever.getEmbeddedPicture();
-
-                  ThreadUtils.runOnUiThread(
-                      new Runnable() {
-                        @Override
-                        public void run() {
-                          Log.d("AlbumPic", "Path: " + path);
-
-                          if (art != null && art.length > 0) {
-                            BitmapFactory.Options options = new BitmapFactory.Options();
-                            options.inSampleSize = 2; // Ajusta según sea necesario
-                            Bitmap bitmap =
-                                BitmapFactory.decodeByteArray(art, 0, art.length, options);
-                            Glide.with(img.getContext())
-                                .load(bitmap)
-                                .placeholder(CircelPrograssBar())
-                                .error(R.drawable.musico)
-                                .transform(new RoundedCornersTransformation(RenderSize()))
-                                .into(img);
-                          } else {
-                            img.setImageResource(R.drawable.musico);
-                          }
-                        }
-                      });
-                } catch (final Exception e) {
-                  ThreadUtils.runOnUiThread(
-                      new Runnable() {
-                        @Override
-                        public void run() {
-                          img.setImageResource(R.drawable.musico);
-                        }
-                      });
-                }
-              }
-            })
-        .start();
+    Glide.with(img.getContext())
+        .load(new Mp3CoverModel(path))
+        .placeholder(CircelPrograssBar())
+        .error(R.drawable.ic_material_audio)
+        .transform(new RoundedCornersTransformation(RenderSize()))
+        .into(img);
   }
 
   public static void GlideNormal(ImageView imageView, File path) {
@@ -203,31 +162,13 @@ public class GlideCompat {
     textView.setText(String.valueOf(imageWidth).concat("x".concat(String.valueOf(imageHeight))));
   }
 
-  public static void loadImgPdf(File file, ImageView imageView) throws IOException {
-    FileInputStream inputStream = new FileInputStream(file);
-    try {
-      ParcelFileDescriptor fileDescriptor = ParcelFileDescriptor.dup(inputStream.getFD());
-      Bitmap bitmap = pdfPageToBitmap(fileDescriptor);
-      Glide.with(imageView.getContext())
-          .load(bitmap)
-          .transform(new RoundedCornersTransformation(RenderSize()))
-          .placeholder(CircelPrograssBar())
-          .error(android.R.drawable.gallery_thumb)
-          .into(imageView);
-    } finally {
-      inputStream.close();
-    }
-  }
-
-  private static Bitmap pdfPageToBitmap(ParcelFileDescriptor fileDescriptor) throws IOException {
-    PdfRenderer renderer = new PdfRenderer(fileDescriptor);
-    PdfRenderer.Page page = renderer.openPage(0);
-    // create a new bitmap with the same dimensions as the page
-    Bitmap bitmap = Bitmap.createBitmap(page.getWidth(), page.getHeight(), Bitmap.Config.ARGB_8888);
-    page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
-    page.close();
-    renderer.close();
-    return bitmap;
+  public static void loadImgPdf(String path, ImageView img) {
+    Glide.with(img.getContext())
+        .load(new PdfModelView(path))
+        .placeholder(CircelPrograssBar())
+        .error(R.drawable.ic_material_pdf)
+        .transform(new RoundedCornersTransformation(RenderSize()))
+        .into(img);
   }
 
   public static void LoadVector(String path, ImageView c) {
@@ -248,13 +189,11 @@ public class GlideCompat {
   public static void LoadApkFile(String file, ImageView img) {
     try {
       Glide.with(img.getContext())
-          .load(getApkIcon(file, img.getContext()))
+          .load(new ApkIconLoaderModel(file))
           .error(R.drawable.ic_material_android)
           .transform(new RoundedCornersTransformation(RenderSize()))
           .placeholder(CircelPrograssBar())
           .into(img);
-      //      packageInfo = null;
-      //      packageManager = null;
     } catch (Exception err) {
       img.setImageResource(R.drawable.ic_material_android);
     }
@@ -279,24 +218,11 @@ public class GlideCompat {
 
   public static void LoadSvg(String path, ImageView c) {
     Glide.with(c.getContext())
-        .load(loadSvg(path))
+        .load(path)
         .error(R.drawable.errorxml)
-        //       .transform(new RoundedCornersTransformation(RenderSize()))
         .placeholder(CircelPrograssBar())
+        
         .into(c);
-  }
-
-  protected static Drawable loadSvg(String path) {
-    Drawable drawable = null;
-    try {
-      FileInputStream fileInputStream = new FileInputStream(new File(path));
-      SVG svg = SVG.getFromInputStream(fileInputStream);
-      drawable = new PictureDrawable(svg.renderToPicture());
-
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    return drawable;
   }
 
   public static void LoadIconTheme(String file, ImageView v) {
@@ -309,14 +235,7 @@ public class GlideCompat {
         .into(v);
   }
 
-  public static Drawable getApkIcon(final String _path, Context context) {
-    android.content.pm.PackageManager packageManager = context.getPackageManager();
-    android.content.pm.PackageInfo packageInfo = packageManager.getPackageArchiveInfo(_path, 0);
-    packageInfo.applicationInfo.sourceDir = _path;
-    packageInfo.applicationInfo.publicSourceDir = _path;
-    return (packageInfo.applicationInfo.loadIcon(packageManager));
-  }
-
+  
   public static void LoadIconVsCode(String file, ImageView img) {
     var mypath = "extension/icon.png";
 
@@ -372,22 +291,6 @@ public class GlideCompat {
         .error(R.drawable.ic_material_image)
         .priority(Priority.NORMAL)
         .into(img);
-  }
-
-  public static void LoadSvginString(String svgcode, ImageView icon) {
-    try {
-
-      SVG svg = SVG.getFromString(svgcode);
-      var draw = new PictureDrawable(svg.renderToPicture());
-      Glide.with(icon.getContext())
-          .load(draw)
-          .transform(new RoundedCornersTransformation(RenderSize()))
-          .error(R.drawable.greendraw)
-          .priority(Priority.NORMAL)
-          .into(icon);
-    } catch (Exception err) {
-
-    }
   }
 
   public static void LoadSvgInAsster(String input, ImageView img) {

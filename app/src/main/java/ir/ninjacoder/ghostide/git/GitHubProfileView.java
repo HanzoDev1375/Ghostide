@@ -53,6 +53,9 @@ public class GitHubProfileView {
             Toast.makeText(context, "Please enter your token", Toast.LENGTH_SHORT).show();
           }
         });
+  }
+
+  public void show() {
     edit.show();
   }
 
