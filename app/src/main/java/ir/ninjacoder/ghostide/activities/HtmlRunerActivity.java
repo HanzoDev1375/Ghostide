@@ -1,9 +1,11 @@
 package ir.ninjacoder.ghostide.activities;
 
 import android.transition.Explode;
+import com.google.common.reflect.TypeToken;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.ServerHost;
 import ir.ninjacoder.ghostide.databinding.HtmlrunerBinding;
+import ir.ninjacoder.ghostide.enums.ErudaThemeManager;
 import ir.ninjacoder.ghostide.enums.ErudaThemes;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.utils.FileUtil;
@@ -30,13 +32,13 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import io.github.rosemoe.sora.langs.loglang.LogLang;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class HtmlRunerActivity extends BaseCompat {
   protected ArrayList<HashMap<String, Object>> listLogJs = new ArrayList<>();
@@ -52,6 +54,7 @@ public class HtmlRunerActivity extends BaseCompat {
   private SharedPreferences saveThemeEruda;
   private ErudaThemes theme;
   protected HtmlrunerBinding bin;
+  private String js;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +62,7 @@ public class HtmlRunerActivity extends BaseCompat {
     getWindow().setExitTransition(new Explode());
     getWindow().setEnterTransition(new Explode());
     getWindow().setReenterTransition(new Explode());
-    super.onCreate(savedInstanceState); 
+    super.onCreate(savedInstanceState);
     bin = HtmlrunerBinding.inflate(getLayoutInflater());
     setContentView(bin.getRoot());
     findAndMatchIdInview();
@@ -431,32 +434,143 @@ public class HtmlRunerActivity extends BaseCompat {
     Toast.makeText(getApplicationContext(), _s, Toast.LENGTH_SHORT).show();
   }
 
-  public void reloadConsoleJs() {
+  void reloadConsoleJs() {
     String erudaPath = "file:///android_asset/eruda.js";
-    String themeName = theme.getThemeName();
-    String js =
-        "(function(){"
-            + "var script = document.createElement('script');"
-            + "script.src = '"
-            + erudaPath
-            + "';"
-            + "document.body.appendChild(script);"
-            + "eruda.init({"
-            + "\n"
-            + "    defaults: {"
-            + "\n"
-            + "displaySize: 77,"
-            + "\n"
-            + "transparency: 1,"
-            + "\n"
-            + "theme: '"
-            + themeName
-            + "'"
-            + "\n"
-            + "}"
-            + "\n"
-            + "});"
-            + "})();";
+    ErudaThemes theme = ErudaThemeManager.getCurrentTheme(this);
+    Map<String, String> mapcolor =
+        new Gson()
+            .fromJson(
+                FileUtil.readFile("/storage/emulated/0/GhostWebIDE/theme/erudatheme.json"),
+                new TypeToken<Map<String, String>>() {}.getType());
+    boolean isThemeFile =
+        FileUtil.isExistFile("/storage/emulated/0/GhostWebIDE/theme/erudatheme.json");
+    if (theme == ErudaThemes.GHOST) {
+      if (isThemeFile)
+        js =
+            "(function(){"
+                + "var script = document.createElement('script');"
+                + "script.src = '"
+                + erudaPath
+                + "';"
+                + "document.body.appendChild(script);"
+                + "eruda.init({"
+                + "    defaults: {"
+                + "        displaySize: 77,"
+                + "        transparency: 1,"
+                + "    }"
+                + "});"
+                + "eruda.util.evalCss.setTheme({"
+                + "    consoleWarnBackground: '"
+                + mapcolor.get("erudaconsoleWarnBackground")
+                + "',"
+                + "    consoleWarnForeground: '"
+                + mapcolor.get("erudaconsoleWarnForeground")
+                + "',"
+                + "    consoleWarnBorder: '"
+                + mapcolor.get("erudaconsoleWarnBorder")
+                + "',"
+                + "    consoleErrorBackground: '"
+                + mapcolor.get("erudaconsoleErrorBackground")
+                + "',"
+                + "    consoleErrorForeground: '"
+                + mapcolor.get("erudaconsoleErrorForeground")
+                + "',"
+                + "    consoleErrorBorder: '"
+                + mapcolor.get("erudaconsoleErrorBorder")
+                + "',"
+                + "    light: '"
+                + mapcolor.get("erudalight")
+                + "',"
+                + "    dark: '"
+                + mapcolor.get("erudadark")
+                + "',"
+                + "    darkerBackground: '"
+                + mapcolor.get("erudadarkerBackground")
+                + "',"
+                + "    background: '"
+                + mapcolor.get("erudabackground")
+                + "',"
+                + "    foreground: '"
+                + mapcolor.get("erudaforeground")
+                + "',"
+                + "    selectForeground: '"
+                + mapcolor.get("erudaselectForeground")
+                + "',"
+                + "    accent: '"
+                + mapcolor.get("erudaaccent")
+                + "',"
+                + "    highlight: '"
+                + mapcolor.get("erudahighlight")
+                + "',"
+                + "    border: '"
+                + mapcolor.get("erudaborder")
+                + "',"
+                + "    primary: '"
+                + mapcolor.get("erudaprimary")
+                + "',"
+                + "    contrast: '"
+                + mapcolor.get("erudacontrast")
+                + "',"
+                + "    varColor: '"
+                + mapcolor.get("erudavarColor")
+                + "',"
+                + "    stringColor: '"
+                + mapcolor.get("erudastringColor")
+                + "',"
+                + "    keywordColor: '"
+                + mapcolor.get("erudakeywordColor")
+                + "',"
+                + "    numberColor: '"
+                + mapcolor.get("erudanumberColor")
+                + "',"
+                + "    operatorColor: '"
+                + mapcolor.get("erudaoperatorColor")
+                + "',"
+                + "    linkColor: '"
+                + mapcolor.get("erudalinkColor")
+                + "',"
+                + "    textColor: '"
+                + mapcolor.get("erudatextColor")
+                + "',"
+                + "    tagNameColor: '"
+                + mapcolor.get("erudatagNameColor")
+                + "',"
+                + "    functionColor: '"
+                + mapcolor.get("erudafunctionColor")
+                + "',"
+                + "    attributeNameColor: '"
+                + mapcolor.get("erudaattributeNameColor")
+                + "',"
+                + "    commentColor: '"
+                + mapcolor.get("erudacommentColor")
+                + "',"
+                + "    cssProperty: '"
+                + mapcolor.get("erudacssProperty")
+                + "'"
+                + "});"
+                + "})();";
+    } else if (theme == ErudaThemes.MATERIALTHEMES) {
+      js = ObjectUtils.loadErudaMaterial3(bin.web);
+    } else {
+      js =
+          "(function(){"
+              + "var script = document.createElement('script');"
+              + "script.src = '"
+              + erudaPath
+              + "';"
+              + "document.body.appendChild(script);"
+              + "eruda.init({"
+              + "    defaults: {"
+              + "        displaySize: 77,"
+              + "        transparency: 1,"
+              + "        theme: '"
+              + theme.getThemeName()
+              + "'"
+              + "    }"
+              + "});"
+              + "})();";
+    }
+
     bin.web.post(() -> bin.web.loadUrl("javascript:" + js));
   }
 

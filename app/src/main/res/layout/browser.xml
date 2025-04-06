@@ -1,70 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:id="@+id/_coordinator">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:id="@+id/_coordinator">
 
     <com.google.android.material.appbar.AppBarLayout
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:fitsSystemWindows="true"
-            android:theme="@style/AppTheme.AppBarOverlay"
-            android:id="@+id/appbar">
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:fitsSystemWindows="true"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:id="@+id/appbar">
 
         <com.google.android.material.appbar.MaterialToolbar
-                android:layout_height="?attr/actionBarSize"
-                android:layout_width="match_parent"
-                android:id="@+id/toolbar"/>
+            android:layout_height="?attr/actionBarSize"
+            android:layout_width="match_parent"
+            android:id="@+id/toolbar" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:id="@+id/browers_main_layout">
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/browers_main_layout">
 
             <ProgressBar
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:indeterminate="true"
-                    style="?android:progressBarStyleHorizontal"
-                    android:id="@+id/bar"/>
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:indeterminate="true"
+                style="?android:progressBarStyleHorizontal"
+                android:id="@+id/bar" />
 
-            <ir.ninjacoder.ghostide.layoutmanager.WebViewCompatGhostWeb
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:id="@+id/myweb"/>
+            <WebView
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:id="@+id/myweb" />
 
             <LinearLayout
-                    android:layout_height="match_parent"
-                    android:layout_width="match_parent"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:padding="10dp"
-                    android:orientation="vertical"
-                    android:id="@+id/emptyView">
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical|center_horizontal"
+                android:padding="10dp"
+                android:orientation="vertical"
+                android:id="@+id/emptyView">
 
                 <ImageView
-                        android:layout_height="80dp"
-                        android:layout_width="80dp"
-                        android:src="@drawable/web"
-                        android:scaleType="fitXY"
-                        android:layout_margin="10dp"
-                        android:tint="?@attr/colorPrimary"/>
+                    android:layout_height="80dp"
+                    android:layout_width="80dp"
+                    android:src="@drawable/web"
+                    android:scaleType="fitXY"
+                    android:layout_margin="10dp"
+                    android:tint="?@attr/colorPrimary" />
 
                 <TextView
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:textSize="16sp"
-                        android:text="You Oflline!"
-                        android:textStyle="bold"/>
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:textSize="16sp"
+                    android:text="You Oflline!"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 

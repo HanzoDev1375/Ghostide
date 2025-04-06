@@ -2,6 +2,9 @@ package ir.ninjacoder.ghostide.activities;
 
 import android.os.Handler;
 import android.transition.Explode;
+import com.blankj.utilcode.util.FileIOUtils;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import ir.ninjacoder.ghostide.marco.WallpaperParallaxEffect;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.utils.FileUtil;
@@ -377,6 +380,46 @@ public class BaseCompat extends AppCompatActivity {
 
   public void ThemeChaker() {
     try {
+
+      var themeeuda =
+          """
+            {
+        "erudaconsoleWarnBackground": "#1C1B1F",
+        "erudaconsoleWarnForeground": "#FFD8E4",
+        "erudaconsoleWarnBorder": "#3A2E3A",
+        "erudaconsoleErrorBackground": "#31111D",
+        "erudaconsoleErrorForeground": "#FFB4AB",
+        "erudaconsoleErrorBorder": "#3A2E3A",
+        "erudalight": "#E6E0E9",
+        "erudadark": "#1C1B1F",
+        "erudadarkerBackground": "#141218",
+        "erudabackground": "#1C1B1F",
+        "erudaforeground": "#E6E0E9",
+        "erudaselectForeground": "#E6E0E9",
+        "erudaaccent": "#D0BCFF",
+        "erudahighlight": "#36343B",
+        "erudaborder": "#49454F",
+        "erudaprimary": "#D0BCFF",
+        "erudacontrast": "#141218",
+        "erudavarColor": "#EFB8C8",
+        "erudastringColor": "#9ADBA0",
+        "erudakeywordColor": "#D0BCFF",
+        "erudanumberColor": "#F5BDE6",
+        "erudaoperatorColor": "#A8A8A8",
+        "erudalinkColor": "#9ADBA0",
+        "erudatextColor": "#E6E0E9",
+        "erudatagNameColor": "#D0BCFF",
+        "erudafunctionColor": "#E6E0E9",
+        "erudaattributeNameColor": "#EFB8C8",
+        "erudacommentColor": "#7A7A7A",
+        "erudacssProperty": "#EFB8C8"
+        }
+        """;
+      if (!FileUtil.isExistFile("/storage/emulated/0/GhostWebIDE/theme/erudatheme.json")) {
+        
+        FileIOUtils.writeFileFromString(
+            "/storage/emulated/0/GhostWebIDE/theme/erudatheme.json", themeeuda);
+      }
       if (!FileUtil.isExistFile(ThemePath)) {
         ThemeUtils.winterToPath();
         Toast.makeText(getApplicationContext(), "Theme the Maket in " + ThemePath.trim(), 2).show();

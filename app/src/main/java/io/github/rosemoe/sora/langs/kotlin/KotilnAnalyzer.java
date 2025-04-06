@@ -296,9 +296,13 @@ public class KotilnAnalyzer implements CodeAnalyzer {
                 isbold = true;
                 color = EditorColorScheme.javafield;
               }
-              if(token.getText().equals("main")){
+              if (token.getText().equals("main")) {
                 isbold = true;
                 color = EditorColorScheme.javafun;
+              }
+              // this for ninja lang
+              if (token.getText().equals("runAsUi")) {
+                color = EditorColorScheme.red;
               }
 
               result.addIfNeeded(

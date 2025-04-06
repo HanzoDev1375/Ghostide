@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.os.Environment;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.webkit.WebView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import android.content.pm.PackageManager;
@@ -372,6 +373,130 @@ public class ObjectUtils {
 
   static int get(int color, IdeEditor editor) {
     return MaterialColors.getColor(editor, color);
+  }
+
+  static int getweb(int color, WebView v) {
+    return MaterialColors.getColor(v, color);
+  }
+
+  public static String loadErudaMaterial3(WebView v) {
+    int colorPrimary = R.attr.colorPrimary;
+    int colorOnPrimary = R.attr.colorOnPrimary;
+    int colorPrimaryContainer = R.attr.colorPrimaryContainer;
+    int colorPrimaryFixed = R.attr.colorPrimaryFixed;
+    int colorPrimaryFixedDim = R.attr.colorPrimaryFixedDim;
+    int colorSecondary = R.attr.colorSecondary;
+    int colorOnSecondary = R.attr.colorOnSecondary;
+    int colorSecondaryFixed = R.attr.colorSecondaryFixed;
+    int colorSecondaryFixedDim = R.attr.colorSecondaryFixedDim;
+    int colorTertiary = R.attr.colorTertiary;
+    int colorSurfaces = R.attr.colorSurface;
+    int colorOnTertiaryContainer = R.attr.colorOnTertiaryContainer;
+    int colorOnTertiaryFixedVariant = R.attr.colorOnTertiaryFixedVariant;
+    int colorTertiaryFixedDim = R.attr.colorTertiaryFixedDim;
+    String erudaPath = "file:///android_asset/eruda.js";
+    return "(function(){"
+        + "var script = document.createElement('script');"
+        + "script.src = '"
+        + erudaPath
+        + "';"
+        + "document.body.appendChild(script);"
+        + "eruda.init({"
+        + "    defaults: {"
+        + "        displaySize: 77,"
+        + "        transparency: 1,"
+        + "    }"
+        + "});"
+        + "eruda.util.evalCss.setTheme({"
+        + "    consoleWarnBackground: '"
+        + getweb(colorPrimary, v)
+        + "',"
+        + "    consoleWarnForeground: '"
+        + getweb(colorOnPrimary, v)
+        + "',"
+        + "    consoleWarnBorder: '"
+        + getweb(colorPrimaryContainer, v)
+        + "',"
+        + "    consoleErrorBackground: '"
+        + getweb(colorSecondary, v)
+        + "',"
+        + "    consoleErrorForeground: '"
+        + getweb(colorOnSecondary, v)
+        + "',"
+        + "    consoleErrorBorder: '"
+        + getweb(colorSecondaryFixed, v)
+        + "',"
+        + "    light: '"
+        + getweb(colorPrimaryFixed, v)
+        + "',"
+        + "    dark: '"
+        + getweb(colorPrimaryFixedDim, v)
+        + "',"
+        + "    darkerBackground: '"
+        + getweb(colorSecondaryFixedDim, v)
+        + "',"
+        + "    background: '"
+        + getweb(colorTertiary, v)
+        + "',"
+        + "    foreground: '"
+        + getweb(colorSurfaces, v)
+        + "',"
+        + "    selectForeground: '"
+        + getweb(colorOnTertiaryContainer, v)
+        + "',"
+        + "    accent: '"
+        + getweb(colorOnTertiaryFixedVariant, v)
+        + "',"
+        + "    highlight: '"
+        + getweb(colorTertiaryFixedDim, v)
+        + "',"
+        + "    border: '"
+        + getweb(colorPrimary, v)
+        + "',"
+        + "    primary: '"
+        + getweb(colorOnPrimary, v)
+        + "',"
+        + "    contrast: '"
+        + getweb(colorPrimaryContainer, v)
+        + "',"
+        + "    varColor: '"
+        + getweb(colorPrimaryFixed, v)
+        + "',"
+        + "    stringColor: '"
+        + getweb(colorPrimaryFixedDim, v)
+        + "',"
+        + "    keywordColor: '"
+        + getweb(colorSecondary, v)
+        + "',"
+        + "    numberColor: '"
+        + getweb(colorOnSecondary, v)
+        + "',"
+        + "    operatorColor: '"
+        + getweb(colorSecondaryFixed, v)
+        + "',"
+        + "    linkColor: '"
+        + getweb(colorSecondaryFixedDim, v)
+        + "',"
+        + "    textColor: '"
+        + getweb(colorTertiary, v)
+        + "',"
+        + "    tagNameColor: '"
+        + getweb(colorSurfaces, v)
+        + "',"
+        + "    functionColor: '"
+        + getweb(colorOnTertiaryContainer, v)
+        + "',"
+        + "    attributeNameColor: '"
+        + getweb(colorOnTertiaryFixedVariant, v)
+        + "',"
+        + "    commentColor: '"
+        + getweb(colorTertiaryFixedDim, v)
+        + "',"
+        + "    cssProperty: '"
+        + getweb(colorPrimary, v)
+        + "'"
+        + "});"
+        + "})();";
   }
 
   public static void tryToRunThemeMaterial(IdeEditor editor) {

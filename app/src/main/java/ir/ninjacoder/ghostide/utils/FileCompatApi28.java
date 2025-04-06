@@ -13,7 +13,7 @@ public class FileCompatApi28 {
     ShowBar(bar, true);
 
     ThreadUtils.executeByIo(
-        new ThreadUtils.Task<String>() {
+        new ThreadUtils.SimpleTask<String>() {
 
           @Override
           public void onSuccess(String result) {

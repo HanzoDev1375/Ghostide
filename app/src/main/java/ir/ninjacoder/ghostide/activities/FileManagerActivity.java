@@ -1162,7 +1162,9 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     if (staticstring.endsWith(".py")) {
       SendDataFromCodeEditor(newpos, "path", files, newlistmap);
     }
-
+    if (staticstring.endsWith(".class")) {
+      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+    }
     if (staticstring.endsWith(".ghost")) {
       /// SendDataFromCodeEditor(newpos, "path", files, newlistmap);
       var it = new Intent();

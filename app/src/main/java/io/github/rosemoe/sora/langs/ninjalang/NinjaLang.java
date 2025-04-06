@@ -6,8 +6,10 @@ import io.github.rosemoe.sora.interfaces.EditorLanguage;
 import io.github.rosemoe.sora.interfaces.NewlineHandler;
 import io.github.rosemoe.sora.langs.internal.MyCharacter;
 import io.github.rosemoe.sora.langs.kotlin.KotilnAnalyzer;
+import io.github.rosemoe.sora.langs.kotlin.KotilnAutoText;
 import io.github.rosemoe.sora.langs.kotlin.KotlinLexer;
 
+import io.github.rosemoe.sora.langs.ninjalang.server.ServerHot;
 import java.io.StringReader;
 
 import org.antlr.v4.runtime.CharStreams;
@@ -33,7 +35,9 @@ public class NinjaLang implements EditorLanguage {
 
   @Override
   public AutoCompleteProvider getAutoCompleteProvider() {
-    return new NinjaAuto();
+      var ninjaorator = new KotilnAutoText();
+      ninjaorator.setKeywords(ServerHot.keys);
+    return ninjaorator;
   }
 
   @Override

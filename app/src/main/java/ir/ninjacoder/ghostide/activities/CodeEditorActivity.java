@@ -765,7 +765,9 @@ public class CodeEditorActivity extends BaseCompat {
           String selectedFilePath = tabs_listmap.get(selectedTabPosition).get("path").toString();
           Toast.makeText(this, selectedFilePath, 2).show();
           String fileContent = editor.getText().toString();
-          FileUtil.writeFile(selectedFilePath, fileContent);
+          if (selectedFilePath.endsWith(".class")) {
+            FileUtil.writeFile(selectedFilePath.replace(".class", ".java"), fileContent);
+          } else FileUtil.writeFile(selectedFilePath, fileContent);
           ClickItemChildAnimation(editor);
           EditorUtil.savecursor(editor, this, savecursor);
         }
@@ -1011,6 +1013,7 @@ public class CodeEditorActivity extends BaseCompat {
             (dialog, which) -> {
               tablayouteditor.removeTabAt(position);
               tabs_listmap.remove(position);
+              setCloseother();
             })
         .setNegativeButton(
             "تلاش مجدد",

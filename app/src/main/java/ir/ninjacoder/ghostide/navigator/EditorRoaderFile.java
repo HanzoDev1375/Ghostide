@@ -1,8 +1,10 @@
 package ir.ninjacoder.ghostide.navigator;
 
+import com.blankj.utilcode.util.ThreadUtils;
 import io.github.rosemoe.sora.langs.glsllang.GLSLLang;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.utils.FileCompatApi28;
+import ir.ninjacoder.ghostide.utils.FileUtil;
 import ir.ninjacoder.ghostide.widget.ExrtaFab;
 import android.widget.ProgressBar;
 import io.github.rosemoe.sora.langs.Javacc.JavaccLang;
@@ -32,6 +34,14 @@ import io.github.rosemoe.sora.langs.svg.SvgLang;
 import io.github.rosemoe.sora.langs.universal.UniversalLanguage;
 import io.github.rosemoe.sora.langs.xml.XMLLanguage;
 import io.github.rosemoe.sora.widget.CodeEditor;
+import java.io.File;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Collections;
+import org.benf.cfr.reader.api.CfrDriver;
+import org.benf.cfr.reader.api.OutputSinkFactory;
+import org.benf.cfr.reader.api.SinkReturns;
 
 /*
  * <p> this class Work Reload is Lang files  </p>
@@ -177,6 +187,33 @@ public class EditorRoaderFile {
       editor.setEditorLanguage(scssLang);
       _fab.postDelayed(_fab::show, 400);
       ReadFileCompat(editor, _path, bar);
+    } else if (_path.endsWith(".class")) {
+      editor.setEditorLanguage(new JavaLanguage(editor));
+      _fab.postDelayed(_fab::show, 400);
+      ThreadUtils.executeByIo(
+          new ThreadUtils.SimpleTask<String>() {
+
+            @Override
+            public void onFail(Throwable arg0) {
+              super.onFail(arg0);
+            }
+
+            @Override
+            public void onSuccess(String arg0) {
+              editor.setText(arg0);
+            }
+
+            @Override
+            public void onCancel() {
+              super.onCancel();
+            }
+
+            @Override
+            public String doInBackground() {
+              return decompileClass(new File(_path));
+            }
+          });
+
     } else _fab.postDelayed(_fab::hide, 400);
   }
 
@@ -185,6 +222,54 @@ public class EditorRoaderFile {
       FileCompatApi28.readFile(path, bar, editor);
     } catch (Throwable e) {
       editor.setText(e.toString());
+    }
+  }
+
+  private static String decompileClass(File classFile) {
+    final StringBuilder result = new StringBuilder();
+
+    if (!classFile.exists()) {
+      return "فایل یافت نشد!";
+    }
+
+    try {
+      CfrDriver driver =
+          new CfrDriver.Builder()
+              .withOutputSink(
+                  new OutputSinkFactory() {
+                    @Override
+                    public List<SinkClass> getSupportedSinks(
+                        SinkType sinkType, Collection<SinkClass> collection) {
+                      return Collections.singletonList(SinkClass.DECOMPILED);
+                    }
+
+                    @Override
+                    public <T> Sink<T> getSink(SinkType sinkType, SinkClass sinkClass) {
+                      return value -> {
+                        if (value instanceof SinkReturns.Decompiled) {
+                          String code = ((SinkReturns.Decompiled) value).getJava();
+                          result.append(code).append("\n"); // اضافه کردن خط جدید
+                        }
+                      };
+                    }
+                  })
+              .withOptions(
+                  Map.of(
+                      "showversion", "false",
+                      "comments", "false",
+                      "decodefinally", "true" // اضافه کردن برای بهبود خروجی
+                      ))
+              .build();
+
+      driver.analyse(Collections.singletonList(classFile.getAbsolutePath()));
+
+      return result
+          .toString()
+          .replace("Decompiled with CFR", "")
+          .replaceAll("\\*\\s+\\.", ""); 
+
+    } catch (Exception e) {
+      return  e.getLocalizedMessage(); 
     }
   }
 }

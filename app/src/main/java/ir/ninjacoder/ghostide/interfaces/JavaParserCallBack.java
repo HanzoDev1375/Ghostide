@@ -1,5 +1,5 @@
 package ir.ninjacoder.ghostide.interfaces;
 
-public interface JavaClassPaster {
+public interface JavaParserCallBack {
   void past();
 }

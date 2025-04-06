@@ -161,6 +161,15 @@
                      android:layout_height="wrap_content"
                      android:layout_width="match_parent"
                      android:layout_marginEnd="8dp"
+                     app:modBackground="middle"
+                     android:layout_marginTop="4dp"
+                     android:layout_marginStart="8dp"
+                     android:id="@+id/erudathemes" />
+
+                <ir.ninjacoder.prograsssheet.perfence.PerfenceLayoutSubTitle
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:layout_marginEnd="8dp"
                      app:modBackground="bottom"
                      android:layout_marginTop="4dp"
                      android:layout_marginStart="8dp"
@@ -171,6 +180,9 @@
             <androidx.recyclerview.widget.RecyclerView
                  android:layout_height="wrap_content"
                  android:layout_width="match_parent"
+                 android:layout_marginEnd="8dp"
+                 android:layout_marginTop="4dp"
+                 android:layout_marginStart="8dp"
                  android:id="@+id/rvsetting" />
 
         </LinearLayout>

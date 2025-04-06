@@ -2,7 +2,6 @@ package ir.ninjacoder.ghostide.activities;
 
 import ir.ninjacoder.ghostide.NetworkChangeReceiver;
 import ir.ninjacoder.ghostide.R;
-import ir.ninjacoder.ghostide.layoutmanager.WebViewCompatGhostWeb;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import android.content.IntentFilter;
 import android.content.res.ColorStateList;
@@ -25,7 +24,7 @@ import com.google.android.material.color.MaterialColors;
 public class BrowserActivity extends BaseCompat implements NetworkChangeReceiver.CallBackNetWork {
   protected LinearLayout layout1, emptyView;
   protected ProgressBar bar;
-  protected WebViewCompatGhostWeb view;
+  protected WebView view;
   protected AppBarLayout appbar;
   protected MaterialToolbar toolbar;
   

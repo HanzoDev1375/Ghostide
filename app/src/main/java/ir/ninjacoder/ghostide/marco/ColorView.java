@@ -11,7 +11,7 @@ import ir.ninjacoder.ghostide.activities.BrowserActivity;
 import ir.ninjacoder.ghostide.adapter.ColorRenderAdapter;
 import ir.ninjacoder.ghostide.adapter.JavaASmailAd;
 import ir.ninjacoder.ghostide.config.ChlidJavaList;
-import ir.ninjacoder.ghostide.interfaces.JavaClassPaster;
+import ir.ninjacoder.ghostide.interfaces.JavaParserCallBack;
 import ir.ninjacoder.ghostide.model.JavaModel;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.utils.FileUtil;
@@ -453,7 +453,7 @@ public class ColorView {
     }
   }
 
-  static void renameJavaFile(String oldFilePath, String newFilePath, JavaClassPaster classPast) {
+  static void renameJavaFile(String oldFilePath, String newFilePath, JavaParserCallBack classPast) {
     if (!oldFilePath.endsWith(".java") || !newFilePath.endsWith(".java")) {
       Log.w("File not Found ", "this file not java");
       return;
@@ -489,7 +489,7 @@ public class ColorView {
   }
 
   public static void renameJavaFileImpl(
-      Context context, String fileInput, String output, JavaClassPaster past) {
+      Context context, String fileInput, String output, JavaParserCallBack past) {
     MakefolderBinding binding = MakefolderBinding.inflate(LayoutInflater.from(context));
     binding.editor.setText(""); // Reset the text editor if necessary
 

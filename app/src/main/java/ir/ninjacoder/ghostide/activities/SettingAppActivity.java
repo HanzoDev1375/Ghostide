@@ -5,10 +5,11 @@ import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.adapter.ListAppIconAd;
 import ir.ninjacoder.ghostide.config.AppIconManager;
 import ir.ninjacoder.ghostide.config.PrfnsUtil;
-import ir.ninjacoder.ghostide.config.SwitchMaterialPrf;
+import ir.ninjacoder.ghostide.enums.ErudaThemeManager;
+import ir.ninjacoder.ghostide.enums.ErudaThemes;
+import java.util.Arrays;
 import ir.ninjacoder.ghostide.filehelper.IconCursorImpl;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
-import ir.ninjacoder.ghostide.utils.DataUtil;
 import ir.ninjacoder.ghostide.widget.GhostWebMaterialDialog;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
@@ -20,17 +21,11 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowInsets;
-import android.view.WindowManager;
 import android.widget.*;
-import androidx.appcompat.app.AlertDialog;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -40,12 +35,9 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import com.google.android.material.textfield.TextInputLayout;
 import com.quickersilver.themeengine.ThemeChooserDialogBuilder;
 import com.quickersilver.themeengine.ThemeEngine;
 import com.quickersilver.themeengine.ThemeMode;
-import dev.trindadedev.lib.ui.components.preference.adapter.ItemLayoutAdapterMod;
-import dev.trindadedev.lib.ui.components.preference.adapter.LayoutModel;
 import ir.ninjacoder.prograsssheet.LayoutSheetEditText;
 import ir.ninjacoder.prograsssheet.perfence.PerfenceLayoutSubTitle;
 import ir.ninjacoder.prograsssheet.perfence.PreferenceSwitchGroup;
@@ -98,7 +90,7 @@ public class SettingAppActivity extends BaseCompat {
       gridMode,
       Analyzercod,
       iconSpash;
-  private PerfenceLayoutSubTitle themecustom, blurmod, windowsize;
+  private PerfenceLayoutSubTitle themecustom, blurmod, windowsize, erudathemes;
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
@@ -132,7 +124,7 @@ public class SettingAppActivity extends BaseCompat {
     themeEngine.applyToActivity(this);
     bar = findViewById(R.id.bar);
     breaklevelmodel = findViewById(R.id.breaklevelmodel);
-
+    erudathemes = findViewById(R.id.erudathemes);
     getvb = getSharedPreferences("getvb", Activity.MODE_PRIVATE);
     getDrak = getSharedPreferences("getDrak", Activity.MODE_PRIVATE);
     war = getSharedPreferences("war", Activity.MODE_PRIVATE);
@@ -173,7 +165,8 @@ public class SettingAppActivity extends BaseCompat {
     autoSaveText.setDescription(getString(R.string.autoSaveText_description));
     breaklevelmodel.setTitle("BreakLevelModel");
     breaklevelmodel.setDescription("setBreakLevelModel Live Style");
-
+    erudathemes.setTitle("Eruda theme");
+    erudathemes.setDescription("Custom theme Eruda");
     _toolbar.setOnApplyWindowInsetsListener(
         new View.OnApplyWindowInsetsListener() {
           @Override
@@ -195,6 +188,9 @@ public class SettingAppActivity extends BaseCompat {
         v -> {
           customDataRow(
               "Custom Theme", "Select Theme in format .ghost", "themes", thememanagersoft);
+        });
+        erudathemes.setOnClickListener(v ->{
+            showthemeeruda();
         });
     blurmod.setOnClickListener(c -> _blursize());
     windowsize.setOnClickListener(
@@ -746,5 +742,24 @@ public class SettingAppActivity extends BaseCompat {
           sheet.dismiss();
         });
     sheet.show();
+  }
+
+  void showthemeeruda() {
+    ErudaThemes currentTheme = ErudaThemeManager.getCurrentTheme(this);
+    String[] themeNames = ErudaThemes.getAllThemeNames();
+    int currentIndex = Arrays.asList(themeNames).indexOf(currentTheme.getThemeName());
+
+    new MaterialAlertDialogBuilder(this)
+        .setTitle("select theme eruda")
+        .setSingleChoiceItems(
+            themeNames,
+            currentIndex,
+            (dialog, which) -> {
+              ErudaThemes selectedTheme = ErudaThemes.values()[which];
+              ErudaThemeManager.saveTheme(SettingAppActivity.this, selectedTheme);
+              
+            })
+        .setNegativeButton(android.R.string.ok, null)
+        .show();
   }
 }

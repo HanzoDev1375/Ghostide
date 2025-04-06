@@ -11,9 +11,13 @@ public enum ErudaThemes {
   ARC_DARK("Arc Dark"),
   ATOM_ONE_DARK("Atom One Dark"),
   SOLARIZED_DARK("Solarized Dark"),
-  NIGHT_OWL("Night Owl");
+  NIGHT_OWL("Night Owl"),
+  AMOLED("AMOLED"),
+  // custom
+  GHOST("Custom theme"),
+  MATERIALTHEMES("material3 theme android");
 
-  private String themeName = "Dark";
+  private final String themeName;
 
   ErudaThemes(String themeName) {
     this.themeName = themeName;
@@ -21,5 +25,23 @@ public enum ErudaThemes {
 
   public String getThemeName() {
     return themeName;
+  }
+
+  public static ErudaThemes fromString(String text) {
+    for (ErudaThemes theme : ErudaThemes.values()) {
+      if (theme.themeName.equalsIgnoreCase(text)) {
+        return theme;
+      }
+    }
+    return DARK;
+  }
+
+  public static String[] getAllThemeNames() {
+    ErudaThemes[] themes = values();
+    String[] names = new String[themes.length];
+    for (int i = 0; i < themes.length; i++) {
+      names[i] = themes[i].getThemeName();
+    }
+    return names;
   }
 }

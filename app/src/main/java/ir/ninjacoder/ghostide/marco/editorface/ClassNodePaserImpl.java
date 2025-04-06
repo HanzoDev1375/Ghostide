@@ -1,7 +1,7 @@
 package ir.ninjacoder.ghostide.marco.editorface;
 
 import ir.ninjacoder.ghostide.databinding.MakefolderBinding;
-import ir.ninjacoder.ghostide.interfaces.JavaClassPaster;
+import ir.ninjacoder.ghostide.interfaces.JavaParserCallBack;
 import ir.ninjacoder.ghostide.marco.editorface.ClassNodePaser;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import android.content.Context;
@@ -33,11 +33,11 @@ public class ClassNodePaserImpl {
   protected MakefolderBinding bind;
   protected String path;
   private Context context;
-  private JavaClassPaster paster;
+  private JavaParserCallBack paster;
   private View view;
   private ModeUser mode = ModeUser.DIALOG;
 
-  public ClassNodePaserImpl(String path, Context context, JavaClassPaster paster, View view) {
+  public ClassNodePaserImpl(String path, Context context, JavaParserCallBack paster, View view) {
     this.path = path;
     this.context = context;
     this.paster = paster;
