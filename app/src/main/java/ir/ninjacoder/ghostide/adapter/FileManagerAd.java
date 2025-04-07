@@ -175,14 +175,10 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
         }
       }
     }
-    if (!filteredFiles.get(pos).containsKey("select")
-        || filteredFiles.get(pos).get("select") == null) {
-      filteredFiles.get(pos).put("select", false);
-    }
+    
+    
     viewHolder.itemView.setClickable(true);
-    Boolean isSelected = (Boolean) filteredFiles.get(pos).get("select");
-    viewHolder.box.setChecked(isSelected != null ? isSelected : false);
-    viewHolder.box.setVisibility(isSelectionMode ? View.VISIBLE : View.GONE);
+    
   }
 
   @NonNull
@@ -287,34 +283,22 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
 
       roots.setOnClickListener(
           c -> {
-            int position = getBindingAdapterPosition();
-            if (position != RecyclerView.NO_POSITION) {
-              if (!isSelectionMode) { // فقط اگر در حالت انتخاب نیستیم کلیک عادی انجام شود
-                click.onClick(c, position);
+                       click.onClick(c, position);
                 AnimUtils.ClickAnimation(itemView);
-              }
-            }
+              
+            
           });
 
       roots.setOnLongClickListener(
           v -> {
-            int position = getBindingAdapterPosition();
-            if (position != RecyclerView.NO_POSITION) {
-              isSelectionMode = !isSelectionMode;
-              notifyDataSetChanged();
+            
               click.onLongClick(v,position);
               return true;
-            }
-            return false;
+            
+            
           });
 
-      box.setOnClickListener(
-          v -> {
-            int position = getBindingAdapterPosition();
-            if (position != RecyclerView.NO_POSITION && position < filteredFiles.size()) {
-              filteredFiles.get(position).put("select", box.isChecked());
-            }
-          });
+      
     }
   }
 

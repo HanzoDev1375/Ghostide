@@ -111,11 +111,11 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
   private String CreateFolder = "";
   private String GetTab = "";
   private String tab = "";
-  private double n = 0;
+  private int n = 0;
   private ProjectMaker projectMaker;
   private double positionTabs = 0;
   protected SharedPreferences gridMode;
-  private boolean Chack = false;
+  
   private boolean staticStorage = false;
   private String version = "";
   private double post = 0;
@@ -2081,20 +2081,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
 
   @Override
   public void onLongClick(View view, int pos) {
-    // setItemSheetOld(pos, view);
-    bind.viewChild.setVisibility(View.VISIBLE);
-    bind.mdel.setOnClickListener(
-        v -> {
-          n = files.size() - 1;
-          for (int _repeat13 = 0; _repeat13 < (int) (files.size()); _repeat13++) {
-            if ((boolean) files.get((int) n).get("select") == true) {
-              FileUtil.deleteFile(files.get((int) n).get("path").toString());
-            }
-            n--;
-          }
-          reLoadFile();
-          bind.viewChild.setVisibility(View.GONE);
-        });
+    setItemSheetOld(pos,view);
   }
 
   @Override
