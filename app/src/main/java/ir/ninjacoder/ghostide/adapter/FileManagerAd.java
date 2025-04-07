@@ -1,6 +1,7 @@
 package ir.ninjacoder.ghostide.adapter;
 
 import android.content.SharedPreferences;
+import android.widget.CheckBox;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.config.AmazonClassHelper;
 import ir.ninjacoder.ghostide.databin.FileMaker;
@@ -49,6 +50,7 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
   private List<HashMap<String, Object>> files = new ArrayList<>();
   protected GridLayoutManager g;
   private SharedPreferences prf;
+  private boolean isSelectionMode = false;
 
   public FileManagerAd(List<HashMap<String, Object>> files, Context context, onClick click) {
     this.context = context;
@@ -173,8 +175,14 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
         }
       }
     }
-
+    if (!filteredFiles.get(pos).containsKey("select")
+        || filteredFiles.get(pos).get("select") == null) {
+      filteredFiles.get(pos).put("select", false);
+    }
     viewHolder.itemView.setClickable(true);
+    Boolean isSelected = (Boolean) filteredFiles.get(pos).get("select");
+    viewHolder.box.setChecked(isSelected != null ? isSelected : false);
+    viewHolder.box.setVisibility(isSelectionMode ? View.VISIBLE : View.GONE);
   }
 
   @NonNull
@@ -265,6 +273,7 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     protected LinearLayout roots;
     protected ImageView icon;
     View getPos;
+    private CheckBox box;
 
     public VH(View view) {
       super(view);
@@ -273,15 +282,38 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
       tvTools = view.findViewById(R.id.tvTools);
       roots = view.findViewById(R.id.roots);
       icon = view.findViewById(R.id.icon);
+      box = view.findViewById(R.id.box);
+      box.setVisibility(View.GONE);
+
       roots.setOnClickListener(
           c -> {
-            click.onClick(c, getPosition());
-            AnimUtils.ClickAnimation(itemView);
+            int position = getBindingAdapterPosition();
+            if (position != RecyclerView.NO_POSITION) {
+              if (!isSelectionMode) { // فقط اگر در حالت انتخاب نیستیم کلیک عادی انجام شود
+                click.onClick(c, position);
+                AnimUtils.ClickAnimation(itemView);
+              }
+            }
           });
+
       roots.setOnLongClickListener(
           v -> {
-            click.onLongClick(v, getPosition());
+            int position = getBindingAdapterPosition();
+            if (position != RecyclerView.NO_POSITION) {
+              isSelectionMode = !isSelectionMode;
+              notifyDataSetChanged();
+              click.onLongClick(v,position);
+              return true;
+            }
             return false;
+          });
+
+      box.setOnClickListener(
+          v -> {
+            int position = getBindingAdapterPosition();
+            if (position != RecyclerView.NO_POSITION && position < filteredFiles.size()) {
+              filteredFiles.get(position).put("select", box.isChecked());
+            }
           });
     }
   }

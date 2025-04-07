@@ -240,6 +240,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     book = getSharedPreferences("hsipsot4444", Activity.MODE_PRIVATE);
 
     // WindowsMath(bind.Drawer, _coordinator);
+    bind.viewChild.setVisibility(View.GONE);
     BackPressed();
     if (gridMode.contains("gride")) {
       setViewType(ViewType.GRID);
@@ -2080,7 +2081,20 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
 
   @Override
   public void onLongClick(View view, int pos) {
-    setItemSheetOld(pos, view);
+    // setItemSheetOld(pos, view);
+    bind.viewChild.setVisibility(View.VISIBLE);
+    bind.mdel.setOnClickListener(
+        v -> {
+          n = files.size() - 1;
+          for (int _repeat13 = 0; _repeat13 < (int) (files.size()); _repeat13++) {
+            if ((boolean) files.get((int) n).get("select") == true) {
+              FileUtil.deleteFile(files.get((int) n).get("path").toString());
+            }
+            n--;
+          }
+          reLoadFile();
+          bind.viewChild.setVisibility(View.GONE);
+        });
   }
 
   @Override
