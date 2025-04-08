@@ -119,7 +119,7 @@ public class FontFragment extends Fragment {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.connect();
             InputStream inputStream = connection.getInputStream();
-            File downloadsDir = new File("//storage/emulated/0/GhostWebIDE/font/");
+            File downloadsDir = new File("/storage/emulated/0/GhostWebIDE/font/");
             if (!downloadsDir.exists()) {
               downloadsDir.mkdirs();
             }

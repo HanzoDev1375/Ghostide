@@ -175,10 +175,8 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
         }
       }
     }
-    
-    
+
     viewHolder.itemView.setClickable(true);
-    
   }
 
   @NonNull
@@ -283,22 +281,15 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
 
       roots.setOnClickListener(
           c -> {
-                       click.onClick(c, position);
-                AnimUtils.ClickAnimation(itemView);
-              
-            
+            click.onClick(c, getBindingAdapterPosition());
+            AnimUtils.ClickAnimation(itemView);
           });
 
       roots.setOnLongClickListener(
           v -> {
-            
-              click.onLongClick(v,position);
-              return true;
-            
-            
+            click.onLongClick(v, getBindingAdapterPosition());
+            return true;
           });
-
-      
     }
   }
 

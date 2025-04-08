@@ -189,7 +189,7 @@ public class EditorRoaderFile {
       ReadFileCompat(editor, _path, bar);
     } else if (_path.endsWith(".class")) {
       editor.setEditorLanguage(new JavaLanguage(editor));
-      _fab.postDelayed(_fab::show, 400);
+      _fab.postDelayed(_fab::hide, 400);
       ThreadUtils.executeByIo(
           new ThreadUtils.SimpleTask<String>() {
 

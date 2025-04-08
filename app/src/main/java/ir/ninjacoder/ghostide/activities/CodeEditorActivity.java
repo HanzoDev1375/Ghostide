@@ -118,7 +118,7 @@ public class CodeEditorActivity extends BaseCompat {
   private final ArrayList<String> string = new ArrayList<>();
   private final ArrayList<String> list = new ArrayList<>();
   private LinearLayout multytab;
-  private FrameLayout FrameLayout01;
+  private FrameLayout FrameLayout01, editorparser;
   private LinearLayout newLayoutSymbolBar;
   private LinearLayout CustomToolbar;
   private ProgressBar progressbar1;
@@ -126,7 +126,6 @@ public class CodeEditorActivity extends BaseCompat {
   private BadgeView badgeview3;
   private TextView titleauthor;
   private ImageView image, redo, undo, menupopnew, iconAuthor;
-  private IdeEditor editor;
   private LinearLayout FrameLayout02;
   private LinearLayout linear3;
   private ProgressBar proanjctor;
@@ -178,6 +177,7 @@ public class CodeEditorActivity extends BaseCompat {
   private EditorViewModel modelEditor;
   private String Paths;
   private boolean isSvg = false;
+  private IdeEditor editor;
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
@@ -224,7 +224,6 @@ public class CodeEditorActivity extends BaseCompat {
     undo = findViewById(R.id.undo);
     tablayouteditor = findViewById(R.id.tablayouteditor);
     menupopnew = findViewById(R.id.menupopnew);
-    editor = findViewById(R.id.editor);
     FrameLayout02 = findViewById(R.id.FrameLayout02);
     linear3 = findViewById(R.id.linear3);
     proanjctor = findViewById(R.id.proanjctor);
@@ -232,6 +231,7 @@ public class CodeEditorActivity extends BaseCompat {
     imageview1 = findViewById(R.id.imageview1);
     ghost_searchs = findViewById(R.id.editor_ser);
     ghost_searchs.hide();
+    editor = findViewById(R.id.editor);
     syspiar = findViewById(R.id.syspiar);
     savecursor = getSharedPreferences("editor", MODE_PRIVATE);
     word = getSharedPreferences("word", MODE_PRIVATE);
@@ -264,12 +264,11 @@ public class CodeEditorActivity extends BaseCompat {
     iconAuthor = findViewById(R.id.iconAuthor);
     imageloadereditor = findViewById(R.id.imageloadereditor);
     modelEditor = new ViewModelProvider(this).get(EditorViewModel.class);
-    editor.restoreState(_savedInstanceState);
     themeForJson2 = new ThemeUtils();
     ghostIcon = findViewById(R.id.icon_backgroundghost);
     var mRootView = getWindow().getDecorView();
     syspiar.setVisibility(View.GONE);
-    EditorUtil.restorecursor(editor, this, savecursor);
+    
     mRootView
         .getViewTreeObserver()
         .addOnGlobalLayoutListener(

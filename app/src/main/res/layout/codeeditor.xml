@@ -156,8 +156,6 @@
                     <ir.ninjacoder.ghostide.IdeEditor
                          android:layout_height="match_parent"
                          android:layout_width="match_parent"
-                         android:gravity="left|top"
-                         android:padding="8dp"
                          android:id="@+id/editor" />
 
                     <ImageView
