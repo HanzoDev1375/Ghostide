@@ -1,28 +1,20 @@
 package ir.ninjacoder.ghostide;
 
 import android.content.SharedPreferences;
-import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
 import io.github.rosemoe.sora.event.LongPressEvent;
 import io.github.rosemoe.sora.event.TextSizeChangeEvent;
-import io.github.rosemoe.sora.langs.java.JavaLanguage;
 import ir.ninjacoder.ghostide.config.LOG;
 import ir.ninjacoder.ghostide.editor.EditorUtil;
 import ir.ninjacoder.ghostide.interfaces.CallBackErrorManager;
 import ir.ninjacoder.ghostide.marco.CommentList;
 import ir.ninjacoder.ghostide.marco.editorface.IEditor;
-import ir.ninjacoder.ghostide.model.ObjectClassName;
-import ir.ninjacoder.ghostide.utils.DataUtil;
-import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.widget.SymbolInputView;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import io.github.rosemoe.sora.event.ClickEvent;
 import io.github.rosemoe.sora.langs.html.HTMLLanguage;
-import io.github.rosemoe.sora.text.Content;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
@@ -37,9 +29,7 @@ import io.github.rosemoe.sora.event.ContentChangeEvent;
 import io.github.rosemoe.sora.interfaces.EditorLanguage;
 import io.github.rosemoe.sora.langs.xml.XMLLanguage;
 import io.github.rosemoe.sora.langs.xml.XMLLexer;
-import java.io.InputStreamReader;
 import java.io.StringReader;
-import java.util.List;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.Token;
 import java.util.ArrayList;
@@ -70,7 +60,6 @@ public class IdeEditor extends CodeEditor implements IEditor {
           "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)");
   // test
   private SymbolInputView mSymbolInputView;
-  
 
   public IdeEditor(Context context) {
     super(context);
@@ -108,8 +97,8 @@ public class IdeEditor extends CodeEditor implements IEditor {
     if (saveTextSize != null) {
       setTextSizePx(getSize);
     }
-        EditorUtil.setClick(this);
-
+    EditorUtil.setClick(this);
+    
     return this;
   }
 
@@ -119,9 +108,7 @@ public class IdeEditor extends CodeEditor implements IEditor {
     edit.apply();
   }
 
-  void setLongEvent(LongPressEvent ev) {
-    
-  }
+  void setLongEvent(LongPressEvent ev) {}
 
   void ta(ClickEvent ev) {
     //    if (getEditorLanguage() instanceof HTMLLanguage) {
@@ -377,8 +364,7 @@ public class IdeEditor extends CodeEditor implements IEditor {
     }
   }
 
-  public void restoreState(@NonNull Bundle savedInstanceState) {
-  }
+  public void restoreState(@NonNull Bundle savedInstanceState) {}
 
   public int getLineCountes() {
     return getLineCount();

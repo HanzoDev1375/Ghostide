@@ -33,12 +33,39 @@ public class SecurePrefs {
     return sharedPreferences.getString("github_token", null);
   }
 
-  public void saveUserInfo(String username, String avatarUrl, String name) {
+  public void saveUserInfo(
+      String username,
+      String avatarUrl,
+      String name,
+      String bio,
+      int followers,
+      int following,
+      String type) {
     SharedPreferences.Editor editor = sharedPreferences.edit();
     editor.putString("username", username);
     editor.putString("avatar_url", avatarUrl);
     editor.putString("name", name);
+    editor.putString("bio", bio);
+    editor.putInt("followers", followers);
+    editor.putInt("following", following);
+    editor.putString("type", type);
     editor.apply();
+  }
+
+  public String getBio() {
+    return sharedPreferences.getString("bio", "");
+  }
+
+  public int getFollowers() {
+    return sharedPreferences.getInt("followers", 0);
+  }
+
+  public int getFollowing() {
+    return sharedPreferences.getInt("following", 0);
+  }
+
+  public String getType() {
+    return sharedPreferences.getString("type", "");
   }
 
   public String getUsername() {

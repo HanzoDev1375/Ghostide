@@ -185,7 +185,7 @@ public class EditorTextActionWindow extends EditorPopupWindow
                           KotlinTools tools = new KotlinTools();
                           tools.run(v.getContext(), editor, v);
                         } else if (editor.getEditorLanguage() instanceof SMLang) {
-                          SmaliHelper.run(editor, v.getContext());
+                          new ToolItem().bindSmail(v.getContext(), editor, v);
                         } else if (editor.getEditorLanguage() instanceof JsonLanguage) {
                           JsonTools.run((IdeEditor) editor, v, v.getContext());
                         } else if (editor.getEditorLanguage() instanceof XMLLanguage) {

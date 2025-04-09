@@ -93,6 +93,7 @@ public class EditorTouchEventHandler
   public EditorTouchEventHandler(CodeEditor editor) {
     mEditor = editor;
     mScroller = new OverScroller(editor.getContext());
+    
     maxSize =
         TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_SP, 32, Resources.getSystem().getDisplayMetrics());

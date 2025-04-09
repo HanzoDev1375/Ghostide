@@ -1,5 +1,13 @@
 package ir.ninjacoder.ghostide;
 
+import android.Manifest;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.provider.Settings;
+import androidx.core.content.ContextCompat;
+import android.content.pm.PackageManager;
+import androidx.core.app.ActivityCompat;
 import ir.ninjacoder.ghostide.Welcome.SplashWord;
 import ir.ninjacoder.ghostide.activities.BaseCompat;
 import ir.ninjacoder.ghostide.activities.FileManagerActivity;
@@ -39,9 +47,39 @@ public class MainActivity extends BaseCompat {
   }
 
   private void initialize(Bundle _savedInstanceState) {
+      runtimePermissions();
     iconSpash = getSharedPreferences("iconSpash", MODE_PRIVATE);
     setac = getSharedPreferences("setac", MODE_PRIVATE);
     tryToRunApp();
+  }
+
+  void runtimePermissions() {
+    if (Build .VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      if (!Environment.isExternalStorageManager()) {
+        try {
+          Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+          Uri uri = Uri.fromParts("package", getPackageName(), null);
+          intent.setData(uri);
+          startActivity(intent);
+        } catch (Exception ex) {
+          Intent intent = new Intent();
+          intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+          startActivity(intent);
+        }
+      }
+    } else {
+      if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+              == PackageManager.PERMISSION_DENIED
+          || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+              == PackageManager.PERMISSION_DENIED) {
+        ActivityCompat.requestPermissions(
+            this,
+            new String[] {
+              Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE
+            },
+            1000);
+      }
+    }
   }
 
   private void tryToRunApp() {

@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.os.Environment;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.transition.Transition;
+import android.transition.TransitionManager;
 import android.webkit.WebView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -18,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.transition.platform.MaterialSharedAxis;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.model.ObjectClassName;
@@ -48,7 +51,6 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 import androidx.transition.AutoTransition;
-import androidx.transition.TransitionManager;
 import com.google.android.material.R;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.button.MaterialButton;
@@ -300,12 +302,6 @@ public class ObjectUtils {
       bar.getIndeterminateDrawable()
           .setColorFilter(MaterialColors.getColor(bar, TvColor), PorterDuff.Mode.SRC_IN);
     }
-  }
-
-  public static void animateLayoutChanges(View view) {
-    var autoTransition = new AutoTransition();
-    autoTransition.setDuration((short) 200);
-    TransitionManager.beginDelayedTransition((ViewGroup) view, autoTransition);
   }
 
   public static void shp(View v) {
@@ -578,33 +574,20 @@ public class ObjectUtils {
 
   public static void showViewWithAnimation(View view) {
 
+    Transition sharedAxis = new MaterialSharedAxis(MaterialSharedAxis.Z, true);
+    TransitionManager.beginDelayedTransition((ViewGroup) view, sharedAxis);
+
     if (view.getVisibility() != View.VISIBLE) {
       view.setVisibility(View.VISIBLE);
-      ObjectAnimator animator = ObjectAnimator.ofFloat(view, "translationY", view.getHeight(), 0);
-      animator.setDuration(300);
-      animator.addListener(
-          new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-              view.setTranslationY(0);
-            }
-          });
-      animator.start();
     }
   }
 
   public static void hideViewWithAnimation(View view, ExrtaFab fab) {
+
+    Transition sharedAxis = new MaterialSharedAxis(MaterialSharedAxis.Z, false);
+    TransitionManager.beginDelayedTransition((ViewGroup) view, sharedAxis);
     if (view.getVisibility() == View.VISIBLE) {
-      ObjectAnimator animator = ObjectAnimator.ofFloat(view, "translationY", 0, view.getHeight());
-      animator.setDuration(300);
-      animator.addListener(
-          new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-              view.postDelayed(() -> view.setVisibility(View.GONE), 300);
-            }
-          });
-      animator.start();
+      view.setVisibility(View.GONE);
     }
   }
 

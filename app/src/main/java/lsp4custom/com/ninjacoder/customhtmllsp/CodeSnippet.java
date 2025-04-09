@@ -17,7 +17,7 @@ public class CodeSnippet {
   public CodeSnippet(String jsonPath) {
     this.jsonPath = jsonPath;
   }
-
+  @Deprecated
   public void run(List<CompletionItem> list, String pr) {
     JsonObject jsonObject = JsonParser.parseString(jsonPath).getAsJsonObject();
     Gson gson = new Gson();
@@ -37,5 +37,24 @@ public class CodeSnippet {
             .collect(Collectors.toList());
 
     list.addAll(helper);
+  }
+
+  public static List<CompletionItem> runasList(String prefix, String jsonPath) {
+    JsonObject jsonObject = JsonParser.parseString(jsonPath).getAsJsonObject();
+    Gson gson = new Gson();
+    Set<Map.Entry<String, JsonElement>> jsonEntries = jsonObject.entrySet();
+
+    return jsonEntries.stream()
+        .map(
+            entry -> {
+              JsonObject jsonObj = entry.getValue().getAsJsonObject();
+              CompletionItem snippet = new CompletionItem();
+              snippet.desc = jsonObj.get("description").getAsString();
+              snippet.label = jsonObj.get("prefix").getAsString();
+              snippet.commit = jsonObj.get("body").getAsString();
+              return snippet;
+            })
+        .filter(item -> item.label.startsWith(prefix))
+        .collect(Collectors.toList());
   }
 }

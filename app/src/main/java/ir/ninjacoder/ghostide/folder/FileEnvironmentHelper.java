@@ -68,8 +68,11 @@ public class FileEnvironmentHelper {
   public boolean isLayoutFolder() {
     return isFolderKeyRegex(filePath, "(layout-([a-zA-Z0-9-]+))|layout");
   }
-  public boolean isValueFolder(){
-      return isFolderKeyRegex(filePath,"(values-([a-zA-Z0-9-]+))|values");
+  public boolean isValueIran(){
+      return isFolderKeyRegex(filePath,"values-fa");
+  }  
+  public boolean isValueCustomName(String regexName){
+      return isFolderKeyRegex(filePath,regexName);
   }  
 
   public boolean isSrcDirectory() {

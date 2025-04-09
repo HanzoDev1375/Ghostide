@@ -115,7 +115,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
   private ProjectMaker projectMaker;
   private double positionTabs = 0;
   protected SharedPreferences gridMode;
-  
+
   private boolean staticStorage = false;
   private String version = "";
   private double post = 0;
@@ -131,41 +131,23 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
   private ArrayList<HashMap<String, Object>> projectdata = new ArrayList<>();
   private Intent intentgetSettings = new Intent();
   private SharedPreferences shp;
-
   private Intent activitiy = new Intent();
-
   private ProgressDialog progressDilaog;
-
   private ProgressDialog unzip;
-
   private SharedPreferences soglo;
-
   private SharedPreferences np;
-
   private ProgressDialog mprodialog;
-
   private SharedPreferences dismoveFile;
-
   private ProgressDialog prodel;
-
   private ProgressDialog proveg;
-
   private Intent getabout = new Intent();
-
   private Intent void10 = new Intent();
-
   private SharedPreferences sd;
-
   private SharedPreferences delfile;
-
   private ProgressDialog copydir;
-
   private ProgressDialog copypath;
-
   private Intent getJavaLayoutManager = new Intent();
-
   private SharedPreferences zipCuntishen;
-
   private Intent govirwFilm = new Intent();
   private SharedPreferences war;
   private RequestNetwork CheckNewVersion;
@@ -463,8 +445,8 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     bind.navs.getMenu().add(0, 10, 0, "Bookmarks (Beta)").setIcon(R.drawable.drawer_item4);
     bind.navs.getMenu().add(0, 11, 0, "Apk Manager").setIcon(R.drawable.drawer_item3);
     bind.navs.getMenu().add(0, 12, 0, "About").setIcon(R.drawable.drawer_item11);
-    bind.navs.getMenu().add(0, 13, 0, "Leave").setIcon(R.drawable.drawer_item1);
-    bind.navs.getMenu().add(0, 14, 0, "test");
+    bind.navs.getMenu().add(0, 14, 0, "Store").setIcon(R.drawable.shop_24);
+    bind.navs.getMenu().add(0, 13, 0, "exit").setIcon(R.drawable.drawer_item1);
     DrowerHandler();
   }
 
@@ -810,7 +792,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
         || _map.get((int) _pos).get(_path).toString().endsWith(".otf")) {
       finalintentpostfont.setClass(getApplicationContext(), FontViewActivity.class);
       finalintentpostfont.putExtra("font", _map.get((int) _pos).get(_path).toString());
-      startActivity(finalintentpostfont);
+      loadAnim(finalintentpostfont);
     }
   }
 
@@ -1171,7 +1153,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
       var it = new Intent();
       it.setClass(getApplicationContext(), ThemePreviewActivity.class);
       it.putExtra("keyitem", staticstring);
-      startActivity(it);
+      loadAnim(it);
     }
     if (staticstring.endsWith(".xml")) {
       loadVector(newpos);
@@ -1246,7 +1228,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
       govirwFilm.setClass(getApplicationContext(), VideoViewsActivity.class);
       govirwFilm.putExtra("getPath", staticstring);
       govirwFilm.putExtra("getTitle", Uri.parse(staticstring).getLastPathSegment());
-      startActivity(govirwFilm);
+      loadAnim(govirwFilm);
     }
     if (staticstring.endsWith(".apk")) {
       apkShowDataRoom();
@@ -1255,7 +1237,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
       getabout.setClass(getApplicationContext(), PdfViewNewActivity.class);
       getabout.putExtra("pdf", staticstring);
       getabout.putExtra("t", Uri.parse(staticstring).getLastPathSegment());
-      startActivity(getabout);
+      loadAnim(getabout);
     }
     if (staticstring.endsWith(".tar.gz")) {
       _targz(staticstring, Folder);
@@ -1275,7 +1257,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     if (staticstring.endsWith(".png")) {
       getabout.setClass(getApplicationContext(), SetHomeWallpActivity.class);
       getabout.putExtra("img", staticstring);
-      startActivity(getabout);
+      loadAnim(getabout);
     }
     _fontpost(files, "path", newpos);
     _themeinstall(files, newpos, "path");
@@ -1459,7 +1441,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                 (cc, fdd) -> {
                   Intent mintent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
                   mintent.setData(Uri.parse("package:" + getPackageName()));
-                  startActivity(mintent);
+                  loadAnim(mintent);
                 });
             cbuilder.setNegativeButton("No", null);
             cbuilder.show();
@@ -1677,7 +1659,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     bind.navs.setClick(
         (item) -> {
           bind.navs.setCheckedItem(item.getItemId());
-          switch ((int) item.getItemId()) {
+          switch (item.getItemId()) {
             case 1:
               {
                 setSanDisk();
@@ -1688,25 +1670,25 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                 getJavaLayoutManager.setClass(
                     getApplicationContext(), JavaManagerLayoutActivity.class);
                 getJavaLayoutManager.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(getJavaLayoutManager);
+                loadAnim(getJavaLayoutManager);
                 break;
               }
             case 3:
               {
                 void10.setClass(getApplicationContext(), TerminalActivity.class);
-                startActivity(void10);
+                loadAnim(void10);
                 break;
               }
             case 4:
               {
                 intentgetSettings.setClass(getApplicationContext(), SettingAppActivity.class);
-                startActivity(intentgetSettings);
+                loadAnim(intentgetSettings);
                 break;
               }
             case 5:
               {
                 intentgetLogCat.setClass(getApplicationContext(), LogCatViewActivity.class);
-                startActivity(intentgetLogCat);
+                loadAnim(intentgetLogCat);
                 break;
               }
             case 6:
@@ -1722,14 +1704,13 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
                       "https://raw.githubusercontent.com/HanzoDev1375/HanzoDev1375/main/log.json",
                       "v",
                       UpdateCheck);
-                } else {
                 }
                 break;
               }
             case 8:
               {
                 intentgetLogCat.setClass(getApplicationContext(), PluginManagerActivity.class);
-                startActivity(intentgetLogCat);
+                loadAnim(intentgetLogCat);
                 break;
               }
             case 9:
@@ -1740,20 +1721,21 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
             case 10:
               {
                 intentgetLogCat.setClass(getApplicationContext(), FileBookmarkActivity.class);
-                startActivity(intentgetLogCat);
+                loadAnim(intentgetLogCat);
+                
                 break;
               }
             case 11:
               {
                 var b = new Intent();
                 b.setClass(getApplicationContext(), ApkViewActivity.class);
-                startActivity(b);
+                loadAnim(b);
                 break;
               }
             case 12:
               {
                 getabout.setClass(getApplicationContext(), AboutActivity.class);
-                startActivity(getabout);
+                loadAnim(getabout);
                 break;
               }
             case 13:
@@ -1763,7 +1745,8 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
               }
             case 14:
               {
-                startActivity(new Intent(getApplicationContext(), StoreAcitvity.class));
+                loadAnim (new Intent(getApplicationContext(), StoreAcitvity.class));
+
                 break;
               }
           }
@@ -2081,7 +2064,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
 
   @Override
   public void onLongClick(View view, int pos) {
-    setItemSheetOld(pos,view);
+    setItemSheetOld(pos, view);
   }
 
   @Override
@@ -2090,7 +2073,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
       switch (keyCode) {
         case KeyEvent.KEYCODE_S:
           // open settings
-          startActivity(new Intent(getApplicationContext(), SettingAppActivity.class));
+          loadAnim(new Intent(getApplicationContext(), SettingAppActivity.class));
           return true;
         case KeyEvent.KEYCODE_F:
           /// open dialog make folder
@@ -2122,11 +2105,11 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
           return true;
         case KeyEvent.KEYCODE_T:
           // open terminal
-          startActivity(new Intent(getApplicationContext(), TerminalActivity.class));
+          loadAnim(new Intent(getApplicationContext(), TerminalActivity.class));
           return true;
         case KeyEvent.KEYCODE_A:
           // open apk manager;
-          startActivity(new Intent(getApplicationContext(), ApkViewActivity.class));
+          loadAnim(new Intent(getApplicationContext(), ApkViewActivity.class));
           return true;
         case KeyEvent.KEYCODE_ESCAPE:
           BackPressed();

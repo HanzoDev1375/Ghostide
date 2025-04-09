@@ -59,7 +59,7 @@ public class GitHubProfileView {
     edit.show();
   }
 
-  private void verifyToken(String token) {
+  public void verifyToken(String token) {
     Request request =
         new Request.Builder()
             .url("https://api.github.com/user")
@@ -90,10 +90,13 @@ public class GitHubProfileView {
                     String username = userJson.getString("login");
                     String avatarUrl = userJson.getString("avatar_url");
                     String name = userJson.optString("name", username);
-
-                    // ذخیره اطلاعات
+                    String bio = userJson.optString("bio", "user not bio sorry!");
+                    int followers = userJson.optInt("followers", 0);
+                    int following = userJson.optInt("following", 0);
+                    String type = userJson.optString("type", "User");
                     securePrefs.saveToken(token);
-                    securePrefs.saveUserInfo(username, avatarUrl, name);
+                    securePrefs.saveUserInfo(
+                        username, avatarUrl, name, bio, followers, following, type);
 
                     ThreadUtils.runOnUiThread(
                         () -> {
@@ -145,5 +148,21 @@ public class GitHubProfileView {
     subtitle.setText("");
     iconLoader.setImageResource(R.drawable.app_icon);
     showLoginDialog();
+  }
+
+  public String getBio() {
+    return securePrefs.getBio();
+  }
+
+  public int getFollowers() {
+    return securePrefs.getFollowers();
+  }
+
+  public int getFollowing() {
+    return securePrefs.getFollowing();
+  }
+
+  public String getType() {
+    return securePrefs.getType();
   }
 }

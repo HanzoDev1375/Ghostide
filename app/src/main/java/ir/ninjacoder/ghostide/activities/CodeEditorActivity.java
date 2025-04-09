@@ -1,6 +1,7 @@
 package ir.ninjacoder.ghostide.activities;
 
 import android.content.res.ColorStateList;
+import com.bumptech.glide.Glide;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.tabs.TabLayout;
 import ir.ninjacoder.ghostide.G4Compiler;
@@ -24,6 +25,7 @@ import ir.ninjacoder.ghostide.navigator.EditorHelperColor;
 import ir.ninjacoder.ghostide.navigator.EditorRoaderFile;
 import ir.ninjacoder.ghostide.project.JavaCompilerBeta;
 import ir.ninjacoder.ghostide.project.ProjectManager;
+import ir.ninjacoder.ghostide.tasks.SecurePrefs;
 import ir.ninjacoder.ghostide.tasks.app.SassForAndroid;
 import ir.ninjacoder.ghostide.terminal.TerminalActivity;
 import ir.ninjacoder.ghostide.utils.*;
@@ -123,14 +125,13 @@ public class CodeEditorActivity extends BaseCompat {
   private LinearLayout CustomToolbar;
   private ProgressBar progressbar1;
   private RecyclerView dir;
-  private BadgeView badgeview3;
   private TextView titleauthor;
   private ImageView image, redo, undo, menupopnew, iconAuthor;
   private LinearLayout FrameLayout02;
   private LinearLayout linear3;
   private ProgressBar proanjctor;
   private LinearLayout barSymoble;
-  private ImageView imageview1, imageloadereditor;
+  private ImageView imageview1, imageloadereditor, avatargithubuser;
   private RecyclerView syspiar;
   private final Intent intentaddFile = new Intent();
   private final Intent htmlrus = new Intent();
@@ -217,7 +218,7 @@ public class CodeEditorActivity extends BaseCompat {
     CustomToolbar = findViewById(R.id.CustomToolbar);
     progressbar1 = findViewById(R.id.progressbar1);
     dir = findViewById(R.id.dir);
-    badgeview3 = findViewById(R.id.badgeview3);
+    avatargithubuser = findViewById(R.id.avatargithubuser);
     titleauthor = findViewById(R.id.titleauthor);
     image = findViewById(R.id.image);
     redo = findViewById(R.id.redo);
@@ -268,7 +269,13 @@ public class CodeEditorActivity extends BaseCompat {
     ghostIcon = findViewById(R.id.icon_backgroundghost);
     var mRootView = getWindow().getDecorView();
     syspiar.setVisibility(View.GONE);
-    
+    var userview = new SecurePrefs(this);
+    Glide.with(this)
+        .load(userview.getAvatarUrl())
+        .circleCrop()
+        .error(R.drawable.app_icon)
+        .into(avatargithubuser);
+
     mRootView
         .getViewTreeObserver()
         .addOnGlobalLayoutListener(
@@ -422,8 +429,6 @@ public class CodeEditorActivity extends BaseCompat {
       editor.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO);
     }
     editor.setText(modelEditor.getText());
-
-    var editorHelperColor = new EditorHelperColor(editor, badgeview3);
     var size =
         TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
@@ -526,9 +531,6 @@ public class CodeEditorActivity extends BaseCompat {
         "/storage/emulated/0/GhostWebIDE/ninjacoder/openFile.json", shp.getString("path", ""));
 
     progressbar1.setVisibility(View.GONE);
-
-    badgeview3.setBadgeBackground(Color.TRANSPARENT);
-    badgeview3.setBadgeCount("");
     if (re.getString("f380", "").equals("true")) {
       editor.setNonPrintablePaintingFlags(CodeEditor.FLAG_DRAW_LINE_SEPARATOR);
     }

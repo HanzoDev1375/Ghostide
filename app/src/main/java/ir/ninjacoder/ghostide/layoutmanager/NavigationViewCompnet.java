@@ -53,13 +53,18 @@ public class NavigationViewCompnet extends NavigationView {
     ImageView icon = getHeaderView(0).findViewById(R.id.iconHeader);
     TextView title = getHeaderView(0).findViewById(R.id.headertitle);
     TextView subtitle = getHeaderView(0).findViewById(R.id.hedersubtitle);
+    TextView followers = getHeaderView(0).findViewById(R.id.leftTextView);
+    TextView following = getHeaderView(0).findViewById(R.id.rightTextView);
+    TextView bio = getHeaderView(0).findViewById(R.id.biogithub);
     try {
       var it = new GitHubProfileView(getContext(), icon, title, subtitle);
       icon.setOnClickListener(
           v -> {
-            it.show();
+            if (it != null) it.show();
           });
-
+      followers.setText("follwers " + it.getFollowers());
+      following.setText("following " + it.getFollowing());
+      bio.setText(it.getBio());
       icon.setOnLongClickListener(
           v33 -> {
             new MaterialAlertDialogBuilder(getContext())

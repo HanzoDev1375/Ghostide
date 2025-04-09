@@ -182,4 +182,8 @@ public class LayoutSheetEditText implements TextWatcher {
   public void setIsAnim(boolean isAnim) {
     this.isAnim = isAnim;
   }
+  public boolean isShow(){
+      return dialog.isShowing();
+  }
 }
+ 

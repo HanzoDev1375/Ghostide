@@ -1,17 +1,7 @@
 package ir.ninjacoder.ghostide.Welcome;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.os.Environment;
-import android.provider.Settings;
-import android.net.Uri;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.activities.StreamSoftAppActivity;
-import ir.ninjacoder.ghostide.utils.DataUtil;
-import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.utils.FileUtil;
 import ir.ninjacoder.ghostide.utils.ThemeUtils;
 import android.content.Intent;
@@ -34,7 +24,6 @@ public class SplashWord extends AppIntro2 {
   @Override
   public void onCreate(Bundle arg0) {
     super.onCreate(arg0);
-    runtimePermissions();
     // TODO: Implement this method
     dialog = new PrograssSheet(this);
     dialog.setMode(StateMod.PROGRASSV);
@@ -56,7 +45,7 @@ public class SplashWord extends AppIntro2 {
             true);
     t1.setCallBack(
         () -> {
-          runtimePermissions();
+          
         });
 
     addSlide(t1);
@@ -206,32 +195,5 @@ public class SplashWord extends AppIntro2 {
         .start();
   }
 
-  void runtimePermissions() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-      if (!Environment.isExternalStorageManager()) {
-        try {
-          Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
-          Uri uri = Uri.fromParts("package", getPackageName(), null);
-          intent.setData(uri);
-          startActivity(intent);
-        } catch (Exception ex) {
-          Intent intent = new Intent();
-          intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-          startActivity(intent);
-        }
-      }
-    } else {
-      if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-              == PackageManager.PERMISSION_DENIED
-          || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-              == PackageManager.PERMISSION_DENIED) {
-        ActivityCompat.requestPermissions(
-            this,
-            new String[] {
-              Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE
-            },
-            1000);
-      }
-    }
-  }
+  
 }

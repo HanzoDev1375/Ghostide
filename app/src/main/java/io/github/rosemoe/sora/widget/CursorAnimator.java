@@ -1,45 +1,33 @@
-/*
- *    sora-editor - the awesome code editor for Android
- *    https://github.com/Rosemoe/sora-editor
- *    Copyright (C) 2020-2022  Rosemoe
- *
- *     This library is free software; you can redistribute it and/or
- *     modify it under the terms of the GNU Lesser General Public
- *     License as published by the Free Software Foundation; either
- *     version 2.1 of the License, or (at your option) any later version.
- *
- *     This library is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *     Lesser General Public License for more details.
- *
- *     You should have received a copy of the GNU Lesser General Public
- *     License along with this library; if not, write to the Free Software
- *     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
- *     USA
- *
- *     Please contact Rosemoe by email 2073412493@qq.com if you need
- *     additional information or have any questions
- */
 package io.github.rosemoe.sora.widget;
 
 import android.animation.ValueAnimator;
 import android.view.animation.DecelerateInterpolator;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.OvershootInterpolator;
 
-/**
- * Helper class for cursor animation in editor
- *
- * @author Rosemoe
- */
+/** Enhanced cursor animator with multiple animation modes */
 public class CursorAnimator implements ValueAnimator.AnimatorUpdateListener {
 
-  private final CodeEditor editor;
-  ValueAnimator animatorX;
-  ValueAnimator animatorY;
-  ValueAnimator animatorBgBottom;
-  ValueAnimator animatorBackground;
-  private float startX, startY, startSize, startBottom;
-  private long lastAnimateTime;
+  public enum AnimationMode {
+    /** Classic smooth movement animation */
+    SMOOTH,
+    /** Animation with scaling effect */
+    SCALE,
+    /** Spring-like animation with overshoot effect */
+    SPRING
+  }
+
+  protected final CodeEditor editor;
+  protected ValueAnimator animatorX;
+  protected ValueAnimator animatorY;
+  protected ValueAnimator animatorBgBottom;
+  protected ValueAnimator animatorBackground;
+  protected ValueAnimator animatorScale;
+
+  protected float startX, startY, startSize, startBottom;
+  protected long lastAnimateTime;
+  protected float currentScale = 1f;
+  protected AnimationMode animationMode = AnimationMode.SPRING;
 
   public CursorAnimator(CodeEditor editor) {
     this.editor = editor;
@@ -47,6 +35,15 @@ public class CursorAnimator implements ValueAnimator.AnimatorUpdateListener {
     animatorY = new ValueAnimator();
     animatorBackground = new ValueAnimator();
     animatorBgBottom = new ValueAnimator();
+    animatorScale = new ValueAnimator();
+  }
+
+  public void setAnimationMode(AnimationMode mode) {
+    this.animationMode = mode;
+  }
+
+  public AnimationMode getAnimationMode() {
+    return animationMode;
   }
 
   public void markStartPos() {
@@ -57,13 +54,15 @@ public class CursorAnimator implements ValueAnimator.AnimatorUpdateListener {
     startSize = editor.mLayout.getRowCountForLine(line) * editor.getRowHeight();
     startBottom =
         editor.mLayout.getCharLayoutOffset(line, editor.getText().getColumnCount(line))[0];
+    currentScale = 1f;
   }
 
   public boolean isRunning() {
     return animatorX.isRunning()
         || animatorY.isRunning()
         || animatorBackground.isRunning()
-        || animatorBgBottom.isRunning();
+        || animatorBgBottom.isRunning()
+        || animatorScale.isRunning();
   }
 
   public void cancel() {
@@ -71,12 +70,14 @@ public class CursorAnimator implements ValueAnimator.AnimatorUpdateListener {
     animatorY.cancel();
     animatorBackground.cancel();
     animatorBgBottom.cancel();
+    animatorScale.cancel();
   }
 
   public void markEndPosAndStart() {
     if (!editor.isCursorAnimationEnabled()) {
       return;
     }
+
     if (isRunning()) {
       startX = (float) animatorX.getAnimatedValue();
       startY = (float) animatorY.getAnimatedValue();
@@ -84,18 +85,23 @@ public class CursorAnimator implements ValueAnimator.AnimatorUpdateListener {
       startBottom = (float) animatorBgBottom.getAnimatedValue();
       cancel();
     }
-    var duration = 160;
+
     if (System.currentTimeMillis() - lastAnimateTime < 100) {
       return;
     }
+
     var line = editor.getCursor().getLeftLine();
     animatorX.removeAllUpdateListeners();
     float[] pos =
         editor.mLayout.getCharLayoutOffset(
             editor.getCursor().getLeftLine(), editor.getCursor().getLeftColumn());
 
-    animatorX = ValueAnimator.ofFloat(startX, (pos[1] + editor.measureTextRegionOffset()));
-    animatorY = ValueAnimator.ofFloat(startY, pos[0]);
+    float targetX = pos[1] + editor.measureTextRegionOffset();
+    float targetY = pos[0];
+
+    // Common setup for position animators
+    animatorX = ValueAnimator.ofFloat(startX, targetX);
+    animatorY = ValueAnimator.ofFloat(startY, targetY);
     animatorBackground =
         ValueAnimator.ofFloat(
             startSize,
@@ -105,13 +111,24 @@ public class CursorAnimator implements ValueAnimator.AnimatorUpdateListener {
         ValueAnimator.ofFloat(
             startBottom,
             editor.mLayout.getCharLayoutOffset(line, editor.getText().getColumnCount(line))[0]);
-    animatorX.setInterpolator(new DecelerateInterpolator());
-    animatorY.setInterpolator(new DecelerateInterpolator());
-    animatorBackground.setInterpolator(new DecelerateInterpolator());
-    animatorBgBottom.setInterpolator(new DecelerateInterpolator());
+
+    // Configure based on animation mode
+    switch (animationMode) {
+      case SCALE:
+        configureScaleAnimation(targetX, targetY);
+        break;
+      case SPRING:
+        configureSpringAnimation();
+        break;
+      case SMOOTH:
+      default:
+        configureSmoothAnimation();
+        break;
+    }
 
     animatorX.addUpdateListener(this);
 
+    int duration = animationMode == AnimationMode.SPRING ? 220 : 160;
     animatorX.setDuration(duration);
     animatorY.setDuration(duration);
     animatorBackground.setDuration(duration);
@@ -122,7 +139,43 @@ public class CursorAnimator implements ValueAnimator.AnimatorUpdateListener {
     animatorBackground.start();
     animatorBgBottom.start();
 
+    if (animationMode == AnimationMode.SCALE) {
+      animatorScale.start();
+    }
+
     lastAnimateTime = System.currentTimeMillis();
+  }
+
+  private void configureSmoothAnimation() {
+    animatorX.setInterpolator(new DecelerateInterpolator());
+    animatorY.setInterpolator(new DecelerateInterpolator());
+    animatorBackground.setInterpolator(new DecelerateInterpolator());
+    animatorBgBottom.setInterpolator(new DecelerateInterpolator());
+  }
+
+  private void configureSpringAnimation() {
+    animatorX.setInterpolator(new OvershootInterpolator(1.5f));
+    animatorY.setInterpolator(new OvershootInterpolator(1.5f));
+    animatorBackground.setInterpolator(new OvershootInterpolator(1.2f));
+    animatorBgBottom.setInterpolator(new OvershootInterpolator(1.2f));
+  }
+
+  private void configureScaleAnimation(float targetX, float targetY) {
+    float distance = (float) Math.hypot(targetX - startX, targetY - startY);
+    float maxScale = Math.min(1.8f, 1f + distance / (editor.getRowHeight() * 2));
+
+    animatorScale = ValueAnimator.ofFloat(1f, maxScale, 1f);
+    animatorScale.setInterpolator(new DecelerateInterpolator());
+    animatorScale.setDuration(200);
+    animatorScale.addUpdateListener(
+        animation -> {
+          currentScale = (float) animation.getAnimatedValue();
+        });
+
+    animatorX.setInterpolator(new LinearInterpolator());
+    animatorY.setInterpolator(new LinearInterpolator());
+    animatorBackground.setInterpolator(new LinearInterpolator());
+    animatorBgBottom.setInterpolator(new LinearInterpolator());
   }
 
   @Override
