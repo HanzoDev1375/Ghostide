@@ -7,12 +7,13 @@ import io.github.rosemoe.sora.data.CompletionItem;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Collections;
+import lsp4custom.com.ninjacoder.customhtmllsp.CodeSnippet;
 
-public class CsAutoComplete  implements AutoCompleteProvider{
+public class CsAutoComplete implements AutoCompleteProvider {
 
   private String[] mKeywords;
   private boolean mKeywordsAreLowCase;
-  
+
   public void setKeywords(String[] keywords) {
     mKeywords = keywords;
     mKeywordsAreLowCase = false;
@@ -47,7 +48,7 @@ public class CsAutoComplete  implements AutoCompleteProvider{
       Collections.sort(words, CompletionItem.COMPARATOR_BY_NAME);
       keywords.addAll(words);
     }
-    
+    keywords.addAll(CodeSnippet.runasList("csharp", prefix));
     return keywords;
   }
 

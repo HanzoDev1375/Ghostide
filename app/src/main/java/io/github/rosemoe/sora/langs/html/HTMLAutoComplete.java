@@ -210,19 +210,72 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
     //	result.addIfNeeded(line,column,TextStyle.makeStyle(EditorColorScheme.AUTO_COMP_PANEL_CORNER,CssColor(prefix),false,false,true));
   }
 
-  public String getLoramRandom(int count) {
-    StringBuilder builder = new StringBuilder();
-    String[] lorams = {
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud ",
-      "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud "
+  /** تولید متن تصادفی Lorem Ipsum با تعداد کلمات مشخص مثال: loram200 → 200 کلمه تصادفی */
+  public String getLoramRandom(String input) {
+    // لیست ثابت از کلمات Lorem Ipsum (مختصر شده)
+    String[] loremWords = {
+      "Lorem",
+      "ipsum",
+      "dolor",
+      "sit",
+      "amet",
+      "consectetur",
+      "adipiscing",
+      "elit",
+      "sed",
+      "do",
+      "eiusmod",
+      "tempor",
+      "incididunt",
+      "ut",
+      "labore",
+      "et",
+      "dolore",
+      "magna",
+      "aliqua",
+      "Ut",
+      "enim",
+      "ad",
+      "minim",
+      "veniam",
+      "quis",
+      "nostrud",
+      "exercitation",
+      "ullamco",
+      "laboris",
+      "nisi",
+      "ut",
+      "aliquip",
+      "ex",
+      "ea",
+      "commodo",
+      "consequat"
     };
-    Random random = new Random();
-    for (int i = 0; i < count; i++) {
-      int index = random.nextInt(lorams.length);
-      builder.append(lorams[index]).append("");
-      builder.append(" ");
+
+    // استخراج عدد از ورودی (مثال: loram200 → 200)
+    int wordCount = 50; // مقدار پیش‌فرض
+    try {
+      if (input.matches("loram\\d+")) {
+        wordCount = Integer.parseInt(input.replace("loram", ""));
+      }
+    } catch (NumberFormatException e) {
+      wordCount = 50; // Fallback
     }
-    return builder.toString();
+
+    // تولید متن تصادفی
+    Random random = new Random();
+    StringBuilder result = new StringBuilder();
+    for (int i = 0; i < wordCount; i++) {
+      String word = loremWords[random.nextInt(loremWords.length)];
+      result.append(word).append(" ");
+
+      // خط‌بندی هر 10 کلمه
+      if ((i + 1) % 10 == 0) {
+        result.append("\n");
+      }
+    }
+
+    return result.toString().trim();
   }
 
   public String last(String pa) {
@@ -230,27 +283,8 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
   }
 
   public void setList(String prefix) {
-    if ("loram".startsWith(prefix) && prefix.length() > 0) {
-      items.add(new CompletionItem(getLoramRandom(10), "Loram"));
-    }
-    if ("stylecss3".startsWith(prefix) && prefix.length() > 0) {
-      var cssCode =
-          """
-      <style type = "text/css">
-
-       *{
-          color:red;
-          background-color:black;
-          padding:8px;
-          text-align:left;
-        }
-
-      </style>
-
-      """;
-      items.add(new CompletionItem(cssCode, "CssWord", "Style"));
-    }
-
+    if (prefix.startsWith("loram"))
+      items.add(new CompletionItem(prefix, getLoramRandom(prefix), "Lorem Ipsum (" + prefix + ")"));
     keyhtml.installFromSora(items, prefix);
     keyhtml.installHtmlAttr(items, prfex);
     keyhtml.intallCss3KeyWord(items, prfex);

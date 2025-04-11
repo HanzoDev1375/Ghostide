@@ -24,6 +24,7 @@
 package io.github.rosemoe.sora.interfaces;
 
 import io.github.rosemoe.sora.widget.CodeEditor;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.github.rosemoe.sora.data.CompletionItem;

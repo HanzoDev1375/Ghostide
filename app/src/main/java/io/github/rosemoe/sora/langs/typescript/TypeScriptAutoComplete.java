@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
+import lsp4custom.com.ninjacoder.customhtmllsp.CodeSnippet;
 import lsp4custom.com.ninjacoder.customhtmllsp.TypeScriptCardshorts;
 
 public class TypeScriptAutoComplete implements AutoCompleteProvider {
@@ -66,9 +67,10 @@ public class TypeScriptAutoComplete implements AutoCompleteProvider {
       Collections.sort(words, CompletionItem.COMPARATOR_BY_NAME);
       keywords.addAll(words);
     }
-    shortcard = new TypeScriptCardshorts(keywords, prefix);
+    
 
     it = keywords;
+    keywords.addAll(CodeSnippet.runasList("typescript", prefix));
     return keywords;
   }
 

@@ -1,8 +1,8 @@
 package io.github.rosemoe.sora.langs.java;
 
+import com.blankj.utilcode.util.ThreadUtils;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.config.JavaToGsonHelper;
-import ir.ninjacoder.ghostide.config.LOG;
 import io.github.rosemoe.sora.data.CompletionItem;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
-import lsp4custom.com.ninjacoder.customhtmllsp.Css3Server;
+import lsp4custom.com.ninjacoder.customhtmllsp.CodeSnippet;
 import lsp4custom.com.ninjacoder.customhtmllsp.JavaCardshorts;
 import lsp4custom.com.ninjacoder.customhtmllsp.TypeScriptCardshorts;
 
@@ -55,39 +55,37 @@ public class JavaAutoComplete implements AutoCompleteProvider {
     prf = prefix;
     String match = prefix;
 
+    // افزودن کلمات کلیدی
     if (keywordArray != null) {
       for (String kw : keywordArray) {
         if (kw.startsWith(match)) {
-          keywords.add(new CompletionItem(kw, name));
+          keywords.add(new CompletionItem(kw, name != null ? name : "Keyword"));
         }
       }
     }
 
     Collections.sort(keywords, CompletionItem.COMPARATOR_BY_NAME);
 
+    // افزودن شناسه‌های کاربر
     Object extra = analyzeResult.getExtra();
-    Identifiers userIdentifiers = (extra instanceof Identifiers) ? (Identifiers) extra : null;
-    if (userIdentifiers != null) {
+    if (extra instanceof Identifiers) {
+      Identifiers userIdentifiers = (Identifiers) extra;
       List<CompletionItem> words = new ArrayList<>();
+
       for (String word : userIdentifiers.getIdentifiers()) {
-        if (word.startsWith(match)) {
-          words.add(new CompletionItem(word, "Identifiers"));
+        if (word.toLowerCase().startsWith(match)) {
+          words.add(new CompletionItem(word, "Identifier"));
         }
       }
+
       Collections.sort(words, CompletionItem.COMPARATOR_BY_NAME);
       keywords.addAll(words);
     }
 
-    shortcard = new JavaCardshorts(keywords, prefix, editor);
     JavaToGsonHelper.installFormSora(keywords);
 
-    it = keywords;
-    try {
-      new Css3Server().toJavaLspDemo(keywords, prefix);
-    } catch (Exception err) {
-      LOG.error("ErrorOpenXmlFile", err.getLocalizedMessage());
-    }
-
+    it = new ArrayList<>(keywords); // ایجاد کپی از لیست keywords
+    keywords.addAll(CodeSnippet.runasList("java", prefix));
     return keywords;
   }
 

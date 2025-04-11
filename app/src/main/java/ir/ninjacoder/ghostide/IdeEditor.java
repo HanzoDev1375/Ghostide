@@ -87,7 +87,7 @@ public class IdeEditor extends CodeEditor implements IEditor {
     setDividerWidth(19);
     setPinLineNumber(true);
     setDividerMargin(30f);
-    setNonPrintablePaintingFlags(FLAG_GHOSTWEB);
+    setNonPrintablePaintingFlags(FLAG_GHOSTWEB|FLAG_Scrop);
     subscribeEvent(ClickEvent.class, ((event, unsubscribe) -> ta(event)));
     subscribeEvent(ContentChangeEvent.class, ((event, unsubscribe) -> handleContentChange(event)));
     subscribeEvent(TextSizeChangeEvent.class, ((event, unsubscribe) -> textSize(event)));

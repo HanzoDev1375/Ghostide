@@ -21,6 +21,9 @@ import java.util.List;
 
 public class FileUtil {
 
+  public static final String HOME = "/storage/emulated/0/GhostWebIDE/";
+  public static final String HOMESNIPPET = "/storage/emulated/0/GhostWebIDE/snippet/snippetconfig.json";
+
   private static void createNewFile(String path) {
     int lastSep = path.lastIndexOf(File.separator);
     if (lastSep > 0) {
@@ -232,7 +235,8 @@ public class FileUtil {
   public static String getPackageDataDir(Context context) {
     return context.getExternalFilesDir(null).getAbsolutePath();
   }
-  public static String getRoot(Context context){
+
+  public static String getRoot(Context context) {
     return context.getFilesDir().getPath();
   }
 

@@ -48,6 +48,7 @@ public class PythonAutoComplete implements AutoCompleteProvider {
       Collections.sort(words, CompletionItem.COMPARATOR_BY_NAME);
       keywords.addAll(words);
     }
+    keywords.addAll(CodeSnippet.runasList("python", prefix));
     return keywords;
   }
 

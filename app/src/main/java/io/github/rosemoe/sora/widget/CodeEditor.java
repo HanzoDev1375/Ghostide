@@ -234,6 +234,7 @@ public class CodeEditor extends View
   public static final int FLAG_DRAW_WHITESPACE_IN_SELECTION = 1 << 6;
 
   public static final int FLAG_GHOSTWEB = 1 << 7;
+  public static final int FLAG_Scrop = 1 << 8;
 
   /** Adjust the completion window's position scheme according to the device's screen size. */
   public static final int WINDOW_POS_MODE_AUTO = 0;
@@ -2422,6 +2423,18 @@ public class CodeEditor extends View
               trailingWhitespaceStart,
               circleRadius);
         }
+        if ((mNonPrintableOptions & FLAG_Scrop) != 0) {
+          drawWhitespacesAsSquare(
+              canvas,
+              paintingOffset,
+              line,
+              row,
+              firstVisibleChar,
+              lastVisibleChar,
+              leadingWhitespaceEnd,
+              trailingWhitespaceStart,
+              circleRadius);
+        }
         if ((mNonPrintableOptions & FLAG_DRAW_WHITESPACE_TRAILING) != 0) {
           drawWhitespaces(
               canvas,
@@ -2472,6 +2485,18 @@ public class CodeEditor extends View
             }
             if ((mNonPrintableOptions & FLAG_DRAW_WHITESPACE_INNER) == 0) {
               drawWhitespaces(
+                  canvas,
+                  paintingOffset,
+                  line,
+                  row,
+                  firstVisibleChar,
+                  lastVisibleChar,
+                  Math.max(leadingWhitespaceEnd, selectionStart),
+                  Math.min(trailingWhitespaceStart, selectionEnd),
+                  circleRadius);
+            }
+            if ((mNonPrintableOptions & FLAG_Scrop) == 0) {
+              drawWhitespacesAsSquare(
                   canvas,
                   paintingOffset,
                   line,
@@ -2592,6 +2617,17 @@ public class CodeEditor extends View
     canvas.drawText(graph, xPosition, baseline, mPaintGraph);
   }
 
+  protected void drawWhitespacesAsSquare(
+      Canvas canvas,
+      float offset,
+      int line,
+      int row,
+      int rowStart,
+      int rowEnd,
+      int min,
+      int max,
+      float circleRadius) {}
+
   /** Draw non-printable characters */
   protected void drawWhitespaces(
       Canvas canvas,
@@ -2673,7 +2709,8 @@ public class CodeEditor extends View
     }
     // Only them this action is needed
     if (leading != column
-        && (mNonPrintableOptions & (FLAG_DRAW_WHITESPACE_INNER | FLAG_DRAW_WHITESPACE_TRAILING))
+        && (mNonPrintableOptions
+                & (FLAG_DRAW_WHITESPACE_INNER | FLAG_DRAW_WHITESPACE_TRAILING | FLAG_Scrop))
             != 0) {
       while (trailing > 0 && isWhitespace(buffer[trailing - 1])) {
         trailing--;

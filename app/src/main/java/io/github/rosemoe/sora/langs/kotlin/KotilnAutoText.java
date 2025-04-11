@@ -2,7 +2,6 @@ package io.github.rosemoe.sora.langs.kotlin;
 
 import io.github.rosemoe.sora.data.CompletionItem;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -49,6 +48,7 @@ public class KotilnAutoText implements AutoCompleteProvider {
       Collections.sort(words, CompletionItem.COMPARATOR_BY_NAME);
       keywords.addAll(words);
     }
+    keywords.addAll(CodeSnippet.runasList  ("kotlin", prefix));
     return keywords;
   }
 

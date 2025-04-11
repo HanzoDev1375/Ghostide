@@ -85,6 +85,10 @@ public class CustomAdGhostWeb extends EditorCompletionAdapter {
     item_icon.setBackground(
         new CircleDrawable(
             getThemeColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER), true, item.label));
+    view.setBackgroundColor(
+        isCurrentCursorPosition
+            ? getThemeColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER)
+            : Color.TRANSPARENT);
 
     view.setTag(pos);
     return view;

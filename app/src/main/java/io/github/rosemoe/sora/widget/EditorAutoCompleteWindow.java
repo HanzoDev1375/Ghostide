@@ -104,7 +104,6 @@ public class EditorAutoCompleteWindow extends EditorPopupWindow {
     listview1.setVerticalScrollBarEnabled(false);
     listview1.setSelector(colorAcsentDialog());
     listview1.setOverScrollMode(ListView.OVER_SCROLL_NEVER);
-    
 
     LayoutTransition transition = new LayoutTransition();
     transition.enableTransitionType(LayoutTransition.CHANGING);
@@ -220,8 +219,6 @@ public class EditorAutoCompleteWindow extends EditorPopupWindow {
     mBg.setStroke(2, colors.getColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER));
     mBg.setColor(colors.getColor(EditorColorScheme.AUTO_COMP_PANEL_BG));
   }
-
-  
 
   /**
    * Change layout to loading/idle
@@ -440,6 +437,7 @@ public class EditorAutoCompleteWindow extends EditorPopupWindow {
       mColors = mEditor.getTextAnalyzeResult();
       mLine = mEditor.getCursor().getLeftLine();
       mColumn = mEditor.getCursor().getLeftColumn();
+      
     }
 
     @Override
@@ -447,6 +445,7 @@ public class EditorAutoCompleteWindow extends EditorPopupWindow {
       try {
         displayResults(
             mLocalProvider.getAutoCompleteItems(mPrefix, mColors, mLine, mColumn), mTime);
+        
       } catch (Exception e) {
         e.printStackTrace();
         displayResults(new ArrayList<>(), mTime);
