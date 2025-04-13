@@ -1,8 +1,8 @@
 package ir.ninjacoder.ghostide.model;
 
 public class CursorIconModel {
-  private int icon;
-  private int headericon;
+  private String icon;
+  private String headericon;
   private String nameicon;
   private String iconhader;
   private boolean isPremium;
@@ -12,7 +12,7 @@ public class CursorIconModel {
    * ghost icon name header -> nife icon isPremium -> true (ghost ide this free in version 2.0.1j)
    */
   public CursorIconModel(
-      int icon, int headericon, String nameicon, String iconhader, boolean isPremium) {
+      String icon, String headericon, String nameicon, String iconhader, boolean isPremium) {
     this.icon = icon;
     this.headericon = headericon;
     this.nameicon = nameicon;
@@ -20,11 +20,11 @@ public class CursorIconModel {
     this.isPremium = isPremium;
   }
 
-  public int getIcon() {
+  public String getIcon() {
     return this.icon;
   }
 
-  public int getHeadericon() {
+  public String getHeadericon() {
     return this.headericon;
   }
 

@@ -3,6 +3,7 @@ package ir.ninjacoder.ghostide.layoutmanager;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.bumptech.glide.Glide;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.git.GitHubProfileView;
@@ -57,19 +58,32 @@ public class NavigationViewCompnet extends NavigationView {
     TextView following = getHeaderView(0).findViewById(R.id.rightTextView);
     TextView bio = getHeaderView(0).findViewById(R.id.biogithub);
     try {
-      var it = new GitHubProfileView(getContext(), icon, title, subtitle);
-      icon.setOnClickListener(
-          v -> {
-            if (it != null) it.show();
-          });
-      followers.setText("follwers " + it.getFollowers());
-      following.setText("following " + it.getFollowing());
-      bio.setText(it.getBio());
+      var it = new GitHubProfileView(getContext());
+      followers.setText(it.hasFollowers() ? "follwers " + it.getFollowers() : "");
+      following.setText(it.hasFollowing() ? "following " + it.getFollowing() : "");
+      bio.setText(it.hasBio() ? it.getBio() : "");
+      Glide.with(icon.getContext())
+          .load(it.hasAvatarUrl() ? it.getAvatarUrl() : R.drawable.app_icon)
+          .circleCrop()
+          .error(R.drawable.app_icon)
+          .into(icon);
+      title.setText(it.hasName() ? it.getName() : "");
+      subtitle.setText(it.hasUsername() ? it.getUsername() : "");
       icon.setOnLongClickListener(
           v33 -> {
             new MaterialAlertDialogBuilder(getContext())
                 .setTitle("Log out??")
-                .setPositiveButton("yes", (r, __) -> it.logout())
+                .setPositiveButton(
+                    "yes",
+                    (r, __) -> {
+                      it.logout();
+                      icon.setImageResource(R.drawable.app_icon);
+                      title.setText("");
+                      subtitle.setText("");
+                      followers.setText("");
+                      following.setText("");
+                      bio.setText("");
+                    })
                 .show();
 
             return false;

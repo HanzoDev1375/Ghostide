@@ -26,262 +26,122 @@ public class MarkDownCodeAnalyzer implements CodeAnalyzer {
       TextAnalyzeResult result,
       TextAnalyzer.AnalyzeThread.Delegate delegate) {
     try {
-      StringBuilder text =
-          content instanceof StringBuilder ? (StringBuilder) content : new StringBuilder(content);
       CodePointCharStream stream = CharStreams.fromReader(new StringReader(content.toString()));
-      
-      var lexer = new MarkDown(stream);
-      var classNamePrevious = false;
-      Token token, preToken = null, prePreToken = null;
-      boolean first = true;
-      Stack<BlockLine> stack = new Stack<>();
-      int type, currSwitch = 1, maxSwitch = 0, previous = -1;
+      var lexer = new MarkdownLexer(stream);
+
+      Token token;
       int lastLine = 1;
-      int line, column;
-      var prevIsTagName = false;
 
       while (delegate.shouldAnalyze()) {
         token = lexer.nextToken();
-        if (token == null) break;
-        if (token.getType() == MarkDown.EOF) {
-          lastLine = token.getLine() - 1;
-          break;
-        }
-        line = token.getLine() - 1;
-        type = token.getType();
-        String text1 = token.getText();
-        column = token.getCharPositionInLine();
-        if (type == MarkDown.EOF) {
-          lastLine = line;
+        if (token == null || token.getType() == MarkdownLexer.EOF) {
+          lastLine = token != null ? token.getLine() - 1 : lastLine;
           break;
         }
 
-        switch (type) {
-          case MarkDown.WS:
-            if (first) {
-              result.addNormalIfNull();
-            }
+        int line = token.getLine() - 1;
+        int column = token.getCharPositionInLine();
+        String text = token.getText();
+
+        // Skip whitespace and line breaks
+        if (token.getType() == MarkdownLexer.WHITESPACE
+            || token.getType() == MarkdownLexer.LINE_BREAK) {
+          result.addNormalIfNull();
+          continue;
+        }
+
+        // Apply coloring based on token type
+        switch (token.getType()) {
+            // Headings
+          case MarkdownLexer.H1:
+          case MarkdownLexer.H2:
+          case MarkdownLexer.H3:
+          case MarkdownLexer.H4:
+          case MarkdownLexer.H5:
+          case MarkdownLexer.H6:
+            result.addIfNeeded(line, column, EditorColorScheme.ATTRIBUTE_NAME);
             break;
-          
-          case MarkDown.HQ:
+
+            // Code blocks and inline code
+          case MarkdownLexer.CODE_BLOCK:
+          case MarkdownLexer.INLINE_CODE:
+          case MarkdownLexer.CODE_BLOCK_CONTENT:
+          case MarkdownLexer.INLINE_CODE_CONTENT:
             result.addIfNeeded(line, column, EditorColorScheme.LITERAL);
             break;
-          case MarkDown.STRING:
-          case MarkDown.CHATREF:
-            {
-              if (text1.startsWith("\"#")) {
-                var colors = result;
-                try {
-                  int color = Color.parseColor(text1.substring(1, text1.length() - 1));
-                  colors.addIfNeeded(line, column, EditorColorScheme.LITERAL);
-                  if (ColorUtils.calculateLuminance(color) > 0.5) {
-                    Span span =
-                        Span.obtain(
-                            column + 1,
-                            TextStyle.makeStyle(
-                                EditorColorScheme.black, 0, false, false, false, false, true));
-                    if (span != null) {
-                      span.setBackgroundColorMy(color);
-                      colors.add(line, span);
-                    }
-                  } else if (ColorUtils.calculateLuminance(color) <= 0.5) {
-                    Span span =
-                        Span.obtain(
-                            column + 1,
-                            TextStyle.makeStyle(
-                                EditorColorScheme.TEXT_NORMAL,
-                                0,
-                                false,
-                                false,
-                                false,
-                                false,
-                                true));
-                    if (span != null) {
-                      span.setBackgroundColorMy(color);
-                      colors.add(line, span);
-                    }
-                  }
 
-                  Span middle = Span.obtain(column + text1.length() - 1, EditorColorScheme.LITERAL);
-                  middle.setBackgroundColorMy(Color.TRANSPARENT);
-                  colors.add(line, middle);
-
-                  Span end =
-                      Span.obtain(
-                          column + text1.length(),
-                          TextStyle.makeStyle(EditorColorScheme.TEXT_NORMAL));
-                  end.setBackgroundColorMy(Color.TRANSPARENT);
-                  colors.add(line, end);
-                  break;
-                } catch (Exception ignore) {
-                  ignore.printStackTrace();
-                }
-              }
-              result.addIfNeeded(line, column, forString());
-              break;
-            }
-
-          case MarkDown.LPAREN:
-          case MarkDown.RPAREN:
-          case MarkDown.LBRACK:
-          case MarkDown.RBRACK:
-          case MarkDown.SEMI:
-          case MarkDown.COMMA:
-          case MarkDown.ASSIGN:
-          case MarkDown.BANG:
-          case MarkDown.TILDE:
-          case MarkDown.QUESTION:
-          case MarkDown.COLON:
-          case MarkDown.EQUAL:
-          case MarkDown.GE:
-          case MarkDown.LE:
-          case MarkDown.NOTEQUAL:
-          case MarkDown.AND:
-          case MarkDown.OR:
-          case MarkDown.INC:
-          case MarkDown.DEC:
-          case MarkDown.ADD:
-          case MarkDown.SUB:
-          case MarkDown.MUL:
-          case MarkDown.BITAND:
-          case MarkDown.BITOR:
-          case MarkDown.CARET:
-          case MarkDown.MOD:
-          case MarkDown.ADD_ASSIGN:
-          case MarkDown.SUB_ASSIGN:
-          case MarkDown.MUL_ASSIGN:
-          case MarkDown.DIV_ASSIGN:
-          case MarkDown.AND_ASSIGN:
-          case MarkDown.OR_ASSIGN:
-          case MarkDown.XOR_ASSIGN:
-          case MarkDown.MOD_ASSIGN:
-          case MarkDown.LSHIFT_ASSIGN:
-          case MarkDown.RSHIFT_ASSIGN:
-          case MarkDown.URSHIFT_ASSIGN:
-          case MarkDown.ARROW:
-          
-          case MarkDown.ELLIPSIS:
-          case MarkDown.DOT:
+            // Lists
+          case MarkdownLexer.ORDERED_LIST:
+          case MarkdownLexer.UNORDERED_LIST:
+          case MarkdownLexer.TASK_LIST:
+          case MarkdownLexer.TASK_LIST_DONE:
             result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
             break;
-          
-          case MarkDown.GT:
-            result.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
-            break;
-          case MarkDown.LT:
-            { 
-              result.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
-              var block = result.obtainNewBlock();
-              block.startLine = line;
-              block.startColumn = column;
-              stack.push(block);
-              
-              break;
-            }
-            //// '/>'
-          case MarkDown.SLASH_CLOSE:
-            result.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
+
+            // Links and images
+          case MarkdownLexer.L_BRACKET:
+          case MarkdownLexer.R_BRACKET:
+          case MarkdownLexer.L_PAREN:
+          case MarkdownLexer.R_PAREN:
+          case MarkdownLexer.BANG:
+            result.addIfNeeded(line, column, EditorColorScheme.FUNCTION_NAME);
             break;
 
-            /// '</'
-          case MarkDown.OPEN_SLASH:
-            {
-              result.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
-              final var block = stack.pop();
-                block.endLine = line;
-                block.endColumn = column;
-                result.addBlockLine(block);
+          case MarkdownLexer.URL:
+          case MarkdownLexer.AUTO_URL:
+            result.addIfNeeded(line, column, EditorColorScheme.LITERAL);
+            break;
 
-              break;
-            }
-          case MarkDown.IDENTIFIER:
-            {
-              int colorid = EditorColorScheme.TEXT_NORMAL;
-              boolean isBold, isItalic, isUnderLineMode = false;
-              
-              if (previous == MarkDown.HQ) {
-                colorid = EditorColorScheme.AUTO_COMP_PANEL_CORNER;
-              }
-              if (previous == MarkDown.LBRACK
-                  || previous == MarkDown.DOT
-                  || previous == MarkDown.COLON) {
-                colorid = EditorColorScheme.ATTRIBUTE_NAME;
-              }
-              
-              // show '<'
-              if (previous == MarkDown.LT) {
-                colorid = EditorColorScheme.OPERATOR;
-              }
-              // end '</'
-              if (previous == MarkDown.OPEN_SLASH) {
-                colorid = EditorColorScheme.OPERATOR;
-                
-              }
+            // Formatting
+          case MarkdownLexer.BOLD:
+          case MarkdownLexer.ITALIC:
+          case MarkdownLexer.STRIKETHROUGH:
+            result.addIfNeeded(line, column, EditorColorScheme.javafield);
+            break;
 
-              //ListCss3Color.initColor(token, line, column, result, true);
-              result.addIfNeeded(line, column, colorid);
-              break;
-            }
-          case MarkDown.LBRACE:
+            // HTML
+          case MarkdownLexer.HTML_TAG_OPEN:
+          case MarkdownLexer.HTML_TAG_NAME:
+          case MarkdownLexer.HTML_TAG_CLOSE:
+            result.addIfNeeded(line, column, EditorColorScheme.HTML_TAG);
+            break;
+
+          case MarkdownLexer.HTML_ATTRIBUTE_NAME:
+            result.addIfNeeded(line, column, EditorColorScheme.ATTRIBUTE_NAME);
+            break;
+
+          case MarkdownLexer.HTML_ATTRIBUTE_VALUE:
+            result.addIfNeeded(line, column, EditorColorScheme.ATTRIBUTE_VALUE);
+            break;
+
+            // Tables
+          case MarkdownLexer.PIPE:
             result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
-            if (stack.isEmpty()) {
-              if (currSwitch > maxSwitch) {
-                maxSwitch = currSwitch;
-              }
-              currSwitch = 0;
-            }
-            currSwitch++;
-            BlockLine block = result.obtainNewBlock();
-            block.startLine = line;
-            block.startColumn = column;
-            stack.push(block);
             break;
-          case MarkDown.RBRACE:
-            result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
-            if (!stack.isEmpty()) {
-              BlockLine b = stack.pop();
-              b.endLine = line;
-              b.endColumn = column;
-              if (b.startLine != b.endLine) {
-                result.addBlockLine(b);
-              }
-            }
-            break;
-          case MarkDown.DIV:
-            {
-              result.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
-              break;
-            }
+
+            // Blockquotes
+          case MarkdownLexer.BLOCKQUOTE:
           
+            result.addIfNeeded(line, column, EditorColorScheme.javafield);
+            break;
+
+            // Horizontal rule
+          case MarkdownLexer.HR:
+            result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
+            break;
+
+            // Default text
           default:
             result.addIfNeeded(line, column, EditorColorScheme.TEXT_NORMAL);
-
             break;
         }
-
-        /** test */
-        if (token.getType() != MarkDown.WS) {
-          preToken = token;
-        }
-        if (type != MarkDown.WS) {
-          previous = type;
-        }
-
-        first = false;
       }
+
       result.determine(lastLine);
 
     } catch (IOException e) {
       e.printStackTrace();
-      Log.e("TAG", e.getMessage());
+      Log.e("MarkdownAnalyzer", "Error analyzing markdown: " + e.getMessage());
     }
-  }
-
-  public long withoutCompletion(int id) {
-    return TextStyle.makeStyle(id, 0, true, false, false, false, true);
-  }
-
-  public long forString() {
-    return TextStyle.makeStyle(EditorColorScheme.LITERAL, 0, true, false, false);
   }
 }

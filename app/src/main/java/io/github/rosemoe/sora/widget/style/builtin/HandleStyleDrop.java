@@ -24,8 +24,8 @@ public class HandleStyleDrop implements SelectionHandleStyle {
   public HandleStyleDrop(Context context) {
     // drawable = context.getDrawable(R.drawable.ic_sora_handle_drop).mutate();
     prf = context.getSharedPreferences("keys", Context.MODE_PRIVATE);
-    if (prf != null) {
-      drawable = context.getDrawable(prf.getInt("name",R.drawable.ghostcallcurbl)).mutate();
+    if (prf.contains("name")) {
+      drawable = Drawable.createFromPath(prf.getString("name","")).mutate();
     } else {
       drawable = context.getDrawable(R.drawable.ghostcur).mutate();
     }

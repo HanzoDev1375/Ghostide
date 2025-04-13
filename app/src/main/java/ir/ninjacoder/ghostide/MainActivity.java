@@ -47,14 +47,14 @@ public class MainActivity extends BaseCompat {
   }
 
   private void initialize(Bundle _savedInstanceState) {
-      runtimePermissions();
+    runtimePermissions();
     iconSpash = getSharedPreferences("iconSpash", MODE_PRIVATE);
     setac = getSharedPreferences("setac", MODE_PRIVATE);
     tryToRunApp();
   }
 
   void runtimePermissions() {
-    if (Build .VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
       if (!Environment.isExternalStorageManager()) {
         try {
           Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
@@ -95,6 +95,16 @@ public class MainActivity extends BaseCompat {
     if (!FileUtil.isExistFile(iconPath)) {
       AssetsSoft soft = new AssetsSoft();
       soft.copyOneFileFromAssets("icon.png", iconPath, this);
+    }
+    var cursorpath = "/storage/emulated/0/GhostWebIDE/cursor/cursor.json";
+    if (!FileUtil.isExistFile(cursorpath)) {
+      AssetsSoft soft = new AssetsSoft();
+      soft.unzipFromAssets(this, "cursor.zip", "/storage/emulated/0/GhostWebIDE/cursor");
+    }
+    var snippetPath = "/storage/emulated/0/GhostWebIDE/snippet/snippetconfig.json";
+    if (!FileUtil.isExistFile(snippetPath)) {
+      new AssetsSoft()
+          .unzipFromAssets(this, "snippet.zip", "/storage/emulated/0/GhostWebIDE/snippet/");
     }
     try {
       if (!FileUtil.isExistFile("/storage/emulated/0/GhostWebIDE/android/android.jar")) {

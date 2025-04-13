@@ -21,42 +21,30 @@ import ir.ninjacoder.ghostide.R;
 
 public class GitHubProfileView {
   private Context context;
-  private ImageView iconLoader;
-  private TextView title, subtitle;
   private SecurePrefs securePrefs;
   private OkHttpClient client;
-  private LayoutSheetEditText edit;
 
-  public GitHubProfileView(
-      Context context, ImageView iconLoader, TextView title, TextView subtitle) {
+  public GitHubProfileView(Context context) {
     this.context = context;
-    this.iconLoader = iconLoader;
-    this.title = title;
-    this.subtitle = subtitle;
     this.securePrefs = new SecurePrefs(context);
     this.client = new OkHttpClient();
-    if (securePrefs.getToken() != null) {
-      showUserInfo();
-    } else {
-      showLoginDialog();
-    }
   }
 
   private void showLoginDialog() {
-    edit = new LayoutSheetEditText(context);
-    edit.setTitle("Enter GitHub Token");
-    edit.setokClick(
-        v -> {
-          if (!edit.isEmptyText()) {
-            verifyToken(edit.getText().toString());
-          } else {
-            Toast.makeText(context, "Please enter your token", Toast.LENGTH_SHORT).show();
-          }
-        });
+    //    edit = new LayoutSheetEditText(context);
+    //    edit.setTitle("Enter GitHub Token");
+    //    edit.setokClick(
+    //        v -> {
+    //          if (!edit.isEmptyText()) {
+    //            verifyToken(edit.getText().toString());
+    //          } else {
+    //            Toast.makeText(context, "Please enter your token", Toast.LENGTH_SHORT).show();
+    //          }
+    //        });
   }
 
   public void show() {
-    edit.show();
+    ///  edit.show();
   }
 
   public void verifyToken(String token) {
@@ -100,11 +88,8 @@ public class GitHubProfileView {
 
                     ThreadUtils.runOnUiThread(
                         () -> {
-                          showUserInfo();
+                          // showUserInfo();
                           Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show();
-                          if (edit != null) {
-                            edit.dismiss();
-                          }
                         });
                   } catch (Exception e) {
                     ThreadUtils.runOnUiThread(
@@ -120,34 +105,36 @@ public class GitHubProfileView {
             });
   }
 
-  private void showUserInfo() {
-    String username = securePrefs.getUsername();
-    String name = securePrefs.getName();
-    String avatarUrl = securePrefs.getAvatarUrl();
-
-    if (username != null && !username.isEmpty()) {
-      title.setText(username);
-    }
-
-    if (name != null && !name.isEmpty()) {
-      subtitle.setText(name);
-    }
-
-    if (avatarUrl != null && !avatarUrl.isEmpty()) {
-      Glide.with(context)
-          .load(avatarUrl)
-          .circleCrop()
-          .placeholder(R.drawable.app_icon)
-          .into(iconLoader);
-    }
-  }
+  //
+  //  private void showUserInfo() {
+  //    String username = securePrefs.getUsername();
+  //    String name = securePrefs.getName();
+  //    String avatarUrl = securePrefs.getAvatarUrl();
+  //
+  //    if (username != null && !username.isEmpty()) {
+  //      title.setText(hasUsername() ? username : context.getString(R.string.app_name));
+  //    }
+  //
+  //    if (name != null && !name.isEmpty()) {
+  //      subtitle.setText(hasName() ? name : context.getString(R.string.app_name));
+  //    }
+  //
+  //    if (avatarUrl != null && !avatarUrl.isEmpty()) {
+  //      Glide.with(context)
+  //          .load(hasAvatarUrl() ? avatarUrl : R.drawable.app_icon)
+  //          .circleCrop()
+  //          .error(R.drawable.app_icon)
+  //          .placeholder(R.drawable.app_icon)
+  //          .into(iconLoader);
+  //    }
+  //  }
 
   public void logout() {
     securePrefs.clear();
-    title.setText("");
-    subtitle.setText("");
-    iconLoader.setImageResource(R.drawable.app_icon);
-    showLoginDialog();
+    ////    title.setText("");
+    ////    subtitle.setText("");
+    ////    iconLoader.setImageResource(R.drawable.app_icon);
+    // showLoginDialog();
   }
 
   public String getBio() {
@@ -164,5 +151,41 @@ public class GitHubProfileView {
 
   public String getType() {
     return securePrefs.getType();
+  }
+
+  public boolean hasBio() {
+    return securePrefs.hasBio();
+  }
+
+  public boolean hasFollowers() {
+    return securePrefs.hasFollowers();
+  }
+
+  public boolean hasFollowing() {
+    return securePrefs.hasFollowing();
+  }
+
+  public boolean hasAvatarUrl() {
+    return securePrefs.hasAvatarUrl();
+  }
+
+  public boolean hasName() {
+    return securePrefs.hasName();
+  }
+
+  public boolean hasUsername() {
+    return securePrefs.hasUsername();
+  }
+
+  public String getUsername() {
+    return securePrefs.getUsername();
+  }
+
+  public String getAvatarUrl() {
+    return securePrefs.getAvatarUrl();
+  }
+
+  public String getName() {
+    return securePrefs.getName();
   }
 }

@@ -2,9 +2,11 @@ package ir.ninjacoder.ghostide.Store;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.widget.Toast;
 import androidx.annotation.MainThread;
 import androidx.recyclerview.widget.GridLayoutManager;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import ir.ninjacoder.ghostide.RequestNetworkController;
 import java.io.File;
 import android.view.LayoutInflater;
@@ -181,12 +183,18 @@ public class ThemeFragment extends Fragment {
 
             @Override
             public void onSuccess(File result) {
-              // ذخیره مسیر تم در SharedPreferences
-              //              SharedPreferences prefs =
-              //                  context.getSharedPreferences("font_prefs", Context.MODE_PRIVATE);
-              //              prefs.edit().putString("selected_font_path",
-              // result.getAbsolutePath()).apply();
-              //
+              new MaterialAlertDialogBuilder(getContext())
+                  .setTitle("Apply theme in Editor")
+                  .setMessage("not try to select in theme for code editor !!!")
+                  .setPositiveButton(
+                      android.R.string.ok,
+                      (e, ee) -> {
+                        SharedPreferences prefs =
+                            getContext().getSharedPreferences("thememanagersoft", Context.MODE_PRIVATE);
+                        prefs.edit().putString("themes", result.getAbsolutePath()).apply();
+                      })
+                  .setNegativeButton(android.R.string.cancel, null)
+                  .show();
               Toast.makeText(
                       getContext(),
                       "تم با موفقیت ذخیره شد: " + result.getPath(),

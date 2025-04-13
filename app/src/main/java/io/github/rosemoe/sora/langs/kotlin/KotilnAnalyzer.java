@@ -8,6 +8,7 @@ import io.github.rosemoe.sora.text.TextStyle;
 
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
+import java.util.Arrays;
 import java.util.Stack;
 
 import io.github.rosemoe.sora.data.BlockLine;
@@ -283,8 +284,8 @@ public class KotilnAnalyzer implements CodeAnalyzer {
                 isItalic = true;
               }
               if (token.getText().equals("apply") || token.getText().equals("let")) {
+
                 color = EditorColorScheme.Ninja;
-                isbold = true;
               }
               if (token.getText().equals("field")) {
                 isbold = true;
@@ -302,7 +303,63 @@ public class KotilnAnalyzer implements CodeAnalyzer {
               }
               // this for ninja lang
               if (token.getText().equals("runAsUi")) {
-                color = EditorColorScheme.red;
+                color = EditorColorScheme.javaoprator;
+              }
+              String[] ktStdFunctions = {
+                "arrayOf", "listOf", "mutableListOf", "mutableMapOf",
+                "setOf", "mutableSetOf", "mapOf", "emptyList",
+                "emptySet", "emptyMap", "sequenceOf"
+              };
+
+              // توابع حوزه همزمانی (coroutines)
+              String[] ktCoroutine = {
+                "delay", "withContext",
+                "async", "coroutineScope",
+                "supervisorScope", "runBlocking", "launch"
+              };
+
+              String[] ktScopeFunctions = { "with"};
+              String[] ktCollectionFunctions = {
+                "filter",
+                "map",
+                "flatMap",
+                "fold",
+                "reduce",
+                "forEach",
+                "any",
+                "all",
+                "none",
+                "first",
+                "last",
+                "contains",
+                "reversed",
+                "sorted",
+                "sum",
+                "average",
+                "count",
+                "max",
+                "min",
+                "take",
+                "drop",
+                "zip",
+                "plus",
+                "minus",
+                "distinct",
+                "groupBy",
+                "associateBy",
+                "partition",
+                "onEach",
+                "shuffled",
+                "joinToString"
+              };
+              if (Arrays.asList(ktStdFunctions).contains(token.getText())) {
+                color = EditorColorScheme.javafield;
+              } else if (Arrays.asList(ktCoroutine).contains(token.getText())) {
+                color = EditorColorScheme.javafun;
+              } else if (Arrays.asList(ktScopeFunctions).contains(token.getText())) {
+                color = EditorColorScheme.javaoprator;
+              } else if (Arrays.asList(ktCollectionFunctions).contains(token.getText())) {
+                color = EditorColorScheme.javaparament;
               }
 
               result.addIfNeeded(
@@ -390,7 +447,7 @@ public class KotilnAnalyzer implements CodeAnalyzer {
 
               @Override
               public void enterBlock(KotlinParser.BlockContext ctx) {
-                if (ctx.statements().isEmpty()) {
+                if (!ctx.statements().isEmpty()) {
                   Utils.setWaringSpan(
                       result,
                       ctx.LCURL().getSymbol().getLine(),

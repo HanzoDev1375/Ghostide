@@ -66,8 +66,8 @@ public class HandleStyleSideDrop extends HandleStyleDrop {
         (int)
             TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, 30f, context.getResources().getDisplayMetrics());
-    if (prf != null) {
-      drawable = context.getDrawable(prf.getInt("header", R.drawable.ghostcur)).mutate();
+    if (prf.contains("header")) {
+      drawable = Drawable.createFromPath(prf.getString("header", "")).mutate();
     } else {
       drawable = context.getDrawable(R.drawable.ghostcur).mutate();
     }

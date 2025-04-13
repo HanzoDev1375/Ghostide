@@ -258,10 +258,6 @@ public class Css3Server {
     "z-index"
   };
 
-  static final String[] paddingValues = {
-    "px", "em", "rem", "%", "vw", "vh", "vmin", "vmax", "in", "cm", "mm", "pt", "pc", "ch"
-  };
-
   protected HTMLConstants htmlconfig;
 
   public Css3Server() {
@@ -501,8 +497,65 @@ public class Css3Server {
     }
   }
 
+  String[] paddingValues = {
+    "px", "em", "rem", "vw", "vh", "vmin", "vmax", "in", "cm", "mm", "pt", "pc", "ch"
+  };
+
+  // برای نمایش عین vscode و در xml هم بزودی
+  List<CompletionItem> getPaddingCompletions(String prefix) {
+    List<CompletionItem> result = new ArrayList<>();
+
+    // حالت 1: عدد خالص (مثلاً "2")
+    if (prefix.matches("^\\d+$")) {
+      for (String unit : paddingValues) {
+        result.add(css(prefix + unit, "CssUnit"));
+      }
+      return result;
+    }
+
+    // حالت 2: عدد + واحد ناتمام (مثلاً "2p", "2em", "2pc")
+    Matcher unitMatcher = Pattern.compile("^(\\d+)([a-z%]*)").matcher(prefix);
+    if (unitMatcher.matches()) {
+      String number = unitMatcher.group(1);
+      String partialUnit = unitMatcher.group(2);
+
+      for (String unit : paddingValues) {
+        if (unit.startsWith(partialUnit)) {
+          result.add(css(number + unit, "CssUnit"));
+        }
+      }
+      return result;
+    }
+
+    // حالت 3: خصوصیت CSS (مثلاً "padding:2", "padding:2p", "padding:2pc")
+    String[] properties = {
+      "padding:", "padding-top:", "padding-right:", "padding-bottom:", "padding-left:"
+    };
+
+    for (String prop : properties) {
+      if (prefix.startsWith(prop)) {
+        String valuePart = prefix.substring(prop.length());
+        Matcher valueMatcher = Pattern.compile("^(\\d+)([a-z%]*)").matcher(valuePart);
+
+        if (valueMatcher.matches()) {
+          String number = valueMatcher.group(1);
+          String partialUnit = valueMatcher.group(2);
+
+          for (String unit : paddingValues) {
+            if (unit.startsWith(partialUnit)) {
+              result.add(css(prop + number + unit, "CssPadding"));
+            }
+          }
+        }
+        break;
+      }
+    }
+
+    return result;
+  }
+
   public void Padding(List<CompletionItem> list, String prefix) {
-    Padding(list, prefix, "padding:", "padding-top:");
+    list.addAll(getPaddingCompletions(prefix));
   }
 
   public CompletionItem css(String attr, String desc, String data) {

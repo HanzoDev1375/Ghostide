@@ -1,7 +1,10 @@
 package ir.ninjacoder.ghostide.folder;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import ir.ninjacoder.ghostide.R;
 import android.widget.ImageView;
+import ir.ninjacoder.ghostide.glidecompat.glideres.IconRes;
 
 public class FileIconHelper {
 
@@ -67,8 +70,14 @@ public class FileIconHelper {
   }
 
   public void bindIcon(ImageView imageView) {
-    imageView.setImageResource(fileIconRes);
+    
+    Glide.with(imageView.getContext())
+        .load(new IconRes(fileIconRes, imageView.getContext()))
+        .error(R.drawable.errorxml)
+        .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+        .into(imageView);
   }
+  
 
   private void check() {
     fileHelper = new FileHelper(filePath);
@@ -189,7 +198,7 @@ public class FileIconHelper {
         else if (fileEnvHelper.react().isReactFile()) fileIconRes = R.drawable.ic_material_react;
         else fileIconRes = R.drawable.ic_material_javascript;
       } else fileIconRes = R.drawable.ic_material_javascript;
-    } else if (is("json")) {
+    } else if (is("json") || is("snippet")) {
       if (isEnvironmentEnabled) {
         if (fileEnvHelper.isNpmPackageJson()) fileIconRes = R.drawable.ic_material_npm;
         else fileIconRes = R.drawable.ic_material_json;

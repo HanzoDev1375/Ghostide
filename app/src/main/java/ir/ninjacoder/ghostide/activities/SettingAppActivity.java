@@ -7,6 +7,7 @@ import ir.ninjacoder.ghostide.config.AppIconManager;
 import ir.ninjacoder.ghostide.config.PrfnsUtil;
 import ir.ninjacoder.ghostide.enums.ErudaThemeManager;
 import ir.ninjacoder.ghostide.enums.ErudaThemes;
+import ir.ninjacoder.ghostide.git.GitHubProfileView;
 import java.util.Arrays;
 import ir.ninjacoder.ghostide.filehelper.IconCursorImpl;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
@@ -90,7 +91,7 @@ public class SettingAppActivity extends BaseCompat {
       gridMode,
       Analyzercod,
       iconSpash;
-  private PerfenceLayoutSubTitle themecustom, blurmod, windowsize, erudathemes;
+  private PerfenceLayoutSubTitle themecustom, blurmod, windowsize, erudathemes,jointogithub;
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
@@ -123,6 +124,7 @@ public class SettingAppActivity extends BaseCompat {
     themeEngine.setThemeMode(ThemeMode.DARK);
     themeEngine.applyToActivity(this);
     bar = findViewById(R.id.bar);
+    jointogithub = findViewById(R.id.jointogithub);
     breaklevelmodel = findViewById(R.id.breaklevelmodel);
     erudathemes = findViewById(R.id.erudathemes);
     getvb = getSharedPreferences("getvb", Activity.MODE_PRIVATE);
@@ -167,6 +169,8 @@ public class SettingAppActivity extends BaseCompat {
     breaklevelmodel.setDescription("setBreakLevelModel Live Style");
     erudathemes.setTitle("Eruda theme");
     erudathemes.setDescription("Custom theme Eruda");
+    jointogithub.setTitle("Github login");
+    jointogithub.setDescription("Try to join in github for show lego and user name etc..");
     _toolbar.setOnApplyWindowInsetsListener(
         new View.OnApplyWindowInsetsListener() {
           @Override
@@ -358,6 +362,15 @@ public class SettingAppActivity extends BaseCompat {
         (bin, is) -> {
           if (is) GhostIdeAppLoader.getPrefManager().edit().putBoolean("breaks", true).apply();
           else GhostIdeAppLoader.getPrefManager().edit().putBoolean("breaks", false).apply();
+        });
+        jointogithub.setOnClickListener(v ->{
+            var msheet = new LayoutSheetEditText(this);
+            msheet.show();
+            msheet.setokClick(i ->{
+                var git = new GitHubProfileView(this);
+                git.verifyToken(msheet.getText());
+                msheet.dismiss();
+            });
         });
 
     StartLuncherApp();

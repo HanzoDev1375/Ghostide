@@ -229,7 +229,7 @@ public class FileIconHelperPath {
     else if (is("jar")) fileIconPath = ICON_PATH + "/ic_material_jar.png";
     else if (is("java")) fileIconPath = ICON_PATH + "/ic_material_java.png";
     else if (is("js")) fileIconPath = ICON_PATH + "/ic_material_javascript.png";
-    else if (is("json")) fileIconPath = ICON_PATH + "/ic_material_json.png";
+    else if (is("json") || is("snippet")) fileIconPath = ICON_PATH + "/ic_material_json.png";
     else if (is("kt")) fileIconPath = ICON_PATH + "/ic_material_kotlin.png";
     else if (is("less")) fileIconPath = ICON_PATH + "/ic_material_less.png";
     else if (is("log")) fileIconPath = ICON_PATH + "/ic_material_log.png";

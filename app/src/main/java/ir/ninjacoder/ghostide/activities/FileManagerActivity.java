@@ -92,6 +92,7 @@ import ir.ninjacoder.prograsssheet.MusicSheet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
+import ninja.coder.appuploader.data.SnippetManagerImpl;
 import ninjacoder.ghostide.androidtools.r8.android.R8Tools;
 import storage.sdcard.SdCardUtil;
 import com.ninjacoder.jgit.childer.TextFind;
@@ -1081,6 +1082,9 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
 
   public void _dataOnClickItemList(int _pos) {
     newpos = _pos;
+    if(staticstring.endsWith(".snippet")){
+        new SnippetManagerImpl(new File(staticstring),this);
+    }
     if (staticstring.endsWith(".txt") || staticstring.endsWith(".log")) {
       SendDataFromCodeEditor(newpos, "path", files, newlistmap);
     }

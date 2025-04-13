@@ -60,6 +60,30 @@ public class SecurePrefs {
     return sharedPreferences.getInt("followers", 0);
   }
 
+  public boolean hasBio() {
+    return sharedPreferences.contains("bio");
+  }
+
+  public boolean hasFollowers() {
+    return sharedPreferences.contains("followers");
+  }
+
+  public boolean hasFollowing() {
+    return sharedPreferences.contains("following");
+  }
+
+  public boolean hasAvatarUrl() {
+    return sharedPreferences.contains("avatar_url");
+  }
+
+  public boolean hasName() {
+    return sharedPreferences.contains("name");
+  }
+
+  public boolean hasUsername() {
+    return sharedPreferences.contains("username");
+  }
+
   public int getFollowing() {
     return sharedPreferences.getInt("following", 0);
   }

@@ -83,7 +83,7 @@ public class CodeSnippet {
                         String lineStr = line.getAsString();
                         // فقط اگر خط شامل placeholder باشد، جایگزینی انجام می‌شود
                         if (lineStr.contains("${")) {
-                          lineStr = lineStr.replaceAll("\\$\\{[^}]*\\}", "");
+                          lineStr = lineStr.replaceAll("\\$\\{[^}]*:(.*?)\\}", "$1");
                         }
                         bodyBuilder.append(lineStr).append("\n");
                       }
@@ -93,7 +93,7 @@ public class CodeSnippet {
                     bodyStr = bodyElement.getAsString();
                     // فقط اگر متن اصلی شامل placeholder باشد، جایگزینی انجام می‌شود
                     if (bodyStr.contains("${")) {
-                      bodyStr = bodyStr.replaceAll("\\$\\{[^}]*\\}", "$2");
+                      bodyStr = bodyStr.replaceAll("\\$\\{[^}]*:(.*?)\\}", "$1");
                     }
                   }
                   snippet.commit = bodyStr;

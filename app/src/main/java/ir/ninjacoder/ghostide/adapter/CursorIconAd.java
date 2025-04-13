@@ -8,34 +8,34 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 import ir.ninjacoder.ghostide.R;
-import ir.ninjacoder.ghostide.model.CursorIconModel;
+import ir.ninjacoder.ghostide.utils.FileUtil;
 import java.util.ArrayList;
 import java.util.List;
 import android.content.SharedPreferences.Editor;
+import java.util.Map;
 
 public class CursorIconAd extends RecyclerView.Adapter<CursorIconAd.Holder> {
-  private List<CursorIconModel> model;
   private Context context;
   private SharedPreferences prf;
   private OnItemClickVistor visit;
+  private List<Map<String, String>> listModel = new ArrayList<>();
+  ;
+  String jsonPath = "/storage/emulated/0/GhostWebIDE/cursor/cursor.json";
 
   public CursorIconAd(Context context, OnItemClickVistor visit) {
     this.context = context;
     this.visit = visit;
     prf = context.getSharedPreferences("keys", Context.MODE_PRIVATE);
-    model = new ArrayList<>();
-    add(R.drawable.ghostcallcurfa, R.drawable.ghostcallcurbl, "Ghost ", "Nife model");
-    add(R.drawable.ghostcurfa, R.drawable.ghostcubl, "Ghost Red ", "Red model");
-    add(R.drawable.handcurfa,R.drawable.handcurbl,"Blue Hand","Blue Hand drak");
-    add(R.drawable.ktcurfa,R.drawable.ktcurbld,"God of war face","god of war nife");
-    add(R.drawable.mousecurfa,R.drawable.mousecurbl,"Hand Drak ","Mouse Drak");
-    add(R.drawable.ninjacurfa,R.drawable.ninjacurbl,"dantelo face","danleto wood");
-    add(R.drawable.vacurfa,R.drawable.vacurbl,"Venom face","Venom D");
-  }
 
-  void add(int iconname, int headericon, String iconnamestr, String iconheadername) {
-    model.add(new CursorIconModel(iconname, headericon, iconnamestr, iconheadername, false));
+    listModel =
+        new Gson()
+            .fromJson(
+                FileUtil.readFile(jsonPath),
+                new TypeToken<List<Map<String, String>>>() {}.getType());
   }
 
   public interface OnItemClickVistor {
@@ -46,7 +46,6 @@ public class CursorIconAd extends RecyclerView.Adapter<CursorIconAd.Holder> {
   public static class Holder extends RecyclerView.ViewHolder {
     private TextView mainname, headername;
     private ImageView iconname, headericon;
-    
 
     public Holder(View view) {
       super(view);
@@ -59,22 +58,28 @@ public class CursorIconAd extends RecyclerView.Adapter<CursorIconAd.Holder> {
 
   @Override
   public int getItemCount() {
-    return model.size();
+    return listModel.size();
   }
 
   @Override
   public void onBindViewHolder(Holder holder, int pos) {
-    var itempos = model.get(pos);
-    holder.iconname.setImageResource(itempos.getIcon());
-    holder.headericon.setImageResource(itempos.getHeadericon());
-    holder.mainname.setText(itempos.getNameicon());
-    holder.headername.setText(itempos.getIconhader());
+    var itempos = listModel.get(pos);
+    Glide.with(holder.iconname.getContext())
+        .load(itempos.get("cursorstart"))
+        .error(R.drawable.errorxml)
+        .into(holder.iconname);
+    Glide.with(holder.headericon.getContext())
+        .load(itempos.get("cursorend"))
+        .error(R.drawable.errorxml)
+        .into(holder.headericon);
+    holder.mainname.setText(itempos.get("namecursorstart"));
+    holder.headername.setText(itempos.get("namecursorend"));
     holder.itemView.setOnClickListener(
         v -> {
           visit.click(holder.getAdapterPosition());
           Editor editor = prf.edit();
-          editor.putInt("name", itempos.getIcon());
-          editor.putInt("header", itempos.getHeadericon());
+          editor.putString("name", itempos.get("cursorstart"));
+          editor.putString("header", itempos.get("cursorend"));
           editor.apply();
         });
   }

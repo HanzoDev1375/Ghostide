@@ -1,6 +1,7 @@
 package ir.ninjacoder.ghostide.adapter;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.widget.CheckBox;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.config.AmazonClassHelper;
@@ -140,7 +141,6 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
 
     } else {
       FileIconHelper fileIconHelper = new FileIconHelper(myfile.toString());
-      viewHolder.icon.setImageResource(fileIconHelper.getFileIcon());
       fileIconHelper.setDynamicFolderEnabled(true);
       fileIconHelper.setEnvironmentEnabled(true);
       fileIconHelper.bindIcon(viewHolder.icon);
@@ -172,6 +172,10 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
           GlideCompat.GlideLoadMp3(viewHolder.icon, myfile.toString());
         } else if (myfile.toString().endsWith(".pdf")) {
           GlideCompat.loadImgPdf(myfile.toString(), viewHolder.icon);
+        } else if (myfile.toString().endsWith(".snippet")) {
+          viewHolder.icon.setColorFilter(Color.parseColor("#FBC82F"));
+        } else if (myfile.toString().startsWith("snippetconfig.json")) {
+          viewHolder.icon.setColorFilter(Color.CYAN);
         }
       }
     }
