@@ -18,6 +18,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import lsp4custom.com.ninjacoder.customhtmllsp.CodeSnippet;
 import lsp4custom.com.ninjacoder.customhtmllsp.ListKeyword;
 
 import java.util.ArrayList;
@@ -79,7 +80,7 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
       Collections.sort(words, CompletionItem.COMPARATOR_BY_NAME);
       items.addAll(words);
     }
-    // Test
+    items.addAll(CodeSnippet.runasList("html", prefix));
 
     return items;
   }

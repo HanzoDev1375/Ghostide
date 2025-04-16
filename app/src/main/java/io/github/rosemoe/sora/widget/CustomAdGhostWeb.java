@@ -1,6 +1,9 @@
 package io.github.rosemoe.sora.widget;
 
 import com.ninjacoder.jgit.CircleDrawable;
+import com.skydoves.powermenu.PowerMenu;
+import com.skydoves.powermenu.PowerMenuItem;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.utils.AnimUtils;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -90,6 +93,7 @@ public class CustomAdGhostWeb extends EditorCompletionAdapter {
             ? getThemeColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER)
             : Color.TRANSPARENT);
 
+    
     view.setTag(pos);
     return view;
   }

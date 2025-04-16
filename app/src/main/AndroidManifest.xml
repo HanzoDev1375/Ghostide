@@ -50,7 +50,7 @@
         <activity android:name=".activities.ErrorManagerActivity" />
         <activity android:name=".activities.AboutActivity" />
         <activity android:name=".activities.ShellCodeActivity" />
-        <activity android:name="ir.ninjacoder.ghostide.Store.StoreAcitvity"/>
+        <activity android:name="ir.ninjacoder.ghostide.Store.StoreAcitvity" />
         <activity
             android:name=".terminal.TerminalActivity"
             android:configChanges="orientation|screenSize|smallestScreenSize|density|screenLayout|keyboard|keyboardHidden|navigation"
@@ -330,15 +330,7 @@
         <activity android:name=".activities.PhpActivity" />
         <activity android:name=".activities.FileBookmarkActivity" />
         <activity android:name=".activities.SetHomeWallpActivity" />
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="ir.ninjacoder.ghostide.provider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider" />
-        </provider>
+
         <activity android:name="ir.ninjacoder.ghostide.keyboard.Setting">
         </activity>
         <activity-alias
@@ -486,5 +478,14 @@
         </receiver>
         <activity android:name=".activities.ApkViewActivity" />
         <activity android:name=".Welcome.SplashWord" />
+       <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="ir.ninjacoder.ghostide.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider" />
+        </provider>
     </application>
 </manifest>

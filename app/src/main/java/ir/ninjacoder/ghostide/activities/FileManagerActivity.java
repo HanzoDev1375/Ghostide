@@ -704,7 +704,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
       List<HashMap<String, Object>> _listmap1,
       List<HashMap<String, Object>> _listmap2) {
     tab = _listmap1.get((int) _position).get(_key).toString();
-    shp.edit().putString("pos_path", _listmap1.get((int) _position).get(_key).toString()).commit();
+    shp.edit().putString("pos_path", _listmap1.get((int) _position).get(_key).toString()).apply();
     if (_listmap2.isEmpty()) {
       positionTabs = 0;
       activitiy.setClass(getApplicationContext(), CodeEditorActivity.class);

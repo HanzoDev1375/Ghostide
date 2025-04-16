@@ -1,6 +1,8 @@
 package ir.ninjacoder.ghostide.git;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,23 +30,6 @@ public class GitHubProfileView {
     this.context = context;
     this.securePrefs = new SecurePrefs(context);
     this.client = new OkHttpClient();
-  }
-
-  private void showLoginDialog() {
-    //    edit = new LayoutSheetEditText(context);
-    //    edit.setTitle("Enter GitHub Token");
-    //    edit.setokClick(
-    //        v -> {
-    //          if (!edit.isEmptyText()) {
-    //            verifyToken(edit.getText().toString());
-    //          } else {
-    //            Toast.makeText(context, "Please enter your token", Toast.LENGTH_SHORT).show();
-    //          }
-    //        });
-  }
-
-  public void show() {
-    ///  edit.show();
   }
 
   public void verifyToken(String token) {
@@ -82,15 +67,14 @@ public class GitHubProfileView {
                     int followers = userJson.optInt("followers", 0);
                     int following = userJson.optInt("following", 0);
                     String type = userJson.optString("type", "User");
+
                     securePrefs.saveToken(token);
                     securePrefs.saveUserInfo(
                         username, avatarUrl, name, bio, followers, following, type);
 
-                    ThreadUtils.runOnUiThread(
-                        () -> {
-                          // showUserInfo();
-                          Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show();
-                        });
+                    // بررسی ستاره دادن کاربر به مخزن
+                    checkIfUserStarredRepo(token, username);
+
                   } catch (Exception e) {
                     ThreadUtils.runOnUiThread(
                         () ->
@@ -105,36 +89,67 @@ public class GitHubProfileView {
             });
   }
 
-  //
-  //  private void showUserInfo() {
-  //    String username = securePrefs.getUsername();
-  //    String name = securePrefs.getName();
-  //    String avatarUrl = securePrefs.getAvatarUrl();
-  //
-  //    if (username != null && !username.isEmpty()) {
-  //      title.setText(hasUsername() ? username : context.getString(R.string.app_name));
-  //    }
-  //
-  //    if (name != null && !name.isEmpty()) {
-  //      subtitle.setText(hasName() ? name : context.getString(R.string.app_name));
-  //    }
-  //
-  //    if (avatarUrl != null && !avatarUrl.isEmpty()) {
-  //      Glide.with(context)
-  //          .load(hasAvatarUrl() ? avatarUrl : R.drawable.app_icon)
-  //          .circleCrop()
-  //          .error(R.drawable.app_icon)
-  //          .placeholder(R.drawable.app_icon)
-  //          .into(iconLoader);
-  //    }
-  //  }
+  private void checkIfUserStarredRepo(String token, String username) {
+    Request request =
+        new Request.Builder()
+            .url("https://api.github.com/user/starred/HanzoDev1375/Ghostide")
+            .header("Authorization", "token " + token)
+            .build();
+
+    client
+        .newCall(request)
+        .enqueue(
+            new Callback() {
+              @Override
+              public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                // در صورت خطا، می‌توانید اینجا تصمیم بگیرید که چه کاری انجام دهید
+              }
+
+              @Override
+              public void onResponse(@NonNull Call call, @NonNull Response response)
+                  throws IOException {
+                if (response.code() == 204) {
+                  // کد 204 یعنی کاربر ستاره داده است
+                  securePrefs.setHasStarredRepo(true);
+                } else if (response.code() == 404) {
+                  // کد 404 یعنی کاربر ستاره نداده است
+                  securePrefs.setHasStarredRepo(false);
+                  showStarDialogOnce();
+                }
+              }
+            });
+  }
+
+  private void showStarDialogOnce() {
+    if (!securePrefs.hasShownStarDialog()) {
+      ThreadUtils.runOnUiThread(
+          () -> {
+            new MaterialAlertDialogBuilder(context)
+                .setTitle("Please support the project.")
+                .setMessage(
+                    "If you enjoy Ghostide, please support us by giving the repository a star on GitHub!")
+                .setPositiveButton(
+                    "go to github",
+                    (dialog, which) -> {
+                      try {
+                        Intent browserIntent =
+                            new Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("https://github.com/HanzoDev1375/Ghostide"));
+                        context.startActivity(browserIntent);
+                      } catch (Exception e) {
+                        Toast.makeText(context, "Error opening browser", Toast.LENGTH_SHORT).show();
+                      }
+                    })
+                .setNegativeButton("no", null)
+                .setOnDismissListener(dialog -> securePrefs.setHasShownStarDialog(true))
+                .show();
+          });
+    }
+  }
 
   public void logout() {
     securePrefs.clear();
-    ////    title.setText("");
-    ////    subtitle.setText("");
-    ////    iconLoader.setImageResource(R.drawable.app_icon);
-    // showLoginDialog();
   }
 
   public String getBio() {

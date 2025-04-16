@@ -107,4 +107,20 @@ public class SecurePrefs {
   public void clear() {
     sharedPreferences.edit().clear().apply();
   }
+
+  public void setHasStarredRepo(boolean hasStarred) {
+    sharedPreferences.edit().putBoolean("has_starred_repo", hasStarred).apply();
+  }
+
+  public boolean hasStarredRepo() {
+    return sharedPreferences.getBoolean("has_starred_repo", false);
+  }
+
+  public void setHasShownStarDialog(boolean hasShown) {
+    sharedPreferences.edit().putBoolean("has_shown_star_dialog", hasShown).apply();
+  }
+
+  public boolean hasShownStarDialog() {
+    return sharedPreferences.getBoolean("has_shown_star_dialog", false);
+  }
 }

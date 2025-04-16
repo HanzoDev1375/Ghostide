@@ -144,6 +144,14 @@ public class EditorAutoCompleteWindow extends EditorPopupWindow {
             Toast.makeText(mEditor.getContext(), e.toString(), Toast.LENGTH_SHORT).show();
           }
         });
+    listview1.setOnItemLongClickListener(
+        (parent, view, position, id) -> {
+          var menu = new EditorTextActionWindow(mEditor);
+          menu.setShowItems(false);
+          menu.setText("Test");
+          if(menu != null) menu.show();
+          return true; 
+        });
   }
 
   public void setItemClick() {
@@ -437,7 +445,6 @@ public class EditorAutoCompleteWindow extends EditorPopupWindow {
       mColors = mEditor.getTextAnalyzeResult();
       mLine = mEditor.getCursor().getLeftLine();
       mColumn = mEditor.getCursor().getLeftColumn();
-      
     }
 
     @Override
@@ -445,7 +452,7 @@ public class EditorAutoCompleteWindow extends EditorPopupWindow {
       try {
         displayResults(
             mLocalProvider.getAutoCompleteItems(mPrefix, mColors, mLine, mColumn), mTime);
-        
+
       } catch (Exception e) {
         e.printStackTrace();
         displayResults(new ArrayList<>(), mTime);

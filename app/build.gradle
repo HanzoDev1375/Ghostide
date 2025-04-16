@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace "ir.ninjacoder.ghostide"
-    compileSdk 34
+    compileSdk 35
     
     defaultConfig {
         applicationId "ir.ninjacoder.ghostide"

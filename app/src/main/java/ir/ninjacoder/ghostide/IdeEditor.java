@@ -1,8 +1,11 @@
 package ir.ninjacoder.ghostide;
 
 import android.content.SharedPreferences;
+import android.view.DragEvent;
 import io.github.rosemoe.sora.event.LongPressEvent;
 import io.github.rosemoe.sora.event.TextSizeChangeEvent;
+import io.github.rosemoe.sora.model.Inlay;
+import io.github.rosemoe.sora.util.IntPair;
 import ir.ninjacoder.ghostide.config.LOG;
 import ir.ninjacoder.ghostide.editor.EditorUtil;
 import ir.ninjacoder.ghostide.interfaces.CallBackErrorManager;
@@ -76,6 +79,7 @@ public class IdeEditor extends CodeEditor implements IEditor {
     init();
   }
 
+  
   public IdeEditor init() {
     setTabWidth(2);
     listitem = new CommentList();
@@ -87,7 +91,7 @@ public class IdeEditor extends CodeEditor implements IEditor {
     setDividerWidth(19);
     setPinLineNumber(true);
     setDividerMargin(30f);
-    setNonPrintablePaintingFlags(FLAG_GHOSTWEB|FLAG_Scrop);
+    setNonPrintablePaintingFlags(FLAG_GHOSTWEB | FLAG_Scrop);
     subscribeEvent(ClickEvent.class, ((event, unsubscribe) -> ta(event)));
     subscribeEvent(ContentChangeEvent.class, ((event, unsubscribe) -> handleContentChange(event)));
     subscribeEvent(TextSizeChangeEvent.class, ((event, unsubscribe) -> textSize(event)));
@@ -98,7 +102,6 @@ public class IdeEditor extends CodeEditor implements IEditor {
       setTextSizePx(getSize);
     }
     EditorUtil.setClick(this);
-    
     return this;
   }
 

@@ -25,6 +25,7 @@ import ir.ninjacoder.ghostide.navigator.EditorHelperColor;
 import ir.ninjacoder.ghostide.navigator.EditorRoaderFile;
 import ir.ninjacoder.ghostide.project.JavaCompilerBeta;
 import ir.ninjacoder.ghostide.project.ProjectManager;
+import ir.ninjacoder.ghostide.tasks.FileChangeReceiver;
 import ir.ninjacoder.ghostide.tasks.SecurePrefs;
 import ir.ninjacoder.ghostide.tasks.app.SassForAndroid;
 import ir.ninjacoder.ghostide.terminal.TerminalActivity;
@@ -179,6 +180,8 @@ public class CodeEditorActivity extends BaseCompat {
   private String Paths;
   private boolean isSvg = false;
   private IdeEditor editor;
+  private FileChangeReceiver.FileChangeListener fileChangeListener;
+  private boolean isFileChangeDialogShowing = false;
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
@@ -761,6 +764,7 @@ public class CodeEditorActivity extends BaseCompat {
       DataUtil.showMessage(getApplicationContext(), getString(R.string.errorEmptyFile));
     } else {
       try {
+        isFileChangeDialogShowing = false;
         int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
         if (selectedTabPosition >= 0 && selectedTabPosition < tabs_listmap.size()) {
           String selectedFilePath = tabs_listmap.get(selectedTabPosition).get("path").toString();
@@ -769,8 +773,6 @@ public class CodeEditorActivity extends BaseCompat {
           if (selectedFilePath.endsWith(".class")) {
             FileUtil.writeFile(selectedFilePath.replace(".class", ".java"), fileContent);
           } else FileUtil.writeFile(selectedFilePath, fileContent);
-          ClickItemChildAnimation(editor);
-          EditorUtil.savecursor(editor, this, savecursor);
         }
       } catch (Exception e) {
         DataUtil.showMessage(getApplicationContext(), "Error not File saved!");
@@ -893,6 +895,19 @@ public class CodeEditorActivity extends BaseCompat {
               String tabText = Uri.parse(path).getLastPathSegment();
               if (FileUtil.isExistFile(path)) {
                 tablayouteditor.addTab(tablayouteditor.newTab().setText(tabText));
+                FileChangeReceiver.startWatching(
+                    CodeEditorActivity.this,
+                    path,
+                    (filePath) -> {
+                      FileChangeReceiver.showFileChangedDialog(
+                          CodeEditorActivity.this,
+                          filePath,
+                          () -> {
+                            // کد برای بارگذاری مجدد فایل
+                            setCodeEditorFileReader(filePath);
+                          });
+                    });
+
               } else {
                 tablayouteditor.addTab(
                     tablayouteditor.newTab().setText("File not found" + tabText));
@@ -973,7 +988,6 @@ public class CodeEditorActivity extends BaseCompat {
                   String filePath = tabs_listmap.get(pos).get("path").toString();
                   boolean fileExists =
                       (boolean) tabs_listmap.get(pos).getOrDefault("exists", false);
-
                   if (!fileExists) {
                     showFileNotFoundDialog(pos, filePath);
                   } else {
@@ -1265,12 +1279,5 @@ public class CodeEditorActivity extends BaseCompat {
     }
 
     return super.onKeyDown(data, key);
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    EditorUtil.savecursor(editor, CodeEditorActivity.this, savecursor);
-    // TODO: Implement this method
   }
 }

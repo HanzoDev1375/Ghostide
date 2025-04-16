@@ -25,6 +25,7 @@ package io.github.rosemoe.sora.widget;
 
 import io.github.rosemoe.sora.event.TextSizeChangeEvent;
 import io.github.rosemoe.sora.graphics.BubbleHelper;
+import io.github.rosemoe.sora.model.Inlay;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.utils.DiagnosticsListener;
@@ -391,8 +392,45 @@ public class CodeEditor extends View
     return this.minidraw;
   }
 
+  private final List<Inlay> inlays = new ArrayList<>();
+
+  public void addInlay(Inlay inlay) {
+    inlays.add(inlay);
+    invalidate();
+  }
+
+  public void removeInlay(Inlay inlay) {
+    inlays.remove(inlay);
+    invalidate();
+  }
+
+  public void clearInlays() {
+    inlays.clear();
+    invalidate();
+  }
+
   public void setMinidraw(String minidraw) {
     this.minidraw = minidraw;
+  }
+
+  private void drawInlay(Canvas canvas, Inlay inlay) {
+    // محاسبه موقعیت Inlay بر اساس خط و ستون
+    float[] pos = mLayout.getCharLayoutOffset(inlay.line, inlay.column);
+    float x = pos[1] + measureTextRegionOffset() - getOffsetX();
+    float y = pos[0] - getOffsetY() + getRowBaseline(0);
+
+    // ذخیره وضعیت Canvas
+    canvas.save();
+
+    // تنظیمات رنگ و فونت
+    mPaintOther.setColor(inlay.color);
+    mPaintOther.setTextSize(mPaint.getTextSize() * 0.9f); // اندازه کوچک‌تر از متن اصلی
+
+    // رسم متن Inlay
+    canvas.drawText(inlay.text, x, y, mPaintOther);
+
+    // بازگردانی وضعیت Canvas
+    canvas.restore();
   }
 
   public synchronized void setDiagnostics(List<DiagnosticWrapper> diagnostics) {
@@ -1384,6 +1422,10 @@ public class CodeEditor extends View
       canvas.drawText(text, centerX, baseline, mPaint);
       mPaint.setTextAlign(Paint.Align.LEFT);
       return;
+    }
+
+    for (Inlay inlay : inlays) {
+      drawInlay(canvas, inlay);
     }
     getCursor().updateCache(getFirstVisibleLine());
 
@@ -6019,6 +6061,7 @@ public class CodeEditor extends View
     if (mEventHandler.getScroller().computeScrollOffset()) {
       invalidate();
     }
+    postInvalidateOnAnimation();
   }
 
   @Override
