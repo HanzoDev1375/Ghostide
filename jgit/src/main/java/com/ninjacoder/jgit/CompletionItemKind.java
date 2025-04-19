@@ -33,6 +33,7 @@ public enum CompletionItemKind {
   private int value = 0;
   private long defaultDisplayBackgroundColor = 0;
   private String displayString = "";
+
   CompletionItemKind(int value, long defaultDisplayBackgroundColor) {
     value = value;
     defaultDisplayBackgroundColor = defaultDisplayBackgroundColor;

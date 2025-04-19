@@ -180,7 +180,6 @@ public class CodeEditorActivity extends BaseCompat {
   private String Paths;
   private boolean isSvg = false;
   private IdeEditor editor;
-  private FileChangeReceiver.FileChangeListener fileChangeListener;
   private boolean isFileChangeDialogShowing = false;
 
   @Override
@@ -760,6 +759,8 @@ public class CodeEditorActivity extends BaseCompat {
   }
 
   void saveFileByIo() {
+    isFileChangeDialogShowing = false;
+    FileChangeReceiver.stopWatching();
     if (editor.getText().toString().isEmpty()) {
       DataUtil.showMessage(getApplicationContext(), getString(R.string.errorEmptyFile));
     } else {
@@ -895,18 +896,20 @@ public class CodeEditorActivity extends BaseCompat {
               String tabText = Uri.parse(path).getLastPathSegment();
               if (FileUtil.isExistFile(path)) {
                 tablayouteditor.addTab(tablayouteditor.newTab().setText(tabText));
-                FileChangeReceiver.startWatching(
-                    CodeEditorActivity.this,
-                    path,
-                    (filePath) -> {
-                      FileChangeReceiver.showFileChangedDialog(
-                          CodeEditorActivity.this,
-                          filePath,
-                          () -> {
-                            // کد برای بارگذاری مجدد فایل
-                            setCodeEditorFileReader(filePath);
-                          });
-                    });
+                isFileChangeDialogShowing = true;
+                if (isFileChangeDialogShowing)
+                  FileChangeReceiver.startWatching(
+                      CodeEditorActivity.this,
+                      path,
+                      (filePath) -> {
+                        FileChangeReceiver.showFileChangedDialog(
+                            CodeEditorActivity.this,
+                            filePath,
+                            () -> {
+                              // کد برای بارگذاری مجدد فایل
+                              setCodeEditorFileReader(filePath);
+                            });
+                      });
 
               } else {
                 tablayouteditor.addTab(
@@ -1162,6 +1165,8 @@ public class CodeEditorActivity extends BaseCompat {
 
   public void FabFileRuner() {
     try {
+        isFileChangeDialogShowing = false;
+        FileChangeReceiver.stopWatching();
       int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
       if (selectedTabPosition >= 0 && selectedTabPosition < tabs_listmap.size()) {
         String selectedFilePath = tabs_listmap.get(selectedTabPosition).get("path").toString();

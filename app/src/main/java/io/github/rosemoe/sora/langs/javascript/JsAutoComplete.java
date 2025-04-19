@@ -1,13 +1,14 @@
 package io.github.rosemoe.sora.langs.javascript;
 
+import android.content.SharedPreferences;
+import android.app.Activity;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import io.github.rosemoe.sora.data.CompletionItem;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
 import lsp4custom.com.ninjacoder.customhtmllsp.CodeSnippet;
 
@@ -15,7 +16,11 @@ public class JsAutoComplete implements AutoCompleteProvider {
 
   private String[] mKeywords;
   private boolean mKeywordsAreLowCase;
-
+    protected SharedPreferences save_path; // using default name
+   public JsAutoComplete(){
+       save_path =
+        GhostIdeAppLoader.getContext().getSharedPreferences("save_path", Activity.MODE_PRIVATE);
+   }
   public void setKeywords(String[] keywords) {
     mKeywords = keywords;
     mKeywordsAreLowCase = false;
@@ -48,6 +53,7 @@ public class JsAutoComplete implements AutoCompleteProvider {
       }
       Collections.sort(words, CompletionItem.COMPARATOR_BY_NAME);
       keywords.addAll(CodeSnippet.runasList("javascript", prefix));
+     keywords. addAll(CodeSnippet.getListFile(save_path.getString("path",""),prefix));    
       keywords.addAll(words);
     }
     return keywords;

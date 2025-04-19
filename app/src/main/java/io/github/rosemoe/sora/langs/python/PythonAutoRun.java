@@ -29,16 +29,7 @@ public class PythonAutoRun implements AutoCompleteProvider {
       }
     }
     // if (item != null) items.add(Arrays.asList(listKeys));
-    var py = "/storage/emulated/0/GhostWebIDE/codeHelper/py.json";
-    File file = new File(py);
-    if (file.exists()) {
-      if (!items.isEmpty()) {
-        CodeSnippet code = new CodeSnippet(FileUtil.readFile(py));
-        code.run(items, prefix);
-      }
-    } else {
-      Log.e(TAG, "py.json not found in " + py);
-    }
+    
 
     return items;
   }

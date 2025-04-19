@@ -690,6 +690,7 @@ public class PHPLanguage implements EditorLanguage {
         || ch == '?'
         || ch == '.'
         || ch == '_'
+        || ch == '/'
         || ch == '$';
   }
 

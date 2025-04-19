@@ -51,8 +51,8 @@ public class JavaLanguage implements EditorLanguage {
           keywords.length,
           ObjectUtils.getClassNameObject().length);
       boolean isJavaKeyword = keywords.length > 0;
-      auto.setKeywords(combinedArray, isJavaKeyword ? "JavaKeyWords" : "JavaClass");
-
+      // auto.setKeywords(combinedArray, isJavaKeyword ? "JavaKeyWords" : "JavaClass");
+       auto.setKeywords(keywords);
     } catch (Exception err) {
 
     }
@@ -61,7 +61,9 @@ public class JavaLanguage implements EditorLanguage {
 
   @Override
   public boolean isAutoCompleteChar(char ch) {
-    return MyCharacter.isJavaIdentifierPart(ch) || Character.isLetter(ch) || Character.isDigit(ch);
+    return MyCharacter.isJavaIdentifierPart(ch)
+        || Character.isLetter(ch)
+        || Character.isDigit(ch);
   }
 
   @Override

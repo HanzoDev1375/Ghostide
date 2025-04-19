@@ -6,7 +6,7 @@
      android:minHeight="40dp"
      android:padding="2dp">
 
-    <View
+    <ImageView
          android:layout_height="20dp"
          android:layout_width="20dp"
          android:visibility="visible"

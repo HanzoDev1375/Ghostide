@@ -6,9 +6,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.Gson;
 import io.github.rosemoe.sora.data.CompletionItem;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Optional;
 import java.util.jar.JarFile;
 import java.util.Enumeration;
@@ -31,26 +33,39 @@ public class CodeSnippet {
     this.jsonPath = jsonPath;
   }
 
-  @Deprecated
-  public void run(List<CompletionItem> list, String pr) {
-    JsonObject jsonObject = JsonParser.parseString(jsonPath).getAsJsonObject();
-    Gson gson = new Gson();
-    List<CompletionItem> codeSnippets = new ArrayList<>();
-    Set<Map.Entry<String, JsonElement>> jsonEntries = jsonObject.entrySet();
-    List<CompletionItem> helper =
-        jsonEntries.stream()
-            .map(
-                entry -> {
-                  CompletionItem snippet = gson.fromJson(entry.getValue(), CompletionItem.class);
-                  JsonObject jsonObj = entry.getValue().getAsJsonObject();
-                  snippet.desc = jsonObj.get("description").getAsString();
-                  snippet.label = jsonObj.get("prefix").getAsString();
-                  snippet.commit = jsonObj.get("body").getAsString();
-                  return snippet;
-                })
-            .collect(Collectors.toList());
+  public static List<CompletionItem> getJar(String pre) {
+    List<CompletionItem> completionItems = new ArrayList<>();
 
-    list.addAll(helper);
+    try {
+      var input = GhostIdeAppLoader.getContext().getAssets().open("class_info.json");
+      JsonArray jsonArray = JsonParser.parseReader(new InputStreamReader(input)).getAsJsonArray();
+
+      for (JsonElement element : jsonArray) {
+        JsonObject jsonObj = element.getAsJsonObject();
+        CompletionItem item = new CompletionItem();
+        // تنظیم label با نام کلاس
+        item.label = jsonObj.get("class_name").getAsString();
+        // تنظیم desc با نام کامل پکیج
+        item.desc = jsonObj.get("full_package").getAsString();
+        // تنظیم commitبا نام کلاس (می‌توانید این را تغییر دهید)
+        item.commit = jsonObj.get("class_name").getAsString();
+        completionItems.add(item);
+      }
+
+      // فیلتر کردن بر اساس پیشوند
+      if (pre != null && !pre.isEmpty()) {
+        completionItems =
+            completionItems.stream()
+                .filter(item -> item.label.startsWith(pre))
+                .collect(Collectors.toList());
+      }
+
+      return completionItems;
+
+    } catch (Exception err) {
+      err.printStackTrace();
+      return new ArrayList<>();
+    }
   }
 
   public static List<CompletionItem> runasList(String language, String prefix) {
@@ -111,36 +126,6 @@ public class CodeSnippet {
     }
   }
 
-  //  public static List<CompletionItem> runasList(String language, String prefix) {
-  //    String jsonPath = SnippetConfig.getPathForLanguage(language);
-  //    if (jsonPath == null) {
-  //      return new ArrayList<>();
-  //    }
-  //
-  //    try {
-  //      File snippetFile = new File(jsonPath);
-  //      JsonObject jsonObject = JsonParser.parseReader(new
-  // FileReader(snippetFile)).getAsJsonObject();
-  //      Set<Map.Entry<String, JsonElement>> jsonEntries = jsonObject.entrySet();
-  //
-  //      return jsonEntries.stream()
-  //          .map(
-  //              entry -> {
-  //                JsonObject jsonObj = entry.getValue().getAsJsonObject();
-  //                CompletionItem snippet = new CompletionItem();
-  //                snippet.desc = jsonObj.get("description").getAsString();
-  //                snippet.label = jsonObj.get("prefix").getAsString();
-  //                snippet.commit = jsonObj.get("body").getAsString();
-  //                return snippet;
-  //              })
-  //          .filter(item -> item.label.startsWith(prefix))
-  //          .collect(Collectors.toList());
-  //    } catch (Exception e) {
-  //      e.printStackTrace();
-  //      return new ArrayList<>();
-  //    }
-  //  }
-  //
   public static List<CompletionItem> analyzeCodeCompletion(
       String jarPath, String code, int cursorPosition) {
     List<CompletionItem> result = new ArrayList<>();
@@ -248,5 +233,9 @@ public class CodeSnippet {
     return classes.stream()
         .filter(item -> item.label.startsWith(prefix))
         .collect(Collectors.toList());
+  }
+
+  public static List<CompletionItem> getListFile(String currentPath, String prefix) {
+    return PathCompleter.getPathCompletions(currentPath, prefix);
   }
 }

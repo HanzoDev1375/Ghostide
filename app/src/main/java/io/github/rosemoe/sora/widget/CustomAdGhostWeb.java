@@ -1,5 +1,6 @@
 package io.github.rosemoe.sora.widget;
 
+import com.bumptech.glide.Glide;
 import com.ninjacoder.jgit.CircleDrawable;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
@@ -22,7 +23,7 @@ import io.github.rosemoe.sora.data.CompletionItem;
 public class CustomAdGhostWeb extends EditorCompletionAdapter {
   protected HTMLConstants htmlconfig;
   protected TextView item_label, item_desc, item_type;
-  View item_icon;
+  private ImageView item_icon;
 
   private io.github.rosemoe.sora.widget.TextSummry.TextUtils textUtils;
 
@@ -83,17 +84,23 @@ public class CustomAdGhostWeb extends EditorCompletionAdapter {
       item_desc.setText(item.desc);
     }
     var editor = getEditor();
-
-    // فلن یک رنگ ثابت میدم
-    item_icon.setBackground(
-        new CircleDrawable(
-            getThemeColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER), true, item.label));
+    if (isImage(item.label)) {
+      Glide.with(item_icon.getContext())
+          .load(item.jdir)
+          .circleCrop()
+          .error(
+              new CircleDrawable(
+                  getThemeColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER), true, item.label))
+          .into(item_icon);
+    } else
+      item_icon.setBackground(
+          new CircleDrawable(
+              getThemeColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER), true, item.label));
     view.setBackgroundColor(
         isCurrentCursorPosition
             ? getThemeColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER)
             : Color.TRANSPARENT);
 
-    
     view.setTag(pos);
     return view;
   }
@@ -103,5 +110,9 @@ public class CustomAdGhostWeb extends EditorCompletionAdapter {
     i.setColor(ColorStateList.valueOf(Color.parseColor(col)));
     i.setCornerRadius(15);
     return i;
+  }
+
+  private boolean isImage(String path) {
+    return path.endsWith(".png") || path.endsWith(".svg");
   }
 }

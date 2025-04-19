@@ -718,7 +718,12 @@ public class HTMLLanguage implements EditorLanguage {
   /** Checks if the given character is an auto complete character in HTML */
   @Override
   public boolean isAutoCompleteChar(char ch) {
-    return Character.isLetter(ch) || Character.isDigit(ch) || MyCharacter.isJavaIdentifierStart(ch);
+    return Character.isLetter(ch)
+        || Character.isDigit(ch)
+        || MyCharacter.isJavaIdentifierStart(ch)
+        || ch == '/'
+        || ch == '-'
+        || ch == '.';
   }
 
   @Override

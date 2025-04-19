@@ -115,8 +115,6 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
 
       FileIconHelperPath fileIconPath = new FileIconHelperPath(myfile.toString());
       fileIconPath.bind(viewHolder.icon);
-      fileIconPath.setDynamicFolderEnabled(true);
-      fileIconPath.setEnvironmentEnabled(true);
       if (BinderRecyclerview1.TaskVideo(myfile.toString())) {
         GlideCompat.GlideNormal(viewHolder.icon, myfile.toString());
       } else if (BinderRecyclerview1.PhotoView(myfile.toString())) {

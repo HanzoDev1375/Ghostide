@@ -16,7 +16,6 @@ public class FontManager {
 
     public static void setFontFromUrl(Context context, TextView textView, String fontUrl) {
         if (fontUrl == null || fontUrl.isEmpty()) {
-            // اگر فونتی انتخاب نشده، از فونت ذخیره شده استفاده کنید
             setSavedFont(context, textView);
             return;
         }

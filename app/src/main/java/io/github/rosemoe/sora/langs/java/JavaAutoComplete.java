@@ -86,6 +86,7 @@ public class JavaAutoComplete implements AutoCompleteProvider {
 
     it = new ArrayList<>(keywords); // ایجاد کپی از لیست keywords
     keywords.addAll(CodeSnippet.runasList("java", prefix));
+    keywords.addAll(CodeSnippet.getJar(prefix));
     return keywords;
   }
 

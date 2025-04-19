@@ -81,6 +81,7 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
       items.addAll(words);
     }
     items.addAll(CodeSnippet.runasList("html", prefix));
+    items.addAll(CodeSnippet.getListFile(save_path.getString("path",""),prefix));    
 
     return items;
   }

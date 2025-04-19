@@ -1331,36 +1331,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     di.setNeutralButton("خیر", null);
     di.build();
   }
-
-  public void _projectinit() {
-    var maindialogPrfex = new DialogUtil(FileManagerActivity.this);
-    maindialogPrfex.setView(R.layout.projectinitre);
-    maindialogPrfex.setTitle("Make project");
-    maindialogPrfex.setCancelable(true);
-    maindialogPrfex.setPositiveButton("make", null);
-    maindialogPrfex.setNegativeButton(android.R.string.cancel, null);
-    maindialogPrfex.setOnShowListener(
-        (var) -> {
-          RecyclerView post = maindialogPrfex.getAlertDialog().findViewById(R.id.post);
-          Button positive = maindialogPrfex.getButton(DialogInterface.BUTTON_POSITIVE);
-          projectdata.clear();
-          for (int _repeat20 = 0; _repeat20 < (int) (4); _repeat20++) {
-            {
-              HashMap<String, Object> _item = new HashMap<>();
-              _item.put("dontsetMe", "");
-              projectdata.add(_item);
-            }
-          }
-          // post.setAdapter(new RecyclerviewCppAdapter(projectdata));
-          post.setLayoutManager(new GridLayoutManager(FileManagerActivity.this, (int) 2));
-          positive.setOnClickListener(
-              (vftrororocjj) -> {
-                maindialogPrfex.dismiss();
-              });
-        });
-    maindialogPrfex.build();
-  }
-
   public void VectorImageShow(final String _input, final String _output) {
     VectorHelper.iconPath = _input;
     VectorHelper.projectResourceDirectory = _output;

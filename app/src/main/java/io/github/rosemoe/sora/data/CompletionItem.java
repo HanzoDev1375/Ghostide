@@ -62,6 +62,7 @@ public class CompletionItem {
   public String commit;
   public String label;
   public String desc;
+  public String jdir;  
 
   /** Cursor offset in {@link CompletionItem#commit} */
   public int cursorOffset;

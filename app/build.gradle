@@ -193,5 +193,6 @@ dependencies {
     implementation("io.github.skylot:jadx-core:$jadxVersion")
     implementation("io.github.skylot:jadx-dex-input:$jadxVersion")
     implementation 'androidx.security:security-crypto:1.1.0-alpha03'
+    
 }
 
