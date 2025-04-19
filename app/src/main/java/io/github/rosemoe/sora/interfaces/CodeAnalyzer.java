@@ -23,10 +23,7 @@
  */
 package io.github.rosemoe.sora.interfaces;
 
-import ir.ninjacoder.ghostide.databin.DiagnosticWrapper;
-import java.util.List;
 
-import io.github.rosemoe.sora.text.Content;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.text.TextAnalyzer;
 
@@ -37,7 +34,7 @@ import io.github.rosemoe.sora.text.TextAnalyzer;
  */
 public interface CodeAnalyzer {
 
-  default void setDiagnostics(List<DiagnosticWrapper> diagnostics) {}
+  
 
   default void analyzeInBackground(CharSequence contents) {}
 

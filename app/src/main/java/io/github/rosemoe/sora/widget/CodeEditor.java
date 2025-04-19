@@ -28,33 +28,27 @@ import io.github.rosemoe.sora.graphics.BubbleHelper;
 import io.github.rosemoe.sora.model.Inlay;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
-import ir.ninjacoder.ghostide.utils.DiagnosticsListener;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import androidx.core.graphics.ColorUtils;
 import io.github.rosemoe.sora.event.ColorSchemeUpdateEvent;
 import io.github.rosemoe.sora.text.TextUtils;
 import kotlin.text.StringsKt;
 import java.io.File;
-import ir.ninjacoder.ghostide.databin.DiagnosticWrapper;
 import android.util.TypedValue;
 import android.util.TypedValue;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import io.github.rosemoe.sora.data.CompletionItem;
-import io.github.rosemoe.sora.text.DiagnosticSpanMapUpdater;
 import io.github.rosemoe.sora.text.TextLayoutHelper;
 
 import static io.github.rosemoe.sora.text.TextUtils.isEmoji;
 import static io.github.rosemoe.sora.util.Numbers.stringSize;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Path;
 import android.graphics.Rect;
@@ -99,7 +93,6 @@ import androidx.annotation.Px;
 import androidx.annotation.RequiresApi;
 
 import io.github.rosemoe.sora.widget.commentRule.CommentHelper;
-import io.github.rosemoe.sora.widget.tooltip.ToolTipHelper;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -155,7 +148,6 @@ import io.github.rosemoe.sora.widget.layout.WordwrapLayout;
 import io.github.rosemoe.sora.widget.style.SelectionHandleStyle;
 import io.github.rosemoe.sora.widget.style.builtin.HandleStyleSideDrop;
 
-import java.util.regex.Matcher;
 
 /**
  * CodeEditor is an editor that can highlight text regions by doing basic syntax analyzing This
@@ -367,22 +359,17 @@ public class CodeEditor extends View
   private OnKeyboardOperation enters;
   private OnCompletionItemSelectedListener onCompletionItemSelectedListener;
   private boolean mHardwareAccAllowed;
-  private DiagnosticsListener mDiagnosticsListener;
+  
   private File mCurrentFile;
-  private final List<DiagnosticWrapper> mDiagnostics = new ArrayList<>();
+  
   private boolean isBlockLineRpg;
   private String charName = "";
   private List<Rect> iconRect = new ArrayList<>();
   private Canvas canvas;
   private String minidraw;
 
-  public List<DiagnosticWrapper> getDiagnostics() {
-    return mDiagnostics;
-  }
-
-  public void setDiagnosticsListener(DiagnosticsListener diagnosticsListener) {
-    mDiagnosticsListener = diagnosticsListener;
-  }
+  
+  
 
   public List<Rect> geticonRect() {
     return iconRect;
@@ -433,18 +420,7 @@ public class CodeEditor extends View
     canvas.restore();
   }
 
-  public synchronized void setDiagnostics(List<DiagnosticWrapper> diagnostics) {
-    mDiagnostics.clear();
-    mDiagnostics.addAll(diagnostics);
-    if (mLanguage.getAnalyzer() != null) {
-      mLanguage.getAnalyzer().setDiagnostics(diagnostics);
-    }
-    if (mDiagnosticsListener != null) {
-      post(() -> mDiagnosticsListener.onDiagnosticsUpdate(mDiagnostics));
-    }
-    analyze(false);
-  }
-
+  
   public CodeEditor(Context context) {
     this(context, null);
   }
@@ -6099,14 +6075,6 @@ public class CodeEditor extends View
       }
     }
 
-    if (startLine == endLine) {
-
-      DiagnosticSpanMapUpdater.shiftDiagnosticsOnSingleLineInsert(
-          mDiagnostics, startLine, startColumn, endColumn);
-    } else {
-      DiagnosticSpanMapUpdater.shiftDiagnosticsOnMultiLineInsert(
-          mDiagnostics, startLine, startColumn, endLine, endColumn);
-    }
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
       mRenderer.afterInsert(content, startLine, startColumn, endLine, endColumn, insertedContent);
@@ -6201,13 +6169,7 @@ public class CodeEditor extends View
       }
     }
 
-    if (startLine == endLine) {
-      DiagnosticSpanMapUpdater.shiftDiagnosticsOnSingleLineInsert(
-          mDiagnostics, startLine, startColumn, endColumn);
-    } else {
-      DiagnosticSpanMapUpdater.shiftDiagnosticsOnMultiLineInsert(
-          mDiagnostics, startLine, startColumn, endLine, endColumn);
-    }
+   
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
       mRenderer.afterDelete(content, startLine, startColumn, endLine, endColumn, deletedContent);

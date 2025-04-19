@@ -8,7 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import javax.lang.model.SourceVersion;
 
 public class FileNio {
 
@@ -45,10 +44,7 @@ public class FileNio {
         mPackageNameLayout.setError("Package name part cannot be empty");
         return;
       }
-      if (!SourceVersion.isName(name)) {
-        mPackageNameLayout.setError("'" + name + "' is not a valid Java identifier");
-        return;
-      }
+      
     }
     if (packages.length == 0) {
       mPackageNameLayout.setError("Please enter a package name");

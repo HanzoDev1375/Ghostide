@@ -1,7 +1,6 @@
 package io.github.rosemoe.sora.langs.java;
 
 import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.comments.JavadocComment;
@@ -11,7 +10,6 @@ import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.config.JavaPaserUtils;
-import ir.ninjacoder.ghostide.databin.DiagnosticWrapper;
 import ir.ninjacoder.ghostide.utils.ThemeUtils;
 import android.graphics.Color;
 import androidx.core.graphics.ColorUtils;
@@ -20,7 +18,6 @@ import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.ast.expr.TypeExpr;
@@ -31,13 +28,11 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import io.github.rosemoe.sora.langs.xml.analyzer.Utils;
 import io.github.rosemoe.sora.util.TrieTree;
-import java.util.ArrayList;
 import android.util.Log;
 import io.github.rosemoe.sora.data.Span;
 import io.github.rosemoe.sora.text.TextStyle;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
@@ -56,21 +51,17 @@ import io.github.rosemoe.sora.widget.EditorColorScheme;
 public class JavaCodeAnalyzer implements CodeAnalyzer {
 
   private final WeakReference<IdeEditor> mEditorReference;
-  private final List<DiagnosticWrapper> mDiagnostics;
+  
   private static final Object OBJECT = new Object();
 
   private Map<String, Boolean> mapStyle;
 
   public JavaCodeAnalyzer(IdeEditor editor) {
     mEditorReference = new WeakReference<>(editor);
-    mDiagnostics = new ArrayList<>();
+    
   }
 
-  @Override
-  public void setDiagnostics(List<DiagnosticWrapper> diagnostics) {
-    mDiagnostics.clear();
-    mDiagnostics.addAll(diagnostics);
-  }
+  
 
   @Override
   public void analyzeInBackground(CharSequence content) {

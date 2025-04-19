@@ -9,7 +9,7 @@ android {
     
     defaultConfig {
         applicationId "ir.ninjacoder.ghostide"
-        minSdk 21 
+        minSdk 26
         targetSdk 32
         versionCode 33
         versionName "2.0.1"
@@ -123,9 +123,9 @@ dependencies {
     implementation project(path: ":jgit")
     implementation project(path: ":prddownloader")
     implementation project(path: ":datautils") 	
-    implementation project(path: ":jaxp:jaxp-internal")
-    implementation project(path: ":jaxp:xml")
-  	implementation project(path: ":ui-designer")
+ //  implementation project(path: ":jaxp:jaxp-internal")
+//   implementation project(path: ":jaxp:xml")
+    implementation project(path: ":ui-designer")
     implementation project(path: ":webview")
     implementation project(path: ":vectormaster")
     implementation project(path: ":eclipse-standalone")

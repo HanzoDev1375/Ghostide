@@ -24,11 +24,6 @@
 package io.github.rosemoe.sora.langs.css3;
 
 import ir.ninjacoder.ghostide.IdeEditor;
-import android.util.Log;
-import com.steadystate.css.dom.CSSStyleSheetImpl;
-import com.steadystate.css.format.CSSFormat;
-import com.steadystate.css.parser.CSSOMParser;
-import com.steadystate.css.parser.SACParserCSS3;
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 import io.github.rosemoe.sora.interfaces.EditorLanguage;
@@ -42,7 +37,6 @@ import org.antlr.v4.runtime.Token;
 
 import java.io.IOException;
 import java.io.StringReader;
-import org.w3c.css.sac.InputSource;
 
 public class CSS3Language implements EditorLanguage {
   /** */
@@ -545,11 +539,8 @@ public class CSS3Language implements EditorLanguage {
 
   @Override
   public CharSequence format(CharSequence text) {
-    try {
-      return Css3Format.format(text.toString());
-    } catch (Exception err) {
-      return text;
-    }
+
+    return text;
   }
 
   @Override
@@ -658,31 +649,4 @@ public class CSS3Language implements EditorLanguage {
     }
   }
 
-  static class Css3Format {
-    private static CSSFormat formatter;
-
-    public static String format(String code) {
-      try {
-        formatter =
-            new CSSFormat()
-                .setPropertiesInSeparateLines(2)
-                .setRgbAsHex(true)
-                .setUseSourceStringValues(true);
-        InputSource source = new InputSource(new StringReader(code));
-
-        CSSOMParser parser = new CSSOMParser(new SACParserCSS3());
-        CSSStyleSheetImpl sheet = (CSSStyleSheetImpl) parser.parseStyleSheet(source, null, null);
-
-        String formattedCode = sheet.getCssText(formatter);
-        Log.w("Code formatting completed in ", String.valueOf(System.nanoTime()) + "Ms");
-        return formattedCode;
-      } catch (IOException err) {
-        Log.e("ErrorFormatCode", err.getLocalizedMessage());
-      } catch (Exception e) {
-        Log.e("ErrorFormatCode", "Unexpected error: " + e.getLocalizedMessage());
-      }
-
-      return code;
-    }
-  }
 }

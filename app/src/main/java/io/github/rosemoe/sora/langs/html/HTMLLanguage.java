@@ -24,11 +24,6 @@
 package io.github.rosemoe.sora.langs.html;
 
 import ir.ninjacoder.ghostide.IdeEditor;
-import com.steadystate.css.dom.CSSStyleSheetImpl;
-import com.steadystate.css.format.CSSFormat;
-import com.steadystate.css.parser.CSSOMParser;
-import android.util.Log;
-import com.steadystate.css.parser.SACParserCSS3;
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 import io.github.rosemoe.sora.interfaces.EditorLanguage;
@@ -47,7 +42,6 @@ import org.jsoup.select.Elements;
 import java.io.File;
 import java.io.StringReader;
 import java.util.Arrays;
-import org.w3c.css.sac.InputSource;
 
 public class HTMLLanguage implements EditorLanguage {
   private IdeEditor editor;
@@ -786,15 +780,6 @@ public class HTMLLanguage implements EditorLanguage {
     Document.OutputSettings outputSettings = new Document.OutputSettings();
     outputSettings.indentAmount(4);
     doc.outputSettings(outputSettings.prettyPrint(true));
-
-    Elements styleElements = doc.select("style");
-    for (Element styleElement : styleElements) {
-      String cssCode = styleElement.html();
-      var i = new Css3FormatCode().format(cssCode);
-      String formattedCssCode = i;
-      styleElement.html("\n\n" + formattedCssCode + "\n\n");
-    }
-
     Elements jsElements = doc.select("script");
     for (Element jsElement : jsElements) {
       String jsCode = jsElement.html();
@@ -1087,33 +1072,6 @@ public class HTMLLanguage implements EditorLanguage {
               .append(text = TextUtils.createIndent(count + advanceAfter, tabSize, useTab()));
       int shiftLeft = text.length() + 1;
       return new HandleResult(sb, shiftLeft);
-    }
-  }
-
-  class Css3FormatCode {
-
-    private CSSFormat formats;
-
-    public String format(String code) {
-
-      formats =
-          new CSSFormat()
-              .setPropertiesInSeparateLines(getIndentAdvance(code))
-              .setRgbAsHex(true)
-              .setUseSourceStringValues(true);
-      try {
-        InputSource source = new InputSource(new StringReader(code));
-        CSSOMParser parser = new CSSOMParser(new SACParserCSS3());
-        CSSStyleSheetImpl sheet = (CSSStyleSheetImpl) parser.parseStyleSheet(source, null, null);
-
-        String formattedCode = sheet.getCssText(formats);
-        Log.w("Code formatting completed in ", String.valueOf(System.nanoTime()) + "Ms");
-        return formattedCode;
-      } catch (Exception err) {
-        Log.w("Code Format Error", err.toString());
-      }
-
-      return code;
     }
   }
 }

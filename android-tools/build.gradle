@@ -3,10 +3,10 @@ plugins {
 }
 
 android {
-    compileSdk 34
+    compileSdk 35
     namespace "ninjacoder.ghostide.androidtools.r8.android"
     defaultConfig {
-        minSdkVersion 21
+        minSdkVersion 26
         targetSdkVersion 32
     }
     buildTypes {
@@ -28,5 +28,5 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.google.android.material:material:1.13.0-alpha11")
     implementation project(path: ":prograsssheetlib")
-    
+    implementation("com.github.Cosmic-Ide.kotlinc-android:kotlinc:2a0a6a7291") 
 }
