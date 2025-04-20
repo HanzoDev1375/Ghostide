@@ -146,7 +146,7 @@ public class EditorRoaderFile {
       editor.setEditorLanguage(new DartLang());
     } else if (_path.endsWith(".kt")) {
       ReadFileCompat(editor, _path, bar);
-      _fab.postDelayed(_fab::hide, 400);
+      _fab.postDelayed(_fab::show, 400);
       editor.setEditorLanguage(new KotlinLanguage());
     } else if (_path.endsWith(".groovy") || _path.endsWith(".gradle")) {
       ReadFileCompat(editor, _path, bar);

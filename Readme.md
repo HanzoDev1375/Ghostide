@@ -43,17 +43,19 @@
 - [x] Auto-save functionality
 - [x] Git integration
 - [ ] Plugin system (coming soon)
-- [x] HTML file reader
+- [x] HTML file reader(show system icon svg png ...)
 - [x] Sass and Scss compiler
 - [x] Java fx compiler 
-- [x] Java Helper (90%) (Create constructor,Getter and setter and..)
+- [x] Kotlin compiler v2
+- [x] Java Helper (99%) (Create constructor,Getter and setter and..)
 - [x] Html lsp(custom mod 50%)
-- [ ] Fast type
+- [x] Fast type
 - [ ] Less Compiler
 - [x] JavaCc Compiler
 - [x] Git manager (30%) (Need help)
 - [x] CodeFormatter (60%)
-- [ ] Ruby compiler (coming soon)
+- [ ] Ruby compiler (coming soon hard mod help!!)
+- [ ] Ninja Compiler (my lang)
 - [x] Physical keyboard support
 
 ---
@@ -77,6 +79,7 @@
 - [x] Shell
 - [x] Markdown
 - [x] Go
+- [ ] Tsx && jsx
 
 ---
 
@@ -153,7 +156,7 @@ You can name your snippets with lowercase English letters, as in the examples ab
 
 ### Physical Keyboard Shortcuts
 
-Ghost IDE offers a variety of keyboard shortcuts for physical keyboards:
+Ghost IDE offers a variety of keyboard shortcuts for physical keyboards from FileManager Activity:
 
 - `Ctrl + F`: Create new file
 - `Ctrl + G`: Git clone
@@ -163,3 +166,8 @@ Ghost IDE offers a variety of keyboard shortcuts for physical keyboards:
 - `Ctrl + D`: Open drawer
 - `Ctrl + A`: Open APK viewer
 - `Ctrl + T`: Open terminal
+
+
+### System plugin
+
+- Currently we do not have the ability to create plugins, but this feature will be available in the future.

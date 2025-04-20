@@ -88,6 +88,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TimerTask;
+import ninjacoder.ghostide.androidtools.r8.android.KotlinCompilerImpl;
 
 public class CodeEditorActivity extends BaseCompat {
 
@@ -1229,6 +1230,8 @@ public class CodeEditorActivity extends BaseCompat {
         } else if (selectedFilePath.contains(".jj")) {
           var file = new File(selectedFilePath);
           JavaCcComplierImpl.main(file.toString(), file.getParent() + "/");
+        }else if(selectedFilePath.contains(".kt")){
+            new KotlinCompilerImpl(CodeEditorActivity.this,selectedFilePath);
         }
       } else {
 
