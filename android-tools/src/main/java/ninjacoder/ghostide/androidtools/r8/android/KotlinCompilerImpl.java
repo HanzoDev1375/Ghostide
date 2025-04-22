@@ -3,6 +3,7 @@ package ninjacoder.ghostide.androidtools.r8.android;
 import android.content.Context;
 import ir.ninjacoder.prograsssheet.LayoutSheetEditText;
 
+
 public class KotlinCompilerImpl {
 
   private Context c;
@@ -12,7 +13,7 @@ public class KotlinCompilerImpl {
   public KotlinCompilerImpl(Context c, String filePath) {
     this.c = c;
     this.filePath = filePath;
-
+     
     init();
   }
 

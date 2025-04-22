@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-    <string name="app_name">Ghost Web IDE</string>
+    <string name="app_name">Ghost IDE</string>
     <string name="dkplayer_replay">Replay</string>
     <string name="dkplayer_lock_tip">Locked</string>
     <string name="dkplayer_unlocked">Unlocked</string>

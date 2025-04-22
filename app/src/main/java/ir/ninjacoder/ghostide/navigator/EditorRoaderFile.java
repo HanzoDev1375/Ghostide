@@ -2,6 +2,7 @@ package ir.ninjacoder.ghostide.navigator;
 
 import com.blankj.utilcode.util.ThreadUtils;
 import io.github.rosemoe.sora.langs.glsllang.GLSLLang;
+import io.github.rosemoe.sora.langs.yml.YmlLang;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.utils.FileCompatApi28;
 import ir.ninjacoder.ghostide.utils.FileUtil;
@@ -214,6 +215,10 @@ public class EditorRoaderFile {
             }
           });
 
+    } else if (_path.endsWith(".yml")) {
+      ReadFileCompat(editor, _path, bar);
+      editor.setEditorLanguage(new YmlLang());
+      _fab.postDelayed(_fab::hide, 400);
     } else _fab.postDelayed(_fab::hide, 400);
   }
 
@@ -263,13 +268,10 @@ public class EditorRoaderFile {
 
       driver.analyse(Collections.singletonList(classFile.getAbsolutePath()));
 
-      return result
-          .toString()
-          .replace("Decompiled with CFR", "")
-          .replaceAll("\\*\\s+\\.", ""); 
+      return result.toString().replace("Decompiled with CFR", "").replaceAll("\\*\\s+\\.", "");
 
     } catch (Exception e) {
-      return  e.getLocalizedMessage(); 
+      return e.getLocalizedMessage();
     }
   }
 }

@@ -17,15 +17,15 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = "GhostWeb IDE"
+rootProject.name = "Ghost IDE"
 
 include(":app")
-include(":eclipse-standalone")
+
 include(":android-tools")
 include(":Plugin")
 include(":pl-codecomment")
 include(":jgit")
-
+include(":eclipse-standalone")
 include(":ui-designer")
 include(":vectormaster")
 include(":webview")

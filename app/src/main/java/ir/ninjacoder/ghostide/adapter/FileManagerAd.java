@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.widget.CheckBox;
 import ir.ninjacoder.ghostide.R;
-import ir.ninjacoder.ghostide.config.AmazonClassHelper;
 import ir.ninjacoder.ghostide.databin.FileMaker;
 import ir.ninjacoder.ghostide.folder.FileHelper;
 import ir.ninjacoder.ghostide.folder.FileIconHelper;

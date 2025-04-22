@@ -448,6 +448,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     bind.navs.getMenu().add(0, 12, 0, "About").setIcon(R.drawable.drawer_item11);
     bind.navs.getMenu().add(0, 14, 0, "Store").setIcon(R.drawable.shop_24);
     bind.navs.getMenu().add(0, 13, 0, "exit").setIcon(R.drawable.drawer_item1);
+    bind.navs.getMenu().add(0,15,0,"star in myket").setIcon(R.drawable.starmyket);
     DrowerHandler();
   }
 
@@ -1082,8 +1083,8 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
 
   public void _dataOnClickItemList(int _pos) {
     newpos = _pos;
-    if(staticstring.endsWith(".snippet")){
-        new SnippetManagerImpl(new File(staticstring),this);
+    if (staticstring.endsWith(".snippet")) {
+      new SnippetManagerImpl(new File(staticstring), this);
     }
     if (staticstring.endsWith(".txt") || staticstring.endsWith(".log")) {
       SendDataFromCodeEditor(newpos, "path", files, newlistmap);
@@ -1147,6 +1148,9 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
       loadjadx();
     }
     if (staticstring.endsWith(".py")) {
+      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+    }
+    if (staticstring.endsWith(".yml")) {
       SendDataFromCodeEditor(newpos, "path", files, newlistmap);
     }
     if (staticstring.endsWith(".class")) {
@@ -1331,6 +1335,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     di.setNeutralButton("خیر", null);
     di.build();
   }
+
   public void VectorImageShow(final String _input, final String _output) {
     VectorHelper.iconPath = _input;
     VectorHelper.projectResourceDirectory = _output;
@@ -1696,7 +1701,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
               {
                 intentgetLogCat.setClass(getApplicationContext(), FileBookmarkActivity.class);
                 loadAnim(intentgetLogCat);
-                
+
                 break;
               }
             case 11:
@@ -1719,9 +1724,12 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
               }
             case 14:
               {
-                loadAnim (new Intent(getApplicationContext(), StoreAcitvity.class));
+                loadAnim(new Intent(getApplicationContext(), StoreAcitvity.class));
 
                 break;
+              }
+              case 15:{
+                  setLink("myket://comment?id=ir.ninjacoder.ghostide");
               }
           }
           return false;

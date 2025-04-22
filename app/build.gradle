@@ -29,6 +29,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             signingConfig signingConfigs.release
         }
@@ -118,17 +119,15 @@ dependencies {
     implementation("com.google.code.gson:gson:2.11.0")
     def jadxVersion = "1.5.1"
     implementation project(path: ":Plugin")
-    implementation project(path: ":pl-codecomment") 	
+    implementation project(path: ":pl-codecomment")
     implementation project(path: ":jgit") 
     implementation project(path: ":jgit")
+    implementation project(path: ":eclipse-standalone")
     implementation project(path: ":prddownloader")
-    implementation project(path: ":datautils") 	
- //  implementation project(path: ":jaxp:jaxp-internal")
-//   implementation project(path: ":jaxp:xml")
+    implementation project(path: ":datautils")
     implementation project(path: ":ui-designer")
     implementation project(path: ":webview")
     implementation project(path: ":vectormaster")
-    implementation project(path: ":eclipse-standalone")
     implementation project(path: ":android-tools")
     implementation project(path: ":prograsssheetlib")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.2")

@@ -2,6 +2,7 @@ package ir.ninjacoder.ghostide.databin;
 
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.interfaces.FileCallBack;
+import ir.ninjacoder.ghostide.utils.FileUtil;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -41,6 +42,7 @@ public class FileMaker {
             file = new File(path, fileName);
             if (!file.exists()) {
               file.createNewFile();
+              file.mkdir();
               FileOutputStream fos = new FileOutputStream(file);
               String sampleText = democode(file.getName());
               fos.write(sampleText.getBytes());

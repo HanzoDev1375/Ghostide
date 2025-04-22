@@ -13,6 +13,7 @@ import com.github.javaparser.StaticJavaParser;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.github.javaparser.ast.CompilationUnit;
 import dalvik.system.DexClassLoader;
+import ir.ninjacoder.java.compiler.tools.JavaCompiler;
 import ir.ninjacoder.prograsssheet.PrograssSheet;
 import java.util.Optional;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -36,7 +37,7 @@ public class JavaCompilerBeta {
       @Override
       protected void onPreExecute() {
         pr = new PrograssSheet(context);
-        pr.setTitle ("Running...");
+        pr.setTitle("Running...");
         pr.setCancelable(false);
         pr.show();
       }
@@ -77,7 +78,7 @@ public class JavaCompilerBeta {
         long time = System.currentTimeMillis();
         publishProgress("Compiling Java...");
         opt.clear();
-        opt.add("-11");
+        opt.add("-17");
         opt.add("-nowarn");
         opt.add("-deprecation");
         opt.add("-d");
@@ -98,14 +99,8 @@ public class JavaCompilerBeta {
                 compileErrors.append((char) p1);
               }
             };
-
-        org.eclipse.jdt.internal.compiler.batch.Main main =
-            new org.eclipse.jdt.internal.compiler.batch.Main(
-                printWriter, printWriter, false, null, null);
-
-        main.compile(opt.toArray(new String[0]));
-
-        if (main.globalErrorsCount > 0) {
+        JavaCompiler compiler = new JavaCompiler(printWriter, opt.toArray(new String[0]));
+        if (compiler.getTotalError() > 0) {
           return compileErrors.toString();
         }
         ecjTime = System.currentTimeMillis() - time;
@@ -141,7 +136,7 @@ public class JavaCompilerBeta {
 
       @Override
       protected void onProgressUpdate(String... values) {
-        pr.setTitle (values[0]);
+        pr.setTitle(values[0]);
       }
 
       @Override
