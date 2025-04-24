@@ -100,9 +100,6 @@ public class JavaCompilerBeta {
               }
             };
         JavaCompiler compiler = new JavaCompiler(printWriter, opt.toArray(new String[0]));
-        if (compiler.getTotalError() > 0) {
-          return compileErrors.toString();
-        }
         ecjTime = System.currentTimeMillis() - time;
 
         // Package compiled classes to a JAR file

@@ -1,10 +1,13 @@
 package ir.ninjacoder.ghostide;
 
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.DragEvent;
 import io.github.rosemoe.sora.event.LongPressEvent;
 import io.github.rosemoe.sora.event.TextSizeChangeEvent;
+import io.github.rosemoe.sora.langs.java.JavaLanguage;
 import io.github.rosemoe.sora.model.Inlay;
+import io.github.rosemoe.sora.model.LineIcon;
 import io.github.rosemoe.sora.util.IntPair;
 import ir.ninjacoder.ghostide.config.LOG;
 import ir.ninjacoder.ghostide.editor.EditorUtil;
@@ -79,7 +82,6 @@ public class IdeEditor extends CodeEditor implements IEditor {
     init();
   }
 
-  
   public IdeEditor init() {
     setTabWidth(2);
     listitem = new CommentList();
@@ -101,7 +103,6 @@ public class IdeEditor extends CodeEditor implements IEditor {
     if (saveTextSize != null) {
       setTextSizePx(getSize);
     }
-    EditorUtil.setClick(this);
     return this;
   }
 
@@ -111,7 +112,9 @@ public class IdeEditor extends CodeEditor implements IEditor {
     edit.apply();
   }
 
-  void setLongEvent(LongPressEvent ev) {}
+  void setLongEvent(LongPressEvent ev) {
+    //// addLineIcon(R.drawable.ic_material_python, 5);
+  }
 
   void ta(ClickEvent ev) {
     //    if (getEditorLanguage() instanceof HTMLLanguage) {

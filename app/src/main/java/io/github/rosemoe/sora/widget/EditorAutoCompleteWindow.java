@@ -147,7 +147,6 @@ public class EditorAutoCompleteWindow extends EditorPopupWindow {
     listview1.setOnItemLongClickListener(
         (parent, view, position, id) -> {
           var menu = new EditorTextActionWindow(mEditor);
-          menu.setShowItems(false);
           menu.setText("Test");
           if(menu != null) menu.show();
           return true; 

@@ -113,6 +113,9 @@ public class CustomAdGhostWeb extends EditorCompletionAdapter {
   }
 
   private boolean isImage(String path) {
-    return path.endsWith(".png") || path.endsWith(".svg");
+    return path.endsWith(".png")
+        || path.endsWith(".svg")
+        || path.endsWith(".jpg")
+        || path.endsWith(".gif");
   }
 }

@@ -26,6 +26,7 @@ package io.github.rosemoe.sora.widget;
 import io.github.rosemoe.sora.event.TextSizeChangeEvent;
 import io.github.rosemoe.sora.graphics.BubbleHelper;
 import io.github.rosemoe.sora.model.Inlay;
+import io.github.rosemoe.sora.model.LineIcon;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import android.graphics.PorterDuff;
@@ -147,7 +148,6 @@ import io.github.rosemoe.sora.widget.layout.RowIterator;
 import io.github.rosemoe.sora.widget.layout.WordwrapLayout;
 import io.github.rosemoe.sora.widget.style.SelectionHandleStyle;
 import io.github.rosemoe.sora.widget.style.builtin.HandleStyleSideDrop;
-
 
 /**
  * CodeEditor is an editor that can highlight text regions by doing basic syntax analyzing This
@@ -359,17 +359,18 @@ public class CodeEditor extends View
   private OnKeyboardOperation enters;
   private OnCompletionItemSelectedListener onCompletionItemSelectedListener;
   private boolean mHardwareAccAllowed;
-  
   private File mCurrentFile;
-  
   private boolean isBlockLineRpg;
   private String charName = "";
   private List<Rect> iconRect = new ArrayList<>();
   private Canvas canvas;
   private String minidraw;
+  private List<LineIcon> lineIcons = new ArrayList<>();
 
-  
-  
+  public void addLineIcon(int lineNumber, int iconRes) {
+    LineIcon lineIcon = new LineIcon(iconRes, lineNumber);
+    lineIcons.add(lineIcon);
+  }
 
   public List<Rect> geticonRect() {
     return iconRect;
@@ -420,7 +421,6 @@ public class CodeEditor extends View
     canvas.restore();
   }
 
-  
   public CodeEditor(Context context) {
     this(context, null);
   }
@@ -3271,43 +3271,76 @@ public class CodeEditor extends View
    * @param centerY The center y on screen for the panel
    * @param rightX The right x on screen for the panel
    */
-  protected void drawLineInfoPanel(Canvas canvas, float centerY, float rightX) {
-    if (!mDisplayLnPanel) {
+  protected void drawLineNumber(
+      Canvas canvas, int line, int row, float offsetX, float width, int color) {
+    if (width + offsetX <= 0) {
       return;
     }
 
-    String text = mLnTip + (1 + getFirstVisibleLine());
-    float backupSize = mPaint.getTextSize();
-    mPaint.setTextSize(getLineInfoTextSize());
-    Paint.FontMetricsInt backupMetrics = mTextMetrics;
-    mTextMetrics = mPaint.getFontMetricsInt();
-    float expand = mDpUnit * 3;
-    float textWidth = mPaint.measureText(text);
+    // تنظیمات متن
+    if (mPaintOther.getTextAlign() != mLineNumberAlign) {
+      mPaintOther.setTextAlign(mLineNumberAlign);
+    }
+    mPaintOther.setColor(color);
 
-    // تعیین مرزها
-    mRect.top = centerY - getRowHeight() / 2f - expand;
-    mRect.bottom = centerY + getRowHeight() / 2f + expand;
-    mRect.right = rightX;
-    mRect.left = rightX - expand * 2 - textWidth;
+    // محاسبه موقعیت عمودی
+    float y =
+        (getRowBottom(row) + getRowTop(row)) / 2f
+            - (mLineNumberMetrics.descent - mLineNumberMetrics.ascent) / 2f
+            - mLineNumberMetrics.ascent
+            - getOffsetY();
 
-    // ایجاد حباب با استفاده از BubbleHelper
-    BubbleHelper.buildBubblePath(mPath, mRect);
+    // تبدیل شماره خط به رشته
+    var buffer = TemporaryCharBuffer.obtain(20);
+    line++;
+    int i = stringSize(line);
+    Numbers.getChars(line, i, buffer);
 
-    // ترسیم حباب
-    drawColor(canvas, mColors.getColor(EditorColorScheme.LINE_NUMBER_PANEL), mRect);
+    // محاسبه موقعیت افقی شماره خط
+    float lineNumberX;
+    switch (mLineNumberAlign) {
+      case LEFT:
+        lineNumberX = offsetX;
+        break;
+      case RIGHT:
+        lineNumberX = offsetX + width;
+        break;
+      case CENTER:
+        lineNumberX = offsetX + (width + mDividerMargin) / 2f;
+        break;
+      default:
+        lineNumberX = offsetX;
+    }
 
-    float baseline = centerY - getRowHeight() / 2f + getRowBaseline(0);
-    float centerX = (mRect.left + mRect.right) / 2;
-    mPaint.setColor(mColors.getColor(EditorColorScheme.LINE_NUMBER_PANEL_TEXT));
-    mPaint.setTextAlign(Paint.Align.CENTER);
-    canvas.drawText(text, centerX, baseline, mPaint);
+    // رسم شماره خط
+    canvas.drawText(buffer, 0, i, lineNumberX, y, mPaintOther);
 
-    // ترسیم Path حباب
-    canvas.drawPath(mPath, mPaint);
+    // محاسبه عرض شماره خط
+    float lineNumberWidth = mPaintOther.measureText(buffer, 0, i);
 
-    mPaint.setTextAlign(Paint.Align.LEFT);
-    mPaint.setTextSize(backupSize);
-    mTextMetrics = backupMetrics;
+    // رسم آیکون‌ها
+    for (LineIcon lineIcon : lineIcons) {
+      if (lineIcon.getLineNumber() == line) {
+        Bitmap defaultIconBitmap =
+            BitmapFactory.decodeResource(getResources(), lineIcon.getIconRes());
+        int desiredWidth = 30;
+        int desiredHeight = 30;
+        Bitmap scaledIconBitmap =
+            Bitmap.createScaledBitmap(defaultIconBitmap, desiredWidth, desiredHeight, true);
+
+        if (scaledIconBitmap != null) {
+          // موقعیت افقی آیکون: دقیقاً بعد از شماره خط
+          float iconX = lineNumberX + lineNumberWidth + 10; // 5 پیکسل فاصله بین شماره خط و آیکون
+          float iconY = y - scaledIconBitmap.getHeight(); // موقعیت عمودی آیکون
+
+          Paint iconPaint = new Paint();
+        ///  iconPaint.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
+
+          // رسم آیکون
+          canvas.drawBitmap(scaledIconBitmap, iconX, iconY, iconPaint);
+        }
+      }
+    }
   }
 
   /**
@@ -3613,90 +3646,49 @@ public class CodeEditor extends View
     this.iconRes = iconRes;
   }
 
-  protected void drawLineNumber(
-      Canvas canvas, int line, int row, float offsetX, float width, int color) {
-    Bitmap defaultIconBitmap = BitmapFactory.decodeResource(getResources(), iconRes);
-    int desiredWidth = 30;
-    int desiredHeight = 30;
-    Bitmap scaledIconBitmap =
-        Bitmap.createScaledBitmap(defaultIconBitmap, desiredWidth, desiredHeight, true);
-    if (width + offsetX <= 0) {
+  public void removeLineIcon(int lineNumber) {
+    lineIcons.removeIf(icon -> icon.getLineNumber() == lineNumber);
+  }
+
+  protected void drawLineInfoPanel(Canvas canvas, float centerY, float rightX) {
+    if (!mDisplayLnPanel) {
       return;
     }
 
-    // تنظیمات متن
-    if (mPaintOther.getTextAlign() != mLineNumberAlign) {
-      mPaintOther.setTextAlign(mLineNumberAlign);
-    }
-    mPaintOther.setColor(color);
-    float y =
-        (getRowBottom(row) + getRowTop(row)) / 2f
-            - (mLineNumberMetrics.descent - mLineNumberMetrics.ascent) / 2f
-            - mLineNumberMetrics.ascent
-            - getOffsetY();
+    String text = mLnTip + (1 + getFirstVisibleLine());
+    float backupSize = mPaint.getTextSize();
+    mPaint.setTextSize(getLineInfoTextSize());
+    Paint.FontMetricsInt backupMetrics = mTextMetrics;
+    mTextMetrics = mPaint.getFontMetricsInt();
+    float expand = mDpUnit * 3;
+    float textWidth = mPaint.measureText(text);
 
-    var buffer = TemporaryCharBuffer.obtain(20);
-    line++;
-    int i = stringSize(line);
-    Numbers.getChars(line, i, buffer);
-    float lineNumberX;
-    switch (mLineNumberAlign) {
-      case LEFT:
-        lineNumberX = offsetX;
-        break;
-      case RIGHT:
-        lineNumberX = offsetX + width;
-        break;
-      case CENTER:
-        lineNumberX = offsetX + (width + mDividerMargin) / 2f;
-        break;
-      default:
-        lineNumberX = offsetX;
-    }
+    // تعیین مرزها
+    mRect.top = centerY - getRowHeight() / 2f - expand;
+    mRect.bottom = centerY + getRowHeight() / 2f + expand;
+    mRect.right = rightX;
+    mRect.left = rightX - expand * 2 - textWidth;
 
-    // رسم شماره خط
-    canvas.drawText(buffer, 0, i, lineNumberX, y, mPaintOther);
+    // ایجاد حباب با استفاده از BubbleHelper
+    BubbleHelper.buildBubblePath(mPath, mRect);
 
-    // رسم آیکون در صورت وجود با فاصله بیشتر از شماره خط
-    if (scaledIconBitmap != null) {
-      float iconX = lineNumberX + mDividerMargin + 10; // افزایش فاصله آیکون از شماره خط
-      float iconY = y - scaledIconBitmap.getHeight() / 2f; // موقعیت عمودی آیکون
-      if (line == ShowIcon) {
-        Paint iconPaint = new Paint();
-        iconPaint.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(scaledIconBitmap, iconX, iconY, iconPaint);
-        Rect iconRects =
-            new Rect(
-                (int) iconX,
-                (int) iconY,
-                (int) (iconX + scaledIconBitmap.getWidth()),
-                (int) (iconY + scaledIconBitmap.getHeight()));
-        iconRect.add(iconRects);
-      }
-    }
+    // ترسیم حباب
+    drawColor(canvas, mColors.getColor(EditorColorScheme.LINE_NUMBER_PANEL), mRect);
 
-    // بازیابی بافر موقت
-    TemporaryCharBuffer.recycle(buffer);
+    float baseline = centerY - getRowHeight() / 2f + getRowBaseline(0);
+    float centerX = (mRect.left + mRect.right) / 2;
+    mPaint.setColor(mColors.getColor(EditorColorScheme.LINE_NUMBER_PANEL_TEXT));
+    mPaint.setTextAlign(Paint.Align.CENTER);
+    canvas.drawText(text, centerX, baseline, mPaint);
+
+    // ترسیم Path حباب
+    canvas.drawPath(mPath, mPaint);
+
+    mPaint.setTextAlign(Paint.Align.LEFT);
+    mPaint.setTextSize(backupSize);
+    mTextMetrics = backupMetrics;
   }
 
-  /**
-   * Draw single line number
-   *
-   * <p>Paint iconPaint = new Paint(); iconPaint.setColorFilter(new PorterDuffColorFilter(color,
-   * PorterDuff.Mode.SRC_IN));
-   *
-   * <p>canvas.drawBitmap(scaledIconBitmap, iconX, iconY, iconPaint); // استفاده از paint با فیلتر
-   * رنگ
-   */
-
-  /**
-   * Draw line number background
-   *
-   * @param canvas Canvas to draw
-   * @param offsetX Start x of line number region
-   * @param width Width of line number region
-   * @param color Color of line number background
-   */
   protected void drawLineNumberBackground(Canvas canvas, float offsetX, float width, int color) {
     float right = offsetX + width;
     if (right < 0) {
@@ -6075,7 +6067,6 @@ public class CodeEditor extends View
       }
     }
 
-
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
       mRenderer.afterInsert(content, startLine, startColumn, endLine, endColumn, insertedContent);
     }
@@ -6168,8 +6159,6 @@ public class CodeEditor extends View
             mSpanner.getResult().getSpanMap(), startLine, startColumn, endLine, endColumn);
       }
     }
-
-   
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
       mRenderer.afterDelete(content, startLine, startColumn, endLine, endColumn, deletedContent);

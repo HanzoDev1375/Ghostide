@@ -1,5 +1,6 @@
 package ir.ninjacoder.ghostide.databin;
 
+import com.blankj.utilcode.util.FileUtils;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.interfaces.FileCallBack;
 import ir.ninjacoder.ghostide.utils.FileUtil;
@@ -39,47 +40,42 @@ public class FileMaker {
         v -> {
           try {
             String fileName = et.getText().toString();
-            file = new File(path, fileName);
-            if (!file.exists()) {
-              file.createNewFile();
-              file.mkdir();
-              FileOutputStream fos = new FileOutputStream(file);
-              String sampleText = democode(file.getName());
-              fos.write(sampleText.getBytes());
-              fos.close();
+            String filePath = path + "/" + fileName;
 
-              Toast.makeText(et.getContext(), "فایل با موفقیت ایجاد شد", Toast.LENGTH_SHORT).show();
+            if (!FileUtil.isExistFile(filePath)) {
+              String sampleText = democode(fileName);
+              FileUtil.writeFile(filePath, sampleText);
+
+              Toast.makeText(et.getContext(), "done!", Toast.LENGTH_SHORT).show();
+              call.onDoneMakeFile(filePath);
             } else {
               input.setErrorEnabled(true);
               input.setError("This file already exists");
             }
             input.setErrorEnabled(false);
             dialog.getButtonOk().setEnabled(true);
-            call.onDoneMakeFile("");
-
             dialog.dismiss();
-          } catch (IOException err) {
+          } catch (Exception err) {
             call.onError(err.getMessage());
           }
         });
 
     if (et.getText().toString().isEmpty()) {
       dialog.getButtonOk().setEnabled(false);
-    } else dialog.getButtonOk().setEnabled(true);
+    }
 
     et.addTextChangedListener(
         new TextWatcher() {
-
           @Override
           public void onTextChanged(CharSequence c, int arg1, int arg2, int arg3) {
-
             if (c.toString().isEmpty()) {
               dialog.getButtonOk().setEnabled(false);
               input.setErrorEnabled(false);
-            } else dialog.getButtonOk().setEnabled(true);
+              return;
+            }
 
-            file = new File(path, c.toString());
-            if (file.exists()) {
+            String filePath = path + "/" + c.toString();
+            if (FileUtil.isExistFile(filePath)) {
               input.setErrorEnabled(true);
               input.setError("This file already exists");
               dialog.getButtonOk().setEnabled(false);
@@ -96,7 +92,7 @@ public class FileMaker {
           @Override
           public void afterTextChanged(Editable arg0) {}
         });
-        dialog.show();
+    dialog.show();
   }
 
   public void codeHelper(TextInputLayout input, String name) {

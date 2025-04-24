@@ -3,6 +3,7 @@ package ir.ninjacoder.ghostide.utils;
 import android.Manifest;
 import android.app.Activity;
 import android.os.Environment;
+import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.transition.Transition;
@@ -17,6 +18,7 @@ import android.provider.Settings;
 import android.net.Uri;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.blankj.utilcode.util.ThreadUtils;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.google.android.material.tabs.TabLayout;
@@ -838,22 +840,37 @@ public class ObjectUtils {
   }
 
   public static void addStarToTab(int pos, TabLayout tab) {
-    var getIndexTab = tab.getTabAt(pos);
-    if (getIndexTab != null) {
-      String tabText = getIndexTab.getText().toString();
+    TabLayout.Tab tabInstance = tab.getTabAt(pos);
+    if (tabInstance != null) {
+      String tabText = tabInstance.getText().toString();
       if (!tabText.startsWith("*")) {
-        getIndexTab.setText("*" + tabText);
+        SpannableString spannableText = new SpannableString("*" + tabText);
+        spannableText.setSpan(
+            new ForegroundColorSpan(Color.GREEN),
+            0,
+            spannableText.length(),
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            
+        tabInstance.setText(spannableText);
       }
     }
   }
 
   public static void removedStarToTab(int pos, TabLayout tab) {
-    var getIndexTab = tab.getTabAt(pos);
-    if (getIndexTab != null) {
-      String tabText = getIndexTab.getText().toString();
+    TabLayout.Tab tabInstance = tab.getTabAt(pos);
+    if (tabInstance != null) {
+      String tabText = tabInstance.getText().toString();
       if (tabText.startsWith("*")) {
-        getIndexTab.setText(tabText.substring(1));
+        tabInstance.setText(tabText.substring(1));
       }
     }
+  }
+
+  public static void runAndPostInTime(Runnable runs, long time) {
+    ThreadUtils.runOnUiThreadDelayed(runs, time);
+  }
+
+  public static void runAndPostInTime(Runnable runs) {
+    ThreadUtils.runOnUiThreadDelayed(runs, 2000); // 2s
   }
 }

@@ -51,17 +51,14 @@ import io.github.rosemoe.sora.widget.EditorColorScheme;
 public class JavaCodeAnalyzer implements CodeAnalyzer {
 
   private final WeakReference<IdeEditor> mEditorReference;
-  
+
   private static final Object OBJECT = new Object();
 
   private Map<String, Boolean> mapStyle;
 
   public JavaCodeAnalyzer(IdeEditor editor) {
     mEditorReference = new WeakReference<>(editor);
-    
   }
-
-  
 
   @Override
   public void analyzeInBackground(CharSequence content) {
@@ -588,14 +585,15 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 @Override
                 public void visit(MethodDeclaration arg0, Void arg1) {
                   var variableName = arg0.getNameAsString();
-                  int li = arg0.getBegin().get().line;
+                  int li = arg0.getBegin().get().line - 1; // تبدیل به index بر اساس 0
                   int cl = arg0.getBegin().get().column;
                   mtusing.add(arg0.getNameAsString());
                   inline.put(variableName, li);
                   incol.put(variableName, cl);
-                  if (JavaPaserUtils.getDeprecated(arg0.getAnnotations()))
+
+                  if (JavaPaserUtils.getDeprecated(arg0.getAnnotations())) {
                     Utils.setWaringSpan(result, li, cl + 1);
-                  
+                  }
 
                   super.visit(arg0, arg1);
                 }
@@ -646,7 +644,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
 
           unusedImport.removeIf(importName -> usedVariables.contains(getSimpleName(importName)));
           declaredVariables.removeAll(usedVariables);
-
+          
           for (var it : unusedImport) {
             var myline = inline.get(it);
             var mycol = incol.get(it);

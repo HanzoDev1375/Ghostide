@@ -178,7 +178,7 @@ public class CodeEditorActivity extends BaseCompat {
   private GhostWebEditorSearch ghost_searchs;
   private int tabPos = -1;
   private EditorViewModel modelEditor;
-  private String Paths;
+  private String Paths, path;
   private boolean isSvg = false;
   private IdeEditor editor;
   private boolean isFileChangeDialogShowing = false;
@@ -762,6 +762,22 @@ public class CodeEditorActivity extends BaseCompat {
   void saveFileByIo() {
     isFileChangeDialogShowing = false;
     FileChangeReceiver.stopWatching();
+    ObjectUtils.runAndPostInTime(
+        () -> {
+          FileChangeReceiver.startWatching(
+              CodeEditorActivity.this,
+              getPathCode(),
+              (filePath) -> {
+                FileChangeReceiver.showFileChangedDialog(
+                    CodeEditorActivity.this,
+                    filePath,
+                    () -> {
+                      setCodeEditorFileReader(filePath);
+                    });
+              });
+        },
+        3000);
+
     if (editor.getText().toString().isEmpty()) {
       DataUtil.showMessage(getApplicationContext(), getString(R.string.errorEmptyFile));
     } else {
@@ -862,15 +878,15 @@ public class CodeEditorActivity extends BaseCompat {
     AnimUtils.Amin01(_view);
   }
 
-  public void _Animwork(final View _view) {
+  void _Animwork(final View _view) {
     AnimUtils.Worker(_view);
   }
 
-  public void _Anim04(final View _view) {
+  void _Anim04(final View _view) {
     AnimUtils.Amin04(_view, this);
   }
 
-  public void ClickItemChildAnimation(View view) {
+  void ClickItemChildAnimation(View view) {
     var fade_in =
         new ScaleAnimation(
             0.9f, 1f, 0.9f, 1f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.7f);
@@ -890,7 +906,7 @@ public class CodeEditorActivity extends BaseCompat {
 
         tabs_listmap.forEach(
             it -> {
-              String path =
+              path =
                   it.containsKey("path") && it.get("path") != null ? it.get("path").toString() : "";
               boolean fileExists = FileUtil.isExistFile(path);
               it.put("exists", fileExists);
@@ -918,11 +934,6 @@ public class CodeEditorActivity extends BaseCompat {
               }
             });
         setDistreeView();
-        //        if (tablayouteditor.getTabCount() > 0) {
-        //          int newTabPosition = tablayouteditor.getTabCount() - 1;
-        //          tablayouteditor.getTabAt(newTabPosition).select();
-        //        }
-
         tablayouteditor.addOnTabSelectedListener(
             new TabLayout.OnTabSelectedListener() {
 
@@ -996,9 +1007,6 @@ public class CodeEditorActivity extends BaseCompat {
                     showFileNotFoundDialog(pos, filePath);
                   } else {
                     setCodeEditorFileReader(filePath);
-                    ClickItemChildAnimation(tabs.view);
-                    ClickItemChildAnimation(editor);
-                    EditorUtil.savecursor(editor, CodeEditorActivity.this, savecursor);
                   }
                 }
               }
@@ -1021,6 +1029,18 @@ public class CodeEditorActivity extends BaseCompat {
         }
       }
     }
+  }
+
+  private String localdata = "";
+  private String getPathCode() {
+
+    tabs_listmap.forEach(
+        it -> {
+          localdata =
+              it.containsKey("path") && it.get("path") != null ? it.get("path").toString() : "";
+        });
+
+    return localdata;
   }
 
   private void showFileNotFoundDialog(int position, String filePath) {
@@ -1166,8 +1186,24 @@ public class CodeEditorActivity extends BaseCompat {
 
   public void FabFileRuner() {
     try {
-        isFileChangeDialogShowing = false;
-        FileChangeReceiver.stopWatching();
+      isFileChangeDialogShowing = false;
+      FileChangeReceiver.stopWatching();
+      ObjectUtils.runAndPostInTime(
+          () -> {
+            FileChangeReceiver.startWatching(
+                CodeEditorActivity.this,
+                getPathCode(),
+                (filePath) -> {
+                  FileChangeReceiver.showFileChangedDialog(
+                      CodeEditorActivity.this,
+                      filePath,
+                      () -> {
+                        // کد برای بارگذاری مجدد فایل
+                        setCodeEditorFileReader(filePath);
+                      });
+                });
+          },
+          3000);
       int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
       if (selectedTabPosition >= 0 && selectedTabPosition < tabs_listmap.size()) {
         String selectedFilePath = tabs_listmap.get(selectedTabPosition).get("path").toString();
@@ -1223,15 +1259,15 @@ public class CodeEditorActivity extends BaseCompat {
         } else if (selectedFilePath.contains(".scss") || selectedFilePath.contains(".sass")) {
           SassForAndroid.run(CodeEditorActivity.this, selectedFilePath, selectedFilePath);
         } else if (selectedFilePath.contains(".java")) {
-          JavaCompilerBeta.run(CodeEditorActivity.this, fileContent);
+          JavaCompilerBeta.run(CodeEditorActivity.this, selectedFilePath);
         } else if (selectedFilePath.contains(".xml")) {
           XmlLayoutDesignActivity.show(
               CodeEditorActivity.this, "xml", selectedFilePath, false, false);
         } else if (selectedFilePath.contains(".jj")) {
           var file = new File(selectedFilePath);
           JavaCcComplierImpl.main(file.toString(), file.getParent() + "/");
-        }else if(selectedFilePath.contains(".kt")){
-            new KotlinCompilerImpl(CodeEditorActivity.this,selectedFilePath);
+        } else if (selectedFilePath.contains(".kt")) {
+          new KotlinCompilerImpl(CodeEditorActivity.this, selectedFilePath);
         }
       } else {
 
