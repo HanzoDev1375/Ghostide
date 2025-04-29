@@ -12,6 +12,8 @@ import com.bumptech.glide.module.AppGlideModule;
 import ir.ninjacoder.ghostide.glidecompat.glideapk.ApkIconLoaderModel;
 import android.graphics.drawable.Drawable;
 import ir.ninjacoder.ghostide.glidecompat.glideapk.ApkIconModelLoader;
+import ir.ninjacoder.ghostide.glidecompat.glidejavaparser.CustomImageLoader;
+import ir.ninjacoder.ghostide.glidecompat.glidejavaparser.CustomImageRequest;
 import ir.ninjacoder.ghostide.glidecompat.glideres.IconRes;
 import ir.ninjacoder.ghostide.glidecompat.glideres.IconModelLoaderFactory;
 import ir.ninjacoder.ghostide.glidecompat.musicglide.Mp3CoverLoaderFactory;
@@ -37,5 +39,9 @@ public class AppModule extends AppGlideModule {
     registry.append(
         ApkIconLoaderModel.class, Drawable.class, new ApkIconModelLoader.Factory(context));
         registry.prepend(IconRes.class, Drawable.class, new IconModelLoaderFactory(context));
+        
+        registry.prepend(
+        CustomImageRequest.class, Drawable.class, new CustomImageLoader.Factory(context));
+
   }
 }

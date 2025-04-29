@@ -760,23 +760,8 @@ public class CodeEditorActivity extends BaseCompat {
   }
 
   void saveFileByIo() {
-    isFileChangeDialogShowing = false;
+
     FileChangeReceiver.stopWatching();
-    ObjectUtils.runAndPostInTime(
-        () -> {
-          FileChangeReceiver.startWatching(
-              CodeEditorActivity.this,
-              getPathCode(),
-              (filePath) -> {
-                FileChangeReceiver.showFileChangedDialog(
-                    CodeEditorActivity.this,
-                    filePath,
-                    () -> {
-                      setCodeEditorFileReader(filePath);
-                    });
-              });
-        },
-        3000);
 
     if (editor.getText().toString().isEmpty()) {
       DataUtil.showMessage(getApplicationContext(), getString(R.string.errorEmptyFile));
@@ -788,6 +773,21 @@ public class CodeEditorActivity extends BaseCompat {
           String selectedFilePath = tabs_listmap.get(selectedTabPosition).get("path").toString();
           Toast.makeText(this, selectedFilePath, 2).show();
           String fileContent = editor.getText().toString();
+          ObjectUtils.runAndPostInTime(
+              () -> {
+                FileChangeReceiver.startWatching(
+                    CodeEditorActivity.this,
+                    selectedFilePath,
+                    (filePath) -> {
+                      FileChangeReceiver.showFileChangedDialog(
+                          CodeEditorActivity.this,
+                          filePath,
+                          () -> {
+                            setCodeEditorFileReader(filePath);
+                          });
+                    });
+              },
+              3000);
           if (selectedFilePath.endsWith(".class")) {
             FileUtil.writeFile(selectedFilePath.replace(".class", ".java"), fileContent);
           } else FileUtil.writeFile(selectedFilePath, fileContent);
@@ -1031,31 +1031,19 @@ public class CodeEditorActivity extends BaseCompat {
     }
   }
 
-  private String localdata = "";
-  private String getPathCode() {
-
-    tabs_listmap.forEach(
-        it -> {
-          localdata =
-              it.containsKey("path") && it.get("path") != null ? it.get("path").toString() : "";
-        });
-
-    return localdata;
-  }
-
   private void showFileNotFoundDialog(int position, String filePath) {
     new MaterialAlertDialogBuilder(this)
-        .setTitle("فایل یافت نشد")
-        .setMessage("فایل " + Uri.parse(filePath).getLastPathSegment() + " وجود ندارد")
+        .setTitle("File not found ")
+        .setMessage("file " + Uri.parse(filePath).getLastPathSegment() + " وجود ندارد")
         .setPositiveButton(
-            "بستن تب",
+            "close tab",
             (dialog, which) -> {
               tablayouteditor.removeTabAt(position);
               tabs_listmap.remove(position);
               setCloseother();
             })
         .setNegativeButton(
-            "تلاش مجدد",
+            "tryit",
             (dialog, which) -> {
               boolean existsNow = FileUtil.isExistFile(filePath);
               tabs_listmap.get(position).put("exists", existsNow);
@@ -1068,7 +1056,7 @@ public class CodeEditorActivity extends BaseCompat {
                 }
               }
             })
-        .setNeutralButton("لغو", null)
+        .setNeutralButton("close dialog", null)
         .show();
   }
 
@@ -1186,24 +1174,8 @@ public class CodeEditorActivity extends BaseCompat {
 
   public void FabFileRuner() {
     try {
-      isFileChangeDialogShowing = false;
       FileChangeReceiver.stopWatching();
-      ObjectUtils.runAndPostInTime(
-          () -> {
-            FileChangeReceiver.startWatching(
-                CodeEditorActivity.this,
-                getPathCode(),
-                (filePath) -> {
-                  FileChangeReceiver.showFileChangedDialog(
-                      CodeEditorActivity.this,
-                      filePath,
-                      () -> {
-                        // کد برای بارگذاری مجدد فایل
-                        setCodeEditorFileReader(filePath);
-                      });
-                });
-          },
-          3000);
+
       int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
       if (selectedTabPosition >= 0 && selectedTabPosition < tabs_listmap.size()) {
         String selectedFilePath = tabs_listmap.get(selectedTabPosition).get("path").toString();
@@ -1211,6 +1183,21 @@ public class CodeEditorActivity extends BaseCompat {
         String fileContent = editor.getText().toString();
         ObjectUtils.removedStarToTab(selectedTabPosition, tablayouteditor);
         FileUtil.writeFile(selectedFilePath, fileContent);
+        ObjectUtils.runAndPostInTime(
+            () -> {
+              FileChangeReceiver.startWatching(
+                  CodeEditorActivity.this,
+                  selectedFilePath,
+                  (filePath) -> {
+                    FileChangeReceiver.showFileChangedDialog(
+                        CodeEditorActivity.this,
+                        filePath,
+                        () -> {
+                          setCodeEditorFileReader(filePath);
+                        });
+                  });
+            },
+            3000);
         if (selectedFilePath.contains(".html")) {
           if (ru.getBoolean("live", false)) {
             var it = new CompilerUtils(selectedFilePath, Mode.WEB, CodeEditorActivity.this);

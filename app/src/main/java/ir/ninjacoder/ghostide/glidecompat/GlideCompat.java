@@ -4,6 +4,8 @@ import android.net.Uri;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.glidecompat.glideapk.ApkIconLoaderModel;
+import ir.ninjacoder.ghostide.glidecompat.glidejavaparser.CustomImageRequest;
+import ir.ninjacoder.ghostide.glidecompat.glidejavaparser.JavaParserAnalyzer;
 import ir.ninjacoder.ghostide.glidecompat.musicglide.Mp3CoverModel;
 import ir.ninjacoder.ghostide.glidecompat.pdfglide.PdfModelView;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
@@ -221,7 +223,6 @@ public class GlideCompat {
         .load(path)
         .error(R.drawable.errorxml)
         .placeholder(CircelPrograssBar())
-        
         .into(c);
   }
 
@@ -235,7 +236,19 @@ public class GlideCompat {
         .into(v);
   }
 
-  
+  public static void setLoadJavaModel(ImageView img, File file) {
+    CustomImageRequest request =
+        new CustomImageRequest(
+            file,
+            R.drawable.ic_material_java,
+            new JavaParserAnalyzer());
+    Glide.with(img.getContext())
+        .load(request)
+        .placeholder(CircelPrograssBar())
+        .error(R.drawable.ic_material_java)
+        .into(img);
+  }
+
   public static void LoadIconVsCode(String file, ImageView img) {
     var mypath = "extension/icon.png";
 

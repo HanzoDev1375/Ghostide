@@ -164,13 +164,15 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
               span.setBackgroundColorMy(Color.WHITE);
               result.add(line, span);
 
-              Span middle = Span.obtain(column + token.getText().length(), EditorColorScheme.LITERAL);
+              Span middle =
+                  Span.obtain(column + token.getText().length(), EditorColorScheme.LITERAL);
               middle.setBackgroundColorMy(Color.TRANSPARENT);
               result.add(line, middle);
 
               Span end =
                   Span.obtain(
-                      column + token.getText().length(), TextStyle.makeStyle(EditorColorScheme.TEXT_NORMAL));
+                      column + token.getText().length(),
+                      TextStyle.makeStyle(EditorColorScheme.TEXT_NORMAL));
               end.setBackgroundColorMy(Color.TRANSPARENT);
               result.add(line, end);
 
@@ -179,6 +181,9 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
           case HTMLLexer.STRING:
           case HTMLLexer.CHATREF:
             {
+              if (previous == HTMLLexer.DOLLAR || token.getType() == HTMLLexer.DOLLAR) {
+                result.addIfNeeded(line, column, EditorColorScheme.jsoprator);
+              }
               if (RegexUtilCompat.RegexSelect(
                   "(\\#[a-zA-F0-9]{8})|(\\#[a-zA-F0-9]{6})|(\\#[a-zA-F0-9]{3})", text1)) {
 
@@ -291,6 +296,9 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
           case HTMLLexer.DIV:
           case HTMLLexer.AT:
             result.addIfNeeded(line, column, EditorColorScheme.htmlsymbol);
+            if (previous == HTMLLexer.IDENTIFIER || token.getType() == HTMLLexer.IDENTIFIER) {
+              result.addIfNeeded(line, column, EditorColorScheme.jsattr);
+            }
             break;
 
           case HTMLLexer.HtmlAttr:
@@ -310,10 +318,10 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
             break;
           case HTMLLexer.GT:
             result.addIfNeeded(line, column, EditorColorScheme.htmlblockhash);
+
             break;
           case HTMLLexer.LT:
             {
-              result.addIfNeeded(line, column, EditorColorScheme.htmlblockhash);
               if (stack.isEmpty()) {
                 if (currSwitch > maxSwitch) {
                   maxSwitch = currSwitch;
@@ -324,8 +332,13 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
               BlockLine block = result.obtainNewBlock();
               block.startLine = line;
               block.startColumn = column;
-              stack.push(block);
+              var colorida = EditorColorScheme.htmlblocknormal;
 
+              if (GhostIdeAppLoader.getPrefManager().getBoolean("breaks", false) == true)
+                colorida = HTMLConstants.get(stack.size());
+              else colorida = EditorColorScheme.htmlblocknormal;
+              stack.push(block);
+              result.addIfNeeded(line, column, colorida);
               break;
             }
             //// '/>'
@@ -336,7 +349,6 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
             /// '</'
           case HTMLLexer.OPEN_SLASH:
             {
-              result.addIfNeeded(line, column, EditorColorScheme.htmlblockhash);
               if (!stack.isEmpty()) {
                 BlockLine b = stack.pop();
                 b.endLine = line;
@@ -345,7 +357,11 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
                   result.addBlockLine(b);
                 }
               }
-
+              var colorres1 = EditorColorScheme.htmlblocknormal;
+              if (GhostIdeAppLoader.getPrefManager().getBoolean("breaks", false) == true)
+                colorres1 = HTMLConstants.get(stack.size());
+              else colorres1 = EditorColorScheme.htmlblocknormal;
+              result.addIfNeeded(line, column, colorres1);
               break;
             }
           case HTMLLexer.IDENTIFIER:

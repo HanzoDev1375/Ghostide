@@ -32,42 +32,42 @@ import androidx.annotation.NonNull;
  */
 public class ContentReference extends TextReference {
 
-    private final Content content;
+  private final Content content;
 
-    public ContentReference(@NonNull Content ref) {
-        super(ref);
-        this.content = ref;
-    }
+  public ContentReference(@NonNull Content ref) {
+    super(ref);
+    this.content = ref;
+  }
 
-    public int getLineCount() {
-        validateAccess();
-        return content.getLineCount();
-    }
+  public int getLineCount() {
+    validateAccess();
+    return content.getLineCount();
+  }
 
-    public int getColumnCount(int line) {
-        validateAccess();
-        return content.getColumnCount(line);
-    }
+  public int getColumnCount(int line) {
+    validateAccess();
+    return content.getColumnCount(line);
+  }
 
-    public String getLine(int line) {
-        validateAccess();
-        return content.getLineString(line);
-    }
+  public String getLine(int line) {
+    validateAccess();
+    return content.getLineString(line);
+  }
 
-    public void getLineChars(int line, char[] dest) {
-        validateAccess();
-        content.getLineChars(line, dest);
-    }
+  public void getLineChars(int line, char[] dest) {
+    validateAccess();
+    content.getLineChars(line, dest);
+  }
 
-    @NonNull
-    @Override
-    public Content getReference() {
-        return (Content) super.getReference();
-    }
+  @NonNull
+  @Override
+  public Content getReference() {
+    return (Content) super.getReference();
+  }
 
-    @Override
-    public ContentReference setValidator(Validator validator) {
-        super.setValidator(validator);
-        return this;
-    }
+  @Override
+  public ContentReference setValidator(Validator validator) {
+    super.setValidator(validator);
+    return this;
+  }
 }

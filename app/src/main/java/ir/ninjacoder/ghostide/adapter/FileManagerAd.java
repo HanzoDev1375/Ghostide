@@ -132,7 +132,6 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
       } else if (myfile.toString().endsWith(".mp3")) {
         GlideCompat.GlideLoadMp3(viewHolder.icon, myfile.toString());
       } else if (myfile.toString().endsWith(".pdf")) {
-
         GlideCompat.loadImgPdf(myfile.toString(), viewHolder.icon);
       }
 
@@ -158,7 +157,6 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
         }
         if (myfile.toString().endsWith(".xml")) {
           GlideCompat.LoadVector(myfile.toString(), viewHolder.icon);
-
         } else if (myfile.toString().endsWith(".svg")) {
           GlideCompat.LoadSvg(myfile.toString(), viewHolder.icon);
         } else if (myfile.toString().endsWith(".apk")) {
@@ -171,8 +169,8 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
           GlideCompat.loadImgPdf(myfile.toString(), viewHolder.icon);
         } else if (myfile.toString().endsWith(".snippet")) {
           viewHolder.icon.setColorFilter(Color.parseColor("#FBC82F"));
-        } else if (myfile.toString().startsWith("snippetconfig.json")) {
-          viewHolder.icon.setColorFilter(Color.CYAN);
+        } else if (myfile.toString().endsWith(".java")) {
+          GlideCompat.setLoadJavaModel(viewHolder.icon, new File(myfile.toString()));
         }
       }
     }

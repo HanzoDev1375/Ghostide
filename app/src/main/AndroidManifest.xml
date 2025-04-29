@@ -17,6 +17,10 @@
     <uses-permission android:name="android.permission.SET_WALLPAPER_COMPONENT" />
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
     <uses-permission android:name="android.permission.READ_WALLPAPER_INTERNAL" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!-- Required on Android 14+ to post foreground services with explicit type (foregroundServiceType = dataSync) -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
     <application
         android:allowBackup="true"
         tools:replace="android:allowBackup,android:supportsRtl"
@@ -41,9 +45,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.FileManagerActivity" />
-        <activity
-            android:name=".activities.CodeEditorActivity"
-        />
+        <activity android:name=".activities.CodeEditorActivity" />
         <activity android:name=".activities.HtmlRunerActivity" />
         <activity android:name=".activities.JsRunerActivity" />
         <activity android:name=".activities.SettingAppActivity" />
@@ -478,7 +480,7 @@
         </receiver>
         <activity android:name=".activities.ApkViewActivity" />
         <activity android:name=".Welcome.SplashWord" />
-       <provider
+        <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="ir.ninjacoder.ghostide.provider"
             android:exported="false"
@@ -487,5 +489,11 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider" />
         </provider>
+        <service
+            android:name="ir.ninjacoder.ghostide.tasks.FileWatcherService"
+            android:enabled="true"
+            android:stopWithTask="true"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
     </application>
 </manifest>

@@ -19,7 +19,6 @@ import java.util.List;
 public class JavaASmailAd extends RecyclerView.Adapter<JavaASmailAd.Holder> {
   protected List<JavaModel> codeInfo;
   protected OnClickItem item;
-  protected LbsBinding binding;
 
   public JavaASmailAd(List<JavaModel> codeInfo, OnClickItem item) {
     this.codeInfo = codeInfo;
@@ -39,28 +38,33 @@ public class JavaASmailAd extends RecyclerView.Adapter<JavaASmailAd.Holder> {
   public void onBindViewHolder(Holder holder, int pos) {
     var iritem = codeInfo.get(holder.getAdapterPosition());
     /** holder match */
-    binding.normaltext.setText(iritem.getCode());
-    binding.normaltext.setOnClickListener(
-        v -> item.onClick(iritem, v, holder.getAdapterPosition()));
-    binding.titleview.setText(iritem.getName().substring(0, 1));
+    holder.normaltext.setText(iritem.getCode());
+    holder.itemView.setOnClickListener(v -> item.onClick(iritem, v, holder.getAdapterPosition()));
+    holder.titleview.setText(iritem.getName().substring(0, 1));
     var shap =
         new MaterialShapeDrawable(
             ShapeAppearanceModel.builder().setAllCorners(CornerFamily.ROUNDED, 23f).build());
     shap.setFillColor(ColorStateList.valueOf(iritem.getColor()));
-    binding.getTag.setBackground(shap);
-    AnimUtils.AutoColorSynchronizedfromTxt(iritem.getColor(),binding.titleview);
+    holder.getTag.setBackground(shap);
+    AnimUtils.AutoColorSynchronizedfromTxt(iritem.getColor(), holder.titleview);
   }
 
   @Override
   public Holder onCreateViewHolder(ViewGroup parant, int viewType) {
-    binding = LbsBinding.inflate(LayoutInflater.from(parant.getContext()));
-    return new Holder(binding.getRoot());
+    LbsBinding binding = LbsBinding.inflate(LayoutInflater.from(parant.getContext()));
+    return new Holder(binding);
   }
 
   public class Holder extends RecyclerView.ViewHolder {
 
-    public Holder(View view) {
-      super(view);
+    private TextView normaltext, titleview;
+    View getTag;
+
+    public Holder(LbsBinding view) {
+      super(view.getRoot());
+      normaltext = view.normaltext;
+      titleview = view.titleview;
+      getTag = view.getTag;
     }
   }
 }

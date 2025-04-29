@@ -29,8 +29,6 @@ import io.github.rosemoe.sora.model.Inlay;
 import io.github.rosemoe.sora.model.LineIcon;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import io.github.rosemoe.sora.event.ColorSchemeUpdateEvent;
 import io.github.rosemoe.sora.text.TextUtils;
 import kotlin.text.StringsKt;
@@ -1084,11 +1082,15 @@ public class CodeEditor extends View
     duplicateSelection(true);
   }
 
-  public void commitText(String txt, boolean v) {
+  public void commitText(CharSequence txt, boolean v) {
     var cur = getCursor();
     if (cur != null) {
       cur.onCommitText(txt, v);
     }
+  }
+
+  public void commitText(CharSequence text) {
+    commitText(text, true);
   }
 
   /**
@@ -3334,7 +3336,7 @@ public class CodeEditor extends View
           float iconY = y - scaledIconBitmap.getHeight(); // موقعیت عمودی آیکون
 
           Paint iconPaint = new Paint();
-        ///  iconPaint.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
+          ///  iconPaint.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
 
           // رسم آیکون
           canvas.drawBitmap(scaledIconBitmap, iconX, iconY, iconPaint);
@@ -5843,8 +5845,8 @@ public class CodeEditor extends View
         if (isEditable()) {
           getCursor().onCommitText(" ");
           notifyExternalCursorChange();
-          enters.Space();
         }
+
         return true;
       default:
         if (event.isCtrlPressed() && !event.isAltPressed()) {

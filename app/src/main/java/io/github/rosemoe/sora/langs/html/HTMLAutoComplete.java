@@ -390,7 +390,7 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
       String wrappedTags = openingTags.toString() + closingTags.toString();
       CompletionItem tagCompletion = new CompletionItem(api, wrappedTags, "Html Snippet Compat Id");
       tagCompletion.commit = wrappedTags;
-      tagCompletion.cursorOffset = openingTags.length() - 2;
+      tagCompletion.cursorOffset(tagCompletion.commit.length() -1);
       items.add(tagCompletion);
     }
   }
@@ -430,7 +430,7 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
       CompletionItem tagCompletion =
           new CompletionItem(api, wrappedTags, "Html Snippet Compat Class");
       tagCompletion.commit = wrappedTags;
-      tagCompletion.cursorOffset = openingTags.length() - 2;
+      tagCompletion.cursorOffset(openingTags.length() - 1);
       items.add(tagCompletion);
     }
   }

@@ -75,16 +75,9 @@ public class FontFragment extends Fragment {
 
   class FontAd extends RecyclerView.Adapter<FontAd.Holder> {
     private List<Map<String, String>> list;
-    private LayoutFontViewBinding binding;
 
     public FontAd(List<Map<String, String>> list) {
       this.list = list;
-    }
-
-    class Holder extends RecyclerView.ViewHolder {
-      public Holder(View v) {
-        super(v);
-      }
     }
 
     @Override
@@ -94,19 +87,29 @@ public class FontFragment extends Fragment {
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-      binding = LayoutFontViewBinding.inflate(LayoutInflater.from(parent.getContext()));
-      return new Holder(binding.getRoot());
+      var binding = LayoutFontViewBinding.inflate(LayoutInflater.from(parent.getContext()));
+      return new Holder(binding);
     }
 
     @Override
     public void onBindViewHolder(Holder holder, int pos) {
       String fontUrl = list.get(pos).get(key);
-      FontManager.setFontFromUrl(getContext(), binding.textContent, fontUrl);
+      FontManager.setFontFromUrl(getContext(), holder.textContent, fontUrl);
 
       holder.itemView.setOnClickListener(
-          v -> {   
+          v -> {
             downloadAndSaveFont(getContext(), fontUrl);
           });
+    }
+
+    class Holder extends RecyclerView.ViewHolder {
+      TextView textContent;
+
+      public Holder(LayoutFontViewBinding v) {
+        super(v.getRoot());
+        textContent = v.textContent;
+        
+      }
     }
   }
 

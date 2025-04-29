@@ -40,12 +40,18 @@ object CommandCompat {
         return "export PATH=\$PATH:$appLibDirPath && export PYTHONHOME=$pythonBuildDirPath && export PYTHONPATH=$appLibDirPath && export LD_LIBRARY_PATH=\"\$LD_LIBRARY_PATH:\" && export LD_LIBRARY_PATH=\"\$LD_LIBRARY_PATH${pythonLibDirPath}\" && clear && libpython3.so && echo '[Enter to Exit]' && read junk && exit"
     }
 
-    fun getRunPhpCommand(context: Context, phpFile: File): String {
+  fun getRunPhpCommand(context: Context, phpFile: File): String {
     val appLibDirPath = context.applicationInfo.nativeLibraryDir
     val appFileDirPath = context.filesDir.absolutePath
     val phpLibDirPath = "$appFileDirPath/lib"
     val phpIniPath = File(context.filesDir, "php.ini").path
-    val redText = ShellUtils.shellCyan
-    return "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:$phpLibDirPath && \"$appLibDirPath/libphp-8.2.8.so\" -f \"${phpFile.path}\" -c \"$phpIniPath\" && echo '${redText}[Enter to Exit]\\033[0m' && read junk && exit"
+    
+    return """
+        export LD_LIBRARY_PATH=\$${""}LD_LIBRARY_PATH:$phpLibDirPath
+        "$appLibDirPath/libphp-8.2.8.so" -f "${phpFile.path}" -c "$phpIniPath"
+        echo -e '\033[31m[Enter to Exit]\033[0m'
+        read junk
+        exit
+    """.trimIndent().replace("\n", " && ")
 }
 }

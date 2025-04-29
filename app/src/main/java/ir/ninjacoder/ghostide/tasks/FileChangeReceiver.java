@@ -10,6 +10,7 @@ import android.os.Looper;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import java.io.File;
 
 public class FileChangeReceiver extends BroadcastReceiver {
   private static FileObserver fileObserver;
@@ -30,9 +31,16 @@ public class FileChangeReceiver extends BroadcastReceiver {
     currentFilePath = filePath;
     listener = l;
     stopWatching();
-
+    /**
+     * Create a new file observer for a certain file or directory. Monitoring does not start on
+     * creation! You must call {@link #startWatching()} before you will receive events.
+     *
+     * @param path The file or directory to monitor
+     * @param mask The event or events (added together) to watch for
+     * @deprecated use {@link #FileObserver(File, int)} instead.
+     */
     fileObserver =
-        new FileObserver(filePath, FileObserver.MODIFY | FileObserver.CLOSE_WRITE) {
+        new FileObserver(new File(filePath), FileObserver.MODIFY | FileObserver.CLOSE_WRITE) {
           private final Handler handler = new Handler(Looper.getMainLooper());
 
           @Override

@@ -1,15 +1,10 @@
 package io.github.rosemoe.sora.langs.javascript;
 
-import android.graphics.Color;
-import io.github.rosemoe.sora.data.Span;
 import android.util.Log;
 
-import io.github.rosemoe.sora.langs.IdentifierAutoComplete;
 import io.github.rosemoe.sora.text.TextStyle;
 import java.util.Stack;
 import io.github.rosemoe.sora.data.BlockLine;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
 import org.antlr.v4.runtime.Token;
@@ -23,7 +18,7 @@ import io.github.rosemoe.sora.widget.EditorColorScheme;
 public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
   private int COMPLETE = 25;
   private int INCOMPLETE = 24;
-  private BasicSyntaxJavaScriptAnalyzer as ;
+  private BasicSyntaxJavaScriptAnalyzer as;
 
   @Override
   public void analyze(
@@ -31,7 +26,7 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
       TextAnalyzeResult result,
       TextAnalyzer.AnalyzeThread.Delegate delegate) {
     try {
-      as  = new BasicSyntaxJavaScriptAnalyzer();
+      as = new BasicSyntaxJavaScriptAnalyzer();
       CodePointCharStream stream = CharStreams.fromReader(new StringReader(content.toString()));
       JavaScriptLexer lexer = new JavaScriptLexer(stream);
       var classNamePrevious = false;
@@ -94,7 +89,7 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
           case JavaScriptLexer.QuestionMarkDot:
           case JavaScriptLexer.Colon:
           case JavaScriptLexer.Ellipsis:
-          case JavaScriptLexer.Dot:
+
           case JavaScriptLexer.PlusPlus:
           case JavaScriptLexer.Plus:
           case JavaScriptLexer.MinusMinus:
@@ -108,6 +103,17 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
                 column,
                 TextStyle.makeStyle(
                     EditorColorScheme.AUTO_COMP_PANEL_CORNER, 0, true, false, false));
+            break;
+
+          case JavaScriptLexer.Dot:
+            result.addIfNeeded(
+                line,
+                column,
+                TextStyle.makeStyle(
+                    EditorColorScheme.AUTO_COMP_PANEL_CORNER, 0, true, false, false));
+            if (previous == JavaScriptLexer.Identifier) {
+              result.addIfNeeded(line, column +1, EditorColorScheme.javafield);
+            }
             break;
           case JavaScriptLexer.Modulus:
           case JavaScriptLexer.NullCoalesce:
@@ -315,18 +321,17 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
             prevIsTagName = false;
             classNamePrevious = false;
             break;
-          
         }
         if (type != JavaScriptLexer.WhiteSpaces) {
           previous = type;
         }
-
+        preToken = token;
         first = false;
       }
       result.determine(lastLine);
       identifiers.finish();
       result.setExtra(identifiers);
-       as.analyze(content, result, delegate);
+      as.analyze(content, result, delegate);
     } catch (IOException e) {
       e.printStackTrace();
       Log.e("TAG", e.getMessage());

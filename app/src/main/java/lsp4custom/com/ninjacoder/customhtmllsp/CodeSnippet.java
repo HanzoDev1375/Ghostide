@@ -112,6 +112,7 @@ public class CodeSnippet {
                     }
                   }
                   snippet.commit = bodyStr;
+                  snippet.cursorOffset(snippet.commit.length() - 1);
                 } else {
                   snippet.commit = "";
                 }

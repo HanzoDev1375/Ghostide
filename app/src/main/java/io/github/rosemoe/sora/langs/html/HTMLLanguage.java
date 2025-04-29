@@ -717,6 +717,8 @@ public class HTMLLanguage implements EditorLanguage {
         || MyCharacter.isJavaIdentifierStart(ch)
         || ch == '/'
         || ch == '-'
+        || ch == '+'
+        || ch == '#'
         || ch == '.';
   }
 

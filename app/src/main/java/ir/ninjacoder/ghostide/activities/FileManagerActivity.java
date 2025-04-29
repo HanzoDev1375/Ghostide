@@ -32,7 +32,9 @@ import ir.ninjacoder.ghostide.model.ZipFileShow;
 import ir.ninjacoder.ghostide.project.ProjectMaker;
 import ir.ninjacoder.ghostide.recyclerview.RecyclerViewHelper;
 import ir.ninjacoder.ghostide.services.FileEventUser;
-import ir.ninjacoder.ghostide.services.MediaListenerService;
+import ir.ninjacoder.ghostide.tasks.FileWatcher;
+import ir.ninjacoder.ghostide.tasks.FileWatcherService;
+import ir.ninjacoder.ghostide.tasks.FileWatcherServiceConnection;
 import ir.ninjacoder.ghostide.terminal.TerminalActivity;
 import ir.ninjacoder.ghostide.utils.*;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
@@ -41,13 +43,11 @@ import ir.ninjacoder.ghostide.utils.VectorHelper;
 import ir.ninjacoder.ghostide.widget.GhostWebMaterialDialog;
 import ir.ninjacoder.ghostide.widget.component.fastscrollcompat.FastScrollerBuilder;
 import android.Manifest;
-import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -55,7 +55,6 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
-import ir.ninjacoder.ghostide.PluginManager.FilePostBroadcastReceiver;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -75,11 +74,9 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.blankj.utilcode.util.ThreadUtils;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.search.SearchBar;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -99,7 +96,8 @@ import com.ninjacoder.jgit.childer.TextFind;
 import java.io.File;
 import java.util.*;
 
-public class FileManagerActivity extends BaseCompat implements FileManagerAd.onClick {
+public class FileManagerActivity extends BaseCompat
+    implements FileManagerAd.onClick, FileWatcher.OnFileChangeListener {
 
   public String Folder = "";
   protected SdCardUtil externalspace;
@@ -166,6 +164,8 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
   private AndroidUriFileUtil utils;
   private GridLayoutManager gridLayoutManager;
   private SharedPreferences sharedPreferences;
+  private FileWatcherServiceConnection fileEventRelay;
+  private boolean isFileWatcherBound = false;
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
@@ -199,9 +199,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
 
   private void initialize(Bundle _savedInstanceState) {
 
-    startService(new Intent(getApplicationContext(), MediaListenerService.class));
-    // from protected NavigationViewCompnet bind.navs;
-
     // setSupportActionBar(searchbar);
     gridLayoutManager = new GridLayoutManager(this, 1);
     gridMode = getSharedPreferences("gride", Activity.MODE_PRIVATE);
@@ -231,13 +228,6 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
       setViewType(ViewType.ROW);
     }
     ThemeChaker();
-    Observable<FileEvent> fileObservable = RxFileObserver.create(Folder);
-    fileObservable.subscribe(
-        (it) -> {
-          if (it.isCreate()) {
-            Log.w("FileCreate", it.toString());
-          }
-        });
     var helper =
         new RecyclerViewHelper(
             bind.recyclerview2,
@@ -273,6 +263,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
             }
           }
         });
+
     UpdateCheck =
         new RequestNetwork.RequestListener() {
 
@@ -337,6 +328,42 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     } else _dataOnClickItemList(pos);
   }
 
+  private void bindFileWatcherService(File file) {
+    unbindFileWatcherService();
+
+    fileEventRelay = new FileWatcherServiceConnection(this);
+    fileEventRelay.setFileToWatch(file);
+    Intent intent = new Intent(this, FileWatcherService.class);
+    startService(intent);
+
+    if (bindService(intent, fileEventRelay, Context.BIND_IMPORTANT)) {
+      isFileWatcherBound = true;
+    } else {
+      Log.e(
+          "TAG",
+          "Error: The requested service doesn't "
+              + "exist, or this client isn't allowed access to it.");
+    }
+  }
+
+  private void unbindFileWatcherService() {
+    if (isFileWatcherBound && fileEventRelay != null) {
+      unbindService(fileEventRelay);
+      isFileWatcherBound = false;
+      fileEventRelay = null;
+    }
+  }
+
+  @Override
+  public void onFileChanged(int event, String path) {
+    switch (event) {
+      case FileWatcher.CREATE:
+      case FileWatcher.DELETE:
+        reLoadFile();
+        break;
+    }
+  }
+
   void savePath() {
     if (save_path.contains("path")) {
       if (FileUtil.isExistFile(save_path.getString("path", ""))) {
@@ -351,6 +378,8 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
       reLoadFile();
     }
     IntentHelper.getFilePath = Folder;
+    bindFileWatcherService(new File(save_path.getString("path", "")));
+    Log.w("FilePath", save_path.getString("path", ""));
   }
 
   public void setViewType(ViewType viewType) {
@@ -448,7 +477,7 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
     bind.navs.getMenu().add(0, 12, 0, "About").setIcon(R.drawable.drawer_item11);
     bind.navs.getMenu().add(0, 14, 0, "Store").setIcon(R.drawable.shop_24);
     bind.navs.getMenu().add(0, 13, 0, "exit").setIcon(R.drawable.drawer_item1);
-    bind.navs.getMenu().add(0,15,0,"star in myket").setIcon(R.drawable.starmyket);
+    bind.navs.getMenu().add(0, 15, 0, "star in myket").setIcon(R.drawable.starmyket);
     DrowerHandler();
   }
 
@@ -490,7 +519,8 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
   protected void onDestroy() {
     super.onDestroy();
     // TODO: Implement this method
-    stopService(new Intent(this, MediaListenerService.class));
+    unbindFileWatcherService();
+    stopService(new Intent(this,FileWatcherService.class));
   }
 
   public void reLoadFile(boolean isSortFile) {
@@ -1728,8 +1758,9 @@ public class FileManagerActivity extends BaseCompat implements FileManagerAd.onC
 
                 break;
               }
-              case 15:{
-                  setLink("myket://comment?id=ir.ninjacoder.ghostide");
+            case 15:
+              {
+                setLink("myket://comment?id=ir.ninjacoder.ghostide");
               }
           }
           return false;
