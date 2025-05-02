@@ -1,142 +1,142 @@
 [
     {
         "key": "False",
-        "description": null
+        "description": "A Boolean value representing false. Used in logical operations and conditional statements."
     },
     {
         "key": "None",
-        "description": null
+        "description": "Represents the absence of a value or a null value in Python."
     },
     {
         "key": "True",
-        "description": null
+        "description": "A Boolean value representing true. Used in logical operations and conditional statements."
     },
     {
         "key": "and",
-        "description": null
+        "description": "A logical operator that returns True only if both operands are true."
     },
     {
         "key": "as",
-        "description": null
+        "description": "Used to create an alias when importing modules or in 'with' statements for context managers."
     },
     {
         "key": "assert",
-        "description": null
+        "description": "Used for debugging to check if a condition is True; raises AssertionError if False."
     },
     {
         "key": "async",
-        "description": null
+        "description": "Declares a function as a coroutine for asynchronous programming."
     },
     {
         "key": "await",
-        "description": null
+        "description": "Pauses execution until an async coroutine completes and returns its result."
     },
     {
         "key": "break",
-        "description": null
+        "description": "Exits the nearest enclosing loop (for or while) prematurely."
     },
     {
         "key": "class",
-        "description": null
+        "description": "Defines a new class, which is a blueprint for creating objects."
     },
     {
         "key": "continue",
-        "description": null
+        "description": "Skips the rest of the current loop iteration and moves to the next one."
     },
     {
         "key": "def",
-        "description": null
+        "description": "Used to define a function in Python."
     },
     {
         "key": "del",
-        "description": null
+        "description": "Deletes a variable, item in a list, or attribute of an object."
     },
     {
         "key": "elif",
-        "description": null
+        "description": "Short for 'else if'; used in conditional statements to check multiple conditions."
     },
     {
         "key": "else",
-        "description": null
+        "description": "Executes a block of code if the preceding 'if' or 'elif' conditions are False."
     },
     {
         "key": "except",
-        "description": null
+        "description": "Catches and handles exceptions in a try-except block."
     },
     {
         "key": "finally",
-        "description": null
+        "description": "A block of code that executes no matter what, used in try-except-finally."
     },
     {
         "key": "for",
-        "description": null
+        "description": "Starts a loop that iterates over a sequence (list, tuple, string, etc.)."
     },
     {
         "key": "from",
-        "description": null
+        "description": "Used to import specific attributes or functions from a module."
     },
     {
         "key": "global",
-        "description": null
+        "description": "Declares a variable as global, allowing modification inside a function."
     },
     {
         "key": "if",
-        "description": null
+        "description": "Starts a conditional statement; executes a block if the condition is True."
     },
     {
         "key": "import",
-        "description": null
+        "description": "Used to import modules or libraries into a Python script."
     },
     {
         "key": "in",
-        "description": null
+        "description": "Checks if a value exists in a sequence (list, tuple, string, etc.)."
     },
     {
         "key": "is",
-        "description": null
+        "description": "Checks if two variables refer to the same object in memory."
     },
     {
         "key": "lambda",
-        "description": null
+        "description": "Creates a small anonymous function (e.g., lambda x: x*2)."
     },
     {
         "key": "nonlocal",
-        "description": null
+        "description": "Declares a variable in a nested function as non-local (not global, but not local either)."
     },
     {
         "key": "not",
-        "description": null
+        "description": "A logical operator that inverts the truth value (not True → False)."
     },
     {
         "key": "or",
-        "description": null
+        "description": "A logical operator that returns True if at least one operand is true."
     },
     {
         "key": "pass",
-        "description": null
+        "description": "A null operation; used as a placeholder where syntax requires a statement."
     },
     {
         "key": "raise",
-        "description": null
+        "description": "Manually triggers (raises) an exception in Python."
     },
     {
         "key": "return",
-        "description": null
+        "description": "Exits a function and optionally returns a value."
     },
     {
         "key": "try",
-        "description": null
+        "description": "Starts a block of code where exceptions can be caught and handled."
     },
     {
         "key": "while",
-        "description": null
+        "description": "Starts a loop that executes as long as the condition is True."
     },
     {
         "key": "with",
-        "description": null
+        "description": "Used for context management (e.g., file handling) to ensure resources are properly released."
     },
     {
         "key": "yield",
-        "description": null
+        "description": "Pauses a function and returns a value, making it a generator."
     }
 ]

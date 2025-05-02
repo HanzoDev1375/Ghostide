@@ -2,133 +2,123 @@ package com.ninjacoder.jgit;
 
 import android.content.Context;
 import android.util.Log;
-import android.view.View;
+import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
-import com.google.android.material.snackbar.Snackbar;
-
-import java.time.Duration;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.lib.BatchingProgressMonitor;
+import org.eclipse.jgit.api.errors.TransportException;
+import org.eclipse.jgit.lib.ProgressMonitor;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
 import java.io.File;
 
-@RequiresApi(26)
 public class PushTask extends GitTask {
 
   private static final String TAG = PushTask.class.getSimpleName();
-  private boolean[] gitOptions;
-  private String userName;
-  private String passwordUser;
+  private final boolean[] gitOptions;
+  private final String userName;
+  private final String passwordUser;
+  private String[] values;  
 
-  PushTask(Context context, File repo, String[] values, boolean[] options,String userName,String passwordUser) {
+  PushTask(
+      Context context,
+      File repo,
+      String[] values,
+      boolean[] options,
+      String userName,
+      String passwordUser) {
     super(context, repo, values);
-   this. gitOptions = options;
+    this.gitOptions = options;
     this.userName = userName;
     this.passwordUser = passwordUser;
+    this.values = values;
     id = 6;
   }
 
   @Override
   protected Boolean doInBackground(String... params) {
-    Git git = GitWrapper.getGit(repo);
-    if (git != null) {
-      try {
-        if (gitOptions[3]) {
-          git.push()
-              .setRemote(params[0])
-              .setDryRun(gitOptions[0])
-              .setForce(gitOptions[1])
-              .setThin(gitOptions[2])
-              .setProgressMonitor(
-                  new BatchingProgressMonitor() {
-                    @Override
-                    protected void onUpdate(String taskName, int workCurr, Duration arg2) {}
-
-                    @Override
-                    protected void onEndTask(String taskName, int workCurr, Duration arg2) {}
-
-                    @Override
-                    protected void onUpdate(
-                        String taskName,
-                        int workCurr,
-                        int workTotal,
-                        int percentDone,
-                        Duration arg4) {
-                      publishProgress(
-                          taskName,
-                          String.valueOf(percentDone),
-                          String.valueOf(workCurr),
-                          String.valueOf(workTotal));
-                    }
-
-                    @Override
-                    protected void onEndTask(
-                        String taskName,
-                        int workCurr,
-                        int workTotal,
-                        int percentDone,
-                        Duration arg4) {
-                      publishProgress(
-                          taskName, String.valueOf(workCurr), String.valueOf(workTotal));
-                    }
-                  })
-              .setPushTags()
-              .setCredentialsProvider(new UsernamePasswordCredentialsProvider(userName,passwordUser))
-              .call();
-        } else {
-          git.push()
-              .setRemote(params[0])
-              .setDryRun(gitOptions[0])
-              .setForce(gitOptions[1])
-              .setProgressMonitor(
-                  new BatchingProgressMonitor() {
-                    @Override
-                    protected void onUpdate(String taskName, int workCurr, Duration arg2) {}
-
-                    @Override
-                    protected void onEndTask(String taskName, int workCurr, Duration arg2) {}
-
-                    @Override
-                    protected void onUpdate(
-                        String taskName,
-                        int workCurr,
-                        int workTotal,
-                        int percentDone,
-                        Duration arg4) {
-                      publishProgress(
-                          taskName,
-                          String.valueOf(percentDone),
-                          String.valueOf(workCurr),
-                          String.valueOf(workTotal));
-                    }
-
-                    @Override
-                    protected void onEndTask(
-                        String taskName,
-                        int workCurr,
-                        int workTotal,
-                        int percentDone,
-                        Duration arg4) {
-                      publishProgress(
-                          taskName, String.valueOf(workCurr), String.valueOf(workTotal));
-                    }
-                  })
-              .setThin(gitOptions[2])
-             //done using param from user
-              .setCredentialsProvider(new UsernamePasswordCredentialsProvider(userName,passwordUser))
-              .call();
-        }
-      } catch (GitAPIException e) {
-        Log.e(TAG, e.toString());
-        return false;
-      }
-
-      return true;
+    if (params == null || params.length == 0) {
+      Log.e(TAG, "Remote name not provided");
+      return false;
     }
 
-    return false;
+    Git git = GitWrapper.getGit(repo);
+    if (git == null) {
+      Log.e(TAG, "Git repository is null");
+      return false;
+    }
+
+    try {
+      UsernamePasswordCredentialsProvider credentials =
+          new UsernamePasswordCredentialsProvider(userName, passwordUser);
+
+      org.eclipse.jgit.api.PushCommand pushCommand =
+          git.push()
+              .setRemote(params[0])
+              .setDryRun(gitOptions[0])
+              .setForce(gitOptions[1])
+              .setThin(gitOptions[2])
+              .setCredentialsProvider(credentials);
+
+      if (gitOptions[3]) { // اگر تیک تگ‌ها زده شده باشد
+        pushCommand.setPushTags();
+      }
+
+      // اضافه کردن مانیتور پیشرفت ساده
+      pushCommand.setProgressMonitor(new SimpleProgressMonitor());
+
+      pushCommand.call();
+
+      return true;
+
+    } catch (TransportException e) {
+      Log.e(TAG, "خطا در ارتباط با ریموت: " + e.getMessage());
+      return false;
+    } catch (GitAPIException e) {
+      Log.e(TAG, "خطای گیت در عملیات پوش: " + e.getMessage());
+      return false;
+    } catch (Exception e) {
+      Log.e(TAG, "خطای ناشناخته: " + e.getMessage());
+      return false;
+    }
+  }
+
+  @Override
+  protected void onPostExecute(Boolean success) {
+    super.onPostExecute(success);
+    if (context != null) {
+      String message = success ? values[1] : values[2];
+      Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+    }
+  }
+
+  private static class SimpleProgressMonitor implements ProgressMonitor {
+    @Override
+    public void start(int totalTasks) {
+      Log.d(TAG, "شروع عملیات پوش با " + totalTasks + " تسک");
+    }
+
+    @Override
+    public void beginTask(String title, int totalWork) {
+      Log.d(TAG, "شروع تسک: " + title + " (" + totalWork + " واحد کار)");
+    }
+
+    @Override
+    public void update(int completed) {
+      Log.d(TAG, "پیشرفت: " + completed + " واحد تکمیل شد");
+    }
+
+    @Override
+    public void endTask() {
+      Log.d(TAG, "تسک تکمیل شد");
+    }
+
+    @Override
+    public boolean isCancelled() {
+      return false;
+    }
+
+    @Override
+    public void showDuration(boolean arg0) {}
   }
 }

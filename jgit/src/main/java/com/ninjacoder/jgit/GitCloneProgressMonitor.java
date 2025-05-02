@@ -18,15 +18,10 @@ class GitCloneProgressMonitor implements ProgressMonitor {
   private boolean cancelled = false;
   
   private final Handler handler = new Handler(Looper.getMainLooper());
-
-  
-
   public GitCloneProgressMonitor(LinearProgressIndicator progress, TextView message) {
     this.progress = progress;
     this.message = message;
   }
-
-  
 
   public void cancel() {
     cancelled = true;
@@ -39,7 +34,7 @@ class GitCloneProgressMonitor implements ProgressMonitor {
 
   @Override
   public void beginTask(String title, int totalWork) {
-    handler.post(() -> message.setText(title));
+    handler.post(() -> message.setText(title + " " + String.valueOf(totalWork)));
   }
 
   @Override

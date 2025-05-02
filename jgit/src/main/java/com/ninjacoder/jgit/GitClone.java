@@ -57,7 +57,6 @@ public class GitClone {
     binding = LayoutDialogProgressBinding.inflate(LayoutInflater.from(context));
     binding.message.setVisibility(View.VISIBLE);
 
-    
     MaterialAlertDialogBuilder builder =
         new MaterialAlertDialogBuilder(context)
             .setTitle("Cloning Repository...")
@@ -66,7 +65,6 @@ public class GitClone {
             .setPositiveButton(android.R.string.cancel, null)
             .setCancelable(false);
 
-    
     AlertDialog dialog = builder.create();
     dialog.show();
 
@@ -76,7 +74,6 @@ public class GitClone {
     GitCloneProgressMonitor progress =
         new GitCloneProgressMonitor(binding.progress, binding.message);
 
-    
     Thread cloneThread =
         new Thread(
             () -> {
@@ -87,11 +84,10 @@ public class GitClone {
                       .setProgressMonitor(progress)
                       .call()) {
 
-                
                 runOnUiThread(
                     () -> {
                       dialog.dismiss();
-                       call.onEndWork();
+                      call.onEndWork();
                     });
 
               } catch (Throwable err) {
@@ -99,8 +95,6 @@ public class GitClone {
                   err.printStackTrace();
                   runOnUiThread(
                       () -> {
-                        
-                        
                         new MaterialAlertDialogBuilder(context)
                             .setTitle("Clone Error")
                             .setMessage("Error cloning repository: " + err.getMessage())
@@ -116,7 +110,6 @@ public class GitClone {
               }
             });
 
-    
     Button button = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
     button.setText(android.R.string.cancel);
     button.setOnClickListener(
@@ -126,10 +119,9 @@ public class GitClone {
           cloneThread.interrupt();
         });
 
-    cloneThread.start(); 
+    cloneThread.start();
   }
 
-  
   private void runOnUiThread(Runnable action) {
     new Handler(Looper.getMainLooper()).post(action);
   }

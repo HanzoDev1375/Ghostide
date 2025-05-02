@@ -10,7 +10,7 @@ import io.github.rosemoe.sora.widget.EditorColorScheme;
 import java.util.List;
 
 public class Utils {
-  public static int[] setErrorSpan(TextAnalyzeResult colors, int line, int column) {
+  public static int[] setErrorSpan(TextAnalyzeResult colors, int line, int column, String text) {
     int lineCount = colors.getSpanMap().size();
     int realLine = line - 1;
     List<Span> spans = colors.getSpanMap().get(Math.min(realLine, lineCount - 1));
@@ -21,12 +21,14 @@ public class Utils {
     if (realLine >= lineCount) {
       Span span = Span.obtain(0, EditorColorScheme.PROBLEM_ERROR);
       span.problemFlags = Span.FLAG_ERROR;
+
       colors.add(realLine, span);
       end[0]++;
     } else {
       Span last = null;
       for (int i = 0; i < spans.size(); i++) {
         Span span = spans.get(i);
+        
         if (last != null) {
           if (last.column <= column - 1 && span.column >= column - 1) {
             span.problemFlags = Span.FLAG_ERROR;
@@ -48,6 +50,10 @@ public class Utils {
     }
 
     return end;
+  }
+
+  public static int[] setErrorSpan(TextAnalyzeResult colors, int line, int column) {
+      return setErrorSpan(colors,line,column,"");
   }
 
   public static int[] setWaringSpan(TextAnalyzeResult colors, int line, int column) {
@@ -122,7 +128,7 @@ public class Utils {
       Span last = null;
       for (int i = 0; i < spans.size(); i++) {
         Span span = spans.get(i);
-        span.setDrawminiText("Test");
+        // span.setDrawminiText("Test");
         if (last != null) {
           if (last.column <= column - 1 && span.column >= column - 1) {
             span.problemFlags = 0;

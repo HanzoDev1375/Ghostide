@@ -23,18 +23,22 @@ public class CommitTask extends GitTask {
   @Override
   protected Boolean doInBackground(String... strings) {
     try {
-      Git git = GitWrapper.getGit(repo);
-      if (git != null) {
+      if (strings == null || strings.length < 3 || strings[0] == null) {
+        return false;
+      }
 
-        if(GitUtils.isGitRepository(repo)) {
-          git.commit().setMessage(strings[0]).setCommitter(strings[1], strings[2]).call();
-        }
+      Git git = GitWrapper.getGit(repo);
+      if (git != null && GitUtils.isGitRepository(repo)) {
+        git.commit()
+            .setMessage(strings[0])
+            .setCommitter(
+                strings[1] != null ? strings[1] : "", strings[2] != null ? strings[2] : "")
+            .call();
       }
     } catch (GitAPIException e) {
       Log.e(TAG, e.toString());
       return false;
     }
-
     return true;
   }
 

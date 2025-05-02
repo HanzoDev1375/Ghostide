@@ -5263,7 +5263,7 @@ public class CodeEditor extends View
     TextAnalyzeResult colors = mSpanner.getResult();
     colors.getSpanMap().clear();
     mSpanner.analyze(getText());
-
+    colors.setText(getText().toString());
     requestLayout();
 
     dispatchEvent(

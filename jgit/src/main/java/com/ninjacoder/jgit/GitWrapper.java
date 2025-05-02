@@ -22,6 +22,7 @@ import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -197,29 +198,29 @@ public class GitWrapper {
    * @return list of commits
    */
   public static List<RevCommit> getCommits(File repo) {
-  if (repo == null || !GitUtils.isGitRepository(repo)) return null;
+    if (repo == null || !GitUtils.isGitRepository(repo)) return null;
 
-  Iterable<RevCommit> log = null;
-  List<RevCommit> revCommits = new ArrayList<>();
+    Iterable<RevCommit> log = null;
+    List<RevCommit> revCommits = new ArrayList<>();
 
-  try {
-    Git git = getGit(repo);
-    if (git != null) {
-      log = git.log().call();
+    try {
+      Git git = getGit(repo);
+      if (git != null) {
+        log = git.log().call();
+      }
+    } catch (GitAPIException e) {
+      Log.e(TAG, e.toString());
+      return null;
     }
-  } catch (GitAPIException e) {
-    Log.e(TAG, e.toString());
-    return null;
-  }
 
-  if (log != null) {
-    for (RevCommit commit : log) {
-      revCommits.add(commit);
+    if (log != null) {
+      for (RevCommit commit : log) {
+        revCommits.add(commit);
+      }
     }
-  }
 
-  return revCommits;
-}
+    return revCommits;
+  }
 
   /**
    * git branch
@@ -251,23 +252,44 @@ public class GitWrapper {
    * @param checked switch to branch if it exists
    */
   public static void createBranch(Context context, File repo, String branchName, boolean checked) {
-    if (checked) {
-      new CheckoutTask(
-              context,
-              repo,
-              new String[] {
-                "Creating new branch", "Checked out successfully.", "Unable to checkout."
-              })
-          .execute(String.valueOf(true), branchName);
-    } else {
-      try {
-        Git git = getGit(repo);
-        if (git != null) {
+    try {
+      Git git = getGit(repo);
+      if (git != null) {
+        // ابتدا بررسی می‌کنیم branch وجود دارد یا نه
+        boolean branchExists =
+            git.branchList().call().stream()
+                .anyMatch(ref -> ref.getName().endsWith("/" + branchName));
+
+        if (branchExists && checked) {
+          // اگر branch وجود دارد و checked=true است، checkout می‌کنیم
+          new CheckoutTask(
+                  context,
+                  repo,
+                  new String[] {
+                    "در حال تغییر به برنچ", "تغییر به برنچ با موفقیت انجام شد", "خطا در تغییر برنچ"
+                  })
+              .execute("false", branchName);
+        } else if (!branchExists) {
+          // اگر branch وجود ندارد، ایجاد می‌کنیم
           git.branchCreate().setName(branchName).call();
+
+          if (checked) {
+            // اگر checked=true است، به branch جدید checkout می‌کنیم
+            new CheckoutTask(
+                    context,
+                    repo,
+                    new String[] {
+                      "در حال تغییر به برنچ جدید",
+                      "برنچ جدید ایجاد و انتخاب شد",
+                      "خطا در ایجاد برنچ جدید"
+                    })
+                .execute("false", branchName);
+          }
         }
-      } catch (GitAPIException e) {
-        Log.e(TAG, e.toString());
       }
+    } catch (GitAPIException e) {
+      Log.e(TAG, "خطا در ایجاد برنچ: " + e.toString());
+      Toast.makeText(context, "خطا در ایجاد برنچ: " + e.getMessage(), Toast.LENGTH_LONG).show();
     }
   }
 
@@ -393,30 +415,64 @@ public class GitWrapper {
 
   public static void commit(Context context, File repo) {
     LayoutGitpullBinding bin = LayoutGitpullBinding.inflate(LayoutInflater.from(context));
-    var rm = bin.remote.getEditText().getText().toString();
-    bin.remote.setHint("Commit ...");
-    bin.userName.setVisibility(View.GONE);
-    bin.token.setVisibility(View.GONE);
+
+    // Configure the layout for commit
+    bin.remote.setHint("Commit message*");
+    bin.userName.setHint("Your name*");
+    bin.token.setHint("Your email*");
+    bin.userName.setVisibility(View.VISIBLE);
+    bin.token.setVisibility(View.VISIBLE);
+
+    // Get default values from git config
+    try {
+      StoredConfig config = getConfig(repo);
+      if (config != null) {
+        // Get user.name
+        String userName = config.getString("user", null, "name");
+        if (userName != null) {
+          bin.userName.getEditText().setText(userName);
+        }
+
+        // Get user.email
+        String userEmail = config.getString("user", null, "email");
+        if (userEmail != null) {
+          bin.token.getEditText().setText(userEmail);
+        }
+      }
+    } catch (Exception e) {
+      Log.e(TAG, "Error getting git config", e);
+    }
 
     new MaterialAlertDialogBuilder(context)
         .setTitle("Git Commit")
         .setPositiveButton(
             "commit",
             (c, cc) -> {
-              List<RevCommit> cmd = getCommits(repo == null ? repo : null);
-              for (RevCommit commit : cmd) {
-                new CommitTask(
-                        context,
-                        repo,
-                        new String[] {
-                          "Committing changes", "Committed successfully.", "Unable to commit files."
-                        })
-                    .execute(
-                        bin.remote.getEditText().getText().toString(),
-                        commit.getAuthorIdent().getName(),
-                        commit.getAuthorIdent().getEmailAddress());
+              String message = bin.remote.getEditText().getText().toString();
+              String name = bin.userName.getEditText().getText().toString();
+              String email = bin.token.getEditText().getText().toString();
+
+              if (message.isEmpty()) {
+                Toast.makeText(context, "Commit message cannot be empty", Toast.LENGTH_SHORT)
+                    .show();
+                return;
               }
+
+              if (name.isEmpty() || email.isEmpty()) {
+                Toast.makeText(context, "Please provide your name and email", Toast.LENGTH_SHORT)
+                    .show();
+                return;
+              }
+
+              new CommitTask(
+                      context,
+                      repo,
+                      new String[] {
+                        "Committing changes", "Committed successfully", "Failed to commit"
+                      })
+                  .execute(message, name, email);
             })
+        .setNegativeButton("Cancel", null)
         .setView(bin.getRoot())
         .show();
   }

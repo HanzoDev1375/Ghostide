@@ -24,9 +24,15 @@ public class JavaParserAnalyzer implements JavaCodeAnalyzer {
         cu.findAll(ClassOrInterfaceDeclaration.class).stream()
             .anyMatch(ClassOrInterfaceDeclaration::isAbstract);
 
+    boolean isinnerClass =
+        cu.findAll(ClassOrInterfaceDeclaration.class).stream()
+            .anyMatch(ClassOrInterfaceDeclaration::isInnerClass);
+    boolean toplevel =
+        cu.findAll(ClassOrInterfaceDeclaration.class).stream()
+            .anyMatch(ClassOrInterfaceDeclaration::isTopLevelType);
     boolean isEnum =
         cu.findAll(ClassOrInterfaceDeclaration.class).stream().anyMatch(c -> c.isEnumDeclaration());
 
-    return new JavaAnalysisResult(isInterface, isClass, isAbstract, isEnum);
+    return new JavaAnalysisResult(isInterface, isClass, isAbstract, isEnum, isinnerClass);
   }
 }

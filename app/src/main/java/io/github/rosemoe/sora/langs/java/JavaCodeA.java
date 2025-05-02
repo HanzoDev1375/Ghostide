@@ -40,7 +40,7 @@ public class JavaCodeA implements CodeAnalyzer {
                 // TODO: Implement this method
                 int line = node.getSymbol().getLine();
                 int col = node.getSymbol().getCharPositionInLine();
-                int[] errorMatch = Utils.setErrorSpan(result, line, col);
+                int[] errorMatch = Utils.setErrorSpan(result, line, col,node.getSymbol().getText());
               }
 
               @Override

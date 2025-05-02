@@ -45,6 +45,7 @@ public class TextAnalyzeResult {
   protected Span mLast;
   protected int mSuppressSwitch = Integer.MAX_VALUE;
   boolean determined = false;
+  private String text;
 
   /** Create a new result */
   public TextAnalyzeResult() {
@@ -325,5 +326,13 @@ public class TextAnalyzeResult {
     mLabels = null;
     mExtra = null;
     determined = false;
+  }
+
+  public String getText() {
+    return this.text;
+  }
+
+  public void setText(String text) {
+    this.text = text;
   }
 }

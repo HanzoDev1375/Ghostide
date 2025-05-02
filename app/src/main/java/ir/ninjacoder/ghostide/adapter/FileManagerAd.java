@@ -8,6 +8,7 @@ import ir.ninjacoder.ghostide.databin.FileMaker;
 import ir.ninjacoder.ghostide.folder.FileHelper;
 import ir.ninjacoder.ghostide.folder.FileIconHelper;
 import ir.ninjacoder.ghostide.folder.FileIconHelperPath;
+import ir.ninjacoder.ghostide.git.JgitHelper;
 import ir.ninjacoder.ghostide.glidecompat.GlideCompat;
 import ir.ninjacoder.ghostide.interfaces.FileCallBack;
 import ir.ninjacoder.ghostide.marco.FileCounter;
@@ -172,6 +173,9 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
         } else if (myfile.toString().endsWith(".java")) {
           GlideCompat.setLoadJavaModel(viewHolder.icon, new File(myfile.toString()));
         }
+        // test
+        JgitHelper.initbylazy(myfile,viewHolder.folderName);
+        
       }
     }
 
