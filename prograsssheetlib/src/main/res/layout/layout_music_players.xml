@@ -112,30 +112,34 @@
                      android:layout_height="match_parent"
                      android:layout_width="match_parent"
                      android:scaleType="centerInside"
-                     android:tint="?attr/colorPrimary"
                      android:background="?attr/selectableItemBackgroundBorderless"
+                     android:tint="?attr/colorPrimary"
                      app:srcCompat="@drawable/musicprevious"
                      android:id="@+id/pre" />
 
             </LinearLayout>
 
-            <com.google.android.material.card.MaterialCardView
-                 android:layout_height="70dp"
-                 android:layout_width="70dp"
+            <LinearLayout
+                 android:layout_height="75dp"
+                 android:layout_width="75dp"
                  android:layout_marginEnd="24dp"
-                 app:strokeColor="@android:color/transparent"
-                 app:cardBackgroundColor="@android:color/transparent"
+                 android:background="@drawable/bg_pause_anim"
                  android:id="@+id/cardmusic">
 
-                <ImageView
+                <com.google.android.material.button.MaterialButton
                      android:layout_height="match_parent"
                      android:layout_width="match_parent"
-                     android:src="@drawable/musicplay"
+                     app:icon="@drawable/musicplay"
                      android:scaleType="centerInside"
+                     app:iconSize="42dp"
+                     app:backgroundTint="?attr/colorSecondaryContainer"
+                     app:iconTint="?attr/colorOnSecondaryContainer"
                      android:tint="?attr/colorOnPrimary"
+                     app:iconPadding="0dp"
+                     app:iconGravity="textStart"
                      android:id="@+id/play" />
 
-            </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
 
             <LinearLayout
                  android:layout_height="50dp"

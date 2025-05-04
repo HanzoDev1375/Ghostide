@@ -72,7 +72,6 @@
          android:layout_width="match_parent"
          app:dividerInsetEnd="14dp"
          app:dividerInsetStart="14dp"
-         app:dividerColor="?@attr/colorPrimary"
          android:id="@+id/divider" />
 
 </LinearLayout>

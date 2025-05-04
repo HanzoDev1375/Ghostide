@@ -5,32 +5,23 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.AnimatedVectorDrawable;
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
-import android.widget.SeekBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.graphics.ColorUtils;
 import androidx.palette.graphics.Palette;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.color.MaterialColors;
-import com.google.android.material.shape.CornerFamily;
-import com.google.android.material.shape.MaterialShapeDrawable;
-import com.google.android.material.shape.ShapeAppearanceModel;
 import com.google.android.material.slider.Slider;
 import ir.ninjacoder.prograsssheet.databinding.LayoutMusicPlayersBinding;
 import ir.ninjacoder.prograsssheet.interfaces.MediaPlayerListener;
@@ -46,6 +37,8 @@ public class MusicSheet implements Slider.OnChangeListener {
   private Sheet dialog;
   private LayoutMusicPlayersBinding bind;
 
+  // در constructor بعد از مقداردهی اولیه:
+
   public MusicSheet(Context context, String musicpatch) {
     this.context = context;
     this.musicpatch = musicpatch;
@@ -56,6 +49,7 @@ public class MusicSheet implements Slider.OnChangeListener {
     bind.titlemusic.setText(md.getNameArtist());
     bind.submusic.setText(md.getNameAlbom());
     setMatchParentDialog(true);
+    showandP(true);
     dialog
         .getBehavior()
         .addBottomSheetCallback(
@@ -101,8 +95,6 @@ public class MusicSheet implements Slider.OnChangeListener {
     int seconds = durationInSeconds % 60;
     bind.tvname.setText(String.format("%d:%02d", minutes, seconds));
 
-    bind.play.setColorFilter(
-        MaterialColors.getColor(bind.play, com.google.android.material.R.attr.colorPrimary));
     bind.pre.setOnClickListener(
         v -> {
           if ((md.getCurrentDuration() - backwardTime) > 0) {
@@ -121,12 +113,26 @@ public class MusicSheet implements Slider.OnChangeListener {
         i -> {
           if (md.isPlaying()) {
             md.pause();
+
           } else {
             md.start();
           }
         });
     bind.musicseekbar.setValueTo(md.getDuration() / 90);
     start();
+  }
+
+  void showandP(boolean isPlaying) {
+    bind.play.setBackground(
+        AppCompatResources.getDrawable(
+            context, isPlaying ? R.drawable.bg_play_anim : R.drawable.bg_pause_anim));
+    bind.play.setIcon(
+        AppCompatResources.getDrawable(
+            context, isPlaying ? R.drawable.musicstop : R.drawable.musicplay));
+    Drawable icon = bind.play.getBackground();
+    var icons = bind.play.getIcon();
+    startAnimation(icon);
+    startAnimation(icons);
   }
 
   void start() {
@@ -137,49 +143,15 @@ public class MusicSheet implements Slider.OnChangeListener {
           public void isPlaying(int currentDuration) {}
 
           @Override
-          public void onPause() {
-            animateIcon(R.drawable.musicstop, bind.play);
-          }
-
-          @Override
           public void onStart() {
-            animateIcon(R.drawable.musicplay, bind.play);
-          }
-        });
-  }
-
-  private void animateIcon(int newIcon, View view) {
-    AlphaAnimation fadeOut = new AlphaAnimation(1, 0);
-    fadeOut.setDuration(300);
-    fadeOut.setAnimationListener(
-        new Animation.AnimationListener() {
-          @Override
-          public void onAnimationEnd(Animation animation) {
-            ((ImageView) view).setImageResource(newIcon);
-
-            ScaleAnimation scaleIn =
-                new ScaleAnimation(
-                    0.5f,
-                    1.0f,
-                    0.5f,
-                    1.0f,
-                    Animation.RELATIVE_TO_SELF,
-                    0.5f,
-                    Animation.RELATIVE_TO_SELF,
-                    0.5f);
-            scaleIn.setDuration(300);
-            view.startAnimation(scaleIn);
-            view.setVisibility(View.VISIBLE);
+            showandP(true);
           }
 
           @Override
-          public void onAnimationRepeat(Animation animation) {}
-
-          @Override
-          public void onAnimationStart(Animation animation) {}
+          public void onPause() {
+            showandP(false);
+          }
         });
-
-    bind.play.startAnimation(fadeOut);
   }
 
   public MusicSheet show() {
@@ -253,28 +225,35 @@ public class MusicSheet implements Slider.OnChangeListener {
     Palette.from(bitmap)
         .generate(
             palette -> {
+              // دریافت رنگ‌ها از پالت
               int dominantColor = palette.getDarkMutedColor(Color.WHITE);
               int vibrantColor = palette.getDarkVibrantColor(Color.WHITE);
               int mutedColor = palette.getDarkMutedColor(Color.BLACK);
 
-              bind.getRoot().setBackgroundColor(darkenColor(dominantColor, 0.4f));
-              bind.next.setColorFilter(darkenColor(mutedColor, 5.0f));
-              autoColor(darkenColor(mutedColor, 5.0f), bind.play);
-              bind.pre.setColorFilter(darkenColor(mutedColor, 5.0f));
-              bind.cardmusic.setCardBackgroundColor(darkenColor(mutedColor, 3.3f));
-              bind.musicseekbar.setThumbTintList(
-                  ColorStateList.valueOf(darkenColor(mutedColor, 4.0f)));
-              bind.musicseekbar.setTrackActiveTintList(
-                  ColorStateList.valueOf(darkenColor(mutedColor, 4.0f)));
+              // محاسبه رنگ‌های تیره‌تر
+              int darkenedMutedColor = darkenColor(mutedColor, 5.0f);
+              int darkenedDominantColor = darkenColor(dominantColor, 0.4f);
 
-              int colo = darkenColor(mutedColor, 5.0f);
-              bind.submusic.setTextColor(colo);
-              bind.tvname.setTextColor(colo);
-              bind.tvtr.setTextColor(colo);
-              bind.titlemusic.setTextColor(colo);
+              // اعمال به پس‌زمینه
+              bind.getRoot().setBackgroundColor(darkenedDominantColor);
+              bind.play.setIconTint(ColorStateList.valueOf(mutedColor));
+              bind.next.setColorFilter(darkenedMutedColor);
+              bind.pre.setColorFilter(darkenedMutedColor);
+              bind.play.setBackgroundTintList(ColorStateList.valueOf(darkenedMutedColor));
+              // SeekBar customization
+              ColorStateList thumbColor = ColorStateList.valueOf(darkenedMutedColor);
+              bind.musicseekbar.setThumbTintList(thumbColor);
+              bind.musicseekbar.setTrackActiveTintList(thumbColor);
 
+              // متن‌ها
+              bind.submusic.setTextColor(darkenedMutedColor);
+              bind.tvname.setTextColor(darkenedMutedColor);
+              bind.tvtr.setTextColor(darkenedMutedColor);
+              bind.titlemusic.setTextColor(darkenedMutedColor);
+
+              // نوار نویگیشن دیالوگ
               if (dialog != null && dialog.getWindow() != null) {
-                dialog.getWindow().setNavigationBarColor(darkenColor(dominantColor, 0.4f));
+                dialog.getWindow().setNavigationBarColor(darkenedDominantColor);
                 dialog.setTitle("Hello");
               }
             });
@@ -303,5 +282,16 @@ public class MusicSheet implements Slider.OnChangeListener {
 
   void setMatchParentDialog(boolean is) {
     if (is) dialog.setFullScreen();
+  }
+
+  void startAnimation(@NonNull Drawable drawable) {
+    if (drawable instanceof AnimatedVectorDrawable) {
+      ((AnimatedVectorDrawable) drawable).start();
+    } else if (drawable instanceof AnimatedVectorDrawableCompat) {
+      ((AnimatedVectorDrawableCompat) drawable).start();
+    } else {
+      throw new IllegalArgumentException(
+          "Drawable must be an AnimatedVectorDrawable or AnimatedVectorDrawableCompat");
+    }
   }
 }

@@ -92,7 +92,7 @@
                              android:layout_height="wrap_content"
                              android:layout_width="wrap_content"
                              android:textSize="20dp"
-                             android:textColor="?@attr/colorPrimary"
+                             
                              android:text="Empty List" />
 
                     </LinearLayout>
@@ -106,7 +106,6 @@
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
              android:layout_height="wrap_content"
              android:layout_width="wrap_content"
-             app:rippleColor="?attr/colorPrimary"
              android:clickable="true"
              android:layout_margin="17dp"
              android:focusable="true"

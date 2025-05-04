@@ -285,10 +285,6 @@ public class PHPCodeAnalyzer implements CodeAnalyzer {
           case HTMLLexer.CSSKEYWORD:
             result.addIfNeeded(line, column, EditorColorScheme.Ninja);
             break;
-          case HTMLLexer.HtmlTags:
-          case HTMLLexer.HtmlTagOne:
-            result.addIfNeeded(line, column, EditorColorScheme.phphtmlkeyword);
-            break;
           case HTMLLexer.GT:
             result.addIfNeeded(line, column, EditorColorScheme.phpsymbol);
             break;

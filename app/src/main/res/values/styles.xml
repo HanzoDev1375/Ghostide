@@ -157,13 +157,6 @@
         <item name="android:singleLine">true</item>
         <item name="android:textSize">15sp</item>
     </style>
-    <style
-        name="Apple"
-        parent="AppTheme"
-    >
-        <item name="android:textColor">?attr/colorPrimary</item>
-        <item name="android:textColorSecondary">?attr/colorPrimary</item>
-    </style>
     <style name="DropDown">
         <item name="android:paddingLeft">6dip</item>
         <item name="android:minHeight">?android:attr/listPreferredItemHeight</item>

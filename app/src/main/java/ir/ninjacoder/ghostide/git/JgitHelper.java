@@ -2,6 +2,9 @@ package ir.ninjacoder.ghostide.git;
 
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.view.View;
+import androidx.annotation.MainThread;
+import ir.ninjacoder.ghostide.tasks.AsyncTaskCompat;
 import java.lang.ref.WeakReference;
 import android.util.Log;
 import android.widget.EditText;
@@ -146,20 +149,82 @@ public class JgitHelper {
   }
 
   public static void initbylazy(File file, TextView textView) {
-    // ابتدا رنگ پیش‌فرض را تنظیم کنید
-    textView.setTextColor(MaterialColors.getColor(textView, ObjectUtils.TvColor, 0));
-
-    // فقط برای فایل‌های معمولی (نه دایرکتوری) بررسی Git انجام شود
     if (file.isFile()) {
       new GitStatusChecker(textView).execute(file);
     }
   }
 
-  static class GitStatusChecker extends AsyncTask<File, Void, Integer> {
+  class GitTextSub extends AsyncTaskCompat<File, Void, String> {
+    private final WeakReference<TextView> textViewRef;
+
+    public GitTextSub(TextView textView) {
+      this.textViewRef = new WeakReference<>(textView);
+      textView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    protected String doInBackground(File... params) {
+      try {
+        File file = params[0];
+        JgitHelper gitHelper = new JgitHelper(file);
+
+        if (!gitHelper.isInitialized()) {
+          return null; // Not a valid Git repository
+        }
+
+        String fileName = file.getName();
+
+        if (gitHelper.getAllModified().stream().anyMatch(s -> s.endsWith(fileName))) {
+          return "C"; // Changed
+        } else if (gitHelper.getAllAdded().stream().anyMatch(s -> s.endsWith(fileName))) {
+          return "A"; // Added
+        } else if (gitHelper.getAllUntracked().stream().anyMatch(s -> s.endsWith(fileName))) {
+          return "U"; // Untracked
+        }
+      } catch (Exception e) {
+        Log.e(TAG, "Error checking git status", e);
+      }
+      return null;
+    }
+
+    @MainThread
+    @Override
+    protected void onPreExecute() {
+      super.onPreExecute();
+      TextView textView = textViewRef.get();
+      if (textView != null) {
+        textView.setVisibility(View.GONE);
+      }
+    }
+
+    @Override
+    protected void onPostExecute(String result) {
+      TextView textView = textViewRef.get();
+      if (textView != null) {
+        if (result != null) {
+          textView.setVisibility(View.VISIBLE);
+          textView.setText(result);
+        } else {
+          textView.setVisibility(View.GONE);
+        }
+      }
+    }
+  }
+
+  static class GitStatusChecker extends AsyncTaskCompat<File, Void, Integer> {
     private final WeakReference<TextView> textViewRef;
 
     public GitStatusChecker(TextView textView) {
       this.textViewRef = new WeakReference<>(textView);
+    }
+
+    @Override
+    protected void onPreExecute() {
+      super.onPreExecute();
+      TextView textView = textViewRef.get();
+      if (textView != null) {
+        textView.setTextColor(MaterialColors.getColor(textView, ObjectUtils.colorOnSurface, 0));
+      }
     }
 
     @Override

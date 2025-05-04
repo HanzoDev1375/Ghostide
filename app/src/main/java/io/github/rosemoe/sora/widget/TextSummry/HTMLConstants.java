@@ -23,7 +23,8 @@ public class HTMLConstants {
 
   public static int get(int i) {
     int mcolorid2;
-
+   if (i >= 14) 
+        i = ((i - 1) % 13) + 1;
     switch (i) {
       case 1:
         mcolorid2 = EditorColorScheme.breaklevel1;

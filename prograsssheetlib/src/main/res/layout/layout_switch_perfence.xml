@@ -38,7 +38,7 @@
          android:text="test"
          android:layout_marginLeft="8dp"
          android:layout_marginRight="16dp"
-         android:textColor="?colorOnSurfaceVariant"
+         android:textColor="?colorOnSurface"
          android:layout_marginTop="4dp"
          android:id="@+id/preference_description" />
 
