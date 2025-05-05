@@ -159,7 +159,7 @@ dependencies {
     implementation("xyz.doikki.android.dkplayer:player-ijk:3.3.7")
     implementation("xyz.doikki.android.dkplayer:videocache:3.3.7")
     implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.14")
-    implementation("androidx.recyclerview:recyclerview:1.4.0-alpha01")
+    implementation("androidx.recyclerview:recyclerview:1.4.0")
     implementation("androidx.recyclerview:recyclerview-selection:1.1.0")
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("org.antlr:antlr4:4.13.1")

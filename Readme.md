@@ -32,6 +32,8 @@
 - **[Telegram Group](https://t.me/ghost_web_ide)**
 - **[Telegram Channel](https://t.me/Ghostwebide)**
 
+### Custom Theme
+- You can learn how to create a theme here [click](https://github.com/HanzoDev1375/ghosttheme)
 
 ### Features
 
