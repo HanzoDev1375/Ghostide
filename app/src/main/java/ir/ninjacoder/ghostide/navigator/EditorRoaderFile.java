@@ -2,6 +2,7 @@ package ir.ninjacoder.ghostide.navigator;
 
 import com.blankj.utilcode.util.ThreadUtils;
 import io.github.rosemoe.sora.langs.glsllang.GLSLLang;
+import io.github.rosemoe.sora.langs.jsx.JavaScriptJsxLanguage;
 import io.github.rosemoe.sora.langs.yml.YmlLang;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.utils.FileCompatApi28;
@@ -219,7 +220,14 @@ public class EditorRoaderFile {
       ReadFileCompat(editor, _path, bar);
       editor.setEditorLanguage(new YmlLang());
       _fab.postDelayed(_fab::hide, 400);
-    } else _fab.postDelayed(_fab::hide, 400);
+    } else if (_path.endsWith(".jsx")) {
+      ReadFileCompat(editor, _path, bar);
+      editor.setEditorLanguage(new JavaScriptJsxLanguage());
+      _fab.postDelayed(_fab::hide, 400);
+    } else {
+      ReadFileCompat(editor, _path, bar);
+      _fab.postDelayed(_fab::hide, 400);
+    }
   }
 
   protected static void ReadFileCompat(CodeEditor editor, String path, ProgressBar bar) {

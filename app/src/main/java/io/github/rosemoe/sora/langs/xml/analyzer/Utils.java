@@ -28,7 +28,7 @@ public class Utils {
       Span last = null;
       for (int i = 0; i < spans.size(); i++) {
         Span span = spans.get(i);
-        
+
         if (last != null) {
           if (last.column <= column - 1 && span.column >= column - 1) {
             span.problemFlags = Span.FLAG_ERROR;
@@ -53,7 +53,7 @@ public class Utils {
   }
 
   public static int[] setErrorSpan(TextAnalyzeResult colors, int line, int column) {
-      return setErrorSpan(colors,line,column,"");
+    return setErrorSpan(colors, line, column, "");
   }
 
   public static int[] setWaringSpan(TextAnalyzeResult colors, int line, int column) {
@@ -81,15 +81,16 @@ public class Utils {
           if (last.column <= column - 1 && span.column >= column - 1) {
             span.problemFlags = Span.FLAG_WARNING;
             last.problemFlags = Span.FLAG_WARNING;
-            span.style = mcolor;
-            last.style = mcolor;
+            //    span.style = mcolor;
+            //  last.style = mcolor;
+            last.setDrawminiText("t");
             end[1] = last.column;
             break;
           }
         }
         if (i == spans.size() - 1 && span.column <= column - 1) {
           span.problemFlags = Span.FLAG_WARNING;
-          span.style = mcolor;
+          //   span.style = mcolor;
           end[1] = span.column;
           break;
         }

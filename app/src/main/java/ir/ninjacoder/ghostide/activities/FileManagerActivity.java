@@ -131,11 +131,9 @@ public class FileManagerActivity extends BaseCompat
   private Intent intentgetSettings = new Intent();
   private SharedPreferences shp;
   private Intent activitiy = new Intent();
-  private ProgressDialog progressDilaog;
   private ProgressDialog unzip;
   private SharedPreferences soglo;
   private SharedPreferences np;
-  private ProgressDialog mprodialog;
   private SharedPreferences dismoveFile;
   private ProgressDialog prodel;
   private ProgressDialog proveg;
@@ -201,6 +199,9 @@ public class FileManagerActivity extends BaseCompat
 
     // setSupportActionBar(searchbar);
     gridLayoutManager = new GridLayoutManager(this, 1);
+    if (gridLayoutManager != null) {
+        bind.recyclerview2.setLayoutManager(gridLayoutManager);
+    }
     gridMode = getSharedPreferences("gride", Activity.MODE_PRIVATE);
     fileListItem = new FileManagerAd(files, FileManagerActivity.this, this);
     shp = getSharedPreferences("shp", Activity.MODE_PRIVATE);
@@ -408,8 +409,6 @@ public class FileManagerActivity extends BaseCompat
         "https://raw.githubusercontent.com/HanzoDev1375/HanzoDev1375/main/log.json",
         "",
         UpdateCheck);
-    if (war.contains("val")) {}
-
     try {
       var pInfo =
           getApplicationContext()
@@ -420,11 +419,8 @@ public class FileManagerActivity extends BaseCompat
       showMessage(e.toString());
     }
     // new FastScrollerBuilder(bind.recyclerview2).useMd2Style().build();
-    progressDilaog =
-        new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
+ 
     unzip = new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
-    mprodialog =
-        new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
     prodel = new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
     proveg = new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
     copydir =
@@ -563,11 +559,6 @@ public class FileManagerActivity extends BaseCompat
                         _item.put("path", item);
                         return _item;
                       })
-                  .filter(
-                      item -> {
-                        String path = (String) item.get("path");
-                        return !path.isEmpty() && !new File(path).isHidden();
-                      })
                   .collect(Collectors.toList());
           files.addAll(folderItems);
           fileList.forEach(
@@ -593,9 +584,7 @@ public class FileManagerActivity extends BaseCompat
                 bind.filedirBar.setVisibility(View.GONE);
                 bind.recyclerview2.setAdapter(fileListItem);
                 ListSheet.bind(bind.recyclerview2, Folder);
-                if (gridLayoutManager != null) {
-                  bind.recyclerview2.setLayoutManager(gridLayoutManager);
-                }
+                
               });
         });
     executor.shutdown();
@@ -1129,6 +1118,9 @@ public class FileManagerActivity extends BaseCompat
       SendDataFromCodeEditor(newpos, "path", files, newlistmap);
     }
     if (staticstring.endsWith(".js")) {
+      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+    }
+    if (staticstring.endsWith(".jsx")) {
       SendDataFromCodeEditor(newpos, "path", files, newlistmap);
     }
     if (staticstring.endsWith(".html")) {

@@ -47,7 +47,6 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
   protected Context context;
   protected onClick click;
   protected ViewType viewType = ViewType.ROW;
-  protected List<HashMap<String, Object>> filteredFiles;
   protected HashMap<String, Object> name = new HashMap<>();
   private List<HashMap<String, Object>> files = new ArrayList<>();
   protected GridLayoutManager g;
@@ -57,14 +56,13 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
   public FileManagerAd(List<HashMap<String, Object>> files, Context context, onClick click) {
     this.context = context;
     this.files = files;
-    this.filteredFiles = files;
     this.click = click;
     prf = context.getSharedPreferences("iconpath", Context.MODE_PRIVATE);
   }
 
   @Override
   public int getItemCount() {
-    return filteredFiles.size();
+    return files.size();
   }
 
   @Override
@@ -97,7 +95,7 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     View view = viewHolder.itemView;
     AnimUtils.Sacla(viewHolder.itemView);
     setSettingTextView(viewHolder.folderName);
-    var myfile = new File(filteredFiles.get(pos).get("path").toString());
+    var myfile = new File(files.get(pos).get("path").toString());
     viewHolder.folderName.setTextColor(MaterialColors.getColor(viewHolder.folderName,ObjectUtils.colorOnSurface,0));
     viewHolder.tvTools.setTextColor(MaterialColors.getColor(viewHolder.tvTools,ObjectUtils.colorOnSurface,0));
     if (FileUtil.isDirectory(myfile.toString())) {
@@ -145,12 +143,12 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
       fileIconHelper.setEnvironmentEnabled(true);
       fileIconHelper.bindIcon(viewHolder.icon);
 
-      if (FileUtil.isDirectory(filteredFiles.get(pos).get("path").toString())) {
+      if (FileUtil.isDirectory(files.get(pos).get("path").toString())) {
         Folder = true;
         Files = false;
 
         viewHolder.tvTools.setText("");
-      } else if (FileUtil.isExistFile(filteredFiles.get(pos).get("path").toString())) {
+      } else if (FileUtil.isExistFile(files.get(pos).get("path").toString())) {
         viewHolder.icon.setPadding(0, 0, 0, 0);
         getTime(myfile.toString(), viewHolder.tvTools);
         viewHolder.icon.setBackgroundColor(0);
@@ -188,7 +186,7 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
 
   @NonNull
   public HashMap<String, Object> getItem(int position) {
-    return filteredFiles.get(position);
+    return files.get(position);
   }
 
   @Override

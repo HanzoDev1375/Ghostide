@@ -413,7 +413,7 @@ public class CodeEditor extends View
     mPaintOther.setTextSize(mPaint.getTextSize() * 0.9f); // اندازه کوچک‌تر از متن اصلی
 
     // رسم متن Inlay
-    canvas.drawText(inlay.text, x, y, mPaintOther);
+    canvas.drawText(inlay.text, x, y, mPaintGraph);
 
     // بازگردانی وضعیت Canvas
     canvas.restore();

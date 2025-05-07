@@ -1,5 +1,6 @@
-package io.github.rosemoe.sora.langs.javascript;
+package io.github.rosemoe.sora.langs.jsx;
 
+import io.github.rosemoe.sora.langs.javascript.JsAutoComplete;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import android.widget.Toast;
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
@@ -19,7 +20,7 @@ import org.antlr.v4.runtime.Token;
 
 import java.io.IOException;
 
-public class JavaScriptLanguage implements EditorLanguage {
+public class JavaScriptJsxLanguage implements EditorLanguage {
   public static String[] keywords = {
     "break",
     "do",
@@ -59,6 +60,7 @@ public class JavaScriptLanguage implements EditorLanguage {
     "async",
     "await",
     "yield",
+    "yield*",
     "implements",
     "let",
     "private",
@@ -73,13 +75,13 @@ public class JavaScriptLanguage implements EditorLanguage {
         new BraceHandler(), new TwoIndentHandler(), new JavaDocStartHandler(), new JavaDocHandler()
       };
 
-  public JavaScriptLanguage() {
+  public JavaScriptJsxLanguage() {
     Toast.makeText(GhostIdeAppLoader.getContext(), "Start Server Language", 2).show();
   }
 
   @Override
   public CodeAnalyzer getAnalyzer() {
-    return new JavaScriptCodeAnalyzer();
+    return new JsxCodeAnalyzer();
   }
 
   @Override
@@ -97,22 +99,22 @@ public class JavaScriptLanguage implements EditorLanguage {
   @Override
   public int getIndentAdvance(String content) {
     try {
-      JavaScriptLexer lexer =
-          new JavaScriptLexer(CharStreams.fromReader(new StringReader(content)));
+      JavaScriptLexerJsx lexer =
+          new JavaScriptLexerJsx(CharStreams.fromReader(new StringReader(content)));
 
       Token token;
       int advance = 0;
       while (((token = lexer.nextToken()) != null && token.getType() != token.EOF)) {
         switch (token.getType()) {
-          case JavaScriptLexer.OpenBracket:
-          case JavaScriptLexer.OpenBrace:
-          case JavaScriptLexer.OpenParen:
+          case JavaScriptLexerJsx.OpenBracket:
+          case JavaScriptLexerJsx.OpenBrace:
+          case JavaScriptLexerJsx.OpenParen:
             advance++;
             break;
 
-          case JavaScriptLexer.CloseBracket:
-          case JavaScriptLexer.CloseBrace:
-          case JavaScriptLexer.CloseParen:
+          case JavaScriptLexerJsx.CloseBracket:
+          case JavaScriptLexerJsx.CloseBrace:
+          case JavaScriptLexerJsx.CloseParen:
             advance--;
             break;
         }
@@ -132,8 +134,8 @@ public class JavaScriptLanguage implements EditorLanguage {
 
   @Override
   public CharSequence format(CharSequence text) {
-    
-     return javaFormat(text.toString());
+
+    return javaFormat(text.toString());
   }
 
   @Override

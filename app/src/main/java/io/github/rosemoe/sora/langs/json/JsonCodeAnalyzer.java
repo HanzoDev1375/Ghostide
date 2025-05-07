@@ -76,9 +76,13 @@ public class JsonCodeAnalyzer implements CodeAnalyzer {
 
           case JSON.TEXT:
             identifiers.addIdentifier(token.getText());
-            if (RegexUtilCompat.RegexSelect("\"(?:[^\"\\\\]|\\\\.)*\"", token.getText())) {
+            if (RegexUtilCompat.RegexSelect("\".*?\"", token.getText())) {
               result.addIfNeeded(
                   line, column + token.getText().length() - 1, EditorColorScheme.KEYWORD);
+            }
+            if (RegexUtilCompat.RegexSelect("\\(n|t|r|s)(\\$.*)", token.getText())) {
+              result.addIfNeeded(
+                  line, column + token.getText().length() - 1, EditorColorScheme.IDENTIFIER_NAME);
             }
             if (RegexUtilCompat.RegexSelect(
                 "(\\#[a-zA-F0-9]{8})|(\\#[a-zA-F0-9]{6})|(\\#[a-zA-F0-9]{3})", token.getText())) {

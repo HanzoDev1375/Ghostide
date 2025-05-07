@@ -81,7 +81,8 @@
 - [x] Shell
 - [x] Markdown
 - [x] Go
-- [ ] Tsx && jsx
+- [x] Tsx(not) && jsx(ok)
+- [ ] zig
 
 ---
 
