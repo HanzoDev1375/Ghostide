@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace "com.mcal.vectormaster"
-   // compileSdk 35
+     compileSdk 35
 
     defaultConfig {
         minSdkVersion 21
