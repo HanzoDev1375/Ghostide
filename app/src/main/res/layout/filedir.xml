@@ -16,12 +16,12 @@
         <com.google.android.material.appbar.AppBarLayout
              android:layout_height="wrap_content"
              android:layout_width="match_parent"
+             app:backgroundTint="@android:color/transparent"
              android:id="@+id/_app_bar">
 
             <com.google.android.material.search.SearchBar
                  android:layout_height="wrap_content"
                  android:layout_width="match_parent"
-                 android:background="@android:color/transparent"
                  app:liftOnScrollColor="@android:color/transparent"
                  android:hint="@string/search_file"
                  android:id="@+id/searchbar">
@@ -47,11 +47,13 @@
              android:layout_height="match_parent"
              android:layout_width="match_parent"
              android:hint="@string/search_file"
+             app:backgroundTint="?attr/colorSurface"
              app:layout_anchor="@id/searchbar" />
 
         <androidx.core.widget.NestedScrollView
              android:layout_height="match_parent"
              android:layout_width="match_parent"
+             android:backgroundTint="@android:color/transparent"
              app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <LinearLayout

@@ -1,6 +1,7 @@
 package ir.ninjacoder.ghostide.glidecompat;
 
 import android.net.Uri;
+import com.sdsmdg.harjot.vectormaster.VectorModel;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.glidecompat.glideapk.ApkIconLoaderModel;
@@ -174,18 +175,12 @@ public class GlideCompat {
   }
 
   public static void LoadVector(String path, ImageView c) {
-    var vx = new VectorMasterDrawable(GhostIdeAppLoader.getContext(), new File(path));
-    if (vx.isVector()) {
-      vx.setColorFilter(MaterialColors.getColor(c, ObjectUtils.TvColor), PorterDuff.Mode.SRC_IN);
-      Glide.with(c.getContext())
-          .load(vx)
-          .error(R.drawable.errorxml)
-          .transform(new RoundedCornersTransformation(RenderSize()))
-          .placeholder(CircelPrograssBar())
-          .into(c);
-    } else {
-      c.setImageResource(R.drawable.errorxml);
-    }
+    File file = new File(path);
+    Glide.with(c.getContext())
+        .load(new VectorModel(file, c.getContext()))
+        .error(R.drawable.errorxml)
+        .placeholder(R.drawable.xmlfile)
+        .into(c);
   }
 
   public static void LoadApkFile(String file, ImageView img) {
@@ -238,10 +233,7 @@ public class GlideCompat {
 
   public static void setLoadJavaModel(ImageView img, File file) {
     CustomImageRequest request =
-        new CustomImageRequest(
-            file,
-            R.drawable.ic_material_java,
-            new JavaParserAnalyzer());
+        new CustomImageRequest(file, R.drawable.ic_material_java, new JavaParserAnalyzer());
     Glide.with(img.getContext())
         .load(request)
         .placeholder(CircelPrograssBar())

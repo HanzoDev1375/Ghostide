@@ -1,12 +1,11 @@
 plugins {
     id "com.android.library"
     id "org.jetbrains.kotlin.android"
-    id "maven-publish"
 }
 
 android {
     namespace "com.mcal.vectormaster"
-    compileSdk 34
+   // compileSdk 35
 
     defaultConfig {
         minSdkVersion 21
@@ -22,8 +21,8 @@ android {
         jvmTarget = "17"
     }
     compileOptions {
-        sourceCompatibility 11
-        targetCompatibility 11
+        sourceCompatibility 17
+        targetCompatibility 17
     }
 }
 
@@ -31,4 +30,5 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("com.google.android.material:material:1.12.0")
     implementation("org.jetbrains:annotations:24.0.1")
+    implementation("com.github.bumptech.glide:glide:5.0.0-rc01")
 }

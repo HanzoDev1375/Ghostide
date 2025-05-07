@@ -2,6 +2,7 @@ package ir.ninjacoder.ghostide.adapter;
 
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.util.Log;
 import android.widget.CheckBox;
 import com.google.android.material.color.MaterialColors;
 import ir.ninjacoder.ghostide.R;
@@ -96,8 +97,10 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     AnimUtils.Sacla(viewHolder.itemView);
     setSettingTextView(viewHolder.folderName);
     var myfile = new File(files.get(pos).get("path").toString());
-    viewHolder.folderName.setTextColor(MaterialColors.getColor(viewHolder.folderName,ObjectUtils.colorOnSurface,0));
-    viewHolder.tvTools.setTextColor(MaterialColors.getColor(viewHolder.tvTools,ObjectUtils.colorOnSurface,0));
+    viewHolder.folderName.setTextColor(
+        MaterialColors.getColor(viewHolder.folderName, ObjectUtils.colorOnSurface, 0));
+    viewHolder.tvTools.setTextColor(
+        MaterialColors.getColor(viewHolder.tvTools, ObjectUtils.colorOnSurface, 0));
     if (FileUtil.isDirectory(myfile.toString())) {
       if (viewType == ViewType.ROW) {
         viewHolder.icon.setPadding(8, 8, 8, 8);
@@ -177,7 +180,7 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
         // test
         JgitHelper.initbylazy(myfile, viewHolder.folderName);
         // test1
-        
+
       }
     }
 

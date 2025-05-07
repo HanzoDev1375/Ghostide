@@ -200,7 +200,7 @@ public class FileManagerActivity extends BaseCompat
     // setSupportActionBar(searchbar);
     gridLayoutManager = new GridLayoutManager(this, 1);
     if (gridLayoutManager != null) {
-        bind.recyclerview2.setLayoutManager(gridLayoutManager);
+      bind.recyclerview2.setLayoutManager(gridLayoutManager);
     }
     gridMode = getSharedPreferences("gride", Activity.MODE_PRIVATE);
     fileListItem = new FileManagerAd(files, FileManagerActivity.this, this);
@@ -242,8 +242,7 @@ public class FileManagerActivity extends BaseCompat
 
               @Override
               public void CallBackRight(int pos) {
-                _delFileCustom(pos);
-                bind.recyclerview2.getAdapter().notifyDataSetChanged();
+                removedFiles(pos);
               }
             });
     bind.recyclerview2.addOnScrollListener(
@@ -419,7 +418,7 @@ public class FileManagerActivity extends BaseCompat
       showMessage(e.toString());
     }
     // new FastScrollerBuilder(bind.recyclerview2).useMd2Style().build();
- 
+
     unzip = new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
     prodel = new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
     proveg = new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
@@ -516,7 +515,7 @@ public class FileManagerActivity extends BaseCompat
     super.onDestroy();
     // TODO: Implement this method
     unbindFileWatcherService();
-    stopService(new Intent(this,FileWatcherService.class));
+    stopService(new Intent(this, FileWatcherService.class));
   }
 
   public void reLoadFile(boolean isSortFile) {
@@ -584,7 +583,6 @@ public class FileManagerActivity extends BaseCompat
                 bind.filedirBar.setVisibility(View.GONE);
                 bind.recyclerview2.setAdapter(fileListItem);
                 ListSheet.bind(bind.recyclerview2, Folder);
-                
               });
         });
     executor.shutdown();
@@ -987,10 +985,8 @@ public class FileManagerActivity extends BaseCompat
           positive.setOnClickListener(
               (vftrororocjj) -> {
                 {
-                  java.io.File dYx4Y =
-                      new java.io.File(files.get((int) _pos).get("path").toString());
-                  java.io.File e5Cyk =
-                      new java.io.File(Folder.concat("/".concat(editor.getText().toString())));
+                  File dYx4Y = new File(files.get((int) _pos).get("path").toString());
+                  File e5Cyk = new File(Folder.concat("/".concat(editor.getText().toString())));
                   dYx4Y.renameTo(e5Cyk);
                 }
                 dialog.dismiss();
@@ -1000,11 +996,11 @@ public class FileManagerActivity extends BaseCompat
     dialog.show();
   }
 
-  public void _delFileCustom(int _pos) {
+  public void removedFiles(int _pos) {
     var di = new DialogUtil(FileManagerActivity.this);
     di.setTitle("Romved File");
     di.setMessage("romved ".concat(files.get(_pos).get("path").toString().concat(" your mobile?")));
-    di.setNeutralButton("no", (p, d) -> {});
+    di.setNeutralButton("no", null);
     di.setPositiveButton(
         "ok",
         (p1, d2) -> {
@@ -1031,6 +1027,7 @@ public class FileManagerActivity extends BaseCompat
             protected void onPostExecute(String _result) {
               prodel.dismiss();
               reLoadFile();
+              
             }
           }.execute("");
         });
@@ -2019,7 +2016,7 @@ public class FileManagerActivity extends BaseCompat
               }
             case 4:
               {
-                _delFileCustom(_position);
+                removedFiles(_position);
                 sheet.getDismiss(true);
                 break;
               }

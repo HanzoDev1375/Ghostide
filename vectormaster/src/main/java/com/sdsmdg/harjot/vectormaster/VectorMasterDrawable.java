@@ -281,7 +281,7 @@ public class VectorMasterDrawable extends Drawable {
                     (tempPosition != -1)
                         ? Float.parseFloat(xpp.getAttributeValue(tempPosition))
                         : DefaultValues.PATH_TRIM_PATH_START);
-                
+
                 pathModel.buildPath(useLegacyParser);
                 break;
               case "group":
@@ -633,9 +633,4 @@ public class VectorMasterDrawable extends Drawable {
     this.scaleY = scaleY;
     invalidateSelf();
   }
-
-  /*    public void setUseLightTheme(boolean useLightTheme) {
-      this.useLightTheme = useLightTheme;
-      buildVectorModel();
-  }*/
 }

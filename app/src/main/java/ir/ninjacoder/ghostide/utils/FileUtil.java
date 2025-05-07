@@ -22,7 +22,10 @@ import java.util.List;
 public class FileUtil {
 
   public static final String HOME = "/storage/emulated/0/GhostWebIDE/";
-  public static final String HOMESNIPPET = "/storage/emulated/0/GhostWebIDE/snippet/snippetconfig.json";
+  public static final String THEME = HOME + File.separator + "theme";
+  public static final String KtHome = HOME + File.separator + "kthome";
+  public static final String HOMESNIPPET =
+      "/storage/emulated/0/GhostWebIDE/snippet/snippetconfig.json";
 
   private static void createNewFile(String path) {
     int lastSep = path.lastIndexOf(File.separator);

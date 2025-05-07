@@ -1,6 +1,8 @@
 package ir.ninjacoder.ghostide.activities;
 
 import android.content.res.ColorStateList;
+import android.os.Handler;
+import android.os.Looper;
 import com.bumptech.glide.Glide;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.tabs.TabLayout;
@@ -486,22 +488,25 @@ public class CodeEditorActivity extends BaseCompat {
     editor.subscribeEvent(
         ContentChangeEvent.class,
         (event, subscribe) -> {
-          modelEditor.setText(event.getEditor().getText().toString());
           var cu = event.getEditor().getCursor();
-          modelEditor.setCursor(cu.getLeftLine() + cu.getLeftColumn());
           var myChar = new CharUtil(editor.getText().toString(), titleauthor);
+
           var iscode = new FactoryCodeError(editor, iconAuthor);
-          undo.setEnabled(editor.canUndo());
-          redo.setEnabled(editor.canRedo());
           int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
           if (selectedTabPosition >= 0 && selectedTabPosition < tabs_listmap.size()) {
             ObjectUtils.addStarToTab(selectedTabPosition, tablayouteditor);
           }
-          iscode.run();
+          new Handler(Looper.getMainLooper())
+              .postDelayed(
+                  () -> {
+                    iscode.run();
+                  },
+                  3000);
         });
 
     if (sve.contains("getAutoSave")) {
       if (sve.getString("getAutoSave", "").equals("true")) {
+        FileChangeReceiver.stopWatching();
         editor.subscribeEvent(
             ContentChangeEvent.class,
             (event, subscribe) -> {
