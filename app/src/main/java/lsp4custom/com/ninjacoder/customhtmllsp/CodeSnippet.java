@@ -1,5 +1,12 @@
 package lsp4custom.com.ninjacoder.customhtmllsp;
 
+import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -9,6 +16,7 @@ import io.github.rosemoe.sora.data.CompletionItem;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Optional;
@@ -127,29 +135,73 @@ public class CodeSnippet {
     }
   }
 
-  public static List<CompletionItem> analyzeCodeCompletion(
-      String jarPath, String code, int cursorPosition) {
+  public static void configureSymbolSolver(String sourcePath) {
+    TypeSolver typeSolver =
+        new CombinedTypeSolver(
+            new ReflectionTypeSolver(), new JavaParserTypeSolver(new File(sourcePath)));
+    JavaSymbolSolver symbolSolver = new JavaSymbolSolver(typeSolver);
+    StaticJavaParser.getConfiguration().setSymbolResolver(symbolSolver);
+  }
+
+  public static List<CompletionItem> analyzeCodeCompletion(String sourcePath, String code,int f) {
     List<CompletionItem> result = new ArrayList<>();
 
-    // استخراج متن قبل از مکان نما (برای تشخیص context)
-    String textBeforeCursor = code.substring(0, cursorPosition);
-
-    // اگر آخرین کاراکتر نقطه است (مثل file.)
-    if (textBeforeCursor.endsWith(".")) {
-      // پیدا کردن نام متغیر قبل از نقطه
-      String varName = extractVariableNameBeforeDot(textBeforeCursor);
-      String varType = findVariableType(code, varName);
-
-      if (varType != null) {
-        result.addAll(getMethodsForClass(jarPath, varType));
-      }
+    // بررسی اولیه برای جلوگیری از NullPointerException
+    if (code == null || code.isEmpty() || sourcePath == null) {
+      return result;
     }
-    // اگر در حال تایپ کلاس هستیم (مثل new Fil)
-    else {
-      result.addAll(getClasses(jarPath, textBeforeCursor.trim()));
+
+    try {
+      configureSymbolSolver(sourcePath);
+
+      // پیدا کردن آخرین نقطه در کد به عنوان موقعیت احتمالی کرسر
+      int lastDotIndex = code.lastIndexOf('.');
+
+      if (lastDotIndex != -1 && lastDotIndex < code.length() - 1) {
+        // حالت متغیر با نقطه (مثل var.)
+        String textBeforeDot = code.substring(0, lastDotIndex);
+        String varName = extractVariableNameBeforeDot(textBeforeDot);
+
+        if (!varName.isEmpty()) {
+          String varType = resolveVariableTypeWithSymbolSolver(code, varName);
+          if (varType != null) {
+            result.addAll(getMethodsForClassFromSource(sourcePath, varType));
+          }
+        }
+      } else {
+        // حالت معمولی - جستجوی کلاس‌ها
+        // پیدا کردن آخرین کلمه در کد به عنوان پیشوند
+        String[] words = code.split("[^a-zA-Z0-9_]");
+        String prefix = words.length > 0 ? words[words.length - 1] : "";
+
+        if (!prefix.isEmpty()) {
+          result.addAll(getClasses(sourcePath, prefix));
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      return new ArrayList<>();
     }
 
     return result;
+  }
+
+  private static String resolveVariableTypeWithSymbolSolver(String code, String varName) {
+    try {
+      CompilationUnit cu = StaticJavaParser.parse(code);
+      Optional<VariableDeclarator> varOpt =
+          cu.findAll(VariableDeclarator.class).stream()
+              .filter(v -> v.getNameAsString().equals(varName))
+              .findFirst();
+
+      if (varOpt.isPresent()) {
+        ResolvedType type = varOpt.get().resolve().getType();
+        return type.describe(); // مثل: java.io.File
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 
   private static String extractVariableNameBeforeDot(String text) {
@@ -162,6 +214,37 @@ public class CodeSnippet {
     Pattern pattern = Pattern.compile("\\s+" + varName + "\\s*=\\s*new\\s+(\\w+)");
     Matcher matcher = pattern.matcher(code);
     return matcher.find() ? matcher.group(1) : null;
+  }
+
+  private static List<CompletionItem> getMethodsForClassFromSource(String sourcePath, String fqcn) {
+    List<CompletionItem> methods = new ArrayList<>();
+
+    String className = fqcn.substring(fqcn.lastIndexOf(".") + 1);
+
+    File dir = new File(sourcePath);
+    for (File file : dir.listFiles((d, name) -> name.endsWith(".java"))) {
+      try {
+        CompilationUnit cu = StaticJavaParser.parse(file);
+        cu.findAll(ClassOrInterfaceDeclaration.class).stream()
+            .filter(c -> c.getNameAsString().equals(className))
+            .findFirst()
+            .ifPresent(
+                c ->
+                    c.getMethods()
+                        .forEach(
+                            method -> {
+                              CompletionItem item = new CompletionItem();
+                              item.label = method.getNameAsString();
+                              item.commit = method.getNameAsString() + "()";
+                              item.desc = "method";
+                              methods.add(item);
+                            }));
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+
+    return methods;
   }
 
   private static List<CompletionItem> getMethodsForClass(String jarPath, String className) {

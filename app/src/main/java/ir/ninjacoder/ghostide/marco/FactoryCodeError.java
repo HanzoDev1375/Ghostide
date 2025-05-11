@@ -1,6 +1,17 @@
 package ir.ninjacoder.ghostide.marco;
 
 import com.blankj.utilcode.util.ThreadUtils;
+import com.google.android.material.tabs.TabLayout;
+import io.github.rosemoe.sora.langs.dart.Dart2Lexer;
+import io.github.rosemoe.sora.langs.dart.Dart2Parser;
+import io.github.rosemoe.sora.langs.dart.Dart2ParserBaseListener;
+import io.github.rosemoe.sora.langs.jsx.JavaScriptJsxLanguage;
+import io.github.rosemoe.sora.langs.jsx.JavaScriptLexerJsx;
+import io.github.rosemoe.sora.langs.jsx.JavaScriptParserJsx;
+import io.github.rosemoe.sora.langs.jsx.JavaScriptParserJsxBaseListener;
+import io.github.rosemoe.sora.langs.kotlin.KotlinLexer;
+import io.github.rosemoe.sora.langs.kotlin.KotlinParser;
+import io.github.rosemoe.sora.langs.kotlin.KotlinParserBaseListener;
 import io.github.rosemoe.sora.widget.tooltip.ToolItemPop;
 import io.github.rosemoe.sora.widget.tooltip.ToolTipHelper;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
@@ -67,14 +78,16 @@ public class FactoryCodeError {
   private IdeEditor editor;
   private ImageView call;
   private boolean errorCall;
+  private TabLayout tab;
 
   /**
    * ایجاد کردن نمونه از کد ادیتور با این کار نیازی نیست در فعالیت اصلی دوبار کال کنید حافظه خوری
    * شدید است من سیع میکنم در گوست ide ویژگی های مفید پیاده سازی کنم
    */
-  public FactoryCodeError(IdeEditor editor, ImageView call) {
+  public FactoryCodeError(IdeEditor editor, ImageView call, TabLayout tab) {
     this.editor = editor;
     this.call = call;
+    this.tab = tab;
   }
 
   void Iconnotfound() {
@@ -96,7 +109,7 @@ public class FactoryCodeError {
       } else if (editor.getEditorLanguage() instanceof CppLanguage) {
         Iconnotfound();
       } else if (editor.getEditorLanguage() instanceof DartLang) {
-        Iconnotfound();
+        dart();
       } else if (editor.getEditorLanguage() instanceof ghostlangs) {
         Iconnotfound();
       } else if (editor.getEditorLanguage() instanceof HTMLLanguage) {
@@ -110,7 +123,7 @@ public class FactoryCodeError {
       } else if (editor.getEditorLanguage() instanceof JsonLanguage) {
         Iconnotfound();
       } else if (editor.getEditorLanguage() instanceof KotlinLanguage) {
-        Iconnotfound();
+        kt();
       } else if (editor.getEditorLanguage() instanceof NinjaLang) {
         Iconnotfound();
       } else if (editor.getEditorLanguage() instanceof PHPLanguage) {
@@ -129,9 +142,128 @@ public class FactoryCodeError {
         cs();
       } else if (editor.getEditorLanguage() instanceof MySqlLang) {
         Iconnotfound();
+      } else if (editor.getEditorLanguage() instanceof JavaScriptJsxLanguage) {
+        jsx();
       } else if (editor.getEditorLanguage() instanceof EditorLanguage) {
         Iconnotfound();
       }
+    }
+  }
+
+  void dart() {
+    if (editor != null) {
+      new Thread(
+              () -> {
+                try {
+                  var input = new ANTLRInputStream(new StringReader(editor.getText().toString()));
+                  var lexer = new Dart2Lexer(input);
+                  var stream = new CommonTokenStream(lexer);
+                  var paser = new Dart2Parser(stream);
+                  var callBackLabe =
+                      new Dart2ParserBaseListener() {
+                        @Override
+                        public void visitErrorNode(ErrorNode node) {
+                          errorCall = true;
+                        }
+                      };
+
+                  var walk = new ParseTreeWalker();
+                  walk.walk(callBackLabe, paser.compilationUnit());
+                  new Handler(Looper.getMainLooper())
+                      .post(
+                          () -> {
+                            if (errorCall) {
+                              call.setImageResource(R.drawable.closehsi);
+                              call.setColorFilter(Color.RED);
+                            } else {
+                              call.setImageResource(R.drawable.ic_palette_check_box);
+                              call.setColorFilter(Color.GREEN);
+                            }
+                            posyByLazy(errorCall);
+                          });
+                } catch (Exception err) {
+
+                }
+              })
+          .start();
+    }
+  }
+
+  void jsx() {
+    if (editor != null) {
+      new Thread(
+              () -> {
+                try {
+                  var input = new ANTLRInputStream(new StringReader(editor.getText().toString()));
+                  var lexer = new JavaScriptLexerJsx(input);
+                  var stream = new CommonTokenStream(lexer);
+                  var paser = new JavaScriptParserJsx(stream);
+                  var callBackLabe =
+                      new JavaScriptParserJsxBaseListener() {
+                        @Override
+                        public void visitErrorNode(ErrorNode node) {
+                          errorCall = true;
+                        }
+                      };
+
+                  var walk = new ParseTreeWalker();
+                  walk.walk(callBackLabe, paser.program());
+                  new Handler(Looper.getMainLooper())
+                      .post(
+                          () -> {
+                            if (errorCall) {
+                              call.setImageResource(R.drawable.closehsi);
+                              call.setColorFilter(Color.RED);
+                            } else {
+                              call.setImageResource(R.drawable.ic_palette_check_box);
+                              call.setColorFilter(Color.GREEN);
+                            }
+                            posyByLazy(errorCall);
+                          });
+                } catch (Exception err) {
+
+                }
+              })
+          .start();
+    }
+  }
+
+  void kt() {
+    if (editor != null) {
+      new Thread(
+              () -> {
+                try {
+                  var input = new ANTLRInputStream(new StringReader(editor.getText().toString()));
+                  var lexer = new KotlinLexer(input);
+                  var stream = new CommonTokenStream(lexer);
+                  var paser = new KotlinParser(stream);
+                  var callBackLabe =
+                      new KotlinParserBaseListener() {
+                        @Override
+                        public void visitErrorNode(ErrorNode node) {
+                          errorCall = true;
+                        }
+                      };
+
+                  var walk = new ParseTreeWalker();
+                  walk.walk(callBackLabe, paser.kotlinFile());
+                  new Handler(Looper.getMainLooper())
+                      .post(
+                          () -> {
+                            if (errorCall) {
+                              call.setImageResource(R.drawable.closehsi);
+                              call.setColorFilter(Color.RED);
+                            } else {
+                              call.setImageResource(R.drawable.ic_palette_check_box);
+                              call.setColorFilter(Color.GREEN);
+                            }
+                            posyByLazy(errorCall);
+                          });
+                } catch (Exception err) {
+
+                }
+              })
+          .start();
     }
   }
 
@@ -166,11 +298,14 @@ public class FactoryCodeError {
                           () -> {
                             if (errorCall) {
                               call.setImageResource(R.drawable.closehsi);
+
                               call.setColorFilter(Color.RED);
+
                             } else {
                               call.setImageResource(R.drawable.ic_palette_check_box);
                               call.setColorFilter(Color.GREEN);
                             }
+                            posyByLazy(errorCall);
                           });
                 } catch (Exception err) {
 
@@ -178,6 +313,17 @@ public class FactoryCodeError {
               })
           .start();
     }
+  }
+
+  private int getTabSelectPos() {
+    return tab.getSelectedTabPosition();
+  }
+
+  void posyByLazy(boolean errorCall) {
+    if (errorCall) {
+      ObjectUtils.removedStarToTab(getTabSelectPos(), tab);
+      ObjectUtils.addStarToTabError(getTabSelectPos(), tab);
+    } else ObjectUtils.removedStarToTab(getTabSelectPos(), tab);
   }
 
   void java() {
@@ -220,6 +366,7 @@ public class FactoryCodeError {
                               call.setImageResource(R.drawable.ic_palette_check_box);
                               call.setColorFilter(Color.GREEN);
                             }
+                            posyByLazy(errorCall);
                           });
                 } catch (Exception err) {
 
@@ -265,6 +412,7 @@ public class FactoryCodeError {
                               call.setImageResource(R.drawable.ic_palette_check_box);
                               call.setColorFilter(Color.GREEN);
                             }
+                            posyByLazy(errorCall);
                           });
                 } catch (Exception err) {
 
@@ -303,6 +451,7 @@ public class FactoryCodeError {
                               call.setImageResource(R.drawable.ic_palette_check_box);
                               call.setColorFilter(Color.GREEN);
                             }
+                            posyByLazy(errorCall);
                           });
                 } catch (Exception err) {
 
@@ -317,8 +466,6 @@ public class FactoryCodeError {
     private boolean errorCall = false;
 
     private ErrorNode errorNode;
-
-    public JavaTask() {}
 
     @MainThread
     @Override
@@ -362,6 +509,7 @@ public class FactoryCodeError {
         call.setImageResource(R.drawable.ic_palette_check_box);
         call.setColorFilter(Color.GREEN);
       }
+      posyByLazy(errorCall);
     }
   }
 
@@ -369,6 +517,7 @@ public class FactoryCodeError {
 
     private boolean errorCall = false;
     private ErrorNode errorNode; // تغییر نام به یک متغیر سراسری
+
     public TypeScriptTask() {}
 
     @MainThread
@@ -407,13 +556,12 @@ public class FactoryCodeError {
       if (errorCall) {
         call.setImageResource(R.drawable.closehsi);
         call.setColorFilter(Color.RED);
-        
 
       } else {
         call.setImageResource(R.drawable.ic_palette_check_box);
         call.setColorFilter(Color.GREEN);
-        
       }
+      posyByLazy(errorCall);
     }
   }
 }

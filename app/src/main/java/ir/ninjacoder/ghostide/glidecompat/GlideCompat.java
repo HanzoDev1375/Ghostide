@@ -7,6 +7,7 @@ import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.glidecompat.glideapk.ApkIconLoaderModel;
 import ir.ninjacoder.ghostide.glidecompat.glidejavaparser.CustomImageRequest;
 import ir.ninjacoder.ghostide.glidecompat.glidejavaparser.JavaParserAnalyzer;
+import ir.ninjacoder.ghostide.glidecompat.glidezip.ZipEntryModel;
 import ir.ninjacoder.ghostide.glidecompat.musicglide.Mp3CoverModel;
 import ir.ninjacoder.ghostide.glidecompat.pdfglide.PdfModelView;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
@@ -242,14 +243,11 @@ public class GlideCompat {
   }
 
   public static void LoadIconVsCode(String file, ImageView img) {
-    var mypath = "extension/icon.png";
-
+    var mypath = "resources/icons/icon.png";
     Glide.with(img.getContext())
-        .asBitmap()
-        .load(getIconSwbFile(file, mypath))
+        .load(new ZipEntryModel(file, mypath))
         .transform(new RoundedCornersTransformation(RenderSize()))
         .error(R.drawable.file)
-        .priority(Priority.NORMAL)
         .into(img);
   }
 

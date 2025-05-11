@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Enumeration;
 
-class KotlinCompiler {
+public class KotlinCompiler {
   private final EditText outputEditText;
   private final Context context;
   private final String kotlinLibsPath = "/storage/emulated/0/GhostWebIDE/kt/";
@@ -38,7 +38,7 @@ class KotlinCompiler {
   private final String workspaces = "/storage/emulated/0/GhostWebIDE/kt/";
   private PrograssSheet progressDialog;
 
-  interface OnDoneCompiler {
+  public interface OnDoneCompiler {
     void onCompile();
   }
 
@@ -369,7 +369,7 @@ class KotlinCompiler {
     public String toString() {
       StringBuilder sb = new StringBuilder();
       for (CompilerMessage message : messages) {
-        sb.append(message.severity.toString()).append(": ").append(message.message);
+       sb.append(message.message).append("\n");
         if (message.location != null) {
           sb.append(" at ")
               .append(message.location.getPath())

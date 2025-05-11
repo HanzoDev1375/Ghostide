@@ -12,6 +12,7 @@ import android.util.Log;
 import io.github.rosemoe.sora.langs.xml.analyzer.BasicSyntaxPullAnalyzer;
 import io.github.rosemoe.sora.text.TextStyle;
 import io.github.rosemoe.sora.widget.ListCss3Color;
+import java.util.LinkedList;
 import java.util.Stack;
 import io.github.rosemoe.sora.data.BlockLine;
 import org.antlr.v4.runtime.CharStreams;
@@ -34,6 +35,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
   }
 
   private BasicSyntaxPullAnalyzer htmlCodeAnalyzer;
+  
 
   @Override
   public void analyze(
@@ -60,6 +62,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
 
       while (delegate.shouldAnalyze()) {
         token = lexer.nextToken();
+        
         if (token == null) break;
         if (token.getType() == HTMLLexer.EOF) {
           lastLine = token.getLine() - 1;
@@ -378,8 +381,6 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
                 colorid = EditorColorScheme.AUTO_COMP_PANEL_CORNER;
               }
               if (previous == HTMLLexer.LBRACK
-                  || previous == HTMLLexer.LPAREN
-                  || previous == HTMLLexer.RPAREN
                   || previous == HTMLLexer.IMPORT
                   || previous == HTMLLexer.FUNCTION
                   || previous == HTMLLexer.COLONCOLON) {
@@ -422,7 +423,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
                 /// def code result -> Java.user();
                 colorid = EditorColorScheme.javafun;
               }
-
+              
               /// این ویژگی به علت مصرف زیاد رم متوقف شد اما همچنان میتوانید در برنامه خودتان از این
               // ویژگی استفاده کنید...
               //// ListCss3Color.initColor(token, line, column, result, true);
@@ -528,4 +529,6 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
   public long forString() {
     return TextStyle.makeStyle(EditorColorScheme.htmlstr, 0, true, false, false);
   }
+
+  
 }

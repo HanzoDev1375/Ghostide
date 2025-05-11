@@ -24,7 +24,7 @@ public class CustomImageLoader implements ModelLoader<CustomImageRequest, Drawab
 
   @Override
   public boolean handles(CustomImageRequest request) {
-    return request.getJavaFile().getName().endsWith(".java");
+    return true; 
   }
 
   public static class Factory implements ModelLoaderFactory<CustomImageRequest, Drawable> {

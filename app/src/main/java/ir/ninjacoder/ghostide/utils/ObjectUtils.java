@@ -6,6 +6,7 @@ import android.os.Environment;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.StrikethroughSpan;
 import android.transition.Transition;
 import android.transition.TransitionManager;
 import android.webkit.WebView;
@@ -25,6 +26,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.transition.platform.MaterialSharedAxis;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.IdeEditor;
+import ir.ninjacoder.ghostide.marco.WavyUnderlineSpan;
 import ir.ninjacoder.ghostide.model.ObjectClassName;
 import ir.ninjacoder.ghostide.utils.FileUtil;
 import ir.ninjacoder.ghostide.widget.ExrtaFab;
@@ -850,7 +852,32 @@ public class ObjectUtils {
             0,
             spannableText.length(),
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            
+
+        tabInstance.setText(spannableText);
+      }
+    }
+  }
+
+  public static void addStarToTabError(int pos, TabLayout tab) {
+    TabLayout.Tab tabInstance = tab.getTabAt(pos);
+    if (tabInstance != null) {
+      String tabText = tabInstance.getText() != null ? tabInstance.getText().toString() : "";
+      if (!tabText.startsWith("*")) {
+        String newText = "*" + tabText;
+        SpannableString spannableText = new SpannableString(newText);
+
+        // ستاره سفید
+        spannableText.setSpan(
+            new ForegroundColorSpan(Color.WHITE), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        // خط موج‌دار قرمز برای متن اصلی
+        WavyUnderlineSpan mycustomSpan = new WavyUnderlineSpan();
+        mycustomSpan.setEnabled(true);
+        mycustomSpan.setMod(WavyUnderlineSpan.StatosMod.ERROR);
+
+        spannableText.setSpan(
+            mycustomSpan, 1, newText.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
         tabInstance.setText(spannableText);
       }
     }

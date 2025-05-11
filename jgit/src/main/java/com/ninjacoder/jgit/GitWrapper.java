@@ -4,6 +4,18 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import java.nio.charset.StandardCharsets;
+import org.eclipse.jgit.revwalk.RevTree;
+import org.eclipse.jgit.revwalk.RevWalk;
+import org.eclipse.jgit.treewalk.AbstractTreeIterator;
+import org.eclipse.jgit.diff.DiffEntry;
+import org.eclipse.jgit.treewalk.CanonicalTreeParser;
+import org.eclipse.jgit.lib.ObjectReader;
+import android.text.style.ForegroundColorSpan;
+import android.graphics.Color;
+import android.text.Spannable;
+import android.text.style.StrikethroughSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -507,7 +519,7 @@ public class GitWrapper {
     }
   }
 
-  static Git getGit(File repo) {
+  public static Git getGit(File repo) {
     try {
       return Git.open(repo);
     } catch (IOException e) {
@@ -604,23 +616,106 @@ public class GitWrapper {
     return git != null && git.getRepository().getRepositoryState().canCheckout();
   }
 
-  public static SpannableString diff(View view, File repo, ObjectId hash1, ObjectId hash2) {
-    SpannableString string = null;
+  public static SpannableStringBuilder diff(File repo, ObjectId oldCommit, ObjectId newCommit) {
+    SpannableStringBuilder builder = new SpannableStringBuilder();
     Git git = getGit(repo);
-    try {
-      if (git != null) {
-        OutputStream out = new ByteArrayOutputStream();
-        DiffFormatter formatter = new DiffFormatter(out);
-        formatter.setRepository(git.getRepository());
-        formatter.format(hash1, hash2);
-        string = new SpannableString(out.toString());
-      }
-    } catch (IOException e) {
-      Log.e(TAG, e.toString());
-      Snackbar.make(view, e.toString(), Snackbar.LENGTH_LONG).show();
+
+    if (git == null) {
+      return builder;
     }
 
-    return string;
+    try (ByteArrayOutputStream out = new ByteArrayOutputStream();
+        DiffFormatter formatter = new DiffFormatter(out)) {
+
+      formatter.setRepository(git.getRepository());
+
+      // اگر یکی از کامیت‌ها null باشد، با working tree مقایسه می‌شود
+      List<DiffEntry> diffs;
+      if (newCommit == null) {
+        diffs = git.diff().setOldTree(prepareTreeParser(git, oldCommit)).call();
+      } else {
+        diffs =
+            git.diff()
+                .setOldTree(prepareTreeParser(git, oldCommit))
+                .setNewTree(prepareTreeParser(git, newCommit))
+                .call();
+      }
+
+      for (DiffEntry entry : diffs) {
+        formatter.format(entry);
+        String diffText = out.toString(StandardCharsets.UTF_8.name());
+        applyDiffStyles(builder, diffText);
+        out.reset();
+      }
+    } catch (Exception e) {
+      Log.e(TAG, "خطا در محاسبه تفاوت‌ها", e);
+    }
+
+    return builder;
+  }
+
+  private static AbstractTreeIterator prepareTreeParser(Git git, ObjectId commitId)
+      throws IOException {
+    CanonicalTreeParser treeParser = new CanonicalTreeParser();
+    try (ObjectReader reader = git.getRepository().newObjectReader()) {
+      // روش جایگزین برای parseTree
+      RevWalk revWalk = new RevWalk(reader);
+      RevCommit commit = revWalk.parseCommit(commitId);
+      RevTree tree = commit.getTree();
+
+      treeParser.reset(reader, tree.getId());
+    }
+    return treeParser;
+  }
+
+  private static void applyDiffStyles(SpannableStringBuilder builder, String diffText) {
+    String[] lines = diffText.split("\n");
+
+    for (String line : lines) {
+      int start = builder.length();
+      builder.append(line).append("\n");
+      int end = builder.length();
+
+      if (line.startsWith("+")) {
+        // خطوط اضافه شده (سبز)
+        builder.setSpan(
+            new ForegroundColorSpan(Color.GREEN), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+      } else if (line.startsWith("-")) {
+        // خطوط حذف شده (قرمز با خط خورده)
+        builder.setSpan(
+            new ForegroundColorSpan(Color.RED), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+      } else if (line.startsWith("@@")) {
+        // هدر diff (آبی)
+        builder.setSpan(
+            new ForegroundColorSpan(Color.BLUE), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+      }
+    }
+  }
+
+  public static void diffImpl(File file, Context c) {
+    try {
+      if (!GitUtils.isGitRepository(file)) {
+        GitWrapper.init(c, file);
+      }
+
+      var git = getGit(file);
+      if (git == null) {
+        Toast.makeText(c, "Error to open rep", Toast.LENGTH_SHORT).show();
+        return;
+      }
+
+      ObjectId commit1 = git.getRepository().resolve("HEAD~1");
+      ObjectId commit2 = git.getRepository().resolve("HEAD");
+
+      if (commit1 == null || commit2 == null) {
+        Toast.makeText(c, "commit not found", Toast.LENGTH_SHORT).show();
+        return;
+      }
+      var diffText = diff(file, commit1, commit2);
+      new MaterialAlertDialogBuilder(c).setMessage(diffText).show();
+    } catch (Exception err) {
+      Toast.makeText(c, err.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+    }
   }
 
   void msg(Context c, String ec) {

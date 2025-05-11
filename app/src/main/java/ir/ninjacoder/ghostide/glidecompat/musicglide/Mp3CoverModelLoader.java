@@ -26,6 +26,6 @@ public class Mp3CoverModelLoader implements ModelLoader<Mp3CoverModel, Bitmap> {
 
   @Override
   public boolean handles(@NonNull Mp3CoverModel model) {
-    return model.getFilePath().endsWith(".mp3");
+    return true; 
   }
 }

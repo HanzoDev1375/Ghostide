@@ -42,7 +42,7 @@ public class GitListSheet {
     listItem.addItem("Git Pull");
     listItem.addItem("Git Push");
     listItem.addItem("Git AddAll");
-    listItem.addItem("Git Status");
+    listItem.addItem("Git Diff");
     listItem.addItem("GitLogs");
     listItem.addItem("Git add remote");
     listItem.addItem("Git Fetch ");
@@ -118,16 +118,7 @@ public class GitListSheet {
               case 7:
                 {
                   listItem.getDismiss(true);
-                  ThreadUtils.runOnUiThread(
-                      () -> {
-                        try {
-
-                          MaterialDialogHelper(null, GitWrapper.getCurrentBranch(fileDir));
-                        } catch (Exception err) {
-
-                        }
-                      });
-
+                  GitWrapper.diffImpl(fileDir, ctx);
                   break;
                 }
               case 8:

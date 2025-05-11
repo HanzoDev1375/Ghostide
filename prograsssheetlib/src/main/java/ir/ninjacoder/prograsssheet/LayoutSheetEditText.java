@@ -12,6 +12,17 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
+import android.widget.EditText;
+import android.text.SpannableString;
+import ir.ninjacoder.prograsssheet.interfaces.OnLineNumberEvent;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+import android.text.style.UnderlineSpan;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.graphics.Color;
+import android.text.style.ClickableSpan;
+import android.text.method.LinkMovementMethod;
 import androidx.annotation.StringRes;
 import com.google.android.material.textfield.TextInputLayout;
 import ir.ninjacoder.prograsssheet.databinding.LayoutEdittextSheetBinding;
@@ -24,7 +35,6 @@ public class LayoutSheetEditText implements TextWatcher {
   private Sheet dialog;
   private SharedPreferences prf;
   private boolean isAnim = false;
-    
 
   private StateInputType input = StateInputType.TEXT;
 
@@ -56,7 +66,7 @@ public class LayoutSheetEditText implements TextWatcher {
         et.setInputType(InputType.TYPE_CLASS_TEXT);
     }
     setIsAnim(true);
-     bind.btnok.setEnabled(isEmptyText() ? false : true);
+    bind.btnok.setEnabled(isEmptyText() ? false : true);
   }
 
   public LayoutSheetEditText setTitle(@StringRes int title) {
@@ -182,8 +192,38 @@ public class LayoutSheetEditText implements TextWatcher {
   public void setIsAnim(boolean isAnim) {
     this.isAnim = isAnim;
   }
-  public boolean isShow(){
-      return dialog.isShowing();
+
+  public boolean isShow() {
+    return dialog.isShowing();
+  }
+
+  public void applyClickableSpans(OnLineNumberEvent line) {
+    String fullText = getText();
+    var get = getInputLayout().getEditText();
+    SpannableString spannableString = new SpannableString(fullText);
+    Pattern pattern = Pattern.compile("\\w+\\.\\w+:\\d+");
+    Matcher matcher = pattern.matcher(fullText);
+
+    while (matcher.find()) {
+      String matchedText = matcher.group();
+      int start = matcher.start();
+      int end = matcher.end();
+      String lineNumber = matchedText.substring(matchedText.lastIndexOf(":") + 1);
+      spannableString.setSpan(new UnderlineSpan(), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+      spannableString.setSpan(
+          new ForegroundColorSpan(Color.RED), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+      ClickableSpan clickableSpan =
+          new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+              //add line number form interface
+              line.onLineNumber(Integer.parseInt(lineNumber));
+            }
+          };
+      spannableString.setSpan(clickableSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
+    get.setText(spannableString);
+    get.setMovementMethod(LinkMovementMethod.getInstance());
+    
   }
 }
- 

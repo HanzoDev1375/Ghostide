@@ -90,21 +90,26 @@ public class MainActivity extends BaseCompat {
         getFilesDir().getAbsolutePath() + File.separator + "files" + File.separator + "env.sh";
     var phpPath =
         getFilesDir().getAbsolutePath() + File.separator + "lib" + File.separator + "libx265.so";
-    var ghostPath = "/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost";
+
+    var ghostPath = FileUtil.THEME + "/GhostThemeapp.ghost";
     var iconPath = getFilesDir().getAbsoluteFile() + "/icon.png";
     if (!FileUtil.isExistFile(iconPath)) {
       AssetsSoft soft = new AssetsSoft();
       soft.copyOneFileFromAssets("icon.png", iconPath, this);
     }
-    var cursorpath = "/storage/emulated/0/GhostWebIDE/cursor/cursor.json";
+    var cursorpath = FileUtil.HOME + "/cursor/cursor.json";
     if (!FileUtil.isExistFile(cursorpath)) {
       AssetsSoft soft = new AssetsSoft();
       soft.unzipFromAssets(this, "cursor.zip", "/storage/emulated/0/GhostWebIDE/cursor");
     }
-    var snippetPath = "/storage/emulated/0/GhostWebIDE/snippet/snippetconfig.json";
+    var snippetPath = FileUtil.HOMESNIPPET;
     if (!FileUtil.isExistFile(snippetPath)) {
       new AssetsSoft()
           .unzipFromAssets(this, "snippet.zip", "/storage/emulated/0/GhostWebIDE/snippet/");
+    }
+    var ktPath = FileUtil.HOME + File.separator + "kt" + File.separator + "kotlin-stdlib-1.0.0.jar";
+    if (!FileUtil.isExistFile(ktPath)) {
+      new AssetsSoft().unzipFromAssets(this, "kt.zip", FileUtil.HOME + File.separator + "kt");
     }
     try {
       if (!FileUtil.isExistFile("/storage/emulated/0/GhostWebIDE/android/android.jar")) {

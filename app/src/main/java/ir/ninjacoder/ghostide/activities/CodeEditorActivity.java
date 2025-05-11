@@ -21,6 +21,7 @@ import ir.ninjacoder.ghostide.marco.CharUtil;
 import ir.ninjacoder.ghostide.marco.ColorView;
 import ir.ninjacoder.ghostide.marco.FactoryCodeError;
 import ir.ninjacoder.ghostide.marco.GhostWebEditorSearch;
+import ir.ninjacoder.ghostide.marco.KotlinCompilerImpl;
 import ir.ninjacoder.ghostide.marco.WallpaperParallaxEffect;
 import ir.ninjacoder.ghostide.model.EditorViewModel;
 import ir.ninjacoder.ghostide.navigator.EditorHelperColor;
@@ -90,7 +91,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TimerTask;
-import ninjacoder.ghostide.androidtools.r8.android.KotlinCompilerImpl;
 
 public class CodeEditorActivity extends BaseCompat {
 
@@ -491,7 +491,7 @@ public class CodeEditorActivity extends BaseCompat {
           var cu = event.getEditor().getCursor();
           var myChar = new CharUtil(editor.getText().toString(), titleauthor);
 
-          var iscode = new FactoryCodeError(editor, iconAuthor);
+          var iscode = new FactoryCodeError(editor, iconAuthor,tablayouteditor);
           int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
           if (selectedTabPosition >= 0 && selectedTabPosition < tabs_listmap.size()) {
             ObjectUtils.addStarToTab(selectedTabPosition, tablayouteditor);
@@ -559,7 +559,6 @@ public class CodeEditorActivity extends BaseCompat {
         menupopnew, this, "imagecolor", imap, Color.parseColor("#ff94e7ff"));
     themeForJson2.addWindowsNavColor(this, imap, "tabimagecolorfilter");
     themeForJson2.setFabBackground(_fab, imap);
-    themeForJson2.setFabColorHint(_fab, imap);
     AnimUtils.ClickAnimation(menupopnew);
     tablayouteditor.setSelectedTabIndicatorColor(
         imap.containsKey("tabback")
@@ -1259,7 +1258,7 @@ public class CodeEditorActivity extends BaseCompat {
           var file = new File(selectedFilePath);
           JavaCcComplierImpl.main(file.toString(), file.getParent() + "/");
         } else if (selectedFilePath.contains(".kt")) {
-          new KotlinCompilerImpl(CodeEditorActivity.this, selectedFilePath);
+          new KotlinCompilerImpl(CodeEditorActivity.this, selectedFilePath,editor);
         }
       } else {
 

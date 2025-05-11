@@ -73,7 +73,7 @@ public class ThemePreviewActivity extends BaseCompat {
 
     var theme = new ThemeUtils();
     theme.setThemeCodeEditor((CodeEditor) bind.editor, map, false, this);
-    theme.setFabColorHint(bind.fab, map);
+    theme.setFabBackground(bind.fab, map);
   }
 
   class FakeAd extends RecyclerView.Adapter<FakeAd.VH> {

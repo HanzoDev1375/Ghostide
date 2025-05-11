@@ -268,8 +268,9 @@ public class ThemeUtils {
   }
 
   public ThemeUtils addWindowsNavColor(Activity app, HashMap<String, Object> map, String key) {
-//    ObjectUtils.setNavColor(
-//        map.containsKey(key) ? Color.parseColor(map.get(key).toString()) : Color.TRANSPARENT,app);
+    //    ObjectUtils.setNavColor(
+    //        map.containsKey(key) ? Color.parseColor(map.get(key).toString()) :
+    // Color.TRANSPARENT,app);
     return this;
   }
 
@@ -280,20 +281,13 @@ public class ThemeUtils {
             map.containsKey("fabimagecolor")
                 ? Color.parseColor(map.get("fabimagecolor").toString())
                 : MaterialColors.getColor(fab, ObjectUtils.TvColor)));
-    return this;
-  }
-
-  public ThemeUtils setFabColorHint(
-      ExtendedFloatingActionButton fab, HashMap<String, Object> imap) {
     fab.setBackgroundTintList(
         ColorStateList.valueOf(
             map.containsKey("fabbackgroundcolorcolor")
                 ? Color.parseColor(map.get("fabbackgroundcolorcolor").toString())
-                : MaterialColors.getColor(fab, ObjectUtils.Back)));
-
+                : Color.BLACK));
     return this;
   }
-
   public ThemeUtils subPowerMenu(PowerMenu menu, HashMap<String, Object> map) {
     menu.setTextColor(
         map.containsKey("toolbartextcolor")

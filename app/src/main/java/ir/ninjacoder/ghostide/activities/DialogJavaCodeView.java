@@ -90,7 +90,6 @@ public class DialogJavaCodeView extends DialogFragment {
                   new TypeToken<HashMap<String, Object>>() {}.getType());
 
       theme.setThemeCodeEditor(bin.editor, map, false, requireActivity());
-      theme.setFabColorHint(bin.Fab, map);
     } catch (Exception err) {
 
     }

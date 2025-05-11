@@ -166,8 +166,6 @@ public class FactoryModelProject implements ProjectManagerAdapter.OnProjectClick
   }
 
   public void makeHtmlProject() {
-    var maker = new ProjectMaker(folder, baseCompat, () -> {});
-    maker.setMakeHtmlProject();
   }
 
   public void makeNodeJsProject() {
@@ -732,13 +730,13 @@ public class FactoryModelProject implements ProjectManagerAdapter.OnProjectClick
                         + "apply plugin: 'kotlin-android'\n"
                         + "apply from: \"$flutterRoot/packages/flutter_tools/gradle/flutter.gradle\"\n\n"
                         + "android {\n"
-                        + "    compileSdkVersion 33\n\n"
+                        + "    compileSdkVersion 35\n\n"
                         + "    defaultConfig {\n"
                         + "        applicationId \""
                         + packageNameStr
                         + "\"\n"
                         + "        minSdkVersion 21\n"
-                        + "        targetSdkVersion 33\n"
+                        + "        targetSdkVersion 35\n"
                         + "        versionCode 1\n"
                         + "        versionName \"1.0.0\"\n"
                         + "    }\n\n"
@@ -1246,13 +1244,13 @@ public class FactoryModelProject implements ProjectManagerAdapter.OnProjectClick
                         + "    namespace '"
                         + packageNameStr
                         + "'\n"
-                        + "    compileSdk 33\n\n"
+                        + "    compileSdk 35\n\n"
                         + "    defaultConfig {\n"
                         + "        applicationId \""
                         + packageNameStr
                         + "\"\n"
                         + "        minSdk 21\n"
-                        + "        targetSdk 33\n"
+                        + "        targetSdk 35\n"
                         + "        versionCode 1\n"
                         + "        versionName \"1.0\"\n"
                         + "    }\n\n"

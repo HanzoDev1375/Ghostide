@@ -445,15 +445,7 @@ public class KotilnAnalyzer implements CodeAnalyzer {
                 super.visitErrorNode(node);
               }
 
-              @Override
-              public void enterBlock(KotlinParser.BlockContext ctx) {
-                if (!ctx.statements().isEmpty()) {
-                  Utils.setWaringSpan(
-                      result,
-                      ctx.LCURL().getSymbol().getLine(),
-                      ctx.LCURL().getSymbol().getCharPositionInLine());
-                }
-              }
+              
             };
         ParseTreeWalker.DEFAULT.walk(base, paser.kotlinFile());
       }

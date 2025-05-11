@@ -29,18 +29,21 @@ public class CustomImageDataFetcher implements DataFetcher<Drawable> {
   }
 
   private Drawable resolveImage(JavaAnalysisResult result) {
-    if (result.isInterface()) {
-      return ContextCompat.getDrawable(context, R.drawable.interface_dark);
-    } else if (result.isClass()) {
-      return ContextCompat.getDrawable(context, R.drawable.class_d);
+    if (result.isAbstractException()) {
+      return ContextCompat.getDrawable(context, R.drawable.abstractexceptiondark);
     } else if (result.isAbstract()) {
       return ContextCompat.getDrawable(context, R.drawable.classabstract_dark);
-    } else if (result.isEnum()) {
-      return ContextCompat.getDrawable(context, R.drawable.enum_dark);
+    } else if (result.isInterface()) {
+      return ContextCompat.getDrawable(context, R.drawable.interface_dark);
     } else if (result.isInner()) {
       return ContextCompat.getDrawable(context, R.drawable.modelclass_dark);
-    }
-    return ContextCompat.getDrawable(context, request.getDefaultImageRes());
+    } else if (result.isEnum()) {
+      return ContextCompat.getDrawable(context, R.drawable.enum_dark);
+    } else if (result.isAnnotation()) {
+      return ContextCompat.getDrawable(context, R.drawable.annotationdark);
+    } else if (result.isClass()) {
+      return ContextCompat.getDrawable(context, R.drawable.class_d);
+    } else return ContextCompat.getDrawable(context, request.getDefaultImageRes());
   }
 
   @Override

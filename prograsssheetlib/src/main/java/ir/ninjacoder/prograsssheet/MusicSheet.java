@@ -26,6 +26,7 @@ import com.google.android.material.slider.Slider;
 import ir.ninjacoder.prograsssheet.databinding.LayoutMusicPlayersBinding;
 import ir.ninjacoder.prograsssheet.interfaces.MediaPlayerListener;
 import java.io.File;
+import java.util.Random;
 
 public class MusicSheet implements Slider.OnChangeListener {
 
@@ -200,7 +201,8 @@ public class MusicSheet implements Slider.OnChangeListener {
 
   void setAsPaletteBackground(boolean is) {
     if (is) {
-      var imageSource = md.getImageBitmap() != null ? md.getImageBitmap() : R.drawable.musicerror;
+      var imageSource =
+          md.getImageBitmap() != null ? md.getImageBitmap() : getRandomBackgroundMusic();
       Glide.with(bind.musicicon.getContext())
           .asBitmap()
           .load(imageSource)
@@ -293,5 +295,20 @@ public class MusicSheet implements Slider.OnChangeListener {
       throw new IllegalArgumentException(
           "Drawable must be an AnimatedVectorDrawable or AnimatedVectorDrawableCompat");
     }
+  }
+
+  private int getRandomBackgroundMusic() {
+    int[] musicListIcon = {
+      R.drawable.musicerror,
+      R.drawable.music1,
+      R.drawable.music2,
+      R.drawable.music3,
+      R.drawable.music4,
+      R.drawable.music5,
+      R.drawable.music6
+    };
+    Random rand = new Random();
+    int index = rand.nextInt(musicListIcon.length);
+    return musicListIcon[index];
   }
 }

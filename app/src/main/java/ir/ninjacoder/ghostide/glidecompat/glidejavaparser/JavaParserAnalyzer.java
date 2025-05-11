@@ -3,6 +3,7 @@ package ir.ninjacoder.ghostide.glidecompat.glidejavaparser;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import java.io.File;
@@ -31,8 +32,18 @@ public class JavaParserAnalyzer implements JavaCodeAnalyzer {
         cu.findAll(ClassOrInterfaceDeclaration.class).stream()
             .anyMatch(ClassOrInterfaceDeclaration::isTopLevelType);
     boolean isEnum =
-        cu.findAll(ClassOrInterfaceDeclaration.class).stream().anyMatch(c -> c.isEnumDeclaration());
-
-    return new JavaAnalysisResult(isInterface, isClass, isAbstract, isEnum, isinnerClass);
+        cu.findAll(EnumDeclaration.class).stream().anyMatch(c -> c.isEnumDeclaration());
+    boolean isAnnotation =
+        cu.findAll(AnnotationDeclaration.class).stream().anyMatch(c -> c.isAnnotationDeclaration());
+    // test
+    boolean isAbstractException =
+        cu.findAll(ClassOrInterfaceDeclaration.class).stream()
+            .filter(ClassOrInterfaceDeclaration::isAbstract)
+            .anyMatch(
+                c ->
+                    c.getExtendedTypes().stream()
+                        .anyMatch(t -> t.getNameAsString().endsWith("Exception")));
+    return new JavaAnalysisResult(
+        isInterface, isClass, isAbstract, isEnum, isinnerClass, isAnnotation, isAbstractException);
   }
 }

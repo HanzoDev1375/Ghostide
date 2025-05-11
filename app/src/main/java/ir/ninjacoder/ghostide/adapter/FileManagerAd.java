@@ -176,6 +176,12 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
           viewHolder.icon.setColorFilter(Color.parseColor("#FBC82F"));
         } else if (myfile.toString().endsWith(".java")) {
           GlideCompat.setLoadJavaModel(viewHolder.icon, new File(myfile.toString()));
+        } else if (myfile.toString().endsWith(".swb")) {
+          /**
+           * We will use this method temporarily with this name, I will update it in the future, I
+           * do not have time now
+           */
+          GlideCompat.LoadIconVsCode(myfile.toString(), viewHolder.icon);
         }
         // test
         JgitHelper.initbylazy(myfile, viewHolder.folderName);

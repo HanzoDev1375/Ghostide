@@ -9,8 +9,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.Registry;
 import com.bumptech.glide.annotation.GlideModule;
 import com.bumptech.glide.module.AppGlideModule;
-import com.sdsmdg.harjot.vectormaster.VectorMasterDecoder;
-import com.sdsmdg.harjot.vectormaster.VectorModel;
+import com.sdsmdg.harjot.vectormaster.*;
 import ir.ninjacoder.ghostide.glidecompat.glideapk.ApkIconLoaderModel;
 import android.graphics.drawable.Drawable;
 import ir.ninjacoder.ghostide.glidecompat.glideapk.ApkIconModelLoader;
@@ -18,6 +17,8 @@ import ir.ninjacoder.ghostide.glidecompat.glidejavaparser.CustomImageLoader;
 import ir.ninjacoder.ghostide.glidecompat.glidejavaparser.CustomImageRequest;
 import ir.ninjacoder.ghostide.glidecompat.glideres.IconRes;
 import ir.ninjacoder.ghostide.glidecompat.glideres.IconModelLoaderFactory;
+import ir.ninjacoder.ghostide.glidecompat.glidezip.ZipEntryModel;
+import ir.ninjacoder.ghostide.glidecompat.glidezip.ZipEntryModelLoaderFactory;
 import ir.ninjacoder.ghostide.glidecompat.musicglide.Mp3CoverLoaderFactory;
 import ir.ninjacoder.ghostide.glidecompat.musicglide.Mp3CoverModel;
 import java.io.InputStream;
@@ -25,7 +26,6 @@ import com.caverock.androidsvg.SVG;
 import ir.ninjacoder.ghostide.glidecompat.glidesvg.SvgDecoder;
 import android.graphics.drawable.PictureDrawable;
 import ir.ninjacoder.ghostide.glidecompat.glidesvg.SvgDrawableTranscoder;
-import ir.ninjacoder.ghostide.R;
 
 @GlideModule
 public class AppModule extends AppGlideModule {
@@ -45,7 +45,7 @@ public class AppModule extends AppGlideModule {
 
     registry.prepend(
         CustomImageRequest.class, Drawable.class, new CustomImageLoader.Factory(context));
-    registry.append(
-        VectorModel.class, Drawable.class, new VectorMasterDecoder(context, R.drawable.errorxml));
+    registry.append(VectorModel.class, Drawable.class, new VectorModelLoaderFactory(context));
+    registry.append(ZipEntryModel.class, InputStream.class, new ZipEntryModelLoaderFactory()); 
   }
 }
