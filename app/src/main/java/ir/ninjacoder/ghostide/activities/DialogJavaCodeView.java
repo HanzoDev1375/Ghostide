@@ -1,5 +1,6 @@
 package ir.ninjacoder.ghostide.activities;
 
+import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.databinding.DialogjavacodeviewDialogFragmentBinding;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.utils.ThemeUtils;
@@ -32,7 +33,7 @@ public class DialogJavaCodeView extends DialogFragment {
 
   protected DialogjavacodeviewDialogFragmentBinding bin;
   private SharedPreferences sp;
-  private HashMap<String, Object> map ;
+  private HashMap<String, Object> map;
 
   @NonNull
   @Override
@@ -98,8 +99,8 @@ public class DialogJavaCodeView extends DialogFragment {
     bin.pro.setVisibility(View.GONE);
 
     bin.editor.setEditable(false);
-    bin.editor.setEditorLanguage(new JavaLanguage());
-    
+    bin.editor.setEditorLanguage(new JavaLanguage((IdeEditor) bin.editor));
+
     ObjectUtils.setColorFilter(bin.imageview1);
   }
 

@@ -2,12 +2,17 @@ package io.github.rosemoe.sora.langs.java;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import com.blankj.utilcode.util.ThreadUtils;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.config.JavaToGsonHelper;
 import io.github.rosemoe.sora.data.CompletionItem;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
+import ir.ninjacoder.ghostide.utils.FileUtil;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,19 +33,15 @@ public class JavaAutoComplete implements AutoCompleteProvider {
   private String prf;
   private String name;
   List<CompletionItem> keywords;
-  private SharedPreferences shp;
+  private final WeakReference<IdeEditor> mEditorReference;
 
-  public JavaAutoComplete() {
-    init();
-  }
+  
 
   public JavaAutoComplete(IdeEditor editor) {
-    this.editor = editor;
-    init();
-  }
-
-  void init() {
-    shp = GhostIdeAppLoader.getContext().getSharedPreferences("shp", Context.MODE_PRIVATE);
+    mEditorReference = new WeakReference<>(editor);
+    if (editor == null) {
+      return;
+    }
   }
 
   public void setMd(boolean isMd) {
@@ -65,7 +66,7 @@ public class JavaAutoComplete implements AutoCompleteProvider {
     final String[] keywordArray = mKeywords;
     prf = prefix;
     String match = prefix;
-
+    editor = mEditorReference.get();
     // افزودن کلمات کلیدی
     if (keywordArray != null) {
       for (String kw : keywordArray) {
@@ -97,11 +98,20 @@ public class JavaAutoComplete implements AutoCompleteProvider {
 
     it = new ArrayList<>(keywords); // ایجاد کپی از لیست keywords
     keywords.addAll(CodeSnippet.runasList("java", prefix));
-    keywords.addAll(
-        CodeSnippet.analyzeCodeCompletion(
-            "/storage/emulated/0/apk/hsi.jar",
-            shp.getString("path", ""),
-            editor.getCursor().getLeft()));
+    var its = GhostIdeAppLoader.getShap();
+    try {
+      Handler j = new Handler(Looper.getMainLooper());
+      j.post(
+          () -> {
+            keywords.addAll(
+                CodeSnippet.analyzeCodeCompletion(
+                    "/storage/emulated/0/apk/data/", editor.getText().toString()));
+            Log.d("FilePathRead", editor.getText().toString());
+          });
+    } catch (Exception err) {
+      Log.e("Errortolsp", err.getLocalizedMessage());
+    }
+
     // keywords.addAll(CodeSnippet.getJar(prefix));
     return keywords;
   }

@@ -227,13 +227,17 @@ public class KotlinLanguage implements EditorLanguage {
   }
 
   public String ktformat(String text) {
-     CharStream charStream = CharStreams.fromString(text);
-     KotlinLexer lexer = new KotlinLexer(charStream);
-     CommonTokenStream tokens = new CommonTokenStream(lexer);
-     KotlinParser parser = new KotlinParser(tokens);
-     ParseTree tree = parser.kotlinFile();
-     KotlinVisitor visitor = new KotlinVisitor();
-     return visitor.visit(tree);
+    CharStream charStream = CharStreams.fromString(text);
+    KotlinLexer lexer = new KotlinLexer(charStream);
+    CommonTokenStream tokens = new CommonTokenStream(lexer);
+    KotlinParser parser = new KotlinParser(tokens);
+    ThrowableErrorListener errorListener = new ThrowableErrorListener();
+    parser.removeErrorListeners();
+    parser.addErrorListener(errorListener);
+    ParseTree tree = parser.kotlinFile();
+    KotlinVisitor visitor = new KotlinVisitor(tokens);
+    String result = visitor.visit(tree);
+    return result;
   }
 
   class BraceHandler implements NewlineHandler {

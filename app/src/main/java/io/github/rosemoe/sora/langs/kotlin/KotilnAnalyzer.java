@@ -3,6 +3,7 @@ package io.github.rosemoe.sora.langs.kotlin;
 import android.graphics.Color;
 import android.util.Log;
 import io.github.rosemoe.sora.data.Span;
+import io.github.rosemoe.sora.langs.kotlin.jum.KtJu;
 import io.github.rosemoe.sora.langs.xml.analyzer.Utils;
 import io.github.rosemoe.sora.text.TextStyle;
 
@@ -249,6 +250,7 @@ public class KotilnAnalyzer implements CodeAnalyzer {
               int color = EditorColorScheme.TEXT_NORMAL;
               boolean isbold = false, isItalic = false;
               ktinfo.addIdentifier(token.getText());
+			  var mytext = token.getText();
               int typemode = previous.getType();
               if (typemode == KotlinLexer.AT) {
                 color = EditorColorScheme.ATTRIBUTE_NAME;
@@ -305,20 +307,12 @@ public class KotilnAnalyzer implements CodeAnalyzer {
               if (token.getText().equals("runAsUi")) {
                 color = EditorColorScheme.javaoprator;
               }
-              String[] ktStdFunctions = {
-                "arrayOf", "listOf", "mutableListOf", "mutableMapOf",
-                "setOf", "mutableSetOf", "mapOf", "emptyList",
-                "emptySet", "emptyMap", "sequenceOf"
-              };
+              
 
               // توابع حوزه همزمانی (coroutines)
-              String[] ktCoroutine = {
-                "delay", "withContext",
-                "async", "coroutineScope",
-                "supervisorScope", "runBlocking", "launch"
-              };
+              
 
-              String[] ktScopeFunctions = { "with"};
+              String[] ktScopeFunctions = {"with"};
               String[] ktCollectionFunctions = {
                 "filter",
                 "map",
@@ -352,9 +346,9 @@ public class KotilnAnalyzer implements CodeAnalyzer {
                 "shuffled",
                 "joinToString"
               };
-              if (Arrays.asList(ktStdFunctions).contains(token.getText())) {
+              if (KtJu.ktStd(mytext)) {
                 color = EditorColorScheme.javafield;
-              } else if (Arrays.asList(ktCoroutine).contains(token.getText())) {
+              } else if (KtJu.ktcoroutine(mytext)) {
                 color = EditorColorScheme.javafun;
               } else if (Arrays.asList(ktScopeFunctions).contains(token.getText())) {
                 color = EditorColorScheme.javaoprator;
@@ -444,8 +438,6 @@ public class KotilnAnalyzer implements CodeAnalyzer {
                     node.getSymbol().getCharPositionInLine() + 1);
                 super.visitErrorNode(node);
               }
-
-              
             };
         ParseTreeWalker.DEFAULT.walk(base, paser.kotlinFile());
       }

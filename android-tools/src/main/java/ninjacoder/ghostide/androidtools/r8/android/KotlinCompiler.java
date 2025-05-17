@@ -275,7 +275,7 @@ public class KotlinCompiler {
         appendOutput(className);
       }
     } catch (ClassNotFoundException e) {
-      //    appendOutput("Class " + className + " not found, trying alternatives...");
+      appendOutput("Class " + className + " not found, trying alternatives...");
     } catch (Exception e) {
       appendOutput("Error executing " + className + ": " + e.getMessage());
     }
@@ -302,17 +302,42 @@ public class KotlinCompiler {
   private String findMainClass(File dexFile) throws IOException {
     DexFile df = new DexFile(dexFile);
     Enumeration<String> classes = df.entries();
+    DexClassLoader classLoader =
+        new DexClassLoader(
+            dexFile.getAbsolutePath(),
+            context.getDir("outdex", Context.MODE_PRIVATE).getAbsolutePath(),
+            null,
+            context.getClassLoader());
 
     while (classes.hasMoreElements()) {
       String className = classes.nextElement();
-      if (className.endsWith("Kt")) {
-        return className;
-      }
-      if (className.equals("Main")) {
-        return className;
+      try {
+        Class<?> clazz = classLoader.loadClass(className);
+
+        // چک کردن وجود متد `main` (هم برای Kotlin و هم Java)
+        try {
+          // حالت Kotlin: متد main بدون آرگومان یا با آرگومان Array<String>
+          Method mainMethod = clazz.getMethod("main");
+          if (mainMethod != null) {
+            return className;
+          }
+        } catch (NoSuchMethodException e1) {
+          try {
+            // حالت Java: متد main با آرگومان String[]
+            Method mainMethod = clazz.getMethod("main", String[].class);
+            if (mainMethod != null) {
+              return className;
+            }
+          } catch (NoSuchMethodException e2) {
+            // این کلاس متد main ندارد
+          }
+        }
+      } catch (ClassNotFoundException e) {
+        // اگر کلاس قابل بارگذاری نبود، ادامه بده
+        continue;
       }
     }
-    return null;
+    return null; // هیچ کلاس دارای main یافت نشد
   }
 
   private String buildClasspath() {
@@ -369,16 +394,21 @@ public class KotlinCompiler {
     public String toString() {
       StringBuilder sb = new StringBuilder();
       for (CompilerMessage message : messages) {
-       sb.append(message.message).append("\n");
+        sb.append("[")
+            .append(message.severity.name())
+            .append("] ")
+            .append(message.message)
+            .append("\n");
+
         if (message.location != null) {
-          sb.append(" at ")
+          sb.append("   at ")
               .append(message.location.getPath())
-              .append(":")
+              .append(" (Line ")
               .append(message.location.getLine())
-              .append(":")
-              .append(message.location.getColumn());
+              .append(", Column ")
+              .append(message.location.getColumn())
+              .append(")\n");
         }
-        sb.append("\n");
       }
       return sb.toString();
     }

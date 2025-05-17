@@ -399,7 +399,7 @@ public class CodeEditor extends View
     this.minidraw = minidraw;
   }
 
-  private void drawInlay(Canvas canvas, Inlay inlay) {
+  public void drawInlay(Canvas canvas, Inlay inlay) {
     // محاسبه موقعیت Inlay بر اساس خط و ستون
     float[] pos = mLayout.getCharLayoutOffset(inlay.line, inlay.column);
     float x = pos[1] + measureTextRegionOffset() - getOffsetX();
@@ -408,15 +408,81 @@ public class CodeEditor extends View
     // ذخیره وضعیت Canvas
     canvas.save();
 
-    // تنظیمات رنگ و فونت
-    mPaintOther.setColor(inlay.color);
-    mPaintOther.setTextSize(mPaint.getTextSize() * 0.9f); // اندازه کوچک‌تر از متن اصلی
-
-    // رسم متن Inlay
-    canvas.drawText(inlay.text, x, y, mPaintGraph);
+    // رسم متن Inlay با راست‌چین
+    drawTextRightToLeft(
+        canvas,
+        mText.getLine(inlay.line),
+        0, // از ابتدای متن
+        inlay.text.length(), // طول متن Inlay
+        0, // contextStart
+        inlay.text.length(), // contextCount
+        x, // موقعیت X
+        y, // موقعیت Y (baseline)
+        inlay.line, // شماره خط
+        inlay.color // رنگ متن
+        );
 
     // بازگردانی وضعیت Canvas
     canvas.restore();
+  }
+
+  /**
+   * رسم متن از راست به چپ با استفاده از mPaintGraph مناسب برای نمایش Inlayها و متن‌های راست به چپ
+   */
+  protected void drawTextRightToLeft(
+      Canvas canvas,
+      ContentLine line,
+      int index,
+      int count,
+      int contextStart,
+      int contextCount,
+      float offX,
+      float offY,
+      int lineNumber,
+      int color) {
+
+    if (index < 0 || index >= line.value.length || count < 0 || index + count > line.value.length) {
+      return;
+    }
+
+    // ذخیره تنظیمات فعلی
+    Paint.Style oldStyle = mPaintGraph.getStyle();
+    float oldTextSize = mPaintGraph.getTextSize();
+    Typeface oldTypeface = mPaintGraph.getTypeface();
+
+    // تنظیمات جدید برای رسم متن
+    mPaintGraph.setStyle(Paint.Style.FILL);
+    mPaintGraph.setTextSize(mPaint.getTextSize() * 0.9f); // اندازه کوچک‌تر از متن اصلی
+    mPaintGraph.setTypeface(getTypefaceText());
+    mPaintGraph.setColor(color);
+
+    int end = index + count;
+    var src = line.value;
+    int st = index;
+
+    // محاسبه عرض کل متن برای راست‌چین کردن
+    float totalWidth = mPaintGraph.measureText(src, st, end - st);
+
+    for (int i = index; i < end; i++) {
+      if (src[i] == '\t') {
+        // رسم بخشی از متن قبل از تب
+        canvas.drawText(src, st, i - st, offX - totalWidth, offY, mPaintGraph);
+        float segmentWidth = mPaintGraph.measureText(src, st, i - st);
+        totalWidth -= segmentWidth;
+        offX -= segmentWidth;
+        st = i + 1;
+      }
+    }
+
+    // رسم باقی مانده متن
+    if (st < end) {
+      canvas.drawText(src, st, end - st, offX - totalWidth, offY, mPaintGraph);
+    }
+
+    // بازگردانی تنظیمات قبلی
+    mPaintGraph.setStyle(oldStyle);
+    mPaintGraph.setTextSize(oldTextSize);
+    mPaintGraph.setTypeface(oldTypeface);
   }
 
   public CodeEditor(Context context) {

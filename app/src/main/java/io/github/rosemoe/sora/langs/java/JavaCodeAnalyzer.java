@@ -8,6 +8,7 @@ import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.Type;
+import io.github.rosemoe.sora.model.Inlay;
 import io.github.rosemoe.sora.widget.ListCss3Color;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
@@ -56,7 +57,6 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
   private final WeakReference<IdeEditor> mEditorReference;
   private static final Object OBJECT = new Object();
   private Map<String, Boolean> mapStyle;
-  
 
   public JavaCodeAnalyzer(IdeEditor editor) {
     mEditorReference = new WeakReference<>(editor);
@@ -365,6 +365,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 colorid = EditorColorScheme.red;
               }
               get(colorid, line, column, result);
+
               break;
             }
 
@@ -472,6 +473,19 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                     int line = variable.getBegin().get().line;
                     int column = variable.getBegin().get().column;
                     declaredVariables.add(variableName);
+                    try {
+                      new Handler(Looper.getMainLooper())
+                          .postDelayed(
+                              () -> {
+                                if (variableName.equals("author")) {
+                                  editor.addInlay(
+                                      new Inlay(line, column, "user", EditorColorScheme.COLOR_TIP));
+                                }
+                              },
+                              2000);
+                    } catch (Exception err) {
+                      Log.e("Error run time -> ", err.getLocalizedMessage());
+                    }
                     inline.put(variableName, line);
                     incol.put(variableName, column);
                     varLines.put(variableName, line);
@@ -660,7 +674,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             int column32 = varColumns.get(varName);
             Utils.setWaringSpan(result, line32, column32);
           }
-          
+
           unusedImport.removeIf(importName -> usedVariables.contains(getSimpleName(importName)));
           declaredVariables.removeAll(usedVariables);
 

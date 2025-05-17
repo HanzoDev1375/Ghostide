@@ -14,15 +14,18 @@ import io.github.rosemoe.sora.langs.internal.MyCharacter;
 import io.github.rosemoe.sora.text.TextUtils;
 import io.github.rosemoe.sora.widget.SymbolPairMatch;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
+import java.lang.ref.WeakReference;
 import lsp4custom.com.ninjacoder.customhtmllsp.JavaCardshorts;
 
 public class JavaLanguage implements EditorLanguage {
-  private IdeEditor editor;
-
-  public JavaLanguage() {}
+  private final WeakReference<IdeEditor> mEditorReference;
 
   public JavaLanguage(IdeEditor editor) {
-    this.editor = editor;
+    mEditorReference = new WeakReference<>(editor);
+    editor = mEditorReference.get();
+    if (editor == null) {
+      return;
+    }
   }
 
   private final NewlineHandler[] newLineHandlers =
@@ -32,12 +35,12 @@ public class JavaLanguage implements EditorLanguage {
 
   @Override
   public CodeAnalyzer getAnalyzer() {
-    return new JavaCodeAnalyzer(editor);
+    return new JavaCodeAnalyzer(mEditorReference.get());
   }
 
   @Override
   public AutoCompleteProvider getAutoCompleteProvider() {
-    JavaAutoComplete auto = new JavaAutoComplete();
+    JavaAutoComplete auto = new JavaAutoComplete(mEditorReference.get());
     auto.setMd(true);
 
     try {
@@ -52,7 +55,7 @@ public class JavaLanguage implements EditorLanguage {
           ObjectUtils.getClassNameObject().length);
       boolean isJavaKeyword = keywords.length > 0;
       // auto.setKeywords(combinedArray, isJavaKeyword ? "JavaKeyWords" : "JavaClass");
-       auto.setKeywords(keywords);
+      auto.setKeywords(keywords);
     } catch (Exception err) {
 
     }
@@ -61,9 +64,7 @@ public class JavaLanguage implements EditorLanguage {
 
   @Override
   public boolean isAutoCompleteChar(char ch) {
-    return MyCharacter.isJavaIdentifierPart(ch)
-        || Character.isLetter(ch)
-        || Character.isDigit(ch);
+    return MyCharacter.isJavaIdentifierPart(ch) || Character.isLetter(ch) || Character.isDigit(ch);
   }
 
   @Override

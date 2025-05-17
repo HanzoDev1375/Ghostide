@@ -1,5 +1,7 @@
 package lsp4custom.com.ninjacoder.customhtmllsp;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.TypeSolver;
@@ -11,18 +13,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.Gson;
 import io.github.rosemoe.sora.data.CompletionItem;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Optional;
-import java.util.jar.JarFile;
-import java.util.Enumeration;
-import java.util.jar.JarEntry;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -30,8 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
 public class CodeSnippet {
@@ -143,44 +138,62 @@ public class CodeSnippet {
     StaticJavaParser.getConfiguration().setSymbolResolver(symbolSolver);
   }
 
-  public static List<CompletionItem> analyzeCodeCompletion(String sourcePath, String code,int f) {
+  public static List<CompletionItem> analyzeCodeCompletion(String sourcePath, String userCode) {
     List<CompletionItem> result = new ArrayList<>();
 
-    // بررسی اولیه برای جلوگیری از NullPointerException
-    if (code == null || code.isEmpty() || sourcePath == null) {
+    if (userCode == null || userCode.isEmpty() || sourcePath == null) {
       return result;
     }
 
     try {
-      configureSymbolSolver(sourcePath);
+      // تنظیم SymbolSolver
+      CombinedTypeSolver typeSolver = new CombinedTypeSolver();
+      typeSolver.add(new ReflectionTypeSolver());
+      typeSolver.add(new JavaParserTypeSolver(new File(sourcePath)));
+      JavaSymbolSolver symbolSolver = new JavaSymbolSolver(typeSolver);
+      ParserConfiguration config = new ParserConfiguration().setSymbolResolver(symbolSolver);
+      JavaParser parser = new JavaParser(config);
 
-      // پیدا کردن آخرین نقطه در کد به عنوان موقعیت احتمالی کرسر
-      int lastDotIndex = code.lastIndexOf('.');
+      int lastDot = userCode.lastIndexOf(".");
+      if (lastDot > 0) {
+        String varExpr = userCode.substring(0, lastDot).trim();
+        String fakeCode =
+            "import java.io.*;\n"
+                + "public class Dummy {\n"
+                + "    public void test() {\n"
+                + "        File file = new File(\"\");\n"
+                + "        "
+                + varExpr
+                + ";\n"
+                + // فقط برای parse شدن
+                "    }\n"
+                + "}";
 
-      if (lastDotIndex != -1 && lastDotIndex < code.length() - 1) {
-        // حالت متغیر با نقطه (مثل var.)
-        String textBeforeDot = code.substring(0, lastDotIndex);
-        String varName = extractVariableNameBeforeDot(textBeforeDot);
+        Optional<CompilationUnit> cuOpt = parser.parse(fakeCode).getResult();
+        if (cuOpt.isEmpty()) return result;
 
-        if (!varName.isEmpty()) {
-          String varType = resolveVariableTypeWithSymbolSolver(code, varName);
-          if (varType != null) {
-            result.addAll(getMethodsForClassFromSource(sourcePath, varType));
-          }
+        CompilationUnit cu = cuOpt.get();
+        Optional<VariableDeclarator> varOpt =
+            cu.findAll(VariableDeclarator.class).stream()
+                .filter(v -> varExpr.contains(v.getNameAsString()))
+                .findFirst();
+
+        if (varOpt.isPresent()) {
+          ResolvedType type = varOpt.get().resolve().getType();
+          String fullClass = type.describe(); // مثلا java.io.File
+          result.addAll(getMethodsForClassFromSourceSafe(sourcePath, fullClass, parser));
         }
       } else {
-        // حالت معمولی - جستجوی کلاس‌ها
-        // پیدا کردن آخرین کلمه در کد به عنوان پیشوند
-        String[] words = code.split("[^a-zA-Z0-9_]");
+        // وقتی فقط prefix کلاس هست مثلاً: "Str"
+        String[] words = userCode.split("[^a-zA-Z0-9_]");
         String prefix = words.length > 0 ? words[words.length - 1] : "";
-
         if (!prefix.isEmpty()) {
-          result.addAll(getClasses(sourcePath, prefix));
+          result.addAll(getClassesSafe(sourcePath, prefix, parser));
         }
       }
+
     } catch (Exception e) {
       e.printStackTrace();
-      return new ArrayList<>();
     }
 
     return result;
@@ -209,22 +222,27 @@ public class CodeSnippet {
     return parts.length > 0 ? parts[parts.length - 1] : "";
   }
 
-  private static String findVariableType(String code, String varName) {
-
-    Pattern pattern = Pattern.compile("\\s+" + varName + "\\s*=\\s*new\\s+(\\w+)");
-    Matcher matcher = pattern.matcher(code);
-    return matcher.find() ? matcher.group(1) : null;
+  public static List<CompletionItem> getListFile(String currentPath, String prefix) {
+    return PathCompleter.getPathCompletions(currentPath, prefix);
   }
 
-  private static List<CompletionItem> getMethodsForClassFromSource(String sourcePath, String fqcn) {
+  private static List<CompletionItem> getMethodsForClassFromSourceSafe(
+      String sourcePath, String fqcn, JavaParser parser) {
     List<CompletionItem> methods = new ArrayList<>();
-
-    String className = fqcn.substring(fqcn.lastIndexOf(".") + 1);
+    String className = fqcn.substring(fqcn.lastIndexOf('.') + 1);
 
     File dir = new File(sourcePath);
-    for (File file : dir.listFiles((d, name) -> name.endsWith(".java"))) {
+    File[] javaFiles = dir.listFiles((d, name) -> name.endsWith(".java"));
+
+    if (javaFiles == null) return methods;
+
+    for (File file : javaFiles) {
       try {
-        CompilationUnit cu = StaticJavaParser.parse(file);
+        Optional<CompilationUnit> cuOpt = parser.parse(file).getResult();
+        if (cuOpt.isEmpty()) continue;
+
+        CompilationUnit cu = cuOpt.get();
+
         cu.findAll(ClassOrInterfaceDeclaration.class).stream()
             .filter(c -> c.getNameAsString().equals(className))
             .findFirst()
@@ -247,79 +265,39 @@ public class CodeSnippet {
     return methods;
   }
 
-  private static List<CompletionItem> getMethodsForClass(String jarPath, String className) {
-    List<CompletionItem> methods = new ArrayList<>();
-
-    try (JarFile jarFile = new JarFile(new File(jarPath))) {
-      Enumeration<JarEntry> entries = jarFile.entries();
-
-      while (entries.hasMoreElements()) {
-        JarEntry entry = entries.nextElement();
-
-        if (entry.getName().endsWith(".java")) {
-          try (InputStream in = jarFile.getInputStream(entry)) {
-            CompilationUnit cu = StaticJavaParser.parse(in);
-
-            cu.findAll(ClassOrInterfaceDeclaration.class).stream()
-                .filter(c -> c.getNameAsString().equals(className))
-                .findFirst()
-                .ifPresent(
-                    cls -> {
-                      cls.getMethods()
-                          .forEach(
-                              method -> {
-                                CompletionItem item = new CompletionItem();
-                                item.commit = method.getNameAsString() + "()";
-                                item.desc = "method";
-                                item.label = method.getNameAsString();
-                                methods.add(item);
-                              });
-                    });
-          }
-        }
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-
-    return methods;
-  }
-
-  private static List<CompletionItem> getClasses(String jarPath, String prefix) {
+  private static List<CompletionItem> getClassesSafe(
+      String sourcePath, String prefix, JavaParser parser) {
     List<CompletionItem> classes = new ArrayList<>();
 
-    try (JarFile jarFile = new JarFile(new File(jarPath))) {
-      Enumeration<JarEntry> entries = jarFile.entries();
+    File dir = new File(sourcePath);
+    File[] javaFiles = dir.listFiles((d, name) -> name.endsWith(".java"));
 
-      while (entries.hasMoreElements()) {
-        JarEntry entry = entries.nextElement();
+    if (javaFiles == null) return classes;
 
-        if (entry.getName().endsWith(".java")) {
-          try (InputStream in = jarFile.getInputStream(entry)) {
-            CompilationUnit cu = StaticJavaParser.parse(in);
+    for (File file : javaFiles) {
+      try {
+        Optional<CompilationUnit> cuOpt = parser.parse(file).getResult();
+        if (cuOpt.isEmpty()) continue;
 
-            cu.findAll(ClassOrInterfaceDeclaration.class)
-                .forEach(
-                    cls -> {
-                      CompletionItem item = new CompletionItem();
-                      item.commit = cls.getNameAsString();
-                      item.desc = cls.isInterface() ? "interface" : "class";
-                      item.label = cls.getNameAsString();
-                      classes.add(item);
-                    });
-          }
-        }
+        CompilationUnit cu = cuOpt.get();
+
+        cu.findAll(ClassOrInterfaceDeclaration.class)
+            .forEach(
+                cls -> {
+                  CompletionItem item = new CompletionItem();
+                  item.commit = cls.getNameAsString();
+                  item.desc = cls.isInterface() ? "interface" : "class";
+                  item.label = cls.getNameAsString();
+                  classes.add(item);
+                });
+
+      } catch (IOException e) {
+        e.printStackTrace();
       }
-    } catch (Exception e) {
-      e.printStackTrace();
     }
 
     return classes.stream()
         .filter(item -> item.label.startsWith(prefix))
         .collect(Collectors.toList());
-  }
-
-  public static List<CompletionItem> getListFile(String currentPath, String prefix) {
-    return PathCompleter.getPathCompletions(currentPath, prefix);
   }
 }

@@ -37,7 +37,8 @@ public class GhostIdeAppLoader extends Application {
       ru,
       save_path,
       thememanagersoft,
-      Analyzercod;
+      Analyzercod,
+      shp;
   private static Context mApplicationContext;
   private static Activity activity;
   private static IdeEditor editor;
@@ -92,8 +93,8 @@ public class GhostIdeAppLoader extends Application {
     ru = getSharedPreferences("ru", MODE_PRIVATE);
     Analyzercod = getSharedPreferences("Analyzercod", MODE_PRIVATE);
     thememanagersoft = getSharedPreferences("thememanagersoft", MODE_PRIVATE);
+    shp = getSharedPreferences("shp", MODE_PRIVATE);
     prfns = PreferenceManager.getDefaultSharedPreferences(this);
-    
 
     AssetsSoft soft = new AssetsSoft();
     var iconPath = getFilesDir().getAbsoluteFile() + "/icon.png";
@@ -198,6 +199,10 @@ public class GhostIdeAppLoader extends Application {
 
   public static ThemeEngine getThemeEngine() {
     return themeEngine;
+  }
+
+  public static SharedPreferences getShap() {
+    return shp;
   }
 
   public void onThemeChange() {
