@@ -26,7 +26,14 @@
 </div>
 
 ---
+### Program size
+- This is a question that many people have. Well, it's better to say that it's because of the PHP and Python executables and the Kotlin executables.
+- Unlike other programs, Ghost IDE is very lightweight. We want you to have all the files in one place so you don't need to download them again.
 
+### Store
+- It doesn't matter if you are a programmer or not, you can contribute to this repository [this](https://github.com/HanzoDev1375/ghosttheme)and share your own themes Just don't forget to add your theme and preview to the main json of the repository after you're done uploading it.
+- We have also created a background store[this](https://github.com/HanzoDev1375/ghostidewallpapaer) for you, so if you need variety, you can download the background or even set it for the editor code. You just need to uncolor the following keys 1: `line_number_background` 2: `whole_background` 3: `backgroundcolorlinear`
+- We also created a font store for your taste [this](https://github.com/HanzoDev1375/ghostfont), which includes Iranian and foreign fonts. Ghostide serves you because it was created to serve.
 ### Join the Community
 
 - **[Telegram Group](https://t.me/ghost_web_ide)**
