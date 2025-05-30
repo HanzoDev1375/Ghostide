@@ -1,9 +1,9 @@
 package io.github.rosemoe.sora.langs.html;
 
+import io.github.rosemoe.sora.data.RainbowBracketHelper;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.IdeEditor;
-import ir.ninjacoder.ghostide.config.PrfnsUtil;
 import ir.ninjacoder.ghostide.marco.RegexUtilCompat;
 import android.graphics.Color;
 import androidx.core.graphics.ColorUtils;
@@ -12,7 +12,6 @@ import android.util.Log;
 import io.github.rosemoe.sora.langs.xml.analyzer.BasicSyntaxPullAnalyzer;
 import io.github.rosemoe.sora.text.TextStyle;
 import io.github.rosemoe.sora.widget.ListCss3Color;
-import java.util.LinkedList;
 import java.util.Stack;
 import io.github.rosemoe.sora.data.BlockLine;
 import org.antlr.v4.runtime.CharStreams;
@@ -27,6 +26,7 @@ import io.github.rosemoe.sora.widget.EditorColorScheme;
 
 public class HTMLAnalyzerCompat implements CodeAnalyzer {
   private IdeEditor editor;
+  private RainbowBracketHelper hl;
 
   public HTMLAnalyzerCompat() {}
 
@@ -35,7 +35,6 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
   }
 
   private BasicSyntaxPullAnalyzer htmlCodeAnalyzer;
-  
 
   @Override
   public void analyze(
@@ -46,6 +45,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
       StringBuilder text =
           content instanceof StringBuilder ? (StringBuilder) content : new StringBuilder(content);
       CodePointCharStream stream = CharStreams.fromReader(new StringReader(content.toString()));
+      hl = new RainbowBracketHelper();
       htmlCodeAnalyzer = new BasicSyntaxPullAnalyzer();
       HTMLLexer lexer = new HTMLLexer(stream);
       HTMLAutoComplete auto = new HTMLAutoComplete();
@@ -62,7 +62,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
 
       while (delegate.shouldAnalyze()) {
         token = lexer.nextToken();
-        
+
         if (token == null) break;
         if (token.getType() == HTMLLexer.EOF) {
           lastLine = token.getLine() - 1;
@@ -253,11 +253,16 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
               result.addIfNeeded(line, column, forString());
               break;
             }
-
+            /// colse
           case HTMLLexer.LPAREN:
+          case HTMLLexer.RBRACK:
+            hl.handleOpenBracket(result, line, column, EditorColorScheme.htmlblocknormal);
+            break;
+            // open
           case HTMLLexer.RPAREN:
           case HTMLLexer.LBRACK:
-          case HTMLLexer.RBRACK:
+            hl.handleCloseBracket(result, line, column, EditorColorScheme.htmlblocknormal);
+            break;
           case HTMLLexer.SEMI:
           case HTMLLexer.COMMA:
           case HTMLLexer.ASSIGN:
@@ -298,7 +303,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
           case HTMLLexer.DOLLAR:
           case HTMLLexer.DIV:
           case HTMLLexer.AT:
-            result.addIfNeeded(line, column, EditorColorScheme.htmlsymbol);
+            hl.handleCustom(result, line, column, EditorColorScheme.htmlsymbol);
             if (previous == HTMLLexer.IDENTIFIER || token.getType() == HTMLLexer.IDENTIFIER) {
               result.addIfNeeded(line, column, EditorColorScheme.jsattr);
             }
@@ -423,12 +428,12 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
                 /// def code result -> Java.user();
                 colorid = EditorColorScheme.javafun;
               }
-              
+
               /// این ویژگی به علت مصرف زیاد رم متوقف شد اما همچنان میتوانید در برنامه خودتان از این
               // ویژگی استفاده کنید...
               //// ListCss3Color.initColor(token, line, column, result, true);
+              hl.handleCustom(result, line, column, colorid);
 
-              result.addIfNeeded(line, column, colorid);
               break;
             }
           case HTMLLexer.HTMLRGB:
@@ -451,13 +456,9 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
             block.startColumn = column;
             // max level 8x
             var colorid = EditorColorScheme.htmlblocknormal;
-
-            if (GhostIdeAppLoader.getPrefManager().getBoolean("breaks", false) == true)
-              colorid = HTMLConstants.get(stack.size());
-            else colorid = EditorColorScheme.htmlblocknormal;
             stack.push(block);
-
-            result.addIfNeeded(line, column, colorid);
+            hl.handleOpenBracket(result, line, column, colorid);
+            // result.addIfNeeded(line, column, colorid);
             break;
 
           case HTMLLexer.RBRACE:
@@ -472,12 +473,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
                 }
               }
               // اضافه کردن رنگ برای RBRACE
-
-              var colorres = EditorColorScheme.htmlblocknormal;
-              if (GhostIdeAppLoader.getPrefManager().getBoolean("breaks", false) == true)
-                colorres = HTMLConstants.get(stack.size());
-              else colorres = EditorColorScheme.htmlblocknormal;
-              result.addIfNeeded(line, column, colorres);
+              hl.handleCloseBracket(result, line, column, EditorColorScheme.htmlblocknormal);
               break;
             }
           case HTMLLexer.COLORSSS:
@@ -529,6 +525,4 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
   public long forString() {
     return TextStyle.makeStyle(EditorColorScheme.htmlstr, 0, true, false, false);
   }
-
-  
 }

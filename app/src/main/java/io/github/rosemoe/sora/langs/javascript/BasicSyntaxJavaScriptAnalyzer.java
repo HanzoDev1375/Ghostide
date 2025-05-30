@@ -1,9 +1,12 @@
 package io.github.rosemoe.sora.langs.javascript;
 
+import io.github.rosemoe.sora.data.RainbowBracketHelper;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 import io.github.rosemoe.sora.langs.xml.analyzer.Utils;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.text.TextAnalyzer;
+import io.github.rosemoe.sora.widget.EditorColorScheme;
+import ir.ninjacoder.ghostide.model.Position;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -16,20 +19,22 @@ import java.util.Set;
 
 public class BasicSyntaxJavaScriptAnalyzer implements CodeAnalyzer {
 
-  private static class CodePosition {
-    final int line;
-    final int column;
+  private final Map<String, Position> variables = new HashMap<>();
+  private final Set<String> usedVariables = new HashSet<>();
+  private final Map<String, Position> functions = new HashMap<>();
+  private final Set<String> calledFunctions = new HashSet<>();
+  private JsAutoComplete com;
+  private RainbowBracketHelper helper;
+  private boolean varcall;
+  private boolean funcall;
 
-    public CodePosition(int line, int column) {
-      this.line = line;
-      this.column = column;
-    }
+  public boolean getVarCall() {
+    return varcall;
   }
 
-  private final Map<String, CodePosition> variables = new HashMap<>();
-  private final Set<String> usedVariables = new HashSet<>();
-  private final Map<String, CodePosition> functions = new HashMap<>();
-  private final Set<String> calledFunctions = new HashSet<>();
+  public boolean getFunCall() {
+    return funcall;
+  }
 
   @Override
   public void analyze(
@@ -37,6 +42,8 @@ public class BasicSyntaxJavaScriptAnalyzer implements CodeAnalyzer {
       TextAnalyzeResult colors,
       TextAnalyzer.AnalyzeThread.Delegate delegate) {
     // Reset state for new analysis
+    com = new JsAutoComplete();
+    helper = new RainbowBracketHelper();
     variables.clear();
     usedVariables.clear();
     functions.clear();
@@ -62,7 +69,8 @@ public class BasicSyntaxJavaScriptAnalyzer implements CodeAnalyzer {
             String varName = ctx.assignable().getText();
             variables.put(
                 varName,
-                new CodePosition(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine()));
+                new Position(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine()));
+            com.addVariable(varName, "var");
           }
 
           @Override
@@ -70,15 +78,35 @@ public class BasicSyntaxJavaScriptAnalyzer implements CodeAnalyzer {
             String varName = ctx.getText();
             if (variables.containsKey(varName)) {
               usedVariables.add(varName);
+              varcall = true;
             }
           }
 
           @Override
           public void enterFunctionDeclaration(JavaScriptParser.FunctionDeclarationContext ctx) {
             String funcName = ctx.identifier().getText();
+            com.addFunction(funcName, "void");
             functions.put(
                 funcName,
-                new CodePosition(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine()));
+                new Position(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine()));
+          }
+
+          @Override
+          public void enterNamedFunction(JavaScriptParser.NamedFunctionContext ctx) {
+            String funcName = ctx.getText();
+            functions.put(
+                funcName,
+                new Position(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine()));
+            com.addFunction(funcName, "void");
+          }
+
+          @Override
+          public void enterMethodDefinition(JavaScriptParser.MethodDefinitionContext ctx) {
+            String funcName = ctx.classElementName().getText();
+            com.addFunction(funcName, "void");
+            functions.put(
+                funcName,
+                new Position(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine()));
           }
 
           @Override
@@ -86,6 +114,7 @@ public class BasicSyntaxJavaScriptAnalyzer implements CodeAnalyzer {
             String funcName = ctx.singleExpression().getText();
             if (functions.containsKey(funcName)) {
               calledFunctions.add(funcName);
+              funcall = true;
             }
           }
 
@@ -94,6 +123,7 @@ public class BasicSyntaxJavaScriptAnalyzer implements CodeAnalyzer {
             String funcName = ctx.identifierName().getText();
             if (functions.containsKey(funcName)) {
               calledFunctions.add(funcName);
+              
             }
           }
         };
@@ -108,7 +138,6 @@ public class BasicSyntaxJavaScriptAnalyzer implements CodeAnalyzer {
         });
     functions.forEach(
         (name, pos) -> {
-			
           if (!calledFunctions.contains(name)) {
             Utils.setWaringSpan(colors, pos.line, pos.column);
           }

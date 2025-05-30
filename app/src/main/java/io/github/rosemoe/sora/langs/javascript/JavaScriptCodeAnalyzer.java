@@ -2,6 +2,7 @@ package io.github.rosemoe.sora.langs.javascript;
 
 import android.util.Log;
 
+import io.github.rosemoe.sora.data.RainbowBracketHelper;
 import io.github.rosemoe.sora.text.TextStyle;
 import java.util.Stack;
 import io.github.rosemoe.sora.data.BlockLine;
@@ -19,6 +20,7 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
   private int COMPLETE = 25;
   private int INCOMPLETE = 24;
   private BasicSyntaxJavaScriptAnalyzer as;
+  RainbowBracketHelper br;
 
   @Override
   public void analyze(
@@ -27,6 +29,7 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
       TextAnalyzer.AnalyzeThread.Delegate delegate) {
     try {
       as = new BasicSyntaxJavaScriptAnalyzer();
+      br = new RainbowBracketHelper();
       CodePointCharStream stream = CharStreams.fromReader(new StringReader(content.toString()));
       JavaScriptLexer lexer = new JavaScriptLexer(stream);
       var classNamePrevious = false;
@@ -62,22 +65,21 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
               result.addNormalIfNull();
             }
             break;
-          case JavaScriptLexer.OpenBracket:
+
           case JavaScriptLexer.CloseBracket:
+          case JavaScriptLexer.CloseBrace:
+          case JavaScriptLexer.CloseParen:
             {
-              classNamePrevious = false;
-              result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
+              br.handleCloseBracket(result, line, column, EditorColorScheme.htmlblockhash);
 
               break;
             }
 
           case JavaScriptLexer.OpenParen:
-          case JavaScriptLexer.CloseParen:
+          case JavaScriptLexer.OpenBracket:
           case JavaScriptLexer.OpenBrace:
-          case JavaScriptLexer.CloseBrace:
             {
-              classNamePrevious = false;
-              result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
+              br.handleOpenBracket(result, line, column, EditorColorScheme.htmlblockhash);
 
               break;
             }
@@ -98,13 +100,8 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
           case JavaScriptLexer.Not:
           case JavaScriptLexer.Multiply:
           case JavaScriptLexer.Divide:
-            result.addIfNeeded(
-                line,
-                column,
-                TextStyle.makeStyle(
-                    EditorColorScheme.AUTO_COMP_PANEL_CORNER, 0, true, false, false));
+            br.handleCustom(result, line, column, EditorColorScheme.htmlsymbol);
             break;
-
           case JavaScriptLexer.Dot:
             result.addIfNeeded(
                 line,
@@ -112,7 +109,7 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
                 TextStyle.makeStyle(
                     EditorColorScheme.AUTO_COMP_PANEL_CORNER, 0, true, false, false));
             if (previous == JavaScriptLexer.Identifier) {
-              result.addIfNeeded(line, column +1, EditorColorScheme.javafield);
+              result.addIfNeeded(line, column + 1, EditorColorScheme.javafield);
             }
             break;
           case JavaScriptLexer.Modulus:
@@ -197,10 +194,7 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
           case JavaScriptLexer.While:
           case JavaScriptLexer.Debugger:
           case JavaScriptLexer.Function_:
-            result.addIfNeeded(
-                line,
-                column,
-                TextStyle.makeStyle(EditorColorScheme.ATTRIBUTE_NAME, 0, true, false, false));
+            br.handleCustom(result, line, column, EditorColorScheme.javakeyword);
             break;
           case JavaScriptLexer.This:
           case JavaScriptLexer.With:
@@ -295,6 +289,7 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
               }
               // var
               if (previous == JavaScriptLexer.Var
+                  || previous == JavaScriptLexer.NonStrictLet
                   || previous == JavaScriptLexer.StrictLet
                   || previous == JavaScriptLexer.Const) {
                 mycolor = EditorColorScheme.LITERAL;
@@ -306,7 +301,13 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
                   || previous == JavaScriptLexer.Yield) {
                 mycolor = EditorColorScheme.OPERATOR;
               }
-              result.addIfNeeded(line, column, mycolor);
+              if (as.getVarCall()) {
+                mycolor = EditorColorScheme.red;
+              }
+              if (as.getFunCall()) {
+                mycolor = EditorColorScheme.javakeyword;
+              }
+              br.handleCustom(result, line, column, mycolor);
               break;
             }
 

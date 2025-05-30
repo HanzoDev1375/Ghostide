@@ -5,6 +5,7 @@ import ir.ninjacoder.ghostide.config.CreatorComment;
 import ir.ninjacoder.ghostide.config.GetterSetterGenerator;
 import ir.ninjacoder.ghostide.config.JavaPaserUtils;
 import ir.ninjacoder.ghostide.databinding.MakefolderBinding;
+import ir.ninjacoder.ghostide.marco.LicenseManagerImpl;
 import ir.ninjacoder.ghostide.marco.editorface.ConstructorMaker;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import android.widget.ArrayAdapter;
@@ -66,7 +67,7 @@ public class JavaTools {
             .addItem(new PowerMenuItem("addTrycatch"))
             .addItem(new PowerMenuItem("addIfStatement"))
             .addItem(new PowerMenuItem("fix import"))
-            
+            .addItem(new PowerMenuItem("Copy R"))
             .setIsMaterial(true)
             .build();
     menu.setMenuRadius(20f);
@@ -114,10 +115,13 @@ public class JavaTools {
             javaPaserTools.addThrowsToMethod();
           } else if (pos == 13) {
             javaPaserTools.addTrycatch();
-          }else if(pos == 14) {
-          	javaPaserTools.addIfStatement();
-          }else if(pos == 15){
+          } else if (pos == 14) {
+            javaPaserTools.addIfStatement();
+          } else if (pos == 15) {
             editor.setText(JavaPaserUtils.processCode(editor.getText().toString()));
+          } else if (pos == 16) {
+            var its = new LicenseManagerImpl();
+            its.run((IdeEditor) editor);
           }
         });
   }

@@ -8,12 +8,14 @@ import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.Type;
+import io.github.rosemoe.sora.data.RainbowBracketHelper;
 import io.github.rosemoe.sora.model.Inlay;
 import io.github.rosemoe.sora.widget.ListCss3Color;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.config.JavaPaserUtils;
+import ir.ninjacoder.ghostide.model.Position;
 import ir.ninjacoder.ghostide.utils.ThemeUtils;
 import android.graphics.Color;
 import androidx.core.graphics.ColorUtils;
@@ -57,7 +59,23 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
   private final WeakReference<IdeEditor> mEditorReference;
   private static final Object OBJECT = new Object();
   private Map<String, Boolean> mapStyle;
-
+  Set<String> declaredVariables = new HashSet<>();
+  Set<String> usedVariables = new HashSet<>();
+  Set<String> unusedImport = new HashSet<>();
+  Set<String> mtcall = new HashSet<>();
+  Set<String> mtusing = new HashSet<>();
+  Map<String, Integer> mlines = new HashMap<>();
+  Map<String, Integer> mcoloum = new HashMap<>();
+  Map<String, Integer> inline = new HashMap<>();
+  Map<String, Integer> incol = new HashMap<>();
+  Map<String, Integer> varLines = new HashMap<>();
+  Map<String, Integer> varColumns = new HashMap<>();
+  Set<String> declaredVars = new HashSet<>();
+  Set<String> usedVars = new HashSet<>();
+  Set<String> declaredMethods = new HashSet<>();
+  Set<String> calledMethods = new HashSet<>();
+  Map<String, Position> symbolPositions = new HashMap<>();
+  private RainbowBracketHelper ha;
   public JavaCodeAnalyzer(IdeEditor editor) {
     mEditorReference = new WeakReference<>(editor);
   }
@@ -76,7 +94,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
       TextAnalyzeResult result,
       TextAnalyzer.AnalyzeThread.Delegate delegate) {
     try {
-
+       ha = new RainbowBracketHelper();
       IdeEditor editor = mEditorReference.get();
       if (editor == null) {
         return;
@@ -242,9 +260,13 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             }
 
           case JavaLexer.LPAREN:
+		  case JavaLexer.LBRACK:
+		  ha.handleOpenBracket(result,line,column,EditorColorScheme.htmlblocknormal);
+		  break;
           case JavaLexer.RPAREN:
-          case JavaLexer.LBRACK:
           case JavaLexer.RBRACK:
+		  ha.handleCloseBracket(result,line,column,EditorColorScheme.htmlblocknormal);
+		  break;
           case JavaLexer.SEMI:
           case JavaLexer.COMMA:
           case JavaLexer.ASSIGN:
@@ -288,7 +310,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             if (previous == JavaLexer.IDENTIFIER) {
               get(EditorColorScheme.red, line, column, result);
             }
-            get(EditorColorScheme.TEXT_NORMAL, line, column, result);
+            ha.handleCustom(result,line,column,EditorColorScheme.TEXT_NORMAL);
             break;
           case JavaLexer.BOOLEAN:
           case JavaLexer.BYTE:
@@ -361,11 +383,9 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               if (token.getText().equals("main")) {
                 colorid = EditorColorScheme.green;
               }
-              if (token.getText().equals("author")) {
-                colorid = EditorColorScheme.red;
-              }
+              
               get(colorid, line, column, result);
-
+    
               break;
             }
 
@@ -384,12 +404,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 }
               }
               var lists = result.getBlocks();
-              var colorid = EditorColorScheme.htmlblocknormal;
-
-              if (GhostIdeAppLoader.getPrefManager().getBoolean("breaks", false) == true)
-                colorid = HTMLConstants.get(stack.size());
-              else colorid = EditorColorScheme.htmlblocknormal;
-              result.addIfNeeded(line, column, colorid);
+			  ha.handleOpenBracket(result,line,column,EditorColorScheme.htmlblocknormal);
               break;
             }
 
@@ -400,13 +415,9 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               block.startColumn = column;
               // اضافه کردن بلوک به استک
               var lists = result.getBlocks();
-              var colorres = EditorColorScheme.htmlblocknormal;
-              if (GhostIdeAppLoader.getPrefManager().getBoolean("breaks", false) == true)
-                colorres = HTMLConstants.get(stack.size());
-              else colorres = EditorColorScheme.htmlblocknormal;
+             
+			  ha.handleOpenBracket(result,line,column,EditorColorScheme.htmlblocknormal);
               stack.push(block);
-              result.addIfNeeded(line, column, colorres);
-              // بررسی maxSwitch
               if (stack.isEmpty()) {
                 if (currSwitch > maxSwitch) {
                   maxSwitch = currSwitch;
@@ -451,17 +462,6 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           config.setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
           StaticJavaParser.setConfiguration(config);
           var cu = StaticJavaParser.parse(content.toString());
-          Set<String> declaredVariables = new HashSet<>();
-          Set<String> usedVariables = new HashSet<>();
-          Set<String> unusedImport = new HashSet<>();
-          Set<String> mtcall = new HashSet<>();
-          Set<String> mtusing = new HashSet<>();
-          Map<String, Integer> mlines = new HashMap<>();
-          Map<String, Integer> mcoloum = new HashMap<>();
-          Map<String, Integer> inline = new HashMap<>();
-          Map<String, Integer> incol = new HashMap<>();
-          Map<String, Integer> varLines = new HashMap<>(); // خطوط تعریف متغیرها
-          Map<String, Integer> varColumns = new HashMap<>(); // ستون‌های تعریف متغیرها
 
           cu.accept(
               new VoidVisitorAdapter<Void>() {
@@ -532,9 +532,25 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 }
 
                 @Override
+                public void visit(VariableDeclarator var, Void arg) {
+                  String name = var.getNameAsString();
+                  declaredVars.add(name);
+                  var.getBegin()
+                      .ifPresent(
+                          pos -> symbolPositions.put(name, new Position(pos.line - 1, pos.column)));
+                  super.visit(var, arg);
+                }
+
+                @Override
                 public void visit(MethodDeclaration methodDecl, Void arg1) {
                   // ذخیره نام متد و موقعیت آن (مثل قبل)
                   String methodName = methodDecl.getNameAsString();
+                  String name = methodDecl.getNameAsString();
+                  declaredMethods.add(name);
+                  methodDecl
+                      .getBegin()
+                      .ifPresent(
+                          pos -> symbolPositions.put(name, new Position(pos.line - 1, pos.column)));
                   int line = methodDecl.getBegin().get().line; // خط (بر اساس 0)
                   int col = methodDecl.getBegin().get().column; // ستون شروع متد
                   mtusing.add(methodName);
@@ -573,33 +589,6 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                   if (JavaPaserUtils.getDeprecated(methodDecl.getAnnotations())) {
                     Utils.setWaringSpan(result, line, col + 1);
                   }
-
-                  // رنگ‌آمیزی پارامترهای متد
-                  for (var param : methodDecl.getParameters()) {
-                    // استخراج نوع پارامتر (مثل `int`, `File`, `String`)
-                    Type paramType = param.getType();
-                    String typeName = paramType.toString();
-                    int typeStartLine = paramType.getBegin().get().line; // خط نوع (بر اساس 0)
-                    int typeStartCol = paramType.getBegin().get().column; // ستون شروع نوع
-                    int[] id =
-                        Utils.setSpanEFO(
-                            result,
-                            typeStartLine,
-                            typeStartCol,
-                            EditorColorScheme.javatype,
-                            true,
-                            false);
-                    int nameStartLine = param.getName().getBegin().get().line; // خط نام (بر اساس 0)
-                    int nameStartCol = param.getName().getBegin().get().column;
-                    Utils.setSpanStyle(
-                        result,
-                        nameStartLine,
-                        nameStartCol,
-                        EditorColorScheme.javaparament,
-                        false,
-                        true);
-                  }
-
                   super.visit(methodDecl, arg1); // ادامه بازدید از فرزندان (مثل بدنه متد)
                 }
 
@@ -637,43 +626,20 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
 
                 @Override
                 public void visit(FieldDeclaration arg0, Void arg1) {
-                  for (VariableDeclarator it : arg0.getVariables()) {
-                    var fieldType = it.getType();
-                    int typeStartLine = fieldType.getBegin().get().line - 1;
-                    int typeStartCol = fieldType.getBegin().get().column;
-                    var fieldName = it.getName();
-                    int nameLine = fieldName.getBegin().get().line - 1;
-                    int nameCol = fieldName.getBegin().get().column;
-                    result.addIfNeeded(typeStartLine, typeStartCol, EditorColorScheme.javatype);
-                    // رنگ‌آمیزی نوع فیلد
-                    // Utils.setSpanEFO(
-                    // result,
-                    // typeStartLine,
-                    // typeStartCol,
-                    // EditorColorScheme.javatype,
-                    // true,
-                    // false);
 
-                    // رنگ‌آمیزی نام فیلد
-                    Utils.setSpanEFO(
-                        result,
-                        nameLine,
-                        nameCol, // پایان ستون نام
-                        EditorColorScheme.javafield,
-                        false,
-                        true);
+                  for (VariableDeclarator var : arg0.getVariables()) {
+                    String name = var.getNameAsString();
+                    declaredVars.add(name);
+                    var.getBegin()
+                        .ifPresent(
+                            pos ->
+                                symbolPositions.put(name, new Position(pos.line - 1, pos.column)));
                   }
                 }
               },
               null);
           Set<String> unusedVariables = new HashSet<>(declaredVariables);
           unusedVariables.removeAll(usedVariables);
-
-          for (String varName : unusedVariables) {
-            int line32 = varLines.get(varName);
-            int column32 = varColumns.get(varName);
-            Utils.setWaringSpan(result, line32, column32);
-          }
 
           unusedImport.removeIf(importName -> usedVariables.contains(getSimpleName(importName)));
           declaredVariables.removeAll(usedVariables);
@@ -690,8 +656,6 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 true);
           }
         }
-
-        Log.d("text:-> ", result.getText());
       } catch (Exception err) {
 
       }

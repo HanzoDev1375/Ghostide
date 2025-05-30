@@ -424,22 +424,8 @@ public class KotilnAnalyzer implements CodeAnalyzer {
       result.setSuppressSwitch(maxSwitch + 10);
 
       if (GhostIdeAppLoader.getAnalyzercod().getBoolean("Analyzercod", false) == true) {
-        var antlrinputStream = new ANTLRInputStream(content.toString());
-        var mlexer = new KotlinLexer(antlrinputStream);
-        var streams = new CommonTokenStream(mlexer);
-        var paser = new KotlinParser(streams);
-        var base =
-            new KotlinParserBaseListener() {
-              @Override
-              public void visitErrorNode(ErrorNode node) {
-                Utils.setErrorSpan(
-                    result,
-                    node.getSymbol().getLine(),
-                    node.getSymbol().getCharPositionInLine() + 1);
-                super.visitErrorNode(node);
-              }
-            };
-        ParseTreeWalker.DEFAULT.walk(base, paser.kotlinFile());
+        var it = new KotlinSyntaxAnalyzer();
+		it.analyze(content,result,delegate);
       }
     } catch (IOException e) {
       e.printStackTrace();

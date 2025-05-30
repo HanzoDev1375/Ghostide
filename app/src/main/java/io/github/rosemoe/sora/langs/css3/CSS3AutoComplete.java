@@ -1,10 +1,13 @@
 package io.github.rosemoe.sora.langs.css3;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import io.github.rosemoe.sora.data.CompletionItem;
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
 import io.github.rosemoe.sora.langs.IdentifierAutoComplete;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
 
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import java.util.ArrayList;
 import java.util.List;
 import lsp4custom.com.ninjacoder.customhtmllsp.CodeSnippet;
@@ -33,13 +36,9 @@ public class CSS3AutoComplete implements AutoCompleteProvider {
 
     for (var itemslist : CSS3Language.list)
       if (itemslist.startsWith(prefix)) items.add(asImport(itemslist, "css Import"));
-
+    SharedPreferences save_path = GhostIdeAppLoader.getContext().getSharedPreferences("save_path", Activity.MODE_PRIVATE);
     // Add file path completion item
-    if (prefix.isEmpty()) {
-      CompletionItem filePathItem = new CompletionItem(FILE_PATH, "File Path");
-      filePathItem.cursorOffset(FILE_PATH.length());
-      items.add(filePathItem);
-    }
+    items.addAll(CodeSnippet.getListFile(save_path.getString("path",""),prefix));
     items.addAll(CodeSnippet.runasList("css3", prefix));
     return items;
   }

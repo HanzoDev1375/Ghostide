@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.*;
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
 import lsp4custom.com.ninjacoder.customhtmllsp.CodeSnippet;
 
@@ -18,6 +19,8 @@ public class JsAutoComplete implements AutoCompleteProvider {
   private String[] mKeywords;
   private boolean mKeywordsAreLowCase;
   protected SharedPreferences save_path; // using default name
+  private final Map<String, String> variables = new HashMap<>();
+  private final Map<String, String> functions = new HashMap<>();
 
   public JsAutoComplete() {
     save_path =
@@ -68,7 +71,25 @@ public class JsAutoComplete implements AutoCompleteProvider {
       }
       keywords.addAll(words);
     }
+    for (Map.Entry<String, String> entry : variables.entrySet()) {
+      if (entry.getKey().startsWith(match)) {
+        keywords.add(new CompletionItem(entry.getKey(), "Variable: " + entry.getValue()));
+      }
+    }
+
+    for (Map.Entry<String, String> entry : functions.entrySet()) {
+      if (entry.getKey().startsWith(match)) {
+        keywords.add(new CompletionItem(entry.getKey() + "()", "Function: " + entry.getValue()));
+      }
+    }
     return keywords;
+  }
+
+  public void addVariable(String name, String type) {
+    variables.put(name, type);
+  }
+  public void addFunction(String name, String returnType) {
+    functions.put(name, returnType);
   }
 
   public static class Identifiers {
