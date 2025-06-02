@@ -555,6 +555,7 @@ public class CodeEditorActivity extends BaseCompat {
     themeForJson2.addImageColor(undo, this, "imagecolor", imap, Color.parseColor("#ff94e7ff"));
     themeForJson2.addImageColor(redo, this, "imagecolor", imap, Color.parseColor("#ff94e7ff"));
     themeForJson2.addImageColor(image, this, "imagecolor", imap, Color.parseColor("#ff94e7ff"));
+	themeForJson2.setStatusNavColor(this,imap,"backgroundcolorlinear");
     themeForJson2.addImageColor(
         menupopnew, this, "imagecolor", imap, Color.parseColor("#ff94e7ff"));
     themeForJson2.addWindowsNavColor(this, imap, "tabimagecolorfilter");

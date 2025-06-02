@@ -321,7 +321,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           case JavaLexer.INT:
           case JavaLexer.LONG:
           case JavaLexer.SHORT:
-            get(EditorColorScheme.javakeyword, line, column, result);
+            get(EditorColorScheme.javakeywordoprator, line, column, result);
             classNamePrevious = true;
             break;
             //  case JavaLexer.BLOCK_COMMENT:

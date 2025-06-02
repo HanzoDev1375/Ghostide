@@ -278,6 +278,7 @@ public class EditorColorScheme {
   public static final int javaparament = 5517;
   public static final int javanumber = 1372;
   public static final int javastring = 8362;
+  public static final int javakeywordoprator = 72081;	
 
   /// for html
   public static final int htmltag = 1733;

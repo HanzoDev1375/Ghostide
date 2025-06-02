@@ -1,5 +1,6 @@
 package ir.ninjacoder.ghostide.utils;
 
+import ir.ninjacoder.ghostide.activities.BaseCompat;
 import ir.ninjacoder.ghostide.marco.ColorCompat;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 
@@ -83,6 +84,7 @@ public class ThemeUtils {
     getColor(imap, editor, "breaklevel5", EditorColorScheme.breaklevel5, "#ffd633");
     getColor(imap, editor, "breaklevel6", EditorColorScheme.breaklevel6, "#ff8c33");
     getColor(imap, editor, "breaklevel7", EditorColorScheme.breaklevel7, "#3347ff");
+    getColor(imap, editor, "javakeywordoprator", EditorColorScheme.javakeywordoprator, "#ff3371");
     getColor(imap, editor, "breaklevel8", EditorColorScheme.breaklevel8, "#ec33ff");
 
     getColor(imap, editor, "auto_comp_panel_bg", EditorColorScheme.AUTO_COMP_PANEL_BG, "#ff000000");
@@ -231,14 +233,6 @@ public class ThemeUtils {
 
   public ThemeUtils AddthemetoSattos(Activity a, HashMap<String, Object> imap) {
 
-    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-      Window Hsi = a.getWindow();
-      Hsi.setStatusBarColor(
-          imap.containsKey("backgroundcolorlinear")
-              ? Color.parseColor(imap.get("backgroundcolorlinear").toString())
-              : Color.parseColor("#FF281B26"));
-    }
-
     return this;
   }
 
@@ -288,6 +282,7 @@ public class ThemeUtils {
                 : Color.BLACK));
     return this;
   }
+
   public ThemeUtils subPowerMenu(PowerMenu menu, HashMap<String, Object> map) {
     menu.setTextColor(
         map.containsKey("toolbartextcolor")
@@ -302,6 +297,14 @@ public class ThemeUtils {
             ? Color.parseColor(map.get("tabimagecolorfilter").toString())
             : Color.parseColor("#fff472"));
 
+    return this;
+  }
+
+  public ThemeUtils setStatusNavColor(BaseCompat base, HashMap<String, Object> id, String key) {
+    base.getWindow()
+        .setStatusBarColor(id.containsKey(key) ? Color.parseColor(id.get(key).toString()) : 0);
+    base.getWindow()
+        .setNavigationBarColor(id.containsKey(key) ? Color.parseColor(id.get(key).toString()) : 0);
     return this;
   }
 
@@ -410,6 +413,7 @@ public class ThemeUtils {
     map.put("breaklevel6", "#FF8C33");
     map.put("breaklevel7", "#33FFF5");
     map.put("breaklevel8", "#F1C40F");
+    map.put("javakeywordoprator", "#340178");
     return map;
   }
 
@@ -581,7 +585,8 @@ public class ThemeUtils {
     "breaklevel5": "#FFD733",
     "breaklevel6": "#FF33FF",
     "breaklevel7": "#57FF33",
-    "breaklevel8": "#FFD733"
+    "breaklevel8": "#FFD733",
+	"javakeywordoprator":"#fff9271"
     }
     """;
   }

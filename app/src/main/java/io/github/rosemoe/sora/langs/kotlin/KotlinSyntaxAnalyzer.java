@@ -22,6 +22,7 @@ public class KotlinSyntaxAnalyzer implements CodeAnalyzer {
   private final Set<String> usedVariables = new HashSet<>();
   private final Map<String, Position> functions = new HashMap<>();
   private final Set<String> calledFunctions = new HashSet<>();
+  private final Map<String, Position> parameters = new HashMap<>();
   private RainbowBracketHelper rainbowBracketHelper;
 
   @Override
@@ -78,6 +79,16 @@ public class KotlinSyntaxAnalyzer implements CodeAnalyzer {
           }
 
           @Override
+          public void enterParameter(KotlinParser.ParameterContext ctx) {
+            String paramName = ctx.simpleIdentifier().Identifier().getText();
+            parameters.put(
+                paramName,
+                new Position(
+                    ctx.simpleIdentifier().Identifier().getSymbol().getLine(),
+                    ctx.simpleIdentifier().Identifier().getSymbol().getCharPositionInLine()));
+          }
+
+          @Override
           public void enterCallSuffix(KotlinParser.CallSuffixContext ctx) {
             // This helps detect function calls more accurately
             if (ctx.getParent() instanceof KotlinParser.PostfixUnaryExpressionContext) {
@@ -109,8 +120,22 @@ public class KotlinSyntaxAnalyzer implements CodeAnalyzer {
     functions.forEach(
         (name, pos) -> {
           if (!calledFunctions.contains(name)) {
-            Utils.setWaringSpan(colors, pos.line - 1, pos.column);
+            Utils.setWaringSpan(colors, pos.line, pos.column);
           }
+        });
+
+    parameters.forEach(
+        (name, pos) -> {
+          rainbowBracketHelper.handleSpanColor(
+              colors,
+              pos.line,
+              pos.column + name.length(),
+              EditorColorScheme.ATTRIBUTE_NAME,
+              false,
+              false);
+          //  colors.addIfNeeded(pos.line , pos.column, );
+          // colors.addIfNeeded(pos.line , pos.column + name.length(),
+          // EditorColorScheme.ATTRIBUTE_NAME);
         });
   }
 }
