@@ -29,6 +29,7 @@ import ir.ninjacoder.ghostide.marco.*;
 import ir.ninjacoder.ghostide.model.IconShop;
 import ir.ninjacoder.ghostide.model.ListSheet;
 import ir.ninjacoder.ghostide.model.ZipFileShow;
+import ir.ninjacoder.ghostide.model.dataobject.ShortcutInfoImpl;
 import ir.ninjacoder.ghostide.project.ProjectMaker;
 import ir.ninjacoder.ghostide.recyclerview.RecyclerViewHelper;
 import ir.ninjacoder.ghostide.services.FileEventUser;
@@ -1027,7 +1028,6 @@ public class FileManagerActivity extends BaseCompat
             protected void onPostExecute(String _result) {
               prodel.dismiss();
               reLoadFile();
-              
             }
           }.execute("");
         });
@@ -1981,6 +1981,7 @@ public class FileManagerActivity extends BaseCompat
     sheet.addItem("ReomvedFile", R.drawable.delete);
     sheet.addItem("AddBookMark", R.drawable.ic_bookmark_white);
     sheet.addItem("RenameJavaCode?", R.drawable.ic_material_java);
+    sheet.addItem("Shortcut", R.drawable.share);
     sheet.setOnItemClickLabe(
         (pos_) -> {
           switch (pos_) {
@@ -2048,6 +2049,13 @@ public class FileManagerActivity extends BaseCompat
                     () -> {
                       reLoadFile();
                     });
+                sheet.getDismiss(true);
+                break;
+              }
+            case 7:
+              {
+                var sh = new ShortcutInfoImpl(FileManagerActivity.this);
+                sh.createFileShortcut(R.drawable.file, files.get(_position).get("path").toString());
                 sheet.getDismiss(true);
                 break;
               }

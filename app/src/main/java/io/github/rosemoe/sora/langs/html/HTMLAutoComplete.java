@@ -81,7 +81,7 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
       items.addAll(words);
     }
     items.addAll(CodeSnippet.runasList("html", prefix));
-    items.addAll(CodeSnippet.getListFile(save_path.getString("path",""),prefix));    
+    items.addAll(CodeSnippet.getListFile(save_path.getString("path", ""), prefix));
 
     return items;
   }
@@ -390,17 +390,17 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
       String wrappedTags = openingTags.toString() + closingTags.toString();
       CompletionItem tagCompletion = new CompletionItem(api, wrappedTags, "Html Snippet Compat Id");
       tagCompletion.commit = wrappedTags;
-      tagCompletion.cursorOffset(tagCompletion.commit.length() -1);
+      tagCompletion.cursorOffset(tagCompletion.commit.length() - 1);
       items.add(tagCompletion);
     }
   }
 
   public void classTag(String tagsInput) {
-    idTag(tagsInput);
-    String api = "";
+    idTag(tagsInput); // اگر نیاز به پردازش id هم هست
     List<String> validTags = new ArrayList<>();
-    Collections.sort(validTags, String.CASE_INSENSITIVE_ORDER);
     String[] tags = tagsInput.split("\\+|\\$");
+
+    // استخراج تمام تگ‌های معتبر از ورودی
     for (String tag : tags) {
       String trimmedTag = tag.trim();
       if (isClassVaildTag(trimmedTag)) {
@@ -411,24 +411,29 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
     if (!validTags.isEmpty()) {
       StringBuilder openingTags = new StringBuilder();
       StringBuilder closingTags = new StringBuilder();
-      String input = tagsInput;
-      /** winter code html like in h1.$1name1+h1.$2name1+h1.$3name1+h1.$4name+h1.$5name */
-      Pattern pattern = Pattern.compile("\\.\\$\\d+([a-zA-Z]+)");
-      Matcher matcher = pattern.matcher(input);
-      StringBuilder result = new StringBuilder();
-      while (matcher.find()) {
-        result.append(matcher.group(1));
-      }
+      Pattern pattern = Pattern.compile("\\.\\$(\\d+)([a-zA-Z0-9]+)");
+      Matcher matcher = pattern.matcher(tagsInput);
 
-      for (String tag : validTags) {
-        api = tag;
-        openingTags.append("<" + api.replace(".", "") + " class=\"" + result.toString() + "\">");
-        closingTags.insert(0, "</" + api.replace(".", "") + ">");
+      while (matcher.find()) {
+        /// String tagName = matcher.group(1); // نام تگ (مثلاً h1, div, p)
+        int count = Integer.parseInt(matcher.group(2)); // عدد بعد از .$
+        String className = matcher.group(3); // نام کلاس
+        for (var tagName : validTags) {
+          for (int i = 0; i <= count; i++) {
+            openingTags
+                .append("<")
+                .append(tagName)
+                .append(" class=\"")
+                .append(className)
+                .append("\">");
+            closingTags.insert(0, "</" + tagName + ">");
+          }
+        }
       }
 
       String wrappedTags = openingTags.toString() + closingTags.toString();
       CompletionItem tagCompletion =
-          new CompletionItem(api, wrappedTags, "Html Snippet Compat Class");
+          new CompletionItem("Class Snippet", wrappedTags, "HTML Class Template");
       tagCompletion.commit = wrappedTags;
       tagCompletion.cursorOffset(openingTags.length() - 1);
       items.add(tagCompletion);
@@ -481,14 +486,14 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
       StringBuilder closingTags = new StringBuilder();
       String input = tagsInput;
       /** winter code html like in h1#$1name1+h1#$2name1+h1#$3name1+h1#$4name+h1#$5name */
-      Pattern pattern = Pattern.compile("\\#\\$\\d+([a-zA-Z]+)");
+      Pattern pattern = Pattern.compile("\\#\\$(\\d+)([a-zA-Z]+)");
       Matcher matcher = pattern.matcher(input);
       StringBuilder result = new StringBuilder();
       while (matcher.find()) {
         int num =
             Integer.parseInt(
-                matcher.group(0).substring(3)); // عدد بعد از '#$' را گرفته و تبدیل به int می کنیم
-        String name = matcher.group(0).substring(6); // نام بعد از عدد را گرفته
+                matcher.group(2)); // عدد بعد از '#$' را گرفته و تبدیل به int می کنیم
+        String name = matcher.group(3); // نام بعد از عدد را گرفته
         for (String tag : validTags) {
           api = tag;
           for (int i = 1; i <= num; i++) { // از 1 شروع و تا عدد موجود تکرار می‌کنیم
