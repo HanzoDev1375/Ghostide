@@ -6,8 +6,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
-import androidx.annotation.NonNull;
-
 public abstract class ShortcutInfo implements Parcelable {
   private String mId;
   private CharSequence mName;
@@ -50,10 +48,10 @@ public abstract class ShortcutInfo implements Parcelable {
   }
 
   @Override
-  public void writeToParcel(@NonNull Parcel dest, int flags) {
+  public void writeToParcel(Parcel dest, int flags) {
     TextUtils.writeToParcel(mName, dest, flags);
     dest.writeInt(mIcon);
   }
 
-  public abstract Intent toShortcutIntent(@NonNull Context context);
+  public abstract Intent toShortcutIntent(Context context);
 }

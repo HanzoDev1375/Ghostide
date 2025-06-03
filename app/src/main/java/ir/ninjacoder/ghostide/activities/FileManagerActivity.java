@@ -1970,7 +1970,7 @@ public class FileManagerActivity extends BaseCompat
         });
   }
 
-  public void setItemSheetOld(int _position, final View _view) {
+   void setItemSheetOld(int _position, final View _view) {
 
     var sheet = new ListSheet();
     sheet.setSheetDialog(this);
@@ -2055,7 +2055,13 @@ public class FileManagerActivity extends BaseCompat
             case 7:
               {
                 var sh = new ShortcutInfoImpl(FileManagerActivity.this);
-                sh.createFileShortcut(R.drawable.file, files.get(_position).get("path").toString());
+                sh.createFileShortcut(
+                    0,
+                    files.get(_position).get("path").toString(),
+                    () -> {
+                     // reLoadFile();
+                    });
+					Folder = sh.getKey();
                 sheet.getDismiss(true);
                 break;
               }
