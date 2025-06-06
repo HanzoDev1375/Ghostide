@@ -7,7 +7,6 @@ import ir.ninjacoder.ghostide.model.ShortcutInfo;
 
 public class FileShortcutInfo extends ShortcutInfo {
   private String filePath;
-  public String key = "path";
   private OnShortcutChange ch;
 
   public interface OnShortcutChange {
@@ -24,13 +23,10 @@ public class FileShortcutInfo extends ShortcutInfo {
   @Override
   public Intent toShortcutIntent(Context context) {
     Intent intent = new Intent(context, FileManagerActivity.class);
-    intent.putExtra(key, filePath);
+    intent.putExtra("filePath", filePath);
+    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//	ch.change();
+
     return intent;
   }
-
-   public String getKey(){
-	   return key;
-   }
 }

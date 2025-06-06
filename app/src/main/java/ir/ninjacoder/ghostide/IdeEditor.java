@@ -103,6 +103,7 @@ public class IdeEditor extends CodeEditor implements IEditor {
     if (saveTextSize != null) {
       setTextSizePx(getSize);
     }
+
     return this;
   }
 
@@ -279,13 +280,7 @@ public class IdeEditor extends CodeEditor implements IEditor {
     subscribeEvent(
         ContentChangeEvent.class,
         (event, subscribe) -> {
-          switch (event.getAction()) {
-            case ContentChangeEvent.ACTION_INSERT:
-            case ContentChangeEvent.ACTION_DELETE:
-            case ContentChangeEvent.ACTION_SET_NEW_TEXT:
-              new Handler(Looper.getMainLooper()).postDelayed(runnable, 10);
-              break;
-          }
+          new Handler(Looper.getMainLooper()).postDelayed(runnable, 1000);
         });
   }
 
@@ -311,7 +306,7 @@ public class IdeEditor extends CodeEditor implements IEditor {
       final var endLine = event.getChangeEnd().line;
       final var endColumn = event.getChangeEnd().column;
       if (getEditorLanguage() instanceof XMLLanguage
-          || getEditorLanguage() instanceof HTMLLanguage) {
+          && getEditorLanguage() instanceof HTMLLanguage) {
         boolean isOpen = false;
         try {
           isOpen = editor.getText().charAt(editor.getCursor().getLeft() - 2) == '<';

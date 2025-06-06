@@ -1,7 +1,5 @@
 package io.github.rosemoe.sora.langs.html;
 
-import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -14,7 +12,6 @@ import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 import io.github.rosemoe.sora.widget.commentRule.AppConfig;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import lsp4custom.com.ninjacoder.customhtmllsp.PhpFun;
+import org.jsoup.Jsoup;
 
 public class HTMLAutoComplete implements AutoCompleteProvider {
   protected HTMLConstants htmlconfig;
@@ -45,8 +43,9 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
   private TextAnalyzeResult analyzeResult;
   protected SharedPreferences save_path; // using default name
 
-  public HTMLAutoComplete() {
+  public HTMLAutoComplete(CodeEditor editor) {
     config = new AppConfig();
+    this.editor = editor;
     htmlconfig = new HTMLConstants();
     userIdentifiers = new IdentifierAutoComplete.Identifiers();
     pathz = new ArrayList<>();
@@ -80,6 +79,21 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
       Collections.sort(words, CompletionItem.COMPARATOR_BY_NAME);
       items.addAll(words);
     }
+    var doc = Jsoup.parse(editor.getText().toString());
+    var allElements = doc.select("*");
+    for (var it : allElements) {
+      var className = it.attr("class");
+      var idName = it.attr("id");
+      if (className.startsWith(prfex)) {
+        items.add(new CompletionItem(className, "CssClass"));
+        items.add(new CompletionItem("." + className+ "{\n //your code \n}", "CssClassCompat"));
+      }
+      if (idName.startsWith(prfex)) {
+        items.add(new CompletionItem(idName, "CssId"));
+		items.add(new CompletionItem("#" + idName+ "{\n //your code \n}", "CssIdCompat"));
+      }
+    }
+
     items.addAll(CodeSnippet.runasList("html", prefix));
     items.addAll(CodeSnippet.getListFile(save_path.getString("path", ""), prefix));
 
@@ -491,8 +505,7 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
       StringBuilder result = new StringBuilder();
       while (matcher.find()) {
         int num =
-            Integer.parseInt(
-                matcher.group(2)); // عدد بعد از '#$' را گرفته و تبدیل به int می کنیم
+            Integer.parseInt(matcher.group(2)); // عدد بعد از '#$' را گرفته و تبدیل به int می کنیم
         String name = matcher.group(3); // نام بعد از عدد را گرفته
         for (String tag : validTags) {
           api = tag;

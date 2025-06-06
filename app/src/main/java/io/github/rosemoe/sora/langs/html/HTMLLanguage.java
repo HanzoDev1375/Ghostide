@@ -32,6 +32,7 @@ import io.github.rosemoe.sora.langs.internal.MyCharacter;
 import io.github.rosemoe.sora.text.TextUtils;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.SymbolPairMatch;
+import ir.ninjacoder.ghostide.widget.data.ColorChecker;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.Token;
 import org.jsoup.Jsoup;
@@ -45,9 +46,6 @@ import java.util.Arrays;
 
 public class HTMLLanguage implements EditorLanguage {
   private IdeEditor editor;
-
-  public HTMLLanguage() {}
-
   public HTMLLanguage(IdeEditor editor) {
     this.editor = editor;
   }
@@ -706,7 +704,7 @@ public class HTMLLanguage implements EditorLanguage {
 
   @Override
   public AutoCompleteProvider getAutoCompleteProvider() {
-    return new HTMLAutoComplete();
+    return new HTMLAutoComplete(editor);
   }
 
   /** Checks if the given character is an auto complete character in HTML */
@@ -750,7 +748,7 @@ public class HTMLLanguage implements EditorLanguage {
 
   @Override
   public CharSequence format(CharSequence text) {
-    return formatCode(text.toString());
+    return ColorChecker.fromatWeb(text.toString());
   }
 
   @Override

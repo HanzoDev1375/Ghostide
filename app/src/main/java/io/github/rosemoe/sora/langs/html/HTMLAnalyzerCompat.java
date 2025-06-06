@@ -24,6 +24,7 @@ import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.text.TextAnalyzer;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
 
+
 public class HTMLAnalyzerCompat implements CodeAnalyzer {
   private IdeEditor editor;
   private RainbowBracketHelper hl;
@@ -48,7 +49,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
       hl = new RainbowBracketHelper();
       htmlCodeAnalyzer = new BasicSyntaxPullAnalyzer();
       HTMLLexer lexer = new HTMLLexer(stream);
-      HTMLAutoComplete auto = new HTMLAutoComplete();
+      HTMLAutoComplete auto = new HTMLAutoComplete(editor);
       HTMLAutoComplete.Identifiers info = new HTMLAutoComplete.Identifiers();
       info.begin();
       var classNamePrevious = false;

@@ -15,9 +15,7 @@ import ir.ninjacoder.ghostide.adapter.ViewType;
 import ir.ninjacoder.ghostide.compressor.TarGzExtractor;
 import ir.ninjacoder.ghostide.compressor.XmlToSvg;
 import ir.ninjacoder.ghostide.compressor.ZxExtractor;
-import ir.ninjacoder.ghostide.databin.FileEvent;
 import ir.ninjacoder.ghostide.databin.FileMaker;
-import ir.ninjacoder.ghostide.databin.RxFileObserver;
 import ir.ninjacoder.ghostide.databinding.FiledirBinding;
 import ir.ninjacoder.ghostide.marco.editorface.ClassNodePaserImpl;
 import android.util.Log;
@@ -85,7 +83,6 @@ import com.hzy.lib7z.Z7Extractor;
 import com.ninjacoder.jgit.GitClone;
 import com.ninjacoder.jgit.GsonToClass;
 import com.ninjacoder.jgit.childer.TextFindListener;
-import io.reactivex.rxjava3.core.Observable;
 import ir.ninjacoder.prograsssheet.MusicSheet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -165,6 +162,7 @@ public class FileManagerActivity extends BaseCompat
   private SharedPreferences sharedPreferences;
   private FileWatcherServiceConnection fileEventRelay;
   private boolean isFileWatcherBound = false;
+  private ShortcutInfoImpl sh;
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
@@ -220,7 +218,16 @@ public class FileManagerActivity extends BaseCompat
     materialYou = getSharedPreferences("materialYou", Activity.MODE_PRIVATE);
 
     book = getSharedPreferences("hsipsot4444", Activity.MODE_PRIVATE);
-
+    sh = new ShortcutInfoImpl(FileManagerActivity.this, Folder);
+    if (getIntent().hasExtra("filePath")) {
+      String filePath = getIntent().getStringExtra("filePath");
+      if (filePath != null && new File(filePath).exists()) {
+        Folder = filePath;
+        reLoadFile();
+      } else {
+        DataUtil.showMessage(this, "خطا: مسیر فایل نامعتبر است!");
+      }
+    }
     // WindowsMath(bind.Drawer, _coordinator);
     bind.viewChild.setVisibility(View.GONE);
     BackPressed();
@@ -378,6 +385,7 @@ public class FileManagerActivity extends BaseCompat
       Folder = FileUtil.getExternalStorageDir();
       reLoadFile();
     }
+
     IntentHelper.getFilePath = Folder;
     bindFileWatcherService(new File(save_path.getString("path", "")));
     Log.w("FilePath", save_path.getString("path", ""));
@@ -1970,7 +1978,7 @@ public class FileManagerActivity extends BaseCompat
         });
   }
 
-   void setItemSheetOld(int _position, final View _view) {
+  void setItemSheetOld(int _position, final View _view) {
 
     var sheet = new ListSheet();
     sheet.setSheetDialog(this);
@@ -2054,14 +2062,12 @@ public class FileManagerActivity extends BaseCompat
               }
             case 7:
               {
-                var sh = new ShortcutInfoImpl(FileManagerActivity.this);
                 sh.createFileShortcut(
                     0,
                     files.get(_position).get("path").toString(),
                     () -> {
-                     // reLoadFile();
+                      // reLoadFile();
                     });
-					Folder = sh.getKey();
                 sheet.getDismiss(true);
                 break;
               }

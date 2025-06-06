@@ -3182,21 +3182,13 @@ public class CodeEditor extends View
           mRect.left = centerX - mDpUnit * mBlockLineWidth / 2;
           mRect.right = centerX + mDpUnit * mBlockLineWidth / 2;
 
-          if (!isBlockLineRpg) {
-            if (GhostIdeAppLoader.getPrefManager().getBoolean("breaks", false) == true) {
-              drawColor(canvas, mColors.getColor(HTMLConstants.get(mm)), mRect);
-
-            } else
-              drawColor(
-                  canvas,
-                  mColors.getColor(
-                      curr == cursorIdx
-                          ? EditorColorScheme.BLOCK_LINE_CURRENT
-                          : EditorColorScheme.BLOCK_LINE),
-                  mRect);
-          } else {
-            drawColor(canvas, mColors.getColor(getRandomColor()), mRect);
-          }
+          drawColor(
+              canvas,
+              mColors.getColor(
+                  curr == cursorIdx
+                      ? EditorColorScheme.BLOCK_LINE_CURRENT
+                      : EditorColorScheme.BLOCK_LINE),
+              mRect);
 
         } catch (IndexOutOfBoundsException e) {
           // Ignored

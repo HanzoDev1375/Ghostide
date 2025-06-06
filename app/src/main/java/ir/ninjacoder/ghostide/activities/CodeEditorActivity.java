@@ -14,7 +14,6 @@ import ir.ninjacoder.ghostide.adapter.SyspiarAdapter;
 import ir.ninjacoder.ghostide.adapter.ToolbarListFileAdapter;
 import ir.ninjacoder.ghostide.config.JavaToGsonHelper;
 import ir.ninjacoder.ghostide.databinding.Antcomp8lerBinding;
-import ir.ninjacoder.ghostide.editor.EditorUtil;
 import ir.ninjacoder.ghostide.enums.Mode;
 import ir.ninjacoder.ghostide.layoutmanager.LogCatBottomSheet;
 import ir.ninjacoder.ghostide.marco.CharUtil;
@@ -24,7 +23,6 @@ import ir.ninjacoder.ghostide.marco.GhostWebEditorSearch;
 import ir.ninjacoder.ghostide.marco.KotlinCompilerImpl;
 import ir.ninjacoder.ghostide.marco.WallpaperParallaxEffect;
 import ir.ninjacoder.ghostide.model.EditorViewModel;
-import ir.ninjacoder.ghostide.navigator.EditorHelperColor;
 import ir.ninjacoder.ghostide.navigator.EditorRoaderFile;
 import ir.ninjacoder.ghostide.project.JavaCompilerBeta;
 import ir.ninjacoder.ghostide.project.ProjectManager;
@@ -66,7 +64,6 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.allenliu.badgeview.BadgeView;
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
@@ -490,7 +487,7 @@ public class CodeEditorActivity extends BaseCompat {
         (event, subscribe) -> {
           var cu = event.getEditor().getCursor();
           var myChar = new CharUtil(editor.getText().toString(), titleauthor);
-
+          
           var iscode = new FactoryCodeError(editor, iconAuthor,tablayouteditor);
           int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
           if (selectedTabPosition >= 0 && selectedTabPosition < tabs_listmap.size()) {

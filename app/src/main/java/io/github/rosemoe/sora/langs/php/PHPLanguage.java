@@ -637,7 +637,7 @@ public class PHPLanguage implements EditorLanguage {
 
   @Override
   public AutoCompleteProvider getAutoCompleteProvider() {
-    return new HTMLAutoComplete();
+    return new HTMLAutoComplete(editor);
   }
 
   @Override

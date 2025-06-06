@@ -18,9 +18,11 @@ public class ShortcutInfoImpl {
 
   private Context context;
   private FileShortcutInfo info;
+  private String fullpath;
 
-  public ShortcutInfoImpl(Context context) {
+  public ShortcutInfoImpl(Context context, String fullpath) {
     this.context = context;
+    this.fullpath = fullpath;
   }
 
   public void createFileShortcut(int icon, String path, FileShortcutInfo.OnShortcutChange ch) {
@@ -34,10 +36,6 @@ public class ShortcutInfoImpl {
         it -> {
           requestPinShortcut(it);
         });
-  }
-
-  public String getKey() {
-    return info.getKey();
   }
 
   private void requestPinShortcut(ShortcutInfo shortcutInfo) {

@@ -12,7 +12,7 @@ import com.google.android.material.color.MaterialColors;
 import com.skydoves.powermenu.MenuAnimation;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.Transilt;
-
+import ir.ninjacoder.ghostide.widget.data.ColorChecker;
 import java.io.Serializable;
 
 public class HtmlTool implements Serializable {
@@ -33,6 +33,7 @@ public class HtmlTool implements Serializable {
             .addItem(new PowerMenuItem("Translate"))
             .addItem(new PowerMenuItem("Link viewer"))
             .addItem(new PowerMenuItem("Color preview "))
+            .addItem(new PowerMenuItem("css doc(Beta)"))
             .setIsMaterial(true)
             .build();
     menu.setMenuRadius(20f);
@@ -68,6 +69,8 @@ public class HtmlTool implements Serializable {
           } else if (pos == 7) {
             ColorView mview = new ColorView();
             mview.colorview(editor, context);
+          } else if (pos == 8) {
+            new ColorChecker((IdeEditor) editor);
           }
         });
   }

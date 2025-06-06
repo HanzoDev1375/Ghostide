@@ -19,6 +19,7 @@
     <uses-permission android:name="android.permission.READ_WALLPAPER_INTERNAL" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
     <!-- Required on Android 14+ to post foreground services with explicit type (foregroundServiceType = dataSync) -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
     <application
@@ -44,7 +45,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.FileManagerActivity" />
+        <activity
+            android:name=".activities.FileManagerActivity"
+			android:exported="true"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="file" />
+            </intent-filter>
+        </activity>
         <activity android:name=".activities.CodeEditorActivity" />
         <activity android:name=".activities.HtmlRunerActivity" />
         <activity android:name=".activities.JsRunerActivity" />

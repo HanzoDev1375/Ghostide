@@ -1,5 +1,6 @@
 package ir.ninjacoder.ghostide.utils;
 
+import io.github.rosemoe.sora.data.RainbowBracketHelper;
 import ir.ninjacoder.ghostide.activities.BaseCompat;
 import ir.ninjacoder.ghostide.marco.ColorCompat;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
@@ -37,6 +38,7 @@ public class ThemeUtils {
   protected HashMap<String, Object> map = new HashMap<>();
   private Timer timer = new Timer();
   private TimerTask task;
+  private RainbowBracketHelper helper;
 
   public ThemeUtils() {}
 
@@ -60,10 +62,11 @@ public class ThemeUtils {
 
   public ThemeUtils setThemeCodeEditor(
       CodeEditor editor, HashMap<String, Object> imap, boolean chackHashMap, Activity x) {
-
-    getColor(imap, editor, "block_line", EditorColorScheme.BLOCK_LINE, "#ff28ffae");
+    helper = new RainbowBracketHelper();
+    getColor(imap, editor, "block_line", helper.getRainbowcolorsBlockLine(), "#ff28ffae");
     getColor(imap, editor, "OPERATOR", EditorColorScheme.OPERATOR, "#ff43ffd5");
-    getColor(imap, editor, "block_line_current", EditorColorScheme.BLOCK_LINE_CURRENT, "#ff28ffae");
+    getColor(
+        imap, editor, "block_line_current", helper.getRainbowcolorsblocklinecurrent(), "#ff28ffae");
     getColor(imap, editor, "non_printable_char", EditorColorScheme.NON_PRINTABLE_CHAR, "#ffa10370");
     getColor(imap, editor, "current_line", EditorColorScheme.CURRENT_LINE, "#ff6b90ff");
     getColor(imap, editor, "selection_handle", EditorColorScheme.SELECTION_HANDLE, "#ff2a6373");
@@ -586,7 +589,7 @@ public class ThemeUtils {
     "breaklevel6": "#FF33FF",
     "breaklevel7": "#57FF33",
     "breaklevel8": "#FFD733",
-	"javakeywordoprator":"#fff9271"
+	"javakeywordoprator":"#FF8C33"
     }
     """;
   }
