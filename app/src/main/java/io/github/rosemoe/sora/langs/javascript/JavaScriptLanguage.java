@@ -10,6 +10,7 @@ import io.github.rosemoe.sora.text.TextUtils;
 import io.github.rosemoe.sora.widget.SymbolPairMatch;
 import io.github.rosemoe.sora.interfaces.EditorLanguage;
 
+import ir.ninjacoder.ghostide.widget.data.JsBeautify;
 import java.io.StringReader;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -132,8 +133,11 @@ public class JavaScriptLanguage implements EditorLanguage {
 
   @Override
   public CharSequence format(CharSequence text) {
-    
-     return javaFormat(text.toString());
+    try {
+      return JsBeautify.jsBeautify(text.toString());
+    } catch (Exception err) {
+      return text;
+    }
   }
 
   @Override

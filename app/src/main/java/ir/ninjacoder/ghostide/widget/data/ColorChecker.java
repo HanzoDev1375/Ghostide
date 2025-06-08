@@ -14,6 +14,7 @@ import com.helger.css.writer.CSSWriterSettings;
 import ir.ninjacoder.ghostide.IdeEditor;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -23,10 +24,15 @@ import java.util.HashMap;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import org.jsoup.Jsoup;
+import io.github.rosemoe.sora.data.CompletionItem;
 
 public class ColorChecker {
   private IdeEditor editText;
   private Map<String, String> colorMap = new HashMap<>();
+
+  public static void saveCdnJsFile(List<CompletionItem> list, IdeEditor editor, String prfex) {
+    // soon
+  }
 
   public ColorChecker(IdeEditor editText) {
     this.editText = editText;
@@ -50,28 +56,37 @@ public class ColorChecker {
     editText.setText(doc.outerHtml());
   }
 
-  static String geyCss4(String code) {
-    CascadingStyleSheet aCSS = CSSReader.readFromString(code, ECSSVersion.CSS30);
-    CSSWriterSettings aSettings = new CSSWriterSettings(ECSSVersion.LATEST, false);
-    CSSWriter aWriter = new CSSWriter(aSettings).setWriteHeaderText(false);
-    return aWriter.getCSSAsString(aCSS);
-  }
-
   public static String fromatWeb(String code) {
     var doc = Jsoup.parse(code);
     var styleTags = doc.select("style");
+    var scriptTags = doc.select("script");
     doc.outputSettings().indentAmount(2).prettyPrint(true).outline(true);
     for (var styleTag : styleTags) {
       String originalCss = styleTag.html();
-      String processedCss = geyCss4(originalCss);
+      String processedCss = getCss4(originalCss);
       String indentedCss =
           Arrays.stream(processedCss.split("\n"))
               .map(line -> " \t\t\t   " + line)
               .collect(Collectors.joining("\n"));
-
       styleTag.html("\n" + indentedCss + "\n    ");
     }
+    for (var jsTag : scriptTags) {
+      String originaljs = jsTag.html();
+      String processedjs = JsBeautify.jsBeautify(originaljs);
+      String indentedjs =
+          Arrays.stream(processedjs.split("\n"))
+              .map(line -> " \t\t\t   " + line)
+              .collect(Collectors.joining("\n"));
+      jsTag.html("\n" + indentedjs + "\n    ");
+    }
     return doc.outerHtml();
+  }
+
+  static String getCss4(String code) {
+    CascadingStyleSheet aCSS = CSSReader.readFromString(code, ECSSVersion.CSS30);
+    CSSWriterSettings aSettings = new CSSWriterSettings(ECSSVersion.LATEST, false);
+    CSSWriter aWriter = new CSSWriter(aSettings).setWriteHeaderText(false);
+    return aWriter.getCSSAsString(aCSS);
   }
 
   private void initializeColorMap() {

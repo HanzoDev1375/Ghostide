@@ -137,7 +137,6 @@ dependencies {
     implementation("com.squareup:seismic:1.0.3")
     implementation("org.smali:smali:2.5.2")
     implementation("org.smali:baksmali:2.5.2")
-    implementation("io.apisense:rhino-android:1.0")
     implementation("com.github.TimScriptov:apksigner:1.2.0")
     implementation("org.jsoup:jsoup:1.19.1")
     implementation("com.github.douglasjunior:android-simple-tooltip:1.1.0")
@@ -159,6 +158,6 @@ dependencies {
     implementation("io.github.skylot:jadx-core:$jadxVersion")
     implementation("io.github.skylot:jadx-dex-input:$jadxVersion")
     implementation 'androidx.security:security-crypto:1.1.0-alpha03'
-    
+    implementation 'org.mozilla:rhino-runtime:1.7.15'
 }
 
