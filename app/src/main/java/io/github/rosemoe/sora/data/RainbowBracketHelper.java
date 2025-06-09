@@ -40,23 +40,6 @@ public class RainbowBracketHelper {
     } else result.addIfNeeded(line, column, mcolor);
   }
 
-  public int getRainbowcolorsBlockLine() {
-    if (isRgbEn()) {
-      int color = RAINBOW_COLORS[colonColorIndex % RAINBOW_COLORS.length];
-      colonColorIndex++;
-      return color;
-    }
-    return EditorColorScheme.BLOCK_LINE;
-  }
-
-  public int getRainbowcolorsblocklinecurrent() {
-    if (isRgbEn()) {
-      int color = RAINBOW_COLORS[colonColorIndex % RAINBOW_COLORS.length];
-      colonColorIndex++;
-      return color;
-    }
-    return EditorColorScheme.BLOCK_LINE_CURRENT;
-  }
 
   public void handleCustom(TextAnalyzeResult result, int line, int column, int mcolor) {
     if (isRgbEn()) {

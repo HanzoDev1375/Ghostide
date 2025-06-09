@@ -1,19 +1,13 @@
 package ir.ninjacoder.ghostide.utils;
 
-import io.github.rosemoe.sora.data.RainbowBracketHelper;
 import ir.ninjacoder.ghostide.activities.BaseCompat;
 import ir.ninjacoder.ghostide.marco.ColorCompat;
-import ir.ninjacoder.ghostide.utils.ObjectUtils;
 
-import ir.ninjacoder.ghostide.widget.ExrtaFab;
 import android.app.Activity;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.os.Build;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.blankj.utilcode.util.FileIOUtils;
@@ -23,7 +17,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.skydoves.powermenu.PowerMenu;
-import io.github.rosemoe.sora.text.TextStyle;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
 
@@ -32,13 +25,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.TreeMap;
 
 public class ThemeUtils {
   protected HashMap<String, Object> map = new HashMap<>();
   private Timer timer = new Timer();
   private TimerTask task;
-  private RainbowBracketHelper helper;
+  
 
   public ThemeUtils() {}
 
@@ -62,11 +54,10 @@ public class ThemeUtils {
 
   public ThemeUtils setThemeCodeEditor(
       CodeEditor editor, HashMap<String, Object> imap, boolean chackHashMap, Activity x) {
-    helper = new RainbowBracketHelper();
-    getColor(imap, editor, "block_line", helper.getRainbowcolorsBlockLine(), "#ff28ffae");
+    getColor(imap, editor, "block_line", EditorColorScheme.BLOCK_LINE, "#ff28ffae");
     getColor(imap, editor, "OPERATOR", EditorColorScheme.OPERATOR, "#ff43ffd5");
     getColor(
-        imap, editor, "block_line_current", helper.getRainbowcolorsblocklinecurrent(), "#ff28ffae");
+        imap, editor, "block_line_current", EditorColorScheme.BLOCK_LINE_CURRENT, "#ff28ffae");
     getColor(imap, editor, "non_printable_char", EditorColorScheme.NON_PRINTABLE_CHAR, "#ffa10370");
     getColor(imap, editor, "current_line", EditorColorScheme.CURRENT_LINE, "#ff6b90ff");
     getColor(imap, editor, "selection_handle", EditorColorScheme.SELECTION_HANDLE, "#ff2a6373");

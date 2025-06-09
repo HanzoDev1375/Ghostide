@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import lsp4custom.com.ninjacoder.customhtmllsp.PhpFun;
+import lsp4custom.com.ninjacoder.customhtmllsp.ScriptAnalyzer;
 import org.jsoup.Jsoup;
 
 public class HTMLAutoComplete implements AutoCompleteProvider {
@@ -50,6 +51,7 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
     userIdentifiers = new IdentifierAutoComplete.Identifiers();
     pathz = new ArrayList<>();
     keyhtml = new ListKeyword();
+
     save_path =
         GhostIdeAppLoader.getContext().getSharedPreferences("save_path", Activity.MODE_PRIVATE);
   }
@@ -64,6 +66,7 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
     validTag();
     classTag(prefix);
     idTags(prefix);
+
     Collections.sort(items, CompletionItem.COMPARATOR_BY_NAME);
 
     Collections.sort(items, CompletionItem.COMPARATOR_BY_NAME);
@@ -86,14 +89,20 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
       var idName = it.attr("id");
       if (className.startsWith(prfex)) {
         items.add(new CompletionItem(className, "CssClass"));
-        items.add(new CompletionItem("." + className+ "{\n //your code \n}", "CssClassCompat"));
+        items.add(new CompletionItem("." + className + "{\n //your code \n}", "CssClassCompat"));
       }
       if (idName.startsWith(prfex)) {
         items.add(new CompletionItem(idName, "CssId"));
-		items.add(new CompletionItem("#" + idName+ "{\n //your code \n}", "CssIdCompat"));
+        items.add(new CompletionItem("#" + idName + "{\n //your code \n}", "CssIdCompat"));
       }
     }
-
+    var scriptan = new ScriptAnalyzer(editor.getContext(), prfex);
+    scriptan.setListener(
+        (m, v) -> {
+          items.addAll(m);
+          items.addAll(v);
+        });
+    scriptan.analyzeHtml(editor.getText().toString());
     items.addAll(CodeSnippet.runasList("html", prefix));
     items.addAll(CodeSnippet.getListFile(save_path.getString("path", ""), prefix));
 
