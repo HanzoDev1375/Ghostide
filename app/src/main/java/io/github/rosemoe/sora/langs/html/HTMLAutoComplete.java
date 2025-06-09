@@ -12,10 +12,12 @@ import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 import io.github.rosemoe.sora.widget.commentRule.AppConfig;
+import java.io.File;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lsp4custom.com.ninjacoder.customhtmllsp.CodeSnippet;
+import lsp4custom.com.ninjacoder.customhtmllsp.CssAnalyzer;
 import lsp4custom.com.ninjacoder.customhtmllsp.ListKeyword;
 
 import java.util.ArrayList;
@@ -96,13 +98,22 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
         items.add(new CompletionItem("#" + idName + "{\n //your code \n}", "CssIdCompat"));
       }
     }
-    var scriptan = new ScriptAnalyzer(editor.getContext(), prfex);
+    var scriptan =
+        new ScriptAnalyzer(editor.getContext(), prfex, new File(save_path.getString("path", "")));
     scriptan.setListener(
         (m, v) -> {
           items.addAll(m);
           items.addAll(v);
         });
     scriptan.analyzeHtml(editor.getText().toString());
+
+    var css2 =
+        new CssAnalyzer(editor.getContext(), prfex, new File(save_path.getString("path", "")));
+    css2.setListener(
+        (m) -> {
+          items.addAll(m);
+        });
+    css2.analyzeHtml(editor.getText().toString());
     items.addAll(CodeSnippet.runasList("html", prefix));
     items.addAll(CodeSnippet.getListFile(save_path.getString("path", ""), prefix));
 

@@ -4,20 +4,13 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import io.github.rosemoe.sora.data.CompletionItem;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -30,7 +23,7 @@ public class ScriptAnalyzer {
 
   private static final String TAG = "ScriptAnalyzer";
   private static final String CACHE_DIR = "/sdcard/apk/";
-
+  private final File projectDir;
   private final Context context;
   private final OkHttpClient httpClient;
   private final String prefix;
@@ -39,9 +32,10 @@ public class ScriptAnalyzer {
   private final List<CompletionItem> allMethods = new ArrayList<>();
   private final List<CompletionItem> allVars = new ArrayList<>();
 
-  public ScriptAnalyzer(Context context, String prefix) {
+  public ScriptAnalyzer(Context context, String prefix, File projectDir) {
     this.context = context;
     this.prefix = prefix;
+    this.projectDir = projectDir;
     this.httpClient =
         new OkHttpClient.Builder()
             .connectTimeout(30, TimeUnit.SECONDS)
@@ -59,7 +53,6 @@ public class ScriptAnalyzer {
       return;
     }
 
-    // Clear previous results
     allMethods.clear();
     allVars.clear();
 
@@ -73,22 +66,22 @@ public class ScriptAnalyzer {
         return;
       }
 
-      List<String> scriptUrls =
+      List<String> scriptSrcs =
           scripts.stream()
-              .map(script -> script.absUrl("src"))
+              .map(script -> script.attr("src"))
               .filter(src -> src != null && !src.isEmpty())
               .collect(Collectors.toList());
 
-      if (scriptUrls.isEmpty()) {
-        showToast("No valid script URLs found");
+      if (scriptSrcs.isEmpty()) {
+        showToast("No valid script src found");
         notifyListener();
         return;
       }
 
-      scriptsPending = scriptUrls.size();
+      scriptsPending = scriptSrcs.size();
 
-      for (String url : scriptUrls) {
-        downloadAndAnalyze(url);
+      for (String src : scriptSrcs) {
+        downloadAndAnalyze(src);
       }
 
     } catch (Exception e) {
@@ -98,32 +91,58 @@ public class ScriptAnalyzer {
     }
   }
 
-  private void downloadAndAnalyze(String url) {
+  private void downloadAndAnalyze(String src) {
     try {
-      String fileName = Uri.parse(url).getLastPathSegment();
+      String fileName = Uri.parse(src).getLastPathSegment();
       if (fileName == null || fileName.isEmpty()) {
-        Log.w(TAG, "Invalid filename from URL: " + url);
+        Log.w(TAG, "Invalid filename from src: " + src);
         onScriptProcessed();
         return;
       }
 
-      File cacheFile = new File(CACHE_DIR, fileName);
-      String jsCode;
+      String jsCode = null;
 
-      if (cacheFile.exists()) {
-        jsCode = readFile(cacheFile);
-      } else if (isNetworkAvailable()) {
-        jsCode = downloadScript(url);
-        if (jsCode == null || jsCode.trim().isEmpty()) {
+      // ۱. بررسی مسیر نسبی نسبت به مسیر پروژه (projectDir)
+      try {
+        File resolvedProjectFile = new File(projectDir, src).getCanonicalFile();
+        if (resolvedProjectFile.exists() && resolvedProjectFile.isFile()) {
+          jsCode = readFile(resolvedProjectFile);
+          Log.i(
+              TAG,
+              "📂 Loaded from relative project path: " + resolvedProjectFile.getAbsolutePath());
+        }
+      } catch (IOException ioEx) {
+        Log.w(TAG, "⚠️ Failed to resolve relative path: " + src + " → " + ioEx.getMessage());
+      }
+
+      // ۲. بررسی فایل در کش (CACHE_DIR)
+      if (jsCode == null) {
+        File cacheFile = new File(CACHE_DIR, fileName);
+        if (cacheFile.exists()) {
+          jsCode = readFile(cacheFile);
+          Log.i(TAG, "📁 Loaded from cache: " + cacheFile.getAbsolutePath());
+        }
+
+        // ۳. در صورت آنلاین بودن، دانلود کن
+        else if (src.startsWith("http") && isNetworkAvailable()) {
+          jsCode = downloadScript(src);
+          if (jsCode == null || jsCode.trim().isEmpty()) {
+            onScriptProcessed();
+            return;
+          }
+          saveFile(cacheFile, jsCode);
+          Log.i(TAG, "⬇️ Downloaded and cached: " + cacheFile.getAbsolutePath());
+        }
+
+        // ۴. هیچ منبعی پیدا نشد
+        else {
+          Log.w(TAG, "❌ Not found locally or online: " + src);
           onScriptProcessed();
           return;
         }
-        saveFile(cacheFile, jsCode);
-      } else {
-        Log.w(TAG, "Offline and script not cached: " + url);
-        onScriptProcessed();
-        return;
       }
+
+      // ۵. تحلیل کد JS و اضافه‌کردن به لیست
       List<CompletionItem> methods = getJavaScriptMethods(jsCode, fileName, prefix);
       List<CompletionItem> vars = getJavaScriptVariables(jsCode, fileName, prefix);
       allMethods.addAll(methods);
@@ -132,7 +151,7 @@ public class ScriptAnalyzer {
       showToast("✅ Parsed: " + fileName);
 
     } catch (Exception e) {
-      showError("Error processing: " + url + " → " + e.getMessage());
+      showError("Error processing: " + src + " → " + e.getMessage());
     } finally {
       onScriptProcessed();
     }
@@ -154,7 +173,6 @@ public class ScriptAnalyzer {
   private static List<CompletionItem> getJavaScriptMethods(
       String jsCode, String fileName, String prefix) {
     List<CompletionItem> completionItems = new ArrayList<>();
-
     try {
       for (String methodName : JavaScriptParserHelper.extractJavaScriptMethods(jsCode)) {
         CompletionItem item = new CompletionItem();
@@ -163,26 +181,21 @@ public class ScriptAnalyzer {
         item.commit = methodName + "()";
         completionItems.add(item);
       }
-
-      // فیلتر بر اساس prefix
       if (prefix != null && !prefix.isEmpty()) {
         completionItems =
             completionItems.stream()
                 .filter(item -> item.label.startsWith(prefix))
                 .collect(Collectors.toList());
       }
-
     } catch (Exception err) {
       Log.e(TAG, "Error extracting methods", err);
     }
-
     return completionItems;
   }
 
   private static List<CompletionItem> getJavaScriptVariables(
       String jsCode, String fileName, String prefix) {
     List<CompletionItem> completionItems = new ArrayList<>();
-
     try {
       for (String varName : JavaScriptParserHelper.extractJavaScriptVariables(jsCode)) {
         CompletionItem item = new CompletionItem();
@@ -191,24 +204,16 @@ public class ScriptAnalyzer {
         item.commit = varName;
         completionItems.add(item);
       }
-
-      // فیلتر بر اساس prefix
       if (prefix != null && !prefix.isEmpty()) {
         completionItems =
             completionItems.stream()
                 .filter(item -> item.label.startsWith(prefix))
                 .collect(Collectors.toList());
       }
-
     } catch (Exception err) {
       Log.e(TAG, "Error extracting variables", err);
     }
-
     return completionItems;
-  }
-
-  private static boolean shouldIncludeItem(CompletionItem item, String prefix) {
-    return prefix == null || prefix.isEmpty() || item.label.startsWith(prefix);
   }
 
   private String downloadScript(String url) throws IOException {
