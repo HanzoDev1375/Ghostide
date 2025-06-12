@@ -37,7 +37,7 @@ public class ToolItemPop {
             - editor.getOffsetY()
             - menu.getContentViewHeight()
             - 5;
- //   new Handler(Looper.getMainLooper()).postDelayed(() -> menu.dismiss(), 20000);
+     new Handler(Looper.getMainLooper()).postDelayed(() -> menu.dismiss(), 20000);
     menu.showAsDropDown(editor, x, y);
   }
 }

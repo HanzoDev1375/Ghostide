@@ -84,8 +84,8 @@ public class ObjectUtils {
   public static boolean Android12 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S;
   public static boolean Api28 = Build.VERSION.SDK_INT >= 28;
   public static int Back = R.attr.colorSurface;
-  public static int colorAccent = R.attr.colorAccent;
-  public static int TvColor = R.attr.colorPrimary;
+  public static int colorAccent = R.attr.colorSurface;
+  public static int TvColor = R.attr.colorPrimaryInverse;
   public static int SecColor = R.attr.colorPrimaryContainer;
   public static int ColorNormal = R.attr.colorControlNormal;
   public static int ColorAConNormal = R.attr.colorControlActivated;

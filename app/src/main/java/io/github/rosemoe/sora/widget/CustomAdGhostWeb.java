@@ -7,6 +7,7 @@ import com.skydoves.powermenu.PowerMenuItem;
 import io.github.rosemoe.sora.widget.tooltip.ToolItemPop;
 import io.github.rosemoe.sora.widget.tooltip.ToolTipHelper;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
+import ir.ninjacoder.ghostide.databinding.OneUiBinding;
 import ir.ninjacoder.ghostide.utils.AnimUtils;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -26,7 +27,7 @@ public class CustomAdGhostWeb extends EditorCompletionAdapter {
   protected HTMLConstants htmlconfig;
   protected TextView item_label, item_desc, item_type;
   private ImageView item_icon;
-
+  private OneUiBinding bind;
   private io.github.rosemoe.sora.widget.TextSummry.TextUtils textUtils;
 
   public CustomAdGhostWeb() {
@@ -43,24 +44,24 @@ public class CustomAdGhostWeb extends EditorCompletionAdapter {
   }
 
   @Override
-  public View getView(int pos, View view, ViewGroup parent, boolean isCurrentCursorPosition) {
-    if (view == null) {
-      view = LayoutInflater.from(getContext()).inflate(R.layout.one_ui, parent, false);
-    }
+  public View getView(int pos, View views, ViewGroup parent, boolean isCurrentCursorPosition) {
     CompletionItem item = getItem(pos);
-
-    if (pos == 0) {
-      view.setBackground(colorSet("#fff807"));
-      var tool = new ToolItemPop(getEditor());
-      if (tool != null) {
-        tool.run(item.desc);
-      }
+    View view = views;
+    if (view == null) {
+      bind = OneUiBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+      view = bind.getRoot();
+      view.setTag(bind);
+    } else {
+      bind = (OneUiBinding) view.getTag();
     }
-
-    item_label = view.findViewById(R.id.item_label);
-    item_desc = view.findViewById(R.id.item_desc);
-    item_type = view.findViewById(R.id.item_type);
-    item_icon = view.findViewById(R.id.item_icon);
+    //    var tool = new ToolItemPop(getEditor());
+    //            if (tool != null) {
+    //              tool.run(item.desc);
+    //            }
+    item_label = bind.itemLabel;
+    item_desc = bind.itemDesc;
+    item_type = bind.itemType;
+    item_icon = bind.itemIcon;
     Spannable label =
         Spannable.Factory.getInstance().newSpannable(item.label != null ? item.label : "None");
     String prefix = getPrefix();
@@ -106,13 +107,8 @@ public class CustomAdGhostWeb extends EditorCompletionAdapter {
       item_icon.setBackground(
           new CircleDrawable(
               getThemeColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER), true, item.label));
-    view.setBackgroundColor(
-        isCurrentCursorPosition
-            ? getThemeColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER)
-            : Color.TRANSPARENT);
-    view.setTag(pos);
 
-    return view;
+    return bind.getRoot();
   }
 
   private GradientDrawable colorSet(String col) {
