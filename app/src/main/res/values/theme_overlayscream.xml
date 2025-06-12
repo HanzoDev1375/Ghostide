@@ -1,5 +1,5 @@
 <resources>
-    <style name="ThemeOverlay.AppTheme.MediumContrast.Cream" parent="Theme.Material3.Dark.NoActionBar">
+    <style name="ThemeOverlay.AppTheme.MediumContrast.Cream" parent="Theme.Material3Expressive.Dark.NoActionBar">
         <item name="colorPrimary">@color/md_theme_cream_primary_mediumContrast</item>
         <item name="colorOnPrimary">@color/md_theme_cream_onPrimary_mediumContrast</item>
         <item name="colorPrimaryContainer">@color/md_theme_cream_primaryContainer_mediumContrast</item>
@@ -47,7 +47,7 @@
         <item name="colorSurfaceContainerHigh">@color/md_theme_cream_surfaceContainerHigh_mediumContrast</item>
         <item name="colorSurfaceContainerHighest">@color/md_theme_cream_surfaceContainerHighest_mediumContrast</item>
     </style>
-    <style name="ThemeOverlay.AppTheme.HighContrast.Cream" parent="Theme.Material3.Dark.NoActionBar">
+    <style name="ThemeOverlay.AppTheme.HighContrast.Cream" parent="Theme.Material3Expressive.Dark.NoActionBar">
         <item name="colorPrimary">@color/md_theme_cream_primary_highContrast</item>
         <item name="colorOnPrimary">@color/md_theme_cream_onPrimary_highContrast</item>
         <item name="colorPrimaryContainer">@color/md_theme_cream_primaryContainer_highContrast</item>
