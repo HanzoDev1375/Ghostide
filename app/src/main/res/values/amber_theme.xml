@@ -2,7 +2,7 @@
 <resources>
     <style
         name="Theme.ThemeEngine.Amber"
-        parent="Theme.Material3Expressive.Dark.NoActionBar"
+        parent="Theme.Material3.Dark.NoActionBar"
         >
         <item name="bottomSheetDialogTheme">@style/ThemeOverlay.App.BottomSheetDialog</item>
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialAlertDialog</item>

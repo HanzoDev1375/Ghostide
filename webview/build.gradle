@@ -34,7 +34,7 @@ dependencies {
     implementation project(":vectormaster")
 
     implementation("androidx.appcompat:appcompat:1.7.0")
-    implementation("com.google.android.material:material:1.14.0-alpha01")
+    implementation("com.google.android.material:material:1.13.0-alpha11")
     implementation("org.jetbrains:annotations:24.0.1")
     implementation("com.google.android.gms:play-services-base:18.2.0")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")

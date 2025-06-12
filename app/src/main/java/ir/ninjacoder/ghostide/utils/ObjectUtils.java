@@ -85,7 +85,7 @@ public class ObjectUtils {
   public static boolean Api28 = Build.VERSION.SDK_INT >= 28;
   public static int Back = R.attr.colorSurface;
   public static int colorAccent = R.attr.colorSurface;
-  public static int TvColor = R.attr.colorPrimaryInverse;
+  public static int TvColor = R.attr.colorPrimary;
   public static int SecColor = R.attr.colorPrimaryContainer;
   public static int ColorNormal = R.attr.colorControlNormal;
   public static int ColorAConNormal = R.attr.colorControlActivated;

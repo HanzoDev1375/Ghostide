@@ -1,7 +1,7 @@
 <resources>
     <style
         name="ThemeOverlay.AppTheme.MediumContrast"
-        parent="Theme.Material3Expressive.Dark.NoActionBar"
+        parent="Theme.Material3.Dark.NoActionBar"
         >
         <item name="bottomSheetDialogTheme">@style/ThemeOverlay.App.BottomSheetDialog</item>
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialAlertDialog</item>
@@ -57,7 +57,7 @@
     </style>
     <style
         name="ThemeOverlay.AppTheme.HighContrast"
-        parent="Theme.Material3Expressive.Dark.NoActionBar"
+        parent="Theme.Material3.Dark.NoActionBar"
         >
         <item name="colorPrimary">@color/md_theme_primary_highContrast</item>
         <item name="colorOnPrimary">@color/md_theme_onPrimary_highContrast</item>

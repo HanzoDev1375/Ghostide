@@ -1,7 +1,7 @@
 <resources>
     <style
         name="Theme.ThemeEngine.Green"
-        parent="Theme.Material3Expressive.Dark.NoActionBar"
+        parent="Theme.Material3.Dark.NoActionBar"
         >
         <item name="colorPrimary">@color/green_theme_primary</item>
         <item name="colorOnPrimary">@color/green_theme_onPrimary</item>
