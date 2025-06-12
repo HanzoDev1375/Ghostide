@@ -19,6 +19,7 @@ import com.google.android.material.shape.CornerFamily;
 import com.google.android.material.shape.ShapeAppearanceModel;
 import com.google.android.material.shape.MaterialShapeDrawable;
 import com.google.gson.Gson;
+import io.github.rosemoe.sora.widget.tooltip.ToolTipHelper;
 import ir.ninjacoder.ghostide.utils.FileUtil;
 import com.google.gson.reflect.TypeToken;
 
@@ -143,13 +144,6 @@ public class EditorAutoCompleteWindow extends EditorPopupWindow {
           } catch (Exception e) {
             Toast.makeText(mEditor.getContext(), e.toString(), Toast.LENGTH_SHORT).show();
           }
-        });
-    listview1.setOnItemLongClickListener(
-        (parent, view, position, id) -> {
-          var menu = new EditorTextActionWindow(mEditor);
-          menu.setText("Test");
-          if(menu != null) menu.show();
-          return true; 
         });
   }
 

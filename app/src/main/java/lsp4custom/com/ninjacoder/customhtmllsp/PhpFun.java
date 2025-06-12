@@ -1,6 +1,48 @@
 package lsp4custom.com.ninjacoder.customhtmllsp;
 
+import io.github.rosemoe.sora.data.CompletionItem;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
+import ir.ninjacoder.ghostide.utils.FileUtil;
+import java.io.File;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.jsoup.Jsoup;
+import org.jsoup.parser.Parser;
+
 public class PhpFun {
+  //  public static final String phpXml =
+  //      GhostIdeAppLoader.getContext().getCacheDir()
+  //          + File.separator
+  //          + "lsp"
+  //          + File.separator
+  //          + "php.xml";
+
+  public static final String phpXml = "/storage/emulated/0/apk/php.xml"; // for test
+
+  protected static List<CompletionItem> getLspPhp(String pfrx) {
+    List<CompletionItem> list = new ArrayList<>();
+    try {
+      var doc = Jsoup.parse(FileUtil.readFile(phpXml), "", Parser.xmlParser());
+      var item = doc.select("keyword");
+      for (var it : item) {
+        CompletionItem myitem = new CompletionItem();
+        myitem.label = it.attr("name");
+        String mod = "Php type " + it.attr("type") + " returnType " + it.attr("returnType");
+        myitem.desc = mod;
+        myitem.commit = it.attr("name");
+        myitem.cursorOffset(myitem.label.length() - 1);
+        list.add(myitem);
+      }
+      if (pfrx != null && !pfrx.isEmpty()) {
+        list = list.stream().filter(vvv -> vvv.label.startsWith(pfrx)).collect(Collectors.toList());
+      }
+      return list;
+    } catch (Exception err) {
+      return new ArrayList<>();
+    }
+  }
 
   public static String[] item = {
     "abs ",

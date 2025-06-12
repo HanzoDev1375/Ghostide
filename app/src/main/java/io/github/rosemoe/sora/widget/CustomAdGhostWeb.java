@@ -4,6 +4,8 @@ import com.bumptech.glide.Glide;
 import com.ninjacoder.jgit.CircleDrawable;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
+import io.github.rosemoe.sora.widget.tooltip.ToolItemPop;
+import io.github.rosemoe.sora.widget.tooltip.ToolTipHelper;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.utils.AnimUtils;
 import android.content.res.ColorStateList;
@@ -46,6 +48,14 @@ public class CustomAdGhostWeb extends EditorCompletionAdapter {
       view = LayoutInflater.from(getContext()).inflate(R.layout.one_ui, parent, false);
     }
     CompletionItem item = getItem(pos);
+
+    if (pos == 0) {
+      view.setBackground(colorSet("#fff807"));
+      var tool = new ToolItemPop(getEditor());
+      if (tool != null) {
+        tool.run(item.desc);
+      }
+    }
 
     item_label = view.findViewById(R.id.item_label);
     item_desc = view.findViewById(R.id.item_desc);
@@ -100,8 +110,8 @@ public class CustomAdGhostWeb extends EditorCompletionAdapter {
         isCurrentCursorPosition
             ? getThemeColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER)
             : Color.TRANSPARENT);
-
     view.setTag(pos);
+
     return view;
   }
 

@@ -116,7 +116,7 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
     css2.analyzeHtml(editor.getText().toString());
     items.addAll(CodeSnippet.runasList("html", prefix));
     items.addAll(CodeSnippet.getListFile(save_path.getString("path", ""), prefix));
-
+    items.addAll(CodeSnippet.getPhpLsp(prefix));
     return items;
   }
 
@@ -336,10 +336,6 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
         items.add(AutoCompletion(classapp, "Class adding", HTMLLanguage.getClass));
     for (String getingId : HTMLLanguage.EmtId)
       if (getingId.startsWith(prefix)) items.add(getId(getingId, "Id Tag", HTMLLanguage.getId));
-
-    for (String php : HTMLLanguage.PHP)
-      if (php.startsWith(prefix)) items.add(PhpAsCompletion(php, htmlconfig.PhpKeys));
-
     for (String post : HTMLLanguage.POSTEEMET)
       if (post.startsWith(prefix)) items.add(getEmmetItemPost(post, htmlconfig.Emmet));
     for (String getEmmt : HTMLLanguage.GETHTML5)
@@ -356,16 +352,6 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
         if (span.startsWith(prefix)) {
           items.add(CodeSampel(span, "Html 5 Comment", "<!-- Comment -->"));
         }
-      }
-    }
-    for (String phpfuns : PhpFun.item) {
-      if (phpfuns.startsWith(prefix)) {
-        items.add(dddAsCompletion(phpfuns + "()".trim(), htmlconfig.PhpFun));
-      }
-    }
-    for (var it : PHPLanguage.key) {
-      if (it.startsWith(prefix)) {
-        items.add(dddAsCompletion(it, htmlconfig.PhpKeys));
       }
     }
   }

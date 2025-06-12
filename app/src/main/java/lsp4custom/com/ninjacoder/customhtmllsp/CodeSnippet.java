@@ -300,4 +300,7 @@ public class CodeSnippet {
         .filter(item -> item.label.startsWith(prefix))
         .collect(Collectors.toList());
   }
+   public static List<CompletionItem> getPhpLsp(String sub){
+	   return PhpFun.getLspPhp(sub);
+   }
 }

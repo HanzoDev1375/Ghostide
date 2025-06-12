@@ -36,11 +36,10 @@ public class ToolTipHelper extends EditorPopupWindow {
     this.editor = editor;
     setContentView(onCreateContentView(editor.getContext()));
     this.text = onCreateTextView();
-    displayWindow();
   }
 
   private static int getFeatureFlags() {
-    return FEATURE_SCROLL_AS_CONTENT | FEATURE_SHOW_OUTSIDE_VIEW_ALLOWED;
+    return FEATURE_SHOW_OUTSIDE_VIEW_ALLOWED;
   }
 
   protected View onCreateContentView(@NonNull Context context) {
