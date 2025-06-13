@@ -3,12 +3,12 @@ package ir.ninjacoder.ghostide.config;
 import android.content.Context
 import java.io.*
 import com.xiaoyv.ccompile.utils.*
-
+///test
 object CommandCompat {
     fun getBasicCommand(context: Context): String {
         val appLibDirPath = context.applicationInfo.nativeLibraryDir
         val appFileDirPath = context.filesDir.absolutePath
-        val pythonBuildDirPath = "$appFileDirPath/files/usr"
+        val pythonBuildDirPath = "$appFileDirPath/usr"
         val pythonLibDirPath = "$pythonBuildDirPath/lib"
         val pythonExecName = "libpython3.so"
         val aliasCommand = "alias python=\"$pythonExecName\" && alias pip=\"$pythonExecName -m pip\""
@@ -26,7 +26,7 @@ object CommandCompat {
     fun getInterpreterCommand(context: Context, filePath: String): String {
         val appLibDirPath = context.applicationInfo.nativeLibraryDir
         val appFileDirPath = context.filesDir.absolutePath
-        val pythonBuildDirPath = "$appFileDirPath/files/usr"
+        val pythonBuildDirPath = "$appFileDirPath/usr"
         val pythonLibDirPath = "$pythonBuildDirPath/lib"
         val pythonExecName = "libpython3.so"
         return "export PATH=\$PATH:$appLibDirPath && export PYTHONHOME=$pythonBuildDirPath && export LD_LIBRARY_PATH=\"\$LD_LIBRARY_PATH:\" && export LD_LIBRARY_PATH=\"\$LD_LIBRARY_PATH${pythonLibDirPath}\" && clear && $pythonExecName $filePath && echo '[Enter to Exit]' && read junk && exit"
@@ -35,7 +35,7 @@ object CommandCompat {
     fun getPythonShellCommand(context: Context): String {
         val appLibDirPath = context.applicationInfo.nativeLibraryDir
         val appFileDirPath = context.filesDir.absolutePath
-        val pythonBuildDirPath = "$appFileDirPath/files/usr"
+        val pythonBuildDirPath = "$appFileDirPath/usr"
         val pythonLibDirPath = "$pythonBuildDirPath/lib"
         return "export PATH=\$PATH:$appLibDirPath && export PYTHONHOME=$pythonBuildDirPath && export PYTHONPATH=$appLibDirPath && export LD_LIBRARY_PATH=\"\$LD_LIBRARY_PATH:\" && export LD_LIBRARY_PATH=\"\$LD_LIBRARY_PATH${pythonLibDirPath}\" && clear && libpython3.so && echo '[Enter to Exit]' && read junk && exit"
     }

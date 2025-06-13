@@ -31,7 +31,7 @@ public class SplashWord extends AppIntro2 {
 
     var mypath = getFilesDir().getAbsolutePath() + "/" + "databins";
     var pythonPath =
-        getFilesDir().getAbsolutePath() + File.separator + "files" + File.separator + "env.sh";
+        getFilesDir().getAbsolutePath() + File.separator + "env.sh";
     var phpPath =
         getFilesDir().getAbsolutePath() + File.separator + "lib" + File.separator + "libx265.so";
     var ghostPath = "/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost";
