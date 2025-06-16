@@ -53,68 +53,105 @@ public class ThemeUtils {
 
   public ThemeUtils setThemeCodeEditor(
       CodeEditor editor, HashMap<String, Object> imap, boolean chackHashMap, Activity x) {
-    getColor(imap, editor, KeySet.blockline, EditorColorScheme.BLOCK_LINE, "#ff28ffae");
-    getColor(imap, editor, KeySet.operator, EditorColorScheme.OPERATOR, "#ff43ffd5");
-    getColor(
-        imap, editor, KeySet.blocklinecurrent, EditorColorScheme.BLOCK_LINE_CURRENT, "#ff28ffae");
-    getColor(
-        imap, editor, KeySet.nonprintablechar, EditorColorScheme.NON_PRINTABLE_CHAR, "#ffa10370");
-    getColor(imap, editor, KeySet.currentline, EditorColorScheme.CURRENT_LINE, "#ff6b90ff");
-    getColor(imap, editor, KeySet.selectionhandle, EditorColorScheme.SELECTION_HANDLE, "#ff2a6373");
-    getColor(imap, editor, KeySet.linenumber, EditorColorScheme.LINE_NUMBER, "#ffff0017");
-    getColor(imap, editor, KeySet.linedivider, EditorColorScheme.LINE_DIVIDER, "#1d000000");
-    getColor(imap, editor, KeySet.attributevalue, EditorColorScheme.ATTRIBUTE_VALUE, "#ffa6ffa1");
-    getColor(imap, editor, KeySet.attributename, EditorColorScheme.ATTRIBUTE_NAME, "#ffff1723");
-    getColor(imap, editor, KeySet.textnormal, EditorColorScheme.TEXT_NORMAL, "#ffffffff");
-    getColor(imap, editor, KeySet.identifiername, EditorColorScheme.IDENTIFIER_NAME, "#501910");
-    getColor(imap, editor, KeySet.comment, EditorColorScheme.COMMENT, "#424242");
-    getColor(imap, editor, KeySet.keyword, EditorColorScheme.KEYWORD, "#ff1081");
-    getColor(imap, editor, KeySet.print, EditorColorScheme.print, "#ffa801");
-    getColor(imap, editor, KeySet.ninja, EditorColorScheme.Ninja, "#ffe200");
+    getColor(imap, editor, "block_line", EditorColorScheme.BLOCK_LINE, "#ff28ffae");
+    getColor(imap, editor, "OPERATOR", EditorColorScheme.OPERATOR, "#ff43ffd5");
+    getColor(imap, editor, "block_line_current", EditorColorScheme.BLOCK_LINE_CURRENT, "#ff28ffae");
+    getColor(imap, editor, "non_printable_char", EditorColorScheme.NON_PRINTABLE_CHAR, "#ffa10370");
+    getColor(imap, editor, "current_line", EditorColorScheme.CURRENT_LINE, "#ff6b90ff");
+    getColor(imap, editor, "selection_handle", EditorColorScheme.SELECTION_HANDLE, "#ff2a6373");
+    getColor(imap, editor, "line_number", EditorColorScheme.LINE_NUMBER, "#ffff0017");
+    getColor(imap, editor, "line_divider", EditorColorScheme.LINE_DIVIDER, "#1d000000");
+    getColor(imap, editor, "attribute_value", EditorColorScheme.ATTRIBUTE_VALUE, "#ffa6ffa1");
+    getColor(imap, editor, "attribute_name", EditorColorScheme.ATTRIBUTE_NAME, "#ffff1723");
+    getColor(imap, editor, "text_normal", EditorColorScheme.TEXT_NORMAL, "#ffffffff");
+    getColor(imap, editor, "identifier_name", EditorColorScheme.IDENTIFIER_NAME, "#501910");
+    getColor(imap, editor, "comment", EditorColorScheme.COMMENT, "#424242");
+    getColor(imap, editor, "keyword", EditorColorScheme.KEYWORD, "#ff1081");
+    getColor(imap, editor, "print", EditorColorScheme.print, "#ffa801");
+    getColor(imap, editor, "ninja", EditorColorScheme.Ninja, "#ffe200");
+    getColor(imap, editor, "breaklevel1", EditorColorScheme.breaklevel1, "#ff5733");
+    getColor(imap, editor, "breaklevel2", EditorColorScheme.breaklevel2, "#33c4ff");
+    getColor(imap, editor, "breaklevel3", EditorColorScheme.breaklevel3, "#75ff33");
+    getColor(imap, editor, "breaklevel4", EditorColorScheme.breaklevel4, "#ff33a1");
+    getColor(imap, editor, "breaklevel5", EditorColorScheme.breaklevel5, "#ffd633");
+    getColor(imap, editor, "breaklevel6", EditorColorScheme.breaklevel6, "#ff8c33");
+    getColor(imap, editor, "breaklevel7", EditorColorScheme.breaklevel7, "#3347ff");
+    getColor(imap, editor, "javakeywordoprator", EditorColorScheme.javakeywordoprator, "#ff3371");
+    getColor(imap, editor, "breaklevel8", EditorColorScheme.breaklevel8, "#ec33ff");
 
-    // Break levels
-    getColor(imap, editor, KeySet.breaklevel1, EditorColorScheme.breaklevel1, "#ff5733");
-    getColor(imap, editor, KeySet.breaklevel2, EditorColorScheme.breaklevel2, "#33c4ff");
-    getColor(imap, editor, KeySet.breaklevel3, EditorColorScheme.breaklevel3, "#75ff33");
-    getColor(imap, editor, KeySet.breaklevel4, EditorColorScheme.breaklevel4, "#ff33a1");
-    getColor(imap, editor, KeySet.breaklevel5, EditorColorScheme.breaklevel5, "#ffd633");
-    getColor(imap, editor, KeySet.breaklevel6, EditorColorScheme.breaklevel6, "#ff8c33");
-    getColor(imap, editor, KeySet.breaklevel7, EditorColorScheme.breaklevel7, "#3347ff");
-    getColor(imap, editor, KeySet.breaklevel8, EditorColorScheme.breaklevel8, "#ec33ff");
-
-    // Editor UI elements
-    getColor(
-        imap, editor, KeySet.autocomppanelbg, EditorColorScheme.AUTO_COMP_PANEL_BG, "#ff000000");
+    getColor(imap, editor, "auto_comp_panel_bg", EditorColorScheme.AUTO_COMP_PANEL_BG, "#ff000000");
     getColor(
         imap,
         editor,
-        KeySet.autocomppanelcorner,
+        "auto_comp_panel_corner",
         EditorColorScheme.AUTO_COMP_PANEL_CORNER,
         "#fffffffd");
     getColor(
         imap,
         editor,
-        KeySet.linenumberbackground,
+        "line_number_background",
         EditorColorScheme.LINE_NUMBER_BACKGROUND,
         "#fff00000");
-    getColor(imap, editor, KeySet.wholebackground, EditorColorScheme.WHOLE_BACKGROUND, "#02FFFFFF");
+    getColor(imap, editor, "whole_background", EditorColorScheme.WHOLE_BACKGROUND, "#02FFFFFF");
+    getColor(imap, editor, "html_tag", EditorColorScheme.HTML_TAG, "#ffc84100");
+    getColor(imap, editor, "literal", EditorColorScheme.LITERAL, "#ff2017");
 
-    // Java syntax
-    getColor(imap, editor, KeySet.javakeyword, EditorColorScheme.javakeyword, "#592370");
-    getColor(imap, editor, KeySet.javaoprator, EditorColorScheme.javaoprator, "#672907");
-    getColor(imap, editor, KeySet.javafun, EditorColorScheme.javafun, "#592370");
-    getColor(imap, editor, KeySet.javafield, EditorColorScheme.javafield, "#672907");
-    getColor(imap, editor, KeySet.javatype, EditorColorScheme.javatype, "#337291");
-    getColor(imap, editor, KeySet.javaparament, EditorColorScheme.javaparament, "#336108");
-    getColor(imap, editor, KeySet.javanumber, EditorColorScheme.javanumber, "#ff620a");
-    getColor(imap, editor, KeySet.javastring, EditorColorScheme.javastring, "#ff7dd1");
+    getColor(imap, editor, "print", EditorColorScheme.SCROLL_BAR_THUMB, "#ff3500");
+    getColor(imap, editor, "ninja", EditorColorScheme.SCROLL_BAR_THUMB_PRESSED, "#ffacd9");
+    getColor(
+        imap, editor, "auto_comp_panel_corner", EditorColorScheme.SCROLL_BAR_TRACK, "#ffee3201");
+    getColor(imap, editor, "javakeyword", EditorColorScheme.javakeyword, "#592370");
+    getColor(imap, editor, "javaoprator", EditorColorScheme.javaoprator, "#672907");
+    getColor(imap, editor, "javafun", EditorColorScheme.javafun, "#592370");
+    getColor(imap, editor, "javafield", EditorColorScheme.javafield, "#672907");
+    getColor(imap, editor, "javatype", EditorColorScheme.javatype, "#337291");
+    getColor(imap, editor, "javaparament", EditorColorScheme.javaparament, "#336108");
+    getColor(imap, editor, "javanumber", EditorColorScheme.javanumber, "#ff620a");
+    getColor(imap, editor, "javastring", EditorColorScheme.javastring, "#ff7dd1");
 
-    // HTML/CSS syntax
-    getColor(imap, editor, KeySet.htmltag, EditorColorScheme.htmltag, "#ff6060");
-    getColor(imap, editor, KeySet.htmlattr, EditorColorScheme.htmlattr, "#4fc3f7");
-    getColor(imap, editor, KeySet.htmlattrname, EditorColorScheme.htmlattrname, "#ffab40");
-    getColor(imap, editor, KeySet.htmlstr, EditorColorScheme.htmlstr, "#81c784");
-    getColor(imap, editor, KeySet.csskeyword, EditorColorScheme.csskeyword, "#64b5f6");
+    getColor(imap, editor, "htmltag", EditorColorScheme.htmltag, "#ff6060");
+    getColor(imap, editor, "htmlattr", EditorColorScheme.htmlattr, "#4fc3f7");
+    getColor(imap, editor, "htmlattrname", EditorColorScheme.htmlattrname, "#ffab40");
+    getColor(imap, editor, "htmlstr", EditorColorScheme.htmlstr, "#81c784");
+    getColor(imap, editor, "csskeyword", EditorColorScheme.csskeyword, "#64b5f6");
+    getColor(imap, editor, "htmlsymbol", EditorColorScheme.htmlsymbol, "#ba68c8");
+    getColor(imap, editor, "htmlblockhash", EditorColorScheme.htmlblockhash, "#ff7043");
+    getColor(imap, editor, "htmlblocknormal", EditorColorScheme.htmlblocknormal, "#90caf9");
+    getColor(imap, editor, "jskeyword", EditorColorScheme.jskeyword, "#64b5f6");
+    getColor(imap, editor, "jsfun", EditorColorScheme.jsfun, "#ffd54f");
+    getColor(imap, editor, "jsoprator", EditorColorScheme.jsoprator, "#4db6ac");
+    getColor(imap, editor, "jsattr", EditorColorScheme.jsattr, "#ffab40");
+    getColor(imap, editor, "jsstring", EditorColorScheme.jsstring, "#81c784");
+
+    getColor(imap, editor, "pystring", EditorColorScheme.pystring, "#ff7d51");
+    getColor(imap, editor, "pykeyword", EditorColorScheme.pykeyword, "#51ff7d");
+    getColor(imap, editor, "pysymbol", EditorColorScheme.pysymbol, "#7d51ff");
+    getColor(imap, editor, "pynumber", EditorColorScheme.pynumber, "#ff51ec");
+    getColor(imap, editor, "pycolormatch1", EditorColorScheme.pycolormatch1, "#ffd151");
+    getColor(imap, editor, "pycolormatch2", EditorColorScheme.pycolormatch2, "#51d1ff");
+    getColor(imap, editor, "pycolormatch3", EditorColorScheme.pycolormatch3, "#51ff92");
+    getColor(imap, editor, "pycolormatch4", EditorColorScheme.pycolormatch4, "#ff51a2");
+    getColor(imap, editor, "phpkeyword", EditorColorScheme.phpkeyword, "#0000ff");
+    getColor(imap, editor, "phpattr", EditorColorScheme.phpattr, "#ff8c00");
+    getColor(imap, editor, "phpsymbol", EditorColorScheme.phpsymbol, "#b22222");
+    getColor(imap, editor, "phphtmlattr", EditorColorScheme.phphtmlattr, "#8a2be2");
+    getColor(imap, editor, "phphtmlkeyword", EditorColorScheme.phphtmlkeyword, "#32cd32");
+    getColor(imap, editor, "phpcolormatch1", EditorColorScheme.phpcolormatch1, "#ff69b4");
+    getColor(imap, editor, "phpcolormatch2", EditorColorScheme.phpcolormatch2, "#ffa500");
+    getColor(imap, editor, "phpcolormatch3", EditorColorScheme.phpcolormatch3, "#1e90ff");
+    getColor(imap, editor, "phpcolormatch4", EditorColorScheme.phpcolormatch4, "#ff51a2");
+    getColor(imap, editor, "phpcolormatch5", EditorColorScheme.phpcolormatch5, "#7fff00");
+    getColor(imap, editor, "phpcolormatch6", EditorColorScheme.phpcolormatch6, "#ff4500");
+    getColor(imap, editor, "tskeyword", EditorColorScheme.tskeyword, "#00ff7f");
+    getColor(imap, editor, "tsattr", EditorColorScheme.tsattr, "#1e90ff");
+    getColor(imap, editor, "tssymbols", EditorColorScheme.tssymbols, "#ff1493");
+    getColor(imap, editor, "tscolormatch1", EditorColorScheme.tscolormatch1, "#ffd700");
+    getColor(imap, editor, "tscolormatch2", EditorColorScheme.tscolormatch2, "#ff6347");
+    getColor(imap, editor, "tscolormatch3", EditorColorScheme.tscolormatch3, "#7b68ee");
+    getColor(imap, editor, "tscolormatch4", EditorColorScheme.tscolormatch4, "#32cd32");
+    getColor(imap, editor, "tscolormatch5", EditorColorScheme.tscolormatch5, "#ff4500");
+    getColor(imap, editor, "tscolormatch6", EditorColorScheme.tscolormatch6, "#ff8c00");
+    getColor(imap, editor, "tscolormatch7", EditorColorScheme.tscolormatch7, "#20b2aa");
 
     // fa: اینجا برای رنگ بندی بدون تم جیسون است
     // اگر برای تم عادی میخواهید میتوانید از این روش کمک بگیرید

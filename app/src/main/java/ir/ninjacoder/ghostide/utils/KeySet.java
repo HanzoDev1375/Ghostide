@@ -88,7 +88,6 @@ public class KeySet {
   public static final String imagecolor = "imagecolor";
   public static final String phpattr = "phpattr";
   public static final String jsstring = "jsstring";
-  public static final String htmltag = "html_tag";
   public static final String javaoprator = "javaoprator";
   public static final String htmlattr = "htmlattr";
   public static final String htmlsymbol = "htmlsymbol";

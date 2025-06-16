@@ -487,8 +487,8 @@ public class CodeEditorActivity extends BaseCompat {
         (event, subscribe) -> {
           var cu = event.getEditor().getCursor();
           var myChar = new CharUtil(editor.getText().toString(), titleauthor);
-          
-          var iscode = new FactoryCodeError(editor, iconAuthor,tablayouteditor);
+
+          var iscode = new FactoryCodeError(editor, iconAuthor, tablayouteditor);
           int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
           if (selectedTabPosition >= 0 && selectedTabPosition < tabs_listmap.size()) {
             ObjectUtils.addStarToTab(selectedTabPosition, tablayouteditor);
@@ -550,11 +550,12 @@ public class CodeEditorActivity extends BaseCompat {
     themeForJson2.addTextColor(
         titleauthor, KeySet.syombolbartextcolor, Color.parseColor("#FFFFA0FB"), this, imap);
     themeForJson2.addImageColor(undo, this, KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
-    themeForJson2.addImageColor(redo, this,KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
-    themeForJson2.addImageColor(image, this, KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
-	themeForJson2.setStatusNavColor(this,imap,KeySet.backgroundcolorlinear);
+    themeForJson2.addImageColor(redo, this, KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
     themeForJson2.addImageColor(
-        menupopnew, this,KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
+        image, this, KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
+    themeForJson2.setStatusNavColor(this, imap, KeySet.backgroundcolorlinear);
+    themeForJson2.addImageColor(
+        menupopnew, this, KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
     themeForJson2.addWindowsNavColor(this, imap, KeySet.backgroundcolorlinear);
     themeForJson2.setFabBackground(_fab, imap);
     AnimUtils.ClickAnimation(menupopnew);
@@ -944,7 +945,7 @@ public class CodeEditorActivity extends BaseCompat {
                           .setAutoDismiss(true)
                           .setMenuColor(
                               imap.containsKey(KeySet.menuPosBackground)
-                                  ? Color.parseColor(imap.get(KeySet.menuPosBackground.toString())
+                                  ? Color.parseColor(imap.get(KeySet.menuPosBackground).toString())
                                   : MaterialColors.getColor(
                                       CodeEditorActivity.this, ObjectUtils.Back, 0))
                           .setTextColor(
@@ -1246,7 +1247,7 @@ public class CodeEditorActivity extends BaseCompat {
           var file = new File(selectedFilePath);
           JavaCcComplierImpl.main(file.toString(), file.getParent() + "/");
         } else if (selectedFilePath.contains(".kt")) {
-          new KotlinCompilerImpl(CodeEditorActivity.this, selectedFilePath,editor);
+          new KotlinCompilerImpl(CodeEditorActivity.this, selectedFilePath, editor);
         }
       } else {
 
