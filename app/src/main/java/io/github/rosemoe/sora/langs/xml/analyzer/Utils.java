@@ -104,55 +104,6 @@ public class Utils {
   public static int[] setSpanEFO(TextAnalyzeResult colors, int line, int column, int coloruser) {
     return setSpanEFO(colors, line, column, coloruser, false, false);
   }
-
-  //  public static int[] setSpanEFO(
-  //      TextAnalyzeResult colors,
-  //      int line,
-  //      int column,
-  //      int coloruser,
-  //      boolean isbold,
-  //      boolean isitalic) {
-  //    int lineCount = colors.getSpanMap().size();
-  //    int realLine = line - 1;
-  //    List<Span> spans = colors.getSpanMap().get(Math.min(realLine, lineCount - 1));
-  //
-  //    int[] end = new int[2];
-  //    end[0] = Math.min(realLine, lineCount - 1);
-  //    long style = TextStyle.makeStyle(coloruser, 0, isbold, isitalic, false);
-  //    if (realLine >= lineCount) {
-  //      Span span = Span.obtain(0, TextStyle.makeStyle(coloruser, 0, isbold, isitalic, false));
-  //      span.problemFlags = 0;
-  //
-  //      colors.add(realLine, span);
-  //      end[0]++;
-  //    } else {
-  //      Span last = null;
-  //      for (int i = 0; i < spans.size(); i++) {
-  //        Span span = spans.get(i);
-  //        // span.setDrawminiText("Test");
-  //        if (last != null) {
-  //          if (last.column <= column - 1 && span.column >= column - 1) {
-  //            span.problemFlags = 0;
-  //            last.problemFlags = 0;
-  //            span.style = style;
-  //            last.style = style;
-  //            end[1] = last.column;
-  //            break;
-  //          }
-  //        }
-  //        if (i == spans.size() - 1 && span.column <= column - 1) {
-  //          span.problemFlags = 0;
-  //          span.style = style;
-  //          end[1] = span.column;
-  //          break;
-  //        }
-  //        last = span;
-  //      }
-  //    }
-  //
-  //    return end;
-  //  }
-  //
   public static int[] setSpanEFO(
       TextAnalyzeResult colors,
       int line,
@@ -196,6 +147,62 @@ public class Utils {
       }
       if (i == spans.size() - 1 && span.column <= column - 1) {
         span.problemFlags = 0;
+        span.style = style;
+        end[1] = span.column;
+        return end;
+      }
+      last = span;
+    }
+
+    return end;
+  }
+
+  public static int[] setSpanEFO2(
+      TextAnalyzeResult colors,
+      int line,
+      int column,
+      int coloruser,
+      boolean isbold,
+      boolean isitalic) {
+    int lineCount = colors.getSpanMap().size();
+    int realLine = line - 1;
+
+    // بررسی معتبر بودن خط
+    if (realLine < 0 || realLine >= lineCount) {
+      return new int[] {Math.min(realLine, lineCount - 1), 0};
+    }
+
+    List<Span> spans = colors.getSpanMap().get(realLine);
+    int[] end = new int[2];
+    end[0] = realLine;
+    long style = TextStyle.makeStyle(EditorColorScheme.ATTRIBUTE_NAME, 0, isbold, isitalic, false);
+
+    // بررسی خالی بودن spans
+    if (spans.isEmpty()) {
+      Span span = Span.obtain(0, style);
+      colors.add(realLine, span);
+      end[1] = 0;
+      return end;
+    }
+
+    Span last = null;
+    for (int i = 0; i < spans.size(); i++) {
+      Span span = spans.get(i);
+      if (last != null) {
+        if (last.column <= column - 1 && span.column > column - 1) {
+          span.problemFlags = 0;
+          last.problemFlags = 0;
+          span.style = style;
+		  span.setBackgroundColorMy(coloruser);
+		  last.setBackgroundColorMy(coloruser);
+          last.style = style;
+          end[1] = last.column;
+          return end;
+        }
+      }
+      if (i == spans.size() - 1 && span.column <= column - 1) {
+        span.problemFlags = 0;
+		span.setBackgroundColorMy(coloruser);
         span.style = style;
         end[1] = span.column;
         return end;

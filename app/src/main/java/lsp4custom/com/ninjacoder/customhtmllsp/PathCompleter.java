@@ -22,44 +22,6 @@ import java.util.stream.Collectors;
 class PathCompleter {
   private static Map<String, File[]> cache = new HashMap<>();
 
-  //  protected static List<CompletionItem> getPathCompletions(String currentPath, String prefix) {
-  //    List<CompletionItem> completions = new ArrayList<>();
-  //
-  //    try {
-  //      File directory = resolveDirectory(currentPath, prefix);
-  //      if (directory == null || !directory.exists()) {
-  //        return completions;
-  //      }
-  //
-  //      File[] allFiles =
-  //          cache.computeIfAbsent(
-  //              directory.getAbsolutePath(),
-  //              k -> {
-  //                File[] files = directory.listFiles();
-  //                return files != null ? files : new File[0];
-  //              });
-  //
-  //      String finalPrefix = extractFinalPrefix(prefix);
-  //      String basePath =
-  //          prefix.contains("/")
-  //              ? prefix.substring(0, prefix.lastIndexOf('/') + 1)
-  //              : (prefix.startsWith("./") ? "./" : "");
-  //
-  //      for (File file : allFiles) {
-  //        if (file.getName().startsWith(finalPrefix)) {
-  //          CompletionItem item = new CompletionItem();
-  //          item.label = file.getName();
-  //          item.commit = basePath + file.getName() + (file.isDirectory() ? "/" : "");
-  //          item.desc = file.isFile() ? "File" : "Folder";
-  //          completions.add(item);
-  //        }
-  //      }
-  //    } catch (Exception e) {
-  //      e.printStackTrace();
-  //    }
-  //
-  //    return completions;
-  //  }
   protected static List<CompletionItem> getPathCompletions(String currentPath, String prefix) {
     List<CompletionItem> completions = new ArrayList<>();
 
@@ -88,6 +50,12 @@ class PathCompleter {
           item.desc = file.isFile() ? "File" : "Folder";
           completions.add(item);
         }
+      }
+      if (prefix != null && !prefix.isEmpty()) {
+        completions =
+            completions.stream()
+                .filter(it -> it.label.toLowerCase().startsWith(finalPrefix.toLowerCase()))
+                .collect(Collectors.toList());
       }
     } catch (Exception e) {
       e.printStackTrace();

@@ -12,6 +12,7 @@ import android.util.Log;
 import io.github.rosemoe.sora.langs.xml.analyzer.BasicSyntaxPullAnalyzer;
 import io.github.rosemoe.sora.text.TextStyle;
 import io.github.rosemoe.sora.widget.ListCss3Color;
+import ir.ninjacoder.ghostide.widget.data.CSSVariableParser;
 import java.util.Stack;
 import io.github.rosemoe.sora.data.BlockLine;
 import org.antlr.v4.runtime.CharStreams;
@@ -434,7 +435,8 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
               // ویژگی استفاده کنید...
               //// ListCss3Color.initColor(token, line, column, result, true);
               hl.handleCustom(result, line, column, colorid);
-
+              var cssH= new CSSVariableParser(editor);
+			  cssH.highlightVariables(result,editor.getText().toString());
               break;
             }
           case HTMLLexer.HTMLRGB:

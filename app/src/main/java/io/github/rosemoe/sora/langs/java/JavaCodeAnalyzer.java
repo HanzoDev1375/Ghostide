@@ -76,6 +76,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
   Set<String> calledMethods = new HashSet<>();
   Map<String, Position> symbolPositions = new HashMap<>();
   private RainbowBracketHelper ha;
+
   public JavaCodeAnalyzer(IdeEditor editor) {
     mEditorReference = new WeakReference<>(editor);
   }
@@ -94,7 +95,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
       TextAnalyzeResult result,
       TextAnalyzer.AnalyzeThread.Delegate delegate) {
     try {
-       ha = new RainbowBracketHelper();
+      ha = new RainbowBracketHelper();
       IdeEditor editor = mEditorReference.get();
       if (editor == null) {
         return;
@@ -260,13 +261,13 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             }
 
           case JavaLexer.LPAREN:
-		  case JavaLexer.LBRACK:
-		  ha.handleOpenBracket(result,line,column,EditorColorScheme.htmlblocknormal);
-		  break;
+          case JavaLexer.LBRACK:
+            ha.handleOpenBracket(result, line, column, EditorColorScheme.htmlblocknormal);
+            break;
           case JavaLexer.RPAREN:
           case JavaLexer.RBRACK:
-		  ha.handleCloseBracket(result,line,column,EditorColorScheme.htmlblocknormal);
-		  break;
+            ha.handleCloseBracket(result, line, column, EditorColorScheme.htmlblocknormal);
+            break;
           case JavaLexer.SEMI:
           case JavaLexer.COMMA:
           case JavaLexer.ASSIGN:
@@ -310,7 +311,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             if (previous == JavaLexer.IDENTIFIER) {
               get(EditorColorScheme.red, line, column, result);
             }
-            ha.handleCustom(result,line,column,EditorColorScheme.TEXT_NORMAL);
+            ha.handleCustom(result, line, column, EditorColorScheme.TEXT_NORMAL);
             break;
           case JavaLexer.BOOLEAN:
           case JavaLexer.BYTE:
@@ -324,7 +325,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             get(EditorColorScheme.javakeywordoprator, line, column, result);
             classNamePrevious = true;
             break;
-            //  case JavaLexer.BLOCK_COMMENT:
+          case JavaLexer.BLOCK_COMMENT:
           case JavaLexer.LINE_COMMENT:
             if (previous == JavaLexer.AT) {
               result.addIfNeeded(
@@ -383,15 +384,31 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               if (token.getText().equals("main")) {
                 colorid = EditorColorScheme.green;
               }
-              
+
               get(colorid, line, column, result);
-    
+
               break;
             }
 
           case JavaLexer.HEX_LITERAL:
             ListCss3Color.setColorBinery(token, line, column, result);
             break;
+          case JavaLexer.LBRACE:
+            {
+              if (stack.isEmpty()) {
+                if (currSwitch > maxSwitch) {
+                  maxSwitch = currSwitch;
+                }
+                currSwitch = 0;
+              }
+              currSwitch++;
+              BlockLine block = result.obtainNewBlock();
+              block.startLine = line;
+              block.startColumn = column;
+              stack.push(block);
+              ha.handleOpenBracket(result, line, column, EditorColorScheme.htmlblocknormal);
+			  break;
+            }
 
           case JavaLexer.RBRACE:
             {
@@ -399,32 +416,14 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 BlockLine b = stack.pop();
                 b.endLine = line;
                 b.endColumn = column;
-                if (b.startLine != b.endLine) {
+
+                if (b.startLine != b.endLine || b.startColumn != b.endColumn) {
                   result.addBlockLine(b);
                 }
               }
-              var lists = result.getBlocks();
-			  ha.handleOpenBracket(result,line,column,EditorColorScheme.htmlblocknormal);
-              break;
-            }
-
-          case JavaLexer.LBRACE:
-            {
-              BlockLine block = result.obtainNewBlock();
-              block.startLine = line;
-              block.startColumn = column;
-              // اضافه کردن بلوک به استک
-              var lists = result.getBlocks();
-             
-			  ha.handleOpenBracket(result,line,column,EditorColorScheme.htmlblocknormal);
-              stack.push(block);
-              if (stack.isEmpty()) {
-                if (currSwitch > maxSwitch) {
-                  maxSwitch = currSwitch;
-                }
-                currSwitch = 0;
-              }
-              currSwitch++; // ا
+              var colorid = EditorColorScheme.htmlblocknormal;
+              // اضافه کردن رنگ برای RBRACE
+              ha.handleCloseBracket(result, line, column, EditorColorScheme.htmlblocknormal);
               break;
             }
 

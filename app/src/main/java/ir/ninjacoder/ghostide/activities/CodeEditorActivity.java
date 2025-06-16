@@ -548,38 +548,28 @@ public class CodeEditorActivity extends BaseCompat {
     editor.setLineNumberAlign(Paint.Align.CENTER);
     themeForJson2.setThemeCodeEditor(editor, imap, false, this);
     themeForJson2.addTextColor(
-        titleauthor, "SyombolBarTextColor", Color.parseColor("#FFFFA0FB"), this, imap);
-    themeForJson2.addImageColor(undo, this, "imagecolor", imap, Color.parseColor("#ff94e7ff"));
-    themeForJson2.addImageColor(redo, this, "imagecolor", imap, Color.parseColor("#ff94e7ff"));
-    themeForJson2.addImageColor(image, this, "imagecolor", imap, Color.parseColor("#ff94e7ff"));
-	themeForJson2.setStatusNavColor(this,imap,"backgroundcolorlinear");
+        titleauthor, KeySet.syombolbartextcolor, Color.parseColor("#FFFFA0FB"), this, imap);
+    themeForJson2.addImageColor(undo, this, KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
+    themeForJson2.addImageColor(redo, this,KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
+    themeForJson2.addImageColor(image, this, KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
+	themeForJson2.setStatusNavColor(this,imap,KeySet.backgroundcolorlinear);
     themeForJson2.addImageColor(
-        menupopnew, this, "imagecolor", imap, Color.parseColor("#ff94e7ff"));
-    themeForJson2.addWindowsNavColor(this, imap, "tabimagecolorfilter");
+        menupopnew, this,KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
+    themeForJson2.addWindowsNavColor(this, imap, KeySet.backgroundcolorlinear);
     themeForJson2.setFabBackground(_fab, imap);
     AnimUtils.ClickAnimation(menupopnew);
     tablayouteditor.setSelectedTabIndicatorColor(
-        imap.containsKey("tabback")
-            ? Color.parseColor(imap.get("tabback").toString())
+        imap.containsKey(KeySet.tabback)
+            ? Color.parseColor(imap.get(KeySet.tabback).toString())
             : MaterialColors.getColor(tablayouteditor, ObjectUtils.Back));
     tablayouteditor.setTabTextColors(
         ColorStateList.valueOf(
-            imap.containsKey("tabtextcolor")
-                ? Color.parseColor(imap.get("tabtextcolor").toString())
+            imap.containsKey(KeySet.tabtextcolor)
+                ? Color.parseColor(imap.get(KeySet.tabtextcolor).toString())
                 : MaterialColors.getColor(tablayouteditor, ObjectUtils.TvColor)));
 
     AnimUtils.ClickAnimation(undo);
     AnimUtils.ClickAnimation(redo);
-    if (ru.contains("rup")) {
-      ObjectUtils.tryToRunThemeMaterial(editor);
-      CustomToolbar.setBackgroundColor(0xFF201B16);
-      redo.setColorFilter(0xFFFFDCBD, PorterDuff.Mode.MULTIPLY);
-      undo.setColorFilter(0xFFFFDCBD, PorterDuff.Mode.MULTIPLY);
-      menupopnew.setColorFilter(0xFFEEEEEE, PorterDuff.Mode.MULTIPLY);
-      image.setColorFilter(0xFFFFB689, PorterDuff.Mode.MULTIPLY);
-      titleauthor.setTextColor(0xFFFDA893);
-    } else {
-    }
     setPinLineNumberEditor();
     _Animwork(_fab);
     _Anim01(editor);
@@ -953,13 +943,13 @@ public class CodeEditorActivity extends BaseCompat {
                           .setShowBackground(false)
                           .setAutoDismiss(true)
                           .setMenuColor(
-                              imap.containsKey("tabback")
-                                  ? Color.parseColor(imap.get("tabback").toString())
+                              imap.containsKey(KeySet.menuPosBackground)
+                                  ? Color.parseColor(imap.get(KeySet.menuPosBackground.toString())
                                   : MaterialColors.getColor(
                                       CodeEditorActivity.this, ObjectUtils.Back, 0))
                           .setTextColor(
-                              imap.containsKey("tabtextcolor")
-                                  ? Color.parseColor(imap.get("tabtextcolor").toString())
+                              imap.containsKey(KeySet.menuPosTextColor)
+                                  ? Color.parseColor(imap.get(KeySet.menuPosTextColor).toString())
                                   : MaterialColors.getColor(
                                       CodeEditorActivity.this, ObjectUtils.TvColor, 0))
                           .setMenuRadius(15)
