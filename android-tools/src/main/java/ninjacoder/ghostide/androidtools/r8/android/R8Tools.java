@@ -62,7 +62,7 @@ public class R8Tools {
     void onItemResult();
   }
 
-   class CustomDiagnosticsHandler implements DiagnosticsHandler {
+  class CustomDiagnosticsHandler implements DiagnosticsHandler {
     private final PrograssSheet dialog;
 
     public CustomDiagnosticsHandler(PrograssSheet dialog) {

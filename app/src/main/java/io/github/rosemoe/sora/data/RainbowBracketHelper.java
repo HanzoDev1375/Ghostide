@@ -48,6 +48,12 @@ public class RainbowBracketHelper {
       colonColorIndex = (colonColorIndex + 1) % RAINBOW_COLORS.length;
     } else result.addIfNeeded(line, column, mcolor);
   }
+	
+	public int get(){
+		int color = RAINBOW_COLORS[colonColorIndex % RAINBOW_COLORS.length];
+		colonColorIndex = (colonColorIndex + 1) % RAINBOW_COLORS.length;
+		return color;
+	}
 
   public void handleSpanColor(
       TextAnalyzeResult result,

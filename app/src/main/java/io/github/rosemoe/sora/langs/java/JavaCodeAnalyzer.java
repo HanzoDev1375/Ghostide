@@ -1,21 +1,16 @@
 package io.github.rosemoe.sora.langs.java;
 
-import android.os.Handler;
-import android.os.Looper;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.type.Type;
 import io.github.rosemoe.sora.data.RainbowBracketHelper;
-import io.github.rosemoe.sora.model.Inlay;
 import io.github.rosemoe.sora.widget.ListCss3Color;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.config.JavaPaserUtils;
-import ir.ninjacoder.ghostide.model.Position;
 import ir.ninjacoder.ghostide.utils.ThemeUtils;
 import android.graphics.Color;
 import androidx.core.graphics.ColorUtils;
@@ -34,6 +29,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import io.github.rosemoe.sora.langs.xml.analyzer.Utils;
 import io.github.rosemoe.sora.util.TrieTree;
+import java.util.ArrayList;
 import android.util.Log;
 import io.github.rosemoe.sora.data.Span;
 import io.github.rosemoe.sora.text.TextStyle;
@@ -55,26 +51,9 @@ import io.github.rosemoe.sora.text.TextAnalyzer;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
 
 public class JavaCodeAnalyzer implements CodeAnalyzer {
-
   private final WeakReference<IdeEditor> mEditorReference;
   private static final Object OBJECT = new Object();
   private Map<String, Boolean> mapStyle;
-  Set<String> declaredVariables = new HashSet<>();
-  Set<String> usedVariables = new HashSet<>();
-  Set<String> unusedImport = new HashSet<>();
-  Set<String> mtcall = new HashSet<>();
-  Set<String> mtusing = new HashSet<>();
-  Map<String, Integer> mlines = new HashMap<>();
-  Map<String, Integer> mcoloum = new HashMap<>();
-  Map<String, Integer> inline = new HashMap<>();
-  Map<String, Integer> incol = new HashMap<>();
-  Map<String, Integer> varLines = new HashMap<>();
-  Map<String, Integer> varColumns = new HashMap<>();
-  Set<String> declaredVars = new HashSet<>();
-  Set<String> usedVars = new HashSet<>();
-  Set<String> declaredMethods = new HashSet<>();
-  Set<String> calledMethods = new HashSet<>();
-  Map<String, Position> symbolPositions = new HashMap<>();
   private RainbowBracketHelper ha;
 
   public JavaCodeAnalyzer(IdeEditor editor) {
@@ -262,17 +241,17 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
 
           case JavaLexer.LPAREN:
           case JavaLexer.LBRACK:
+          case JavaLexer.LT:
             ha.handleOpenBracket(result, line, column, EditorColorScheme.htmlblocknormal);
             break;
           case JavaLexer.RPAREN:
           case JavaLexer.RBRACK:
+          case JavaLexer.GT:
             ha.handleCloseBracket(result, line, column, EditorColorScheme.htmlblocknormal);
             break;
           case JavaLexer.SEMI:
           case JavaLexer.COMMA:
           case JavaLexer.ASSIGN:
-          case JavaLexer.GT:
-          case JavaLexer.LT:
           case JavaLexer.BANG:
           case JavaLexer.TILDE:
           case JavaLexer.QUESTION:
@@ -311,7 +290,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             if (previous == JavaLexer.IDENTIFIER) {
               get(EditorColorScheme.red, line, column, result);
             }
-            ha.handleCustom(result, line, column, EditorColorScheme.TEXT_NORMAL);
+            ha.handleCustom(result, line, column, EditorColorScheme.javaoprator);
             break;
           case JavaLexer.BOOLEAN:
           case JavaLexer.BYTE:
@@ -322,7 +301,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           case JavaLexer.INT:
           case JavaLexer.LONG:
           case JavaLexer.SHORT:
-            get(EditorColorScheme.javakeywordoprator, line, column, result);
+            get(EditorColorScheme.javakeyword, line, column, result);
             classNamePrevious = true;
             break;
           case JavaLexer.BLOCK_COMMENT:
@@ -346,12 +325,16 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
 
               int colorid = EditorColorScheme.TEXT_NORMAL;
               if (previous == JavaLexer.AT) {
-                colorid = EditorColorScheme.javastring;
+                colorid = EditorColorScheme.Ninja;
               }
               if (previous == JavaLexer.CLASS
                   || previous == JavaLexer.IMPLEMENTS
                   || previous == JavaLexer.VOID) {
                 colorid = EditorColorScheme.javafun;
+              }
+
+              if (previous == JavaLexer.LBRACK || previous == JavaLexer.ASSERT) {
+                colorid = EditorColorScheme.LITERAL;
               }
               if (previous == JavaLexer.PACKAGE
                   || previous == JavaLexer.IMPORT
@@ -367,48 +350,42 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 colorid = EditorColorScheme.javafun;
               }
               if (previous == JavaLexer.RETURN || previous == JavaLexer.NEW) {
-                colorid = EditorColorScheme.javatype;
+                colorid = EditorColorScheme.HTML_TAG;
               }
               if (previous == JavaLexer.INT) {
                 colorid = EditorColorScheme.javafield;
               }
               if (previous == JavaLexer.CASE || previous == JavaLexer.FINAL) {
-                colorid = EditorColorScheme.javaoprator;
+                colorid = EditorColorScheme.ATTRIBUTE_NAME;
               }
 
               if (previous == JavaLexer.PRIVATE
                   || previous == JavaLexer.PROTECTED
                   || previous == JavaLexer.PUBLIC) {
-                colorid = EditorColorScheme.javafield;
-              }
-              if (token.getText().equals("main")) {
-                colorid = EditorColorScheme.green;
+                colorid = EditorColorScheme.HTML_TAG;
               }
 
-              get(colorid, line, column, result);
+              if (previous == JavaLexer.LPAREN
+                  || prePreToken != null && prePreToken.getType() == JavaLexer.LPAREN
+                  || previous == JavaLexer.RPAREN
+                  || prePreToken != null && prePreToken.getType() == JavaLexer.RPAREN) {
 
+                colorid = EditorColorScheme.javaparament;
+              }
+              if (previous == JavaLexer.LT
+                  || prePreToken != null && prePreToken.getType() == JavaLexer.LT
+                  || previous == JavaLexer.GT
+                  || prePreToken != null && prePreToken.getType() == JavaLexer.GT) {
+                colorid = EditorColorScheme.javafun;
+              }
+
+              ha.handleCustom(result, line, column, colorid);
               break;
             }
 
           case JavaLexer.HEX_LITERAL:
             ListCss3Color.setColorBinery(token, line, column, result);
             break;
-          case JavaLexer.LBRACE:
-            {
-              if (stack.isEmpty()) {
-                if (currSwitch > maxSwitch) {
-                  maxSwitch = currSwitch;
-                }
-                currSwitch = 0;
-              }
-              currSwitch++;
-              BlockLine block = result.obtainNewBlock();
-              block.startLine = line;
-              block.startColumn = column;
-              stack.push(block);
-              ha.handleOpenBracket(result, line, column, EditorColorScheme.htmlblocknormal);
-			  break;
-            }
 
           case JavaLexer.RBRACE:
             {
@@ -416,14 +393,42 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 BlockLine b = stack.pop();
                 b.endLine = line;
                 b.endColumn = column;
-
-                if (b.startLine != b.endLine || b.startColumn != b.endColumn) {
-                  result.addBlockLine(b);
+                if (b.startLine != b.endLine) {
+                  result.addBlockLine(b); // اضافه کردن بلوک به نتایج
                 }
               }
+              var lists = result.getBlocks();
               var colorid = EditorColorScheme.htmlblocknormal;
-              // اضافه کردن رنگ برای RBRACE
-              ha.handleCloseBracket(result, line, column, EditorColorScheme.htmlblocknormal);
+
+              if (GhostIdeAppLoader.getPrefManager().getBoolean("breaks", false) == true)
+                colorid = HTMLConstants.get(stack.size());
+              else colorid = EditorColorScheme.htmlblocknormal;
+              result.addIfNeeded(line, column, colorid);
+              break;
+            }
+
+          case JavaLexer.LBRACE:
+            {
+              BlockLine block = result.obtainNewBlock();
+              block.startLine = line;
+              block.startColumn = column;
+              // اضافه کردن بلوک به استک
+              var lists = result.getBlocks();
+              var colorres = EditorColorScheme.htmlblocknormal;
+              // using HTMLConstants faster in java
+              if (GhostIdeAppLoader.getPrefManager().getBoolean("breaks", false) == true)
+                colorres = HTMLConstants.get(stack.size());
+              else colorres = EditorColorScheme.htmlblocknormal;
+              stack.push(block);
+              result.addIfNeeded(line, column, colorres);
+              // بررسی maxSwitch
+              if (stack.isEmpty()) {
+                if (currSwitch > maxSwitch) {
+                  maxSwitch = currSwitch;
+                }
+                currSwitch = 0;
+              }
+              currSwitch++; // ا
               break;
             }
 
@@ -461,39 +466,50 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           config.setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
           StaticJavaParser.setConfiguration(config);
           var cu = StaticJavaParser.parse(content.toString());
+          Set<String> declaredVariables = new HashSet<>();
+          Set<String> usedVariables = new HashSet<>();
+          Set<String> unusedImport = new HashSet<>();
+          Set<String> mtcall = new HashSet<>();
+          Set<String> mtusing = new HashSet<>();
+          Map<String, Integer> mlines = new HashMap<>();
+          Map<String, Integer> mcoloum = new HashMap<>();
+          Map<String, Integer> inline = new HashMap<>();
+          Map<String, Integer> incol = new HashMap<>();
 
           cu.accept(
               new VoidVisitorAdapter<Void>() {
+                @Override
+                public void visit(FieldDeclaration fieldDeclaration, Void arg) {
+                  for (VariableDeclarator variable : fieldDeclaration.getVariables()) {
+                    String variableName = variable.getNameAsString();
+                    int line = variable.getBegin().get().line;
+                    int column = variable.getBegin().get().column;
+                    declaredVariables.add(variableName);
+                    inline.put(variableName, line);
+                    incol.put(variableName, column);
+
+                    Utils.setSpanEFO(
+                        result,
+                        variable.getName().getBegin().get().line,
+                        variable.getName().getBegin().get().column,
+                        EditorColorScheme.javafield,
+                        true,
+                        false);
+                  }
+
+                  super.visit(fieldDeclaration, arg);
+                }
 
                 @Override
                 public void visit(VariableDeclarationExpr variableDeclarationExpr, Void arg) {
                   for (VariableDeclarator variable : variableDeclarationExpr.getVariables()) {
                     String variableName = variable.getNameAsString();
-                    int line = variable.getBegin().get().line;
+                    int line = variable.getBegin().get().line - 1;
                     int column = variable.getBegin().get().column;
                     declaredVariables.add(variableName);
-                    try {
-                      new Handler(Looper.getMainLooper())
-                          .postDelayed(
-                              () -> {
-                                if (variableName.equals("author")) {
-                                  editor.addInlay(
-                                      new Inlay(line, column, "user", EditorColorScheme.COLOR_TIP));
-                                }
-                              },
-                              2000);
-                    } catch (Exception err) {
-                      Log.e("Error run time -> ", err.getLocalizedMessage());
-                    }
                     inline.put(variableName, line);
                     incol.put(variableName, column);
-                    varLines.put(variableName, line);
-                    varColumns.put(variableName, column);
-                    Utils.setSpanEFO(
-                        result,
-                        variable.getType().getBegin().get().line,
-                        variable.getType().getBegin().get().column,
-                        EditorColorScheme.javafield);
+                    // tesing
                     if (JavaPaserUtils.getRegexAnnotation(variableDeclarationExpr.getAnnotations()))
                       Utils.setWaringSpan(result, line, column, EditorColorScheme.green);
                   }
@@ -503,23 +519,19 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
 
                 @Override
                 public void visit(NameExpr nameExpr, Void arg) {
-                  String varName = nameExpr.getNameAsString();
-                  usedVariables.add(varName);
+                  usedVariables.add(nameExpr.getNameAsString());
                   super.visit(nameExpr, arg);
                 }
 
                 @Override
                 public void visit(ImportDeclaration dec, Void arg) {
                   String importName = dec.getNameAsString();
-                  int line = dec.getBegin().get().line - 1;
+                  int line = dec.getBegin().get().line;
                   int column = dec.getBegin().get().column;
                   inline.put(importName, line);
                   incol.put(importName, column);
                   unusedImport.add(importName);
-                  result.addIfNeeded(
-                      line,
-                      column,
-                      TextStyle.makeStyle(EditorColorScheme.javafun, 0, true, false, false));
+
                   super.visit(dec, arg);
                 }
 
@@ -531,64 +543,33 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 }
 
                 @Override
-                public void visit(VariableDeclarator var, Void arg) {
-                  String name = var.getNameAsString();
-                  declaredVars.add(name);
-                  var.getBegin()
-                      .ifPresent(
-                          pos -> symbolPositions.put(name, new Position(pos.line - 1, pos.column)));
-                  super.visit(var, arg);
+                public void visit(TypeExpr arg0, Void arg1) {
+                  var l = arg0.getBegin().get().line;
+                  var c = arg0.getBegin().get().column;
+                  Utils.setSpanEFO(result, l, c + 1, EditorColorScheme.javastring);
+                  super.visit(arg0, arg1);
                 }
 
                 @Override
-                public void visit(MethodDeclaration methodDecl, Void arg1) {
-                  // ذخیره نام متد و موقعیت آن (مثل قبل)
-                  String methodName = methodDecl.getNameAsString();
-                  String name = methodDecl.getNameAsString();
-                  declaredMethods.add(name);
-                  methodDecl
-                      .getBegin()
-                      .ifPresent(
-                          pos -> symbolPositions.put(name, new Position(pos.line - 1, pos.column)));
-                  int line = methodDecl.getBegin().get().line; // خط (بر اساس 0)
-                  int col = methodDecl.getBegin().get().column; // ستون شروع متد
-                  mtusing.add(methodName);
-                  inline.put(methodName, line);
-                  incol.put(methodName, col);
+                public void visit(TypeParameter arg0, Void arg1) {
+                  var l = arg0.getBegin().get().line;
+                  var c = arg0.getBegin().get().column;
+                  Utils.setSpanEFO(result, l, c + 1, EditorColorScheme.javatype);
+                  super.visit(arg0, arg1);
+                }
 
-                  // رنگ‌آمیزی نوع برگشتی متد (مثل 'void', 'int', 'String')
-                  Type returnType = methodDecl.getType();
-                  int returnTypeStartLine = returnType.getBegin().get().line - 1;
-                  int returnTypeStartCol = returnType.getBegin().get().column;
-                  String returnTypeName = returnType.asString();
+                @Override
+                public void visit(MethodDeclaration arg0, Void arg1) {
+                  var variableName = arg0.getNameAsString();
+                  int li = arg0.getBegin().get().line;
+                  int cl = arg0.getBegin().get().column;
+                  mtusing.add(arg0.getNameAsString());
+                  inline.put(variableName, li);
+                  incol.put(variableName, cl);
+                  if (JavaPaserUtils.getDeprecated(arg0.getAnnotations()))
+                    Utils.setWaringSpan(result, li, cl + 1);
 
-                  Utils.setSpanEFO(
-                      result,
-                      returnTypeStartLine,
-                      returnTypeStartCol,
-                      EditorColorScheme.javatype, // رنگ نوع برگشتی
-                      true, // پررنگ
-                      false // زیرخط دار نباشد
-                      );
-
-                  // رنگ‌آمیزی نام متد
-                  String methodName1 = methodDecl.getNameAsString();
-                  int nameStartLine1 = methodDecl.getName().getBegin().get().line - 1;
-                  int nameStartCol1 = methodDecl.getName().getBegin().get().column;
-
-                  Utils.setSpanEFO(
-                      result,
-                      nameStartLine1,
-                      nameStartCol1,
-                      EditorColorScheme.javafield, // رنگ نام متد
-                      false, // پررنگ نباشد
-                      true // زیرخط دار باشد
-                      );
-                  // بررسی Deprecated (مثل قبل)
-                  if (JavaPaserUtils.getDeprecated(methodDecl.getAnnotations())) {
-                    Utils.setWaringSpan(result, line, col + 1);
-                  }
-                  super.visit(methodDecl, arg1); // ادامه بازدید از فرزندان (مثل بدنه متد)
+                  super.visit(arg0, arg1);
                 }
 
                 @Override
@@ -599,6 +580,16 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                     Utils.setWaringSpan(result, lines, colz + 1);
                   if (JavaPaserUtils.getCustomAnnotationExpr(arg0.getAnnotations(), "NonNull"))
                     Utils.setWaringSpan(result, lines, colz + 1, EditorColorScheme.HTML_TAG);
+
+                  super.visit(arg0, arg1);
+                }
+
+                @Override
+                public void visit(Parameter arg0, Void arg1) {
+                  int myline = arg0.getBegin().get().line;
+                  int mycolums = arg0.getBegin().get().column + 3;
+                  Utils.setSpanEFO(
+                      result, myline, mycolums, EditorColorScheme.KEYWORD, false, true);
 
                   super.visit(arg0, arg1);
                 }
@@ -622,23 +613,8 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
 
                   super.visit(arg0, arg1);
                 }
-
-                @Override
-                public void visit(FieldDeclaration arg0, Void arg1) {
-
-                  for (VariableDeclarator var : arg0.getVariables()) {
-                    String name = var.getNameAsString();
-                    declaredVars.add(name);
-                    var.getBegin()
-                        .ifPresent(
-                            pos ->
-                                symbolPositions.put(name, new Position(pos.line - 1, pos.column)));
-                  }
-                }
               },
               null);
-          Set<String> unusedVariables = new HashSet<>(declaredVariables);
-          unusedVariables.removeAll(usedVariables);
 
           unusedImport.removeIf(importName -> usedVariables.contains(getSimpleName(importName)));
           declaredVariables.removeAll(usedVariables);
@@ -677,21 +653,6 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
   }
 
   private void get(int color, int line, int col, TextAnalyzeResult result) {
-    mapStyle = new HashMap<>();
-    mapStyle =
-        new Gson()
-            .fromJson(
-                ThemeUtils.setReloadStyle(), new TypeToken<Map<String, Boolean>>() {}.getType());
-
-    result.addIfNeeded(
-        line,
-        col,
-        TextStyle.makeStyle(
-            color,
-            0,
-            mapStyle.get("isBold").booleanValue(),
-            mapStyle.get("isItalic").booleanValue(),
-            mapStyle.get("isStrike").booleanValue(),
-            mapStyle.get("isLine").booleanValue()));
+    result.addIfNeeded(line, col, color);
   }
 }

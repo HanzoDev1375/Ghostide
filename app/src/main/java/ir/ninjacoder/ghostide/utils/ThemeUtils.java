@@ -481,7 +481,7 @@ public class ThemeUtils {
 
   public static String themeAsString() {
     return """
-    {
+{
     "javastring": "#89BA62",
     "javafield": "#DF6C75",
     "tabimagecolorfilter": "#B0BEC5",
@@ -580,10 +580,10 @@ public class ThemeUtils {
     "breaklevel6": "#FF33FF",
     "breaklevel7": "#57FF33",
     "breaklevel8": "#FFD733",
-	"javakeywordoprator":"#FF8C33"
-	"menuPosBackground":"#ffffff",
-    "menuPosTextColor":"#000000"
-    }
+    "javakeywordoprator": "#FF8C33",
+    "menuPosBackground": "#ffffff",
+    "menuPosTextColor": "#000000"
+}
     """;
   }
 }

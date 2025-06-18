@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Stack;
 
 import io.github.rosemoe.sora.data.BlockLine;
+import ninjacoder.ghostide.androidtools.r8.android.KotlinCodeAnalyzerCompat;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
@@ -250,7 +251,7 @@ public class KotilnAnalyzer implements CodeAnalyzer {
               int color = EditorColorScheme.TEXT_NORMAL;
               boolean isbold = false, isItalic = false;
               ktinfo.addIdentifier(token.getText());
-			  var mytext = token.getText();
+              var mytext = token.getText();
               int typemode = previous.getType();
               if (typemode == KotlinLexer.AT) {
                 color = EditorColorScheme.ATTRIBUTE_NAME;
@@ -307,10 +308,8 @@ public class KotilnAnalyzer implements CodeAnalyzer {
               if (token.getText().equals("runAsUi")) {
                 color = EditorColorScheme.javaoprator;
               }
-              
 
               // توابع حوزه همزمانی (coroutines)
-              
 
               String[] ktScopeFunctions = {"with"};
               String[] ktCollectionFunctions = {
@@ -424,8 +423,18 @@ public class KotilnAnalyzer implements CodeAnalyzer {
       result.setSuppressSwitch(maxSwitch + 10);
 
       if (GhostIdeAppLoader.getAnalyzercod().getBoolean("Analyzercod", false) == true) {
-        var it = new KotlinSyntaxAnalyzer();
-		it.analyze(content,result,delegate);
+        var analyzers = new KotlinCodeAnalyzerCompat(content.toString());
+        var re = analyzers.analyze();
+        if (re.isSuccess()) {
+          System.out.println("Not found Error");
+        } else {
+          if (re.hasErrors())
+            Utils.setErrorSpan(result, re.getStartLineError(), re.getStartColErrors());
+          else System.out.print("no error");
+          if (re.hasWarnings())
+            Utils.setWaringSpan(result, re.getStartLineWar(), re.getStartColWar());
+          else System.out.println("no error");
+        }
       }
     } catch (IOException e) {
       e.printStackTrace();

@@ -99,6 +99,6 @@ public class KeySet {
   public static final String attributevalue = "attribute_value";
   public static final String jsoprator = "jsoprator";
   public static final String nonprintablechar = "non_printable_char";
-  public static final String menuPosBackground = "menuposbackground";
-  public static final String menuPosTextColor = "menupostextcolor";
+  public static final String menuPosBackground = "menuPosBackground";
+  public static final String menuPosTextColor = "menuPosTextColor";
 }
