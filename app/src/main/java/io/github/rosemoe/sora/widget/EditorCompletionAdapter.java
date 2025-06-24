@@ -87,7 +87,10 @@ public abstract class EditorCompletionAdapter extends BaseAdapter implements Ada
   protected CodeEditor getEditor() {
     return window.getEditor();
   }
-
+  
+  protected boolean isShowing(){
+	  return window.isShowing();
+  }
   /**
    * Implementation of this class should provide exact height of its item
    *

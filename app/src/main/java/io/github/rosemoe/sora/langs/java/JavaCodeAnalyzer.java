@@ -301,7 +301,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           case JavaLexer.INT:
           case JavaLexer.LONG:
           case JavaLexer.SHORT:
-            get(EditorColorScheme.javakeyword, line, column, result);
+            get(EditorColorScheme.javakeywordoprator, line, column, result);
             classNamePrevious = true;
             break;
           case JavaLexer.BLOCK_COMMENT:
@@ -339,7 +339,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               if (previous == JavaLexer.PACKAGE
                   || previous == JavaLexer.IMPORT
                   || prePreToken != null && prePreToken.getType() == JavaLexer.DOT
-                  || previous == JavaLexer.DOT) {
+                  ) {
                 isDot = false;
                 colorid = EditorColorScheme.javafield;
               }
@@ -378,8 +378,11 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                   || prePreToken != null && prePreToken.getType() == JavaLexer.GT) {
                 colorid = EditorColorScheme.javafun;
               }
-
-              ha.handleCustom(result, line, column, colorid);
+			  if(previous == JavaLexer.DOT){
+			    ha.handleCustom(result, line, column, EditorColorScheme.javaparament);
+			  }
+			  result.addIfNeeded(line,column,colorid);
+              
               break;
             }
 
@@ -550,13 +553,6 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                   super.visit(arg0, arg1);
                 }
 
-                @Override
-                public void visit(TypeParameter arg0, Void arg1) {
-                  var l = arg0.getBegin().get().line;
-                  var c = arg0.getBegin().get().column;
-                  Utils.setSpanEFO(result, l, c + 1, EditorColorScheme.javatype);
-                  super.visit(arg0, arg1);
-                }
 
                 @Override
                 public void visit(MethodDeclaration arg0, Void arg1) {
@@ -580,16 +576,6 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                     Utils.setWaringSpan(result, lines, colz + 1);
                   if (JavaPaserUtils.getCustomAnnotationExpr(arg0.getAnnotations(), "NonNull"))
                     Utils.setWaringSpan(result, lines, colz + 1, EditorColorScheme.HTML_TAG);
-
-                  super.visit(arg0, arg1);
-                }
-
-                @Override
-                public void visit(Parameter arg0, Void arg1) {
-                  int myline = arg0.getBegin().get().line;
-                  int mycolums = arg0.getBegin().get().column + 3;
-                  Utils.setSpanEFO(
-                      result, myline, mycolums, EditorColorScheme.KEYWORD, false, true);
 
                   super.visit(arg0, arg1);
                 }
@@ -624,7 +610,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             var mycol = incol.get(it);
             Utils.setSpanEFO(
                 result,
-                myline.intValue(),
+                myline.intValue() -1,
                 mycol.intValue() + it.length(),
                 EditorColorScheme.COMMENT,
                 false,

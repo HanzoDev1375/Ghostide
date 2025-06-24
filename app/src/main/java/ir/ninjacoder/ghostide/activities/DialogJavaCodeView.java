@@ -1,5 +1,6 @@
 package ir.ninjacoder.ghostide.activities;
 
+import io.github.rosemoe.sora.widget.CodeEditor;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.databinding.DialogjavacodeviewDialogFragmentBinding;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
@@ -90,7 +91,7 @@ public class DialogJavaCodeView extends DialogFragment {
                   new StringReader(ThemeUtils.themeAsString()),
                   new TypeToken<HashMap<String, Object>>() {}.getType());
 
-      theme.setThemeCodeEditor(bin.editor, map, false, requireActivity());
+      theme.setThemeCodeEditor((CodeEditor) bin.editor, map, false, requireActivity());
     } catch (Exception err) {
 
     }
@@ -99,7 +100,7 @@ public class DialogJavaCodeView extends DialogFragment {
     bin.pro.setVisibility(View.GONE);
 
     bin.editor.setEditable(false);
-    bin.editor.setEditorLanguage(new JavaLanguage((IdeEditor) bin.editor));
+ //   bin.editor.setEditorLanguage(new JavaLanguage((IdeEditor) bin.editor));
 
     ObjectUtils.setColorFilter(bin.imageview1);
   }

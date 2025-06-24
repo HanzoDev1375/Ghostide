@@ -1,6 +1,5 @@
 package ir.ninjacoder.ghostide.adapter;
 
-
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.R;
 import android.graphics.Color;
@@ -66,6 +65,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> 
                   (in, colorview, allcolos) -> {
                     String colors = Integer.toHexString(colorview);
                     holder.tv.setText("#" + colors);
+					
                     holder.sub.setBackground(db("#" + colors));
                     Handler handler = new Handler(Looper.getMainLooper());
                     handler.postDelayed(

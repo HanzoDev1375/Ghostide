@@ -101,4 +101,5 @@ public class KeySet {
   public static final String nonprintablechar = "non_printable_char";
   public static final String menuPosBackground = "menuPosBackground";
   public static final String menuPosTextColor = "menuPosTextColor";
+  public static final String navstatusbar = "navstatusbar";
 }

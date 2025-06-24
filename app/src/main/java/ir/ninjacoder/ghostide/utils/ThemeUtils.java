@@ -1,6 +1,12 @@
 package ir.ninjacoder.ghostide.utils;
 
+import android.os.Build;
+import android.view.Window;
+import android.widget.LinearLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.activities.BaseCompat;
+import ir.ninjacoder.ghostide.activities.CodeEditorActivity;
 import ir.ninjacoder.ghostide.marco.ColorCompat;
 
 import android.app.Activity;
@@ -292,11 +298,45 @@ public class ThemeUtils {
     return this;
   }
 
-  public ThemeUtils setStatusNavColor(BaseCompat base, HashMap<String, Object> id, String key) {
-    base.getWindow()
-        .setStatusBarColor(id.containsKey(key) ? Color.parseColor(id.get(key).toString()) : 0);
-    base.getWindow()
-        .setNavigationBarColor(id.containsKey(key) ? Color.parseColor(id.get(key).toString()) : 0);
+  void setTransparentSystemBars(
+      CoordinatorLayout coordinator, LinearLayout mainContent, Window window) {
+    window.setStatusBarColor(Color.TRANSPARENT);
+    window.setNavigationBarColor(Color.TRANSPARENT);
+    coordinator.setFitsSystemWindows(true);
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      coordinator.setOnApplyWindowInsetsListener(
+          (v, insets) -> {
+            int top = insets.getSystemWindowInsetTop();
+            int bottom = insets.getSystemWindowInsetBottom();
+
+            mainContent.setPadding(0, top, 0, bottom);
+
+            return insets;
+          });
+    }
+  }
+
+  public ThemeUtils setStatusNavColor(
+      BaseCompat base,
+      HashMap<String, Object> id,
+      String key,
+      CoordinatorLayout layout,
+      LinearLayout getPass) {
+    if (id.containsKey(key)) {
+      String colorStr = id.get(key).toString();
+      if ((colorStr.startsWith("#")
+          && colorStr.length() == 9
+          && colorStr.substring(1, 3).equals("00"))) {
+
+        setTransparentSystemBars(layout, getPass, base.getWindow());
+      } else {
+
+        base.getWindow().setStatusBarColor(Color.parseColor(colorStr));
+        base.getWindow().setNavigationBarColor(Color.parseColor(colorStr));
+      }
+    } else {
+      setTransparentSystemBars(layout, getPass, base.getWindow());
+    }
     return this;
   }
 
@@ -408,6 +448,7 @@ public class ThemeUtils {
     map.put("menuPosTextColor", "#000000");
     map.put("breaklevel8", "#F1C40F");
     map.put("javakeywordoprator", "#340178");
+    map.put("navstatusbar", "#ff000000");
     return map;
   }
 
@@ -582,7 +623,8 @@ public class ThemeUtils {
     "breaklevel8": "#FFD733",
     "javakeywordoprator": "#FF8C33",
     "menuPosBackground": "#ffffff",
-    "menuPosTextColor": "#000000"
+    "menuPosTextColor": "#000000",
+	"navstatusbar":"#ff000000"
 }
     """;
   }

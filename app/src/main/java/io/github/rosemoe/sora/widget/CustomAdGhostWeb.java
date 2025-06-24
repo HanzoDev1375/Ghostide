@@ -22,6 +22,9 @@ import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 import ir.ninjacoder.ghostide.R;
 import io.github.rosemoe.sora.data.CompletionItem;
 
+/**
+ * @param class by ninja coder my ghost ide
+ */
 @SuppressWarnings("CanBeFinal")
 public class CustomAdGhostWeb extends EditorCompletionAdapter {
   protected HTMLConstants htmlconfig;

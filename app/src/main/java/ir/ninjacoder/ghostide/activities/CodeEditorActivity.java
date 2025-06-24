@@ -129,7 +129,7 @@ public class CodeEditorActivity extends BaseCompat {
   private TextView titleauthor;
   private ImageView image, redo, undo, menupopnew, iconAuthor;
   private LinearLayout FrameLayout02;
-  private LinearLayout linear3;
+  private LinearLayout linear3,getColorPass;
   private ProgressBar proanjctor;
   private LinearLayout barSymoble;
   private ImageView imageview1, imageloadereditor, avatargithubuser;
@@ -211,8 +211,8 @@ public class CodeEditorActivity extends BaseCompat {
 
   private void initialize(Bundle _savedInstanceState) {
 
-    Coordinator = findViewById(R.id.Coordinator);
     _fab = findViewById(R.id._fab);
+	  getColorPass = findViewById(R.id.getColorPass);
     Coordinator = findViewById(R.id.Coordinator);
     multytab = findViewById(R.id.multytab);
     FrameLayout01 = findViewById(R.id.FrameLayout01);
@@ -277,7 +277,16 @@ public class CodeEditorActivity extends BaseCompat {
         .circleCrop()
         .error(R.drawable.app_icon)
         .into(avatargithubuser);
-
+    ghostIcon
+        .animate()
+        .scaleX(1.0f)
+        .scaleY(1.0f)
+        // .translationX(minScale)
+        // .translationY(minScale)
+        /// .x(minScale)
+        /// .y(minScale)
+        .setDuration(1000)
+        .start();
     mRootView
         .getViewTreeObserver()
         .addOnGlobalLayoutListener(
@@ -295,33 +304,33 @@ public class CodeEditorActivity extends BaseCompat {
                     getResources().getInteger(android.R.integer.config_shortAnimTime);
 
                 if (keypadHeight > screenHeight * 0.15) {
-
-                  var max = 1.4f;
+                  float minScale = 1.0f;
                   ghostIcon
-                      .animate()
-                      .scaleX(Math.max(max, 1))
-                      .scaleY(Math.max(max, 1))
-                      .translationX(max / 2)
-                      .translationY(max * max - 1)
-                      .x(Math.max(max / 5, 6))
-                      .y(Math.min(max * max, 6))
+                  .animate()
+                  .scaleX(minScale)
+                  .scaleY(minScale)
+                  // .translationX(minScale)
+                  // .translationY(minScale)
+                  /// .x(minScale)
+                  /// .y(minScale)
                       .setDuration(1000)
-                      .start();
+                   .start();
+
                   ObjectUtils.showViewWithAnimation(syspiar);
 
                 } else {
+                  var max = 1.4f;
+                   ghostIcon
+                  .animate()
+                  .scaleX(Math.max(max, 1))
+                  .scaleY(Math.max(max, 1))
+                  //                      .translationX(max / 2)
+                  //                      .translationY(max * max - 1)
+                  //                      .x(Math.max(max / 5, 6))
+                  //                      .y(Math.min(max * max, 6))
+                  .setDuration(1000)
+                  .start();
 
-                  float minScale = 1.0f;
-                  ghostIcon
-                      .animate()
-                      .scaleX(minScale)
-                      .scaleY(minScale)
-                      .translationX(minScale)
-                      .translationY(minScale)
-                      .x(minScale)
-                      .y(minScale)
-                      .setDuration(1000)
-                      .start();
                   ObjectUtils.hideViewWithAnimation(syspiar, _fab);
                 }
               }
@@ -553,10 +562,10 @@ public class CodeEditorActivity extends BaseCompat {
     themeForJson2.addImageColor(redo, this, KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
     themeForJson2.addImageColor(
         image, this, KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
-    themeForJson2.setStatusNavColor(this, imap, KeySet.backgroundcolorlinear);
+
+    themeForJson2.setStatusNavColor(this, imap, KeySet.navstatusbar,Coordinator,getColorPass);
     themeForJson2.addImageColor(
         menupopnew, this, KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
-    themeForJson2.addWindowsNavColor(this, imap, KeySet.backgroundcolorlinear);
     themeForJson2.setFabBackground(_fab, imap);
     AnimUtils.ClickAnimation(menupopnew);
     tablayouteditor.setSelectedTabIndicatorColor(
@@ -607,8 +616,8 @@ public class CodeEditorActivity extends BaseCompat {
     }
     var data = thememanagersoft.contains("br") ? thememanagersoft.getFloat("br", 2) : 3;
     BlurImage.setBlurInWallpaperMobile(this, data, ghostIcon);
-    var layout = findViewById(R.id.getColorPass);
-    layout.setBackgroundColor(Color.parseColor(imap.get("backgroundcolorlinear").toString()));
+   
+    getColorPass.setBackgroundColor(Color.parseColor(imap.get("backgroundcolorlinear").toString()));
 
     editor.setAutoCompletionEnabled(!auto.contains("mauto"));
 

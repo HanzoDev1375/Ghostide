@@ -6,6 +6,7 @@ import com.blankj.utilcode.util.FileIOUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import ir.ninjacoder.ghostide.marco.WallpaperParallaxEffect;
+import ir.ninjacoder.ghostide.utils.EdgeToEdgeUtils;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.utils.FileUtil;
 import ir.ninjacoder.ghostide.utils.ReSizeApp;
@@ -315,6 +316,11 @@ public class BaseCompat extends AppCompatActivity {
     startActivity(i);
   }
 
+  public void applyWall() {
+    if (Build.VERSION.SDK_INT >= 21) getWindow().setNavigationBarColor(0);
+    if (Build.VERSION.SDK_INT >= 21) getWindow().setStatusBarColor(0);
+  }
+
   public void Wall() {
     var data = thememanagersoft.contains("br") ? thememanagersoft.getFloat("br", 2) : 3;
     BlurImage.setBlurInWallpaperMobile(this, data, getWindow().getDecorView());
@@ -416,7 +422,7 @@ public class BaseCompat extends AppCompatActivity {
         }
         """;
       if (!FileUtil.isExistFile("/storage/emulated/0/GhostWebIDE/theme/erudatheme.json")) {
-        
+
         FileIOUtils.writeFileFromString(
             "/storage/emulated/0/GhostWebIDE/theme/erudatheme.json", themeeuda);
       }
