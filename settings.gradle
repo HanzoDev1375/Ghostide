@@ -3,6 +3,9 @@ pluginManagement {
     gradlePluginPortal()
     google()
     mavenCentral()
+    maven {
+            url 'https://maven.myket.ir'
+        }
   }
 }
 
@@ -13,7 +16,9 @@ dependencyResolutionManagement {
     mavenCentral()
     maven { url 'https://jitpack.io' }
     maven { url 'https://oss.jfrog.org/artifactory/oss-snapshot-local' }
-    
+    maven {
+            url 'https://maven.myket.ir'
+        }
   }
 }
 
