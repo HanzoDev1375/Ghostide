@@ -62,44 +62,27 @@ public class ThemeFragment extends Fragment {
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    initialize();
+    binds();
   }
 
-  private void initialize() {
-    setupRecyclerView();
-    loadThemes();
-  }
-
-  private void setupRecyclerView() {
-    bind.rv.setLayoutManager(new GridLayoutManager(getContext(), 2));
-    bind.rv.setAdapter(new ThemeAdapter(listAll));
-  }
-
-  private void loadThemes() {
+  void binds() {
     req = new RequestNetwork((Activity) getContext());
-    req.startRequestNetwork(
-        RequestNetworkController.GET,
-        linkhost,
-        "",
+    call =
         new RequestNetwork.RequestListener() {
           @Override
           public void onResponse(
               String tag, String response, HashMap<String, Object> responseHeaders) {
-            try {
-              TypeToken<List<Map<String, String>>> typeToken =
-                  new TypeToken<List<Map<String, String>>>() {};
-              listAll = new Gson().fromJson(response, typeToken.getType());
-              bind.rv.getAdapter().notifyDataSetChanged();
-            } catch (Exception e) {
-              showToast("خطا در پردازش تم ها");
-            }
+            var type = new TypeToken<List<Map<String, String>>>() {}.getType();
+            listAll = new Gson().fromJson(response, type);
+            bind.rv.setLayoutManager(new GridLayoutManager(getContext(), 2));
+            bind.rv.setAdapter(new ThemeRv(listAll));
           }
 
           @Override
-          public void onErrorResponse(String tag, String message) {
-            showToast("خطا در دریافت تم ها: " + message);
-          }
-        });
+          public void onErrorResponse(String tag, String message) {}
+        };
+
+    req.startRequestNetwork(RequestNetworkController.GET, linkhost, "", call);
   }
 
   private class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ThemeViewHolder> {
@@ -262,7 +245,7 @@ public class ThemeFragment extends Fragment {
   private void showInstallDialog(Map<String, String> themeData) {
     new MaterialAlertDialogBuilder(getContext())
         .setTitle("نصب تم")
-        .setMessage("آیا می‌خواهید این تم را نصب کنید؟")
+        .setMessage("آیا میخواهید این تم را نصب کنید؟")
         .setPositiveButton(
             "نصب",
             (dialog, which) -> {
