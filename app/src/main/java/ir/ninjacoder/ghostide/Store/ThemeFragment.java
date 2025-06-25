@@ -1,6 +1,6 @@
 package ir.ninjacoder.ghostide.Store;
 
-import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.widget.Toast;
@@ -41,16 +41,16 @@ public class ThemeFragment extends Fragment {
   private static final String THEME_PREFS = "thememanagersoft";
   private static final String BACKGROUND_PREFS = "getvb";
 
-  private String linkhost =
+  private final String linkhost =
       "https://raw.githubusercontent.com/HanzoDev1375/ghosttheme/refs/heads/main/github_theme.json";
-  private String imageKey = "image";
-  private String themeKey = "theme";
-  private String backgroundKey = "background";
+  private final String imageKey = "image";
+  private final String themeKey = "theme";
+  private final String backgroundKey = "background";
+
   private List<Map<String, String>> listAll = new ArrayList<>();
   private RequestNetwork req;
-  private RequestNetwork.RequestListener call;
   private OneRvBinding bind;
-  private LayoutCustomimagepreviewBinding bin;
+  private LayoutCustomimagepreviewBinding previewBinding;
 
   @Override
   public View onCreateView(
@@ -60,254 +60,245 @@ public class ThemeFragment extends Fragment {
   }
 
   @Override
-  @MainThread
-  public void onViewCreated(View arg0, Bundle arg1) {
-    super.onViewCreated(arg0, arg1);
-    binds();
+  public void onViewCreated(View view, Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    initialize();
   }
 
-  void binds() {
+  private void initialize() {
+    setupRecyclerView();
+    loadThemes();
+  }
+
+  private void setupRecyclerView() {
+    bind.rv.setLayoutManager(new GridLayoutManager(getContext(), 2));
+    bind.rv.setAdapter(new ThemeAdapter(listAll));
+  }
+
+  private void loadThemes() {
     req = new RequestNetwork((Activity) getContext());
-    call =
+    req.startRequestNetwork(
+        RequestNetworkController.GET,
+        linkhost,
+        "",
         new RequestNetwork.RequestListener() {
           @Override
           public void onResponse(
               String tag, String response, HashMap<String, Object> responseHeaders) {
             try {
-              var type = new TypeToken<List<Map<String, String>>>() {}.getType();
-              listAll = new Gson().fromJson(response, type);
-              bind.rv.setLayoutManager(new GridLayoutManager(getContext(), 2));
-              bind.rv.setAdapter(new ThemeRv(listAll));
+              TypeToken<List<Map<String, String>>> typeToken =
+                  new TypeToken<List<Map<String, String>>>() {};
+              listAll = new Gson().fromJson(response, typeToken.getType());
+              bind.rv.getAdapter().notifyDataSetChanged();
             } catch (Exception e) {
-              Toast.makeText(getContext(), "Error parsing theme data", Toast.LENGTH_SHORT).show();
+              showToast("خطا در پردازش تم ها");
             }
           }
 
           @Override
           public void onErrorResponse(String tag, String message) {
-            Toast.makeText(getContext(), "Error loading themes: " + message, Toast.LENGTH_SHORT)
-                .show();
+            showToast("خطا در دریافت تم ها: " + message);
           }
-        };
-
-    req.startRequestNetwork(RequestNetworkController.GET, linkhost, "", call);
+        });
   }
 
-  class ThemeRv extends RecyclerView.Adapter<ThemeRv.Holder> {
+  private class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ThemeViewHolder> {
 
-    private List<Map<String, String>> list;
-    private LayoutThemestoreBinding themebinding;
+    private final List<Map<String, String>> themes;
 
-    public ThemeRv(List<Map<String, String>> list) {
-      this.list = list;
+    public ThemeAdapter(List<Map<String, String>> themes) {
+      this.themes = themes;
     }
 
-    static class Holder extends RecyclerView.ViewHolder {
-      public Holder(View view) {
-        super(view);
-      }
+    @Override
+    public ThemeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+      LayoutThemestoreBinding binding =
+          LayoutThemestoreBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+      return new ThemeViewHolder(binding);
+    }
+
+    @Override
+    public void onBindViewHolder(ThemeViewHolder holder, int position) {
+      holder.bind(themes.get(position));
     }
 
     @Override
     public int getItemCount() {
-      return list.size();
+      return themes.size();
     }
 
-    @Override
-    public Holder onCreateViewHolder(ViewGroup viewgroup, int arg1) {
-      themebinding = LayoutThemestoreBinding.inflate(LayoutInflater.from(viewgroup.getContext()));
-      return new Holder(themebinding.getRoot());
-    }
+    class ThemeViewHolder extends RecyclerView.ViewHolder {
+      private final LayoutThemestoreBinding binding;
 
-    @Override
-    public void onBindViewHolder(Holder holder, int pos) {
-      var get = list.get(pos);
-
-      String themeName = "Default";
-      if (get.containsKey(themeKey)) {
-        themeName = extractThemeName(get.get(themeKey));
-      }
-      themebinding.nametheme.setText(themeName);
-
-      if (get.containsKey(imageKey)) {
-        Glide.with(themebinding.previewicon.getContext())
-            .load(get.get(imageKey))
-            .diskCacheStrategy(DiskCacheStrategy.NONE)
-            .into(themebinding.previewicon);
+      public ThemeViewHolder(LayoutThemestoreBinding binding) {
+        super(binding.getRoot());
+        this.binding = binding;
       }
 
-      themebinding
-          .getRoot()
-          .setOnClickListener(
-              i -> {
-                setSheet(pos);
-              });
-    }
+      void bind(Map<String, String> themeData) {
+        binding.nametheme.setText(getThemeName(themeData.get(themeKey)));
 
-    String extractThemeName(String themeUrl) {
-      if (themeUrl == null || themeUrl.isEmpty()) {
-        return "Default";
-      }
-      String fileName = themeUrl.substring(themeUrl.lastIndexOf('/') + 1);
-      String themeName = fileName.split("\\.")[0];
-      return themeName.substring(0, 1).toUpperCase() + themeName.substring(1);
-    }
+        if (themeData.containsKey(imageKey)) {
+          Glide.with(binding.previewicon.getContext())
+              .load(themeData.get(imageKey))
+              .diskCacheStrategy(DiskCacheStrategy.NONE)
+              .into(binding.previewicon);
+        }
 
-    void setSheet(int pos) {
-      bin = LayoutCustomimagepreviewBinding.inflate(LayoutInflater.from(getContext()));
-
-      var sheet = new Sheet(getContext());
-      sheet.setFullScreen();
-      sheet.show();
-      bin.fab1.setVisibility(View.INVISIBLE);
-      bin.fab2.setVisibility(View.INVISIBLE);
-      bin.fab3.setText("Save Theme");
-
-      Map<String, String> selectedTheme = list.get(pos);
-
-      bin.fab3.setOnClickListener(
-          v -> {
-            saveThemeAndBackground(selectedTheme, pos);
-          });
-
-      if (selectedTheme.containsKey(imageKey)) {
-        Glide.with(bin.backgroundImage.getContext())
-            .load(selectedTheme.get(imageKey))
-            .diskCacheStrategy(DiskCacheStrategy.NONE)
-            .into(bin.backgroundImage);
-      }
-    }
-
-    void saveThemeAndBackground(Map<String, String> themeData, int pos) {
-      // ایجاد دیالوگ پیشرفت
-      MaterialAlertDialogBuilder progressDialog =
-          new MaterialAlertDialogBuilder(getContext())
-              .setTitle("در حال دانلود تم")
-              .setMessage("لطفاً صبر کنید...")
-              .setCancelable(false)
-              .create();
-
-      AlertDialog dialog = progressDialog.show();
-
-      ThreadUtils.executeByIo(
-          new ThreadUtils.SimpleTask<DownloadResult>() {
-            @Override
-            public DownloadResult doInBackground() throws Throwable {
-              File themeDir = new File(THEME_DIR);
-              if (!themeDir.exists()) {
-                themeDir.mkdirs();
-              }
-
-              String themeUrl = themeData.get(themeKey);
-              String backgroundUrl = themeData.get(backgroundKey);
-
-              File themeFile = null;
-              File backgroundFile = null;
-
-              // دانلود تم
-              if (themeUrl != null && !themeUrl.isEmpty()) {
-                ThreadUtils.runOnUiThread(
-                    () -> {
-                      dialog.setMessage("در حال دانلود فایل تم...");
-                    });
-                String themeFileName = getFileNameFromUrl(themeUrl);
-                themeFile = downloadFile(themeUrl, themeDir, themeFileName);
-              }
-
-              // دانلود پس‌زمینه
-              if (backgroundUrl != null && !backgroundUrl.isEmpty()) {
-                ThreadUtils.runOnUiThread(
-                    () -> {
-                      dialog.setMessage(
-                          "در حال دانلود تصویر پس‌زمینه...\n(این ممکن است چند لحظه طول بکشد)");
-                    });
-                String backgroundFileName = getFileNameFromUrl(backgroundUrl);
-                backgroundFile = downloadFile(backgroundUrl, themeDir, backgroundFileName);
-              }
-
-              return new DownloadResult(themeFile, backgroundFile);
-            }
-
-            @Override
-            public void onSuccess(DownloadResult result) {
-              dialog.dismiss(); // بستن دیالوگ پیشرفت
-
-              if (result.themeFile == null && result.backgroundFile == null) {
-                Toast.makeText(getContext(), "هیچ فایلی دانلود نشد", Toast.LENGTH_SHORT).show();
-                return;
-              }
-
-              // ایجاد دیالوگ نصب تم
-              new MaterialAlertDialogBuilder(getContext())
-                  .setTitle("نصب تم")
-                  .setMessage("تم با موفقیت دانلود شد.\nآیا می‌خواهید این تم را اعمال کنید؟")
-                  .setPositiveButton(
-                      "بله",
-                      (e, ee) -> {
-                        SharedPreferences themePrefs =
-                            getContext().getSharedPreferences(THEME_PREFS, Context.MODE_PRIVATE);
-
-                        SharedPreferences backgroundPrefs =
-                            getContext()
-                                .getSharedPreferences(BACKGROUND_PREFS, Context.MODE_PRIVATE);
-
-                        if (result.themeFile != null) {
-                          themePrefs
-                              .edit()
-                              .putString("themes", result.themeFile.getAbsolutePath())
-                              .apply();
-                        }
-
-                        if (result.backgroundFile != null) {
-                          backgroundPrefs
-                              .edit()
-                              .putString("dir", result.backgroundFile.getAbsolutePath())
-                              .apply();
-                        }
-
-                        String successMsg = "تم با موفقیت اعمال شد:\n";
-                        if (result.themeFile != null) {
-                          successMsg += "تم: " + result.themeFile.getName() + "\n";
-                        }
-                        if (result.backgroundFile != null) {
-                          successMsg += "پس‌زمینه: " + result.backgroundFile.getName();
-                        }
-
-                        Toast.makeText(getContext(), successMsg, Toast.LENGTH_LONG).show();
-                      })
-                  .setNegativeButton("خیر", null)
-                  .setNeutralButton("بعداً", null)
-                  .show();
-            }
-
-            @Override
-            public void onFail(Throwable t) {
-              dialog.dismiss(); // بستن دیالوگ پیشرفت
-              Toast.makeText(getContext(), "خطا در دانلود: " + t.getMessage(), Toast.LENGTH_LONG)
-                  .show();
-            }
-          });
-    }
-
-    class DownloadResult {
-      File themeFile;
-      File backgroundFile;
-
-      DownloadResult(File themeFile, File backgroundFile) {
-        this.themeFile = themeFile;
-        this.backgroundFile = backgroundFile;
+        binding.getRoot().setOnClickListener(v -> showThemePreview(themeData));
       }
     }
   }
 
-  class Sheet extends CustomSheet {
-    public Sheet(Context c) {
-      super(c);
+  private void showThemePreview(Map<String, String> themeData) {
+    previewBinding = LayoutCustomimagepreviewBinding.inflate(LayoutInflater.from(getContext()));
+
+    CustomSheet sheet = new CustomSheet(getContext());
+    sheet.setFullScreen();
+    sheet.setView(previewBinding.getRoot());
+    sheet.show();
+
+    previewBinding.fab1.setVisibility(View.INVISIBLE);
+    previewBinding.fab2.setVisibility(View.INVISIBLE);
+    previewBinding.fab3.setText("ذخیره تم");
+
+    if (themeData.containsKey(imageKey)) {
+      Glide.with(previewBinding.backgroundImage.getContext())
+          .load(themeData.get(imageKey))
+          .diskCacheStrategy(DiskCacheStrategy.NONE)
+          .into(previewBinding.backgroundImage);
     }
 
-    @Override
-    public View getView() {
-      return bin.getRoot();
+    previewBinding.fab3.setOnClickListener(
+        v -> {
+          sheet.dismiss();
+          downloadAndSaveTheme(themeData);
+        });
+  }
+
+  private void downloadAndSaveTheme(Map<String, String> themeData) {
+    AlertDialog progressDialog =
+        new MaterialAlertDialogBuilder(getContext())
+            .setTitle("در حال دانلود")
+            .setMessage("لطفاً صبر کنید...")
+            .setCancelable(false)
+            .create();
+
+    progressDialog.show();
+
+    ThreadUtils.executeByIo(
+        new ThreadUtils.SimpleTask<Boolean>() {
+          @Override
+          public Boolean doInBackground() throws Throwable {
+            File themeDir = new File(THEME_DIR);
+            if (!themeDir.exists()) {
+              themeDir.mkdirs();
+            }
+
+            boolean success = true;
+
+            if (themeData.containsKey(themeKey)) {
+              success &=
+                  downloadFile(
+                      themeData.get(themeKey), themeDir, extractFileName(themeData.get(themeKey)));
+            }
+
+            if (themeData.containsKey(backgroundKey)) {
+              success &=
+                  downloadFile(
+                      themeData.get(backgroundKey),
+                      themeDir,
+                      extractFileName(themeData.get(backgroundKey)));
+            }
+
+            return success;
+          }
+
+          @Override
+          public void onSuccess(Boolean success) {
+            progressDialog.dismiss();
+            if (success) {
+              showInstallDialog(themeData);
+            } else {
+              showToast("خطا در ذخیره برخی فایل ها");
+            }
+          }
+
+          @Override
+          public void onFail(Throwable t) {
+            progressDialog.dismiss();
+            showToast("خطا در دانلود: " + t.getMessage());
+          }
+        });
+  }
+
+  private boolean downloadFile(String url, File directory, String fileName) throws Exception {
+    if (url == null || url.isEmpty()) return false;
+
+    HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+    connection.connect();
+
+    try (InputStream input = connection.getInputStream();
+        OutputStream output = new FileOutputStream(new File(directory, fileName))) {
+
+      byte[] buffer = new byte[4096];
+      int bytesRead;
+      while ((bytesRead = input.read(buffer)) != -1) {
+        output.write(buffer, 0, bytesRead);
+      }
+    } finally {
+      connection.disconnect();
     }
+
+    return true;
+  }
+
+  private void showInstallDialog(Map<String, String> themeData) {
+    new MaterialAlertDialogBuilder(getContext())
+        .setTitle("نصب تم")
+        .setMessage("آیا می‌خواهید این تم را نصب کنید؟")
+        .setPositiveButton(
+            "نصب",
+            (dialog, which) -> {
+              saveThemePaths(themeData);
+              showToast("تم با موفقیت نصب شد");
+            })
+        .setNegativeButton("انصراف", null)
+        .show();
+  }
+
+  private void saveThemePaths(Map<String, String> themeData) {
+    SharedPreferences themePrefs =
+        getContext().getSharedPreferences(THEME_PREFS, Context.MODE_PRIVATE);
+    SharedPreferences bgPrefs =
+        getContext().getSharedPreferences(BACKGROUND_PREFS, Context.MODE_PRIVATE);
+
+    if (themeData.containsKey(themeKey)) {
+      String fileName = extractFileName(themeData.get(themeKey));
+      themePrefs
+          .edit()
+          .putString("themes", new File(THEME_DIR, fileName).getAbsolutePath())
+          .apply();
+    }
+
+    if (themeData.containsKey(backgroundKey)) {
+      String fileName = extractFileName(themeData.get(backgroundKey));
+      bgPrefs.edit().putString("dir", new File(THEME_DIR, fileName).getAbsolutePath()).apply();
+    }
+  }
+
+  private String extractFileName(String url) {
+    if (url == null) return "";
+    return url.substring(url.lastIndexOf('/') + 1);
+  }
+
+  private String getThemeName(String themeUrl) {
+    if (themeUrl == null || themeUrl.isEmpty()) return "بدون نام";
+    String fileName = extractFileName(themeUrl);
+    return fileName.split("\\.")[0];
+  }
+
+  private void showToast(String message) {
+    Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
   }
 }
