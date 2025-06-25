@@ -37,11 +37,15 @@ import java.util.Map;
 
 public class ThemeFragment extends Fragment {
 
+  private static final String THEME_DIR = "/storage/emulated/0/GhostWebIDE/theme/";
+  private static final String THEME_PREFS = "thememanagersoft";
+  private static final String BACKGROUND_PREFS = "getvb";
+
   private String linkhost =
       "https://raw.githubusercontent.com/HanzoDev1375/ghosttheme/refs/heads/main/github_theme.json";
-  private String image = "image";
-  private String theme = "theme";
-  private String background = "background";
+  private String imageKey = "image";
+  private String themeKey = "theme";
+  private String backgroundKey = "background";
   private List<Map<String, String>> listAll = new ArrayList<>();
   private RequestNetwork req;
   private RequestNetwork.RequestListener call;
@@ -119,17 +123,15 @@ public class ThemeFragment extends Fragment {
     public void onBindViewHolder(Holder holder, int pos) {
       var get = list.get(pos);
 
-      // Set theme name
       String themeName = "Default";
-      if (get.containsKey(theme)) {
-        themeName = extractThemeName(get.get(theme));
+      if (get.containsKey(themeKey)) {
+        themeName = extractThemeName(get.get(themeKey));
       }
       themebinding.nametheme.setText(themeName);
 
-      // Load preview image if available
-      if (get.containsKey(image)) {
+      if (get.containsKey(imageKey)) {
         Glide.with(themebinding.previewicon.getContext())
-            .load(get.get(image))
+            .load(get.get(imageKey))
             .diskCacheStrategy(DiskCacheStrategy.NONE)
             .into(themebinding.previewicon);
       }
@@ -159,120 +161,142 @@ public class ThemeFragment extends Fragment {
       sheet.show();
       bin.fab1.setVisibility(View.INVISIBLE);
       bin.fab2.setVisibility(View.INVISIBLE);
-      bin.fab3.setText("Save Theme to file");
+      bin.fab3.setText("Save Theme");
 
       Map<String, String> selectedTheme = list.get(pos);
 
       bin.fab3.setOnClickListener(
           v -> {
-            if (selectedTheme.containsKey(theme)) {
-              saveTheme(selectedTheme.get(theme), selectedTheme.get(background), pos);
-            } else {
-              Toast.makeText(getContext(), "This theme has no file to download", Toast.LENGTH_SHORT)
-                  .show();
-            }
+            saveThemeAndBackground(selectedTheme, pos);
           });
 
-      if (selectedTheme.containsKey(image)) {
+      if (selectedTheme.containsKey(imageKey)) {
         Glide.with(bin.backgroundImage.getContext())
-            .load(selectedTheme.get(image))
+            .load(selectedTheme.get(imageKey))
             .diskCacheStrategy(DiskCacheStrategy.NONE)
             .into(bin.backgroundImage);
       }
     }
 
-    void saveTheme(String themeUrl, String backgroundUrl, int pos) {
+    void saveThemeAndBackground(Map<String, String> themeData, int pos) {
+      // ایجاد دیالوگ پیشرفت
+      MaterialAlertDialogBuilder progressDialog =
+          new MaterialAlertDialogBuilder(getContext())
+              .setTitle("در حال دانلود تم")
+              .setMessage("لطفاً صبر کنید...")
+              .setCancelable(false)
+              .create();
+
+      AlertDialog dialog = progressDialog.show();
+
       ThreadUtils.executeByIo(
-          new ThreadUtils.SimpleTask<File>() {
+          new ThreadUtils.SimpleTask<DownloadResult>() {
             @Override
-            public File doInBackground() throws Throwable {
-              // Create theme directory if not exists
-              File downloadsDir = new File("/storage/emulated/0/GhostWebIDE/theme/");
-              if (!downloadsDir.exists()) {
-                downloadsDir.mkdirs();
+            public DownloadResult doInBackground() throws Throwable {
+              File themeDir = new File(THEME_DIR);
+              if (!themeDir.exists()) {
+                themeDir.mkdirs();
               }
+
+              String themeUrl = themeData.get(themeKey);
+              String backgroundUrl = themeData.get(backgroundKey);
 
               File themeFile = null;
               File backgroundFile = null;
 
-              // Download theme file if URL exists
+              // دانلود تم
               if (themeUrl != null && !themeUrl.isEmpty()) {
-                themeFile = downloadFile(themeUrl, downloadsDir);
+                ThreadUtils.runOnUiThread(
+                    () -> {
+                      dialog.setMessage("در حال دانلود فایل تم...");
+                    });
+                String themeFileName = getFileNameFromUrl(themeUrl);
+                themeFile = downloadFile(themeUrl, themeDir, themeFileName);
               }
 
-              // Download background file if URL exists
+              // دانلود پس‌زمینه
               if (backgroundUrl != null && !backgroundUrl.isEmpty()) {
-                backgroundFile = downloadFile(backgroundUrl, downloadsDir);
+                ThreadUtils.runOnUiThread(
+                    () -> {
+                      dialog.setMessage(
+                          "در حال دانلود تصویر پس‌زمینه...\n(این ممکن است چند لحظه طول بکشد)");
+                    });
+                String backgroundFileName = getFileNameFromUrl(backgroundUrl);
+                backgroundFile = downloadFile(backgroundUrl, themeDir, backgroundFileName);
               }
 
-              // Return the main theme file if exists, otherwise return background file
-              return themeFile != null ? themeFile : backgroundFile;
-            }
-
-            private File downloadFile(String fileUrl, File downloadsDir) throws Exception {
-              URL url = new URL(fileUrl);
-              HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-              connection.connect();
-              InputStream inputStream = connection.getInputStream();
-
-              String fileName = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
-              File outputFile = new File(downloadsDir, fileName);
-
-              try (OutputStream outputStream = new FileOutputStream(outputFile)) {
-                byte[] buffer = new byte[4096];
-                int bytesRead;
-                while ((bytesRead = inputStream.read(buffer)) != -1) {
-                  outputStream.write(buffer, 0, bytesRead);
-                }
-              } finally {
-                inputStream.close();
-              }
-
-              return outputFile;
+              return new DownloadResult(themeFile, backgroundFile);
             }
 
             @Override
-            public void onSuccess(File result) {
-              if (result == null) {
-                Toast.makeText(getContext(), "No files were downloaded", Toast.LENGTH_SHORT).show();
+            public void onSuccess(DownloadResult result) {
+              dialog.dismiss(); // بستن دیالوگ پیشرفت
+
+              if (result.themeFile == null && result.backgroundFile == null) {
+                Toast.makeText(getContext(), "هیچ فایلی دانلود نشد", Toast.LENGTH_SHORT).show();
                 return;
               }
 
+              // ایجاد دیالوگ نصب تم
               new MaterialAlertDialogBuilder(getContext())
-                  .setTitle("Apply theme in Editor")
-                  .setMessage("Do you want to apply this theme in the editor?")
+                  .setTitle("نصب تم")
+                  .setMessage("تم با موفقیت دانلود شد.\nآیا می‌خواهید این تم را اعمال کنید؟")
                   .setPositiveButton(
-                      android.R.string.ok,
+                      "بله",
                       (e, ee) -> {
-                        SharedPreferences prefs =
+                        SharedPreferences themePrefs =
+                            getContext().getSharedPreferences(THEME_PREFS, Context.MODE_PRIVATE);
+
+                        SharedPreferences backgroundPrefs =
                             getContext()
-                                .getSharedPreferences("thememanagersoft", Context.MODE_PRIVATE);
-                        Map<String, String> selectedTheme = list.get(pos);
-                        if (selectedTheme.containsKey(theme)) {
-                          prefs.edit().putString("themes", result.getAbsolutePath()).apply();
+                                .getSharedPreferences(BACKGROUND_PREFS, Context.MODE_PRIVATE);
+
+                        if (result.themeFile != null) {
+                          themePrefs
+                              .edit()
+                              .putString("themes", result.themeFile.getAbsolutePath())
+                              .apply();
                         }
 
-                        if (selectedTheme.containsKey(background)) {
-                          SharedPreferences pref =
-                              getContext().getSharedPreferences("getvb", Context.MODE_PRIVATE);
-                          pref.edit().putString("dir", result.getAbsolutePath()).apply();
+                        if (result.backgroundFile != null) {
+                          backgroundPrefs
+                              .edit()
+                              .putString("dir", result.backgroundFile.getAbsolutePath())
+                              .apply();
                         }
+
+                        String successMsg = "تم با موفقیت اعمال شد:\n";
+                        if (result.themeFile != null) {
+                          successMsg += "تم: " + result.themeFile.getName() + "\n";
+                        }
+                        if (result.backgroundFile != null) {
+                          successMsg += "پس‌زمینه: " + result.backgroundFile.getName();
+                        }
+
+                        Toast.makeText(getContext(), successMsg, Toast.LENGTH_LONG).show();
                       })
-                  .setNegativeButton(android.R.string.cancel, null)
-                  .show();
-
-              Toast.makeText(
-                      getContext(), "Successfully saved: " + result.getPath(), Toast.LENGTH_SHORT)
+                  .setNegativeButton("خیر", null)
+                  .setNeutralButton("بعداً", null)
                   .show();
             }
 
             @Override
             public void onFail(Throwable t) {
-              Toast.makeText(
-                      getContext(), "Error saving theme: " + t.getMessage(), Toast.LENGTH_SHORT)
+              dialog.dismiss(); // بستن دیالوگ پیشرفت
+              Toast.makeText(getContext(), "خطا در دانلود: " + t.getMessage(), Toast.LENGTH_LONG)
                   .show();
             }
           });
+    }
+
+    class DownloadResult {
+      File themeFile;
+      File backgroundFile;
+
+      DownloadResult(File themeFile, File backgroundFile) {
+        this.themeFile = themeFile;
+        this.backgroundFile = backgroundFile;
+      }
     }
   }
 
