@@ -149,8 +149,8 @@ public class ThemeFragment extends Fragment {
       }
     }
   }
-	
-	class Sheet extends CustomSheet {
+
+  class Sheet extends CustomSheet {
     public Sheet(Context c) {
       super(c);
     }
@@ -160,7 +160,6 @@ public class ThemeFragment extends Fragment {
       return previewBinding.getRoot();
     }
   }
-
 
   private void showThemePreview(Map<String, String> themeData) {
     previewBinding = LayoutCustomimagepreviewBinding.inflate(LayoutInflater.from(getContext()));
@@ -188,12 +187,7 @@ public class ThemeFragment extends Fragment {
   }
 
   private void downloadAndSaveTheme(Map<String, String> themeData) {
-    var progressDialog =
-        new MaterialAlertDialogBuilder(getContext()).create()
-            .setTitle("در حال دانلود")
-            .setMessage("لطفاً صبر کنید...")
-            .setCancelable(false)
-            ;
+    var progressDialog = new MaterialAlertDialogBuilder(getContext()).create();
 
     progressDialog.show();
 
