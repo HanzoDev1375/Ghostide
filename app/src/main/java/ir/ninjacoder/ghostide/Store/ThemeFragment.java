@@ -41,6 +41,7 @@ public class ThemeFragment extends Fragment {
       "https://raw.githubusercontent.com/HanzoDev1375/ghosttheme/refs/heads/main/github_theme.json";
   private String image = "image";
   private String theme = "theme";
+  private String background = "background";
   private List<Map<String, String>> listAll = new ArrayList<>();
   private RequestNetwork req;
   private RequestNetwork.RequestListener call;
@@ -68,14 +69,21 @@ public class ThemeFragment extends Fragment {
           @Override
           public void onResponse(
               String tag, String response, HashMap<String, Object> responseHeaders) {
-            var type = new TypeToken<List<Map<String, String>>>() {}.getType();
-            listAll = new Gson().fromJson(response, type);
-            bind.rv.setLayoutManager(new GridLayoutManager(getContext(), 2));
-            bind.rv.setAdapter(new ThemeRv(listAll));
+            try {
+              var type = new TypeToken<List<Map<String, String>>>() {}.getType();
+              listAll = new Gson().fromJson(response, type);
+              bind.rv.setLayoutManager(new GridLayoutManager(getContext(), 2));
+              bind.rv.setAdapter(new ThemeRv(listAll));
+            } catch (Exception e) {
+              Toast.makeText(getContext(), "Error parsing theme data", Toast.LENGTH_SHORT).show();
+            }
           }
 
           @Override
-          public void onErrorResponse(String tag, String message) {}
+          public void onErrorResponse(String tag, String message) {
+            Toast.makeText(getContext(), "Error loading themes: " + message, Toast.LENGTH_SHORT)
+                .show();
+          }
         };
 
     req.startRequestNetwork(RequestNetworkController.GET, linkhost, "", call);
@@ -110,11 +118,22 @@ public class ThemeFragment extends Fragment {
     @Override
     public void onBindViewHolder(Holder holder, int pos) {
       var get = list.get(pos);
-      themebinding.nametheme.setText(extractThemeName(get.get(theme)));
-      Glide.with(themebinding.previewicon.getContext())
-          .load(list.get(pos).get(image))
-          .diskCacheStrategy(DiskCacheStrategy.NONE)
-          .into(themebinding.previewicon);
+
+      // Set theme name
+      String themeName = "Default";
+      if (get.containsKey(theme)) {
+        themeName = extractThemeName(get.get(theme));
+      }
+      themebinding.nametheme.setText(themeName);
+
+      // Load preview image if available
+      if (get.containsKey(image)) {
+        Glide.with(themebinding.previewicon.getContext())
+            .load(get.get(image))
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .into(themebinding.previewicon);
+      }
+
       themebinding
           .getRoot()
           .setOnClickListener(
@@ -129,7 +148,7 @@ public class ThemeFragment extends Fragment {
       }
       String fileName = themeUrl.substring(themeUrl.lastIndexOf('/') + 1);
       String themeName = fileName.split("\\.")[0];
-      return themeName.substring(0, 1) + themeName.substring(1);
+      return themeName.substring(0, 1).toUpperCase() + themeName.substring(1);
     }
 
     void setSheet(int pos) {
@@ -140,35 +159,66 @@ public class ThemeFragment extends Fragment {
       sheet.show();
       bin.fab1.setVisibility(View.INVISIBLE);
       bin.fab2.setVisibility(View.INVISIBLE);
-      bin.fab3.setText("SaveTheme to file");
+      bin.fab3.setText("Save Theme to file");
+
+      Map<String, String> selectedTheme = list.get(pos);
+
       bin.fab3.setOnClickListener(
           v -> {
-            saveTheme(list.get(pos).get(theme), pos);
+            if (selectedTheme.containsKey(theme)) {
+              saveTheme(selectedTheme.get(theme), selectedTheme.get(background), pos);
+            } else {
+              Toast.makeText(getContext(), "This theme has no file to download", Toast.LENGTH_SHORT)
+                  .show();
+            }
           });
-      Glide.with(bin.backgroundImage.getContext())
-          .load(list.get(pos).get(image))
-          .diskCacheStrategy(DiskCacheStrategy.NONE)
-          .into(bin.backgroundImage);
+
+      if (selectedTheme.containsKey(image)) {
+        Glide.with(bin.backgroundImage.getContext())
+            .load(selectedTheme.get(image))
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .into(bin.backgroundImage);
+      }
     }
 
-    void saveTheme(String fontUrl, int pos) {
-
+    void saveTheme(String themeUrl, String backgroundUrl, int pos) {
       ThreadUtils.executeByIo(
           new ThreadUtils.SimpleTask<File>() {
             @Override
             public File doInBackground() throws Throwable {
-              URL url = new URL(fontUrl);
-              HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-              connection.connect();
-              InputStream inputStream = connection.getInputStream();
+              // Create theme directory if not exists
               File downloadsDir = new File("/storage/emulated/0/GhostWebIDE/theme/");
               if (!downloadsDir.exists()) {
                 downloadsDir.mkdirs();
               }
-              String fileName = fontUrl.substring(fontUrl.lastIndexOf('/') + 1);
-              File fontFile = new File(downloadsDir, fileName);
 
-              try (OutputStream outputStream = new FileOutputStream(fontFile)) {
+              File themeFile = null;
+              File backgroundFile = null;
+
+              // Download theme file if URL exists
+              if (themeUrl != null && !themeUrl.isEmpty()) {
+                themeFile = downloadFile(themeUrl, downloadsDir);
+              }
+
+              // Download background file if URL exists
+              if (backgroundUrl != null && !backgroundUrl.isEmpty()) {
+                backgroundFile = downloadFile(backgroundUrl, downloadsDir);
+              }
+
+              // Return the main theme file if exists, otherwise return background file
+              return themeFile != null ? themeFile : backgroundFile;
+            }
+
+            private File downloadFile(String fileUrl, File downloadsDir) throws Exception {
+              URL url = new URL(fileUrl);
+              HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+              connection.connect();
+              InputStream inputStream = connection.getInputStream();
+
+              String fileName = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
+              File outputFile = new File(downloadsDir, fileName);
+
+              try (OutputStream outputStream = new FileOutputStream(outputFile)) {
                 byte[] buffer = new byte[4096];
                 int bytesRead;
                 while ((bytesRead = inputStream.read(buffer)) != -1) {
@@ -178,33 +228,49 @@ public class ThemeFragment extends Fragment {
                 inputStream.close();
               }
 
-              return fontFile;
+              return outputFile;
             }
 
             @Override
             public void onSuccess(File result) {
+              if (result == null) {
+                Toast.makeText(getContext(), "No files were downloaded", Toast.LENGTH_SHORT).show();
+                return;
+              }
+
               new MaterialAlertDialogBuilder(getContext())
                   .setTitle("Apply theme in Editor")
-                  .setMessage("not try to select in theme for code editor !!!")
+                  .setMessage("Do you want to apply this theme in the editor?")
                   .setPositiveButton(
                       android.R.string.ok,
                       (e, ee) -> {
                         SharedPreferences prefs =
-                            getContext().getSharedPreferences("thememanagersoft", Context.MODE_PRIVATE);
-                        prefs.edit().putString("themes", result.getAbsolutePath()).apply();
+                            getContext()
+                                .getSharedPreferences("thememanagersoft", Context.MODE_PRIVATE);
+                        Map<String, String> selectedTheme = list.get(pos);
+                        if (selectedTheme.containsKey(theme)) {
+                          prefs.edit().putString("themes", result.getAbsolutePath()).apply();
+                        }
+
+                        if (selectedTheme.containsKey(background)) {
+                          SharedPreferences pref =
+                              getContext().getSharedPreferences("getvb", Context.MODE_PRIVATE);
+                          pref.edit().putString("dir", result.getAbsolutePath()).apply();
+                        }
                       })
                   .setNegativeButton(android.R.string.cancel, null)
                   .show();
+
               Toast.makeText(
-                      getContext(),
-                      "تم با موفقیت ذخیره شد: " + result.getPath(),
-                      Toast.LENGTH_SHORT)
+                      getContext(), "Successfully saved: " + result.getPath(), Toast.LENGTH_SHORT)
                   .show();
             }
 
             @Override
             public void onFail(Throwable t) {
-              Toast.makeText(getContext(), "خطا در ذخیره تم", Toast.LENGTH_SHORT).show();
+              Toast.makeText(
+                      getContext(), "Error saving theme: " + t.getMessage(), Toast.LENGTH_SHORT)
+                  .show();
             }
           });
     }
