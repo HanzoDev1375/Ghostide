@@ -7,6 +7,7 @@ import androidx.annotation.MainThread;
 import androidx.recyclerview.widget.GridLayoutManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import ir.ninjacoder.ghostide.RequestNetworkController;
+import ir.ninjacoder.prograsssheet.PrograssSheet;
 import java.io.File;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -67,7 +68,7 @@ public class ThemeFragment extends Fragment {
 
   void binds() {
     req = new RequestNetwork((Activity) getContext());
-    call =
+    var call =
         new RequestNetwork.RequestListener() {
           @Override
           public void onResponse(
@@ -75,7 +76,7 @@ public class ThemeFragment extends Fragment {
             var type = new TypeToken<List<Map<String, String>>>() {}.getType();
             listAll = new Gson().fromJson(response, type);
             bind.rv.setLayoutManager(new GridLayoutManager(getContext(), 2));
-            bind.rv.setAdapter(new ThemeRv(listAll));
+            bind.rv.setAdapter(new ThemeAdapter(listAll));
           }
 
           @Override
@@ -170,8 +171,9 @@ public class ThemeFragment extends Fragment {
   }
 
   private void downloadAndSaveTheme(Map<String, String> themeData) {
-    var progressDialog = new MaterialAlertDialogBuilder(getContext()).create();
-
+    var progressDialog = new PrograssSheet(getContext());
+    progressDialog.setTitle("Loading download Background");
+    progressDialog.setPrograss(100, true);
     progressDialog.show();
 
     ThreadUtils.executeByIo(
@@ -185,18 +187,20 @@ public class ThemeFragment extends Fragment {
 
             boolean success = true;
 
+            // Download theme file if exists
             if (themeData.containsKey(themeKey)) {
-              success &=
-                  downloadFile(
-                      themeData.get(themeKey), themeDir, extractFileName(themeData.get(themeKey)));
+              String themeUrl = themeData.get(themeKey);
+              if (themeUrl != null && !themeUrl.isEmpty()) {
+                success &= downloadFile(themeUrl, themeDir, extractFileName(themeUrl));
+              }
             }
 
+            // Download background file if exists
             if (themeData.containsKey(backgroundKey)) {
-              success &=
-                  downloadFile(
-                      themeData.get(backgroundKey),
-                      themeDir,
-                      extractFileName(themeData.get(backgroundKey)));
+              String bgUrl = themeData.get(backgroundKey);
+              if (bgUrl != null && !bgUrl.isEmpty()) {
+                success &= downloadFile(bgUrl, themeDir, extractFileName(bgUrl));
+              }
             }
 
             return success;
@@ -207,7 +211,6 @@ public class ThemeFragment extends Fragment {
             progressDialog.dismiss();
             if (success) {
               showInstallDialog(themeData);
-
             } else {
               showToast("خطا در ذخیره برخی فایل ها");
             }
@@ -219,6 +222,37 @@ public class ThemeFragment extends Fragment {
             showToast("خطا در دانلود: " + t.getMessage());
           }
         });
+  }
+
+  private void saveThemePaths(Map<String, String> themeData) {
+    SharedPreferences themePrefs =
+        getContext().getSharedPreferences(THEME_PREFS, Context.MODE_PRIVATE);
+    SharedPreferences bgPrefs =
+        getContext().getSharedPreferences(BACKGROUND_PREFS, Context.MODE_PRIVATE);
+
+    SharedPreferences.Editor themeEditor = themePrefs.edit();
+    SharedPreferences.Editor bgEditor = bgPrefs.edit();
+
+    // Save theme path if exists
+    if (themeData.containsKey(themeKey)) {
+      String themeUrl = themeData.get(themeKey);
+      if (themeUrl != null && !themeUrl.isEmpty()) {
+        String fileName = extractFileName(themeUrl);
+        themeEditor.putString("themes", new File(THEME_DIR, fileName).getAbsolutePath());
+      }
+    }
+
+    // Save background path if exists
+    if (themeData.containsKey(backgroundKey)) {
+      String bgUrl = themeData.get(backgroundKey);
+      if (bgUrl != null && !bgUrl.isEmpty()) {
+        String fileName = extractFileName(bgUrl);
+        bgEditor.putString("dir", new File(THEME_DIR, fileName).getAbsolutePath());
+      }
+    }
+
+    themeEditor.apply();
+    bgEditor.apply();
   }
 
   private boolean downloadFile(String url, File directory, String fileName) throws Exception {
@@ -254,26 +288,6 @@ public class ThemeFragment extends Fragment {
             })
         .setNegativeButton("انصراف", null)
         .show();
-  }
-
-  private void saveThemePaths(Map<String, String> themeData) {
-    SharedPreferences themePrefs =
-        getContext().getSharedPreferences(THEME_PREFS, Context.MODE_PRIVATE);
-    SharedPreferences bgPrefs =
-        getContext().getSharedPreferences(BACKGROUND_PREFS, Context.MODE_PRIVATE);
-
-    if (themeData.containsKey(themeKey)) {
-      String fileName = extractFileName(themeData.get(themeKey));
-      themePrefs
-          .edit()
-          .putString("themes", new File(THEME_DIR, fileName).getAbsolutePath())
-          .apply();
-    }
-
-    if (themeData.containsKey(backgroundKey)) {
-      String fileName = extractFileName(themeData.get(backgroundKey));
-      bgPrefs.edit().putString("dir", new File(THEME_DIR, fileName).getAbsolutePath()).apply();
-    }
   }
 
   private String extractFileName(String url) {

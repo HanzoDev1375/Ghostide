@@ -2,6 +2,7 @@ package ir.ninjacoder.ghostide.model;
 
 import android.view.LayoutInflater;
 import android.view.View;
+import androidx.appcompat.app.AppCompatActivity;
 import com.google.gson.GsonBuilder;
 import com.ninjacoder.jgit.databinding.SearchLayoutBinderBinding;
 import ir.ninjacoder.ghostide.IdeEditor;
@@ -60,7 +61,7 @@ public class LoadTheme {
             FileUtil.writeFile(pathuser, gson.toJson(file));
             ThreadUtils.runOnUiThread(
                 () -> {
-                  editor.invalidate();
+                  ((AppCompatActivity)context).recreate();
                 });
 
           } catch (Exception err) {
