@@ -186,7 +186,7 @@ Ghost IDE offers a variety of keyboard shortcuts for physical keyboards from Fil
 ### Themeing
 
 ## General UI Colors
-- `whole_background`: Main background color of the entire editor
+- `backgroundcolorlinear`: Main background color of the entire editor
 - `toolbarcolor`: Background color of the toolbar
 - `toolbartextcolor`: Text color in the toolbar
 - `menubackground`: Background color of menus
@@ -204,6 +204,10 @@ Ghost IDE offers a variety of keyboard shortcuts for physical keyboards from Fil
 - `block_line_current`: Color for current code block line
 - `line_divider`: Color for dividers between lines
 - `non_printable_char`: Color for non-printable characters
+
+### Note 
+
+- If you want to use the background image  you need to make these keys `line_number_background`, `whole_background` and `backgroundcolorlinear` and `line_divider`. `#0000000`  continue to pay attention to the main background `backgroundcolorliner`
 
 ## Syntax Highlighting Colors
 
