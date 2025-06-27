@@ -181,3 +181,105 @@ Ghost IDE offers a variety of keyboard shortcuts for physical keyboards from Fil
 ### System plugin
 
 - Currently we do not have the ability to create plugins, but this feature will be available in the future.
+
+
+### Themeing
+
+## General UI Colors
+- `whole_background`: Main background color of the entire editor
+- `toolbarcolor`: Background color of the toolbar
+- `toolbartextcolor`: Text color in the toolbar
+- `menubackground`: Background color of menus
+- `menuPosBackground`: Background color for selected menu items
+- `menuPosTextColor`: Text color for selected menu items
+- `tabback`: Background color of tabs
+- `tabtextcolor`: Text color in tabs
+- `tabimagecolorfilter`: Color filter for tab icons
+- `line_number_background`: Background for line number gutter
+- `line_number`: Color of line numbers
+- `current_line`: Highlight color for current line
+- `selection_insert`: Color for insertion cursor/selection
+- `selection_handle`: Color for selection handles
+- `block_line`: Color for code block lines
+- `block_line_current`: Color for current code block line
+- `line_divider`: Color for dividers between lines
+- `non_printable_char`: Color for non-printable characters
+
+## Syntax Highlighting Colors
+
+### General Syntax
+- `text_normal`: Default text color
+- `comment`: Color for comments
+- `keyword`: Color for keywords
+- `operator`: Color for operators
+- `literal`: Color for literals
+- `identifier_name`: Color for identifiers
+- `attribute_name`: Color for attribute names
+- `attribute_value`: Color for attribute values
+
+### Language-Specific Colors
+
+#### Java
+- `javakeyword`: Java keywords
+- `javastring`: Java strings
+- `javanumber`: Java numbers
+- `javatype`: Java types
+- `javafun`: Java functions
+- `javaoprator`: Java operators
+- `javaparament`: Java parameters
+- `javafield`: Java fields
+
+#### JavaScript/TypeScript
+- `jskeyword`: JS keywords
+- `jsstring`: JS strings
+- `jsattr`: JS attributes
+- `jsfun`: JS functions
+- `jsoprator`: JS operators
+- `tskeyword`: TypeScript keywords
+- `tsattr`: TypeScript attributes
+- `tssymbols`: TypeScript symbols
+- `tscolormatch1-7`: TypeScript color matching groups
+
+#### Python
+- `pykeyword`: Python keywords
+- `pystring`: Python strings
+- `pynumber`: Python numbers
+- `pysymbol`: Python symbols
+- `pycolormatch1-4`: Python color matching groups
+
+#### PHP
+- `phpkeyword`: PHP keywords
+- `phpattr`: PHP attributes
+- `phpsymbol`: PHP symbols
+- `phpcolormatch1-6`: PHP color matching groups
+- `phphtmlkeyword`: PHP+HTML keywords
+- `phphtmlattr`: PHP+HTML attributes
+
+#### HTML
+- `htmltag`: HTML tags
+- `htmlattr`: HTML attributes
+- `htmlattrname`: HTML attribute names
+- `htmlsymbol`: HTML symbols
+- `htmlblocknormal`: Normal HTML blocks(`</`) 
+- `htmlblockhash`: HTML block hashes(`>`)
+
+#### CSS
+- `csskeyword`: CSS keywords
+
+
+#### Kt
+- soon
+
+## Special UI Elements
+- `fabbackgroundcolorcolor`: Floating action button background
+- `fabimagecolor`: Floating action button icon color
+- `fabcolorstroker`: Floating action button stroke color
+- `auto_comp_panel_bg`: Autocomplete panel background
+- `auto_comp_panel_corner`: Autocomplete panel corners
+- `displaytextcolortab`: Text color for displayed tabs
+- `navstatusbar`: Navigation status bar color
+- `backgroundcolorlinear`: Linear gradient background color
+- `print`: Color for print-related elements
+
+## Debugging/Level Colors
+- `breaklevel1-8`: Colors for different breakpoint levels like in (`{}()[]`)

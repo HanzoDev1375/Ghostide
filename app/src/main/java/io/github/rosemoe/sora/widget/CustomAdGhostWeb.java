@@ -4,6 +4,7 @@ import com.bumptech.glide.Glide;
 import com.ninjacoder.jgit.CircleDrawable;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
+import io.github.rosemoe.sora.event.ContentChangeEvent;
 import io.github.rosemoe.sora.widget.tooltip.ToolItemPop;
 import io.github.rosemoe.sora.widget.tooltip.ToolTipHelper;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
@@ -57,10 +58,14 @@ public class CustomAdGhostWeb extends EditorCompletionAdapter {
     } else {
       bind = (OneUiBinding) view.getTag();
     }
-    //    var tool = new ToolItemPop(getEditor());
-    //            if (tool != null) {
-    //              tool.run(item.desc);
-    //            }
+    var tool = new ToolItemPop(view);
+
+    if (pos == 0) {
+      tool.run(item.commit);
+      tool.show();
+    } else if (pos == 1) {
+      tool.autodismiss();
+    }
     item_label = bind.itemLabel;
     item_desc = bind.itemDesc;
     item_type = bind.itemType;

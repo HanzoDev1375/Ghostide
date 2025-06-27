@@ -3,6 +3,7 @@ package io.github.rosemoe.sora.widget.tooltip;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.View;
 import com.google.android.material.color.MaterialColors;
 import com.skydoves.powermenu.MenuAnimation;
 import com.skydoves.powermenu.PowerMenu;
@@ -10,40 +11,30 @@ import com.skydoves.powermenu.PowerMenuItem;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.R;
+
 public class ToolItemPop {
-  private CodeEditor editor;
+  private View editor;
   private PowerMenu menu;
 
-  public ToolItemPop(CodeEditor editor) {
+  public ToolItemPop(View editor) {
     this.editor = editor;
+    menu = new PowerMenu.Builder(editor.getContext()).setIsMaterial(true).build();
   }
 
   public void run(String text) {
-    menu =
-        new PowerMenu.Builder(editor.getContext())
-            .addItem(new PowerMenuItem("value " + text,false,R.drawable.ic_add))
-            .setIsMaterial(true)
-            .setShowBackground(false)
-            .setAutoDismiss(true)
-            .setTextColor(MaterialColors.getColor(editor.getContext(), ObjectUtils.TvColor, 0))
-            .setMenuColor(MaterialColors.getColor(editor.getContext(), ObjectUtils.Back, 0))
-            .setMenuShadow(0.7f)
-            .setAnimation(MenuAnimation.FADE)
-            .setMenuRadius(30)
-            .build();
+    menu.addItem(new PowerMenuItem("value " + text, false, R.drawable.ic_add));
+    menu.setShowBackground(false);
+    menu.setAutoDismiss(true);
+    menu.setTextColor(MaterialColors.getColor(editor.getContext(), ObjectUtils.TvColor, 0));
+    menu.setMenuColor(MaterialColors.getColor(editor.getContext(), ObjectUtils.Back, 0));
+    menu.setMenuShadow(0.7f);
+    menu.setAnimation(MenuAnimation.FADE);
+    menu.setMenuRadius(30);
   }
 
   public void show() {
-    var line = editor.getCursor().getLeftLine();
-    var column = editor.getCursor().getLeftColumn();
-    int x = (int) ((editor.getOffset(line, column) - (menu.getContentViewWidth() / 2)));
-    int y =
-        (int) (editor.getRowHeight() * line)
-            - editor.getOffsetY()
-            - menu.getContentViewHeight()
-            - 5;
 
-    menu.showAsDropDown(editor, x, y);
+    menu.showAsAnchorRightTop(editor);
   }
 
   public void dismiss() {
