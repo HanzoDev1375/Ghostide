@@ -123,11 +123,6 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
           case JavaScriptLexer.LessThanEquals:
           case JavaScriptLexer.GreaterThanEquals:
           case JavaScriptLexer.Equals_:
-            result.addIfNeeded(
-                line,
-                column,
-                TextStyle.makeStyle(EditorColorScheme.NON_PRINTABLE_CHAR, 0, true, false, false));
-            break;
           case JavaScriptLexer.NotEquals:
           case JavaScriptLexer.IdentityEquals:
           case JavaScriptLexer.IdentityNotEquals:
@@ -140,11 +135,6 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
           case JavaScriptLexer.DivideAssign:
           case JavaScriptLexer.ModulusAssign:
           case JavaScriptLexer.PlusAssign:
-            result.addIfNeeded(
-                line,
-                column,
-                TextStyle.makeStyle(EditorColorScheme.ATTRIBUTE_VALUE, 0, true, false, false));
-            break;
           case JavaScriptLexer.MinusAssign:
           case JavaScriptLexer.LeftShiftArithmeticAssign:
           case JavaScriptLexer.RightShiftArithmeticAssign:
@@ -157,7 +147,7 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
             result.addIfNeeded(
                 line,
                 column,
-                TextStyle.makeStyle(EditorColorScheme.KEYWORD, 0, true, false, false));
+                TextStyle.makeStyle(EditorColorScheme.jsattr, 0, true, false, false));
             break;
           case JavaScriptLexer.SingleLineComment:
           case JavaScriptLexer.MultiLineComment:
@@ -180,7 +170,7 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
             result.addIfNeeded(
                 line,
                 column,
-                TextStyle.makeStyle(EditorColorScheme.OPERATOR, 0, true, false, false));
+                TextStyle.makeStyle(EditorColorScheme.jsoprator, 0, true, false, false));
             break;
           case JavaScriptLexer.Else:
           case JavaScriptLexer.New:
@@ -194,7 +184,7 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
           case JavaScriptLexer.While:
           case JavaScriptLexer.Debugger:
           case JavaScriptLexer.Function_:
-            br.handleCustom(result, line, column, EditorColorScheme.javakeyword);
+            br.handleCustom(result, line, column, EditorColorScheme.jskeyword);
             break;
           case JavaScriptLexer.This:
           case JavaScriptLexer.With:
@@ -209,7 +199,7 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
             result.addIfNeeded(
                 line,
                 column,
-                TextStyle.makeStyle(EditorColorScheme.BLOCK_LINE, 0, true, false, false));
+                TextStyle.makeStyle(EditorColorScheme.jskeyword, 0, true, false, false));
             break;
           case JavaScriptLexer.Class:
             if (classNamePrevious) {
@@ -244,7 +234,7 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
             result.addIfNeeded(
                 line,
                 column,
-                TextStyle.makeStyle(EditorColorScheme.HTML_TAG, 0, true, false, false));
+                TextStyle.makeStyle(EditorColorScheme.jskeyword, 0, true, false, false));
             break;
           case JavaScriptLexer.NullLiteral:
           case JavaScriptLexer.BooleanLiteral:
@@ -278,7 +268,7 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
               }
               // symbol like in vscode
               if (previous == JavaScriptLexer.Dot || previous == JavaScriptLexer.Colon) {
-                mycolor = EditorColorScheme.BLOCK_LINE_CURRENT;
+                mycolor = EditorColorScheme.IDENTIFIER_NAME;
               }
               if (previous == JavaScriptLexer.Function_
                   || previous == JavaScriptLexer.Class
@@ -299,13 +289,7 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
                   || previous == JavaScriptLexer.As
                   || previous == JavaScriptLexer.Interface
                   || previous == JavaScriptLexer.Yield) {
-                mycolor = EditorColorScheme.OPERATOR;
-              }
-              if (as.getVarCall()) {
-                mycolor = EditorColorScheme.red;
-              }
-              if (as.getFunCall()) {
-                mycolor = EditorColorScheme.javakeyword;
+                mycolor = EditorColorScheme.jsoprator;
               }
               br.handleCustom(result, line, column, mycolor);
               break;

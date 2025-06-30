@@ -13,16 +13,19 @@ import com.helger.css.reader.CSSReader;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import ir.ninjacoder.ghostide.IdeEditor;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import static io.github.rosemoe.sora.langs.xml.analyzer.Utils.setSpanEFO2;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 public class CSSVariableParser {
 
   private final IdeEditor outputEditText;
   private int line, col;
-  private final int VARIABLE_NAME_COLOR = Color.parseColor("#FF00FF"); // بنفش برای نام متغیرها
-  private final int DEFAULT_VALUE_COLOR = Color.parseColor("#000000"); // سیاه برای مقادیر نامعتبر
+  private final int VARIABLE_NAME_COLOR = Color.TRANSPARENT;
+  private final int DEFAULT_VALUE_COLOR = Color.TRANSPARENT;
 
   public CSSVariableParser(IdeEditor editText) {
     this.outputEditText = editText;
@@ -35,8 +38,63 @@ public class CSSVariableParser {
       String varName = entry.getKey();
       VariableInfo varInfo = entry.getValue();
       int color = parseColorFromValue(varInfo.value);
-      setSpanEFO2(result, varInfo.line, varInfo.col, color, true, false);
+
+      //  setSpanEFO2(result, varInfo.line, varInfo.col, VARIABLE_NAME_COLOR, true, false);
+
+      int valueStartCol = varInfo.col + varName.length() + 1;
+    //  setSpanEFO2(result, varInfo.line, valueStartCol, color, true, false);
     }
+
+    highlightVariableUsages(result, cssContent, variables);
+  }
+
+  private void highlightVariableUsages(
+      TextAnalyzeResult result, String cssContent, Map<String, VariableInfo> variables) {
+    Pattern pattern = Pattern.compile("var\\(\\s*(--[a-zA-Z0-9-]+)\\s*\\)");
+    Matcher matcher = pattern.matcher(cssContent);
+    int[] lineOffsets = calculateLineOffsets(cssContent);
+
+    while (matcher.find()) {
+      String varName = matcher.group(1);
+      if (variables.containsKey(varName)) {
+        int start = matcher.start(1); 
+        int[] lineCol = getExactLineColumn(lineOffsets, start);
+        int line = lineCol[0];
+        int col = lineCol[1];
+
+        // رنگ از تعریف متغیر یا رنگ پیشفرض
+        int color =
+            variables.get(varName).value != null
+                ? parseColorFromValue(variables.get(varName).value)
+                : VARIABLE_NAME_COLOR;
+
+        // هایلایت فقط نام متغیر داخل پرانتز
+        setSpanEFO2(result, line, col, color, true, false);
+      }
+    }
+  }
+
+  private int[] calculateLineOffsets(String text) {
+    List<Integer> offsets = new ArrayList<>();
+    offsets.add(0);
+    for (int i = 0; i < text.length(); i++) {
+      if (text.charAt(i) == '\n') {
+        offsets.add(i + 1);
+      }
+    }
+    return offsets.stream().mapToInt(i -> i).toArray();
+  }
+
+  private int[] getExactLineColumn(int[] lineOffsets, int position) {
+    int line = 1;
+    for (; line < lineOffsets.length; line++) {
+      if (lineOffsets[line] > position) {
+        break;
+      }
+    }
+    line--;
+    int col = position - lineOffsets[line] + 1;
+    return new int[] {line + 1, col};
   }
 
   private Map<String, VariableInfo> parseCSSVariables(String cssContent) {
@@ -71,9 +129,9 @@ public class CSSVariableParser {
 
   private int parseColorFromValue(String value) {
     try {
-      // پردازش رنگ‌های HEX
+
       if (value.startsWith("#")) {
-        if (value.length() == 4) { // فرمت کوتاه (#RGB)
+        if (value.length() == 4) {
           value =
               "#"
                   + value.charAt(1)
@@ -86,7 +144,6 @@ public class CSSVariableParser {
         return Color.parseColor(value);
       }
 
-      // پردازش rgb() و rgba()
       if (value.startsWith("rgb(") || value.startsWith("rgba(")) {
         String[] parts = value.replaceAll("[rgba()]", "").split(",");
         int r = Integer.parseInt(parts[0].trim());
@@ -96,7 +153,6 @@ public class CSSVariableParser {
         return Color.argb(a, r, g, b);
       }
 
-      // پردازش نام رنگ‌ها (مثل red, blue)
       return Color.parseColor(value.toLowerCase());
     } catch (Exception e) {
       return DEFAULT_VALUE_COLOR;

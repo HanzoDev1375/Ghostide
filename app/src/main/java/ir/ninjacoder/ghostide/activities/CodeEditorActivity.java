@@ -419,10 +419,6 @@ public class CodeEditorActivity extends BaseCompat {
                   new TypeToken<HashMap<String, Object>>() {}.getType());
     }
 
-    Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.ab);
-    animation.start();
-    editor.setAnimation(animation);
-    editor.setFadein();
     soundPool = new SoundPool(3, AudioManager.STREAM_MUSIC, 0);
     n1 = soundPool.load(getApplicationContext(), R.raw.typenormal, 1);
     n2 = soundPool.load(getApplicationContext(), R.raw.typeremoved, 1);
@@ -440,12 +436,7 @@ public class CodeEditorActivity extends BaseCompat {
       editor.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO);
     }
     editor.setText(modelEditor.getText());
-    var size =
-        TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            2,
-            getApplicationContext().getResources().getDisplayMetrics());
-    editor.setDividerWidth(size);
+    
     editor.setKeyboardOperation(
         new CodeEditor.OnKeyboardOperation() {
           @Override
@@ -478,12 +469,7 @@ public class CodeEditorActivity extends BaseCompat {
       }
     }
 
-    editor.setLigatureEnabled(true);
-    editor.setHighlightCurrentBlock(true);
-    editor.setHighlightCurrentLine(false);
-    editor.setAutoCompletionOnComposing(false);
-    editor.setLineInfoTextSize(20f);
-    editor.setBlockLineEnabled(true);
+    
 
     if (getvb.contains("chars")) {
       editor.setCustomCharName(getvb.getString("chars", ""));
@@ -587,7 +573,7 @@ public class CodeEditorActivity extends BaseCompat {
         .getColorScheme()
         .setColor(EditorColorScheme.MATCHED_TEXT_BACKGROUND, Color.parseColor("#75800F31"));
 
-    editor.getColorScheme().setColor(EditorColorScheme.red, Color.parseColor("#FF710000"));
+    
 
     if (tab100.contains("mpcnullgogo")) {
       try {
@@ -800,7 +786,7 @@ public class CodeEditorActivity extends BaseCompat {
     }
   }
 
-  public void setPinLineNumberEditor() {
+   void setPinLineNumberEditor() {
     if (line.getString("getline", "").equals("true")) {
       editor.setPinLineNumber(true);
     } else {

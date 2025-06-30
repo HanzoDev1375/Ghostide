@@ -47,50 +47,6 @@ public class ScriptAnalyzer {
     this.listener = listener;
   }
 
-  public void analyzeHtml(String htmlContent) {
-    if (htmlContent == null) {
-      showError("HTML content is NULL!");
-      return;
-    }
-
-    allMethods.clear();
-    allVars.clear();
-
-    try {
-      Document doc = Jsoup.parse(htmlContent);
-      Elements scripts = doc.select("script[src]");
-
-      if (scripts.isEmpty()) {
-        showToast("No external scripts found");
-        notifyListener();
-        return;
-      }
-
-      List<String> scriptSrcs =
-          scripts.stream()
-              .map(script -> script.attr("src"))
-              .filter(src -> src != null && !src.isEmpty())
-              .collect(Collectors.toList());
-
-      if (scriptSrcs.isEmpty()) {
-        showToast("No valid script src found");
-        notifyListener();
-        return;
-      }
-
-      scriptsPending = scriptSrcs.size();
-
-      for (String src : scriptSrcs) {
-        downloadAndAnalyze(src);
-      }
-
-    } catch (Exception e) {
-      showError("Parser crashed: " + e.getClass().getSimpleName() + " - " + e.getMessage());
-      Log.e(TAG, "Parsing error", e);
-      notifyListener();
-    }
-  }
-
   private void downloadAndAnalyze(String src) {
     try {
       String fileName = Uri.parse(src).getLastPathSegment();
@@ -100,55 +56,8 @@ public class ScriptAnalyzer {
         return;
       }
 
-      String jsCode = null;
-
-      // ۱. بررسی مسیر نسبی نسبت به مسیر پروژه (projectDir)
-      try {
-        File resolvedProjectFile = new File(projectDir, src).getCanonicalFile();
-        if (resolvedProjectFile.exists() && resolvedProjectFile.isFile()) {
-          jsCode = readFile(resolvedProjectFile);
-          Log.i(
-              TAG,
-              "📂 Loaded from relative project path: " + resolvedProjectFile.getAbsolutePath());
-        }
-      } catch (IOException ioEx) {
-        Log.w(TAG, "⚠️ Failed to resolve relative path: " + src + " → " + ioEx.getMessage());
-      }
-
-      // ۲. بررسی فایل در کش (CACHE_DIR)
-      if (jsCode == null) {
-        File cacheFile = new File(CACHE_DIR, fileName);
-        if (cacheFile.exists()) {
-          jsCode = readFile(cacheFile);
-          Log.i(TAG, "📁 Loaded from cache: " + cacheFile.getAbsolutePath());
-        }
-
-        // ۳. در صورت آنلاین بودن، دانلود کن
-        else if (src.startsWith("http") && isNetworkAvailable()) {
-          jsCode = downloadScript(src);
-          if (jsCode == null || jsCode.trim().isEmpty()) {
-            onScriptProcessed();
-            return;
-          }
-          saveFile(cacheFile, jsCode);
-          Log.i(TAG, "⬇️ Downloaded and cached: " + cacheFile.getAbsolutePath());
-        }
-
-        // ۴. هیچ منبعی پیدا نشد
-        else {
-          Log.w(TAG, "❌ Not found locally or online: " + src);
-          onScriptProcessed();
-          return;
-        }
-      }
-
-      // ۵. تحلیل کد JS و اضافه‌کردن به لیست
-      List<CompletionItem> methods = getJavaScriptMethods(jsCode, fileName, prefix);
-      List<CompletionItem> vars = getJavaScriptVariables(jsCode, fileName, prefix);
-      allMethods.addAll(methods);
-      allVars.addAll(vars);
-
-      showToast("✅ Parsed: " + fileName);
+      processWithJsonCache(src, fileName);
+      showToast("Processed: " + fileName);
 
     } catch (Exception e) {
       showError("Error processing: " + src + " → " + e.getMessage());
@@ -265,5 +174,142 @@ public class ScriptAnalyzer {
 
   public interface AnalysisListener {
     void onAnalysisComplete(List<CompletionItem> methods, List<CompletionItem> vars);
+  }
+
+  private String getCacheKey(String src) {
+    String fileName = Uri.parse(src).getLastPathSegment();
+    return fileName != null ? fileName + ".json" : "cache.json";
+  }
+
+  private void processWithJsonCache(String src, String fileName) {
+    File jsonCacheFile = new File(CACHE_DIR, getCacheKey(src));
+    
+    try {
+      String jsCode = loadScriptContent(src);
+      if (jsCode != null) {
+        List<CompletionItem> methods = getJavaScriptMethods(jsCode, fileName, prefix);
+        List<CompletionItem> vars = getJavaScriptVariables(jsCode, fileName, prefix);
+        allMethods.addAll(methods);
+        allVars.addAll(vars);
+        
+      }
+    } catch (Exception err) {
+      showError(err.getLocalizedMessage());
+    }
+  }
+
+  private String loadScriptContent(String src) throws IOException {
+    // ۱. بررسی مسیر نسبی
+    File localFile = new File(projectDir, src).getCanonicalFile();
+    if (localFile.exists()) {
+      return readFile(localFile);
+    }
+
+    // ۲. بررسی کش
+    File cacheFile = new File(CACHE_DIR, Uri.parse(src).getLastPathSegment());
+    if (cacheFile.exists()) {
+      return readFile(cacheFile);
+    }
+
+    // ۳. دانلود اگر آنلاین هست
+    if (src.startsWith("http") && isNetworkAvailable()) {
+      String content = downloadScript(src);
+      if (content != null) {
+        saveFile(cacheFile, content);
+      }
+      return content;
+    }
+
+    return null;
+  }
+
+  private void processScript(String src) {
+    new Thread(
+            () -> {
+              try {
+                String jsCode = loadScriptContent(src);
+                if (jsCode == null) return;
+
+                List<CompletionItem> methods = getJavaScriptMethods(jsCode, src, prefix);
+                List<CompletionItem> vars = getJavaScriptVariables(jsCode, src, prefix);
+
+                // ذخیره در حافظه موقت
+                synchronized (this) {
+                  allMethods.addAll(methods);
+                  allVars.addAll(vars);
+                }
+
+                // ذخیره خودکار در کش
+                saveToCache(methods, "methods");
+                saveToCache(vars, "vars");
+
+                showToast("Processed: " + src);
+
+              } catch (Exception e) {
+                showError("Script processing failed: " + e.getMessage());
+              } finally {
+                onScriptProcessed();
+              }
+            })
+        .start();
+  }
+
+  private File getCacheFile(String type) {
+    return new File(CACHE_DIR, "autocomplete_" + type + ".json");
+  }
+
+  private void saveToCache(List<CompletionItem> items, String type) {
+    new Thread(
+            () -> {
+              File cacheFile = getCacheFile(type);
+              JsonCacheHelper.saveToJson(cacheFile, items);
+            })
+        .start();
+  }
+
+  private List<CompletionItem> loadFromCache(String type) {
+    File cacheFile = getCacheFile(type);
+    if (cacheFile.exists()) {
+      return JsonCacheHelper.loadFromJson(cacheFile);
+    }
+    return null;
+  }
+
+  public void analyzeHtml(String htmlContent) {
+    // ابتدا از کش قدیمی بارگذاری کن
+    List<CompletionItem> cachedMethods = loadFromCache("methods");
+    List<CompletionItem> cachedVars = loadFromCache("vars");
+
+    if (cachedMethods != null && cachedVars != null) {
+      allMethods.addAll(cachedMethods);
+      allVars.addAll(cachedVars);
+      notifyListener();
+      showToast("Using cached data");
+      return;
+    }
+
+    // اگر کش وجود نداشت، پردازش جدید انجام شود
+    processHtmlContent(htmlContent);
+  }
+
+  private void processHtmlContent(String htmlContent) {
+    try {
+      Document doc = Jsoup.parse(htmlContent);
+      Elements scripts = doc.select("script[src]");
+
+      if (scripts.isEmpty()) {
+        showToast("No external scripts");
+        return;
+      }
+
+      for (Element script : scripts) {
+        String src = script.attr("src");
+        if (src != null && !src.isEmpty()) {
+          processScript(src);
+        }
+      }
+    } catch (Exception e) {
+      showError("HTML processing failed: " + e.getMessage());
+    }
   }
 }

@@ -1,5 +1,6 @@
 package io.github.rosemoe.sora.langs.python;
 
+import io.github.rosemoe.sora.data.RainbowBracketHelper;
 import io.github.rosemoe.sora.data.Span;
 import ir.ninjacoder.ghostide.IdeEditor;
 import android.graphics.Color;
@@ -26,6 +27,7 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
 
   private PythonErrorManager errors;
   protected IdeEditor editor;
+  RainbowBracketHelper rb;
 
   public PythonCodeAnalyzer(IdeEditor editor) {
     this.editor = editor;
@@ -42,6 +44,7 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
       var lexer = new PythonLexerCompat(stream);
       var auto = new PythonAutoComplete();
       auto.setKeywords(PythonLang.keywords);
+      rb = new RainbowBracketHelper();
       var info = new PythonAutoComplete.Identifiers();
       info.begin();
       errors = new PythonErrorManager(editor);
@@ -76,6 +79,17 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
             if (first) {
               result.addNormalIfNull();
             }
+            break;
+
+          case PythonLexerCompat.LBRACE:
+          case PythonLexerCompat.LPAR:
+          case PythonLexerCompat.LSQB:
+            rb.handleOpenBracket(result, line, column, EditorColorScheme.pycolormatch4);
+            break;
+          case PythonLexerCompat.RBRACE:
+          case PythonLexerCompat.RPAR:
+          case PythonLexerCompat.RSQB:
+            rb.handleCloseBracket(result, line, column, EditorColorScheme.pycolormatch4);
             break;
           case PythonLexerCompat.AND:
           case PythonLexerCompat.AS:
@@ -122,15 +136,8 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
                 TextStyle.makeStyle(EditorColorScheme.pykeyword, 0, true, false, false));
             break;
           case PythonLexerCompat.DOT:
-
           case PythonLexerCompat.STAR:
           case PythonLexerCompat.COMMA:
-          case PythonLexerCompat.LBRACE:
-          case PythonLexerCompat.RBRACE:
-          case PythonLexerCompat.LPAR:
-          case PythonLexerCompat.LSQB:
-          case PythonLexerCompat.RPAR:
-          case PythonLexerCompat.RSQB:
           case PythonLexerCompat.VBAR:
           case PythonLexerCompat.EQUAL:
           case PythonLexerCompat.PERCENT:
@@ -230,11 +237,11 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
                 isUnderLine = false;
               }
               if (token.getText().equals("print")) {
-                colorid = EditorColorScheme.gold;
+                colorid = EditorColorScheme.pycolormatch3;
                 isBold = true;
               }
               if (token.getText().equals("self")) {
-                colorid = EditorColorScheme.green;
+                colorid = EditorColorScheme.pycolormatch4;
                 isBold = true;
               }
 

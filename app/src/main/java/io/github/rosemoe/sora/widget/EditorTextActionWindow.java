@@ -23,6 +23,7 @@
  */
 package io.github.rosemoe.sora.widget;
 
+import io.github.rosemoe.sora.langs.groovy.lang.GroovyLanguage;
 import io.github.rosemoe.sora.langs.json.JsonLanguage;
 import io.github.rosemoe.sora.langs.xml.XMLLanguage;
 import ir.ninjacoder.ghostide.IdeEditor;
@@ -190,10 +191,13 @@ public class EditorTextActionWindow extends EditorPopupWindow
                           JsonTools.run((IdeEditor) editor, v, v.getContext());
                         } else if (editor.getEditorLanguage() instanceof XMLLanguage) {
                           new ToolItem().bindXml(v.getContext(), editor, v);
-                        } else {
-                          Toast.makeText(editor.getContext(), "Tools your lang not found", 2)
+                        } else  if(editor.getEditorLanguage() instanceof GroovyLanguage ){
+                          var gr = new GradleTools(v.getContext(),(IdeEditor)editor,v);
+						  gr.get();
+                        }else{
+							Toast.makeText(editor.getContext(), "Tools your lang not found", 2)
                               .show();
-                        }
+						}
                       }
                       break;
                   }

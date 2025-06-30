@@ -125,7 +125,8 @@ public class ThemeFragment extends Fragment {
         if (themeData.containsKey(imageKey)) {
           Glide.with(binding.previewicon.getContext())
               .load(themeData.get(imageKey))
-              .diskCacheStrategy(DiskCacheStrategy.NONE)
+              .fitCenter()
+              .diskCacheStrategy(DiskCacheStrategy.ALL)
               .into(binding.previewicon);
         }
 
