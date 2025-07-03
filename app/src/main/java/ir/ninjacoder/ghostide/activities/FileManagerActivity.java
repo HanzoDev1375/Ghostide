@@ -481,7 +481,7 @@ public class FileManagerActivity extends BaseCompat
     bind.navs.getMenu().add(0, 12, 0, "About").setIcon(R.drawable.drawer_item11);
     bind.navs.getMenu().add(0, 14, 0, "Store").setIcon(R.drawable.shop_24);
     bind.navs.getMenu().add(0, 13, 0, "exit").setIcon(R.drawable.drawer_item1);
-    bind.navs.getMenu().add(0, 15, 0, "star in myket").setIcon(R.drawable.starmyket);
+    
     DrowerHandler();
   }
 
@@ -1184,11 +1184,7 @@ public class FileManagerActivity extends BaseCompat
       SendDataFromCodeEditor(newpos, "path", files, newlistmap);
     }
     if (staticstring.endsWith(".ghost")) {
-      /// SendDataFromCodeEditor(newpos, "path", files, newlistmap);
-      var it = new Intent();
-      it.setClass(getApplicationContext(), ThemePreviewActivity.class);
-      it.putExtra("keyitem", staticstring);
-      loadAnim(it);
+      loadThemeGhost();
     }
     if (staticstring.endsWith(".xml")) {
       loadVector(newpos);
@@ -1298,11 +1294,47 @@ public class FileManagerActivity extends BaseCompat
     _themeinstall(files, newpos, "path");
   }
 
-  public void MakeZipFileFromThread(int pos) {
+  void loadThemeGhost() {
+    var sheet = new ListSheet();
+    sheet.setSheetDialog(this);
+    sheet.addItem("OpenThemeEditor");
+    sheet.addItem("OpenCodeEditor");
+    sheet.addItem("applyTheme");
+    sheet.setOnItemClickLabe(
+        pos -> {
+          switch (pos) {
+            case 0:
+              {
+                var it = new Intent();
+                it.setClass(getApplicationContext(), ThemePreviewActivity.class);
+                it.putExtra("keyitem", staticstring);
+                loadAnim(it);
+                sheet.getDismiss(true);
+                break;
+              }
+            case 1:
+              {
+                SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+                sheet.getDismiss(true);
+                break;
+              }
+            case 2:
+              {
+                SharedPreferences themePrefs =
+                    getSharedPreferences("thememanagersoft", MODE_PRIVATE);
+                themePrefs.edit().putString("themes", Folder).apply();
+                sheet.getDismiss(true);
+                break;
+              }
+          }
+        });
+  }
+
+  void MakeZipFileFromThread(int pos) {
     MakeZipFileFromThread(pos, "Add project?", "ایا میخواهید یک پروژه بسازید؟", ".project");
   }
 
-  public void MakeZipFileFromThreads(int pos) {
+  void MakeZipFileFromThreads(int pos) {
     MakeZipFileFromThread(pos, "Make ZipFile", "Add Zip ?", ".zip");
   }
 
@@ -1754,10 +1786,6 @@ public class FileManagerActivity extends BaseCompat
                 loadAnim(new Intent(getApplicationContext(), StoreAcitvity.class));
 
                 break;
-              }
-            case 15:
-              {
-                setLink("myket://comment?id=ir.ninjacoder.ghostide");
               }
           }
           return false;
