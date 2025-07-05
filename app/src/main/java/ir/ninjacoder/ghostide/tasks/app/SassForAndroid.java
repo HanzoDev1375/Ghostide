@@ -1,6 +1,8 @@
 package ir.ninjacoder.ghostide.tasks.app;
 
 import android.widget.Toast;
+import ir.ninjacoder.ghostide.IdeEditor;
+import ir.ninjacoder.ghostide.enums.CompilerModel;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.utils.FileUtil;
 import ir.ninjacoder.ghostide.utils.ThemeUtils;
@@ -15,8 +17,13 @@ import de.larsgrefer.sass.embedded.android.AndroidSassCompilerFactory;
 import io.github.rosemoe.sora.langs.desc.SCSSDescription;
 import io.github.rosemoe.sora.langs.universal.UniversalLanguage;
 import io.github.rosemoe.sora.widget.CodeEditor;
-
 import java.io.File;
+import java.net.URL;
+import com.caoccao.javet.swc4j.options.Swc4jTranspileOptions;
+import com.caoccao.javet.swc4j.enums.Swc4jMediaType;
+import com.caoccao.javet.swc4j.enums.Swc4jSourceMapOption;
+import com.caoccao.javet.swc4j.outputs.Swc4jTranspileOutput;
+import com.caoccao.javet.swc4j.Swc4j;
 import java.util.HashMap;
 
 public class SassForAndroid {
@@ -49,6 +56,70 @@ public class SassForAndroid {
       output = sb.getCss();
     } catch (Exception err) {
       err.printStackTrace();
+    }
+  }
+
+  public static void runObjectWeb(IdeEditor input, String output, CompilerModel model) {
+    try {
+
+      String code = input.getText().toString();
+      URL specifier = new URL("file:///storage/emulated/0/Apktool_M/hsi.js");
+      if (model == CompilerModel.JSX) {
+        Swc4jTranspileOptions options =
+            new Swc4jTranspileOptions()
+                .setSpecifier(specifier)
+                .setTransformJsx(true)
+                .setSourceMap(Swc4jSourceMapOption.None)
+                .setMediaType(Swc4jMediaType.Jsx)
+                .setCaptureAst(true);
+
+        Swc4jTranspileOutput outputs = new Swc4j().transpile(code, options);
+        // Print the transpiled code.
+
+        FileUtil.writeFile(output.replace(".jsx", ".js"), outputs.getCode());
+
+      } else if (model == CompilerModel.TSX) {
+        Swc4jTranspileOptions options =
+            new Swc4jTranspileOptions()
+                .setSpecifier(specifier)
+                .setTransformJsx(true)
+                .setSourceMap(Swc4jSourceMapOption.None)
+                .setMediaType(Swc4jMediaType.Tsx)
+                .setCaptureAst(true);
+
+        Swc4jTranspileOutput outputs = new Swc4j().transpile(code, options);
+        // Print the transpiled code.
+        FileUtil.writeFile(output.replace(".tsx", ".js"), outputs.getCode());
+
+      } else if (model == CompilerModel.TYPESRCIPT) {
+        Swc4jTranspileOptions options =
+            new Swc4jTranspileOptions()
+                .setSpecifier(specifier)
+                .setTransformJsx(true)
+                .setSourceMap(Swc4jSourceMapOption.None)
+                .setMediaType(Swc4jMediaType.TypeScript)
+                .setCaptureAst(true);
+
+        Swc4jTranspileOutput outputs = new Swc4j().transpile(code, options);
+        // Print the transpiled code.
+
+        FileUtil.writeFile(output.replace(".ts", ".js"), outputs.getCode());
+      } else if (model == CompilerModel.NODEJS) {
+        Swc4jTranspileOptions options =
+            new Swc4jTranspileOptions()
+                .setSpecifier(specifier)
+                .setTransformJsx(true)
+                .setSourceMap(Swc4jSourceMapOption.None)
+                .setMediaType(Swc4jMediaType.JavaScript)
+                .setCaptureAst(true);
+
+        Swc4jTranspileOutput outputs = new Swc4j().transpile(code, options);
+        // Print the transpiled code.
+
+        FileUtil.writeFile(output.replace(".js", ".nodecompile.js"), outputs.getCode());
+      }
+    } catch (Exception err) {
+
     }
   }
 

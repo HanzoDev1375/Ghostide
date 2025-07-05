@@ -14,6 +14,7 @@ import ir.ninjacoder.ghostide.adapter.SyspiarAdapter;
 import ir.ninjacoder.ghostide.adapter.ToolbarListFileAdapter;
 import ir.ninjacoder.ghostide.config.JavaToGsonHelper;
 import ir.ninjacoder.ghostide.databinding.Antcomp8lerBinding;
+import ir.ninjacoder.ghostide.enums.CompilerModel;
 import ir.ninjacoder.ghostide.enums.Mode;
 import ir.ninjacoder.ghostide.layoutmanager.LogCatBottomSheet;
 import ir.ninjacoder.ghostide.marco.CharUtil;
@@ -129,7 +130,7 @@ public class CodeEditorActivity extends BaseCompat {
   private TextView titleauthor;
   private ImageView image, redo, undo, menupopnew, iconAuthor;
   private LinearLayout FrameLayout02;
-  private LinearLayout linear3,getColorPass;
+  private LinearLayout linear3, getColorPass;
   private ProgressBar proanjctor;
   private LinearLayout barSymoble;
   private ImageView imageview1, imageloadereditor, avatargithubuser;
@@ -212,7 +213,7 @@ public class CodeEditorActivity extends BaseCompat {
   private void initialize(Bundle _savedInstanceState) {
 
     _fab = findViewById(R.id._fab);
-	  getColorPass = findViewById(R.id.getColorPass);
+    getColorPass = findViewById(R.id.getColorPass);
     Coordinator = findViewById(R.id.Coordinator);
     multytab = findViewById(R.id.multytab);
     FrameLayout01 = findViewById(R.id.FrameLayout01);
@@ -306,30 +307,30 @@ public class CodeEditorActivity extends BaseCompat {
                 if (keypadHeight > screenHeight * 0.15) {
                   float minScale = 1.0f;
                   ghostIcon
-                  .animate()
-                  .scaleX(minScale)
-                  .scaleY(minScale)
-                  // .translationX(minScale)
-                  // .translationY(minScale)
-                  /// .x(minScale)
-                  /// .y(minScale)
+                      .animate()
+                      .scaleX(minScale)
+                      .scaleY(minScale)
+                      // .translationX(minScale)
+                      // .translationY(minScale)
+                      /// .x(minScale)
+                      /// .y(minScale)
                       .setDuration(1000)
-                   .start();
+                      .start();
 
                   ObjectUtils.showViewWithAnimation(syspiar);
 
                 } else {
                   var max = 1.4f;
-                   ghostIcon
-                  .animate()
-                  .scaleX(Math.max(max, 1))
-                  .scaleY(Math.max(max, 1))
-                  //                      .translationX(max / 2)
-                  //                      .translationY(max * max - 1)
-                  //                      .x(Math.max(max / 5, 6))
-                  //                      .y(Math.min(max * max, 6))
-                  .setDuration(1000)
-                  .start();
+                  ghostIcon
+                      .animate()
+                      .scaleX(Math.max(max, 1))
+                      .scaleY(Math.max(max, 1))
+                      //                      .translationX(max / 2)
+                      //                      .translationY(max * max - 1)
+                      //                      .x(Math.max(max / 5, 6))
+                      //                      .y(Math.min(max * max, 6))
+                      .setDuration(1000)
+                      .start();
 
                   ObjectUtils.hideViewWithAnimation(syspiar, _fab);
                 }
@@ -436,7 +437,7 @@ public class CodeEditorActivity extends BaseCompat {
       editor.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO);
     }
     editor.setText(modelEditor.getText());
-    
+
     editor.setKeyboardOperation(
         new CodeEditor.OnKeyboardOperation() {
           @Override
@@ -468,8 +469,6 @@ public class CodeEditorActivity extends BaseCompat {
         editor.setCompletionWndPositionMode(CodeEditor.WINDOW_POS_MODE_FULL_WIDTH_ALWAYS);
       }
     }
-
-    
 
     if (getvb.contains("chars")) {
       editor.setCustomCharName(getvb.getString("chars", ""));
@@ -549,7 +548,7 @@ public class CodeEditorActivity extends BaseCompat {
     themeForJson2.addImageColor(
         image, this, KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
 
-    themeForJson2.setStatusNavColor(this, imap, KeySet.navstatusbar,Coordinator,getColorPass);
+    themeForJson2.setStatusNavColor(this, imap, KeySet.navstatusbar, Coordinator, getColorPass);
     themeForJson2.addImageColor(
         menupopnew, this, KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
     themeForJson2.setFabBackground(_fab, imap);
@@ -572,8 +571,6 @@ public class CodeEditorActivity extends BaseCompat {
     editor
         .getColorScheme()
         .setColor(EditorColorScheme.MATCHED_TEXT_BACKGROUND, Color.parseColor("#75800F31"));
-
-    
 
     if (tab100.contains("mpcnullgogo")) {
       try {
@@ -602,7 +599,7 @@ public class CodeEditorActivity extends BaseCompat {
     }
     var data = thememanagersoft.contains("br") ? thememanagersoft.getFloat("br", 2) : 3;
     BlurImage.setBlurInWallpaperMobile(this, data, ghostIcon);
-   
+
     getColorPass.setBackgroundColor(Color.parseColor(imap.get("backgroundcolorlinear").toString()));
 
     editor.setAutoCompletionEnabled(!auto.contains("mauto"));
@@ -786,7 +783,7 @@ public class CodeEditorActivity extends BaseCompat {
     }
   }
 
-   void setPinLineNumberEditor() {
+  void setPinLineNumberEditor() {
     if (line.getString("getline", "").equals("true")) {
       editor.setPinLineNumber(true);
     } else {
@@ -1205,6 +1202,8 @@ public class CodeEditorActivity extends BaseCompat {
           jsonview.setClass(getApplicationContext(), JsonViewerActivity.class);
           jsonview.putExtra("g", selectedFilePath);
           loadAnim(jsonview);
+        } else if (selectedFilePath.contains(".jsx")) {
+          SassForAndroid.runObjectWeb(editor, selectedFilePath, CompilerModel.JSX);
         } else if (selectedFilePath.contains(".js")) {
           getmd.setClass(getApplicationContext(), JsRunerActivity.class);
           getmd.putExtra("sendCode", selectedFilePath);
@@ -1243,6 +1242,8 @@ public class CodeEditorActivity extends BaseCompat {
           JavaCcComplierImpl.main(file.toString(), file.getParent() + "/");
         } else if (selectedFilePath.contains(".kt")) {
           new KotlinCompilerImpl(CodeEditorActivity.this, selectedFilePath, editor);
+        } else if (selectedFilePath.contains(".ts")) {
+          SassForAndroid.runObjectWeb(editor, selectedFilePath, CompilerModel.TYPESRCIPT);
         }
       } else {
 

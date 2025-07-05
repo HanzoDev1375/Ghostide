@@ -159,5 +159,11 @@ dependencies {
     implementation("io.github.skylot:jadx-dex-input:$jadxVersion")
     implementation 'androidx.security:security-crypto:1.1.0-alpha03'
     implementation 'org.mozilla:rhino-runtime:1.7.15'
+	//run ts tsx js jsx in Android
+	
+	implementation("com.caoccao.javet:swc4j:1.6.0") // Must Have
+	arm32Implementation("com.caoccao.javet:swc4j-android-arm:1.6.0")
+    arm64Implementation("com.caoccao.javet:swc4j-android-arm64:1.6.0")
+
 }
 

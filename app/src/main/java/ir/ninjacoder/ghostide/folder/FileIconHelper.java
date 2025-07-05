@@ -192,7 +192,7 @@ public class FileIconHelper {
       } else fileIconRes = R.drawable.ic_material_html;
     } else if (is("jar")) fileIconRes = R.drawable.ic_material_jar;
     else if (is("java") || is("jj")) fileIconRes = R.drawable.ic_material_java;
-    else if (is("js")) {
+    else if (is("js") || is("jsx")) {
       if (isEnvironmentEnabled) {
         if (fileEnvHelper.nodejs().isNodeJsFile()) fileIconRes = R.drawable.ic_material_nodejs;
         else if (fileEnvHelper.react().isReactFile()) fileIconRes = R.drawable.ic_material_react;
@@ -218,7 +218,7 @@ public class FileIconHelper {
     else if (is("sql")) fileIconRes = R.drawable.ic_material_database;
     else if (is("stylus")) fileIconRes = R.drawable.ic_material_stylus;
     else if (is("swift")) fileIconRes = R.drawable.ic_material_swift;
-    else if (is("ts")) {
+    else if (is("ts") || is("tsx")) {
       if (isEnvironmentEnabled) {
         if (fileEnvHelper.react().isReactFile()) fileIconRes = R.drawable.ic_material_react_ts;
         else fileIconRes = R.drawable.ic_material_typescript;

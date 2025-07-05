@@ -52,146 +52,146 @@ import org.benf.cfr.reader.api.SinkReturns;
 
 public class EditorRoaderFile {
 
-  public static void RuningTask(IdeEditor editor, ExrtaFab _fab, String _path, ProgressBar bar) {
+  public static void RuningTask(IdeEditor editor, ExrtaFab fab, String path, ProgressBar bar) {
 
-    if (_path.endsWith(".css")) {
+    if (path.endsWith(".css")) {
       // this html lexer using as html css3 js and sass and scass
       var CSS = new CSS3Language(editor);
       editor.setEditorLanguage(CSS);
-      ReadFileCompat(editor, _path, bar);
-    } else if (_path.endsWith(".py")) {
+      ReadFileCompat(editor, path, bar);
+    } else if (path.endsWith(".py")) {
       editor.setEditorLanguage(new PythonLang(editor));
-      ReadFileCompat(editor, _path, bar);
-      _fab.postDelayed(_fab::show, 400);
-    } else if (_path.endsWith(".cpp")
-        || _path.endsWith(".cxx")
-        || _path.endsWith(".cc")
-        || _path.endsWith(".h")
-        || _path.endsWith(".hpp")) {
+      ReadFileCompat(editor, path, bar);
+      fab.postDelayed(fab::show, 400);
+    } else if (path.endsWith(".cpp")
+        || path.endsWith(".cxx")
+        || path.endsWith(".cc")
+        || path.endsWith(".h")
+        || path.endsWith(".hpp")) {
       editor.setEditorLanguage(new CppLanguage());
-      _fab.postDelayed(_fab::show, 400);
-      ReadFileCompat(editor, _path, bar);
-    } else if (_path.endsWith(".html")) {
+      fab.postDelayed(fab::show, 400);
+      ReadFileCompat(editor, path, bar);
+    } else if (path.endsWith(".html")) {
       var htmllang = new HTMLLanguage(editor);
       editor.setEditorLanguage(htmllang);
-      ReadFileCompat(editor, _path, bar);
-      _fab.postDelayed(_fab::show, 400);
-    } else if (_path.endsWith(".js")) {
+      ReadFileCompat(editor, path, bar);
+      fab.postDelayed(fab::show, 400);
+    } else if (path.endsWith(".js")) {
       editor.setEditorLanguage(new JavaScriptLanguage());
-      ReadFileCompat(editor, _path, bar);
-      _fab.postDelayed(_fab::show, 400);
-    } else if (_path.endsWith(".scss")) {
-      ReadFileCompat(editor, _path, bar);
+      ReadFileCompat(editor, path, bar);
+      fab.postDelayed(fab::show, 400);
+    } else if (path.endsWith(".scss")) {
+      ReadFileCompat(editor, path, bar);
       var it = new SassLangCompat();
       it.setSassMod(false);
       editor.setEditorLanguage(it);
-      _fab.postDelayed(_fab::show, 300);
-    } else if (_path.endsWith(".c")) {
-      ReadFileCompat(editor, _path, bar);
+      fab.postDelayed(fab::show, 300);
+    } else if (path.endsWith(".c")) {
+      ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new UniversalLanguage(new CDescription()));
-    } else if (_path.endsWith(".json")) {
-      ReadFileCompat(editor, _path, bar);
+    } else if (path.endsWith(".json")) {
+      ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new JsonLanguage());
-      _fab.postDelayed(_fab::show, 400);
-    } else if (_path.endsWith(".java")) {
-      ReadFileCompat(editor, _path, bar);
+      fab.postDelayed(fab::show, 400);
+    } else if (path.endsWith(".java")) {
+      ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new JavaLanguage(editor));
-      _fab.postDelayed(_fab::show, 400);
-    } else if (_path.endsWith(".cs")) {
-      ReadFileCompat(editor, _path, bar);
+      fab.postDelayed(fab::show, 400);
+    } else if (path.endsWith(".cs")) {
+      ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new CSharpLanguage());
-    } else if (_path.endsWith(".xml")) {
-      ReadFileCompat(editor, _path, bar);
+    } else if (path.endsWith(".xml")) {
+      ReadFileCompat(editor, path, bar);
       //	editor.setEditorLanguage(new io.github.rosemoe.sora.langs.xml.XMLLanguage());
       XMLLanguage xmlLanguage = new XMLLanguage();
       xmlLanguage.setSyntaxCheckEnable(true);
       editor.setEditorLanguage(xmlLanguage);
-      _fab.postDelayed(_fab::show, 400);
-    } else if (_path.endsWith(".ghost")) {
-      ReadFileCompat(editor, _path, bar);
+      fab.postDelayed(fab::show, 400);
+    } else if (path.endsWith(".ghost")) {
+      ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new ghostlangs());
-    } else if (_path.endsWith(".ninja")) {
-      ReadFileCompat(editor, _path, bar);
+    } else if (path.endsWith(".ninja")) {
+      ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new NinjaLang());
-    } else if (_path.endsWith(".sh")) {
-      ReadFileCompat(editor, _path, bar);
-      _fab.postDelayed(_fab::show, 400);
+    } else if (path.endsWith(".sh")) {
+      ReadFileCompat(editor, path, bar);
+      fab.postDelayed(fab::show, 400);
       editor.setEditorLanguage(new UniversalLanguage(new ShellDescription()));
-    } else if (_path.endsWith(".svg")) {
-      ReadFileCompat(editor, _path, bar);
+    } else if (path.endsWith(".svg")) {
+      ReadFileCompat(editor, path, bar);
       //  ic.setVisibility(View.VISIBLE);
-      //  GlideCompat.LoadSvg(_path, ic);
-      _fab.postDelayed(_fab::show, 400);
+      //  GlideCompat.LoadSvg(path, ic);
+      fab.postDelayed(fab::show, 400);
       var htmllang = new SvgLang(editor);
       editor.setEditorLanguage(htmllang);
-    } else if (_path.endsWith(".md")) {
-      ReadFileCompat(editor, _path, bar);
-      _fab.postDelayed(_fab::show, 400);
+    } else if (path.endsWith(".md")) {
+      ReadFileCompat(editor, path, bar);
+      fab.postDelayed(fab::show, 400);
       editor.setEditorLanguage(new MarkDownLang());
-    } else if (_path.endsWith(".php")) {
-      ReadFileCompat(editor, _path, bar);
+    } else if (path.endsWith(".php")) {
+      ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new PHPLanguage(editor));
-      _fab.postDelayed(_fab::show, 400);
-    } else if (_path.endsWith(".go")) {
-      ReadFileCompat(editor, _path, bar);
+      fab.postDelayed(fab::show, 400);
+    } else if (path.endsWith(".go")) {
+      ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new UniversalLanguage(new GoDescription()));
-    } else if (_path.endsWith(".txt")) {
-      ReadFileCompat(editor, _path, bar);
-    } else if (_path.endsWith(".swift")) {
-      ReadFileCompat(editor, _path, bar);
+    } else if (path.endsWith(".txt")) {
+      ReadFileCompat(editor, path, bar);
+    } else if (path.endsWith(".swift")) {
+      ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new UniversalLanguage(new SwiftDescription()));
-    } else if (_path.endsWith(".rb") || _path.endsWith(".rbw")) {
-      ReadFileCompat(editor, _path, bar);
+    } else if (path.endsWith(".rb") || path.endsWith(".rbw")) {
+      ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new UniversalLanguage(new RubyDescription()));
-    } else if (_path.endsWith(".dart")) {
-      ReadFileCompat(editor, _path, bar);
+    } else if (path.endsWith(".dart")) {
+      ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new DartLang());
-    } else if (_path.endsWith(".kt")) {
-      ReadFileCompat(editor, _path, bar);
-      _fab.postDelayed(_fab::show, 400);
+    } else if (path.endsWith(".kt")) {
+      ReadFileCompat(editor, path, bar);
+      fab.postDelayed(fab::show, 400);
       editor.setEditorLanguage(new KotlinLanguage());
-    } else if (_path.endsWith(".groovy") || _path.endsWith(".gradle")) {
-      ReadFileCompat(editor, _path, bar);
+    } else if (path.endsWith(".groovy") || path.endsWith(".gradle")) {
+      ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new GroovyLanguage());
-    } else if (_path.endsWith("jdjeje")) {
-      ReadFileCompat(editor, _path, bar);
+    } else if (path.endsWith("jdjeje")) {
+      ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new UniversalLanguage(new CppDescription()));
-    } else if (_path.endsWith(".smali")) {
-      ReadFileCompat(editor, _path, bar);
+    } else if (path.endsWith(".smali")) {
+      ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new SMLang());
-    } else if (_path.endsWith(".g4")) {
-      ReadFileCompat(editor, _path, bar);
+    } else if (path.endsWith(".g4")) {
+      ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new ANTLRV4Lang());
-      _fab.postDelayed(_fab::show, 400);
-    } else if (_path.endsWith(".ts")) {
-      ReadFileCompat(editor, _path, bar);
+      fab.postDelayed(fab::show, 400);
+    } else if (path.endsWith(".ts")|| path.endsWith(".tsx")) {
+      ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new TsLang(editor));
-    } else if (_path.endsWith(".properties")) {
-      _fab.hide();
-      ReadFileCompat(editor, _path, bar);
+    } else if (path.endsWith(".properties")) {
+      fab.hide();
+      ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new Propertieslangs());
-    } else if (_path.endsWith(".sql")) {
-      _fab.hide();
-      ReadFileCompat(editor, _path, bar);
+    } else if (path.endsWith(".sql")) {
+      fab.hide();
+      ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new MySqlLang());
-    } else if (_path.endsWith(".jj")) {
+    } else if (path.endsWith(".jj")) {
 
-      ReadFileCompat(editor, _path, bar);
+      ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new JavaccLang(editor));
-      _fab.postDelayed(_fab::show, 400);
-    } else if (_path.endsWith(".frag")) {
-      ReadFileCompat(editor, _path, bar);
+      fab.postDelayed(fab::show, 400);
+    } else if (path.endsWith(".frag")) {
+      ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new GLSLLang());
-      _fab.postDelayed(_fab::hide, 400);
-    } else if (_path.endsWith(".sass")) {
+      fab.postDelayed(fab::hide, 400);
+    } else if (path.endsWith(".sass")) {
       var scssLang = new SassLangCompat();
       scssLang.setSassMod(true);
       editor.setEditorLanguage(scssLang);
-      _fab.postDelayed(_fab::show, 400);
-      ReadFileCompat(editor, _path, bar);
-    } else if (_path.endsWith(".class")) {
+      fab.postDelayed(fab::show, 400);
+      ReadFileCompat(editor, path, bar);
+    } else if (path.endsWith(".class")) {
       editor.setEditorLanguage(new JavaLanguage(editor));
-      _fab.postDelayed(_fab::hide, 400);
+      fab.postDelayed(fab::hide, 400);
       ThreadUtils.executeByIo(
           new ThreadUtils.SimpleTask<String>() {
 
@@ -212,21 +212,21 @@ public class EditorRoaderFile {
 
             @Override
             public String doInBackground() {
-              return decompileClass(new File(_path));
+              return decompileClass(new File(path));
             }
           });
 
-    } else if (_path.endsWith(".yml")) {
-      ReadFileCompat(editor, _path, bar);
+    } else if (path.endsWith(".yml")) {
+      ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new YmlLang());
-      _fab.postDelayed(_fab::hide, 400);
-    } else if (_path.endsWith(".jsx")) {
-      ReadFileCompat(editor, _path, bar);
+      fab.postDelayed(fab::hide, 400);
+    } else if (path.endsWith(".jsx")) {
+      ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new JavaScriptJsxLanguage());
-      _fab.postDelayed(_fab::hide, 400);
+      fab.postDelayed(fab::show, 400);
     } else {
-      ReadFileCompat(editor, _path, bar);
-      _fab.postDelayed(_fab::hide, 400);
+      ReadFileCompat(editor, path, bar);
+      fab.postDelayed(fab::hide, 400);
     }
   }
 

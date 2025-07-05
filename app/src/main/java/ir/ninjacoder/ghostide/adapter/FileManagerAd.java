@@ -182,7 +182,11 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
            * do not have time now
            */
           GlideCompat.LoadIconVsCode(myfile.toString(), viewHolder.icon);
-        }
+        }else if(myfile.toString().endsWith(".jsx")){
+			viewHolder.icon.setColorFilter(Color.parseColor("#ff9028"));
+		}else if(myfile.toString().endsWith(".tsx")) {
+			viewHolder.icon.setColorFilter(Color.parseColor("#FF5DC9DC"));
+		}
         // test
         JgitHelper.initbylazy(myfile, viewHolder.folderName);
         // test1

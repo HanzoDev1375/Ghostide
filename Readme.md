@@ -56,6 +56,7 @@
 - [x] Sass and Scss compiler
 - [x] Java fx compiler 
 - [x] Kotlin compiler v2
+- [x] Compile Ts tsx jsx nodejs
 - [x] Java Helper (99%) (Create constructor,Getter and setter and..)
 - [x] Html lsp(custom mod 50%)
 - [x] Fast type

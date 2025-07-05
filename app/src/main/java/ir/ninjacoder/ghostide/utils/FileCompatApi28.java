@@ -2,9 +2,10 @@ package ir.ninjacoder.ghostide.utils;
 
 import android.view.View;
 import android.widget.ProgressBar;
+import com.blankj.utilcode.util.FileUtils;
 import com.blankj.utilcode.util.ThreadUtils;
 import io.github.rosemoe.sora.widget.CodeEditor;
-
+import com.blankj.utilcode.util.FileIOUtils;
 
 public class FileCompatApi28 {
 
@@ -28,8 +29,7 @@ public class FileCompatApi28 {
 
           @Override
           public String doInBackground() {
-
-            return FileUtil.readFile(fileRead);
+            return FileIOUtils.readFile2String(fileRead);
           }
 
           @Override
