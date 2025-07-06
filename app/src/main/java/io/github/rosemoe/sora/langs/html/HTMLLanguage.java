@@ -717,6 +717,8 @@ public class HTMLLanguage implements EditorLanguage {
         || ch == '-'
         || ch == '+'
         || ch == '#'
+		|| ch == '='
+		|| ch == ':'
         || ch == '.';
   }
 

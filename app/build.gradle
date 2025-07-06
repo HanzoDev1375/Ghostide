@@ -83,8 +83,8 @@ dependencies {
     
     implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
-    implementation("com.google.code.gson:gson:2.11.0")
-    def jadxVersion = "1.5.1"
+    implementation("com.google.code.gson:gson:2.13.1")
+    def jadxVersion = "1.5.2"
     implementation project(path: ":Plugin")
     implementation project(path: ":pl-codecomment")
     implementation project(path: ":jgit") 
@@ -112,8 +112,8 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:5.0.0-rc01")
     implementation("com.blankj:utilcodex:1.31.1")
     implementation("androidx.webkit:webkit:1.10.0")
-    implementation("org.eclipse.jgit:org.eclipse.jgit:6.8.0.202311291450-r")
-    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("org.eclipse.jgit:org.eclipse.jgit:7.3.0.202506031305-r")
+    implementation("com.google.code.gson:gson:2.13.1")
     implementation("androidx.activity:activity:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
@@ -125,20 +125,20 @@ dependencies {
     implementation("xyz.doikki.android.dkplayer:player-exo:3.3.7")
     implementation("xyz.doikki.android.dkplayer:player-ijk:3.3.7")
     implementation("xyz.doikki.android.dkplayer:videocache:3.3.7")
-    implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.14")
+    implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.16")
     implementation("androidx.recyclerview:recyclerview:1.4.0")
     implementation("androidx.recyclerview:recyclerview-selection:1.1.0")
     implementation("de.hdodenhof:circleimageview:3.1.0")
-    implementation("org.antlr:antlr4:4.13.1")
+    implementation("org.antlr:antlr4:4.13.2")
     implementation("org.apache.commons:commons-compress:1.24.0")
-    implementation("com.github.pedrovgs:renderers:3.5.0")
+    implementation("com.github.pedrovgs:renderers:4.1.0")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("com.fasterxml.jackson.core:jackson-core:2.14.2")
     implementation("com.squareup:seismic:1.0.3")
     implementation("org.smali:smali:2.5.2")
     implementation("org.smali:baksmali:2.5.2")
     implementation("com.github.TimScriptov:apksigner:1.2.0")
-    implementation("org.jsoup:jsoup:1.19.1")
+    implementation("org.jsoup:jsoup:1.21.1")
     implementation("com.github.douglasjunior:android-simple-tooltip:1.1.0")
     implementation("io.getstream:photoview:1.0.1")
     implementation("androidx.palette:palette:1.0.0")
@@ -146,8 +146,8 @@ dependencies {
     implementation("io.reactivex.rxjava3:rxjava:3.1.8")
     implementation("androidx.core:core:1.6.0")
     implementation("androidx.preference:preference:1.2.1")
-    implementation("com.github.javaparser:javaparser-core:3.26.4")
-    implementation 'com.github.javaparser:javaparser-symbol-solver-core:3.26.4'
+    implementation("com.github.javaparser:javaparser-core:3.27.0")
+    implementation 'com.github.javaparser:javaparser-symbol-solver-core:3.27.0'
     implementation("com.github.AppIntro:AppIntro:6.3.1")
     implementation("com.airbnb.android:lottie:6.4.1")
     implementation("com.github.jsqlparser:jsqlparser:5.0")
@@ -156,7 +156,7 @@ dependencies {
     implementation("com.diogonunes:JColor:5.5.1")
     // https://mvnrepository.com/artifact/com.google.guava/guava
     implementation("io.github.skylot:jadx-core:$jadxVersion")
-    implementation("io.github.skylot:jadx-dex-input:$jadxVersion")
+    implementation("io.github.skylot:jadx-dex-input:1.5.2")
     implementation 'androidx.security:security-crypto:1.1.0-alpha03'
     implementation 'org.mozilla:rhino-runtime:1.7.15'
 	//run ts tsx js jsx in Android

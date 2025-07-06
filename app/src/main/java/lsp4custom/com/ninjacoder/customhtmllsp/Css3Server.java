@@ -15,11 +15,13 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Css3Server {
   private Random RANDOM = new Random();
@@ -296,8 +298,11 @@ public class Css3Server {
     }
   }
 
-  public void installCssColor(List<CompletionItem> list, String prefix) {
+  String[] VALUE = {"left", "right", "center", "justify", "start", "end"};
 
+
+  public void installCssColor(List<CompletionItem> list, String prefix) {
+    
     String propertyName = "";
     if (prefix.startsWith("color:")) {
       propertyName = "color";
@@ -344,7 +349,7 @@ public class Css3Server {
     }
 
     if (!propertyName.isEmpty()) {
-      String colorPrefix = prefix.substring(propertyName.length() + 1).trim();
+      String colorPrefix = prefix.substring(propertyName.length() + 1);
       for (String color : HTMLLanguage.colorsCss) {
         if (color.startsWith(colorPrefix)) {
           list.add(css(color, htmlconfig.CssColor, propertyName + ": " + color + " ;"));
@@ -477,8 +482,8 @@ public class Css3Server {
     String propertyName = "";
 
     if (prefix.startsWith("type=") || prefix.startsWith("type")) {
-      String typePrefix = prefix.substring("type=".length()).trim();
-      String typePr = prefix.substring("type".length()).trim();
+      String typePrefix = prefix.substring("type=".length());
+      String typePr = prefix.substring("type".length());
 
       for (String type : types) {
         if (type.startsWith(typePrefix) || type.startsWith(typePr)) {
@@ -492,6 +497,14 @@ public class Css3Server {
       for (var it : Transilt.arrf2) {
         if (it.startsWith(langPrefix)) {
           list.add(css("lang=" + "\"" + it + "\"", "Langs"));
+        }
+      }
+    }
+	if (prefix.startsWith("text-align:")) {
+      String langPrefix = prefix.substring("text-align:".length()).trim();
+      for (var it : VALUE) {
+        if (it.startsWith(langPrefix)) {
+          list.add(css("text-align:"  + it + " ;", "css Al"));
         }
       }
     }
@@ -512,7 +525,7 @@ public class Css3Server {
       }
       return result;
     }
-
+    installCombinedTags(result, prefix);
     // حالت 2: عدد + واحد ناتمام (مثلاً "2p", "2em", "2pc")
     Matcher unitMatcher = Pattern.compile("^(\\d+)([a-z%]*)").matcher(prefix);
     if (unitMatcher.matches()) {
@@ -588,5 +601,159 @@ public class Css3Server {
 
   private String generateRandomHexColor() {
     return String.format("#%06X", RANDOM.nextInt(0xFFFFFF + 1));
+  }
+
+  public void installCombinedTags(List<CompletionItem> list, String prefix) {
+    if (prefix.contains("+")) {
+      String[] tagParts = prefix.split("\\+");
+      StringBuilder result = new StringBuilder();
+      int indentLevel = 1;
+      String indent = "\t";
+
+      for (String part : tagParts) {
+        part = part.trim();
+        if (part.isEmpty()) continue;
+
+        // پردازش هر بخش از تگ
+        TagInfo tagInfo = parseTag(part);
+
+        // ساخت تگ باز
+        result.append(indent.repeat(indentLevel)).append("<").append(tagInfo.tagName);
+
+        if (!tagInfo.className.isEmpty()) {
+          result.append(" class=\"").append(tagInfo.className).append("\"");
+        }
+
+        if (!tagInfo.id.isEmpty()) {
+          result.append(" id=\"").append(tibuteValue(tagInfo.id)).append("\"");
+        }
+
+        for (Map.Entry<String, String> attr : tagInfo.attributes.entrySet()) {
+          result
+              .append(" ")
+              .append(attr.getKey())
+              .append("=\"")
+              .append(tibuteValue(attr.getValue()))
+              .append("\"");
+        }
+
+        result.append(">");
+
+        // اگر تگ بعدی وجود دارد، خط جدید اضافه کن
+        if (indentLevel < tagParts.length) {
+          result.append("\n");
+        }
+
+        indentLevel++;
+      }
+
+      // ساخت تگ‌های بسته به صورت معکوس
+      indentLevel -= 2; // یک سطح کمتر از آخرین تگ
+      for (int i = tagParts.length - 1; i >= 0; i--) {
+        if (tagParts[i].trim().isEmpty()) continue;
+
+        TagInfo tagInfo = parseTag(tagParts[i]);
+        result
+            .append(indent.repeat(indentLevel + 1))
+            .append("</")
+            .append(tagInfo.tagName)
+            .append(">");
+
+        if (i > 0) {
+          result.append("\n");
+        }
+
+        indentLevel--;
+      }
+
+      String completionText = result.toString();
+      list.stream().filter(it -> it.label.startsWith(completionText)).collect(Collectors.toList());
+      list.add(css(completionText, "Combined Tags", completionText));
+    }
+  }
+
+  private static class TagInfo {
+    String tagName;
+    String className = "";
+    String id = "";
+    Map<String, String> attributes = new HashMap<>();
+  }
+
+  // متد برای تجزیه و تحلیل هر بخش از تگ
+  private TagInfo parseTag(String tagStr) {
+    TagInfo info = new TagInfo();
+
+    // جدا کردن نام تگ از بقیه مشخصات
+    String[] parts = tagStr.split("[#.=]", 2);
+    info.tagName = parts[0].trim();
+
+    if (parts.length == 1) {
+      return info;
+    }
+
+    String rest = tagStr.substring(parts[0].length());
+
+    // پردازش کلاس
+    if (rest.contains(".")) {
+      int dotIndex = rest.indexOf('.');
+      int nextSpecial =
+          Math.min(
+              rest.indexOf('#', dotIndex + 1) != -1
+                  ? rest.indexOf('#', dotIndex + 1)
+                  : Integer.MAX_VALUE,
+              rest.indexOf('=', dotIndex + 1) != -1
+                  ? rest.indexOf('=', dotIndex + 1)
+                  : Integer.MAX_VALUE);
+
+      String classPart =
+          nextSpecial != Integer.MAX_VALUE
+              ? rest.substring(dotIndex + 1, nextSpecial)
+              : rest.substring(dotIndex + 1);
+
+      info.className = classPart.trim();
+    }
+
+    // پردازش ID
+    if (rest.contains("#")) {
+      int hashIndex = rest.indexOf('#');
+      int nextSpecial =
+          Math.min(
+              rest.indexOf('.', hashIndex + 1) != -1
+                  ? rest.indexOf('.', hashIndex + 1)
+                  : Integer.MAX_VALUE,
+              rest.indexOf('=', hashIndex + 1) != -1
+                  ? rest.indexOf('=', hashIndex + 1)
+                  : Integer.MAX_VALUE);
+
+      String idPart =
+          nextSpecial != Integer.MAX_VALUE
+              ? rest.substring(hashIndex + 1, nextSpecial)
+              : rest.substring(hashIndex + 1);
+
+      info.id = idPart.trim();
+    }
+    if (rest.contains("=")) {
+      int equalIndex = rest.indexOf('=');
+      String attrStr = rest.substring(equalIndex + 1).trim();
+
+      // تقسیم ویژگی‌ها با & (مثلا div=type=button&name=submit)
+      String[] attrPairs = attrStr.split("&");
+      for (String pair : attrPairs) {
+        String[] keyValue = pair.split("=", 2);
+        if (keyValue.length == 2) {
+          info.attributes.put(keyValue[0].trim(), keyValue[1].trim());
+        }
+      }
+    }
+
+    return info;
+  }
+
+  private String tibuteValue(String value) {
+    return value
+        .replace("\"", "&quot;")
+        .replace("'", "&apos;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;");
   }
 }

@@ -66,8 +66,8 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
     items = new ArrayList<>();
     setList(prefix);
     validTag();
-    classTag(prefix);
-    idTags(prefix);
+   // classTag(prefix);
+   // idTags(prefix);
 
     Collections.sort(items, CompletionItem.COMPARATOR_BY_NAME);
 
