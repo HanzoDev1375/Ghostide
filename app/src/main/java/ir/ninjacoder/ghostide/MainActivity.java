@@ -86,8 +86,7 @@ public class MainActivity extends BaseCompat {
     ThemeChaker();
 
     var mypath = getFilesDir().getAbsolutePath() + "/" + "databins";
-    var pythonPath =
-        getFilesDir().getAbsolutePath() + File.separator + "env.sh";
+    var pythonPath = getFilesDir().getAbsolutePath() + File.separator + "env.sh";
     var phpPath =
         getFilesDir().getAbsolutePath() + File.separator + "lib" + File.separator + "libx265.so";
 
@@ -102,6 +101,13 @@ public class MainActivity extends BaseCompat {
       AssetsSoft soft = new AssetsSoft();
       soft.unzipFromAssets(this, "cursor.zip", "/storage/emulated/0/GhostWebIDE/cursor");
     }
+    var pythonchecker = getFilesDir().getAbsolutePath() + File.separator + "python_checker.py";
+    if (!FileUtil.isExistFile(pythonchecker)) {
+      var soft = new AssetsSoft();
+      soft.copyOneFileFromAssets(
+          "python_checker.py", getFilesDir().getAbsolutePath() + File.separator, this);
+    }
+	
     var snippetPath = FileUtil.HOMESNIPPET;
     if (!FileUtil.isExistFile(snippetPath)) {
       new AssetsSoft()
@@ -157,8 +163,7 @@ public class MainActivity extends BaseCompat {
 
   void startApp() {
     var mypath = getFilesDir().getAbsolutePath() + "/" + "databins";
-    var pythonPath =
-        getFilesDir().getAbsolutePath() + File.separator + "env.sh";
+    var pythonPath = getFilesDir().getAbsolutePath() + File.separator + "env.sh";
     var phpPath =
         getFilesDir().getAbsolutePath() + File.separator + "lib" + File.separator + "libx265.so";
     var ghostPath = "/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost";

@@ -2,6 +2,9 @@ package io.github.rosemoe.sora.langs.python;
 
 import io.github.rosemoe.sora.data.RainbowBracketHelper;
 import io.github.rosemoe.sora.data.Span;
+import io.github.rosemoe.sora.langs.python.formatter.PythonSyntaxChecker;
+import io.github.rosemoe.sora.langs.xml.analyzer.Utils;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.IdeEditor;
 import android.graphics.Color;
 import android.util.Log;
@@ -42,7 +45,7 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
 
       CodePointCharStream stream = CharStreams.fromReader(new StringReader(content.toString()));
       var lexer = new PythonLexerCompat(stream);
-      var auto = new PythonAutoComplete();
+      var auto = new PythonAutoComplete(editor);
       auto.setKeywords(PythonLang.keywords);
       rb = new RainbowBracketHelper();
       var info = new PythonAutoComplete.Identifiers();
@@ -268,8 +271,31 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
       info.finish();
       result.setExtra(info);
       result.determine(lastLine);
+      var ch = new PythonSyntaxChecker();
+      ch.checkSyntax(GhostIdeAppLoader.getContext(), content.toString());
+      if (ch.hasErrors()) {
+        ch.getErrors()
+            .forEach(
+                it -> {
+                  Utils.setErrorSpan(result, it.line, it.column);
+                });
+      }
+      if (ch.hasWarnings()) {
+        ch.getWarnings()
+            .forEach(
+                it -> {
+                  Utils.setWaringSpan(result, it.line, it.column, EditorColorScheme.pysymbol);
+                });
+      }
+      if (ch.hasTypo()) {
+        ch.getTypo()
+            .forEach(
+                it -> {
+                  Utils.setTypoSpan(result, it.line, it.column);
+                });
+      }
       // error manager not work
-      errors.analyze(content, result, delegate);
+      //   errors.analyze(content, result, delegate);
       result.setSuppressSwitch(maxSwitch + 10);
       result.setNavigation(labels);
     } catch (IOException e) {

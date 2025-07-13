@@ -18,6 +18,8 @@ import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
 import java.io.InputStreamReader;
 import java.util.Optional;
 import com.github.javaparser.ast.CompilationUnit;
@@ -67,6 +69,46 @@ public class CodeSnippet {
 
     } catch (Exception err) {
       err.printStackTrace();
+      return new ArrayList<>();
+    }
+  }
+
+  public static List<CompletionItem> getCssShortcuts(String pre) {
+    List<CompletionItem> results = new ArrayList<>();
+
+    try {
+      InputStream input = GhostIdeAppLoader.getContext().getAssets().open("shortcss.json");
+      JsonArray jsonArray = JsonParser.parseReader(new InputStreamReader(input)).getAsJsonArray();
+      Map<String, String> shortcutMap = new HashMap<>();
+      for (JsonElement element : jsonArray) {
+        JsonObject obj = element.getAsJsonObject();
+        String key = obj.get("csskey").getAsString().trim();
+        String value = obj.get("cssvalue").getAsString().trim();
+        shortcutMap.put(key, value);
+      }
+
+      // پردازش ورودی مثل "pos:f+pos:a"
+      if (pre != null && !pre.isEmpty()) {
+        String[] keys = pre.split("\\+");
+        StringBuilder combinedCss = new StringBuilder();
+
+        for (String key : keys) {
+          if (shortcutMap.containsKey(key.trim())) {
+            combinedCss.append(shortcutMap.get(key.trim()));
+          }
+        }
+        if (combinedCss.length() > 0) {
+          CompletionItem item =
+              new CompletionItem(combinedCss.toString(), "CssShort", combinedCss.toString());
+          item.cursorOffset(item.commit.length() - 1);
+          results.add(item);
+        }
+      }
+
+      return results;
+
+    } catch (Exception e) {
+      e.printStackTrace();
       return new ArrayList<>();
     }
   }
@@ -300,7 +342,8 @@ public class CodeSnippet {
         .filter(item -> item.label.startsWith(prefix))
         .collect(Collectors.toList());
   }
-   public static List<CompletionItem> getPhpLsp(String sub){
-	   return PhpFun.getLspPhp(sub);
-   }
+
+  public static List<CompletionItem> getPhpLsp(String sub) {
+    return PhpFun.getLspPhp(sub);
+  }
 }

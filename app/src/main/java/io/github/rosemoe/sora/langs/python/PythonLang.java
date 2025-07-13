@@ -1,6 +1,8 @@
 package io.github.rosemoe.sora.langs.python;
 
 import com.ninjacoder.jgit.pythonformatter.PyFormatter;
+import io.github.rosemoe.sora.langs.python.formatter.PythonCodeFormatter;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.IdeEditor;
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
@@ -82,7 +84,7 @@ public class PythonLang implements EditorLanguage {
 
   @Override
   public AutoCompleteProvider getAutoCompleteProvider() {
-    PythonAutoComplete py = new PythonAutoComplete();
+    PythonAutoComplete py = new PythonAutoComplete(editor);
     py.setKeywords(keywords);
     return py;
   }
@@ -94,7 +96,12 @@ public class PythonLang implements EditorLanguage {
 
   @Override
   public CharSequence format(CharSequence text) {
-    return PyFormatter.format(text.toString());
+    try {
+      return PythonCodeFormatter.formatPythonCode(GhostIdeAppLoader.getContext(), text.toString());
+    } catch (Exception err) {
+
+    }
+    return text;
   }
 
   class ColonHandler implements NewlineHandler {

@@ -52,6 +52,45 @@ public class Utils {
     return end;
   }
 
+  public static int[] setTypoSpan(TextAnalyzeResult colors, int line, int column) {
+    int lineCount = colors.getSpanMap().size();
+    int realLine = line - 1;
+    List<Span> spans = colors.getSpanMap().get(Math.min(realLine, lineCount - 1));
+
+    int[] end = new int[2];
+    end[0] = Math.min(realLine, lineCount - 1);
+
+    if (realLine >= lineCount) {
+      Span span = Span.obtain(0, EditorColorScheme.PROBLEM_TYPO);
+      span.problemFlags = Span.FLAG_TYPO;
+
+      colors.add(realLine, span);
+      end[0]++;
+    } else {
+      Span last = null;
+      for (int i = 0; i < spans.size(); i++) {
+        Span span = spans.get(i);
+
+        if (last != null) {
+          if (last.column <= column - 1 && span.column >= column - 1) {
+            span.problemFlags = Span.FLAG_TYPO;
+            last.problemFlags = Span.FLAG_TYPO;
+            end[1] = last.column;
+            break;
+          }
+        }
+        if (i == spans.size() - 1 && span.column <= column - 1) {
+          span.problemFlags = Span.FLAG_TYPO;
+          end[1] = span.column;
+          break;
+        }
+        last = span;
+      }
+    }
+
+    return end;
+  }
+
   public static int[] setErrorSpan(TextAnalyzeResult colors, int line, int column) {
     return setErrorSpan(colors, line, column, "");
   }
@@ -104,6 +143,7 @@ public class Utils {
   public static int[] setSpanEFO(TextAnalyzeResult colors, int line, int column, int coloruser) {
     return setSpanEFO(colors, line, column, coloruser, false, false);
   }
+
   public static int[] setSpanEFO(
       TextAnalyzeResult colors,
       int line,
@@ -193,8 +233,8 @@ public class Utils {
           span.problemFlags = 0;
           last.problemFlags = 0;
           span.style = style;
-		  span.setBackgroundColorMy(coloruser);
-		  last.setBackgroundColorMy(coloruser);
+          span.setBackgroundColorMy(coloruser);
+          last.setBackgroundColorMy(coloruser);
           last.style = style;
           end[1] = last.column;
           return end;
@@ -202,7 +242,7 @@ public class Utils {
       }
       if (i == spans.size() - 1 && span.column <= column - 1) {
         span.problemFlags = 0;
-		span.setBackgroundColorMy(coloruser);
+        span.setBackgroundColorMy(coloruser);
         span.style = style;
         end[1] = span.column;
         return end;

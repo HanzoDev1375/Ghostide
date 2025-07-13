@@ -1,0 +1,25 @@
+program class model{
+
+  @jvmLoaderMobile(
+  
+  pub run(){
+    VERSION=MOBILE.2001
+  }
+  
+ )
+  pub main(){
+  
+  }
+  @get&&set
+  pub auto model{}
+  pub auto item{}
+  pub auto rename{}
+  
+  @EXSPORT 'C'
+  void jnicall{ //also
+    aslo.loaderPostInitAsJvm{
+      val file=get()
+      file.isFile="$HOME"+file.sepretor+root
+    }
+  }
+}

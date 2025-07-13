@@ -41,12 +41,22 @@ import java.util.zip.ZipFile;
 public class GlideCompat {
 
   public static void GlideNormal(ImageView imageView, String path) {
-    Glide.with(imageView.getContext())
-        .load(new File(path))
-        .placeholder(CircelPrograssBar())
-        .error(R.drawable.ic_material_csharp)
-        .transform(new RoundedCornersTransformation(RenderSize()))
-        .into(imageView);
+    if (path.endsWith(".gif")) {
+      Glide.with(imageView.getContext())
+          .asGif()
+          .load(new File(path))
+          .placeholder(CircelPrograssBar())
+          .error(R.drawable.ic_material_csharp)
+          .transform(new RoundedCornersTransformation(RenderSize()))
+          .into(imageView);
+    } else {
+      Glide.with(imageView.getContext())
+          .load(new File(path))
+          .placeholder(CircelPrograssBar())
+          .error(R.drawable.ic_material_csharp)
+          .transform(new RoundedCornersTransformation(RenderSize()))
+          .into(imageView);
+    }
   }
 
   public static void GlideNormalUrl(ImageView imageView, String path) {

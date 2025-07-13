@@ -1,7 +1,9 @@
 package io.github.rosemoe.sora.langs.python;
 
 import io.github.rosemoe.sora.data.CompletionItem;
+import io.github.rosemoe.sora.langs.python.formatter.PythonAutoCompleter;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
+import ir.ninjacoder.ghostide.IdeEditor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -14,6 +16,11 @@ public class PythonAutoComplete implements AutoCompleteProvider {
 
   private String[] mKeywords;
   private boolean mKeywordsAreLowCase;
+  private IdeEditor editor;
+
+  public PythonAutoComplete(IdeEditor editor) {
+    this.editor = editor;
+  }
 
   public void setKeywords(String[] keywords) {
     mKeywords = keywords;
@@ -47,6 +54,13 @@ public class PythonAutoComplete implements AutoCompleteProvider {
       }
       Collections.sort(words, CompletionItem.COMPARATOR_BY_NAME);
       keywords.addAll(words);
+    }
+    PythonAutoCompleter lsp = new PythonAutoCompleter(editor.getContext());
+
+    try {
+      keywords.addAll(lsp.getCompletions(editor.getText().toString(), line, column));
+    } catch (Exception err) {
+
     }
     keywords.addAll(CodeSnippet.runasList("python", prefix));
     return keywords;
