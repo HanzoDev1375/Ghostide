@@ -1,7 +1,6 @@
 package io.github.rosemoe.sora.langs.java;
 
 import ir.ninjacoder.ghostide.IdeEditor;
-import android.os.Build;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
@@ -15,7 +14,6 @@ import io.github.rosemoe.sora.text.TextUtils;
 import io.github.rosemoe.sora.widget.SymbolPairMatch;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import java.lang.ref.WeakReference;
-import lsp4custom.com.ninjacoder.customhtmllsp.JavaCardshorts;
 
 public class JavaLanguage implements EditorLanguage {
   private final WeakReference<IdeEditor> mEditorReference;
@@ -210,7 +208,7 @@ public class JavaLanguage implements EditorLanguage {
 
         DefaultPrinterConfiguration configuration = new DefaultPrinterConfiguration();
         DefaultPrettyPrinter printer = new DefaultPrettyPrinter(configuration);
-
+		
         String formattedCode = printer.print(cu);
         System.out.println(formattedCode);
         return formattedCode;

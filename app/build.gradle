@@ -165,6 +165,6 @@ dependencies {
 	implementation("com.caoccao.javet:swc4j:1.6.0") // Must Have
 	arm32Implementation("com.caoccao.javet:swc4j-android-arm:1.6.0")
     arm64Implementation("com.caoccao.javet:swc4j-android-arm64:1.6.0")
-
+    runtimeOnly 'androidx.graphics:graphics-shapes:1.1.0-alpha01' 
 }
 

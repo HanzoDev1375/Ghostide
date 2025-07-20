@@ -19,6 +19,7 @@ import java.util.*;
 import static io.github.rosemoe.sora.langs.xml.analyzer.Utils.setSpanEFO2;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import org.jsoup.Jsoup;
 
 public class CSSVariableParser {
 
@@ -32,19 +33,12 @@ public class CSSVariableParser {
   }
 
   public void highlightVariables(TextAnalyzeResult result, String cssContent) {
-    Map<String, VariableInfo> variables = parseCSSVariables(cssContent);
-
-    for (Map.Entry<String, VariableInfo> entry : variables.entrySet()) {
-      String varName = entry.getKey();
-      VariableInfo varInfo = entry.getValue();
-      int color = parseColorFromValue(varInfo.value);
-
-      //  setSpanEFO2(result, varInfo.line, varInfo.col, VARIABLE_NAME_COLOR, true, false);
-
-      int valueStartCol = varInfo.col + varName.length() + 1;
-    //  setSpanEFO2(result, varInfo.line, valueStartCol, color, true, false);
-    }
-
+    var doc = Jsoup.parse(cssContent);
+	var variables = parseCSSVariables(cssContent);
+	var d = doc.select("style");
+	d.forEach(ic ->{
+		highlightVariableUsages(result,ic.data(),variables);
+	});
     highlightVariableUsages(result, cssContent, variables);
   }
 
@@ -61,14 +55,10 @@ public class CSSVariableParser {
         int[] lineCol = getExactLineColumn(lineOffsets, start);
         int line = lineCol[0];
         int col = lineCol[1];
-
-        // رنگ از تعریف متغیر یا رنگ پیشفرض
         int color =
             variables.get(varName).value != null
                 ? parseColorFromValue(variables.get(varName).value)
                 : VARIABLE_NAME_COLOR;
-
-        // هایلایت فقط نام متغیر داخل پرانتز
         setSpanEFO2(result, line, col, color, true, false);
       }
     }

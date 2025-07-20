@@ -277,8 +277,8 @@
     </LinearLayout>
 
     <ir.ninjacoder.ghostide.widget.ExrtaFab
-         android:layout_height="wrap_content"
-         android:layout_width="wrap_content"
+         android:layout_height="80dp"
+         android:layout_width="80dp"
          android:layout_marginBottom="44dp"
          app:backgroundTint="?colorPrimary"
          android:padding="24dp"

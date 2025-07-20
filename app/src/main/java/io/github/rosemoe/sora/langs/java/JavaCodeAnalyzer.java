@@ -338,8 +338,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               }
               if (previous == JavaLexer.PACKAGE
                   || previous == JavaLexer.IMPORT
-                  || prePreToken != null && prePreToken.getType() == JavaLexer.DOT
-                  ) {
+                  || prePreToken != null && prePreToken.getType() == JavaLexer.DOT) {
                 isDot = false;
                 colorid = EditorColorScheme.javafield;
               }
@@ -378,11 +377,11 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                   || prePreToken != null && prePreToken.getType() == JavaLexer.GT) {
                 colorid = EditorColorScheme.javafun;
               }
-			  if(previous == JavaLexer.DOT){
-			    ha.handleCustom(result, line, column, EditorColorScheme.javaparament);
-			  }
-			  result.addIfNeeded(line,column,colorid);
-              
+              if (previous == JavaLexer.DOT) {
+                ha.handleCustom(result, line, column, EditorColorScheme.javaparament);
+              }
+              result.addIfNeeded(line, column, colorid);
+
               break;
             }
 
@@ -553,7 +552,6 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                   super.visit(arg0, arg1);
                 }
 
-
                 @Override
                 public void visit(MethodDeclaration arg0, Void arg1) {
                   var variableName = arg0.getNameAsString();
@@ -610,7 +608,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             var mycol = incol.get(it);
             Utils.setSpanEFO(
                 result,
-                myline.intValue() -1,
+                myline.intValue(),
                 mycol.intValue() + it.length(),
                 EditorColorScheme.COMMENT,
                 false,

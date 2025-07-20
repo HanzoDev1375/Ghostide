@@ -2,12 +2,6 @@ package io.github.rosemoe.sora.widget;
 
 import com.bumptech.glide.Glide;
 import com.ninjacoder.jgit.CircleDrawable;
-import com.skydoves.powermenu.PowerMenu;
-import com.skydoves.powermenu.PowerMenuItem;
-import io.github.rosemoe.sora.event.ContentChangeEvent;
-import io.github.rosemoe.sora.widget.tooltip.ToolItemPop;
-import io.github.rosemoe.sora.widget.tooltip.ToolTipHelper;
-import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.databinding.OneUiBinding;
 import ir.ninjacoder.ghostide.utils.AnimUtils;
 import android.content.res.ColorStateList;
@@ -20,7 +14,6 @@ import android.text.style.ForegroundColorSpan;
 import android.util.TypedValue;
 import android.view.*;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
-import ir.ninjacoder.ghostide.R;
 import io.github.rosemoe.sora.data.CompletionItem;
 
 /**
@@ -57,14 +50,6 @@ public class CustomAdGhostWeb extends EditorCompletionAdapter {
       view.setTag(bind);
     } else {
       bind = (OneUiBinding) view.getTag();
-    }
-    var tool = new ToolItemPop(view);
-
-    if (pos == 0) {
-      tool.run(item.commit);
-      tool.show();
-    } else if (pos == 1) {
-      tool.autodismiss();
     }
     item_label = bind.itemLabel;
     item_desc = bind.itemDesc;

@@ -1,10 +1,12 @@
-package ir.ninjacoder.ghostide.config;
+package ir.ninjacoder.ghostide.config
 
 import android.content.Context
 import java.io.*
 import com.xiaoyv.ccompile.utils.*
+
 ///test
 object CommandCompat {
+
     fun getBasicCommand(context: Context): String {
         val appLibDirPath = context.applicationInfo.nativeLibraryDir
         val appFileDirPath = context.filesDir.absolutePath
@@ -12,14 +14,9 @@ object CommandCompat {
         val pythonLibDirPath = "$pythonBuildDirPath/lib"
         val pythonExecName = "libpython3.so"
         val aliasCommand = "alias python=\"$pythonExecName\" && alias pip=\"$pythonExecName -m pip\""
-
         // Combine the Java and Shell script
-        var command = "export PATH=\$PATH:$appLibDirPath:$pythonBuildDirPath && export PYTHONHOME=$pythonBuildDirPath" +
-                " && export PYTHONPATH=$appLibDirPath && export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:$pythonLibDirPath" +
-                " && $aliasCommand && clear"
-
-        // Append the sed and echo commands from the shell script
-    ///    command += " && sed -i 's@$appFileDirPath@Root@g' $appFileDirPath && echo -e \"\\u001B[31mRoot\\u001B[0m\""
+        var command = "export PATH=\$PATH:$appLibDirPath:$pythonBuildDirPath && export PYTHONHOME=$pythonBuildDirPath" + " && export PYTHONPATH=$appLibDirPath && export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:$pythonLibDirPath" + " && $aliasCommand && clear"
+        ///    command += " && sed -i 's@$appFileDirPath@Root@g' $appFileDirPath && echo -e \"\\u001B[31mRoot\\u001B[0m\""
         return command
     }
 
@@ -40,18 +37,18 @@ object CommandCompat {
         return "export PATH=\$PATH:$appLibDirPath && export PYTHONHOME=$pythonBuildDirPath && export PYTHONPATH=$appLibDirPath && export LD_LIBRARY_PATH=\"\$LD_LIBRARY_PATH:\" && export LD_LIBRARY_PATH=\"\$LD_LIBRARY_PATH${pythonLibDirPath}\" && clear && libpython3.so && echo '[Enter to Exit]' && read junk && exit"
     }
 
-  fun getRunPhpCommand(context: Context, phpFile: File): String {
-    val appLibDirPath = context.applicationInfo.nativeLibraryDir
-    val appFileDirPath = context.filesDir.absolutePath
-    val phpLibDirPath = "$appFileDirPath/lib"
-    val phpIniPath = File(context.filesDir, "php.ini").path
-    
-    return """
+    fun getRunPhpCommand(context: Context, phpFile: File): String {
+        val appLibDirPath = context.applicationInfo.nativeLibraryDir
+        val appFileDirPath = context.filesDir.absolutePath
+        val phpLibDirPath = "$appFileDirPath/lib"
+        val phpIniPath = File(context.filesDir, "php.ini").path
+        return """
         export LD_LIBRARY_PATH=\$${""}LD_LIBRARY_PATH:$phpLibDirPath
         "$appLibDirPath/libphp-8.2.8.so" -f "${phpFile.path}" -c "$phpIniPath"
-        echo -e '\033[31m[Enter to Exit]\033[0m'
+        echo "[Enter to Exit]"
         read junk
         exit
-    """.trimIndent().replace("\n", " && ")
-}
+    """.trimIndent()
+    }
+
 }

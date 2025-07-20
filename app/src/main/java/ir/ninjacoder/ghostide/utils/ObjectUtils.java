@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.blankj.utilcode.util.ThreadUtils;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.ImportDeclaration;
+import com.google.android.material.shape.MaterialShapes;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.transition.platform.MaterialSharedAxis;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
@@ -899,5 +900,9 @@ public class ObjectUtils {
 
   public static void runAndPostInTime(Runnable runs) {
     ThreadUtils.runOnUiThreadDelayed(runs, 2000); // 2s
+  }
+
+  public static Drawable getCookieShape() {
+    return MaterialShapes.createShapeDrawable(MaterialShapes.COOKIE_12);
   }
 }

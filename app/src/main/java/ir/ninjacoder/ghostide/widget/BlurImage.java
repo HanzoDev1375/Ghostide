@@ -66,7 +66,7 @@ public class BlurImage {
 
   public static void setBlurInWallpaperMobile(Context context, float blurRadius, ImageView view) {
     try {
-      SharedPreferences getvb ;
+      SharedPreferences getvb;
       getvb = context.getSharedPreferences("getvb", Context.MODE_PRIVATE);
       WallpaperManager wallpaperManager = WallpaperManager.getInstance(context);
 
@@ -82,11 +82,19 @@ public class BlurImage {
 
       Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
       Bitmap bitMapBlur = new BlurImage().blur(context, bitmap, blurRadius);
-      Glide.with(context)
-          .load(getvb.getString("dir", ""))
-          .diskCacheStrategy(DiskCacheStrategy.NONE)
-          .error(new BitmapDrawable(context.getResources(), bitMapBlur))
-          .into(view);
+      if (getvb.getString("dir", "").endsWith(".gif")) {
+        Glide.with(context)
+            .asGif()
+            .load(getvb.getString("dir", ""))
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .error(new BitmapDrawable(context.getResources(), bitMapBlur))
+            .into(view);
+      } else
+        Glide.with(context)
+            .load(getvb.getString("dir", ""))
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .error(new BitmapDrawable(context.getResources(), bitMapBlur))
+            .into(view);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }

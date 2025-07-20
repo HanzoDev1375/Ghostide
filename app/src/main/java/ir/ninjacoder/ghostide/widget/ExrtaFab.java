@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import androidx.core.content.ContextCompat;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import ir.ninjacoder.ghostide.utils.ObjectUtils;
 
 public class ExrtaFab extends ExtendedFloatingActionButton {
 
@@ -21,6 +22,7 @@ public class ExrtaFab extends ExtendedFloatingActionButton {
   public void init() {
     setIconResource(R.drawable.ic_fab_play);
     shrink();
+	setBackground(ObjectUtils.getCookieShape());
   }
 
   public void setColorFilter(int color) {

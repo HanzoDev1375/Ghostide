@@ -8,6 +8,10 @@ public class JavaAnalysisResult {
   private final boolean isInnerClass;
   private final boolean isAnnotation;
   private final boolean isAbstractException;
+  private final boolean isJavaClass;
+  private final boolean isAndroidClass;
+  private final boolean isFragmentClass;
+	private final boolean isGenericClass;
 
   public JavaAnalysisResult(
       boolean isInterface,
@@ -16,7 +20,10 @@ public class JavaAnalysisResult {
       boolean isEnum,
       boolean isInnerClass,
       boolean isAnnotation,
-      boolean isAbstractException) {
+      boolean isAbstractException,
+      boolean isJavaClass,
+      boolean isAndroidClass,
+      boolean isFragmentClass,boolean isGenericClass) {
 
     this.isInterface = isInterface;
     this.isClass = isClass;
@@ -25,6 +32,10 @@ public class JavaAnalysisResult {
     this.isInnerClass = isInnerClass;
     this.isAnnotation = isAnnotation;
     this.isAbstractException = isAbstractException;
+    this.isJavaClass = isJavaClass;
+    this.isAndroidClass = isAndroidClass;
+    this.isFragmentClass = isFragmentClass;
+	this.isGenericClass=isGenericClass;
   }
 
   // Getter methods
@@ -55,4 +66,19 @@ public class JavaAnalysisResult {
   public boolean isAbstractException() {
     return this.isAbstractException;
   }
+
+  public boolean isJavaClass() {
+    return this.isJavaClass;
+  }
+
+  public boolean isAndroidClass() {
+    return this.isAndroidClass;
+  }
+
+  public boolean isFragmentClass() {
+    return this.isFragmentClass;
+  }
+   public boolean isGenericClass(){
+	   return isGenericClass;
+   }
 }

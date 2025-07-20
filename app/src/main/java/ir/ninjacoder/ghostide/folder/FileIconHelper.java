@@ -70,14 +70,13 @@ public class FileIconHelper {
   }
 
   public void bindIcon(ImageView imageView) {
-    
+
     Glide.with(imageView.getContext())
         .load(new IconRes(fileIconRes, imageView.getContext()))
         .error(R.drawable.errorxml)
         .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
         .into(imageView);
   }
-  
 
   private void check() {
     fileHelper = new FileHelper(filePath);
@@ -218,6 +217,7 @@ public class FileIconHelper {
     else if (is("sql")) fileIconRes = R.drawable.ic_material_database;
     else if (is("stylus")) fileIconRes = R.drawable.ic_material_stylus;
     else if (is("swift")) fileIconRes = R.drawable.ic_material_swift;
+    else if (is("dex")) fileIconRes = R.drawable.dexicon;
     else if (is("ts") || is("tsx")) {
       if (isEnvironmentEnabled) {
         if (fileEnvHelper.react().isReactFile()) fileIconRes = R.drawable.ic_material_react_ts;

@@ -1,6 +1,8 @@
 package ir.ninjacoder.ghostide.glidecompat.glidejavaparser;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import com.bumptech.glide.Priority;
 import android.graphics.drawable.Drawable;
 import com.bumptech.glide.load.DataSource;
@@ -29,21 +31,34 @@ public class CustomImageDataFetcher implements DataFetcher<Drawable> {
   }
 
   private Drawable resolveImage(JavaAnalysisResult result) {
-    if (result.isAbstractException()) {
-      return ContextCompat.getDrawable(context, R.drawable.abstractexceptiondark);
+    Drawable drawable;
+    if (result.isJavaClass()) {
+      drawable = ContextCompat.getDrawable(context, R.drawable.class_java);
+    } else if (result.isAndroidClass()) {
+      drawable = ContextCompat.getDrawable(context, R.drawable.class_android);
+    } else if (result.isFragmentClass()) {
+      drawable = ContextCompat.getDrawable(context, R.drawable.fragment_class);
+    } else if (result.isGenericClass()) {
+      drawable = ContextCompat.getDrawable(context, R.drawable.genericclass);
+    } else if (result.isAbstractException()) {
+      drawable = ContextCompat.getDrawable(context, R.drawable.abstractexceptiondark);
     } else if (result.isAbstract()) {
-      return ContextCompat.getDrawable(context, R.drawable.classabstract_dark);
+      drawable = ContextCompat.getDrawable(context, R.drawable.classabstract_dark);
     } else if (result.isInterface()) {
-      return ContextCompat.getDrawable(context, R.drawable.interface_dark);
+      drawable = ContextCompat.getDrawable(context, R.drawable.interface_dark);
     } else if (result.isInner()) {
-      return ContextCompat.getDrawable(context, R.drawable.modelclass_dark);
+      drawable = ContextCompat.getDrawable(context, R.drawable.modelclass_dark);
     } else if (result.isEnum()) {
-      return ContextCompat.getDrawable(context, R.drawable.enum_dark);
+      drawable = ContextCompat.getDrawable(context, R.drawable.enum_dark);
     } else if (result.isAnnotation()) {
-      return ContextCompat.getDrawable(context, R.drawable.annotationdark);
+      drawable = ContextCompat.getDrawable(context, R.drawable.annotationdark);
     } else if (result.isClass()) {
-      return ContextCompat.getDrawable(context, R.drawable.class_d);
-    } else return ContextCompat.getDrawable(context, request.getDefaultImageRes());
+      drawable = ContextCompat.getDrawable(context, R.drawable.class_d);
+    } else {
+      drawable = ContextCompat.getDrawable(context, request.getDefaultImageRes());
+    }
+
+    return drawable;
   }
 
   @Override
