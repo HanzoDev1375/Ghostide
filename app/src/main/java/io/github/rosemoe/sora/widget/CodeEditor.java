@@ -531,6 +531,10 @@ public class CodeEditor extends View
     mCurrentFile = file;
   }
 
+  public String getTextAsString() {
+    return getText().toString();
+  }
+
   public void analyze() {
     analyze(true);
   }

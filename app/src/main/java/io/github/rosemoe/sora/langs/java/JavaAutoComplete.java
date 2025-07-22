@@ -8,10 +8,12 @@ import android.util.Log;
 import com.blankj.utilcode.util.ThreadUtils;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.IdeEditor;
+import ir.ninjacoder.ghostide.config.JavaPaserUtils;
 import ir.ninjacoder.ghostide.config.JavaToGsonHelper;
 import io.github.rosemoe.sora.data.CompletionItem;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import ir.ninjacoder.ghostide.utils.FileUtil;
+import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,8 +36,6 @@ public class JavaAutoComplete implements AutoCompleteProvider {
   private String name;
   List<CompletionItem> keywords;
   private final WeakReference<IdeEditor> mEditorReference;
-
-  
 
   public JavaAutoComplete(IdeEditor editor) {
     mEditorReference = new WeakReference<>(editor);
@@ -75,42 +75,36 @@ public class JavaAutoComplete implements AutoCompleteProvider {
         }
       }
     }
-
+    var toolsJava = new JavaPaserUtils(editor);
+    if (prefix.toLowerCase().startsWith("ins")) {
+      editor.getText().toString().replaceAll("ins", "");
+      keywords.add(new CompletionItem("ins ", toolsJava.addInstanceOf(), "ins"));
+    }
+    if (prefix.toLowerCase().startsWith("cons")) {
+      editor.getText().toString().replaceAll("cons", "");
+      keywords.add(new CompletionItem("cons ", toolsJava.addContractor(), "cons"));
+    }
     Collections.sort(keywords, CompletionItem.COMPARATOR_BY_NAME);
-
-    // افزودن شناسه‌های کاربر
     Object extra = analyzeResult.getExtra();
     if (extra instanceof Identifiers) {
       Identifiers userIdentifiers = (Identifiers) extra;
       List<CompletionItem> words = new ArrayList<>();
 
       for (String word : userIdentifiers.getIdentifiers()) {
-        if (word.toLowerCase().startsWith(match)) {
-          words.add(new CompletionItem(word, "Identifier"));
+        if (word.startsWith(match) || ObjectUtils.getFuzzySearchByString(match, word)) {
+          words.add(new CompletionItem(word, "ABC"));
         }
       }
 
       Collections.sort(words, CompletionItem.COMPARATOR_BY_NAME);
       keywords.addAll(words);
     }
-
-    JavaToGsonHelper.installFormSora(keywords);
+    new JavaToGsonHelper(editor.getTextAsString());
+    JavaToGsonHelper.installFormSora(keywords, prefix);
 
     it = new ArrayList<>(keywords); // ایجاد کپی از لیست keywords
     keywords.addAll(CodeSnippet.runasList("java", prefix));
     var its = GhostIdeAppLoader.getShap();
-    try {
-      Handler j = new Handler(Looper.getMainLooper());
-      j.post(
-          () -> {
-            keywords.addAll(
-                CodeSnippet.analyzeCodeCompletion(
-                    "/storage/emulated/0/apk/data/", editor.getText().toString()));
-            Log.d("FilePathRead", editor.getText().toString());
-          });
-    } catch (Exception err) {
-      Log.e("Errortolsp", err.getLocalizedMessage());
-    }
 
     // keywords.addAll(CodeSnippet.getJar(prefix));
     return keywords;

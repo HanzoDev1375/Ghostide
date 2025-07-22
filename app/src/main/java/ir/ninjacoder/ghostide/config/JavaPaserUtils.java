@@ -7,6 +7,7 @@ import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
@@ -40,6 +41,8 @@ import java.util.HashSet;
 import java.util.Map;
 import com.google.gson.Gson;
 import com.google.common.reflect.TypeToken;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 public class JavaPaserUtils {
 
@@ -202,6 +205,53 @@ public class JavaPaserUtils {
     editor.formatCodeAsync();
   }
 
+  public String extractClassNameWithRegex(String javaCode) {
+
+    Pattern pattern = Pattern.compile("\\bclass\\s+([A-Za-z_$][A-Za-z0-9_$]*)");
+    Matcher matcher = pattern.matcher(javaCode);
+
+    if (matcher.find()) {
+      return matcher.group(1);
+    }
+    return null;
+  }
+
+  public String addInstanceOf() {
+    String findClassName = extractClassNameWithRegex(editor.getTextAsString());
+    if (findClassName == null) {
+      findClassName = "Class Name Not found";
+    }
+
+    StringBuilder bu = new StringBuilder();
+    bu.append("private static ").append(findClassName).append(" INSTANCE;\n");
+    bu.append("public static ").append(findClassName).append(" getInstance() {\n");
+    bu.append("    if (INSTANCE == null) {\n");
+    bu.append("        INSTANCE = new ").append(findClassName).append("();\n");
+    bu.append("    }\n");
+    bu.append("    return INSTANCE;\n");
+    bu.append("}\n");
+    editor.postDelayed(
+        () -> {
+          editor.formatCodeAsync();
+        },
+        1000);
+    return bu.toString();
+  }
+
+  public String addContractor() {
+    String findClassName = extractClassNameWithRegex(editor.getTextAsString());
+    StringBuilder builder = new StringBuilder();
+    builder.append("public ").append(findClassName).append(" (){").append("\n");
+    builder.append("}");
+    editor.postDelayed(
+        () -> {
+          editor.formatCodeAsync();
+        },
+        1000);
+
+    return builder.toString();
+  }
+
   public String format(String code) {
     try {
       CompilationUnit cu = StaticJavaParser.parse(code);
@@ -247,6 +297,7 @@ public class JavaPaserUtils {
   public static String processCode(String code) {
     CompilationUnit cu = StaticJavaParser.parse(code);
     Set<String> typesToImport = new HashSet<>();
+
     cu.findAll(FieldDeclaration.class)
         .forEach(
             field -> {
@@ -254,15 +305,34 @@ public class JavaPaserUtils {
                   .getVariables()
                   .forEach(
                       variable -> {
-                        String typeName =
-                            variable.getType().asString(); // .replaceFirst("\\<\\w+\\>","");
+                        String typeName = variable.getType().asString();
                         typeName = getBaseTypeName(typeName);
-
                         if (!isPrimitiveType(typeName) && !hasImport(cu, typeName)) {
                           typesToImport.add(typeName);
                         }
                       });
             });
+    cu.findAll(MethodDeclaration.class)
+        .forEach(
+            method -> {
+              String returnType = method.getType().asString();
+              returnType = getBaseTypeName(returnType);
+              if (!isPrimitiveType(returnType) && !hasImport(cu, returnType)) {
+                typesToImport.add(returnType);
+              }
+
+              method
+                  .getParameters()
+                  .forEach(
+                      param -> {
+                        String paramType = param.getType().asString();
+                        paramType = getBaseTypeName(paramType);
+                        if (!isPrimitiveType(paramType) && !hasImport(cu, paramType)) {
+                          typesToImport.add(paramType);
+                        }
+                      });
+            });
+
     for (String type : typesToImport) {
       String fullTypeName = getFullTypeName(type);
       if (!fullTypeName.isEmpty() && !hasImport(cu, fullTypeName)) {
@@ -288,7 +358,8 @@ public class JavaPaserUtils {
         || typeName.equals("float")
         || typeName.equals("char")
         || typeName.equals("boolean")
-        || typeName.equals("void");
+        || typeName.equals("void")
+		|| typeName.equals("String");
   }
 
   private static boolean hasImport(CompilationUnit cu, String typeName) {

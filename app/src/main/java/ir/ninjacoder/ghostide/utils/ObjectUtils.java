@@ -25,6 +25,7 @@ import com.github.javaparser.ast.ImportDeclaration;
 import com.google.android.material.shape.MaterialShapes;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.transition.platform.MaterialSharedAxis;
+import com.ninjacoder.jgit.childer.FuzzySearchHelper;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.marco.WavyUnderlineSpan;
@@ -211,11 +212,6 @@ public class ObjectUtils {
   }
 
   public static void setFab(ExtendedFloatingActionButton fb) {
-
-    fb.setTextColor(MaterialColors.getColor(fb, TvColor));
-    fb.setStrokeColor(ColorStateList.valueOf(MaterialColors.getColor(fb, ColorFilter)));
-    fb.setStrokeWidth(0);
-    fb.setBackgroundTintList(ColorStateList.valueOf(MaterialColors.getColor(fb, Back)));
     fb.setIconTint(ColorStateList.valueOf(MaterialColors.getColor(fb, TvColor)));
   }
 
@@ -904,5 +900,14 @@ public class ObjectUtils {
 
   public static Drawable getCookieShape() {
     return MaterialShapes.createShapeDrawable(MaterialShapes.COOKIE_12);
+  }
+
+  /** search like vs code */
+  public static boolean getFuzzySearch(String prfex, IdeEditor editor) {
+    return FuzzySearchHelper.isFuzzyMatch(prfex, editor.getText().toString());
+  }
+
+  public static boolean getFuzzySearchByString(String prfex, String target) {
+    return FuzzySearchHelper.isFuzzyMatch(prfex, target);
   }
 }

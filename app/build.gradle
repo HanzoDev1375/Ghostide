@@ -89,7 +89,6 @@ dependencies {
     implementation project(path: ":Plugin")
     implementation project(path: ":pl-codecomment")
     implementation project(path: ":jgit") 
-    implementation project(path: ":jgit")
     implementation project(path: ":eclipse-standalone")
     implementation project(path: ":prddownloader")
     implementation project(path: ":datautils")

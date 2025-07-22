@@ -253,25 +253,8 @@ public class FileManagerActivity extends BaseCompat
                 removedFiles(pos);
               }
             });
-    bind.recyclerview2.addOnScrollListener(
-        new RecyclerView.OnScrollListener() {
-
-          @Override
-          public void onScrollStateChanged(RecyclerView recyclerView, int _scrollState) {
-            super.onScrollStateChanged(recyclerView, _scrollState);
-          }
-
-          @Override
-          public void onScrolled(RecyclerView recyclerView, int _offsetX, int _offsetY) {
-            super.onScrolled(recyclerView, _offsetX, _offsetY);
-            if (_offsetY > 2) {
-              bind.fabAdd.shrink();
-            } else if (_offsetY < -2) {
-              bind.fabAdd.extend();
-            }
-          }
-        });
-
+			
+			
     UpdateCheck =
         new RequestNetwork.RequestListener() {
 
@@ -459,7 +442,6 @@ public class FileManagerActivity extends BaseCompat
     RefreshTabs();
 
     AnimUtils.Worker(bind.fabAdd);
-    bind.fabAdd.setText("Create");
     bind.fabAdd.setIconResource(R.drawable.create);
     ObjectUtils.setFab(bind.fabAdd);
     bind.fabAdd.setOnClickListener(

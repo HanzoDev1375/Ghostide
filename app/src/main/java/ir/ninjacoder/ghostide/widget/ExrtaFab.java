@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import androidx.core.content.ContextCompat;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import ir.ninjacoder.ghostide.utils.AnimUtils;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 
 public class ExrtaFab extends ExtendedFloatingActionButton {
@@ -36,4 +37,11 @@ public class ExrtaFab extends ExtendedFloatingActionButton {
   public boolean isShow() {
     return getVisibility() == VISIBLE ? true : false;
   }
+  @Override
+  public void setOnClickListener(OnClickListener arg0) {
+  	super.setOnClickListener(arg0);
+  	// TODO: Implement this method
+	  AnimUtils.Sacla(this);
+  }
+  
 }

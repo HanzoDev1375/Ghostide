@@ -37,9 +37,9 @@
 
     </LinearLayout>
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
+    <ir.ninjacoder.ghostide.widget.ExrtaFab
+        android:layout_height="80dp"
+        android:layout_width="80dp"
         android:layout_margin="16dp"
         android:id="@+id/fab"
         android:layout_gravity="right|bottom" />

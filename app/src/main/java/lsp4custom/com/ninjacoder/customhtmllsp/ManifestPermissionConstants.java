@@ -9,7 +9,7 @@ package lsp4custom.com.ninjacoder.customhtmllsp;
  * <p>TODO Check if we could eliminate this and extract these at runtime when the project is
  * initialized.
  *
- * @author Akash Yadav
+ * @author 
  */
 public class ManifestPermissionConstants {
 

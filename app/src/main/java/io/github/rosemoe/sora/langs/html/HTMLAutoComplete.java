@@ -7,11 +7,12 @@ import android.net.Uri;
 import io.github.rosemoe.sora.data.CompletionItem;
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
 import io.github.rosemoe.sora.langs.IdentifierAutoComplete;
-import io.github.rosemoe.sora.langs.php.PHPLanguage;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 import io.github.rosemoe.sora.widget.commentRule.AppConfig;
+import ir.ninjacoder.ghostide.IdeEditor;
+import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import java.io.File;
 import java.util.HashMap;
 import java.util.regex.Matcher;
@@ -19,12 +20,10 @@ import java.util.regex.Pattern;
 import lsp4custom.com.ninjacoder.customhtmllsp.CodeSnippet;
 import lsp4custom.com.ninjacoder.customhtmllsp.CssAnalyzer;
 import lsp4custom.com.ninjacoder.customhtmllsp.ListKeyword;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import lsp4custom.com.ninjacoder.customhtmllsp.PhpFun;
 import lsp4custom.com.ninjacoder.customhtmllsp.ScriptAnalyzer;
 import org.jsoup.Jsoup;
 
@@ -66,8 +65,8 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
     items = new ArrayList<>();
     setList(prefix);
     validTag();
-   // classTag(prefix);
-   // idTags(prefix);
+    // classTag(prefix);
+    // idTags(prefix);
 
     Collections.sort(items, CompletionItem.COMPARATOR_BY_NAME);
 
@@ -77,8 +76,8 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
     if (userIdentifiers != null) {
       List<CompletionItem> words = new ArrayList<>();
       for (String word : userIdentifiers.getIdentifiers()) {
-        if (word.startsWith(prfex)) {
-          words.add(new CompletionItem(word, "( Identifier )"));
+        if (prfex.startsWith(word)) {
+          words.add(new CompletionItem(word, "ABC"));
         }
       }
       Collections.sort(words, CompletionItem.COMPARATOR_BY_NAME);
@@ -89,13 +88,11 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
     for (var it : allElements) {
       var className = it.attr("class");
       var idName = it.attr("id");
-      if (className.startsWith(prfex)) {
+      if (prfex.startsWith(className)) {
         items.add(new CompletionItem(className, "CssClass"));
-        items.add(new CompletionItem("." + className + "{\n //your code \n}", "CssClassCompat"));
       }
-      if (idName.startsWith(prfex)) {
+      if (prfex.startsWith(idName)) {
         items.add(new CompletionItem(idName, "CssId"));
-        items.add(new CompletionItem("#" + idName + "{\n //your code \n}", "CssIdCompat"));
       }
     }
     var scriptan =

@@ -1,103 +1,145 @@
 package ir.ninjacoder.ghostide.config;
 
-import ir.ninjacoder.ghostide.GhostIdeAppLoader;
-import ir.ninjacoder.ghostide.utils.FileUtil;
 import android.util.Log;
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.type.TypeParameter;
-import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.ninjacoder.jgit.childer.FuzzySearchHelper;
 import io.github.rosemoe.sora.data.CompletionItem;
+import ir.ninjacoder.ghostide.utils.FileUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class JavaToGsonHelper {
-  private String javacode;
-  private Map<String, String> map = new HashMap<>();
+  private final String javacode;
+  private final Map<String, String> map = new HashMap<>();
 
   public JavaToGsonHelper(String javacode) {
     this.javacode = javacode;
+    installData();
+  }
+
+  private synchronized void installData() {
     try {
-      installData();
-    } catch (Exception err) {
-      Log.e("ErrorJsonNotFound ", err.getLocalizedMessage());
+      JavaParser parser = new JavaParser();
+      ParseResult<CompilationUnit> parseResult = parser.parse(javacode);
+
+      if (!parseResult.isSuccessful() || !parseResult.getResult().isPresent()) {
+        Log.w("JavaToGsonHelper", "Code is incomplete or has syntax errors. Skipping...");
+        return;
+      }
+
+      CompilationUnit cu = parseResult.getResult().get();
+      map.clear(); // Clear previous data
+
+      cu.accept(
+          new VoidVisitorAdapter<Void>() {
+            @Override
+            public void visit(ClassOrInterfaceDeclaration decl, Void arg) {
+              map.put("classorinterface", decl.getNameAsString());
+              super.visit(decl, arg);
+            }
+
+            @Override
+            public void visit(EnumDeclaration decl, Void arg) {
+              map.put("enum", decl.getNameAsString());
+              super.visit(decl, arg);
+            }
+
+            @Override
+            public void visit(MethodDeclaration decl, Void arg) {
+              StringBuilder methodSignature = new StringBuilder();
+              methodSignature.append(decl.getNameAsString()).append("(");
+              methodSignature.append(");");
+              map.put("method:" + decl.getNameAsString(), methodSignature.toString());
+              super.visit(decl, arg);
+            }
+
+            @Override
+            public void visit(Parameter decl, Void arg) {
+              map.put("param:" + decl.getNameAsString(), decl.getTypeAsString());
+              super.visit(decl, arg);
+            }
+
+            @Override
+            public void visit(TypeParameter decl, Void arg) {
+              map.put("typeparam:" + decl.getNameAsString(), decl.getNameAsString());
+              super.visit(decl, arg);
+            }
+
+            @Override
+            public void visit(FieldDeclaration decl, Void arg) {
+              decl.getVariables()
+                  .forEach(var -> map.put("field:" + var.getNameAsString(), var.getTypeAsString()));
+              super.visit(decl, arg);
+            }
+          },
+          null);
+
+      // Save to JSON only if there's valid data
+      if (!map.isEmpty()) {
+        List<Map<String, String>> dataList = new ArrayList<>();
+        dataList.add(map);
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String json = gson.toJson(dataList);
+        FileUtil.writeFile("/sdcard/data.json", json);
+      }
+    } catch (Exception e) {
+      Log.e("JavaToGsonHelper", "Failed to parse Java code: " + e.getMessage());
     }
   }
 
-  void installData() throws Exception {
-    var cu = StaticJavaParser.parse(javacode);
-    cu.accept(
-        new VoidVisitorAdapter<Void>() {
+  public static synchronized void installFormSora(List<CompletionItem> items, String prefix) {
+    try {
+      String jsonContent = FileUtil.readFile("/sdcard/data.json");
+      if (jsonContent == null || jsonContent.isEmpty()) return;
 
-          @Override
-          public void visit(ClassOrInterfaceDeclaration name, Void objects) {
-            map.put("classorinterface", name.getNameAsString());
-            super.visit(name, objects);
-          }
+      List<Map<String, String>> dataList =
+          new Gson().fromJson(jsonContent, new TypeToken<List<Map<String, String>>>() {}.getType());
 
-          @Override
-          public void visit(EnumDeclaration name, Void objects) {
-            map.put("enumde", name.getNameAsString());
-            super.visit(name, objects);
-          }
+      if (dataList == null || dataList.isEmpty()) return;
 
-          @Override
-          public void visit(MethodDeclaration name, Void objects) {
-            map.put("methods", name.getNameAsString());
-            super.visit(name, objects);
-          }
+      for (Map<String, String> data : dataList) {
+        for (Map.Entry<String, String> entry : data.entrySet()) {
+          String key = entry.getKey();
+          String value = entry.getValue();
 
-          @Override
-          public void visit(Parameter name, Void objects) {
-            map.put("parament", name.getNameAsString());
-            super.visit(name, objects);
+          // فیلتر)
+          if (value != null
+              && (value.toLowerCase().contains(prefix.toLowerCase())
+                  || FuzzySearchHelper.isFuzzyMatch(prefix, value) // تطابق فازی
+              )) {
+            CompletionItem item = createCompletionItem(key, value);
+            if (item != null) items.add(item);
           }
-
-          @Override
-          public void visit(TypeParameter name, Void objects) {
-            map.put("typeparameter", name.getNameAsString());
-            super.visit(name, objects);
-          }
-
-          @Override
-          public void visit(FieldDeclaration name, Void arg1) {
-            name.getVariables().forEach(it -> map.put("var", it.getNameAsString()));
-            super.visit(name, arg1);
-          }
-        },
-        null);
-    List<Map<String, String>> listItem = new ArrayList<>();
-    listItem.add(map);
-    var context = GhostIdeAppLoader.getContext().getDataDir() + "/";
-    Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    FileUtil.writeFile(context + "data.json", gson.toJson(listItem));
+        }
+      }
+    } catch (Exception e) {
+      Log.e("JavaToGsonHelper", "Error loading completions: " + e.getMessage());
+    }
   }
 
-  public static void installFormSora(List<CompletionItem> item) {
-    // item.add(new CompletionItem("classorinterface",map.get("classorinterface")));
-    var path = GhostIdeAppLoader.getContext().getDataDir() + "/" + "data.json";
-    List<Map<String, String>> listasMap = new ArrayList<>();
-    new Gson()
-        .fromJson(FileUtil.readFile(path), new TypeToken<List<Map<String, String>>>() {}.getType());
-    if (!listasMap.isEmpty()) {
-      listasMap.forEach(
-          it -> {
-            List<CompletionItem> listvars = new ArrayList<>();
-            List<CompletionItem> listclassorinterface = new ArrayList<>();
-            listclassorinterface.add(new CompletionItem("classorinterface", it.get("classorinterface")));
-            listvars.add(new CompletionItem("var", it.get("var")));
-            item.addAll(listvars);
-            item.addAll(listclassorinterface);
-          });
+  private static CompletionItem createCompletionItem(String key, String value) {
+    if (key.startsWith("classorinterface")) {
+      return new CompletionItem(value, "Class");
+    } else if (key.startsWith("field:")) {
+      return new CompletionItem(key.replace("field:", ""), "Field (" + value + ")");
+    } else if (key.startsWith("method:")) {
+      return new CompletionItem(value, "Method");
+    } else if (key.startsWith("typeparam:")) {
+      return new CompletionItem(key.replace("typeparam:", ""), "Type Parameter");
+    } else if (key.startsWith("enum")) {
+      return new CompletionItem(value, "Enum");
     }
+    return null;
   }
 }

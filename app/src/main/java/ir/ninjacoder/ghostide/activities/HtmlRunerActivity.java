@@ -252,7 +252,6 @@ public class HtmlRunerActivity extends BaseCompat {
   }
 
   private void installToRun() {
-    ObjectUtils.setFab(bin.Fab);
     //   bin.web.setCustomDialog();
     bin.Toolbar.setNavigationIcon(R.drawable.arrow_back);
     initWebView();
@@ -359,7 +358,7 @@ public class HtmlRunerActivity extends BaseCompat {
     webSettings.setBuiltInZoomControls(_isChecked);
   }
 
-  public void _searchData() {
+   void _searchData() {
     AlertDialog dialog =
         new GhostWebMaterialDialog(HtmlRunerActivity.this)
             .setView(R.layout.webview_search)

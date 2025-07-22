@@ -48,10 +48,11 @@ class PathCompleter {
           item.jdir = file.getAbsolutePath();
           item.commit = basePath + file.getName() + (file.isDirectory() ? "/" : "");
           item.desc = file.isFile() ? "File" : "Folder";
+		  item.cursorOffset(item.commit.length() - 1);
           completions.add(item);
         }
       }
-      if (prefix != null && !prefix.isEmpty()) {
+      if (finalPrefix != null && !finalPrefix.isEmpty()) {
         completions =
             completions.stream()
                 .filter(it -> it.label.toLowerCase().startsWith(finalPrefix.toLowerCase()))
