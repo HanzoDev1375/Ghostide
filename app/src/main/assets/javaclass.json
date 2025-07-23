@@ -1,0 +1,4010 @@
+[
+    {
+        "JavaClassName": "NumericShaper"
+    },
+    {
+        "JavaClassName": "TextAttribute"
+    },
+    {
+        "JavaClassName": "IndexedPropertyChangeEvent"
+    },
+    {
+        "JavaClassName": "PropertyChangeEvent"
+    },
+    {
+        "JavaClassName": "PropertyChangeListener"
+    },
+    {
+        "JavaClassName": "PropertyChangeListenerProxy"
+    },
+    {
+        "JavaClassName": "PropertyChangeSupport"
+    },
+    {
+        "JavaClassName": "BufferedInputStream"
+    },
+    {
+        "JavaClassName": "BufferedOutputStream"
+    },
+    {
+        "JavaClassName": "BufferedReader"
+    },
+    {
+        "JavaClassName": "BufferedWriter"
+    },
+    {
+        "JavaClassName": "ByteArrayInputStream"
+    },
+    {
+        "JavaClassName": "ByteArrayOutputStream"
+    },
+    {
+        "JavaClassName": "CharArrayReader"
+    },
+    {
+        "JavaClassName": "CharArrayWriter"
+    },
+    {
+        "JavaClassName": "CharConversionException"
+    },
+    {
+        "JavaClassName": "Closeable"
+    },
+    {
+        "JavaClassName": "Console"
+    },
+    {
+        "JavaClassName": "DataInput"
+    },
+    {
+        "JavaClassName": "DataInputStream"
+    },
+    {
+        "JavaClassName": "DataOutput"
+    },
+    {
+        "JavaClassName": "DataOutputStream"
+    },
+    {
+        "JavaClassName": "EOFException"
+    },
+    {
+        "JavaClassName": "Externalizable"
+    },
+    {
+        "JavaClassName": "File"
+    },
+    {
+        "JavaClassName": "FileDescriptor"
+    },
+    {
+        "JavaClassName": "FileFilter"
+    },
+    {
+        "JavaClassName": "FileInputStream"
+    },
+    {
+        "JavaClassName": "FileNotFoundException"
+    },
+    {
+        "JavaClassName": "FileOutputStream"
+    },
+    {
+        "JavaClassName": "FilePermission"
+    },
+    {
+        "JavaClassName": "FileReader"
+    },
+    {
+        "JavaClassName": "FileWriter"
+    },
+    {
+        "JavaClassName": "FilenameFilter"
+    },
+    {
+        "JavaClassName": "FilterInputStream"
+    },
+    {
+        "JavaClassName": "FilterOutputStream"
+    },
+    {
+        "JavaClassName": "FilterReader"
+    },
+    {
+        "JavaClassName": "FilterWriter"
+    },
+    {
+        "JavaClassName": "Flushable"
+    },
+    {
+        "JavaClassName": "IOError"
+    },
+    {
+        "JavaClassName": "IOException"
+    },
+    {
+        "JavaClassName": "InputStream"
+    },
+    {
+        "JavaClassName": "InputStreamReader"
+    },
+    {
+        "JavaClassName": "InterruptedIOException"
+    },
+    {
+        "JavaClassName": "InvalidClassException"
+    },
+    {
+        "JavaClassName": "InvalidObjectException"
+    },
+    {
+        "JavaClassName": "LineNumberInputStream"
+    },
+    {
+        "JavaClassName": "LineNumberReader"
+    },
+    {
+        "JavaClassName": "NotActiveException"
+    },
+    {
+        "JavaClassName": "NotSerializableException"
+    },
+    {
+        "JavaClassName": "ObjectInput"
+    },
+    {
+        "JavaClassName": "ObjectInputStream"
+    },
+    {
+        "JavaClassName": "ObjectInputValidation"
+    },
+    {
+        "JavaClassName": "ObjectOutput"
+    },
+    {
+        "JavaClassName": "ObjectOutputStream"
+    },
+    {
+        "JavaClassName": "ObjectStreamClass"
+    },
+    {
+        "JavaClassName": "ObjectStreamConstants"
+    },
+    {
+        "JavaClassName": "ObjectStreamException"
+    },
+    {
+        "JavaClassName": "ObjectStreamField"
+    },
+    {
+        "JavaClassName": "OptionalDataException"
+    },
+    {
+        "JavaClassName": "OutputStream"
+    },
+    {
+        "JavaClassName": "OutputStreamWriter"
+    },
+    {
+        "JavaClassName": "PipedInputStream"
+    },
+    {
+        "JavaClassName": "PipedOutputStream"
+    },
+    {
+        "JavaClassName": "PipedReader"
+    },
+    {
+        "JavaClassName": "PipedWriter"
+    },
+    {
+        "JavaClassName": "PrintStream"
+    },
+    {
+        "JavaClassName": "PrintWriter"
+    },
+    {
+        "JavaClassName": "PushbackInputStream"
+    },
+    {
+        "JavaClassName": "PushbackReader"
+    },
+    {
+        "JavaClassName": "RandomAccessFile"
+    },
+    {
+        "JavaClassName": "Reader"
+    },
+    {
+        "JavaClassName": "SequenceInputStream"
+    },
+    {
+        "JavaClassName": "Serial"
+    },
+    {
+        "JavaClassName": "Serializable"
+    },
+    {
+        "JavaClassName": "SerializablePermission"
+    },
+    {
+        "JavaClassName": "StreamCorruptedException"
+    },
+    {
+        "JavaClassName": "StreamTokenizer"
+    },
+    {
+        "JavaClassName": "StringBufferInputStream"
+    },
+    {
+        "JavaClassName": "StringReader"
+    },
+    {
+        "JavaClassName": "StringWriter"
+    },
+    {
+        "JavaClassName": "SyncFailedException"
+    },
+    {
+        "JavaClassName": "UTFDataFormatException"
+    },
+    {
+        "JavaClassName": "UncheckedIOException"
+    },
+    {
+        "JavaClassName": "UnsupportedEncodingException"
+    },
+    {
+        "JavaClassName": "WriteAbortedException"
+    },
+    {
+        "JavaClassName": "Writer"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "AbstractMethodError"
+    },
+    {
+        "JavaClassName": "Appendable"
+    },
+    {
+        "JavaClassName": "ArithmeticException"
+    },
+    {
+        "JavaClassName": "ArrayIndexOutOfBoundsException"
+    },
+    {
+        "JavaClassName": "ArrayStoreException"
+    },
+    {
+        "JavaClassName": "AssertionError"
+    },
+    {
+        "JavaClassName": "AutoCloseable"
+    },
+    {
+        "JavaClassName": "Boolean"
+    },
+    {
+        "JavaClassName": "BootstrapMethodError"
+    },
+    {
+        "JavaClassName": "Byte"
+    },
+    {
+        "JavaClassName": "CharSequence"
+    },
+    {
+        "JavaClassName": "Character"
+    },
+    {
+        "JavaClassName": "Class"
+    },
+    {
+        "JavaClassName": "ClassCastException"
+    },
+    {
+        "JavaClassName": "ClassCircularityError"
+    },
+    {
+        "JavaClassName": "ClassFormatError"
+    },
+    {
+        "JavaClassName": "ClassLoader"
+    },
+    {
+        "JavaClassName": "ClassNotFoundException"
+    },
+    {
+        "JavaClassName": "ClassValue"
+    },
+    {
+        "JavaClassName": "CloneNotSupportedException"
+    },
+    {
+        "JavaClassName": "Cloneable"
+    },
+    {
+        "JavaClassName": "Comparable"
+    },
+    {
+        "JavaClassName": "Compiler"
+    },
+    {
+        "JavaClassName": "Deprecated"
+    },
+    {
+        "JavaClassName": "Double"
+    },
+    {
+        "JavaClassName": "Enum"
+    },
+    {
+        "JavaClassName": "EnumConstantNotPresentException"
+    },
+    {
+        "JavaClassName": "Error"
+    },
+    {
+        "JavaClassName": "Exception"
+    },
+    {
+        "JavaClassName": "ExceptionInInitializerError"
+    },
+    {
+        "JavaClassName": "Float"
+    },
+    {
+        "JavaClassName": "FunctionalInterface"
+    },
+    {
+        "JavaClassName": "IllegalAccessError"
+    },
+    {
+        "JavaClassName": "IllegalAccessException"
+    },
+    {
+        "JavaClassName": "IllegalArgumentException"
+    },
+    {
+        "JavaClassName": "IllegalMonitorStateException"
+    },
+    {
+        "JavaClassName": "IllegalStateException"
+    },
+    {
+        "JavaClassName": "IllegalThreadStateException"
+    },
+    {
+        "JavaClassName": "IncompatibleClassChangeError"
+    },
+    {
+        "JavaClassName": "IndexOutOfBoundsException"
+    },
+    {
+        "JavaClassName": "InheritableThreadLocal"
+    },
+    {
+        "JavaClassName": "InstantiationError"
+    },
+    {
+        "JavaClassName": "InstantiationException"
+    },
+    {
+        "JavaClassName": "Integer"
+    },
+    {
+        "JavaClassName": "InternalError"
+    },
+    {
+        "JavaClassName": "InterruptedException"
+    },
+    {
+        "JavaClassName": "Iterable"
+    },
+    {
+        "JavaClassName": "LinkageError"
+    },
+    {
+        "JavaClassName": "Long"
+    },
+    {
+        "JavaClassName": "MatchException"
+    },
+    {
+        "JavaClassName": "Math"
+    },
+    {
+        "JavaClassName": "NegativeArraySizeException"
+    },
+    {
+        "JavaClassName": "NoClassDefFoundError"
+    },
+    {
+        "JavaClassName": "NoSuchFieldError"
+    },
+    {
+        "JavaClassName": "NoSuchFieldException"
+    },
+    {
+        "JavaClassName": "NoSuchMethodError"
+    },
+    {
+        "JavaClassName": "NoSuchMethodException"
+    },
+    {
+        "JavaClassName": "NullPointerException"
+    },
+    {
+        "JavaClassName": "Number"
+    },
+    {
+        "JavaClassName": "NumberFormatException"
+    },
+    {
+        "JavaClassName": "Object"
+    },
+    {
+        "JavaClassName": "OutOfMemoryError"
+    },
+    {
+        "JavaClassName": "Override"
+    },
+    {
+        "JavaClassName": "Package"
+    },
+    {
+        "JavaClassName": "Process"
+    },
+    {
+        "JavaClassName": "ProcessBuilder"
+    },
+    {
+        "JavaClassName": "Readable"
+    },
+    {
+        "JavaClassName": "Record"
+    },
+    {
+        "JavaClassName": "ReflectiveOperationException"
+    },
+    {
+        "JavaClassName": "Runnable"
+    },
+    {
+        "JavaClassName": "Runtime"
+    },
+    {
+        "JavaClassName": "RuntimeException"
+    },
+    {
+        "JavaClassName": "RuntimePermission"
+    },
+    {
+        "JavaClassName": "SafeVarargs"
+    },
+    {
+        "JavaClassName": "SecurityException"
+    },
+    {
+        "JavaClassName": "SecurityManager"
+    },
+    {
+        "JavaClassName": "Short"
+    },
+    {
+        "JavaClassName": "StackOverflowError"
+    },
+    {
+        "JavaClassName": "StackTraceElement"
+    },
+    {
+        "JavaClassName": "StackWalker"
+    },
+    {
+        "JavaClassName": "StrictMath"
+    },
+    {
+        "JavaClassName": "String"
+    },
+    {
+        "JavaClassName": "StringBuffer"
+    },
+    {
+        "JavaClassName": "StringBuilder"
+    },
+    {
+        "JavaClassName": "StringIndexOutOfBoundsException"
+    },
+    {
+        "JavaClassName": "SuppressWarnings"
+    },
+    {
+        "JavaClassName": "System"
+    },
+    {
+        "JavaClassName": "Thread"
+    },
+    {
+        "JavaClassName": "ThreadDeath"
+    },
+    {
+        "JavaClassName": "ThreadGroup"
+    },
+    {
+        "JavaClassName": "ThreadLocal"
+    },
+    {
+        "JavaClassName": "Throwable"
+    },
+    {
+        "JavaClassName": "TypeNotPresentException"
+    },
+    {
+        "JavaClassName": "UnknownError"
+    },
+    {
+        "JavaClassName": "UnsatisfiedLinkError"
+    },
+    {
+        "JavaClassName": "UnsupportedClassVersionError"
+    },
+    {
+        "JavaClassName": "UnsupportedOperationException"
+    },
+    {
+        "JavaClassName": "VerifyError"
+    },
+    {
+        "JavaClassName": "VirtualMachineError"
+    },
+    {
+        "JavaClassName": "Void"
+    },
+    {
+        "JavaClassName": "Annotation"
+    },
+    {
+        "JavaClassName": "AnnotationFormatError"
+    },
+    {
+        "JavaClassName": "AnnotationTypeMismatchException"
+    },
+    {
+        "JavaClassName": "Documented"
+    },
+    {
+        "JavaClassName": "ElementType"
+    },
+    {
+        "JavaClassName": "IncompleteAnnotationException"
+    },
+    {
+        "JavaClassName": "Inherited"
+    },
+    {
+        "JavaClassName": "Native"
+    },
+    {
+        "JavaClassName": "Repeatable"
+    },
+    {
+        "JavaClassName": "Retention"
+    },
+    {
+        "JavaClassName": "RetentionPolicy"
+    },
+    {
+        "JavaClassName": "Target"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "CallSite"
+    },
+    {
+        "JavaClassName": "ConstantCallSite"
+    },
+    {
+        "JavaClassName": "LambdaConversionException"
+    },
+    {
+        "JavaClassName": "MethodHandle"
+    },
+    {
+        "JavaClassName": "MethodHandleInfo"
+    },
+    {
+        "JavaClassName": "MethodHandles"
+    },
+    {
+        "JavaClassName": "MethodType"
+    },
+    {
+        "JavaClassName": "MutableCallSite"
+    },
+    {
+        "JavaClassName": "StringConcatException"
+    },
+    {
+        "JavaClassName": "TypeDescriptor"
+    },
+    {
+        "JavaClassName": "VarHandle"
+    },
+    {
+        "JavaClassName": "VolatileCallSite"
+    },
+    {
+        "JavaClassName": "WrongMethodTypeException"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "Cleaner"
+    },
+    {
+        "JavaClassName": "PhantomReference"
+    },
+    {
+        "JavaClassName": "Reference"
+    },
+    {
+        "JavaClassName": "ReferenceQueue"
+    },
+    {
+        "JavaClassName": "SoftReference"
+    },
+    {
+        "JavaClassName": "WeakReference"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "AccessibleObject"
+    },
+    {
+        "JavaClassName": "AnnotatedElement"
+    },
+    {
+        "JavaClassName": "Array"
+    },
+    {
+        "JavaClassName": "Constructor"
+    },
+    {
+        "JavaClassName": "Executable"
+    },
+    {
+        "JavaClassName": "Field"
+    },
+    {
+        "JavaClassName": "GenericArrayType"
+    },
+    {
+        "JavaClassName": "GenericDeclaration"
+    },
+    {
+        "JavaClassName": "GenericSignatureFormatError"
+    },
+    {
+        "JavaClassName": "InvocationHandler"
+    },
+    {
+        "JavaClassName": "InvocationTargetException"
+    },
+    {
+        "JavaClassName": "MalformedParameterizedTypeException"
+    },
+    {
+        "JavaClassName": "MalformedParametersException"
+    },
+    {
+        "JavaClassName": "Member"
+    },
+    {
+        "JavaClassName": "Method"
+    },
+    {
+        "JavaClassName": "Modifier"
+    },
+    {
+        "JavaClassName": "Parameter"
+    },
+    {
+        "JavaClassName": "ParameterizedType"
+    },
+    {
+        "JavaClassName": "Proxy"
+    },
+    {
+        "JavaClassName": "RecordComponent"
+    },
+    {
+        "JavaClassName": "ReflectPermission"
+    },
+    {
+        "JavaClassName": "Type"
+    },
+    {
+        "JavaClassName": "TypeVariable"
+    },
+    {
+        "JavaClassName": "UndeclaredThrowableException"
+    },
+    {
+        "JavaClassName": "WildcardType"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "ObjectMethods"
+    },
+    {
+        "JavaClassName": "SwitchBootstraps"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "BigDecimal"
+    },
+    {
+        "JavaClassName": "BigInteger"
+    },
+    {
+        "JavaClassName": "MathContext"
+    },
+    {
+        "JavaClassName": "RoundingMode"
+    },
+    {
+        "JavaClassName": "Authenticator"
+    },
+    {
+        "JavaClassName": "BindException"
+    },
+    {
+        "JavaClassName": "CacheRequest"
+    },
+    {
+        "JavaClassName": "CacheResponse"
+    },
+    {
+        "JavaClassName": "ConnectException"
+    },
+    {
+        "JavaClassName": "ContentHandler"
+    },
+    {
+        "JavaClassName": "ContentHandlerFactory"
+    },
+    {
+        "JavaClassName": "CookieHandler"
+    },
+    {
+        "JavaClassName": "CookieManager"
+    },
+    {
+        "JavaClassName": "CookiePolicy"
+    },
+    {
+        "JavaClassName": "CookieStore"
+    },
+    {
+        "JavaClassName": "DatagramPacket"
+    },
+    {
+        "JavaClassName": "DatagramSocket"
+    },
+    {
+        "JavaClassName": "DatagramSocketImpl"
+    },
+    {
+        "JavaClassName": "DatagramSocketImplFactory"
+    },
+    {
+        "JavaClassName": "FileNameMap"
+    },
+    {
+        "JavaClassName": "HttpCookie"
+    },
+    {
+        "JavaClassName": "HttpRetryException"
+    },
+    {
+        "JavaClassName": "HttpURLConnection"
+    },
+    {
+        "JavaClassName": "IDN"
+    },
+    {
+        "JavaClassName": "Inet4Address"
+    },
+    {
+        "JavaClassName": "Inet6Address"
+    },
+    {
+        "JavaClassName": "InetAddress"
+    },
+    {
+        "JavaClassName": "InetSocketAddress"
+    },
+    {
+        "JavaClassName": "InterfaceAddress"
+    },
+    {
+        "JavaClassName": "JarURLConnection"
+    },
+    {
+        "JavaClassName": "MalformedURLException"
+    },
+    {
+        "JavaClassName": "MulticastSocket"
+    },
+    {
+        "JavaClassName": "NetPermission"
+    },
+    {
+        "JavaClassName": "NetworkInterface"
+    },
+    {
+        "JavaClassName": "NoRouteToHostException"
+    },
+    {
+        "JavaClassName": "PasswordAuthentication"
+    },
+    {
+        "JavaClassName": "PortUnreachableException"
+    },
+    {
+        "JavaClassName": "ProtocolException"
+    },
+    {
+        "JavaClassName": "ProtocolFamily"
+    },
+    {
+        "JavaClassName": "Proxy"
+    },
+    {
+        "JavaClassName": "ProxySelector"
+    },
+    {
+        "JavaClassName": "ResponseCache"
+    },
+    {
+        "JavaClassName": "SecureCacheResponse"
+    },
+    {
+        "JavaClassName": "ServerSocket"
+    },
+    {
+        "JavaClassName": "Socket"
+    },
+    {
+        "JavaClassName": "SocketAddress"
+    },
+    {
+        "JavaClassName": "SocketException"
+    },
+    {
+        "JavaClassName": "SocketImpl"
+    },
+    {
+        "JavaClassName": "SocketImplFactory"
+    },
+    {
+        "JavaClassName": "SocketOption"
+    },
+    {
+        "JavaClassName": "SocketOptions"
+    },
+    {
+        "JavaClassName": "SocketPermission"
+    },
+    {
+        "JavaClassName": "SocketTimeoutException"
+    },
+    {
+        "JavaClassName": "StandardProtocolFamily"
+    },
+    {
+        "JavaClassName": "StandardSocketOptions"
+    },
+    {
+        "JavaClassName": "URI"
+    },
+    {
+        "JavaClassName": "URISyntaxException"
+    },
+    {
+        "JavaClassName": "URL"
+    },
+    {
+        "JavaClassName": "URLClassLoader"
+    },
+    {
+        "JavaClassName": "URLConnection"
+    },
+    {
+        "JavaClassName": "URLDecoder"
+    },
+    {
+        "JavaClassName": "URLEncoder"
+    },
+    {
+        "JavaClassName": "URLStreamHandler"
+    },
+    {
+        "JavaClassName": "URLStreamHandlerFactory"
+    },
+    {
+        "JavaClassName": "UnknownHostException"
+    },
+    {
+        "JavaClassName": "UnknownServiceException"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "Buffer"
+    },
+    {
+        "JavaClassName": "BufferOverflowException"
+    },
+    {
+        "JavaClassName": "BufferUnderflowException"
+    },
+    {
+        "JavaClassName": "ByteBuffer"
+    },
+    {
+        "JavaClassName": "ByteOrder"
+    },
+    {
+        "JavaClassName": "CharBuffer"
+    },
+    {
+        "JavaClassName": "DoubleBuffer"
+    },
+    {
+        "JavaClassName": "FloatBuffer"
+    },
+    {
+        "JavaClassName": "IntBuffer"
+    },
+    {
+        "JavaClassName": "InvalidMarkException"
+    },
+    {
+        "JavaClassName": "LongBuffer"
+    },
+    {
+        "JavaClassName": "MappedByteBuffer"
+    },
+    {
+        "JavaClassName": "ReadOnlyBufferException"
+    },
+    {
+        "JavaClassName": "ShortBuffer"
+    },
+    {
+        "JavaClassName": "AcceptPendingException"
+    },
+    {
+        "JavaClassName": "AlreadyBoundException"
+    },
+    {
+        "JavaClassName": "AlreadyConnectedException"
+    },
+    {
+        "JavaClassName": "AsynchronousByteChannel"
+    },
+    {
+        "JavaClassName": "AsynchronousChannel"
+    },
+    {
+        "JavaClassName": "AsynchronousChannelGroup"
+    },
+    {
+        "JavaClassName": "AsynchronousCloseException"
+    },
+    {
+        "JavaClassName": "AsynchronousFileChannel"
+    },
+    {
+        "JavaClassName": "AsynchronousServerSocketChannel"
+    },
+    {
+        "JavaClassName": "AsynchronousSocketChannel"
+    },
+    {
+        "JavaClassName": "ByteChannel"
+    },
+    {
+        "JavaClassName": "CancelledKeyException"
+    },
+    {
+        "JavaClassName": "Channel"
+    },
+    {
+        "JavaClassName": "Channels"
+    },
+    {
+        "JavaClassName": "ClosedByInterruptException"
+    },
+    {
+        "JavaClassName": "ClosedChannelException"
+    },
+    {
+        "JavaClassName": "ClosedSelectorException"
+    },
+    {
+        "JavaClassName": "CompletionHandler"
+    },
+    {
+        "JavaClassName": "ConnectionPendingException"
+    },
+    {
+        "JavaClassName": "DatagramChannel"
+    },
+    {
+        "JavaClassName": "FileChannel"
+    },
+    {
+        "JavaClassName": "FileLock"
+    },
+    {
+        "JavaClassName": "FileLockInterruptionException"
+    },
+    {
+        "JavaClassName": "GatheringByteChannel"
+    },
+    {
+        "JavaClassName": "IllegalBlockingModeException"
+    },
+    {
+        "JavaClassName": "IllegalChannelGroupException"
+    },
+    {
+        "JavaClassName": "IllegalSelectorException"
+    },
+    {
+        "JavaClassName": "InterruptedByTimeoutException"
+    },
+    {
+        "JavaClassName": "InterruptibleChannel"
+    },
+    {
+        "JavaClassName": "MembershipKey"
+    },
+    {
+        "JavaClassName": "MulticastChannel"
+    },
+    {
+        "JavaClassName": "NetworkChannel"
+    },
+    {
+        "JavaClassName": "NoConnectionPendingException"
+    },
+    {
+        "JavaClassName": "NonReadableChannelException"
+    },
+    {
+        "JavaClassName": "NonWritableChannelException"
+    },
+    {
+        "JavaClassName": "NotYetBoundException"
+    },
+    {
+        "JavaClassName": "NotYetConnectedException"
+    },
+    {
+        "JavaClassName": "OverlappingFileLockException"
+    },
+    {
+        "JavaClassName": "Pipe"
+    },
+    {
+        "JavaClassName": "ReadPendingException"
+    },
+    {
+        "JavaClassName": "ReadableByteChannel"
+    },
+    {
+        "JavaClassName": "ScatteringByteChannel"
+    },
+    {
+        "JavaClassName": "SeekableByteChannel"
+    },
+    {
+        "JavaClassName": "SelectableChannel"
+    },
+    {
+        "JavaClassName": "SelectionKey"
+    },
+    {
+        "JavaClassName": "Selector"
+    },
+    {
+        "JavaClassName": "ServerSocketChannel"
+    },
+    {
+        "JavaClassName": "ShutdownChannelGroupException"
+    },
+    {
+        "JavaClassName": "SocketChannel"
+    },
+    {
+        "JavaClassName": "UnresolvedAddressException"
+    },
+    {
+        "JavaClassName": "UnsupportedAddressTypeException"
+    },
+    {
+        "JavaClassName": "WritableByteChannel"
+    },
+    {
+        "JavaClassName": "WritePendingException"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "AbstractInterruptibleChannel"
+    },
+    {
+        "JavaClassName": "AbstractSelectableChannel"
+    },
+    {
+        "JavaClassName": "AbstractSelectionKey"
+    },
+    {
+        "JavaClassName": "AbstractSelector"
+    },
+    {
+        "JavaClassName": "AsynchronousChannelProvider"
+    },
+    {
+        "JavaClassName": "SelectorProvider"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "CharacterCodingException"
+    },
+    {
+        "JavaClassName": "Charset"
+    },
+    {
+        "JavaClassName": "CharsetDecoder"
+    },
+    {
+        "JavaClassName": "CharsetEncoder"
+    },
+    {
+        "JavaClassName": "CoderMalfunctionError"
+    },
+    {
+        "JavaClassName": "CoderResult"
+    },
+    {
+        "JavaClassName": "CodingErrorAction"
+    },
+    {
+        "JavaClassName": "IllegalCharsetNameException"
+    },
+    {
+        "JavaClassName": "MalformedInputException"
+    },
+    {
+        "JavaClassName": "StandardCharsets"
+    },
+    {
+        "JavaClassName": "UnmappableCharacterException"
+    },
+    {
+        "JavaClassName": "UnsupportedCharsetException"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "CharsetProvider"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "AccessDeniedException"
+    },
+    {
+        "JavaClassName": "AccessMode"
+    },
+    {
+        "JavaClassName": "AtomicMoveNotSupportedException"
+    },
+    {
+        "JavaClassName": "ClosedDirectoryStreamException"
+    },
+    {
+        "JavaClassName": "ClosedFileSystemException"
+    },
+    {
+        "JavaClassName": "ClosedWatchServiceException"
+    },
+    {
+        "JavaClassName": "CopyOption"
+    },
+    {
+        "JavaClassName": "DirectoryIteratorException"
+    },
+    {
+        "JavaClassName": "DirectoryNotEmptyException"
+    },
+    {
+        "JavaClassName": "DirectoryStream"
+    },
+    {
+        "JavaClassName": "FileAlreadyExistsException"
+    },
+    {
+        "JavaClassName": "FileStore"
+    },
+    {
+        "JavaClassName": "FileSystem"
+    },
+    {
+        "JavaClassName": "FileSystemAlreadyExistsException"
+    },
+    {
+        "JavaClassName": "FileSystemException"
+    },
+    {
+        "JavaClassName": "FileSystemLoopException"
+    },
+    {
+        "JavaClassName": "FileSystemNotFoundException"
+    },
+    {
+        "JavaClassName": "FileSystems"
+    },
+    {
+        "JavaClassName": "FileVisitOption"
+    },
+    {
+        "JavaClassName": "FileVisitResult"
+    },
+    {
+        "JavaClassName": "FileVisitor"
+    },
+    {
+        "JavaClassName": "Files"
+    },
+    {
+        "JavaClassName": "InvalidPathException"
+    },
+    {
+        "JavaClassName": "LinkOption"
+    },
+    {
+        "JavaClassName": "LinkPermission"
+    },
+    {
+        "JavaClassName": "NoSuchFileException"
+    },
+    {
+        "JavaClassName": "NotDirectoryException"
+    },
+    {
+        "JavaClassName": "NotLinkException"
+    },
+    {
+        "JavaClassName": "OpenOption"
+    },
+    {
+        "JavaClassName": "Path"
+    },
+    {
+        "JavaClassName": "PathMatcher"
+    },
+    {
+        "JavaClassName": "Paths"
+    },
+    {
+        "JavaClassName": "ProviderMismatchException"
+    },
+    {
+        "JavaClassName": "ProviderNotFoundException"
+    },
+    {
+        "JavaClassName": "ReadOnlyFileSystemException"
+    },
+    {
+        "JavaClassName": "SecureDirectoryStream"
+    },
+    {
+        "JavaClassName": "SimpleFileVisitor"
+    },
+    {
+        "JavaClassName": "StandardCopyOption"
+    },
+    {
+        "JavaClassName": "StandardOpenOption"
+    },
+    {
+        "JavaClassName": "StandardWatchEventKinds"
+    },
+    {
+        "JavaClassName": "WatchEvent"
+    },
+    {
+        "JavaClassName": "WatchKey"
+    },
+    {
+        "JavaClassName": "WatchService"
+    },
+    {
+        "JavaClassName": "Watchable"
+    },
+    {
+        "JavaClassName": "AclEntry"
+    },
+    {
+        "JavaClassName": "AclEntryFlag"
+    },
+    {
+        "JavaClassName": "AclEntryPermission"
+    },
+    {
+        "JavaClassName": "AclEntryType"
+    },
+    {
+        "JavaClassName": "AclFileAttributeView"
+    },
+    {
+        "JavaClassName": "AttributeView"
+    },
+    {
+        "JavaClassName": "BasicFileAttributeView"
+    },
+    {
+        "JavaClassName": "BasicFileAttributes"
+    },
+    {
+        "JavaClassName": "DosFileAttributeView"
+    },
+    {
+        "JavaClassName": "DosFileAttributes"
+    },
+    {
+        "JavaClassName": "FileAttribute"
+    },
+    {
+        "JavaClassName": "FileAttributeView"
+    },
+    {
+        "JavaClassName": "FileOwnerAttributeView"
+    },
+    {
+        "JavaClassName": "FileStoreAttributeView"
+    },
+    {
+        "JavaClassName": "FileTime"
+    },
+    {
+        "JavaClassName": "GroupPrincipal"
+    },
+    {
+        "JavaClassName": "PosixFileAttributeView"
+    },
+    {
+        "JavaClassName": "PosixFileAttributes"
+    },
+    {
+        "JavaClassName": "PosixFilePermission"
+    },
+    {
+        "JavaClassName": "PosixFilePermissions"
+    },
+    {
+        "JavaClassName": "UserDefinedFileAttributeView"
+    },
+    {
+        "JavaClassName": "UserPrincipal"
+    },
+    {
+        "JavaClassName": "UserPrincipalLookupService"
+    },
+    {
+        "JavaClassName": "UserPrincipalNotFoundException"
+    },
+    {
+        "JavaClassName": "FileSystemProvider"
+    },
+    {
+        "JavaClassName": "FileTypeDetector"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "AccessControlContext"
+    },
+    {
+        "JavaClassName": "AccessControlException"
+    },
+    {
+        "JavaClassName": "AccessController"
+    },
+    {
+        "JavaClassName": "AlgorithmConstraints"
+    },
+    {
+        "JavaClassName": "AlgorithmParameterGenerator"
+    },
+    {
+        "JavaClassName": "AlgorithmParameterGeneratorSpi"
+    },
+    {
+        "JavaClassName": "AlgorithmParameters"
+    },
+    {
+        "JavaClassName": "AlgorithmParametersSpi"
+    },
+    {
+        "JavaClassName": "AllPermission"
+    },
+    {
+        "JavaClassName": "AuthProvider"
+    },
+    {
+        "JavaClassName": "BasicPermission"
+    },
+    {
+        "JavaClassName": "Certificate"
+    },
+    {
+        "JavaClassName": "CodeSigner"
+    },
+    {
+        "JavaClassName": "CodeSource"
+    },
+    {
+        "JavaClassName": "CryptoPrimitive"
+    },
+    {
+        "JavaClassName": "DigestException"
+    },
+    {
+        "JavaClassName": "DigestInputStream"
+    },
+    {
+        "JavaClassName": "DigestOutputStream"
+    },
+    {
+        "JavaClassName": "DomainCombiner"
+    },
+    {
+        "JavaClassName": "DomainLoadStoreParameter"
+    },
+    {
+        "JavaClassName": "DrbgParameters"
+    },
+    {
+        "JavaClassName": "GeneralSecurityException"
+    },
+    {
+        "JavaClassName": "Guard"
+    },
+    {
+        "JavaClassName": "GuardedObject"
+    },
+    {
+        "JavaClassName": "Identity"
+    },
+    {
+        "JavaClassName": "IdentityScope"
+    },
+    {
+        "JavaClassName": "InvalidAlgorithmParameterException"
+    },
+    {
+        "JavaClassName": "InvalidKeyException"
+    },
+    {
+        "JavaClassName": "InvalidParameterException"
+    },
+    {
+        "JavaClassName": "Key"
+    },
+    {
+        "JavaClassName": "KeyException"
+    },
+    {
+        "JavaClassName": "KeyFactory"
+    },
+    {
+        "JavaClassName": "KeyFactorySpi"
+    },
+    {
+        "JavaClassName": "KeyManagementException"
+    },
+    {
+        "JavaClassName": "KeyPair"
+    },
+    {
+        "JavaClassName": "KeyPairGenerator"
+    },
+    {
+        "JavaClassName": "KeyPairGeneratorSpi"
+    },
+    {
+        "JavaClassName": "KeyRep"
+    },
+    {
+        "JavaClassName": "KeyStore"
+    },
+    {
+        "JavaClassName": "KeyStoreException"
+    },
+    {
+        "JavaClassName": "KeyStoreSpi"
+    },
+    {
+        "JavaClassName": "MessageDigest"
+    },
+    {
+        "JavaClassName": "MessageDigestSpi"
+    },
+    {
+        "JavaClassName": "NoSuchAlgorithmException"
+    },
+    {
+        "JavaClassName": "NoSuchProviderException"
+    },
+    {
+        "JavaClassName": "PKCS12Attribute"
+    },
+    {
+        "JavaClassName": "Permission"
+    },
+    {
+        "JavaClassName": "PermissionCollection"
+    },
+    {
+        "JavaClassName": "Permissions"
+    },
+    {
+        "JavaClassName": "Policy"
+    },
+    {
+        "JavaClassName": "PolicySpi"
+    },
+    {
+        "JavaClassName": "Principal"
+    },
+    {
+        "JavaClassName": "PrivateKey"
+    },
+    {
+        "JavaClassName": "PrivilegedAction"
+    },
+    {
+        "JavaClassName": "PrivilegedActionException"
+    },
+    {
+        "JavaClassName": "PrivilegedExceptionAction"
+    },
+    {
+        "JavaClassName": "ProtectionDomain"
+    },
+    {
+        "JavaClassName": "Provider"
+    },
+    {
+        "JavaClassName": "ProviderException"
+    },
+    {
+        "JavaClassName": "PublicKey"
+    },
+    {
+        "JavaClassName": "SecureClassLoader"
+    },
+    {
+        "JavaClassName": "SecureRandom"
+    },
+    {
+        "JavaClassName": "SecureRandomParameters"
+    },
+    {
+        "JavaClassName": "SecureRandomSpi"
+    },
+    {
+        "JavaClassName": "Security"
+    },
+    {
+        "JavaClassName": "SecurityPermission"
+    },
+    {
+        "JavaClassName": "Signature"
+    },
+    {
+        "JavaClassName": "SignatureException"
+    },
+    {
+        "JavaClassName": "SignatureSpi"
+    },
+    {
+        "JavaClassName": "SignedObject"
+    },
+    {
+        "JavaClassName": "Signer"
+    },
+    {
+        "JavaClassName": "Timestamp"
+    },
+    {
+        "JavaClassName": "UnrecoverableEntryException"
+    },
+    {
+        "JavaClassName": "UnrecoverableKeyException"
+    },
+    {
+        "JavaClassName": "UnresolvedPermission"
+    },
+    {
+        "JavaClassName": "Acl"
+    },
+    {
+        "JavaClassName": "AclEntry"
+    },
+    {
+        "JavaClassName": "AclNotFoundException"
+    },
+    {
+        "JavaClassName": "Group"
+    },
+    {
+        "JavaClassName": "LastOwnerException"
+    },
+    {
+        "JavaClassName": "NotOwnerException"
+    },
+    {
+        "JavaClassName": "Owner"
+    },
+    {
+        "JavaClassName": "Permission"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "CRL"
+    },
+    {
+        "JavaClassName": "CRLException"
+    },
+    {
+        "JavaClassName": "CRLReason"
+    },
+    {
+        "JavaClassName": "CRLSelector"
+    },
+    {
+        "JavaClassName": "CertPath"
+    },
+    {
+        "JavaClassName": "CertPathBuilder"
+    },
+    {
+        "JavaClassName": "CertPathBuilderException"
+    },
+    {
+        "JavaClassName": "CertPathBuilderResult"
+    },
+    {
+        "JavaClassName": "CertPathBuilderSpi"
+    },
+    {
+        "JavaClassName": "CertPathChecker"
+    },
+    {
+        "JavaClassName": "CertPathParameters"
+    },
+    {
+        "JavaClassName": "CertPathValidator"
+    },
+    {
+        "JavaClassName": "CertPathValidatorException"
+    },
+    {
+        "JavaClassName": "CertPathValidatorResult"
+    },
+    {
+        "JavaClassName": "CertPathValidatorSpi"
+    },
+    {
+        "JavaClassName": "CertSelector"
+    },
+    {
+        "JavaClassName": "CertStore"
+    },
+    {
+        "JavaClassName": "CertStoreException"
+    },
+    {
+        "JavaClassName": "CertStoreParameters"
+    },
+    {
+        "JavaClassName": "CertStoreSpi"
+    },
+    {
+        "JavaClassName": "Certificate"
+    },
+    {
+        "JavaClassName": "CertificateEncodingException"
+    },
+    {
+        "JavaClassName": "CertificateException"
+    },
+    {
+        "JavaClassName": "CertificateExpiredException"
+    },
+    {
+        "JavaClassName": "CertificateFactory"
+    },
+    {
+        "JavaClassName": "CertificateFactorySpi"
+    },
+    {
+        "JavaClassName": "CertificateNotYetValidException"
+    },
+    {
+        "JavaClassName": "CertificateParsingException"
+    },
+    {
+        "JavaClassName": "CertificateRevokedException"
+    },
+    {
+        "JavaClassName": "CollectionCertStoreParameters"
+    },
+    {
+        "JavaClassName": "Extension"
+    },
+    {
+        "JavaClassName": "LDAPCertStoreParameters"
+    },
+    {
+        "JavaClassName": "PKIXBuilderParameters"
+    },
+    {
+        "JavaClassName": "PKIXCertPathBuilderResult"
+    },
+    {
+        "JavaClassName": "PKIXCertPathChecker"
+    },
+    {
+        "JavaClassName": "PKIXCertPathValidatorResult"
+    },
+    {
+        "JavaClassName": "PKIXParameters"
+    },
+    {
+        "JavaClassName": "PKIXReason"
+    },
+    {
+        "JavaClassName": "PKIXRevocationChecker"
+    },
+    {
+        "JavaClassName": "PolicyNode"
+    },
+    {
+        "JavaClassName": "PolicyQualifierInfo"
+    },
+    {
+        "JavaClassName": "TrustAnchor"
+    },
+    {
+        "JavaClassName": "URICertStoreParameters"
+    },
+    {
+        "JavaClassName": "X509CRL"
+    },
+    {
+        "JavaClassName": "X509CRLEntry"
+    },
+    {
+        "JavaClassName": "X509CRLSelector"
+    },
+    {
+        "JavaClassName": "X509CertSelector"
+    },
+    {
+        "JavaClassName": "X509Certificate"
+    },
+    {
+        "JavaClassName": "X509Extension"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "DSAKey"
+    },
+    {
+        "JavaClassName": "DSAKeyPairGenerator"
+    },
+    {
+        "JavaClassName": "DSAParams"
+    },
+    {
+        "JavaClassName": "DSAPrivateKey"
+    },
+    {
+        "JavaClassName": "DSAPublicKey"
+    },
+    {
+        "JavaClassName": "ECKey"
+    },
+    {
+        "JavaClassName": "ECPrivateKey"
+    },
+    {
+        "JavaClassName": "ECPublicKey"
+    },
+    {
+        "JavaClassName": "EdECKey"
+    },
+    {
+        "JavaClassName": "EdECPrivateKey"
+    },
+    {
+        "JavaClassName": "EdECPublicKey"
+    },
+    {
+        "JavaClassName": "RSAKey"
+    },
+    {
+        "JavaClassName": "RSAMultiPrimePrivateCrtKey"
+    },
+    {
+        "JavaClassName": "RSAPrivateCrtKey"
+    },
+    {
+        "JavaClassName": "RSAPrivateKey"
+    },
+    {
+        "JavaClassName": "RSAPublicKey"
+    },
+    {
+        "JavaClassName": "XECKey"
+    },
+    {
+        "JavaClassName": "XECPrivateKey"
+    },
+    {
+        "JavaClassName": "XECPublicKey"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "AlgorithmParameterSpec"
+    },
+    {
+        "JavaClassName": "DSAGenParameterSpec"
+    },
+    {
+        "JavaClassName": "DSAParameterSpec"
+    },
+    {
+        "JavaClassName": "DSAPrivateKeySpec"
+    },
+    {
+        "JavaClassName": "DSAPublicKeySpec"
+    },
+    {
+        "JavaClassName": "ECField"
+    },
+    {
+        "JavaClassName": "ECFieldF2m"
+    },
+    {
+        "JavaClassName": "ECFieldFp"
+    },
+    {
+        "JavaClassName": "ECGenParameterSpec"
+    },
+    {
+        "JavaClassName": "ECParameterSpec"
+    },
+    {
+        "JavaClassName": "ECPoint"
+    },
+    {
+        "JavaClassName": "ECPrivateKeySpec"
+    },
+    {
+        "JavaClassName": "ECPublicKeySpec"
+    },
+    {
+        "JavaClassName": "EdDSAParameterSpec"
+    },
+    {
+        "JavaClassName": "EdECPoint"
+    },
+    {
+        "JavaClassName": "EdECPrivateKeySpec"
+    },
+    {
+        "JavaClassName": "EdECPublicKeySpec"
+    },
+    {
+        "JavaClassName": "EllipticCurve"
+    },
+    {
+        "JavaClassName": "EncodedKeySpec"
+    },
+    {
+        "JavaClassName": "InvalidKeySpecException"
+    },
+    {
+        "JavaClassName": "InvalidParameterSpecException"
+    },
+    {
+        "JavaClassName": "KeySpec"
+    },
+    {
+        "JavaClassName": "MGF1ParameterSpec"
+    },
+    {
+        "JavaClassName": "NamedParameterSpec"
+    },
+    {
+        "JavaClassName": "PKCS8EncodedKeySpec"
+    },
+    {
+        "JavaClassName": "PSSParameterSpec"
+    },
+    {
+        "JavaClassName": "RSAKeyGenParameterSpec"
+    },
+    {
+        "JavaClassName": "RSAMultiPrimePrivateCrtKeySpec"
+    },
+    {
+        "JavaClassName": "RSAOtherPrimeInfo"
+    },
+    {
+        "JavaClassName": "RSAPrivateCrtKeySpec"
+    },
+    {
+        "JavaClassName": "RSAPrivateKeySpec"
+    },
+    {
+        "JavaClassName": "RSAPublicKeySpec"
+    },
+    {
+        "JavaClassName": "X509EncodedKeySpec"
+    },
+    {
+        "JavaClassName": "XECPrivateKeySpec"
+    },
+    {
+        "JavaClassName": "XECPublicKeySpec"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "Array"
+    },
+    {
+        "JavaClassName": "BatchUpdateException"
+    },
+    {
+        "JavaClassName": "Blob"
+    },
+    {
+        "JavaClassName": "CallableStatement"
+    },
+    {
+        "JavaClassName": "ClientInfoStatus"
+    },
+    {
+        "JavaClassName": "Clob"
+    },
+    {
+        "JavaClassName": "Connection"
+    },
+    {
+        "JavaClassName": "DataTruncation"
+    },
+    {
+        "JavaClassName": "DatabaseMetaData"
+    },
+    {
+        "JavaClassName": "Date"
+    },
+    {
+        "JavaClassName": "Driver"
+    },
+    {
+        "JavaClassName": "DriverManager"
+    },
+    {
+        "JavaClassName": "DriverPropertyInfo"
+    },
+    {
+        "JavaClassName": "NClob"
+    },
+    {
+        "JavaClassName": "ParameterMetaData"
+    },
+    {
+        "JavaClassName": "PreparedStatement"
+    },
+    {
+        "JavaClassName": "Ref"
+    },
+    {
+        "JavaClassName": "ResultSet"
+    },
+    {
+        "JavaClassName": "ResultSetMetaData"
+    },
+    {
+        "JavaClassName": "RowId"
+    },
+    {
+        "JavaClassName": "RowIdLifetime"
+    },
+    {
+        "JavaClassName": "SQLClientInfoException"
+    },
+    {
+        "JavaClassName": "SQLData"
+    },
+    {
+        "JavaClassName": "SQLDataException"
+    },
+    {
+        "JavaClassName": "SQLException"
+    },
+    {
+        "JavaClassName": "SQLFeatureNotSupportedException"
+    },
+    {
+        "JavaClassName": "SQLInput"
+    },
+    {
+        "JavaClassName": "SQLIntegrityConstraintViolationException"
+    },
+    {
+        "JavaClassName": "SQLInvalidAuthorizationSpecException"
+    },
+    {
+        "JavaClassName": "SQLNonTransientConnectionException"
+    },
+    {
+        "JavaClassName": "SQLNonTransientException"
+    },
+    {
+        "JavaClassName": "SQLOutput"
+    },
+    {
+        "JavaClassName": "SQLPermission"
+    },
+    {
+        "JavaClassName": "SQLRecoverableException"
+    },
+    {
+        "JavaClassName": "SQLSyntaxErrorException"
+    },
+    {
+        "JavaClassName": "SQLTimeoutException"
+    },
+    {
+        "JavaClassName": "SQLTransactionRollbackException"
+    },
+    {
+        "JavaClassName": "SQLTransientConnectionException"
+    },
+    {
+        "JavaClassName": "SQLTransientException"
+    },
+    {
+        "JavaClassName": "SQLWarning"
+    },
+    {
+        "JavaClassName": "SQLXML"
+    },
+    {
+        "JavaClassName": "Savepoint"
+    },
+    {
+        "JavaClassName": "Statement"
+    },
+    {
+        "JavaClassName": "Struct"
+    },
+    {
+        "JavaClassName": "Time"
+    },
+    {
+        "JavaClassName": "Timestamp"
+    },
+    {
+        "JavaClassName": "Types"
+    },
+    {
+        "JavaClassName": "Wrapper"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "Annotation"
+    },
+    {
+        "JavaClassName": "AttributedCharacterIterator"
+    },
+    {
+        "JavaClassName": "AttributedString"
+    },
+    {
+        "JavaClassName": "Bidi"
+    },
+    {
+        "JavaClassName": "BreakIterator"
+    },
+    {
+        "JavaClassName": "CharacterIterator"
+    },
+    {
+        "JavaClassName": "ChoiceFormat"
+    },
+    {
+        "JavaClassName": "CollationElementIterator"
+    },
+    {
+        "JavaClassName": "CollationKey"
+    },
+    {
+        "JavaClassName": "Collator"
+    },
+    {
+        "JavaClassName": "DateFormat"
+    },
+    {
+        "JavaClassName": "DateFormatSymbols"
+    },
+    {
+        "JavaClassName": "DecimalFormat"
+    },
+    {
+        "JavaClassName": "DecimalFormatSymbols"
+    },
+    {
+        "JavaClassName": "FieldPosition"
+    },
+    {
+        "JavaClassName": "Format"
+    },
+    {
+        "JavaClassName": "MessageFormat"
+    },
+    {
+        "JavaClassName": "Normalizer"
+    },
+    {
+        "JavaClassName": "NumberFormat"
+    },
+    {
+        "JavaClassName": "ParseException"
+    },
+    {
+        "JavaClassName": "ParsePosition"
+    },
+    {
+        "JavaClassName": "RuleBasedCollator"
+    },
+    {
+        "JavaClassName": "SimpleDateFormat"
+    },
+    {
+        "JavaClassName": "StringCharacterIterator"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "Clock"
+    },
+    {
+        "JavaClassName": "DateTimeException"
+    },
+    {
+        "JavaClassName": "DayOfWeek"
+    },
+    {
+        "JavaClassName": "Duration"
+    },
+    {
+        "JavaClassName": "Instant"
+    },
+    {
+        "JavaClassName": "InstantSource"
+    },
+    {
+        "JavaClassName": "LocalDate"
+    },
+    {
+        "JavaClassName": "LocalDateTime"
+    },
+    {
+        "JavaClassName": "LocalTime"
+    },
+    {
+        "JavaClassName": "Month"
+    },
+    {
+        "JavaClassName": "MonthDay"
+    },
+    {
+        "JavaClassName": "OffsetDateTime"
+    },
+    {
+        "JavaClassName": "OffsetTime"
+    },
+    {
+        "JavaClassName": "Period"
+    },
+    {
+        "JavaClassName": "Year"
+    },
+    {
+        "JavaClassName": "YearMonth"
+    },
+    {
+        "JavaClassName": "ZoneId"
+    },
+    {
+        "JavaClassName": "ZoneOffset"
+    },
+    {
+        "JavaClassName": "ZonedDateTime"
+    },
+    {
+        "JavaClassName": "AbstractChronology"
+    },
+    {
+        "JavaClassName": "ChronoLocalDate"
+    },
+    {
+        "JavaClassName": "ChronoLocalDateTime"
+    },
+    {
+        "JavaClassName": "ChronoPeriod"
+    },
+    {
+        "JavaClassName": "ChronoZonedDateTime"
+    },
+    {
+        "JavaClassName": "Chronology"
+    },
+    {
+        "JavaClassName": "Era"
+    },
+    {
+        "JavaClassName": "HijrahChronology"
+    },
+    {
+        "JavaClassName": "HijrahDate"
+    },
+    {
+        "JavaClassName": "HijrahEra"
+    },
+    {
+        "JavaClassName": "IsoChronology"
+    },
+    {
+        "JavaClassName": "IsoEra"
+    },
+    {
+        "JavaClassName": "JapaneseChronology"
+    },
+    {
+        "JavaClassName": "JapaneseDate"
+    },
+    {
+        "JavaClassName": "JapaneseEra"
+    },
+    {
+        "JavaClassName": "MinguoChronology"
+    },
+    {
+        "JavaClassName": "MinguoDate"
+    },
+    {
+        "JavaClassName": "MinguoEra"
+    },
+    {
+        "JavaClassName": "ThaiBuddhistChronology"
+    },
+    {
+        "JavaClassName": "ThaiBuddhistDate"
+    },
+    {
+        "JavaClassName": "ThaiBuddhistEra"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "DateTimeFormatter"
+    },
+    {
+        "JavaClassName": "DateTimeFormatterBuilder"
+    },
+    {
+        "JavaClassName": "DateTimeParseException"
+    },
+    {
+        "JavaClassName": "DecimalStyle"
+    },
+    {
+        "JavaClassName": "FormatStyle"
+    },
+    {
+        "JavaClassName": "ResolverStyle"
+    },
+    {
+        "JavaClassName": "SignStyle"
+    },
+    {
+        "JavaClassName": "TextStyle"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "ChronoField"
+    },
+    {
+        "JavaClassName": "ChronoUnit"
+    },
+    {
+        "JavaClassName": "IsoFields"
+    },
+    {
+        "JavaClassName": "JulianFields"
+    },
+    {
+        "JavaClassName": "Temporal"
+    },
+    {
+        "JavaClassName": "TemporalAccessor"
+    },
+    {
+        "JavaClassName": "TemporalAdjuster"
+    },
+    {
+        "JavaClassName": "TemporalAdjusters"
+    },
+    {
+        "JavaClassName": "TemporalAmount"
+    },
+    {
+        "JavaClassName": "TemporalField"
+    },
+    {
+        "JavaClassName": "TemporalQueries"
+    },
+    {
+        "JavaClassName": "TemporalQuery"
+    },
+    {
+        "JavaClassName": "TemporalUnit"
+    },
+    {
+        "JavaClassName": "UnsupportedTemporalTypeException"
+    },
+    {
+        "JavaClassName": "ValueRange"
+    },
+    {
+        "JavaClassName": "WeekFields"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "ZoneOffsetTransition"
+    },
+    {
+        "JavaClassName": "ZoneOffsetTransitionRule"
+    },
+    {
+        "JavaClassName": "ZoneRules"
+    },
+    {
+        "JavaClassName": "ZoneRulesException"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "AbstractCollection"
+    },
+    {
+        "JavaClassName": "AbstractList"
+    },
+    {
+        "JavaClassName": "AbstractMap"
+    },
+    {
+        "JavaClassName": "AbstractQueue"
+    },
+    {
+        "JavaClassName": "AbstractSequentialList"
+    },
+    {
+        "JavaClassName": "AbstractSet"
+    },
+    {
+        "JavaClassName": "ArrayDeque"
+    },
+    {
+        "JavaClassName": "ArrayList"
+    },
+    {
+        "JavaClassName": "Arrays"
+    },
+    {
+        "JavaClassName": "Base64"
+    },
+    {
+        "JavaClassName": "BitSet"
+    },
+    {
+        "JavaClassName": "Calendar"
+    },
+    {
+        "JavaClassName": "Collection"
+    },
+    {
+        "JavaClassName": "Collections"
+    },
+    {
+        "JavaClassName": "Comparator"
+    },
+    {
+        "JavaClassName": "ConcurrentModificationException"
+    },
+    {
+        "JavaClassName": "Currency"
+    },
+    {
+        "JavaClassName": "Date"
+    },
+    {
+        "JavaClassName": "Deque"
+    },
+    {
+        "JavaClassName": "Dictionary"
+    },
+    {
+        "JavaClassName": "DoubleSummaryStatistics"
+    },
+    {
+        "JavaClassName": "DuplicateFormatFlagsException"
+    },
+    {
+        "JavaClassName": "EmptyStackException"
+    },
+    {
+        "JavaClassName": "EnumMap"
+    },
+    {
+        "JavaClassName": "EnumSet"
+    },
+    {
+        "JavaClassName": "Enumeration"
+    },
+    {
+        "JavaClassName": "EventListener"
+    },
+    {
+        "JavaClassName": "EventListenerProxy"
+    },
+    {
+        "JavaClassName": "EventObject"
+    },
+    {
+        "JavaClassName": "FormatFlagsConversionMismatchException"
+    },
+    {
+        "JavaClassName": "Formattable"
+    },
+    {
+        "JavaClassName": "FormattableFlags"
+    },
+    {
+        "JavaClassName": "Formatter"
+    },
+    {
+        "JavaClassName": "FormatterClosedException"
+    },
+    {
+        "JavaClassName": "GregorianCalendar"
+    },
+    {
+        "JavaClassName": "HashMap"
+    },
+    {
+        "JavaClassName": "HashSet"
+    },
+    {
+        "JavaClassName": "Hashtable"
+    },
+    {
+        "JavaClassName": "HexFormat"
+    },
+    {
+        "JavaClassName": "IdentityHashMap"
+    },
+    {
+        "JavaClassName": "IllegalFormatCodePointException"
+    },
+    {
+        "JavaClassName": "IllegalFormatConversionException"
+    },
+    {
+        "JavaClassName": "IllegalFormatException"
+    },
+    {
+        "JavaClassName": "IllegalFormatFlagsException"
+    },
+    {
+        "JavaClassName": "IllegalFormatPrecisionException"
+    },
+    {
+        "JavaClassName": "IllegalFormatWidthException"
+    },
+    {
+        "JavaClassName": "IllformedLocaleException"
+    },
+    {
+        "JavaClassName": "InputMismatchException"
+    },
+    {
+        "JavaClassName": "IntSummaryStatistics"
+    },
+    {
+        "JavaClassName": "InvalidPropertiesFormatException"
+    },
+    {
+        "JavaClassName": "Iterator"
+    },
+    {
+        "JavaClassName": "LinkedHashMap"
+    },
+    {
+        "JavaClassName": "LinkedHashSet"
+    },
+    {
+        "JavaClassName": "LinkedList"
+    },
+    {
+        "JavaClassName": "List"
+    },
+    {
+        "JavaClassName": "ListIterator"
+    },
+    {
+        "JavaClassName": "ListResourceBundle"
+    },
+    {
+        "JavaClassName": "Locale"
+    },
+    {
+        "JavaClassName": "LongSummaryStatistics"
+    },
+    {
+        "JavaClassName": "Map"
+    },
+    {
+        "JavaClassName": "MissingFormatArgumentException"
+    },
+    {
+        "JavaClassName": "MissingFormatWidthException"
+    },
+    {
+        "JavaClassName": "MissingResourceException"
+    },
+    {
+        "JavaClassName": "NavigableMap"
+    },
+    {
+        "JavaClassName": "NavigableSet"
+    },
+    {
+        "JavaClassName": "NoSuchElementException"
+    },
+    {
+        "JavaClassName": "Objects"
+    },
+    {
+        "JavaClassName": "Observable"
+    },
+    {
+        "JavaClassName": "Observer"
+    },
+    {
+        "JavaClassName": "Optional"
+    },
+    {
+        "JavaClassName": "OptionalDouble"
+    },
+    {
+        "JavaClassName": "OptionalInt"
+    },
+    {
+        "JavaClassName": "OptionalLong"
+    },
+    {
+        "JavaClassName": "PrimitiveIterator"
+    },
+    {
+        "JavaClassName": "PriorityQueue"
+    },
+    {
+        "JavaClassName": "Properties"
+    },
+    {
+        "JavaClassName": "PropertyPermission"
+    },
+    {
+        "JavaClassName": "PropertyResourceBundle"
+    },
+    {
+        "JavaClassName": "Queue"
+    },
+    {
+        "JavaClassName": "Random"
+    },
+    {
+        "JavaClassName": "RandomAccess"
+    },
+    {
+        "JavaClassName": "ResourceBundle"
+    },
+    {
+        "JavaClassName": "Scanner"
+    },
+    {
+        "JavaClassName": "SequencedCollection"
+    },
+    {
+        "JavaClassName": "SequencedMap"
+    },
+    {
+        "JavaClassName": "SequencedSet"
+    },
+    {
+        "JavaClassName": "ServiceConfigurationError"
+    },
+    {
+        "JavaClassName": "ServiceLoader"
+    },
+    {
+        "JavaClassName": "Set"
+    },
+    {
+        "JavaClassName": "SimpleTimeZone"
+    },
+    {
+        "JavaClassName": "SortedMap"
+    },
+    {
+        "JavaClassName": "SortedSet"
+    },
+    {
+        "JavaClassName": "Spliterator"
+    },
+    {
+        "JavaClassName": "Spliterators"
+    },
+    {
+        "JavaClassName": "SplittableRandom"
+    },
+    {
+        "JavaClassName": "Stack"
+    },
+    {
+        "JavaClassName": "StringJoiner"
+    },
+    {
+        "JavaClassName": "StringTokenizer"
+    },
+    {
+        "JavaClassName": "TimeZone"
+    },
+    {
+        "JavaClassName": "Timer"
+    },
+    {
+        "JavaClassName": "TimerTask"
+    },
+    {
+        "JavaClassName": "TooManyListenersException"
+    },
+    {
+        "JavaClassName": "TreeMap"
+    },
+    {
+        "JavaClassName": "TreeSet"
+    },
+    {
+        "JavaClassName": "UUID"
+    },
+    {
+        "JavaClassName": "UnknownFormatConversionException"
+    },
+    {
+        "JavaClassName": "UnknownFormatFlagsException"
+    },
+    {
+        "JavaClassName": "Vector"
+    },
+    {
+        "JavaClassName": "WeakHashMap"
+    },
+    {
+        "JavaClassName": "AbstractExecutorService"
+    },
+    {
+        "JavaClassName": "ArrayBlockingQueue"
+    },
+    {
+        "JavaClassName": "BlockingDeque"
+    },
+    {
+        "JavaClassName": "BlockingQueue"
+    },
+    {
+        "JavaClassName": "BrokenBarrierException"
+    },
+    {
+        "JavaClassName": "Callable"
+    },
+    {
+        "JavaClassName": "CancellationException"
+    },
+    {
+        "JavaClassName": "CompletableFuture"
+    },
+    {
+        "JavaClassName": "CompletionException"
+    },
+    {
+        "JavaClassName": "CompletionService"
+    },
+    {
+        "JavaClassName": "CompletionStage"
+    },
+    {
+        "JavaClassName": "ConcurrentHashMap"
+    },
+    {
+        "JavaClassName": "ConcurrentLinkedDeque"
+    },
+    {
+        "JavaClassName": "ConcurrentLinkedQueue"
+    },
+    {
+        "JavaClassName": "ConcurrentMap"
+    },
+    {
+        "JavaClassName": "ConcurrentNavigableMap"
+    },
+    {
+        "JavaClassName": "ConcurrentSkipListMap"
+    },
+    {
+        "JavaClassName": "ConcurrentSkipListSet"
+    },
+    {
+        "JavaClassName": "CopyOnWriteArrayList"
+    },
+    {
+        "JavaClassName": "CopyOnWriteArraySet"
+    },
+    {
+        "JavaClassName": "CountDownLatch"
+    },
+    {
+        "JavaClassName": "CountedCompleter"
+    },
+    {
+        "JavaClassName": "CyclicBarrier"
+    },
+    {
+        "JavaClassName": "DelayQueue"
+    },
+    {
+        "JavaClassName": "Delayed"
+    },
+    {
+        "JavaClassName": "Exchanger"
+    },
+    {
+        "JavaClassName": "ExecutionException"
+    },
+    {
+        "JavaClassName": "Executor"
+    },
+    {
+        "JavaClassName": "ExecutorCompletionService"
+    },
+    {
+        "JavaClassName": "ExecutorService"
+    },
+    {
+        "JavaClassName": "Executors"
+    },
+    {
+        "JavaClassName": "Flow"
+    },
+    {
+        "JavaClassName": "ForkJoinPool"
+    },
+    {
+        "JavaClassName": "ForkJoinTask"
+    },
+    {
+        "JavaClassName": "ForkJoinWorkerThread"
+    },
+    {
+        "JavaClassName": "Future"
+    },
+    {
+        "JavaClassName": "FutureTask"
+    },
+    {
+        "JavaClassName": "LinkedBlockingDeque"
+    },
+    {
+        "JavaClassName": "LinkedBlockingQueue"
+    },
+    {
+        "JavaClassName": "LinkedTransferQueue"
+    },
+    {
+        "JavaClassName": "Phaser"
+    },
+    {
+        "JavaClassName": "PriorityBlockingQueue"
+    },
+    {
+        "JavaClassName": "RecursiveAction"
+    },
+    {
+        "JavaClassName": "RecursiveTask"
+    },
+    {
+        "JavaClassName": "RejectedExecutionException"
+    },
+    {
+        "JavaClassName": "RejectedExecutionHandler"
+    },
+    {
+        "JavaClassName": "RunnableFuture"
+    },
+    {
+        "JavaClassName": "RunnableScheduledFuture"
+    },
+    {
+        "JavaClassName": "ScheduledExecutorService"
+    },
+    {
+        "JavaClassName": "ScheduledFuture"
+    },
+    {
+        "JavaClassName": "ScheduledThreadPoolExecutor"
+    },
+    {
+        "JavaClassName": "Semaphore"
+    },
+    {
+        "JavaClassName": "SubmissionPublisher"
+    },
+    {
+        "JavaClassName": "SynchronousQueue"
+    },
+    {
+        "JavaClassName": "ThreadFactory"
+    },
+    {
+        "JavaClassName": "ThreadLocalRandom"
+    },
+    {
+        "JavaClassName": "ThreadPoolExecutor"
+    },
+    {
+        "JavaClassName": "TimeUnit"
+    },
+    {
+        "JavaClassName": "TimeoutException"
+    },
+    {
+        "JavaClassName": "TransferQueue"
+    },
+    {
+        "JavaClassName": "AtomicBoolean"
+    },
+    {
+        "JavaClassName": "AtomicInteger"
+    },
+    {
+        "JavaClassName": "AtomicIntegerArray"
+    },
+    {
+        "JavaClassName": "AtomicIntegerFieldUpdater"
+    },
+    {
+        "JavaClassName": "AtomicLong"
+    },
+    {
+        "JavaClassName": "AtomicLongArray"
+    },
+    {
+        "JavaClassName": "AtomicLongFieldUpdater"
+    },
+    {
+        "JavaClassName": "AtomicMarkableReference"
+    },
+    {
+        "JavaClassName": "AtomicReference"
+    },
+    {
+        "JavaClassName": "AtomicReferenceArray"
+    },
+    {
+        "JavaClassName": "AtomicReferenceFieldUpdater"
+    },
+    {
+        "JavaClassName": "AtomicStampedReference"
+    },
+    {
+        "JavaClassName": "DoubleAccumulator"
+    },
+    {
+        "JavaClassName": "DoubleAdder"
+    },
+    {
+        "JavaClassName": "LongAccumulator"
+    },
+    {
+        "JavaClassName": "LongAdder"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "AbstractOwnableSynchronizer"
+    },
+    {
+        "JavaClassName": "AbstractQueuedLongSynchronizer"
+    },
+    {
+        "JavaClassName": "AbstractQueuedSynchronizer"
+    },
+    {
+        "JavaClassName": "Condition"
+    },
+    {
+        "JavaClassName": "Lock"
+    },
+    {
+        "JavaClassName": "LockSupport"
+    },
+    {
+        "JavaClassName": "ReadWriteLock"
+    },
+    {
+        "JavaClassName": "ReentrantLock"
+    },
+    {
+        "JavaClassName": "ReentrantReadWriteLock"
+    },
+    {
+        "JavaClassName": "StampedLock"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "BiConsumer"
+    },
+    {
+        "JavaClassName": "BiFunction"
+    },
+    {
+        "JavaClassName": "BiPredicate"
+    },
+    {
+        "JavaClassName": "BinaryOperator"
+    },
+    {
+        "JavaClassName": "BooleanSupplier"
+    },
+    {
+        "JavaClassName": "Consumer"
+    },
+    {
+        "JavaClassName": "DoubleBinaryOperator"
+    },
+    {
+        "JavaClassName": "DoubleConsumer"
+    },
+    {
+        "JavaClassName": "DoubleFunction"
+    },
+    {
+        "JavaClassName": "DoublePredicate"
+    },
+    {
+        "JavaClassName": "DoubleSupplier"
+    },
+    {
+        "JavaClassName": "DoubleToIntFunction"
+    },
+    {
+        "JavaClassName": "DoubleToLongFunction"
+    },
+    {
+        "JavaClassName": "DoubleUnaryOperator"
+    },
+    {
+        "JavaClassName": "Function"
+    },
+    {
+        "JavaClassName": "IntBinaryOperator"
+    },
+    {
+        "JavaClassName": "IntConsumer"
+    },
+    {
+        "JavaClassName": "IntFunction"
+    },
+    {
+        "JavaClassName": "IntPredicate"
+    },
+    {
+        "JavaClassName": "IntSupplier"
+    },
+    {
+        "JavaClassName": "IntToDoubleFunction"
+    },
+    {
+        "JavaClassName": "IntToLongFunction"
+    },
+    {
+        "JavaClassName": "IntUnaryOperator"
+    },
+    {
+        "JavaClassName": "LongBinaryOperator"
+    },
+    {
+        "JavaClassName": "LongConsumer"
+    },
+    {
+        "JavaClassName": "LongFunction"
+    },
+    {
+        "JavaClassName": "LongPredicate"
+    },
+    {
+        "JavaClassName": "LongSupplier"
+    },
+    {
+        "JavaClassName": "LongToDoubleFunction"
+    },
+    {
+        "JavaClassName": "LongToIntFunction"
+    },
+    {
+        "JavaClassName": "LongUnaryOperator"
+    },
+    {
+        "JavaClassName": "ObjDoubleConsumer"
+    },
+    {
+        "JavaClassName": "ObjIntConsumer"
+    },
+    {
+        "JavaClassName": "ObjLongConsumer"
+    },
+    {
+        "JavaClassName": "Predicate"
+    },
+    {
+        "JavaClassName": "Supplier"
+    },
+    {
+        "JavaClassName": "ToDoubleBiFunction"
+    },
+    {
+        "JavaClassName": "ToDoubleFunction"
+    },
+    {
+        "JavaClassName": "ToIntBiFunction"
+    },
+    {
+        "JavaClassName": "ToIntFunction"
+    },
+    {
+        "JavaClassName": "ToLongBiFunction"
+    },
+    {
+        "JavaClassName": "ToLongFunction"
+    },
+    {
+        "JavaClassName": "UnaryOperator"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "Attributes"
+    },
+    {
+        "JavaClassName": "JarEntry"
+    },
+    {
+        "JavaClassName": "JarException"
+    },
+    {
+        "JavaClassName": "JarFile"
+    },
+    {
+        "JavaClassName": "JarInputStream"
+    },
+    {
+        "JavaClassName": "JarOutputStream"
+    },
+    {
+        "JavaClassName": "Manifest"
+    },
+    {
+        "JavaClassName": "Pack200"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "ConsoleHandler"
+    },
+    {
+        "JavaClassName": "ErrorManager"
+    },
+    {
+        "JavaClassName": "FileHandler"
+    },
+    {
+        "JavaClassName": "Filter"
+    },
+    {
+        "JavaClassName": "Formatter"
+    },
+    {
+        "JavaClassName": "Handler"
+    },
+    {
+        "JavaClassName": "Level"
+    },
+    {
+        "JavaClassName": "LogManager"
+    },
+    {
+        "JavaClassName": "LogRecord"
+    },
+    {
+        "JavaClassName": "Logger"
+    },
+    {
+        "JavaClassName": "LoggingMXBean"
+    },
+    {
+        "JavaClassName": "LoggingPermission"
+    },
+    {
+        "JavaClassName": "MemoryHandler"
+    },
+    {
+        "JavaClassName": "SimpleFormatter"
+    },
+    {
+        "JavaClassName": "SocketHandler"
+    },
+    {
+        "JavaClassName": "StreamHandler"
+    },
+    {
+        "JavaClassName": "XMLFormatter"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "AbstractPreferences"
+    },
+    {
+        "JavaClassName": "BackingStoreException"
+    },
+    {
+        "JavaClassName": "InvalidPreferencesFormatException"
+    },
+    {
+        "JavaClassName": "NodeChangeEvent"
+    },
+    {
+        "JavaClassName": "NodeChangeListener"
+    },
+    {
+        "JavaClassName": "PreferenceChangeEvent"
+    },
+    {
+        "JavaClassName": "PreferenceChangeListener"
+    },
+    {
+        "JavaClassName": "Preferences"
+    },
+    {
+        "JavaClassName": "PreferencesFactory"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "RandomGenerator"
+    },
+    {
+        "JavaClassName": "RandomGeneratorFactory"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "MatchResult"
+    },
+    {
+        "JavaClassName": "Matcher"
+    },
+    {
+        "JavaClassName": "Pattern"
+    },
+    {
+        "JavaClassName": "PatternSyntaxException"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "BaseStream"
+    },
+    {
+        "JavaClassName": "Collector"
+    },
+    {
+        "JavaClassName": "Collectors"
+    },
+    {
+        "JavaClassName": "DoubleStream"
+    },
+    {
+        "JavaClassName": "IntStream"
+    },
+    {
+        "JavaClassName": "LongStream"
+    },
+    {
+        "JavaClassName": "Stream"
+    },
+    {
+        "JavaClassName": "StreamSupport"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "Adler32"
+    },
+    {
+        "JavaClassName": "CRC32"
+    },
+    {
+        "JavaClassName": "CRC32C"
+    },
+    {
+        "JavaClassName": "CheckedInputStream"
+    },
+    {
+        "JavaClassName": "CheckedOutputStream"
+    },
+    {
+        "JavaClassName": "Checksum"
+    },
+    {
+        "JavaClassName": "DataFormatException"
+    },
+    {
+        "JavaClassName": "Deflater"
+    },
+    {
+        "JavaClassName": "DeflaterInputStream"
+    },
+    {
+        "JavaClassName": "DeflaterOutputStream"
+    },
+    {
+        "JavaClassName": "GZIPInputStream"
+    },
+    {
+        "JavaClassName": "GZIPOutputStream"
+    },
+    {
+        "JavaClassName": "Inflater"
+    },
+    {
+        "JavaClassName": "InflaterInputStream"
+    },
+    {
+        "JavaClassName": "InflaterOutputStream"
+    },
+    {
+        "JavaClassName": "ZipEntry"
+    },
+    {
+        "JavaClassName": "ZipError"
+    },
+    {
+        "JavaClassName": "ZipException"
+    },
+    {
+        "JavaClassName": "ZipFile"
+    },
+    {
+        "JavaClassName": "ZipInputStream"
+    },
+    {
+        "JavaClassName": "ZipOutputStream"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "Generated"
+    },
+    {
+        "JavaClassName": "AEADBadTagException"
+    },
+    {
+        "JavaClassName": "BadPaddingException"
+    },
+    {
+        "JavaClassName": "Cipher"
+    },
+    {
+        "JavaClassName": "CipherInputStream"
+    },
+    {
+        "JavaClassName": "CipherOutputStream"
+    },
+    {
+        "JavaClassName": "CipherSpi"
+    },
+    {
+        "JavaClassName": "EncryptedPrivateKeyInfo"
+    },
+    {
+        "JavaClassName": "ExemptionMechanism"
+    },
+    {
+        "JavaClassName": "ExemptionMechanismException"
+    },
+    {
+        "JavaClassName": "ExemptionMechanismSpi"
+    },
+    {
+        "JavaClassName": "IllegalBlockSizeException"
+    },
+    {
+        "JavaClassName": "KeyAgreement"
+    },
+    {
+        "JavaClassName": "KeyAgreementSpi"
+    },
+    {
+        "JavaClassName": "KeyGenerator"
+    },
+    {
+        "JavaClassName": "KeyGeneratorSpi"
+    },
+    {
+        "JavaClassName": "Mac"
+    },
+    {
+        "JavaClassName": "MacSpi"
+    },
+    {
+        "JavaClassName": "NoSuchPaddingException"
+    },
+    {
+        "JavaClassName": "NullCipher"
+    },
+    {
+        "JavaClassName": "SealedObject"
+    },
+    {
+        "JavaClassName": "SecretKey"
+    },
+    {
+        "JavaClassName": "SecretKeyFactory"
+    },
+    {
+        "JavaClassName": "SecretKeyFactorySpi"
+    },
+    {
+        "JavaClassName": "ShortBufferException"
+    },
+    {
+        "JavaClassName": "DHKey"
+    },
+    {
+        "JavaClassName": "DHPrivateKey"
+    },
+    {
+        "JavaClassName": "DHPublicKey"
+    },
+    {
+        "JavaClassName": "PBEKey"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "ChaCha20ParameterSpec"
+    },
+    {
+        "JavaClassName": "DESKeySpec"
+    },
+    {
+        "JavaClassName": "DESedeKeySpec"
+    },
+    {
+        "JavaClassName": "DHGenParameterSpec"
+    },
+    {
+        "JavaClassName": "DHParameterSpec"
+    },
+    {
+        "JavaClassName": "DHPrivateKeySpec"
+    },
+    {
+        "JavaClassName": "DHPublicKeySpec"
+    },
+    {
+        "JavaClassName": "GCMParameterSpec"
+    },
+    {
+        "JavaClassName": "IvParameterSpec"
+    },
+    {
+        "JavaClassName": "OAEPParameterSpec"
+    },
+    {
+        "JavaClassName": "PBEKeySpec"
+    },
+    {
+        "JavaClassName": "PBEParameterSpec"
+    },
+    {
+        "JavaClassName": "PSource"
+    },
+    {
+        "JavaClassName": "RC2ParameterSpec"
+    },
+    {
+        "JavaClassName": "RC5ParameterSpec"
+    },
+    {
+        "JavaClassName": "SecretKeySpec"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "EGL"
+    },
+    {
+        "JavaClassName": "EGL10"
+    },
+    {
+        "JavaClassName": "EGL11"
+    },
+    {
+        "JavaClassName": "EGLConfig"
+    },
+    {
+        "JavaClassName": "EGLContext"
+    },
+    {
+        "JavaClassName": "EGLDisplay"
+    },
+    {
+        "JavaClassName": "EGLSurface"
+    },
+    {
+        "JavaClassName": "GL"
+    },
+    {
+        "JavaClassName": "GL10"
+    },
+    {
+        "JavaClassName": "GL10Ext"
+    },
+    {
+        "JavaClassName": "GL11"
+    },
+    {
+        "JavaClassName": "GL11Ext"
+    },
+    {
+        "JavaClassName": "GL11ExtensionPack"
+    },
+    {
+        "JavaClassName": "ServerSocketFactory"
+    },
+    {
+        "JavaClassName": "SocketFactory"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "CertPathTrustManagerParameters"
+    },
+    {
+        "JavaClassName": "ExtendedSSLSession"
+    },
+    {
+        "JavaClassName": "HandshakeCompletedEvent"
+    },
+    {
+        "JavaClassName": "HandshakeCompletedListener"
+    },
+    {
+        "JavaClassName": "HostnameVerifier"
+    },
+    {
+        "JavaClassName": "HttpsURLConnection"
+    },
+    {
+        "JavaClassName": "KeyManager"
+    },
+    {
+        "JavaClassName": "KeyManagerFactory"
+    },
+    {
+        "JavaClassName": "KeyManagerFactorySpi"
+    },
+    {
+        "JavaClassName": "KeyStoreBuilderParameters"
+    },
+    {
+        "JavaClassName": "ManagerFactoryParameters"
+    },
+    {
+        "JavaClassName": "SNIHostName"
+    },
+    {
+        "JavaClassName": "SNIMatcher"
+    },
+    {
+        "JavaClassName": "SNIServerName"
+    },
+    {
+        "JavaClassName": "SSLContext"
+    },
+    {
+        "JavaClassName": "SSLContextSpi"
+    },
+    {
+        "JavaClassName": "SSLEngine"
+    },
+    {
+        "JavaClassName": "SSLEngineResult"
+    },
+    {
+        "JavaClassName": "SSLException"
+    },
+    {
+        "JavaClassName": "SSLHandshakeException"
+    },
+    {
+        "JavaClassName": "SSLKeyException"
+    },
+    {
+        "JavaClassName": "SSLParameters"
+    },
+    {
+        "JavaClassName": "SSLPeerUnverifiedException"
+    },
+    {
+        "JavaClassName": "SSLPermission"
+    },
+    {
+        "JavaClassName": "SSLProtocolException"
+    },
+    {
+        "JavaClassName": "SSLServerSocket"
+    },
+    {
+        "JavaClassName": "SSLServerSocketFactory"
+    },
+    {
+        "JavaClassName": "SSLSession"
+    },
+    {
+        "JavaClassName": "SSLSessionBindingEvent"
+    },
+    {
+        "JavaClassName": "SSLSessionBindingListener"
+    },
+    {
+        "JavaClassName": "SSLSessionContext"
+    },
+    {
+        "JavaClassName": "SSLSocket"
+    },
+    {
+        "JavaClassName": "SSLSocketFactory"
+    },
+    {
+        "JavaClassName": "StandardConstants"
+    },
+    {
+        "JavaClassName": "TrustManager"
+    },
+    {
+        "JavaClassName": "TrustManagerFactory"
+    },
+    {
+        "JavaClassName": "TrustManagerFactorySpi"
+    },
+    {
+        "JavaClassName": "X509ExtendedKeyManager"
+    },
+    {
+        "JavaClassName": "X509ExtendedTrustManager"
+    },
+    {
+        "JavaClassName": "X509KeyManager"
+    },
+    {
+        "JavaClassName": "X509TrustManager"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "AuthPermission"
+    },
+    {
+        "JavaClassName": "DestroyFailedException"
+    },
+    {
+        "JavaClassName": "Destroyable"
+    },
+    {
+        "JavaClassName": "PrivateCredentialPermission"
+    },
+    {
+        "JavaClassName": "Subject"
+    },
+    {
+        "JavaClassName": "SubjectDomainCombiner"
+    },
+    {
+        "JavaClassName": "Callback"
+    },
+    {
+        "JavaClassName": "CallbackHandler"
+    },
+    {
+        "JavaClassName": "PasswordCallback"
+    },
+    {
+        "JavaClassName": "UnsupportedCallbackException"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "LoginException"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "X500Principal"
+    },
+    {
+        "JavaClassName": "X500PrivateCredential"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "Certificate"
+    },
+    {
+        "JavaClassName": "CertificateEncodingException"
+    },
+    {
+        "JavaClassName": "CertificateException"
+    },
+    {
+        "JavaClassName": "CertificateExpiredException"
+    },
+    {
+        "JavaClassName": "CertificateNotYetValidException"
+    },
+    {
+        "JavaClassName": "CertificateParsingException"
+    },
+    {
+        "JavaClassName": "X509Certificate"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "CommonDataSource"
+    },
+    {
+        "JavaClassName": "ConnectionEvent"
+    },
+    {
+        "JavaClassName": "ConnectionEventListener"
+    },
+    {
+        "JavaClassName": "ConnectionPoolDataSource"
+    },
+    {
+        "JavaClassName": "DataSource"
+    },
+    {
+        "JavaClassName": "PooledConnection"
+    },
+    {
+        "JavaClassName": "RowSet"
+    },
+    {
+        "JavaClassName": "RowSetEvent"
+    },
+    {
+        "JavaClassName": "RowSetInternal"
+    },
+    {
+        "JavaClassName": "RowSetListener"
+    },
+    {
+        "JavaClassName": "RowSetMetaData"
+    },
+    {
+        "JavaClassName": "RowSetReader"
+    },
+    {
+        "JavaClassName": "RowSetWriter"
+    },
+    {
+        "JavaClassName": "StatementEvent"
+    },
+    {
+        "JavaClassName": "StatementEventListener"
+    },
+    {
+        "JavaClassName": "package-info"
+    },
+    {
+        "JavaClassName": "XMLConstants"
+    },
+    {
+        "JavaClassName": "DatatypeConfigurationException"
+    },
+    {
+        "JavaClassName": "DatatypeConstants"
+    },
+    {
+        "JavaClassName": "DatatypeFactory"
+    },
+    {
+        "JavaClassName": "Duration"
+    },
+    {
+        "JavaClassName": "XMLGregorianCalendar"
+    },
+    {
+        "JavaClassName": "NamespaceContext"
+    },
+    {
+        "JavaClassName": "QName"
+    },
+    {
+        "JavaClassName": "DocumentBuilder"
+    },
+    {
+        "JavaClassName": "DocumentBuilderFactory"
+    },
+    {
+        "JavaClassName": "FactoryConfigurationError"
+    },
+    {
+        "JavaClassName": "ParserConfigurationException"
+    },
+    {
+        "JavaClassName": "SAXParser"
+    },
+    {
+        "JavaClassName": "SAXParserFactory"
+    },
+    {
+        "JavaClassName": "ErrorListener"
+    },
+    {
+        "JavaClassName": "OutputKeys"
+    },
+    {
+        "JavaClassName": "Result"
+    },
+    {
+        "JavaClassName": "Source"
+    },
+    {
+        "JavaClassName": "SourceLocator"
+    },
+    {
+        "JavaClassName": "Templates"
+    },
+    {
+        "JavaClassName": "Transformer"
+    },
+    {
+        "JavaClassName": "TransformerConfigurationException"
+    },
+    {
+        "JavaClassName": "TransformerException"
+    },
+    {
+        "JavaClassName": "TransformerFactory"
+    },
+    {
+        "JavaClassName": "TransformerFactoryConfigurationError"
+    },
+    {
+        "JavaClassName": "URIResolver"
+    },
+    {
+        "JavaClassName": "DOMLocator"
+    },
+    {
+        "JavaClassName": "DOMResult"
+    },
+    {
+        "JavaClassName": "DOMSource"
+    },
+    {
+        "JavaClassName": "SAXResult"
+    },
+    {
+        "JavaClassName": "SAXSource"
+    },
+    {
+        "JavaClassName": "SAXTransformerFactory"
+    },
+    {
+        "JavaClassName": "TemplatesHandler"
+    },
+    {
+        "JavaClassName": "TransformerHandler"
+    },
+    {
+        "JavaClassName": "StreamResult"
+    },
+    {
+        "JavaClassName": "StreamSource"
+    },
+    {
+        "JavaClassName": "Schema"
+    },
+    {
+        "JavaClassName": "SchemaFactory"
+    },
+    {
+        "JavaClassName": "SchemaFactoryLoader"
+    },
+    {
+        "JavaClassName": "TypeInfoProvider"
+    },
+    {
+        "JavaClassName": "Validator"
+    },
+    {
+        "JavaClassName": "ValidatorHandler"
+    },
+    {
+        "JavaClassName": "XPath"
+    },
+    {
+        "JavaClassName": "XPathConstants"
+    },
+    {
+        "JavaClassName": "XPathException"
+    },
+    {
+        "JavaClassName": "XPathExpression"
+    },
+    {
+        "JavaClassName": "XPathExpressionException"
+    },
+    {
+        "JavaClassName": "XPathFactory"
+    },
+    {
+        "JavaClassName": "XPathFactoryConfigurationException"
+    },
+    {
+        "JavaClassName": "XPathFunction"
+    },
+    {
+        "JavaClassName": "XPathFunctionException"
+    },
+    {
+        "JavaClassName": "XPathFunctionResolver"
+    },
+    {
+        "JavaClassName": "XPathVariableResolver"
+    }
+]

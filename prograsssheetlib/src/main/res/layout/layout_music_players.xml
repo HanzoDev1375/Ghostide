@@ -73,15 +73,10 @@
                  android:text="100"
                  android:id="@+id/tvtr" />
 
-            <com.google.android.material.slider.Slider
-                 android:layout_height="wrap_content"
+            <SeekBar
+                 android:layout_height="48dp"
                  android:layout_width="wrap_content"
-                 app:thumbWidth="20dp"
-                 app:thumbHeight="20dp"
-                 android:value="0.0"
-                 style="@style/Widget.Material3.Slider.Legacy"
-                 app:trackHeight="5dp"
-                 app:labelBehavior="gone"
+                 style="@style/MediaPlayer.ProgressBar"
                  android:layout_weight="1.0"
                  android:id="@+id/musicseekbar" />
 

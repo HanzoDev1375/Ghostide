@@ -83,26 +83,18 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
       Collections.sort(words, CompletionItem.COMPARATOR_BY_NAME);
       items.addAll(words);
     }
-    var doc = Jsoup.parse(editor.getText().toString());
+    var doc = Jsoup.parse(editor.getTextAsString());
     var allElements = doc.select("*");
     for (var it : allElements) {
       var className = it.attr("class");
       var idName = it.attr("id");
-      if (prfex.startsWith(className)) {
+      if (className.startsWith(prefix)) {
         items.add(new CompletionItem(className, "CssClass"));
       }
-      if (prfex.startsWith(idName)) {
+      if (idName.startsWith(prefix)) {
         items.add(new CompletionItem(idName, "CssId"));
       }
     }
-    var scriptan =
-        new ScriptAnalyzer(editor.getContext(), prfex, new File(save_path.getString("path", "")));
-    scriptan.setListener(
-        (m, v) -> {
-          items.addAll(m);
-          items.addAll(v);
-        });
-    scriptan.analyzeHtml(editor.getText().toString());
 
     var css2 =
         new CssAnalyzer(editor.getContext(), prfex, new File(save_path.getString("path", "")));

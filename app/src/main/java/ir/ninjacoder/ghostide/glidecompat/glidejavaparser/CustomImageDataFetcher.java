@@ -32,7 +32,11 @@ public class CustomImageDataFetcher implements DataFetcher<Drawable> {
 
   private Drawable resolveImage(JavaAnalysisResult result) {
     Drawable drawable;
-    if (result.isJavaClass()) {
+    if (result.isAndroidViews()) {
+      drawable = ContextCompat.getDrawable(context, R.drawable.androidviewclass);
+    } else if (result.isJavaStandardClass()) {
+      drawable = ContextCompat.getDrawable(context, R.drawable.javaclass);
+    } else if (result.isJavaClass()) {
       drawable = ContextCompat.getDrawable(context, R.drawable.class_java);
     } else if (result.isAndroidClass()) {
       drawable = ContextCompat.getDrawable(context, R.drawable.class_android);

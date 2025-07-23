@@ -3,20 +3,35 @@
     <!-- res/values/attrs.xml -->
     <declare-styleable name="PreferenceSwitchGroup">
         <attr
-                name="modBackground"
-                format="enum">
+            name="modBackground"
+            format="enum">
             <enum
-                    name="none"
-                    value="0" />
+                name="none"
+                value="0" />
             <enum
-                    name="top" 
-                    value="1" />
+                name="top"
+                value="1" />
             <enum
-                    name="middle"
-                    value="2" />
+                name="middle"
+                value="2" />
             <enum
-                    name="bottom"
-                    value="3" />
+                name="bottom"
+                value="3" />
         </attr>
-    </declare-styleable>
+    </declare-styleable> 
+    <dimen name="media_seekbar_progress_wavelength">27dp</dimen>
+    <dimen name="media_seekbar_progress_amplitude">2.7dp</dimen>
+    <dimen name="media_seekbar_progress_phase">8dp</dimen>
+    <dimen name="media_seekbar_progress_stroke_width">3.4dp</dimen>
+    <style
+        name="MediaPlayer.ProgressBar"
+        parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:thumb">@drawable/media_seekbar_thumb</item>
+        <item name="android:thumbTint">?android:attr/textColorPrimary</item>
+        <item name="android:progressTint">?android:attr/textColorPrimary</item>
+        <item name="android:progressBackgroundTint">?android:attr/textColorTertiary</item>
+        <item name="android:clickable">true</item>
+        <item name="android:splitTrack">false</item>
+    </style>
+
 </resources>

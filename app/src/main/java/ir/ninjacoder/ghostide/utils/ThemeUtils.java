@@ -371,7 +371,7 @@ public class ThemeUtils {
     map.put("block_line", "#81D4FA");
     map.put("menubackground", "#1E1E1E");
     map.put("literal", "#64B5F6");
-    map.put("fabbackgroundcolorcolor", "#1E1E1E");
+    map.put("fabbackgroundcolorcolor", "#303030");
     map.put("attribute_value", "#80DEEA");
     map.put("tabback", "#515151");
     map.put("textcolorforgrand", "#B0BEC5");
@@ -526,7 +526,7 @@ public class ThemeUtils {
     "javastring": "#89BA62",
     "javafield": "#DF6C75",
     "tabimagecolorfilter": "#B0BEC5",
-    "fabbackgroundcolorcolor": "#1A1B20",
+    "fabbackgroundcolorcolor": "#FF1A2144",
     "backgroundcolorlinear": "#1A1B20",
     "htmlstr": "#FFCC80",
     "operator": "#FFB74D",

@@ -13,6 +13,7 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.content.res.AppCompatResources;
@@ -22,13 +23,13 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.slider.Slider;
 import ir.ninjacoder.prograsssheet.databinding.LayoutMusicPlayersBinding;
 import ir.ninjacoder.prograsssheet.interfaces.MediaPlayerListener;
+import ir.ninjacoder.prograsssheet.util.SquigglyProgress;
 import java.io.File;
 import java.util.Random;
 
-public class MusicSheet implements Slider.OnChangeListener {
+public class MusicSheet implements SeekBar.OnSeekBarChangeListener {
 
   private Context context;
   private String musicpatch;
@@ -36,9 +37,9 @@ public class MusicSheet implements Slider.OnChangeListener {
   private double forwardTime = 0;
   private double backwardTime = 0;
   private Sheet dialog;
+  protected SquigglyProgress bars;
   private LayoutMusicPlayersBinding bind;
-
-  // در constructor بعد از مقداردهی اولیه:
+  private boolean isSeekBarTracking = false;
 
   public MusicSheet(Context context, String musicpatch) {
     this.context = context;
@@ -49,8 +50,12 @@ public class MusicSheet implements Slider.OnChangeListener {
     dialog = new Sheet(context);
     bind.titlemusic.setText(md.getNameArtist());
     bind.submusic.setText(md.getNameAlbom());
+	bars = new SquigglyProgress();
+	bars.setdefaultSettring();
     setMatchParentDialog(true);
     showandP(true);
+    bind.musicseekbar.setProgressDrawable(bars);
+    
     dialog
         .getBehavior()
         .addBottomSheetCallback(
@@ -67,7 +72,7 @@ public class MusicSheet implements Slider.OnChangeListener {
               public void onSlide(View arg0, float arg1) {}
             });
     setAsPaletteBackground(true);
-    bind.musicseekbar.addOnChangeListener(this);
+    bind.musicseekbar.setOnSeekBarChangeListener(this);
     Handler mHandler = new Handler(Looper.getMainLooper());
     ((Activity) context)
         .runOnUiThread(
@@ -75,10 +80,9 @@ public class MusicSheet implements Slider.OnChangeListener {
 
               @Override
               public void run() {
-                if (md != null) {
-                  int mCurrentPosition = 0;
-                  bind.musicseekbar.setValue(md.getCurrentDuration() / 90);
+                if (md != null && !isSeekBarTracking) {
                   int currentPositionInMillis = md.getCurrentDuration();
+                  bind.musicseekbar.setProgress(currentPositionInMillis);
                   int currentPositionInSeconds = currentPositionInMillis / 1000;
                   int minutes = currentPositionInSeconds / 60;
                   int seconds = currentPositionInSeconds % 60;
@@ -91,6 +95,7 @@ public class MusicSheet implements Slider.OnChangeListener {
     forwardTime = 5000;
     backwardTime = 5000;
     int durationInMillis = md.getDuration();
+    bind.musicseekbar.setMax(durationInMillis);
     int durationInSeconds = durationInMillis / 1000;
     int minutes = durationInSeconds / 60;
     int seconds = durationInSeconds % 60;
@@ -114,15 +119,39 @@ public class MusicSheet implements Slider.OnChangeListener {
         i -> {
           if (md.isPlaying()) {
             md.pause();
-
+            bars.setAnimate(false);
           } else {
             md.start();
+            bars.setAnimate(true);
           }
         });
-    bind.musicseekbar.setValueTo(md.getDuration() / 90);
     start();
   }
 
+  @Override
+  public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+    if (fromUser && md != null) {
+      int currentPositionInSeconds = progress / 1000;
+      int minutes = currentPositionInSeconds / 60;
+      int seconds = currentPositionInSeconds % 60;
+      bind.tvtr.setText(String.format("%d:%02d", minutes, seconds));
+    }
+  }
+
+  @Override
+  public void onStartTrackingTouch(SeekBar seekBar) {
+    isSeekBarTracking = true;
+  }
+
+  @Override
+  public void onStopTrackingTouch(SeekBar seekBar) {
+    if (md != null) {
+      md.seekTo(seekBar.getProgress());
+    }
+    isSeekBarTracking = false;
+  }
+
+  // Rest of your methods remain the same...
   void showandP(boolean isPlaying) {
     bind.play.setBackground(
         AppCompatResources.getDrawable(
@@ -169,6 +198,7 @@ public class MusicSheet implements Slider.OnChangeListener {
   public void playMusic() {
     if (dialog.isShowing()) {
       md.start();
+	  bars.setAnimate(true);
     }
   }
 
@@ -181,13 +211,6 @@ public class MusicSheet implements Slider.OnChangeListener {
     @Override
     public View getView() {
       return bind.getRoot();
-    }
-  }
-
-  @Override
-  public void onValueChange(Slider arg0, float progressValue, boolean arg2) {
-    if (md != null && arg2) {
-      md.seekTo((int) progressValue * 90);
     }
   }
 
@@ -245,16 +268,18 @@ public class MusicSheet implements Slider.OnChangeListener {
               // SeekBar customization
               ColorStateList thumbColor = ColorStateList.valueOf(darkenedMutedColor);
               bind.musicseekbar.setThumbTintList(thumbColor);
-              bind.musicseekbar.setTrackActiveTintList(thumbColor);
+              bind.musicseekbar.setProgressTintList(thumbColor);
 
               // متن‌ها
               bind.submusic.setTextColor(darkenedMutedColor);
               bind.tvname.setTextColor(darkenedMutedColor);
               bind.tvtr.setTextColor(darkenedMutedColor);
               bind.titlemusic.setTextColor(darkenedMutedColor);
+              bars.setTintList(ColorStateList.valueOf(darkenedMutedColor));
 
               // نوار نویگیشن دیالوگ
               if (dialog != null && dialog.getWindow() != null) {
+                dialog.getWindow().setStatusBarColor(darkenedDominantColor);
                 dialog.getWindow().setNavigationBarColor(darkenedDominantColor);
                 dialog.setTitle("Hello");
               }
@@ -262,7 +287,6 @@ public class MusicSheet implements Slider.OnChangeListener {
   }
 
   private int darkenColor(int color, float factor) {
-
     int a = Color.alpha(color);
     int r = (int) (Color.red(color) * factor);
     int g = (int) (Color.green(color) * factor);

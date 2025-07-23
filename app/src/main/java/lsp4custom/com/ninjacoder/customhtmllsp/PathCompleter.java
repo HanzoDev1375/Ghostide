@@ -55,7 +55,7 @@ class PathCompleter {
       if (finalPrefix != null && !finalPrefix.isEmpty()) {
         completions =
             completions.stream()
-                .filter(it -> it.label.toLowerCase().startsWith(finalPrefix.toLowerCase()))
+                .filter(it -> it.label.startsWith(finalPrefix))
                 .collect(Collectors.toList());
       }
     } catch (Exception e) {
