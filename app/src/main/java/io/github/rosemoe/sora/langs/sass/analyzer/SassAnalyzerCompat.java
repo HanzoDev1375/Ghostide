@@ -112,7 +112,7 @@ public class SassAnalyzerCompat implements CodeAnalyzer {
             result.addIfNeeded(
                 line,
                 column,
-                TextStyle.makeStyle(EditorColorScheme.ATTRIBUTE_VALUE, 0, true, false, false));
+                TextStyle.makeStyle(EditorColorScheme.javaparament, 0, true, false, false));
             break;
 
             // from px dp ....
@@ -124,7 +124,7 @@ public class SassAnalyzerCompat implements CodeAnalyzer {
           case ScssLexer.Freq:
           case ScssLexer.Time:
           case ScssLexer.Percentage:
-            result.addIfNeeded(line, column, EditorColorScheme.BLOCK_LINE);
+            result.addIfNeeded(line, column, EditorColorScheme.jsoprator);
             break;
           case ScssLexer.Uri:
           case ScssLexer.Format:
@@ -143,7 +143,7 @@ public class SassAnalyzerCompat implements CodeAnalyzer {
           case ScssLexer.In:
           case ScssLexer.Default:
           case ScssLexer.Important:
-            result.addIfNeeded(line, column, EditorColorScheme.AUTO_COMP_PANEL_CORNER);
+            result.addIfNeeded(line, column, EditorColorScheme.jsattr);
             break;
             /// Syombl
           case ScssLexer.Lparen:
@@ -184,15 +184,15 @@ public class SassAnalyzerCompat implements CodeAnalyzer {
           case ScssLexer.PrefixMatch:
           case ScssLexer.SuffixMatch:
           case ScssLexer.SubstringMatch:
-            result.addIfNeeded(line, column, EditorColorScheme.BLOCK_LINE_CURRENT);
+            result.addIfNeeded(line, column, EditorColorScheme.javakeyword);
             break;
           case ScssLexer.Number:
-            result.addIfNeeded(line, column, EditorColorScheme.red);
+            result.addIfNeeded(line, column, EditorColorScheme.javanumber);
             break;
           case ScssLexer.String_:
           case ScssLexer.Variable:
           case ScssLexer.VendorPrefix:
-            result.addIfNeeded(line, column, EditorColorScheme.COLOR_WARNING);
+            result.addIfNeeded(line, column, EditorColorScheme.javakeywordoprator);
             break;
             // Comment
           case ScssLexer.Comment:
@@ -203,7 +203,7 @@ public class SassAnalyzerCompat implements CodeAnalyzer {
 
           case ScssLexer.HtmlTags:
             {
-              result.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
+              result.addIfNeeded(line, column, EditorColorScheme.htmltag);
               break;
             }
           case ScssLexer.Ident:
@@ -215,6 +215,9 @@ public class SassAnalyzerCompat implements CodeAnalyzer {
               }
               if (pre == ScssLexer.Dollar) {
                 color = EditorColorScheme.javafun;
+              }
+              if (pre == ScssLexer.VendorPrefix && pre == ScssLexer.Variable) {
+                color = EditorColorScheme.jsfun;
               }
               if (token.getText().equals("red")) color = EditorColorScheme.red;
 

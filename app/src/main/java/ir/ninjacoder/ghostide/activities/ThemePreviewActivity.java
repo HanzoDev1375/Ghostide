@@ -229,7 +229,7 @@ public class ThemePreviewActivity extends BaseCompat {
                 echo 'Hello, Ghosy ide!'
                 """;
       case "build.json":
-        bind.editor.setEditorLanguage(new JsonLanguage());
+        bind.editor.setEditorLanguage(new JsonLanguage((CodeEditor) bind.editor));
         return """
                 {
                     "build": {

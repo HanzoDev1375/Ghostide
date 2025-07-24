@@ -1,6 +1,7 @@
 package ir.ninjacoder.ghostide.tasks.app;
 
 import android.widget.Toast;
+import com.inet.lib.less.Less;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.enums.CompilerModel;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
@@ -117,6 +118,8 @@ public class SassForAndroid {
         // Print the transpiled code.
 
         FileUtil.writeFile(output.replace(".js", ".nodecompile.js"), outputs.getCode());
+      } else if (model == CompilerModel.LESS) {
+        FileUtil.writeFile(output.replace(".less", ".css"), getLessCode(input.getTextAsString()));
       }
     } catch (Exception err) {
 
@@ -189,5 +192,9 @@ public class SassForAndroid {
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  private static String getLessCode(String code) {
+    return Less.compile(null, code, true);
   }
 }

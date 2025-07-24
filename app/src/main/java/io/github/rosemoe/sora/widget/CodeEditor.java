@@ -5906,7 +5906,8 @@ public class CodeEditor extends View
       case KeyEvent.KEYCODE_SPACE:
         if (isEditable()) {
           getCursor().onCommitText(" ");
-          notifyExternalCursorChange();
+         // notifyExternalCursorChange();
+         notifyIMEExternalCursorChange(); 
         }
 
         return true;

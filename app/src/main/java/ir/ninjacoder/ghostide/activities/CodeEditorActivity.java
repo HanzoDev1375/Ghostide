@@ -1244,6 +1244,8 @@ public class CodeEditorActivity extends BaseCompat {
           new KotlinCompilerImpl(CodeEditorActivity.this, selectedFilePath, editor);
         } else if (selectedFilePath.contains(".ts")) {
           SassForAndroid.runObjectWeb(editor, selectedFilePath, CompilerModel.TYPESRCIPT);
+        } else if (selectedFilePath.contains(".less")) {
+          SassForAndroid.runObjectWeb(editor, selectedFilePath, CompilerModel.LESS);
         }
       } else {
 

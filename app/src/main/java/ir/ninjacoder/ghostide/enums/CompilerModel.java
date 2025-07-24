@@ -4,5 +4,6 @@ public enum CompilerModel {
   JSX,
   TSX,
   TYPESRCIPT,
-  NODEJS
+  NODEJS,
+  LESS
 }

@@ -3,6 +3,7 @@ package ir.ninjacoder.ghostide.navigator;
 import com.blankj.utilcode.util.ThreadUtils;
 import io.github.rosemoe.sora.langs.glsllang.GLSLLang;
 import io.github.rosemoe.sora.langs.jsx.JavaScriptJsxLanguage;
+import io.github.rosemoe.sora.langs.less.LessLang;
 import io.github.rosemoe.sora.langs.yml.YmlLang;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.utils.FileCompatApi28;
@@ -91,7 +92,7 @@ public class EditorRoaderFile {
       editor.setEditorLanguage(new UniversalLanguage(new CDescription()));
     } else if (path.endsWith(".json")) {
       ReadFileCompat(editor, path, bar);
-      editor.setEditorLanguage(new JsonLanguage());
+      editor.setEditorLanguage(new JsonLanguage((CodeEditor) editor));
       fab.postDelayed(fab::show, 400);
     } else if (path.endsWith(".java")) {
       ReadFileCompat(editor, path, bar);
@@ -163,7 +164,7 @@ public class EditorRoaderFile {
       ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new ANTLRV4Lang());
       fab.postDelayed(fab::show, 400);
-    } else if (path.endsWith(".ts")|| path.endsWith(".tsx")) {
+    } else if (path.endsWith(".ts") || path.endsWith(".tsx")) {
       ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new TsLang(editor));
     } else if (path.endsWith(".properties")) {
@@ -220,9 +221,12 @@ public class EditorRoaderFile {
       ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new YmlLang());
       fab.postDelayed(fab::hide, 400);
-    } else if (path.endsWith(".jsx")) {
+    } else if (path.endsWith(".jsx") || path.endsWith(".tsx")) {
       ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new JavaScriptJsxLanguage());
+      fab.postDelayed(fab::show, 400);
+    } else if (path.endsWith(".less")) {
+      editor.setEditorLanguage(new LessLang((CodeEditor) editor));
       fab.postDelayed(fab::show, 400);
     } else {
       ReadFileCompat(editor, path, bar);

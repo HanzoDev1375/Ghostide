@@ -60,7 +60,7 @@
 - [x] Java Helper (99%) (Create constructor,Getter and setter and..)
 - [x] Html lsp(custom mod 50%)
 - [x] Fast type
-- [ ] Less Compiler
+- [x] Less Compiler
 - [x] JavaCc Compiler
 - [x] Git manager (30%) (Need help)
 - [x] CodeFormatter (60%)

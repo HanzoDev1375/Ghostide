@@ -1,33 +1,35 @@
-lexer grammar JSON;
+/** Taken from "The Definitive ANTLR 4 Reference" by Terence Parr */
 
-LBRACE
-   : '{'
-   | '['
+// Derived from http://json.org
+
+grammar JSON;
+
+json
+   : value
    ;
 
-RBRACE
-   : '}'
-   | ']'
+obj
+   : LBRACE pair (',' pair)* RBRACE
+   | LBRACE RBRACE
    ;
 
-COLON
-   : ':'
+pair
+   : STRING COLON value
    ;
 
-OPEN_QUOTE
-   : '"'
+arr
+   : LBRACKET value (COMMA value)* RBRACKET
+   | LBRACKET RBRACKET
    ;
 
-TEXT
-   : [a-zA-Z0-9]+
-   ;
-
-WS
-   : [\t\r\n]+ -> skip
-   ;
-
-HEXCOLOR
-   : [a-fA-F-0-9]+
+value
+   : STRING
+   | NUMBER
+   | obj
+   | arr
+   | TRUE
+   | FALSE
+   | NULL
    ;
 
 TRUE
@@ -40,5 +42,68 @@ FALSE
 
 NULL
    : 'null'
+   ;
+
+COLON
+   : ':'
+   ;
+
+STRING
+   : '"' (ESC | SAFECODEPOINT)* '"'
+   ;
+
+LBRACE
+   : '{'
+   ;
+
+RBRACE
+   : '}'
+   ;
+
+LBRACKET
+   : '['
+   ;
+
+RBRACKET
+   : ']'
+   ;
+
+COMMA
+   : ','
+   ;
+
+fragment ESC
+   : '\\' (["\\/bfnrt] | UNICODE)
+   ;
+
+fragment UNICODE
+   : 'u' HEX HEX HEX HEX
+   ;
+
+fragment HEX
+   : [0-9a-fA-F]
+   ;
+
+fragment SAFECODEPOINT
+   : ~ ["\\\u0000-\u001F]
+   ;
+
+NUMBER
+   : '-'? INT ('.' [0-9]+)? EXP?
+   ;
+
+fragment INT
+   : '0'
+   | [1-9] [0-9]*
+   ;
+   // no leading zeros
+   
+fragment EXP
+   : [Ee] [+\-]? INT
+   ;
+   // \- since - means "range" inside [...]
+   
+WS
+   : [ \t\n\r]+ -> skip
    ;
 

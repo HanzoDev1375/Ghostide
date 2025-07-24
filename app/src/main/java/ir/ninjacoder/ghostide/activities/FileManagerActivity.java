@@ -253,8 +253,7 @@ public class FileManagerActivity extends BaseCompat
                 removedFiles(pos);
               }
             });
-			
-			
+
     UpdateCheck =
         new RequestNetwork.RequestListener() {
 
@@ -463,7 +462,7 @@ public class FileManagerActivity extends BaseCompat
     bind.navs.getMenu().add(0, 12, 0, "About").setIcon(R.drawable.drawer_item11);
     bind.navs.getMenu().add(0, 14, 0, "Store").setIcon(R.drawable.shop_24);
     bind.navs.getMenu().add(0, 13, 0, "exit").setIcon(R.drawable.drawer_item1);
-    
+
     DrowerHandler();
   }
 
@@ -1107,7 +1106,10 @@ public class FileManagerActivity extends BaseCompat
     if (staticstring.endsWith(".js")) {
       SendDataFromCodeEditor(newpos, "path", files, newlistmap);
     }
-    if (staticstring.endsWith(".jsx")) {
+    if (staticstring.endsWith(".less")) {
+      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+    }
+    if (staticstring.endsWith(".jsx")|| staticstring.endsWith(".tsx")) {
       SendDataFromCodeEditor(newpos, "path", files, newlistmap);
     }
     if (staticstring.endsWith(".html")) {

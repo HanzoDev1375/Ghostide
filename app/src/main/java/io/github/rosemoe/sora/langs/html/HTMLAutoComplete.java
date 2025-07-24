@@ -12,7 +12,6 @@ import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 import io.github.rosemoe.sora.widget.commentRule.AppConfig;
 import ir.ninjacoder.ghostide.IdeEditor;
-import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import java.io.File;
 import java.util.HashMap;
 import java.util.regex.Matcher;
@@ -67,35 +66,34 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
     validTag();
     // classTag(prefix);
     // idTags(prefix);
-
-    Collections.sort(items, CompletionItem.COMPARATOR_BY_NAME);
-
+    String match = prefix;
     Collections.sort(items, CompletionItem.COMPARATOR_BY_NAME);
     Object extra = analyzeResult.getExtra();
     Identifiers userIdentifiers = (extra instanceof Identifiers) ? (Identifiers) extra : null;
     if (userIdentifiers != null) {
       List<CompletionItem> words = new ArrayList<>();
       for (String word : userIdentifiers.getIdentifiers()) {
-        if (prfex.startsWith(word)) {
-          words.add(new CompletionItem(word, "ABC"));
+        if (word.startsWith(match)) {
+          words.add(new CompletionItem(word, "Identifier"));
         }
       }
       Collections.sort(words, CompletionItem.COMPARATOR_BY_NAME);
       items.addAll(words);
     }
+
     var doc = Jsoup.parse(editor.getTextAsString());
     var allElements = doc.select("*");
     for (var it : allElements) {
       var className = it.attr("class");
       var idName = it.attr("id");
+
       if (className.startsWith(prefix)) {
-        items.add(new CompletionItem(className, "CssClass"));
+        items.add(new CompletionItem("." + className, "CssClass"));
       }
       if (idName.startsWith(prefix)) {
-        items.add(new CompletionItem(idName, "CssId"));
+        items.add(new CompletionItem("#" + idName, "CssId"));
       }
     }
-
     var css2 =
         new CssAnalyzer(editor.getContext(), prfex, new File(save_path.getString("path", "")));
     css2.setListener(

@@ -514,6 +514,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
         first = false;
       }
       result.determine(lastLine);
+      info.finish();
       result.setExtra(info);
     } catch (IOException e) {
       e.printStackTrace();
