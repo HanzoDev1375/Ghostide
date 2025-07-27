@@ -16,16 +16,19 @@ public class TerminalActivity extends BaseCompat {
     bin = TerminalactivityBinding.inflate(getLayoutInflater());
     setContentView(bin.getRoot());
     String path = getIntent().getStringExtra("path");
+    String rbcode = getIntent().getStringExtra("rb");
     String phpCode = getIntent().getStringExtra("phpcode");
     TerminalTabSeasonImpl tabSystem =
         new TerminalTabSeasonImpl(
             bin.tabLayout, getSupportFragmentManager(), R.id.terminal_container);
-    if (path != null || phpCode != null) {
+    if (path != null || phpCode != null || rbcode != null) {
       Bundle args = new Bundle();
       if (path != null) {
         args.putString("path", path);
       } else if (phpCode != null) {
         args.putString("phpcode", phpCode);
+      } else if (rbcode != null) {
+        args.putString("rb", rbcode);
       }
       if (!tabSystem.fragments.isEmpty()) {
         tabSystem.fragments.get(0).setArguments(args);

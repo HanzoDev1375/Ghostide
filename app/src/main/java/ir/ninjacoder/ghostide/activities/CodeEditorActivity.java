@@ -1246,6 +1246,10 @@ public class CodeEditorActivity extends BaseCompat {
           SassForAndroid.runObjectWeb(editor, selectedFilePath, CompilerModel.TYPESRCIPT);
         } else if (selectedFilePath.contains(".less")) {
           SassForAndroid.runObjectWeb(editor, selectedFilePath, CompilerModel.LESS);
+        } else if (selectedFilePath.contains(".rb")) {
+          res.setClass(getApplicationContext(), TerminalActivity.class);
+          res.putExtra("rb", selectedFilePath);
+          loadAnim(res);
         }
       } else {
 

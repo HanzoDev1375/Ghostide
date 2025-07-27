@@ -1,25 +1,20 @@
-program class model{
+import {File,HOME}
 
-  @jvmLoaderMobile(
-  
-  pub run(){
-    VERSION=MOBILE.2001
-  }
-  
- )
-  pub main(){
-  
-  }
-  @get&&set
-  pub auto model{}
-  pub auto item{}
-  pub auto rename{}
-  
-  @EXSPORT 'C'
-  void jnicall{ //also
-    aslo.loaderPostInitAsJvm{
-      val file=get()
-      file.isFile="$HOME"+file.sepretor+root
-    }
-  }
+const let HOME = HOME
+class model{
+	
+	pub main(){
+		printor("Hello to ghost ide")
+		let file = File
+		file.run {
+			if(it.hasFileOrFile()){
+				HOME.ghostfile=it
+				HOME.pythonPath=it
+				HOME.jar=it
+				HOME.sass =it
+				HOME.less =it
+			}
+		}
+		
+	}
 }

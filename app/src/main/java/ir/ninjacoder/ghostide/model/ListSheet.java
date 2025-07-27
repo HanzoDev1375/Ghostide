@@ -42,8 +42,7 @@ public class ListSheet {
 
   public void setSheetDialog(Context context) {
     binding = LayoutListsheetBinding.inflate(LayoutInflater.from(context));
-    
-    
+
     binding.list.setAdapter(new SheetAd(item));
     binding.list.setDividerHeight(0);
     dialog = new BottomSheetDialog(context);
@@ -124,6 +123,12 @@ public class ListSheet {
       tv.setTextColor(MaterialColors.getColor(tv, ObjectUtils.colorOnSurface, 0));
 
       return view;
+    }
+  }
+
+  public void dissmiss() {
+    if (dialog != null) {
+      dialog.dismiss();
     }
   }
 

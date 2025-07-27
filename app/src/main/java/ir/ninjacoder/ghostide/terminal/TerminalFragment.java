@@ -28,6 +28,7 @@ import com.termux.terminal.TerminalSessionClient;
 import com.termux.view.TerminalView;
 import com.termux.view.TerminalViewClient;
 
+import ir.ninjacoder.ghostide.config.RubyCommandCompat;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.HashMap;
@@ -142,7 +143,7 @@ public class TerminalFragment extends Fragment implements TerminalViewClient {
               public void onSessionFinished(TerminalSession terminalSession) {
                 if (!terminalSession.isRunning()) {
                   terminalSession.finishIfRunning();
-                  //finish();
+                  // finish();
                 }
               }
 
@@ -193,7 +194,6 @@ public class TerminalFragment extends Fragment implements TerminalViewClient {
               public void onCopyTextToClipboard(TerminalSession session, String text) {
                 ClipboardUtils.copyText(text);
               }
-			  
             });
 
     if (terminalSession != null) {
@@ -218,6 +218,11 @@ public class TerminalFragment extends Fragment implements TerminalViewClient {
                     requireContext(), new File(getArguments().getString("phpcode")));
             terminals.mTermSession.write(php + '\r');
             Log.d("run php from : ", php);
+          } else if (getArguments() != null && getArguments().containsKey("rb")) {
+            String rbcode =
+                RubyCommandCompat.getInterpreterCommand(
+                    requireContext(), getArguments().getString("rb"));
+            terminals.mTermSession.write(rbcode + '\r');
           } else {
             if (getvb.contains("Script")) {
               var code =

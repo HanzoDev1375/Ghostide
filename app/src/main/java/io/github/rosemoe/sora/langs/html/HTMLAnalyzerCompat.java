@@ -1,6 +1,10 @@
 package io.github.rosemoe.sora.langs.html;
 
 import io.github.rosemoe.sora.data.RainbowBracketHelper;
+import io.github.rosemoe.sora.langs.less.LessLexer;
+import io.github.rosemoe.sora.langs.less.LessParser;
+import io.github.rosemoe.sora.langs.less.LessParserBaseListener;
+import io.github.rosemoe.sora.langs.xml.analyzer.Utils;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.IdeEditor;
@@ -15,8 +19,10 @@ import io.github.rosemoe.sora.widget.ListCss3Color;
 import ir.ninjacoder.ghostide.widget.data.CSSVariableParser;
 import java.util.Stack;
 import io.github.rosemoe.sora.data.BlockLine;
+import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
+import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 import java.io.IOException;
 import java.io.StringReader;
@@ -24,11 +30,13 @@ import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.text.TextAnalyzer;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
-
+import org.antlr.v4.runtime.tree.ErrorNode;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 public class HTMLAnalyzerCompat implements CodeAnalyzer {
   private IdeEditor editor;
   private RainbowBracketHelper hl;
+  private boolean isLess = false;
 
   public HTMLAnalyzerCompat() {}
 
@@ -435,8 +443,8 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
               // ویژگی استفاده کنید...
               //// ListCss3Color.initColor(token, line, column, result, true);
               hl.handleCustom(result, line, column, colorid);
-              var cssH= new CSSVariableParser(editor);
-			  cssH.highlightVariables(result,editor.getText().toString());
+              var cssH = new CSSVariableParser(editor);
+              cssH.highlightVariables(result, editor.getText().toString());
               break;
             }
           case HTMLLexer.HTMLRGB:
@@ -516,6 +524,26 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
       result.determine(lastLine);
       info.finish();
       result.setExtra(info);
+      if (isLess) {
+        var inputStream = new ANTLRInputStream(content.toString());
+        var lexer1 = new LessLexer(inputStream);
+        var com = new CommonTokenStream(lexer1);
+        var parse = new LessParser(com);
+        var call =
+            new LessParserBaseListener() {
+              @Override
+              public void visitErrorNode(ErrorNode node) {
+                super.visitErrorNode(node);
+
+                // TODO: Implement this method
+                int lines = node.getSymbol().getLine();
+                int col = node.getSymbol().getCharPositionInLine();
+                int[] error = Utils.setErrorSpan(result, lines, col);
+              }
+            };
+        ParseTreeWalker walker = new ParseTreeWalker();
+        walker.walk(call, parse.stylesheet());
+      }
     } catch (IOException e) {
       e.printStackTrace();
       Log.e("TAG", e.getMessage());
@@ -528,5 +556,13 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
 
   public long forString() {
     return TextStyle.makeStyle(EditorColorScheme.htmlstr, 0, true, false, false);
+  }
+
+  public boolean getIsLess() {
+    return this.isLess;
+  }
+
+  public void setIsLess(boolean isLess) {
+    this.isLess = isLess;
   }
 }

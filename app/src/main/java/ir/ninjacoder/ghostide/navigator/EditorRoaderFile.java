@@ -226,6 +226,7 @@ public class EditorRoaderFile {
       editor.setEditorLanguage(new JavaScriptJsxLanguage());
       fab.postDelayed(fab::show, 400);
     } else if (path.endsWith(".less")) {
+      ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new LessLang((CodeEditor) editor));
       fab.postDelayed(fab::show, 400);
     } else {

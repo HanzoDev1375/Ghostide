@@ -346,10 +346,6 @@ NAME_OR_CASE
    : 'case'
    ; // identifier or case keyword,    the parser grammar will decide what it means
    
-NAME_OR_WILDCARD
-   : '_'
-   ; // identifier or wildcard symbol, the parser grammar will decide what it means
-   
 STRING
    : '"' .*? '"'
    | '"""' .*? '"""'

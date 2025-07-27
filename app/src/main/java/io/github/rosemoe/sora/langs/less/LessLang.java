@@ -5,8 +5,13 @@ import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
 import io.github.rosemoe.sora.interfaces.NewlineHandler;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 import io.github.rosemoe.sora.interfaces.EditorLanguage;
+import io.github.rosemoe.sora.langs.html.HTMLAnalyzerCompat;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.SymbolPairMatch;
+import ir.ninjacoder.ghostide.IdeEditor;
+import java.io.StringReader;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.Token;
 
 public class LessLang implements EditorLanguage {
   private CodeEditor editor;
@@ -22,7 +27,9 @@ public class LessLang implements EditorLanguage {
 
   @Override
   public CodeAnalyzer getAnalyzer() {
-    return new LessCodeAnalyzer(editor);
+    var compat = new HTMLAnalyzerCompat((IdeEditor) editor);
+	compat.setIsLess(true);
+    return compat;
   }
 
   @Override
@@ -32,21 +39,41 @@ public class LessLang implements EditorLanguage {
 
   @Override
   public int getIndentAdvance(String content) {
+
+    try {
+      LessLexer lexer = new LessLexer(CharStreams.fromReader(new StringReader(content)));
+      Token token;
+      int advance = 0;
+      while (((token = lexer.nextToken()) != null && token.getType() != token.EOF)) {
+        switch (token.getType()) {
+          case LessLexer.BlockStart:
+            advance++;
+            break;
+          case LessLexer.BlockEnd:
+            advance--;
+            break;
+        }
+      }
+      advance = Math.max(0, advance);
+      return advance * 2;
+    } catch (Exception err) {
+
+    }
     return 0;
   }
 
   @Override
   public NewlineHandler[] getNewlineHandlers() {
-	  return null
+    return null;
   }
 
   @Override
   public SymbolPairMatch getSymbolPairs() {
-    return SymbolPairMatch.DefaultSymbolPairs;
+    return new SymbolPairMatch.DefaultSymbolPairs();
   }
 
   @Override
- public boolean isAutoCompleteChar(char ch) {
+  public boolean isAutoCompleteChar(char ch) {
     return CharParser.parserChar(ch);
   }
 
