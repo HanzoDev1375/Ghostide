@@ -25,7 +25,7 @@ public class Css3Server {
   private Random RANDOM = new Random();
   private int COLORS_TO_GENERATE = 20;
 
-  static String[] cssColorAttr = {
+ public static String[] cssColorAttr = {
     "color:",
     "background-color:",
     "border-color:",

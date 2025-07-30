@@ -131,33 +131,34 @@ public class Transilt {
 
     dialog.setOnShowListener(
         (var) -> {
-          TextInputLayout input = (TextInputLayout) dialog.findViewById(R.id.input);
-          TextInputEditText result = (TextInputEditText) dialog.findViewById(R.id.result);
-          Spinner sp1 = (Spinner) dialog.findViewById(R.id.sp1);
-          Spinner sp2 = (Spinner) dialog.findViewById(R.id.sp2);
+          TextInputLayout input = dialog.findViewById(R.id.input);
+          TextInputEditText result = dialog.findViewById(R.id.result);
+          Spinner sp1 = dialog.findViewById(R.id.sp1);
+          Spinner sp2 = dialog.findViewById(R.id.sp2);
           Button postViter = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
           Button inittor = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+          mao.clear();
+          for (int a = 0; a < aa.size(); a++) {
+            HashMap<String, Object> _item = new HashMap<>();
+            _item.put("key", aa.get(a));
+            mao.add(_item);
+          }
 
-          // فرض کنید jsonObject به شیء JSON شما اشاره کند
+          sp1.setAdapter(new Sp1Adapter(mao, editor.getContext()));
+          sp2.setAdapter(new Sp2Adapter(mao, editor.getContext()));
           JSONObject jsonObject = new JSONObject();
-          // پر کردن jsonObject با داده‌ها
           try {
-            // مقدار را از متن انتخاب شده دریافت کنید
             String selectedText = editor.getSelectedText();
             if (selectedText != null && !selectedText.isEmpty()) {
-              jsonObject.put(keyObject, selectedText); // مقدار انتخاب شده به عنوان مقدار
+              jsonObject.put(keyObject, selectedText);
             } else {
               Toast.makeText(editor.getContext(), "متنی انتخاب نشده است", Toast.LENGTH_SHORT)
                   .show();
-              return; // اگر متنی انتخاب نشده باشد، عملیات متوقف خواهد شد
+              return;
             }
           } catch (JSONException e) {
             e.printStackTrace();
           }
-
-          // تنظیم آداپترهای اسپینرها و سایر عملیات
-          sp1.setAdapter(new Sp1Adapter(mao, editor.getContext()));
-          sp2.setAdapter(new Sp2Adapter(mao, editor.getContext()));
 
           postViter.setEnabled(!editor.getText().toString().isEmpty());
 
@@ -174,23 +175,20 @@ public class Transilt {
 
           inittor.setOnClickListener(
               view -> {
-                // دریافت مقدار از jsonObject با استفاده از کلید
                 String valueToTranslate;
                 try {
-                  valueToTranslate = jsonObject.getString(keyObject); // مقدار مربوط به کلید
+                  valueToTranslate = jsonObject.getString(keyObject);
                 } catch (JSONException e) {
                   Toast.makeText(editor.getContext(), "خطا در دریافت مقدار", Toast.LENGTH_SHORT)
                       .show();
                   return;
                 }
 
-                // ایجاد API ترجمه
                 TranslateAPI translateAPI =
                     new TranslateAPI(
                         cc.get(sp1.getSelectedItemPosition()),
                         cc.get(sp2.getSelectedItemPosition()).toLowerCase(),
-                        valueToTranslate // مقدار دریافت شده از JSON
-                        );
+                        valueToTranslate);
 
                 translateAPI.setTranslateListener(
                     new TranslateAPI.TranslateListener() {

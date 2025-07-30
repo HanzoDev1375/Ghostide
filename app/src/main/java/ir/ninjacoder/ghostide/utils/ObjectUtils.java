@@ -28,6 +28,7 @@ import com.google.android.material.transition.platform.MaterialSharedAxis;
 import com.ninjacoder.jgit.childer.FuzzySearchHelper;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.IdeEditor;
+import ir.ninjacoder.ghostide.activities.BaseCompat;
 import ir.ninjacoder.ghostide.marco.WavyUnderlineSpan;
 import ir.ninjacoder.ghostide.model.ObjectClassName;
 import ir.ninjacoder.ghostide.utils.FileUtil;
@@ -79,6 +80,8 @@ import java.io.InputStream;
 import com.google.gson.Gson;
 import java.lang.reflect.Type;
 import com.google.common.reflect.TypeToken;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.io.InputStreamReader;
 
@@ -855,6 +858,40 @@ public class ObjectUtils {
     }
   }
 
+  public static void setSaveOprator(
+      ArrayList<HashMap<String, Object>> listTab,
+      IdeEditor editor,
+      TabLayout tab,
+      BaseCompat base) {
+    int selectedTabPosition = tab.getSelectedTabPosition();
+    if (selectedTabPosition >= 0 && selectedTabPosition < listTab.size()) {
+      TabLayout.Tab tabInstance = tab.getTabAt(selectedTabPosition);
+      if (tabInstance != null) {
+        String tabText = tabInstance.getText() != null ? tabInstance.getText().toString() : "";
+        if (!tabText.startsWith("*")) {
+          base.finish();
+          return;
+        }
+      }
+    }
+
+    new MaterialAlertDialogBuilder(editor.getContext())
+        .setTitle("Save File?")
+        .setMessage("Exit for file")
+        .setPositiveButton(
+            android.R.string.ok,
+            (c, d) -> {
+              if (selectedTabPosition >= 0 && selectedTabPosition < listTab.size()) {
+                String selectedFilePath = listTab.get(selectedTabPosition).get("path").toString();
+                Toast.makeText(editor.getContext(), selectedFilePath, 2).show();
+                FileUtil.writeFile(selectedFilePath, editor.getTextAsString());
+                base.finish();
+              }
+            })
+        .setNegativeButton(android.R.string.cancel, null)
+        .show();
+  }
+
   public static void addStarToTabError(int pos, TabLayout tab) {
     TabLayout.Tab tabInstance = tab.getTabAt(pos);
     if (tabInstance != null) {
@@ -862,12 +899,9 @@ public class ObjectUtils {
       if (!tabText.startsWith("*")) {
         String newText = "*" + tabText;
         SpannableString spannableText = new SpannableString(newText);
-
-        // ستاره سفید
         spannableText.setSpan(
             new ForegroundColorSpan(Color.WHITE), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        // خط موج‌دار قرمز برای متن اصلی
         WavyUnderlineSpan mycustomSpan = new WavyUnderlineSpan();
         mycustomSpan.setEnabled(true);
         mycustomSpan.setMod(WavyUnderlineSpan.StatosMod.ERROR);

@@ -55,7 +55,6 @@ public class Sp2Adapter extends BaseAdapter {
         final TextView textview1 = _view.findViewById(R.id.textview1);
 
         textview1.setText(_data.get((int) _position).get("key").toString());
-        ObjectUtils.shapeViews(linear1);
         textview1.setTextColor(ColorStateList.valueOf(MaterialColors.getColor(textview1, ObjectUtils.TvColor)));
         ObjectUtils.setColorFilter(imageview1);
         return _view;

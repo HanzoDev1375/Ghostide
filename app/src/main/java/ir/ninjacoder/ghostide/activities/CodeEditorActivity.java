@@ -3,6 +3,7 @@ package ir.ninjacoder.ghostide.activities;
 import android.content.res.ColorStateList;
 import android.os.Handler;
 import android.os.Looper;
+import androidx.activity.OnBackPressedCallback;
 import com.bumptech.glide.Glide;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.tabs.TabLayout;
@@ -368,7 +369,16 @@ public class CodeEditorActivity extends BaseCompat {
             ic++;
           }
         });
+     getOnBackPressedDispatcher()
+        .addCallback(
+            this,
+            new OnBackPressedCallback(true) {
 
+              @Override
+              public void handleOnBackPressed() {
+                ObjectUtils.setSaveOprator(tabs_listmap,editor,tablayouteditor,CodeEditorActivity.this);
+              }
+            });
     redo.setOnClickListener(
         (v) -> {
           editor.AutoRedo();
@@ -743,7 +753,7 @@ public class CodeEditorActivity extends BaseCompat {
           }
         });
   }
-
+ 
   void saveFileByIo() {
 
     FileChangeReceiver.stopWatching();
