@@ -27,6 +27,7 @@ public class RainbowBracketHelper {
 
   private final Stack<Integer> bracketStack = new Stack<>();
   private final Stack<Integer> colonStack = new Stack<>();
+  private Stack<BlockLine> listBl = new Stack<>();
   private int colorIndex = 0;
   private int colonColorIndex = 0;
 
@@ -38,8 +39,15 @@ public class RainbowBracketHelper {
       colorIndex++;
 
     } else result.addIfNeeded(line, column, mcolor);
+    BlockLine block = result.obtainNewBlock();
+    block.startLine = line;
+    block.startColumn = column;
+    listBl.push(block);
   }
 
+  public void handleOpenBracket(TextAnalyzeResult result, int line, int column) {
+    handleOpenBracket(result, line, column, EditorColorScheme.htmlblockhash);
+  }
 
   public void handleCustom(TextAnalyzeResult result, int line, int column, int mcolor) {
     if (isRgbEn()) {
@@ -48,12 +56,12 @@ public class RainbowBracketHelper {
       colonColorIndex = (colonColorIndex + 1) % RAINBOW_COLORS.length;
     } else result.addIfNeeded(line, column, mcolor);
   }
-	
-	public int get(){
-		int color = RAINBOW_COLORS[colonColorIndex % RAINBOW_COLORS.length];
-		colonColorIndex = (colonColorIndex + 1) % RAINBOW_COLORS.length;
-		return color;
-	}
+
+  public int get() {
+    int color = RAINBOW_COLORS[colonColorIndex % RAINBOW_COLORS.length];
+    colonColorIndex = (colonColorIndex + 1) % RAINBOW_COLORS.length;
+    return color;
+  }
 
   public void handleSpanColor(
       TextAnalyzeResult result,
@@ -75,10 +83,23 @@ public class RainbowBracketHelper {
         int color = bracketStack.pop();
         result.addIfNeeded(line, column, TextStyle.makeStyle(color, 0, true, false, false));
         colorIndex--;
+
       } else {
         result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
       }
-    else result.addIfNeeded(line, column, mcolor);
+    if (!listBl.isEmpty()) {
+      BlockLine b = listBl.pop();
+      b.endLine = line;
+      b.endColumn = column;
+
+      if (b.startLine != b.endLine) {
+        result.addBlockLine(b);
+      }
+    } else result.addIfNeeded(line, column, mcolor);
+  }
+
+  public void handleCloseBracket(TextAnalyzeResult result, int line, int column) {
+    handleCloseBracket(result, line, column, EditorColorScheme.htmlblockhash);
   }
 
   private boolean isRgbEn() {

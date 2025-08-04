@@ -63,6 +63,7 @@ public class PythonAutoComplete implements AutoCompleteProvider {
 
     }
     keywords.addAll(CodeSnippet.runasList("python", prefix));
+	keywords.addAll(CodeSnippet.getPythonMethod(prefix));
     return keywords;
   }
 

@@ -1,5 +1,6 @@
 package io.github.rosemoe.sora.langs.csharp;
 
+import com.ninjacoder.jgit.childer.CharParser;
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 import io.github.rosemoe.sora.interfaces.EditorLanguage;
@@ -66,12 +67,12 @@ public class CSharpLanguage implements EditorLanguage {
 
   @Override
   public SymbolPairMatch getSymbolPairs() {
-    return null;
+    return new SymbolPairMatch.DefaultSymbolPairs();
   }
 
   @Override
   public boolean isAutoCompleteChar(char ch) {
-    return MyCharacter.isJavaIdentifierPart(ch);
+    return CharParser.parserChar(ch);
   }
 
   @Override

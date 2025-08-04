@@ -438,10 +438,9 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
                 /// def code result -> Java.user();
                 colorid = EditorColorScheme.javafun;
               }
-
-              /// این ویژگی به علت مصرف زیاد رم متوقف شد اما همچنان میتوانید در برنامه خودتان از این
-              // ویژگی استفاده کنید...
-              //// ListCss3Color.initColor(token, line, column, result, true);
+              ListCss3Color.getHslColor(token, line, column, result);
+            
+             ListCss3Color.initColor(token, line, column, result, true);
               hl.handleCustom(result, line, column, colorid);
               var cssH = new CSSVariableParser(editor);
               cssH.highlightVariables(result, editor.getText().toString());

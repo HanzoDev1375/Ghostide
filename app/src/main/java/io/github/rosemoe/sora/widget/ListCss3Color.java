@@ -144,26 +144,24 @@ public class ListCss3Color {
     }
     // getHslColor(token,line,column,result);
   }
-  
-  
 
   public static void setColorBinery(Token token, int line, int column, TextAnalyzeResult result) {
     var text = token.getText();
+    int color;
     try {
-      int color ;
-      
+
       if (text.startsWith("0x")) {
-         color = (int) Long.parseLong(text.substring(2),16);
+        color = Color.parseColor(text.replace("0x", "#"));
         result.addIfNeeded(line, column, EditorColorScheme.TEXT_NORMAL);
         Span span =
             Span.obtain(
-                column + 1,
+                column,
                 ColorUtils.calculateLuminance(color) > 0.5
                     ? EditorColorScheme.black
                     : EditorColorScheme.white);
         span.setBackgroundColorMy(color);
         result.add(line, span);
-        Span middle = Span.obtain(column + text.length() - 1, EditorColorScheme.LITERAL);
+        Span middle = Span.obtain(column + text.length(), EditorColorScheme.LITERAL);
         middle.setBackgroundColorMy(Color.TRANSPARENT);
         result.add(line, middle);
         Span end =
@@ -274,32 +272,7 @@ public class ListCss3Color {
   }
 
   public static void initColor(
-      Token token, int line, int column, TextAnalyzeResult result, boolean using) {
-    var text = token.getText();
-
-    if (using) {
-
-      try {
-        var input = GhostIdeAppLoader.getContext().getAssets().open("colors.json");
-        colorList =
-            new Gson()
-                .fromJson(
-                    DataUtil.copyFromInputStream(input),
-                    new TypeToken<List<Map<String, String>>>() {}.getType());
-        colorList.forEach(
-            it -> {
-              if (it.get("colorName") != null) {
-                if (getRegex("\\b" + it.get("colorName") + "\\b", text)) {
-                  getColor(token, line, column, result, Color.parseColor(it.get("cssColor")));
-                }
-              }
-            });
-
-      } catch (Exception err) {
-        Log.e("ErrorColorNotFound", err.getLocalizedMessage());
-      }
-    }
-  }
+      Token token, int line, int column, TextAnalyzeResult result, boolean using) {}
 
   public static long withoutCompletion(int id) {
     return TextStyle.makeStyle(id, 0, true, false, false, false, true);

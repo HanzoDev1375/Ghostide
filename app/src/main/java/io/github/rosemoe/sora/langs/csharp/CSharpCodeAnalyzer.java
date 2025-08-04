@@ -1,5 +1,6 @@
 package io.github.rosemoe.sora.langs.csharp;
 
+import io.github.rosemoe.sora.data.RainbowBracketHelper;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import android.graphics.Color;
 import android.util.Log;
@@ -26,6 +27,7 @@ public class CSharpCodeAnalyzer implements CodeAnalyzer {
 
   private CSharpLexer lexer;
   private int line, lastline, column, type, previous = -1;
+  RainbowBracketHelper he;
 
   @Override
   public void analyze(
@@ -34,6 +36,7 @@ public class CSharpCodeAnalyzer implements CodeAnalyzer {
       TextAnalyzer.AnalyzeThread.Delegate delegate) {
 
     try {
+      he = new RainbowBracketHelper();
       lexer = new CSharpLexer(CharStreams.fromReader(new StringReader(content.toString())));
       Stack<BlockLine> stack = new Stack<>();
       var info = new CsAutoComplete.Identifiers();
@@ -167,25 +170,12 @@ public class CSharpCodeAnalyzer implements CodeAnalyzer {
 
           case CSharpLexer.OPEN_BRACE:
             {
-              BlockLine block = result.obtainNewBlock();
-              block.startLine = line;
-              block.startColumn = column;
-              stack.push(block);
-              result.addIfNeeded(line, column, EditorColorScheme.javaoprator);
+              he.handleOpenBracket(result, line, column);
               break;
             }
           case CSharpLexer.CLOSE_BRACE:
             {
-              if (!stack.isEmpty()) {
-                BlockLine b = stack.pop();
-                b.endLine = line;
-                b.endColumn = column;
-
-                if (b.startLine != b.endLine) {
-                  result.addBlockLine(b);
-                }
-              }
-              result.addIfNeeded(line, column, EditorColorScheme.javaoprator);
+              he.handleCloseBracket(result, line, column);
               break;
             }
 
@@ -278,15 +268,17 @@ public class CSharpCodeAnalyzer implements CodeAnalyzer {
               if (previous == CSharpLexer.ABSTRACT
                   || previous == CSharpLexer.USING
                   || previous == CSharpLexer.DELEGATE
+                  || previous == CSharpLexer.VOID
                   || previous == CSharpLexer.VAR) {
                 color = EditorColorScheme.javaparament;
               }
-              if (previous == CSharpLexer.BOOL || previous == CSharpLexer.AS) {
+              if (previous == CSharpLexer.BOOL
+                  || previous == CSharpLexer.AS
+                  || previous == CSharpLexer.IS
+                  || previous == CSharpLexer.STRING) {
                 color = EditorColorScheme.javafield;
               }
-              if (previous == CSharpLexer.DOT
-                  || previous == CSharpLexer.OPEN_BRACE
-                  || previous == CSharpLexer.CLOSE_BRACE) {
+              if (previous == CSharpLexer.DOT) {
                 color = EditorColorScheme.javafun;
               }
               if (previous == CSharpLexer.NAMESPACE) {
@@ -295,7 +287,7 @@ public class CSharpCodeAnalyzer implements CodeAnalyzer {
                 span.setAlphaCompat(120);
                 result.add(line, span);
               }
-              
+
               if (token.getText().equals("Console")) {
                 color = EditorColorScheme.ATTRIBUTE_VALUE;
               }
@@ -323,7 +315,7 @@ public class CSharpCodeAnalyzer implements CodeAnalyzer {
 
                 @Override
                 public void visitErrorNode(ErrorNode node) {
-                  var lines = node.getSymbol().getLine() - 1;
+                  var lines = node.getSymbol().getLine();
                   var col = node.getSymbol().getCharPositionInLine();
                   var text = node.getText().toString();
                   int[] error = Utils.setErrorSpan(result, lines, col);

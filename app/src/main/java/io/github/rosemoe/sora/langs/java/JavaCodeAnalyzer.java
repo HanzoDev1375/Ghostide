@@ -528,12 +528,11 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 @Override
                 public void visit(ImportDeclaration dec, Void arg) {
                   String importName = dec.getNameAsString();
-                  int line = dec.getBegin().get().line;
-                  int column = dec.getBegin().get().column;
-                  inline.put(importName, line);
-                  incol.put(importName, column);
+                  int line2 = dec.getBegin().get().line;
+                  int column2 = dec.getBegin().get().column;
+                  inline.put(importName, line2);
+                  incol.put(importName, column2);
                   unusedImport.add(importName);
-
                   super.visit(dec, arg);
                 }
 

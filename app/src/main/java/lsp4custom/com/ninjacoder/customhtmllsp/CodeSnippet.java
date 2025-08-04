@@ -52,12 +52,40 @@ public class CodeSnippet {
         item.label = jsonObj.get("class_name").getAsString();
         // تنظیم desc با نام کامل پکیج
         item.desc = jsonObj.get("full_package").getAsString();
-        // تنظیم commitبا نام کلاس (می‌توانید این را تغییر دهید)
+        // تنظیملاس (می‌توانید این را تغییر دهید)
         item.commit = jsonObj.get("class_name").getAsString();
         completionItems.add(item);
       }
+      if (pre != null && !pre.isEmpty()) {
+        completionItems =
+            completionItems.stream()
+                .filter(item -> item.label.startsWith(pre))
+                .collect(Collectors.toList());
+      }
 
-      // فیلتر کردن بر اساس پیشوند
+      return completionItems;
+
+    } catch (Exception err) {
+      err.printStackTrace();
+      return new ArrayList<>();
+    }
+  }
+
+  public static List<CompletionItem> getPythonMethod(String pre) {
+    List<CompletionItem> completionItems = new ArrayList<>();
+
+    try {
+      var input = GhostIdeAppLoader.getContext().getAssets().open("methods.json");
+      JsonArray jsonArray = JsonParser.parseReader(new InputStreamReader(input)).getAsJsonArray();
+
+      for (JsonElement element : jsonArray) {
+        JsonObject jsonObj = element.getAsJsonObject();
+        CompletionItem item = new CompletionItem();
+        item.label = jsonObj.get("name").getAsString();
+        item.desc = jsonObj.get("doc").getAsString();
+        item.commit = jsonObj.get("name").getAsString();
+        completionItems.add(item);
+      }
       if (pre != null && !pre.isEmpty()) {
         completionItems =
             completionItems.stream()

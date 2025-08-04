@@ -1799,17 +1799,17 @@ public class FileManagerActivity extends BaseCompat
     var sh = new ListSheet();
 
     sh.setSheetDialog(this);
-    sh.addItem(getString(R.string.make_folder), R.drawable.folder);
+    sh.addItem(getString(R.string.make_folder), R.drawable.create_new_folder_24px);
     sh.addItem(getString(R.string.make_file), R.drawable.folders_0_5);
-    sh.addItem(getString(R.string.make_project), R.drawable.textfile);
+    sh.addItem(getString(R.string.make_project), R.drawable.extension_24px);
     sh.addItem("FTP", R.drawable.iconmode);
-    sh.addItem(getString(R.string.search_file), R.drawable.imgsearch);
-    sh.addItem(getString(R.string.folder_tree), R.drawable.foldermultipleplus);
-    sh.addItem(getString(R.string.file_tree), R.drawable.filemultiple);
+    sh.addItem(getString(R.string.search_file), R.drawable.document_search_24px);
+    sh.addItem(getString(R.string.folder_tree), R.drawable.folder_tree_24px);
+    sh.addItem(getString(R.string.file_tree), R.drawable.file_tree_24px);
     sh.addItem(getString(R.string.git_clone), R.drawable.git);
     sh.addItem(getString(R.string.android_module), R.drawable.mdapk);
     sh.addItem(getString(R.string.git_tools), R.drawable.git);
-    sh.addItem(getString(R.string.gson_to_class), R.drawable.ic_material_folder_json);
+    sh.addItem(getString(R.string.gson_to_class), R.drawable.file_json_24px);
     sh.addItem("PastJavaCode?", R.drawable.ic_material_java);
     sh.setOnItemClickLabe(
         (pos333) -> {

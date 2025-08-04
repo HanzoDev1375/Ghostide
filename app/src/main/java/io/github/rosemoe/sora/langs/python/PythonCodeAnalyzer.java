@@ -1,5 +1,8 @@
 package io.github.rosemoe.sora.langs.python;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import io.github.rosemoe.sora.data.RainbowBracketHelper;
 import io.github.rosemoe.sora.data.Span;
 import io.github.rosemoe.sora.langs.python.formatter.PythonSyntaxChecker;
@@ -11,9 +14,12 @@ import android.util.Log;
 
 import io.github.rosemoe.sora.text.TextStyle;
 import io.github.rosemoe.sora.widget.ListCss3Color;
+import java.io.InputStreamReader;
 import java.util.List;
 import io.github.rosemoe.sora.data.NavigationItem;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.Stack;
 import io.github.rosemoe.sora.data.BlockLine;
 import org.antlr.v4.runtime.CharStreams;
@@ -30,7 +36,8 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
 
   private PythonErrorManager errors;
   protected IdeEditor editor;
-  RainbowBracketHelper rb;
+  private RainbowBracketHelper rb;
+  Token token = null, preToken = null, prePreToken = null;
 
   public PythonCodeAnalyzer(IdeEditor editor) {
     this.editor = editor;
@@ -52,7 +59,7 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
       info.begin();
       errors = new PythonErrorManager(editor);
       var classNamePrevious = false;
-      Token token, preToken = null, prePreToken = null;
+
       boolean first = true;
       Stack<BlockLine> stack = new Stack<>();
       List<NavigationItem> labels = new ArrayList<>();
@@ -239,15 +246,27 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
                 isBold = true;
                 isUnderLine = false;
               }
-              if (token.getText().equals("print")) {
-                colorid = EditorColorScheme.pycolormatch3;
-                isBold = true;
-              }
-              if (token.getText().equals("self")) {
-                colorid = EditorColorScheme.pycolormatch4;
-                isBold = true;
+              Set<String> methodNames = new HashSet<>();
+
+              try {
+                var input = GhostIdeAppLoader.getContext().getAssets().open("methods.json");
+                var array = JsonParser.parseReader(new InputStreamReader(input)).getAsJsonArray();
+                array.forEach(
+                    it -> {
+                      JsonObject obj = it.getAsJsonObject();
+                      if (obj.has("name")) {
+                        methodNames.add(obj.get("name").getAsString());
+                      }
+                    });
+              } catch (Exception err) {
+                Log.e("JsonErrorToRun" + PythonCodeAnalyzer.class.getName(), err.getMessage());
               }
 
+              if (methodNames.contains(token.getText())
+                  || methodNames.stream()
+                      .anyMatch(name -> name.equalsIgnoreCase(token.getText()))) {
+                colorid = EditorColorScheme.pycolormatch3;
+              }
               result.addIfNeeded(
                   line, column, TextStyle.makeStyle(colorid, 0, isBold, false, false, isUnderLine));
               break;

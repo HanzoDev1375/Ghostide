@@ -531,7 +531,7 @@ public class HtmlHelper {
       case "gray":
         return Color.GRAY;
       default:
-        return Color.parseColor("#00000000");
+        return Color.parseColor("#000000");
     }
   }
 

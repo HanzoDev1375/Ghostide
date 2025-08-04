@@ -18,10 +18,6 @@ import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.shape.CornerFamily;
 import com.google.android.material.shape.ShapeAppearanceModel;
 import com.google.android.material.shape.MaterialShapeDrawable;
-import com.google.gson.Gson;
-import io.github.rosemoe.sora.widget.tooltip.ToolTipHelper;
-import ir.ninjacoder.ghostide.utils.FileUtil;
-import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,7 +39,6 @@ public class EditorAutoCompleteWindow extends EditorPopupWindow {
   private final CodeEditor mEditor;
   private final ListView listview1;
   private final LinearProgressIndicator circularProgressIndicator;
-  private final GradientDrawable mBg;
   protected boolean mCancelShowUp = false;
   private CoordinatorLayout roots;
   private int mCurrent = 0;
@@ -57,6 +52,7 @@ public class EditorAutoCompleteWindow extends EditorPopupWindow {
   private EditorCompletionAdapter mAdapter;
   private long requestShow = 0;
   private long requestHide = -1;
+  private GradientDrawable gd;
 
   /**
    * Create a panel instance for the given editor
@@ -70,8 +66,7 @@ public class EditorAutoCompleteWindow extends EditorPopupWindow {
     var vis =
         LayoutInflater.from(editor.getContext()).inflate(R.layout.auto_textlayout, null, false);
     setContentView(vis);
-    GradientDrawable gd = new GradientDrawable();
-    mBg = gd;
+    gd = new GradientDrawable();
 
     roots = vis.findViewById(R.id.rootcoordinator);
     circularProgressIndicator = vis.findViewById(R.id.barText);
@@ -82,25 +77,11 @@ public class EditorAutoCompleteWindow extends EditorPopupWindow {
         getThemeColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER));
     circularProgressIndicator.setTrackCornerRadius(20);
     // listview1.setSelector(colorAcsentDialog());
-    roots.setBackgroundColor(0);
-    roots.setClickable(true);
-    ShapeAppearanceModel.Builder builde = new ShapeAppearanceModel.Builder();
-    builde.setAllCorners(CornerFamily.ROUNDED, 30f);
-    mcard.setShapeAppearanceModel(builde.build());
-    imap = new HashMap<>();
-    try {
-      imap =
-          new Gson()
-              .fromJson(
-                  FileUtil.readFile("storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost"),
-                  new TypeToken<HashMap<String, Object>>() {}.getType());
-    } catch (Exception err) {
-      err.printStackTrace();
-    }
+    applyColorScheme();
+    roots.setBackground(gd);
     EditorColorScheme colors = editor.getColorScheme();
-    mcard.setBackgroundColor(Color.parseColor(imap.get("auto_comp_panel_bg").toString()));
-    mcard.setStrokeWidth(2);
-    mcard.setStrokeColor(Color.parseColor(imap.get("auto_comp_panel_corner").toString()));
+    mcard.setCardBackgroundColor(Color.TRANSPARENT);
+    mcard.setStrokeWidth(0);
     listview1.setHorizontalScrollBarEnabled(false);
     listview1.setVerticalScrollBarEnabled(false);
     listview1.setSelector(colorAcsentDialog());
@@ -130,8 +111,6 @@ public class EditorAutoCompleteWindow extends EditorPopupWindow {
 
     //	layout.setLayoutTransition(transition);
     listview1.setLayoutTransition(transition);
-
-    //	applyColorSchemecopy();
     getPopup().setAnimationStyle(R.style.hso);
     listview1.setDividerHeight(0);
     setLoading(true);
@@ -170,6 +149,12 @@ public class EditorAutoCompleteWindow extends EditorPopupWindow {
     mCancelShowUp = val;
   }
 
+  public void applyColorScheme() {
+    gd.setShape(GradientDrawable.RECTANGLE);
+    gd.setColor(getThemeColor(EditorColorScheme.AUTO_COMP_PANEL_BG));
+    gd.setStroke(2, getThemeColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER));
+  }
+
   @Override
   public void show() {
     if (mCancelShowUp) {
@@ -183,7 +168,7 @@ public class EditorAutoCompleteWindow extends EditorPopupWindow {
             super.show();
           }
         },
-        40);
+        100);
   }
 
   public void hide() {
@@ -206,19 +191,6 @@ public class EditorAutoCompleteWindow extends EditorPopupWindow {
    */
   public void setProvider(AutoCompleteProvider provider) {
     mProvider = provider;
-  }
-
-  /** Apply colors for self */
-  public void applyColorScheme() {
-    EditorColorScheme colors = mEditor.getColorScheme();
-    mBg.setStroke(2, colors.getColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER));
-    mBg.setColor(colors.getColor(EditorColorScheme.AUTO_COMP_PANEL_BG));
-  }
-
-  public void applyColorSchemecopy() {
-    EditorColorScheme colors = mEditor.getColorScheme();
-    mBg.setStroke(2, colors.getColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER));
-    mBg.setColor(colors.getColor(EditorColorScheme.AUTO_COMP_PANEL_BG));
   }
 
   /**
