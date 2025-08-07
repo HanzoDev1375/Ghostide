@@ -107,7 +107,13 @@ public class MainActivity extends BaseCompat {
       soft.copyOneFileFromAssets(
           "python_checker.py", getFilesDir().getAbsolutePath() + File.separator, this);
     }
-	
+    var pyauto = getFilesDir().getAbsolutePath() + File.separator + "autocomplete.py";
+    if (!FileUtil.isExistFile(pyauto)) {
+      var soft = new AssetsSoft();
+      soft.copyOneFileFromAssets(
+          "autocomplete.py", getFilesDir().getAbsolutePath() + File.separator, this);
+    }
+
     var snippetPath = FileUtil.HOMESNIPPET;
     if (!FileUtil.isExistFile(snippetPath)) {
       new AssetsSoft()

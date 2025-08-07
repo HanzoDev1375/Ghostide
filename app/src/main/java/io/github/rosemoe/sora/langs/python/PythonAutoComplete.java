@@ -55,15 +55,16 @@ public class PythonAutoComplete implements AutoCompleteProvider {
       Collections.sort(words, CompletionItem.COMPARATOR_BY_NAME);
       keywords.addAll(words);
     }
-    PythonAutoCompleter lsp = new PythonAutoCompleter(editor.getContext());
+    PythonAutoCompleter lsp = new PythonAutoCompleter();
 
     try {
-      keywords.addAll(lsp.getCompletions(editor.getText().toString(), line, column));
+      keywords.addAll(
+          lsp.complete(editor.getContext(), editor.getTextAsString(), line, column, prefix));
     } catch (Exception err) {
 
     }
     keywords.addAll(CodeSnippet.runasList("python", prefix));
-	keywords.addAll(CodeSnippet.getPythonMethod(prefix));
+    // keywords.addAll(CodeSnippet.getPythonMethod(prefix));
     return keywords;
   }
 

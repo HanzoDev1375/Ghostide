@@ -1,5 +1,7 @@
 package io.github.rosemoe.sora.widget.TextSummry;
 
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
+import ir.ninjacoder.ghostide.tasks.app.HtmlToCssGenerator;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.marco.ColorView;
@@ -13,6 +15,7 @@ import com.skydoves.powermenu.MenuAnimation;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.Transilt;
 import ir.ninjacoder.ghostide.widget.data.ColorChecker;
+import java.io.File;
 import java.io.Serializable;
 
 public class HtmlTool implements Serializable {
@@ -33,7 +36,7 @@ public class HtmlTool implements Serializable {
             .addItem(new PowerMenuItem("Translate"))
             .addItem(new PowerMenuItem("Link viewer"))
             .addItem(new PowerMenuItem("Color preview "))
-            .addItem(new PowerMenuItem("css doc(Beta)"))
+            .addItem(new PowerMenuItem("html convert id&class to css"))
             .setIsMaterial(true)
             .build();
     menu.setMenuRadius(20f);
@@ -70,7 +73,11 @@ public class HtmlTool implements Serializable {
             ColorView mview = new ColorView();
             mview.colorview(editor, context);
           } else if (pos == 8) {
-            new ColorChecker((IdeEditor) editor);
+            var it = GhostIdeAppLoader.getShap();
+            if (it.contains("pos_path")) {
+              File file = new File(it.getString("pos_path", ""));
+              HtmlToCssGenerator.run(editor.getTextAsString(), file.getParent(), editor);
+            }
           }
         });
   }

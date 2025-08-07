@@ -446,7 +446,6 @@ public class CodeEditorActivity extends BaseCompat {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       editor.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO);
     }
-    editor.setText(modelEditor.getText());
 
     editor.setKeyboardOperation(
         new CodeEditor.OnKeyboardOperation() {
@@ -577,7 +576,6 @@ public class CodeEditorActivity extends BaseCompat {
     AnimUtils.ClickAnimation(redo);
     setPinLineNumberEditor();
     _Animwork(_fab);
-    _Anim01(editor);
     editor
         .getColorScheme()
         .setColor(EditorColorScheme.MATCHED_TEXT_BACKGROUND, Color.parseColor("#75800F31"));
@@ -649,7 +647,7 @@ public class CodeEditorActivity extends BaseCompat {
     }
   }
 
-  public void setManagerpanel(final View _view) {
+   void setManagerpanel(final View _view) {
     pvr =
         new PowerMenu.Builder(CodeEditorActivity.this)
             .addItem(new PowerMenuItem("Search Text", false, R.drawable.textsearch))
@@ -803,11 +801,11 @@ public class CodeEditorActivity extends BaseCompat {
     }
   }
 
-  public void setCodeEditorFileReader(String _path) {
+   void setCodeEditorFileReader(String _path) {
     EditorRoaderFile.RuningTask(editor, _fab, _path, proanjctor);
   }
 
-  public void setClosetab(int _position, ArrayList<HashMap<String, Object>> _data) {
+   void setClosetab(int _position, ArrayList<HashMap<String, Object>> _data) {
     if (FileUtil.isExistFile(_data.get(_position).get("path").toString())) {
       _data.remove((_position));
       if (_data.isEmpty()) {
@@ -863,32 +861,10 @@ public class CodeEditorActivity extends BaseCompat {
     }
   }
 
-  public void _Anim(final View setCodeEditorFileReader) {
-    android.view.animation.Animation animation = new android.view.animation.AlphaAnimation(0, 1);
-    animation.setDuration(300);
-    setCodeEditorFileReader.setAnimation(animation);
-  }
-
-  public void _Anim01(final View _view) {
-    AnimUtils.Amin01(_view);
-  }
-
   void _Animwork(final View _view) {
     AnimUtils.Worker(_view);
   }
 
-  void _Anim04(final View _view) {
-    AnimUtils.Amin04(_view, this);
-  }
-
-  void ClickItemChildAnimation(View view) {
-    var fade_in =
-        new ScaleAnimation(
-            0.9f, 1f, 0.9f, 1f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.7f);
-    fade_in.setDuration(300);
-    fade_in.setFillAfter(true);
-    view.startAnimation(fade_in);
-  }
 
   void ReloadFileInPos() {
     if (shp.contains("path")) {
@@ -1290,7 +1266,7 @@ public class CodeEditorActivity extends BaseCompat {
     bottomSheetDialog.show();
   }
 
-  public void setWallpaperParallaxEffect() {
+   void setWallpaperParallaxEffect() {
 
     effect = new WallpaperParallaxEffect(this);
     effect.setCallback(
