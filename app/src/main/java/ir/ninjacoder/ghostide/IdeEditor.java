@@ -90,9 +90,7 @@ public class IdeEditor extends CodeEditor implements IEditor {
     showSoftInput();
     setLineInfoTextSize(18f);
     setScalable(true);
-    setDividerWidth(19);
     setPinLineNumber(true);
-    setDividerMargin(30f);
     setNonPrintablePaintingFlags(FLAG_GHOSTWEB | FLAG_Scrop);
     subscribeEvent(ClickEvent.class, ((event, unsubscribe) -> ta(event)));
     subscribeEvent(ContentChangeEvent.class, ((event, unsubscribe) -> handleContentChange(event)));

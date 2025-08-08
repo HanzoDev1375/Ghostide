@@ -1,5 +1,6 @@
 package io.github.rosemoe.sora.langs.java;
 
+import com.github.javaparser.ParserConfiguration;
 import ir.ninjacoder.ghostide.IdeEditor;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.StaticJavaParser;
@@ -205,10 +206,9 @@ public class JavaLanguage implements EditorLanguage {
     public static String format(String code) {
       try {
         CompilationUnit cu = StaticJavaParser.parse(code);
-
+        StaticJavaParser.getConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
         DefaultPrinterConfiguration configuration = new DefaultPrinterConfiguration();
         DefaultPrettyPrinter printer = new DefaultPrettyPrinter(configuration);
-		
         String formattedCode = printer.print(cu);
         System.out.println(formattedCode);
         return formattedCode;

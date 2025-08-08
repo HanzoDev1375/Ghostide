@@ -22,8 +22,9 @@ import java.util.regex.Matcher;
 public class AndroidSVGFormatter {
 
   private static final String TAG = "SVGFormatter";
-
+  private static final String SVG_HEADER_COMMENT = "<!-- Created with Ghost ide -->\n";
   private int indentSize;
+  private boolean showheader = true;
   private Context context;
 
   // ترتیب attributes برای SVG
@@ -96,7 +97,7 @@ public class AndroidSVGFormatter {
   }
 
   public AndroidSVGFormatter(Context context) {
-    this(context, 4); // پیشفرض 2 فاصله
+    this(context, 2);
   }
 
   /** فرمت کردن محتوای SVG */
@@ -115,12 +116,11 @@ public class AndroidSVGFormatter {
       if (rootElement == null) {
         throw new Exception("خطا در پارس کردن SVG");
       }
-
-      // تمیز کردن و بهبود
       cleanElement(rootElement);
-
-      // تولید خروجی فرمت شده
-      result.formattedContent = elementToString(rootElement, 0);
+      result.formattedContent =
+          showheader
+              ? SVG_HEADER_COMMENT + elementToString(rootElement, 0)
+              : elementToString(rootElement, 0);
       result.formattedSize = result.formattedContent.getBytes("UTF-8").length;
       result.success = true;
 
@@ -137,12 +137,10 @@ public class AndroidSVGFormatter {
     return result;
   }
 
-  /** پارس کردن XML با استفاده از Android Pull Parser */
   private SVGElement parseXML(String xmlContent) throws XmlPullParserException, IOException {
     XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
     factory.setNamespaceAware(true);
     XmlPullParser parser = factory.newPullParser();
-
     parser.setInput(new StringReader(xmlContent));
 
     SVGElement root = null;
@@ -150,13 +148,20 @@ public class AndroidSVGFormatter {
 
     int eventType = parser.getEventType();
     while (eventType != XmlPullParser.END_DOCUMENT) {
-
       switch (eventType) {
         case XmlPullParser.START_TAG:
           String tagName = parser.getName();
           SVGElement element = new SVGElement(tagName);
+          if ("svg".equalsIgnoreCase(tagName)) {
+            element.attributes.put("xmlns", "http://www.w3.org/2000/svg");
+            for (int i = 0; i < parser.getAttributeCount(); i++) {
+              if ("xmlns:xlink".equals(parser.getAttributeName(i))) {
+                element.attributes.put("xmlns:xlink", parser.getAttributeValue(i));
+              }
+            }
+          }
 
-          // اضافه کردن attributes
+          // پردازش سایر attributes
           for (int i = 0; i < parser.getAttributeCount(); i++) {
             String attrName = parser.getAttributeName(i);
             String attrValue = parser.getAttributeValue(i);
@@ -187,10 +192,8 @@ public class AndroidSVGFormatter {
           }
           break;
       }
-
       eventType = parser.next();
     }
-
     return root;
   }
 
@@ -221,7 +224,15 @@ public class AndroidSVGFormatter {
   private Map<String, String> sortAttributes(Map<String, String> attributes) {
     Map<String, String> sorted = new LinkedHashMap<>();
 
-    // اول attributes مهم
+    // اول namespaceهای ضروری
+    if (attributes.containsKey("xmlns")) {
+      sorted.put("xmlns", attributes.get("xmlns"));
+    }
+    if (attributes.containsKey("xmlns:xlink")) {
+      sorted.put("xmlns:xlink", attributes.get("xmlns:xlink"));
+    }
+
+    // سپس بقیه attributes مهم
     for (String attrName : SVG_ATTR_ORDER) {
       if (attributes.containsKey(attrName)) {
         sorted.put(attrName, attributes.get(attrName));
@@ -464,5 +475,13 @@ public class AndroidSVGFormatter {
     } else {
       Log.e(TAG, "❌ تست ناموفق: " + result.errorMessage);
     }
+  }
+
+  public boolean getShowheader() {
+    return this.showheader;
+  }
+
+  public void setShowheader(boolean showheader) {
+    this.showheader = showheader;
   }
 }

@@ -76,7 +76,7 @@ public class HtmlToCssGenerator {
       }
 
       // 6. ذخیره فایل CSS
-      FileWriter cssWriter = new FileWriter(output + "style.css");
+      FileWriter cssWriter = new FileWriter(output + "/style.css");
       cssWriter.write(cssBuilder.toString());
       cssWriter.close();
       System.out.println("CSS file generated: output.css");
