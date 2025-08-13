@@ -8,6 +8,12 @@ import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import java.util.Stack;
 
 public class RainbowBracketHelper {
+  private CharSequence m;
+
+  public RainbowBracketHelper(CharSequence m) {
+    this.m = m;
+  }
+
   private static final int[] RAINBOW_COLORS = {
     EditorColorScheme.breaklevel1,
     EditorColorScheme.breaklevel2,
@@ -42,7 +48,7 @@ public class RainbowBracketHelper {
     BlockLine block = result.obtainNewBlock();
     block.startLine = line;
     block.startColumn = column;
-    listBl.push(block);
+    if (!getNotScan()) listBl.push(block);
   }
 
   public void handleOpenBracket(TextAnalyzeResult result, int line, int column) {
@@ -93,7 +99,7 @@ public class RainbowBracketHelper {
       b.endColumn = column;
 
       if (b.startLine != b.endLine) {
-        result.addBlockLine(b);
+        if (!getNotScan()) result.addBlockLine(b);
       }
     } else result.addIfNeeded(line, column, mcolor);
   }
@@ -106,5 +112,9 @@ public class RainbowBracketHelper {
     if (GhostIdeAppLoader.getAnalyzercod().getBoolean("Analyzercod", false) == false) {
       return false;
     } else return true;
+  }
+
+  private boolean getNotScan() {
+    return m.equals("[") || m.equals("]") || m.equals("<") || m.equals(">");
   }
 }

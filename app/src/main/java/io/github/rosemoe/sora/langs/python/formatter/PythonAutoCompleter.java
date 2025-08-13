@@ -13,7 +13,7 @@ public class PythonAutoCompleter {
 
   private static final String TAG = "PythonAutoCompleter";
 
-  public List<CompletionItem> complete(
+  public synchronized List<CompletionItem> complete(
       Context context, String code, int line, int column, String prefix) {
     try {
       String json = runAutoComplete(context, code, line, column);

@@ -258,15 +258,13 @@ public class FileManagerActivity extends BaseCompat
         new RequestNetwork.RequestListener() {
 
           @Override
-          public void onResponse(String _param1, String _param2, HashMap<String, Object> _param3) {
-
-            final String _response = _param2;
+          public void onResponse(String _param1, String response, HashMap<String, Object> _param3) {
 
             try {
               upfile =
                   new Gson()
                       .fromJson(
-                          _response,
+                          response,
                           new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
             } catch (Exception e) {
             }
@@ -280,13 +278,18 @@ public class FileManagerActivity extends BaseCompat
                   "Update",
                   (p, d) -> {
                     bind.downloder.setTitle(upfile.get(0).get("Title").toString());
-                    bind.downloder.setSizeTitle(upfile.get(0).get("sizearm64").toString());
+                    bind.downloder.setSizeTitle(
+                        ObjectUtils.hasCpuArm64()
+                            ? upfile.get(0).get("sizearm64").toString()
+                            : upfile.get(0).get("sizearm32").toString());
                     bind.downloder.setVisibility(View.VISIBLE);
                     bind.fabAdd.setVisibility(View.GONE);
                     bind.downloder.setOnClick(
                         v -> {
                           bind.downloder.setDownload(
-                              upfile.get(0).get("linkarm64").toString(),
+                              ObjectUtils.hasCpuArm64()
+                                  ? upfile.get(0).get("linkarm64").toString()
+                                  : upfile.get(0).get("linkarm32").toString(),
                               upfile.get(0).get("appname").toString());
                         });
                   });
@@ -349,6 +352,11 @@ public class FileManagerActivity extends BaseCompat
     switch (event) {
       case FileWatcher.CREATE:
       case FileWatcher.DELETE:
+        reLoadFile();
+        break;
+      
+      case FileWatcher.MODIFY:
+      case FileWatcher.MOVED_FROM:
         reLoadFile();
         break;
     }
@@ -511,7 +519,7 @@ public class FileManagerActivity extends BaseCompat
   public void reLoadFile(boolean isSortFile) {
     bind.recyclerview2.setVisibility(View.GONE);
     bind.filedirBar.setVisibility(View.VISIBLE);
-    ExecutorService executor = Executors.newSingleThreadExecutor();
+    ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     executor.execute(
         () -> {
           save_path.edit().putString("path", Folder).apply();
@@ -583,7 +591,7 @@ public class FileManagerActivity extends BaseCompat
   }
 
   public void FolderMaker() {
-    androidx.appcompat.app.AlertDialog dialog =
+    var dialog =
         new GhostWebMaterialDialog(FileManagerActivity.this)
             .setView(R.layout.makefolder)
             .setTitle("Folder")
@@ -683,15 +691,6 @@ public class FileManagerActivity extends BaseCompat
           @Override
           public void onError(String error) {}
         });
-  }
-
-  public void _Ripple_Drawable(final View _view, final String _c) {
-    android.content.res.ColorStateList clr =
-        new android.content.res.ColorStateList(
-            new int[][] {new int[] {}}, new int[] {Color.parseColor(_c)});
-    android.graphics.drawable.RippleDrawable ripdr =
-        new android.graphics.drawable.RippleDrawable(clr, null, null);
-    _view.setBackground(ripdr);
   }
 
   public void RefreshTabs() {
@@ -1109,7 +1108,7 @@ public class FileManagerActivity extends BaseCompat
     if (staticstring.endsWith(".less")) {
       SendDataFromCodeEditor(newpos, "path", files, newlistmap);
     }
-    if (staticstring.endsWith(".jsx")|| staticstring.endsWith(".tsx")) {
+    if (staticstring.endsWith(".jsx") || staticstring.endsWith(".tsx")) {
       SendDataFromCodeEditor(newpos, "path", files, newlistmap);
     }
     if (staticstring.endsWith(".html")) {
@@ -1306,7 +1305,9 @@ public class FileManagerActivity extends BaseCompat
               {
                 SharedPreferences themePrefs =
                     getSharedPreferences("thememanagersoft", MODE_PRIVATE);
-                themePrefs.edit().putString("themes", Folder).apply();
+                themePrefs.edit().putString("themes", staticstring).apply();
+                Toast.makeText(getApplicationContext(), themePrefs.getString("themes", ""), 2)
+                    .show();
                 sheet.getDismiss(true);
                 break;
               }
@@ -1327,7 +1328,7 @@ public class FileManagerActivity extends BaseCompat
     di.setTitle(title);
     di.setMessage(massges);
     di.setPositiveButton(
-        "بله",
+        "ok",
         (p1, d2) -> {
           var copydir = new ProgressDialog(this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
           copydir.setCanceledOnTouchOutside(false);

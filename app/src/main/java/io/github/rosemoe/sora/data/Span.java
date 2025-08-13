@@ -82,7 +82,7 @@ public class Span {
 
   public int alphacompat;
 
-  public String drawminiText = "";
+  public String drawminiText;
 
   /**
    * Set this value to draw curly lines for this span to indicates code problems.

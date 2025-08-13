@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.rosemoe.sora.data.RainbowBracketHelper;
 import io.github.rosemoe.sora.data.Span;
+import io.github.rosemoe.sora.langs.python.formatter.PythonCodeAnalyzerAst;
 import io.github.rosemoe.sora.langs.python.formatter.PythonSyntaxChecker;
 import io.github.rosemoe.sora.langs.xml.analyzer.Utils;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
@@ -54,7 +55,7 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
       var lexer = new PythonLexerCompat(stream);
       var auto = new PythonAutoComplete(editor);
       auto.setKeywords(PythonLang.keywords);
-      rb = new RainbowBracketHelper();
+      rb = new RainbowBracketHelper(editor.getTextAsString());
       var info = new PythonAutoComplete.Identifiers();
       info.begin();
       errors = new PythonErrorManager(editor);
@@ -77,6 +78,7 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
         }
         line = token.getLine() - 1;
         type = token.getType();
+
         column = token.getCharPositionInLine();
         if (type == PythonLexerCompat.EOF) {
           lastLine = line;
@@ -205,14 +207,15 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
               boolean isBold = false;
               boolean isUnderLine = false;
               info.addIdentifier(token.getText());
+
               if (previous == PythonLexerCompat.CLASS) {
                 colorid = EditorColorScheme.pycolormatch1;
                 isBold = true;
                 isUnderLine = false;
               }
-              if (previous == PythonLexerCompat.DEF) {
-                colorid = EditorColorScheme.pycolormatch2;
-              }
+              //              if (previous == PythonLexerCompat.DEF) {
+              //                colorid = EditorColorScheme.pycolormatch2;
+              //              }
               if (previous == PythonLexerCompat.IF) {
                 colorid = EditorColorScheme.pycolormatch3;
                 isBold = true;
@@ -316,6 +319,36 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
       // error manager not work
       //   errors.analyze(content, result, delegate);
       result.setSuppressSwitch(maxSwitch + 10);
+      var pyast = new PythonCodeAnalyzerAst();
+      pyast.analyze(GhostIdeAppLoader.getContext(), content.toString());
+      var listAst = pyast.getElements();
+      pyast
+          .getMethods()
+          .forEach(
+              v -> {
+                Utils.setSpanEFO2(
+                    result, v.line, v.column, EditorColorScheme.javafield, false, true);
+              });
+      pyast
+          .getFunctions()
+          .forEach(
+              v -> {
+                Utils.setSpanEFO2(result, v.line, v.column, EditorColorScheme.javafun, true, false);
+              });
+      pyast
+          .getClasses()
+          .forEach(
+              v -> {
+                Utils.setSpanEFO2(
+                    result, v.line, v.column, EditorColorScheme.javaoprator, true, false);
+              });
+      pyast
+          .getVariables()
+          .forEach(
+              v -> {
+                Utils.setSpanEFO2(
+                    result, v.line, v.column, EditorColorScheme.javatype, false, false);
+              });
       result.setNavigation(labels);
     } catch (IOException e) {
       e.printStackTrace();

@@ -74,7 +74,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
       TextAnalyzeResult result,
       TextAnalyzer.AnalyzeThread.Delegate delegate) {
     try {
-      ha = new RainbowBracketHelper();
+      ha = new RainbowBracketHelper(content);
       IdeEditor editor = mEditorReference.get();
       if (editor == null) {
         return;
@@ -532,7 +532,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                   int column2 = dec.getBegin().get().column;
                   inline.put(importName, line2);
                   incol.put(importName, column2);
-                  unusedImport.add(importName);
+                  unusedImport.add(dec.getName().asString());
                   super.visit(dec, arg);
                 }
 
@@ -554,8 +554,8 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 @Override
                 public void visit(MethodDeclaration arg0, Void arg1) {
                   var variableName = arg0.getNameAsString();
-                  int li = arg0.getBegin().get().line;
-                  int cl = arg0.getBegin().get().column;
+                  int li = arg0.getName().getBegin().get().line;
+                  int cl = arg0.getName().getBegin().get().column;
                   mtusing.add(arg0.getNameAsString());
                   inline.put(variableName, li);
                   incol.put(variableName, cl);
@@ -567,8 +567,8 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
 
                 @Override
                 public void visit(ConstructorDeclaration arg0, Void arg1) {
-                  int lines = arg0.getBegin().get().line;
-                  int colz = arg0.getBegin().get().column;
+                  int lines = arg0.getName().getBegin().get().line;
+                  int colz = arg0.getName().getBegin().get().column;
                   if (JavaPaserUtils.getDeprecated(arg0.getAnnotations()))
                     Utils.setWaringSpan(result, lines, colz + 1);
                   if (JavaPaserUtils.getCustomAnnotationExpr(arg0.getAnnotations(), "NonNull"))

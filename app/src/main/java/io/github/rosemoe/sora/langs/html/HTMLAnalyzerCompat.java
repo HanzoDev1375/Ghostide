@@ -55,7 +55,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
       StringBuilder text =
           content instanceof StringBuilder ? (StringBuilder) content : new StringBuilder(content);
       CodePointCharStream stream = CharStreams.fromReader(new StringReader(content.toString()));
-      hl = new RainbowBracketHelper();
+      hl = new RainbowBracketHelper(content);
       htmlCodeAnalyzer = new BasicSyntaxPullAnalyzer();
       HTMLLexer lexer = new HTMLLexer(stream);
       HTMLAutoComplete auto = new HTMLAutoComplete(editor);

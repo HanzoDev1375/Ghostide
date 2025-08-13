@@ -37,7 +37,7 @@ public class JsonCodeAnalyzer implements CodeAnalyzer {
       TextAnalyzeResult result,
       TextAnalyzer.AnalyzeThread.Delegate delegate) {
     try {
-		br =new RainbowBracketHelper();
+		br =new RainbowBracketHelper(content);
       CodePointCharStream stream = CharStreams.fromReader(new StringReader(content.toString()));
       JSONLexer jsons = new JSONLexer(stream);
       Token token;

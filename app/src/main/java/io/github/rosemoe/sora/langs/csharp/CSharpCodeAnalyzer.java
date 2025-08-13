@@ -36,7 +36,7 @@ public class CSharpCodeAnalyzer implements CodeAnalyzer {
       TextAnalyzer.AnalyzeThread.Delegate delegate) {
 
     try {
-      he = new RainbowBracketHelper();
+      he = new RainbowBracketHelper(content);
       lexer = new CSharpLexer(CharStreams.fromReader(new StringReader(content.toString())));
       Stack<BlockLine> stack = new Stack<>();
       var info = new CsAutoComplete.Identifiers();

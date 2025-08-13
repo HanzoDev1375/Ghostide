@@ -29,7 +29,7 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
       TextAnalyzer.AnalyzeThread.Delegate delegate) {
     try {
       as = new BasicSyntaxJavaScriptAnalyzer();
-      br = new RainbowBracketHelper();
+      br = new RainbowBracketHelper(content);
       CodePointCharStream stream = CharStreams.fromReader(new StringReader(content.toString()));
       JavaScriptLexer lexer = new JavaScriptLexer(stream);
       var classNamePrevious = false;

@@ -31,7 +31,7 @@ public class KotlinSyntaxAnalyzer implements CodeAnalyzer {
       TextAnalyzeResult colors,
       TextAnalyzer.AnalyzeThread.Delegate delegate) {
 
-    rainbowBracketHelper = new RainbowBracketHelper();
+    rainbowBracketHelper = new RainbowBracketHelper(content);
     variables.clear();
     usedVariables.clear();
     functions.clear();

@@ -18,7 +18,6 @@ import ir.ninjacoder.ghostide.databinding.Antcomp8lerBinding;
 import ir.ninjacoder.ghostide.enums.CompilerModel;
 import ir.ninjacoder.ghostide.enums.Mode;
 import ir.ninjacoder.ghostide.layoutmanager.LogCatBottomSheet;
-import ir.ninjacoder.ghostide.marco.CharUtil;
 import ir.ninjacoder.ghostide.marco.ColorView;
 import ir.ninjacoder.ghostide.marco.FactoryCodeError;
 import ir.ninjacoder.ghostide.marco.GhostWebEditorSearch;
@@ -52,12 +51,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.util.TypedValue;
 import android.view.*;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.ScaleAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 import androidx.activity.EdgeToEdge;
@@ -489,8 +484,6 @@ public class CodeEditorActivity extends BaseCompat {
         ContentChangeEvent.class,
         (event, subscribe) -> {
           var cu = event.getEditor().getCursor();
-          var myChar = new CharUtil(editor.getText().toString(), titleauthor);
-
           var iscode = new FactoryCodeError(editor, iconAuthor, tablayouteditor);
           int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
           if (selectedTabPosition >= 0 && selectedTabPosition < tabs_listmap.size()) {

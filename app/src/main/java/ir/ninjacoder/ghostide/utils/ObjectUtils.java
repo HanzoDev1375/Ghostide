@@ -881,7 +881,11 @@ public class ObjectUtils {
                 base.finish();
               }
             })
-        .setNegativeButton(android.R.string.cancel, null)
+        .setNegativeButton(
+            android.R.string.cancel,
+            (c, cc) -> {
+              base.finish();
+            })
         .show();
   }
 
@@ -936,5 +940,12 @@ public class ObjectUtils {
 
   public static boolean getFuzzySearchByString(String prfex, String target) {
     return FuzzySearchHelper.isFuzzyMatch(prfex, target);
+  }
+
+  public static boolean hasCpuArm64() {
+    if (Build.SUPPORTED_ABIS[0].contains("arm64")) {
+      return true;
+    }
+    return false;
   }
 }

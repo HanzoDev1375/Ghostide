@@ -42,6 +42,8 @@ public class CompletionItem {
 
   @SerializedName("description")
   public String description;
+  
+  public String jdoc;
 
   public String getPrefix() {
     return prefix;

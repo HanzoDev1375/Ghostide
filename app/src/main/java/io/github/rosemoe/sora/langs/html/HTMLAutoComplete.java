@@ -11,7 +11,6 @@ import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 import io.github.rosemoe.sora.widget.commentRule.AppConfig;
-import ir.ninjacoder.ghostide.IdeEditor;
 import java.io.File;
 import java.util.HashMap;
 import java.util.regex.Matcher;
@@ -23,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import lsp4custom.com.ninjacoder.customhtmllsp.ScriptAnalyzer;
+import lsp4custom.com.ninjacoder.javapaserdata.HtmlUtil;
 import org.jsoup.Jsoup;
 
 public class HTMLAutoComplete implements AutoCompleteProvider {
@@ -308,16 +307,25 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
   public void setList(String prefix) {
     if (prefix.startsWith("loram"))
       items.add(new CompletionItem(prefix, getLoramRandom(prefix), "Lorem Ipsum (" + prefix + ")"));
+
+    if (HtmlUtil.hasStyleTag(editor.getTextAsString())) {
+      keyhtml.intallCss3KeyWord(items, prfex);
+      keyhtml.installCssAttr(items, prfex);
+      keyhtml.intallCss3Color(items, prfex);
+      keyhtml.installCssPadding(items, prfex);
+      for (String post : HTMLLanguage.colorsCss)
+        if (post.startsWith(prefix)) items.add(PhpAsCompletion(post, htmlconfig.CssColor));
+    }
+
+    if (HtmlUtil.hasScriptTag(editor.getTextAsString())) {
+      for (String ddd : HTMLLanguage.JS)
+        if (ddd.startsWith(prefix)) items.add(dddAsCompletion(ddd, htmlconfig.JsKey));
+    }
     keyhtml.installFromSora(items, prefix);
     keyhtml.installHtmlAttr(items, prfex);
-    keyhtml.intallCss3KeyWord(items, prfex);
-    keyhtml.installCssAttr(items, prfex);
-    keyhtml.intallCss3Color(items, prfex);
-    keyhtml.installCssPadding(items, prfex);
+
     keyhtml.randomColor(items, prfex);
 
-    for (String ddd : HTMLLanguage.JS)
-      if (ddd.startsWith(prefix)) items.add(dddAsCompletion(ddd, htmlconfig.JsKey));
     for (String classapp : HTMLLanguage.EmtClass)
       if (classapp.startsWith(prefix))
         items.add(AutoCompletion(classapp, "Class adding", HTMLLanguage.getClass));
@@ -330,9 +338,6 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
 
     for (String getTagNull : HTMLLanguage.TagNull)
       if (getTagNull.startsWith(prefix)) items.add(getEmmetItemPost(getTagNull, htmlconfig.TagOne));
-
-    for (String post : HTMLLanguage.colorsCss)
-      if (post.startsWith(prefix)) items.add(PhpAsCompletion(post, htmlconfig.CssColor));
 
     for (String span : comit) {
       if (span.equalsIgnoreCase("Comment")) {

@@ -43,7 +43,7 @@ public class BasicSyntaxJavaScriptAnalyzer implements CodeAnalyzer {
       TextAnalyzer.AnalyzeThread.Delegate delegate) {
     // Reset state for new analysis
     com = new JsAutoComplete();
-    helper = new RainbowBracketHelper();
+    helper = new RainbowBracketHelper(content);
     variables.clear();
     usedVariables.clear();
     functions.clear();

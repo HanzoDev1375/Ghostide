@@ -58,10 +58,11 @@ public class PythonAutoComplete implements AutoCompleteProvider {
     PythonAutoCompleter lsp = new PythonAutoCompleter();
 
     try {
+		
       keywords.addAll(
           lsp.complete(editor.getContext(), editor.getTextAsString(), line, column, prefix));
     } catch (Exception err) {
-
+          //  Log.e("PythonError",err.getLocalizedMessage());
     }
     keywords.addAll(CodeSnippet.runasList("python", prefix));
     // keywords.addAll(CodeSnippet.getPythonMethod(prefix));
