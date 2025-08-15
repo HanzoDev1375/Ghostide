@@ -3676,14 +3676,14 @@ fragment INEGETRGB
    : [0-9]+
    ;
 
+HSL
+   : 'hsla(' HUE ',' SATURATION ',' LIGHTNESS (',' ALPHA)? ')'
+   | 'rgba(' HUE ',' SATURATION ',' LIGHTNESS (',' ALPHA)? ')'
+   ;
+
 HTMLRGB
    : 'rgb(' INEGETRGB ',' INEGETRGB ',' INEGETRGB ')'
    | 'hsl(' INEGETRGB ',' INEGETRGB ',' INEGETRGB ')'
-   ;
-   //hsl(300, 10%, 300%,1)
-   
-HSL
-   : 'hsl(' HUE ',' SATURATION ',' LIGHTNESS (',' ALPHA)? ')'
    ;
 
 fragment HUE

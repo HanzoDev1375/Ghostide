@@ -438,8 +438,6 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
                 /// def code result -> Java.user();
                 colorid = EditorColorScheme.javafun;
               }
-              ListCss3Color.getHslColor(token, line, column, result);
-            
              ListCss3Color.initColor(token, line, column, result, true);
               hl.handleCustom(result, line, column, colorid);
               var cssH = new CSSVariableParser(editor);
@@ -451,6 +449,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
             // result.addIfNeeded(line, column, EditorColorScheme.COLOR_DEBUG);
             break;
           case HTMLLexer.HSL:
+           //using hsla
             ListCss3Color.getHslColor(token, line, column, result);
             break;
           case HTMLLexer.LBRACE:

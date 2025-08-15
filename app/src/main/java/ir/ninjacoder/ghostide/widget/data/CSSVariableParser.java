@@ -33,58 +33,76 @@ public class CSSVariableParser {
   }
 
   public void highlightVariables(TextAnalyzeResult result, String cssContent) {
-    var doc = Jsoup.parse(cssContent);
-	var variables = parseCSSVariables(cssContent);
-	var d = doc.select("style");
-	d.forEach(ic ->{
-		highlightVariableUsages(result,ic.data(),variables);
-	});
+
+    var variables = parseCSSVariables(cssContent);
     highlightVariableUsages(result, cssContent, variables);
   }
 
   private void highlightVariableUsages(
       TextAnalyzeResult result, String cssContent, Map<String, VariableInfo> variables) {
-    Pattern pattern = Pattern.compile("var\\(\\s*(--[a-zA-Z0-9-]+)\\s*\\)");
-    Matcher matcher = pattern.matcher(cssContent);
-    int[] lineOffsets = calculateLineOffsets(cssContent);
+    try {
+      CascadingStyleSheet css =
+          CSSReader.readFromString(cssContent, StandardCharsets.UTF_8, ECSSVersion.CSS30);
+      if (css != null) {
+        for (ICSSTopLevelRule rule : css.getAllRules()) {
+          if (rule instanceof CSSStyleRule) {
+            CSSStyleRule styleRule = (CSSStyleRule) rule;
+            for (CSSDeclaration declaration : styleRule.getAllDeclarations()) {
+              CSSExpression expression = declaration.getExpression();
+              if (expression != null) {
+                for (ICSSExpressionMember member : expression.getAllMembers()) {
+                  if (member instanceof CSSExpressionMemberFunction) {
+                    CSSExpressionMemberFunction func = (CSSExpressionMemberFunction) member;
 
-    while (matcher.find()) {
-      String varName = matcher.group(1);
-      if (variables.containsKey(varName)) {
-        int start = matcher.start(1); 
-        int[] lineCol = getExactLineColumn(lineOffsets, start);
-        int line = lineCol[0];
-        int col = lineCol[1];
-        int color =
-            variables.get(varName).value != null
-                ? parseColorFromValue(variables.get(varName).value)
-                : VARIABLE_NAME_COLOR;
-        setSpanEFO2(result, line, col, color, true, false);
+                    if ("var".equals(func.getFunctionName())) {
+                      CSSExpression innerExpr = func.getExpression(); // نسخه قدیمی
+                      if (innerExpr != null && !innerExpr.getAllMembers().isEmpty()) {
+                        String varName = innerExpr.getAllMembers().get(0).getAsCSSString().trim();
+
+                        if (variables.containsKey(varName)) {
+                          int line = func.getSourceLocation().getFirstTokenBeginLineNumber();
+                          int col = func.getSourceLocation().getFirstTokenBeginColumnNumber();
+
+                          int color = parseColorFromValue(variables.get(varName).value);
+
+                          for (int offset = 0; offset < varName.length(); offset++) {
+                            setSpanEFO2(result, line, col , color, true, false);
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
+    } catch (Exception e) {
+      e.printStackTrace();
     }
   }
 
   private int[] calculateLineOffsets(String text) {
     List<Integer> offsets = new ArrayList<>();
     offsets.add(0);
+
     for (int i = 0; i < text.length(); i++) {
       if (text.charAt(i) == '\n') {
         offsets.add(i + 1);
       }
     }
+    offsets.add(text.length());
     return offsets.stream().mapToInt(i -> i).toArray();
   }
 
   private int[] getExactLineColumn(int[] lineOffsets, int position) {
-    int line = 1;
-    for (; line < lineOffsets.length; line++) {
-      if (lineOffsets[line] > position) {
-        break;
-      }
+    int line = Arrays.binarySearch(lineOffsets, position);
+    if (line < 0) {
+      line = -line - 2;
     }
-    line--;
-    int col = position - lineOffsets[line] + 1;
-    return new int[] {line + 1, col};
+    int column = position - lineOffsets[line];
+    return new int[] {line, column};
   }
 
   private Map<String, VariableInfo> parseCSSVariables(String cssContent) {
@@ -100,8 +118,15 @@ public class CSSVariableParser {
               String property = declaration.getProperty();
               if (property.startsWith("--")) {
                 CSSExpression expression = declaration.getExpression();
-                int line = declaration.getSourceLocation().getLastTokenBeginLineNumber();
-                int col = declaration.getSourceLocation().getLastTokenBeginColumnNumber();
+                // استفاده از FirstToken به جای LastToken برای موقعیت دقیق شروع
+                int line =
+                    declaration
+                        .getSourceLocation()
+                        .getFirstTokenBeginLineNumber(); // تبدیل به index 0-based
+                int col =
+                    declaration
+                        .getSourceLocation()
+                        .getFirstTokenBeginColumnNumber(); // تبدیل به index 0-based
                 if (expression != null) {
                   variables.put(
                       property, new VariableInfo(expression.getAsCSSString().trim(), line, col));

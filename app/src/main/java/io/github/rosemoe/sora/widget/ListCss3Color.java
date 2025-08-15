@@ -81,63 +81,64 @@ public class ListCss3Color {
 
     try {
       int color = 0;
+      if (text1.startsWith("rgb") || text1.startsWith("hsl")) {
+        String rgbValues = text1.substring(4, text1.length() - 1);
+        String[] rgb = rgbValues.split(",");
+        if (rgb.length == 3) {
+          int r = Integer.parseInt(rgb[0].trim());
+          int g = Integer.parseInt(rgb[1].trim());
+          int b = Integer.parseInt(rgb[2].trim());
+          r = Math.max(0, Math.min(255, r));
+          g = Math.max(0, Math.min(255, g));
+          b = Math.max(0, Math.min(255, b));
+          color = Color.rgb(r, g, b);
+          System.out.println("Color rgb : " + "r: " + r + " g: " + g + " b: " + b);
 
-      String rgbValues = text1.substring(4, text1.length() - 1);
-      String[] rgb = rgbValues.split(",");
-      if (rgb.length == 3) {
-        int r = Integer.parseInt(rgb[0].trim());
-        int g = Integer.parseInt(rgb[1].trim());
-        int b = Integer.parseInt(rgb[2].trim());
-        r = Math.max(0, Math.min(255, r));
-        g = Math.max(0, Math.min(255, g));
-        b = Math.max(0, Math.min(255, b));
-        color = Color.rgb(r, g, b);
-        System.out.println("Color rgb : " + "r: " + r + " g: " + g + " b: " + b);
+          colors.addIfNeeded(line, column, EditorColorScheme.LITERAL);
 
-        colors.addIfNeeded(line, column, EditorColorScheme.LITERAL);
+          Span span =
+              Span.obtain(
+                  column,
+                  TextStyle.makeStyle(
+                      ColorUtils.calculateLuminance(color) > 0.5
+                          ? EditorColorScheme.black
+                          : EditorColorScheme.TEXT_NORMAL,
+                      0,
+                      false,
+                      true,
+                      false,
+                      false,
+                      true));
+          if (span != null) {
+            span.setBackgroundColorMy(color);
+            colors.add(line, span);
+          }
 
-        Span span =
-            Span.obtain(
-                column,
-                TextStyle.makeStyle(
-                    ColorUtils.calculateLuminance(color) > 0.5
-                        ? EditorColorScheme.black
-                        : EditorColorScheme.TEXT_NORMAL,
-                    0,
-                    false,
-                    true,
-                    false,
-                    false,
-                    true));
-        if (span != null) {
-          span.setBackgroundColorMy(color);
-          colors.add(line, span);
+          // Setting the span to cover whole text
+          Span fullTextSpan =
+              Span.obtain(
+                  column + text1.length(),
+                  TextStyle.makeStyle(
+                      ColorUtils.calculateLuminance(color) > 0.5
+                          ? EditorColorScheme.black
+                          : EditorColorScheme.TEXT_NORMAL,
+                      0,
+                      false,
+                      true,
+                      false,
+                      false,
+                      true));
+          fullTextSpan.setBackgroundColorMy(color);
+          colors.add(line, fullTextSpan);
+
+          Span endSpan =
+              Span.obtain(
+                  column + text1.length(), TextStyle.makeStyle(EditorColorScheme.TEXT_NORMAL));
+          endSpan.setBackgroundColorMy(Color.TRANSPARENT);
+          colors.add(line, endSpan);
+        } else {
+          throw new IllegalArgumentException("Invalid RGB format");
         }
-
-        // Setting the span to cover whole text
-        Span fullTextSpan =
-            Span.obtain(
-                column + text1.length(),
-                TextStyle.makeStyle(
-                    ColorUtils.calculateLuminance(color) > 0.5
-                        ? EditorColorScheme.black
-                        : EditorColorScheme.TEXT_NORMAL,
-                    0,
-                    false,
-                    true,
-                    false,
-                    false,
-                    true));
-        fullTextSpan.setBackgroundColorMy(color);
-        colors.add(line, fullTextSpan);
-
-        Span endSpan =
-            Span.obtain(
-                column + text1.length(), TextStyle.makeStyle(EditorColorScheme.TEXT_NORMAL));
-        endSpan.setBackgroundColorMy(Color.TRANSPARENT);
-        colors.add(line, endSpan);
-      } else {
-        throw new IllegalArgumentException("Invalid RGB format");
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -179,13 +180,13 @@ public class ListCss3Color {
     var colors = result;
 
     try {
-      if (text1.startsWith("hsl(")) {
-        String hslValues = text1.substring(4, text1.length() - 1);
-        String[] hsl = hslValues.split(",");
+      if (text1.startsWith("hsla") || text1.startsWith("rgba")) {
+		  String rgbValues = text1.substring(5, text1.length() - 1);
+        String[] hsl = rgbValues.split(",");
         if (hsl.length >= 3) {
           float h = Float.parseFloat(hsl[0].trim()); // Hue
-          float s = Float.parseFloat(hsl[1].trim()) / 100f; // Saturation
-          float l = Float.parseFloat(hsl[2].trim()) / 100f; // Lightness
+          float s = Float.parseFloat(hsl[1].trim().replace("%", "")) / 100f; // Saturation
+          float l = Float.parseFloat(hsl[2].trim().replace("%", "")) / 100f; // Lightness
           float alpha =
               (hsl.length == 4) ? Float.parseFloat(hsl[3].trim()) : 1.0f; // Alpha (شفافیت)
 
@@ -249,14 +250,8 @@ public class ListCss3Color {
                   column + text1.length(), TextStyle.makeStyle(EditorColorScheme.TEXT_NORMAL));
           endSpan.setBackgroundColorMy(Color.TRANSPARENT);
           colors.add(line, endSpan);
-
-        } else {
-          // throw new IllegalArgumentException("Invalid HSL format");
         }
-      } else {
-        // throw new IllegalArgumentException("Unsupported color format");
       }
-
     } catch (Exception e) {
       e.printStackTrace();
     }
