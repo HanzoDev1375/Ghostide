@@ -2957,6 +2957,8 @@ public class CodeEditor extends View
             offsetX,
             baseline,
             line);
+        
+            
       } else {
         if (startIndex <= selectionStart) {
           if (endIndex >= selectionEnd) {
@@ -2972,6 +2974,7 @@ public class CodeEditor extends View
                 offsetX,
                 baseline,
                 line);
+            
             float deltaX = measureText(mBuffer, startIndex, selectionStart - startIndex, line);
             // selectionStart - selectionEnd
             mPaint.setColor(mColors.getColor(EditorColorScheme.TEXT_SELECTED));
@@ -2985,6 +2988,7 @@ public class CodeEditor extends View
                 offsetX + deltaX,
                 baseline,
                 line);
+            
             deltaX += measureText(mBuffer, selectionStart, selectionEnd - selectionStart, line);
             // selectionEnd - endIndex
             mPaint.setColor(color);
@@ -2998,6 +3002,7 @@ public class CodeEditor extends View
                 offsetX + deltaX,
                 baseline,
                 line);
+            
           } else {
             // Two regions
             // startIndex - selectionStart
@@ -3011,7 +3016,7 @@ public class CodeEditor extends View
                 offsetX,
                 baseline,
                 line);
-            // selectionStart - endIndex
+            
             mPaint.setColor(mColors.getColor(EditorColorScheme.TEXT_SELECTED));
             drawText(
                 canvas,
@@ -3023,6 +3028,7 @@ public class CodeEditor extends View
                 offsetX + measureText(mBuffer, startIndex, selectionStart - startIndex, line),
                 baseline,
                 line);
+            
           }
         } else {
           // selectionEnd > startIndex > selectionStart
@@ -3039,7 +3045,7 @@ public class CodeEditor extends View
                 offsetX + measureText(mBuffer, startIndex, selectionEnd - startIndex, line),
                 baseline,
                 line);
-            // startIndex - selectionEnd
+            
             mPaint.setColor(mColors.getColor(EditorColorScheme.TEXT_SELECTED));
             drawText(
                 canvas,
@@ -3051,6 +3057,8 @@ public class CodeEditor extends View
                 offsetX,
                 baseline,
                 line);
+            
+        
           } else {
             // One region
             mPaint.setColor(mColors.getColor(EditorColorScheme.TEXT_SELECTED));
@@ -3656,7 +3664,6 @@ public class CodeEditor extends View
       canvas.drawText(src, st, end - st, offX, offY, mPaint);
     }
   }
-
   @UnsupportedUserUsage
   public float[] findFirstVisibleChar(
       float target, int start, int end, ContentLine line, int lineNumber) {
@@ -5344,7 +5351,7 @@ public class CodeEditor extends View
     invalidateHwRenderer();
     invalidate();
   }
-
+  
   /**
    * Set the editor's text size in sp unit. This value must be > 0
    *

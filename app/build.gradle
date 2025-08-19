@@ -11,7 +11,7 @@ android {
     defaultConfig {
         applicationId "ir.ninjacoder.ghostide"
         minSdk 26
-        targetSdk 32
+        targetSdk 35
         versionCode 34
         versionName "2.0.2"
         vectorDrawables {

@@ -52,7 +52,7 @@
     </style>
     <style
         name="AppTheme"
-        parent="Theme.Material3.Dark.NoActionBar"
+        parent="Theme.Bases"
     >
         <item name="bottomSheetDialogTheme">@style/ThemeOverlay.App.BottomSheetDialog</item>
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialAlertDialog</item>

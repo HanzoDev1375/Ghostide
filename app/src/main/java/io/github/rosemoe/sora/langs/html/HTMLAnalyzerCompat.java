@@ -295,6 +295,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
           case HTMLLexer.BITOR:
           case HTMLLexer.CARET:
           case HTMLLexer.MOD:
+          case HTMLLexer.HASH:
           case HTMLLexer.ADD_ASSIGN:
           case HTMLLexer.SUB_ASSIGN:
           case HTMLLexer.MUL_ASSIGN:
@@ -418,6 +419,10 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
               if (previous == HTMLLexer.CASE || previous == HTMLLexer.FINAL) {
                 colorid = EditorColorScheme.ATTRIBUTE_NAME;
               }
+              // hash #
+              if (previous == HTMLLexer.HASH) {
+                colorid = EditorColorScheme.htmlsymbol;
+              }
               // show '<'
               if (previous == HTMLLexer.LT) {
                 colorid = EditorColorScheme.OPERATOR;
@@ -438,7 +443,13 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
                 /// def code result -> Java.user();
                 colorid = EditorColorScheme.javafun;
               }
-             ListCss3Color.initColor(token, line, column, result, true);
+              if (token.getText().equals("red")) {
+                colorid = EditorColorScheme.red;
+              } else if (token.getText().equals("green")) {
+                colorid = EditorColorScheme.green;
+              } else if (token.getText().equals("blue")) {
+                colorid = EditorColorScheme.blue;
+              }
               hl.handleCustom(result, line, column, colorid);
               var cssH = new CSSVariableParser(editor);
               cssH.highlightVariables(result, editor.getText().toString());
@@ -449,7 +460,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
             // result.addIfNeeded(line, column, EditorColorScheme.COLOR_DEBUG);
             break;
           case HTMLLexer.HSL:
-           //using hsla
+            // using hsla
             ListCss3Color.getHslColor(token, line, column, result);
             break;
           case HTMLLexer.LBRACE:

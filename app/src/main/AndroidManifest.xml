@@ -129,8 +129,6 @@
                 <data android:mimeType="application/3gpp*" />
                 <data android:mimeType="application/mp4" />
                 <data android:mimeType="application/mpeg*" />
-                <data android:mimeType="application/ogg" />
-                <data android:mimeType="application/sdp" />
                 <data android:mimeType="application/vnd.3gp*" />
                 <data android:mimeType="application/vnd.apple.mpegurl" />
                 <data android:mimeType="application/vnd.dvd*" />
@@ -143,7 +141,6 @@
                 <data android:mimeType="application/x-ogg" />
                 <data android:mimeType="application/x-quicktimeplayer" />
                 <data android:mimeType="application/x-shockwave-flash" />
-                <data android:mimeType="application/xspf+xml" />
                 <data android:mimeType="misc/ultravox" />
             </intent-filter>
             <intent-filter>

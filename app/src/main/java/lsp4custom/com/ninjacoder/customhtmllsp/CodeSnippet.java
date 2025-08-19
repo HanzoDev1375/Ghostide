@@ -48,11 +48,8 @@ public class CodeSnippet {
       for (JsonElement element : jsonArray) {
         JsonObject jsonObj = element.getAsJsonObject();
         CompletionItem item = new CompletionItem();
-        // تنظیم label با نام کلاس
         item.label = jsonObj.get("class_name").getAsString();
-        // تنظیم desc با نام کامل پکیج
         item.desc = jsonObj.get("full_package").getAsString();
-        // تنظیملاس (می‌توانید این را تغییر دهید)
         item.commit = jsonObj.get("class_name").getAsString();
         completionItems.add(item);
       }
@@ -169,7 +166,7 @@ public class CodeSnippet {
                     for (JsonElement line : bodyArray) {
                       if (!line.isJsonNull()) {
                         String lineStr = line.getAsString();
-                        // فقط اگر خط شامل placeholder باشد، جایگزینی انجام می‌شود
+                       
                         if (lineStr.contains("${")) {
                           lineStr = lineStr.replaceAll("\\$\\{[^}]*:(.*?)\\}", "$1");
                         }
@@ -179,7 +176,6 @@ public class CodeSnippet {
                     bodyStr = bodyBuilder.toString();
                   } else {
                     bodyStr = bodyElement.getAsString();
-                    // فقط اگر متن اصلی شامل placeholder باشد، جایگزینی انجام می‌شود
                     if (bodyStr.contains("${")) {
                       bodyStr = bodyStr.replaceAll("\\$\\{[^}]*:(.*?)\\}", "$1");
                     }

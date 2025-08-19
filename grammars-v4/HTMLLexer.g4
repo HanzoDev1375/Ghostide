@@ -3682,8 +3682,12 @@ HSL
    ;
 
 HTMLRGB
-   : 'rgb(' INEGETRGB ',' INEGETRGB ',' INEGETRGB ')'
-   | 'hsl(' INEGETRGB ',' INEGETRGB ',' INEGETRGB ')'
+   : 'rgb(' HUE ',' SATURATION ',' LIGHTNESS ')'
+   | 'hsl(' HUE ',' SATURATION ',' LIGHTNESS ')'
+   ;
+
+CSSXCOLOR
+   : HUE ',' SATURATION ',' LIGHTNESS
    ;
 
 fragment HUE
@@ -3691,11 +3695,11 @@ fragment HUE
    ;
 
 fragment SATURATION
-   : INTS '%'
+   : INTS '%'?
    ;
 
 fragment LIGHTNESS
-   : INTS '%'
+   : INTS '%'?
    ;
 
 fragment ALPHA
