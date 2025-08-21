@@ -19,42 +19,21 @@
              app:backgroundTint="@android:color/transparent"
              android:id="@+id/_app_bar">
 
-            <com.google.android.material.search.SearchBar
+            <com.ninjacoder.jgit.search.SearchBar
                  android:layout_height="wrap_content"
                  android:layout_width="match_parent"
-                 app:liftOnScrollColor="@android:color/transparent"
-                 android:hint="@string/search_file"
-                 android:id="@+id/searchbar">
-
-                <LinearLayout
-                     android:layout_height="wrap_content"
-                     android:layout_width="match_parent"
-                     android:orientation="horizontal">
-
-                    <ImageView
-                         android:layout_height="40dp"
-                         android:layout_width="40dp"
-                         android:src="@drawable/app_icon"
-                         android:gravity="right" />
-
-                </LinearLayout>
-
-            </com.google.android.material.search.SearchBar>
+                 android:layout_marginEnd="8dp"
+                 android:layout_marginStart="8dp"
+				 android:visibility="gone"
+                 android:id="@+id/searchbar" />
 
         </com.google.android.material.appbar.AppBarLayout>
-
-        <com.google.android.material.search.SearchView
-             android:layout_height="match_parent"
-             android:layout_width="match_parent"
-             android:hint="@string/search_file"
-             app:backgroundTint="?attr/colorSurface"
-             app:layout_anchor="@id/searchbar" />
 
         <androidx.core.widget.NestedScrollView
              android:layout_height="match_parent"
              android:layout_width="match_parent"
-             android:backgroundTint="@android:color/transparent"
-             app:layout_behavior="@string/appbar_scrolling_view_behavior">
+             app:layout_behavior="@string/appbar_scrolling_view_behavior"
+             android:backgroundTint="@android:color/transparent">
 
             <LinearLayout
                  android:layout_height="match_parent"
@@ -85,7 +64,7 @@
                          android:layout_height="match_parent"
                          android:layout_width="match_parent"
                          android:visibility="gone"
-                         android:gravity="center"
+                         android:gravity="center_horizontal"
                          android:orientation="vertical"
                          android:textSize="20dp"
                          android:id="@+id/emptyview">
@@ -94,7 +73,6 @@
                              android:layout_height="wrap_content"
                              android:layout_width="wrap_content"
                              android:textSize="20dp"
-                             
                              android:text="Empty List" />
 
                     </LinearLayout>

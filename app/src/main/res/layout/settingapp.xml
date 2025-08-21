@@ -25,6 +25,7 @@
             app:collapsedTitleTextAppearance="?textAppearanceTitleLarge"
             style="?attr/collapsingToolbarLayoutMediumStyle"
             app:titleCollapseMode="scale"
+			app:liftOnScroll="false"
             app:expandedTitleTextColor="?attr/colorOnSurface"
             app:collapsedTitleTextColor="?attr/colorOnSurface">
 
@@ -33,6 +34,7 @@
                 android:layout_width="match_parent"
                 android:paddingEnd="8dp"
                 android:elevation="0dp"
+				
                 app:layout_collapseMode="pin"
                 android:paddingStart="24dp"
                 android:id="@+id/_toolbar" />

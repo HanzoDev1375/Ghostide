@@ -28,19 +28,20 @@ public class CircleDrawable extends Drawable {
     mTextPaint.setTextAlign(Paint.Align.CENTER);
   }
 
-  
-
   @Override
   public void draw(Canvas canvas) {
     float width = getBounds().right;
     float height = getBounds().bottom;
 
     if (mCircle) {
-      canvas.drawCircle(width / 2, height / 2, width / 2, mPaint);
+      int ir = name.equals("v") ? 1 : name.equals("m") ? 2 : 4;
+      float radius = Math.min(width, height) / ir;
+      canvas.drawRoundRect(0f, 0f, width, height, radius, radius, mPaint);
     } else {
       canvas.drawRect(0f, 0f, width, height, mPaint);
     }
 
+    // متن
     canvas.save();
     canvas.translate(width / 2f, height / 2f);
     float textCenter = -(mTextPaint.descent() + mTextPaint.ascent()) / 2f;

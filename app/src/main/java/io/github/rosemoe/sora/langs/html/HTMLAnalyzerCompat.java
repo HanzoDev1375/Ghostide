@@ -169,6 +169,9 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
                 column,
                 TextStyle.makeStyle(EditorColorScheme.phpcolormatch3, 0, true, false, false));
             break;
+		  case HTMLLexer.CSSXCOLOR:
+		  ListCss3Color.getNumberColor(token,line,column,result);
+		  break;	
           case HTMLLexer.HEX_LITERAL:
             {
               Span span =

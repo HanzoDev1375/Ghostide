@@ -5,6 +5,7 @@
  */
 package ir.ninjacoder.ghostide.activities;
 
+import com.ninjacoder.jgit.search.SearchCallBack;
 import ir.ninjacoder.ghostide.PluginManager.IntentHelper;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.RequestNetwork;
@@ -75,7 +76,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.search.SearchBar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -102,7 +102,6 @@ public class FileManagerActivity extends BaseCompat
   protected AlertDialog maindialogPrfex;
   protected FastScrollerBuilder fast;
   protected FileEventUser user;
-  private SearchBar searchbar;
   private String staticstring = "";
   private FileManagerAd fileListItem;
   private String CreateFolder = "";
@@ -196,7 +195,6 @@ public class FileManagerActivity extends BaseCompat
 
   private void initialize(Bundle _savedInstanceState) {
 
-    // setSupportActionBar(searchbar);
     gridLayoutManager = new GridLayoutManager(this, 1);
     if (gridLayoutManager != null) {
       bind.recyclerview2.setLayoutManager(gridLayoutManager);
@@ -219,6 +217,17 @@ public class FileManagerActivity extends BaseCompat
 
     book = getSharedPreferences("hsipsot4444", Activity.MODE_PRIVATE);
     sh = new ShortcutInfoImpl(FileManagerActivity.this, Folder);
+    bind.searchbar.setCallBack(
+        new SearchCallBack() {
+
+          @Override
+          public void onTextChange(String text) {
+            // soon
+          }
+
+          @Override
+          public void onafterTextChanged(Editable edit, String code) {}
+        });
     if (getIntent().hasExtra("filePath")) {
       String filePath = getIntent().getStringExtra("filePath");
       if (filePath != null && new File(filePath).exists()) {
@@ -354,7 +363,7 @@ public class FileManagerActivity extends BaseCompat
       case FileWatcher.DELETE:
         reLoadFile();
         break;
-      
+
       case FileWatcher.MODIFY:
       case FileWatcher.MOVED_FROM:
         reLoadFile();
@@ -519,7 +528,8 @@ public class FileManagerActivity extends BaseCompat
   public void reLoadFile(boolean isSortFile) {
     bind.recyclerview2.setVisibility(View.GONE);
     bind.filedirBar.setVisibility(View.VISIBLE);
-    ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+    ExecutorService executor =
+        Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     executor.execute(
         () -> {
           save_path.edit().putString("path", Folder).apply();

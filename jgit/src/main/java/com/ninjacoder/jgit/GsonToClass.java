@@ -3,7 +3,6 @@ package com.ninjacoder.jgit;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.widget.ArrayAdapter;
-import android.widget.Toast;
 import com.blankj.utilcode.util.FileIOUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
@@ -208,60 +207,9 @@ public class GsonToClass {
   }
 
   private String convertJsonToJava(String jsonInput, String nameClass) {
-    if (isJsonVilad(jsonInput)) {
-      try {
-
-        // تبدیل رشته JSON به Map
-        /// سریع تر تبدیل کنید
-        Gson gson = new Gson();
-        Type type = new TypeToken<Map<String, Object>>() {}.getType();
-        Map<String, Object> map = gson.fromJson(jsonInput, type);
-
-        // تولید کد Java بر اساس داده‌های موجود در Map
-        StringBuilder javaCode = new StringBuilder();
-        javaCode.append("package yourApp;").append("\n");
-        javaCode.append("import com.google.gson.annotations.SerializedName;").append("\n");
-
-        javaCode.append("public class ").append(nameClass).append("{\n");
-
-        for (Map.Entry<String, Object> entry : map.entrySet()) {
-          String key = entry.getKey();
-          Object value = entry.getValue();
-          javaCode.append("\t@SerializedName(" + key + ")").append('\n');
-          javaCode.append("\tprivate " + convertType(value) + " " + key + ";\n");
-        }
-
-        for (Map.Entry<String, Object> entry : map.entrySet()) {
-          String key = entry.getKey();
-          Object value = entry.getValue();
-          // setNot usimg
-
-          javaCode.append(
-              "\n\npublic void set"
-                  + capitalize(key)
-                  + "("
-                  + convertType(value)
-                  + " "
-                  + key
-                  + ") {\n");
-          javaCode.append("\tthis." + key + " = " + key + ";\n");
-          javaCode.append("}\n");
-          javaCode.append("\npublic " + convertType(value) + " get" + capitalize(key) + "() {\n");
-          javaCode.append("\treturn " + key + ";\n");
-          javaCode.append("}\n");
-        }
-
-        javaCode.append("}");
-
-        return javaCode.toString();
-      } catch (Exception e) {
-        e.printStackTrace();
-        return "خطا در تبدیل JSON به کد جاوا.";
-      }
-    } else {
-      return "Json از جنس ارایه ساپورت نمیشود ";
-    }
+   return new JsonToJavaConverter().convertJsonToJava(jsonInput,nameClass);
   }
+
 
   private String setConvertToDataClass(String code, String className) {
     return new JsonToKotlinBuilder().build(code, className);
@@ -277,8 +225,10 @@ public class GsonToClass {
       return "double";
     } else if (value instanceof Boolean) {
       return "boolean";
+    } else if (value instanceof List) {
+      return "List<?>";
     } else {
-      return "Object"; 
+      return "Object";
     }
   }
 
@@ -700,6 +650,15 @@ public class GsonToClass {
       return "any";
     } else {
       return "any";
+    }
+  }
+
+  private boolean isJsonValid(String json) {
+    try {
+      new Gson().fromJson(json, Object.class);
+      return true;
+    } catch (Exception e) {
+      return false;
     }
   }
 }
