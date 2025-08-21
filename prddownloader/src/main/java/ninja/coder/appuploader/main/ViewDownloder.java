@@ -174,7 +174,7 @@ public class ViewDownloder extends RelativeLayout {
     } else {
       ApkInstallerCompat compat =
           new ApkInstallerCompat(
-              getContext(), new File("/storage/emulated/0/GhostWebIDE/apk/ghostidearm64.apk"));
+              getContext(), new File("/storage/emulated/0/GhostWebIDE/apk/"+ name));
       compat.execute();
     }
   }

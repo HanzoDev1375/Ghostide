@@ -38,6 +38,12 @@ public class MainActivity extends BaseCompat {
   private SharedPreferences setac, iconSpash;
   private static final String C_COMPILER_DIR = "c_compiler";
 
+  private static final int REQUEST_CODE_STORAGE_PERMISSION = 1000;
+  private static final int REQUEST_CODE_MEDIA_IMAGES_PERMISSION = 1001;
+  private static final int REQUEST_CODE_MANAGE_ALL_FILES = 1002;
+  private boolean allPermissionsGranted = false;
+  private boolean isWaitingForPermissionResult = false;
+
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
     bind = MainBinding.inflate(LayoutInflater.from(this));
@@ -47,39 +53,135 @@ public class MainActivity extends BaseCompat {
   }
 
   private void initialize(Bundle _savedInstanceState) {
-    runtimePermissions();
     iconSpash = getSharedPreferences("iconSpash", MODE_PRIVATE);
     setac = getSharedPreferences("setac", MODE_PRIVATE);
-    tryToRunApp();
+    runtimePermissions();
   }
 
   void runtimePermissions() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
       if (!Environment.isExternalStorageManager()) {
+        isWaitingForPermissionResult = true;
         try {
           Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
           Uri uri = Uri.fromParts("package", getPackageName(), null);
           intent.setData(uri);
-          startActivity(intent);
+          startActivityForResult(intent, REQUEST_CODE_MANAGE_ALL_FILES);
         } catch (Exception ex) {
           Intent intent = new Intent();
           intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-          startActivity(intent);
+          startActivityForResult(intent, REQUEST_CODE_MANAGE_ALL_FILES);
         }
+      } else {
+        checkMediaImagesPermission();
       }
     } else {
       if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
               == PackageManager.PERMISSION_DENIED
           || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
               == PackageManager.PERMISSION_DENIED) {
+        isWaitingForPermissionResult = true;
         ActivityCompat.requestPermissions(
             this,
             new String[] {
               Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE
             },
-            1000);
+            REQUEST_CODE_STORAGE_PERMISSION);
+      } else {
+        checkMediaImagesPermission();
       }
     }
+  }
+
+  private void checkMediaImagesPermission() {
+    // برای اندروید 13+ مجوز READ_MEDIA_IMAGES نیاز است
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES)
+          != PackageManager.PERMISSION_GRANTED) {
+        isWaitingForPermissionResult = true;
+        ActivityCompat.requestPermissions(
+            this,
+            new String[] {Manifest.permission.READ_MEDIA_IMAGES},
+            REQUEST_CODE_MEDIA_IMAGES_PERMISSION);
+      } else {
+        allPermissionsGranted = true;
+        startAppProcess();
+      }
+    } else {
+      allPermissionsGranted = true;
+      startAppProcess();
+    }
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+
+    if (requestCode == REQUEST_CODE_MANAGE_ALL_FILES) {
+      isWaitingForPermissionResult = false;
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        if (Environment.isExternalStorageManager()) {
+          checkMediaImagesPermission();
+        } else {
+          Toast.makeText(
+                  this, "Storage access is required for app functionality", Toast.LENGTH_LONG)
+              .show();
+
+          checkMediaImagesPermission();
+        }
+      }
+    }
+  }
+
+  @Override
+  public void onRequestPermissionsResult(
+      int requestCode, String[] permissions, int[] grantResults) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+    isWaitingForPermissionResult = false;
+
+    switch (requestCode) {
+      case REQUEST_CODE_STORAGE_PERMISSION:
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+          checkMediaImagesPermission();
+        } else {
+          Toast.makeText(
+                  this,
+                  "Storage permission is recommended for full functionality",
+                  Toast.LENGTH_LONG)
+              .show();
+          checkMediaImagesPermission();
+        }
+        break;
+
+      case REQUEST_CODE_MEDIA_IMAGES_PERMISSION:
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+          allPermissionsGranted = true;
+          startAppProcess();
+        } else {
+          allPermissionsGranted = true;
+          startAppProcess();
+          Toast.makeText(
+                  this, "Some features may not work without media permission", Toast.LENGTH_SHORT)
+              .show();
+        }
+        break;
+    }
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    if (!isWaitingForPermissionResult && !allPermissionsGranted) {
+      runtimePermissions();
+    }
+  }
+
+  private void startAppProcess() {
+    if (!allPermissionsGranted) {
+      return;
+    }
+    tryToRunApp();
   }
 
   private void tryToRunApp() {
@@ -146,7 +248,11 @@ public class MainActivity extends BaseCompat {
 
               @Override
               public void onSucceed() {
-                Toast.makeText(MainActivity.this, "done", Toast.LENGTH_SHORT).show();
+                runOnUiThread(
+                    () -> {
+                      Toast.makeText(MainActivity.this, "done", Toast.LENGTH_SHORT).show();
+                      startApp();
+                    });
               }
             });
       } else {
@@ -160,41 +266,42 @@ public class MainActivity extends BaseCompat {
     if (!FileUtil.isExistFile(getFilesDir().getAbsolutePath() + File.separator + "php.ini")) {
       var softApi = new AssetsSoft();
       softApi.copyOneFileFromAssets("php.ini", getFilesDir().getAbsolutePath() + "/", this);
-    } else Log.e("File Copyed", AssetsSoft.class.getSimpleName());
+    } else {
+      Log.e("File Copyed", AssetsSoft.class.getSimpleName());
+    }
 
     if (iconSpash != null) {
-      setIconSp();
+      runOnUiThread(this::setIconSp);
     }
   }
 
   void startApp() {
-    var mypath = getFilesDir().getAbsolutePath() + "/" + "databins";
-    var pythonPath = getFilesDir().getAbsolutePath() + File.separator + "env.sh";
-    var phpPath =
-        getFilesDir().getAbsolutePath() + File.separator + "lib" + File.separator + "libx265.so";
-    var ghostPath = "/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost";
-    ask =
-        new TimerTask() {
-          @Override
-          public void run() {
-            runOnUiThread(
-                () -> {
-                  if (!FileUtil.isExistFile(pythonPath)
-                      || !FileUtil.isExistFile(phpPath)
-                      || !FileUtil.isExistFile(mypath)
-                      || !FileUtil.isExistFile(ghostPath)) {
+    runOnUiThread(
+        () -> {
+          var mypath = getFilesDir().getAbsolutePath() + "/" + "databins";
+          var pythonPath = getFilesDir().getAbsolutePath() + File.separator + "env.sh";
+          var phpPath =
+              getFilesDir().getAbsolutePath()
+                  + File.separator
+                  + "lib"
+                  + File.separator
+                  + "libx265.so";
+          var ghostPath = "/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost";
 
-                    startActivity(new Intent(getApplication(), SplashWord.class));
-                  } else {
-                    gotopage.setClass(getApplicationContext(), FileManagerActivity.class);
-                    gotopage.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    startActivity(gotopage);
-                  }
-                });
+          if (!FileUtil.isExistFile(pythonPath)
+              || !FileUtil.isExistFile(phpPath)
+              || !FileUtil.isExistFile(mypath)
+              || !FileUtil.isExistFile(ghostPath)) {
+
+            startActivity(new Intent(getApplication(), SplashWord.class));
+            finish();
+          } else {
+            gotopage.setClass(getApplicationContext(), FileManagerActivity.class);
+            gotopage.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(gotopage);
+            finish();
           }
-        };
-
-    _timer.schedule(ask, 3000);
+        });
   }
 
   void setIconSp() {

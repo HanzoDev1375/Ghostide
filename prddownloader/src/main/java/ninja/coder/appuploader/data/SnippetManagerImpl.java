@@ -117,8 +117,6 @@ public class SnippetManagerImpl {
         runOnUiThread(() -> Toast.makeText(context, "فایل خالی است", Toast.LENGTH_SHORT).show());
         return;
       }
-
-      // استفاده از JsonReader با حالت LENIENT برای پردازش آسان‌تر JSON
       JsonReader jsonReader = new JsonReader(new StringReader(jsonString));
       jsonReader.setStrictness(Strictness.LENIENT);
 

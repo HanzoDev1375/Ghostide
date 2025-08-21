@@ -36,7 +36,6 @@
              android:layout_width="wrap_content"
              android:textSize="18sp"
              android:layout_marginRight="3dp"
-             android:textColor="#FFFFFF"
              android:focusable="false"
              android:id="@+id/tvname"
              android:text="new version app 1.6.5"
@@ -46,7 +45,6 @@
              android:layout_height="wrap_content"
              android:layout_width="wrap_content"
              android:textSize="15sp"
-             android:textColor="#FFFFFF"
              android:typeface="serif"
              android:focusable="false"
              android:id="@+id/tvsize"
@@ -65,13 +63,12 @@
         <ImageView
              android:layout_height="30dp"
              android:layout_width="30dp"
-             android:src="@drawable/ic_settings_backup_restore_white" />
+             android:src="@drawable/round_install_mobile_24" />
 
         <TextView
              android:layout_height="wrap_content"
              android:layout_width="wrap_content"
              android:textSize="15sp"
-             android:textColor="#FFFFFF"
              android:layout_marginTop="3dp"
              android:typeface="serif"
              android:focusable="false"
