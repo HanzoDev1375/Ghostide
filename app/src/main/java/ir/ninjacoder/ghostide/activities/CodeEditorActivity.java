@@ -1212,7 +1212,7 @@ public class CodeEditorActivity extends BaseCompat {
         } else if (selectedFilePath.contains(".scss") || selectedFilePath.contains(".sass")) {
           SassForAndroid.run(CodeEditorActivity.this, selectedFilePath, selectedFilePath);
         } else if (selectedFilePath.contains(".java")) {
-          JavaCompilerBeta.run(CodeEditorActivity.this, selectedFilePath);
+          JavaCompilerBeta.run(CodeEditorActivity.this, editor.getTextAsString());
         } else if (selectedFilePath.contains(".xml")) {
           XmlLayoutDesignActivity.show(
               CodeEditorActivity.this, "xml", selectedFilePath, false, false);
