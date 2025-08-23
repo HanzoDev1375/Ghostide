@@ -77,6 +77,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.io.InputStreamReader;
+import org.antlr.v4.runtime.Lexer;
 
 public class ObjectUtils {
   public static boolean Android12 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S;
@@ -947,5 +948,29 @@ public class ObjectUtils {
       return true;
     }
     return false;
+  }
+
+  // char
+  public static boolean getNextLexer(Lexer lexer, char ch) {
+    return lexer._input.LA(1) == ch;
+  }
+  // برای مقایسه رشته (تعدادی کاراکتر پشت سر هم)
+  public static boolean getNextLexer(Lexer lexer, String s) {
+    for (int i = 0; i < s.length(); i++) {
+      if (lexer._input.LA(i + 1) != s.charAt(i)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  // برای مقایسه با offset خاص
+  public static boolean getNextLexer(Lexer lexer, String s, int typeGo) {
+    for (int i = 0; i < s.length(); i++) {
+      if (lexer._input.LA(typeGo + i) != s.charAt(i)) {
+        return false;
+      }
+    }
+    return true;
   }
 }

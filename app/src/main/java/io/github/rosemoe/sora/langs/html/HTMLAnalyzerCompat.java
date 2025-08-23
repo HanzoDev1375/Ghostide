@@ -16,6 +16,7 @@ import android.util.Log;
 import io.github.rosemoe.sora.langs.xml.analyzer.BasicSyntaxPullAnalyzer;
 import io.github.rosemoe.sora.text.TextStyle;
 import io.github.rosemoe.sora.widget.ListCss3Color;
+import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.widget.data.CSSVariableParser;
 import java.util.Stack;
 import io.github.rosemoe.sora.data.BlockLine;
@@ -169,9 +170,9 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
                 column,
                 TextStyle.makeStyle(EditorColorScheme.phpcolormatch3, 0, true, false, false));
             break;
-		  case HTMLLexer.CSSXCOLOR:
-		  ListCss3Color.getNumberColor(token,line,column,result);
-		  break;	
+          case HTMLLexer.CSSXCOLOR:
+            ListCss3Color.getNumberColor(token, line, column, result);
+            break;
           case HTMLLexer.HEX_LITERAL:
             {
               Span span =
@@ -446,12 +447,25 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
                 /// def code result -> Java.user();
                 colorid = EditorColorScheme.javafun;
               }
-              if (token.getText().equals("red")) {
-                colorid = EditorColorScheme.red;
-              } else if (token.getText().equals("green")) {
-                colorid = EditorColorScheme.green;
-              } else if (token.getText().equals("blue")) {
-                colorid = EditorColorScheme.blue;
+              // next
+              if (ObjectUtils.getNextLexer(lexer, '(')) {
+                colorid = EditorColorScheme.javafield;
+              }
+              if (ObjectUtils.getNextLexer(lexer, '.')) {
+                colorid = EditorColorScheme.javafun;
+              }
+              if (ObjectUtils.getNextLexer(lexer, ',')) {
+                colorid = EditorColorScheme.javaparament;
+              }
+              if (ObjectUtils.getNextLexer(lexer, ')')) {
+                colorid = EditorColorScheme.javaparament;
+              }
+              // -> str
+              if (ObjectUtils.getNextLexer(lexer, '>')) {
+                colorid = EditorColorScheme.javafun;
+              }
+              if (ObjectUtils.getNextLexer(lexer, ':')) {
+                colorid = EditorColorScheme.javanumber;
               }
               hl.handleCustom(result, line, column, colorid);
               var cssH = new CSSVariableParser(editor);

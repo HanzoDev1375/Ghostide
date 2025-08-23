@@ -11,6 +11,7 @@ import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.config.JavaPaserUtils;
+import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.utils.ThemeUtils;
 import android.graphics.Color;
 import androidx.core.graphics.ColorUtils;
@@ -377,8 +378,25 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                   || prePreToken != null && prePreToken.getType() == JavaLexer.GT) {
                 colorid = EditorColorScheme.javafun;
               }
-              if (previous == JavaLexer.DOT) {
-                ha.handleCustom(result, line, column, EditorColorScheme.javaparament);
+              // next
+              if (ObjectUtils.getNextLexer(lexer, '(')) {
+                colorid = EditorColorScheme.tsattr;
+              }
+              if (ObjectUtils.getNextLexer(lexer, '.')) {
+                colorid = EditorColorScheme.tscolormatch1;
+              }
+              if (ObjectUtils.getNextLexer(lexer, ',')) {
+                colorid = EditorColorScheme.tscolormatch2;
+              }
+              if (ObjectUtils.getNextLexer(lexer, ')')) {
+                colorid = EditorColorScheme.tscolormatch3;
+              }
+              // -> str
+              if (ObjectUtils.getNextLexer(lexer, '>')) {
+                colorid = EditorColorScheme.pycolormatch4;
+              }
+              if (ObjectUtils.getNextLexer(lexer, ':')) {
+                colorid = EditorColorScheme.jskeyword;
               }
               result.addIfNeeded(line, column, colorid);
 

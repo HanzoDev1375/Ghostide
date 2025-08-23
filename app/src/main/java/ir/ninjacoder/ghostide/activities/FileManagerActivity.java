@@ -1154,6 +1154,9 @@ public class FileManagerActivity extends BaseCompat
     if (staticstring.endsWith(".java")) {
       SendDataFromCodeEditor(newpos, "path", files, newlistmap);
     }
+    if (staticstring.endsWith(".rs")) {
+      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+    }
     if (staticstring.endsWith(".json")) {
       SendDataFromCodeEditor(newpos, "path", files, newlistmap);
     }

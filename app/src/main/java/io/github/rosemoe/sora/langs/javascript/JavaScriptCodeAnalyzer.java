@@ -6,6 +6,7 @@ import io.github.rosemoe.sora.data.RainbowBracketHelper;
 import io.github.rosemoe.sora.text.TextStyle;
 import java.util.Stack;
 import io.github.rosemoe.sora.data.BlockLine;
+import java.util.regex.Pattern;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
 import org.antlr.v4.runtime.Token;
@@ -145,9 +146,7 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
           case JavaScriptLexer.PowerAssign:
           case JavaScriptLexer.ARROW:
             result.addIfNeeded(
-                line,
-                column,
-                TextStyle.makeStyle(EditorColorScheme.jsattr, 0, true, false, false));
+                line, column, TextStyle.makeStyle(EditorColorScheme.jsattr, 0, true, false, false));
             break;
           case JavaScriptLexer.SingleLineComment:
           case JavaScriptLexer.MultiLineComment:
@@ -258,6 +257,7 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
 
           case JavaScriptLexer.Identifier:
             {
+              boolean hasfunc = false;
               identifiers.addIdentifier(token.getText());
               int mycolor = EditorColorScheme.TEXT_NORMAL;
               if (previous == JavaScriptLexer.Import || previous == JavaScriptLexer.From) {
@@ -275,6 +275,7 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
                   || previous == JavaScriptLexer.Package
                   || previous == JavaScriptLexer.Export
                   || previous == JavaScriptLexer.Extends) {
+                hasfunc = true;
                 mycolor = EditorColorScheme.HTML_TAG;
               }
               // var
@@ -282,6 +283,7 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
                   || previous == JavaScriptLexer.NonStrictLet
                   || previous == JavaScriptLexer.StrictLet
                   || previous == JavaScriptLexer.Const) {
+                hasfunc = true;
                 mycolor = EditorColorScheme.LITERAL;
               }
               // retrun and .....
@@ -289,17 +291,23 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
                   || previous == JavaScriptLexer.As
                   || previous == JavaScriptLexer.Interface
                   || previous == JavaScriptLexer.Yield) {
+                hasfunc = true;
                 mycolor = EditorColorScheme.jsoprator;
               }
-              br.handleCustom(result, line, column, mycolor);
+              if (!hasfunc) {
+                Pattern pattern = Pattern.compile("\\b[A-Z][a-zA-Z]*\\b");
+                var matcher = pattern.matcher(token.getText());
+                if (matcher.matches()) {
+
+                  mycolor = EditorColorScheme.javatype;
+                }
+              }
+              result.addIfNeeded(line, column, mycolor);
               break;
             }
 
           case JavaScriptLexer.StringLiteral:
-            {
-              result.addIfNeeded(line, column, EditorColorScheme.LITERAL);
-            }
-
+            result.addIfNeeded(line, column, EditorColorScheme.LITERAL);
             break;
           default:
             result.addIfNeeded(line, column, EditorColorScheme.TEXT_NORMAL);

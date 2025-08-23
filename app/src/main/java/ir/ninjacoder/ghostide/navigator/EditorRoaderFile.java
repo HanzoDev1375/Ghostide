@@ -4,6 +4,7 @@ import com.blankj.utilcode.util.ThreadUtils;
 import io.github.rosemoe.sora.langs.glsllang.GLSLLang;
 import io.github.rosemoe.sora.langs.jsx.JavaScriptJsxLanguage;
 import io.github.rosemoe.sora.langs.less.LessLang;
+import io.github.rosemoe.sora.langs.rust.RustLang;
 import io.github.rosemoe.sora.langs.yml.YmlLang;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.utils.FileCompatApi28;
@@ -228,6 +229,10 @@ public class EditorRoaderFile {
     } else if (path.endsWith(".less")) {
       ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new LessLang((CodeEditor) editor));
+      fab.postDelayed(fab::show, 400);
+    } else if (path.endsWith(".rs")) {
+      ReadFileCompat(editor, path, bar);
+      editor.setEditorLanguage(new RustLang(editor));
       fab.postDelayed(fab::show, 400);
     } else {
       ReadFileCompat(editor, path, bar);

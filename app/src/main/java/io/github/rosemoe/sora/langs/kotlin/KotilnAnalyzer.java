@@ -9,6 +9,7 @@ import io.github.rosemoe.sora.text.TextStyle;
 
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
+import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import java.util.Arrays;
 import java.util.Stack;
 
@@ -252,6 +253,7 @@ public class KotilnAnalyzer implements CodeAnalyzer {
               boolean isbold = false, isItalic = false;
               ktinfo.addIdentifier(token.getText());
               var mytext = token.getText();
+              boolean hasktpr = false;
               int typemode = previous.getType();
               if (typemode == KotlinLexer.AT) {
                 color = EditorColorScheme.ATTRIBUTE_NAME;
@@ -264,6 +266,7 @@ public class KotilnAnalyzer implements CodeAnalyzer {
               }
               if (typemode == KotlinLexer.COLON) {
                 color = EditorColorScheme.KEYWORD;
+                hasktpr = true;
               }
               if (typemode == KotlinLexer.CLASS
                   || typemode == KotlinLexer.FUN
@@ -292,7 +295,7 @@ public class KotilnAnalyzer implements CodeAnalyzer {
               }
               if (token.getText().equals("field")) {
                 isbold = true;
-                color = EditorColorScheme.TEXT_NORMAL;
+                color = EditorColorScheme.white;
               }
               if (token.getText().equals("run")
                   || token.getText().equals("aslo")
@@ -308,7 +311,27 @@ public class KotilnAnalyzer implements CodeAnalyzer {
               if (token.getText().equals("runAsUi")) {
                 color = EditorColorScheme.javaoprator;
               }
-
+              // next
+              if (ObjectUtils.getNextLexer(lexer, '(')) {
+                color = EditorColorScheme.javafield;
+              }
+              if (ObjectUtils.getNextLexer(lexer, '.')) {
+                color = EditorColorScheme.javafun;
+              }
+              if (ObjectUtils.getNextLexer(lexer, ',')) {
+                color = EditorColorScheme.javaparament;
+              }
+              if (ObjectUtils.getNextLexer(lexer, ')')) {
+                color = EditorColorScheme.javaparament;
+              }
+              // -> str
+              if (ObjectUtils.getNextLexer(lexer, '>')) {
+                color = EditorColorScheme.javafun;
+              }
+              if (!hasktpr)
+                if (ObjectUtils.getNextLexer(lexer, ':')) {
+                  color = EditorColorScheme.javanumber;
+                }
               // توابع حوزه همزمانی (coroutines)
 
               String[] ktScopeFunctions = {"with"};

@@ -4,10 +4,13 @@ import android.Manifest;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import androidx.core.content.ContextCompat;
 import android.content.pm.PackageManager;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationManagerCompat;
 import ir.ninjacoder.ghostide.Welcome.SplashWord;
 import ir.ninjacoder.ghostide.activities.BaseCompat;
 import ir.ninjacoder.ghostide.activities.FileManagerActivity;
@@ -41,6 +44,7 @@ public class MainActivity extends BaseCompat {
   private static final int REQUEST_CODE_STORAGE_PERMISSION = 1000;
   private static final int REQUEST_CODE_MEDIA_IMAGES_PERMISSION = 1001;
   private static final int REQUEST_CODE_MANAGE_ALL_FILES = 1002;
+  private static final int REQUEST_CODE_NOTIFICATION_PERMISSION = 1003;
   private boolean allPermissionsGranted = false;
   private boolean isWaitingForPermissionResult = false;
 
@@ -94,7 +98,6 @@ public class MainActivity extends BaseCompat {
   }
 
   private void checkMediaImagesPermission() {
-    // برای اندروید 13+ مجوز READ_MEDIA_IMAGES نیاز است
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
       if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES)
           != PackageManager.PERMISSION_GRANTED) {
@@ -104,12 +107,39 @@ public class MainActivity extends BaseCompat {
             new String[] {Manifest.permission.READ_MEDIA_IMAGES},
             REQUEST_CODE_MEDIA_IMAGES_PERMISSION);
       } else {
+        checkNotificationPermission();
+      }
+    } else {
+      checkNotificationPermission();
+    }
+  }
+
+  private void checkNotificationPermission() {
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+          != PackageManager.PERMISSION_GRANTED) {
+        isWaitingForPermissionResult = true;
+        ActivityCompat.requestPermissions(
+            this,
+            new String[] {Manifest.permission.POST_NOTIFICATIONS},
+            REQUEST_CODE_NOTIFICATION_PERMISSION);
+      } else {
         allPermissionsGranted = true;
         startAppProcess();
       }
     } else {
-      allPermissionsGranted = true;
-      startAppProcess();
+
+      if (NotificationManagerCompat.from(this).areNotificationsEnabled()) {
+        allPermissionsGranted = true;
+        startAppProcess();
+      } else {
+
+        Toast.makeText(this, "Please enable notifications for better experience", Toast.LENGTH_LONG)
+            .show();
+        allPermissionsGranted = true;
+        startAppProcess();
+      }
     }
   }
 
@@ -123,6 +153,7 @@ public class MainActivity extends BaseCompat {
         if (Environment.isExternalStorageManager()) {
           checkMediaImagesPermission();
         } else {
+
           Toast.makeText(
                   this, "Storage access is required for app functionality", Toast.LENGTH_LONG)
               .show();
@@ -145,6 +176,7 @@ public class MainActivity extends BaseCompat {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
           checkMediaImagesPermission();
         } else {
+
           Toast.makeText(
                   this,
                   "Storage permission is recommended for full functionality",
@@ -156,13 +188,28 @@ public class MainActivity extends BaseCompat {
 
       case REQUEST_CODE_MEDIA_IMAGES_PERMISSION:
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+          checkNotificationPermission();
+        } else {
+
+          checkNotificationPermission();
+          Toast.makeText(
+                  this, "Some features may not work without media permission", Toast.LENGTH_SHORT)
+              .show();
+        }
+        break;
+
+      case REQUEST_CODE_NOTIFICATION_PERMISSION:
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
           allPermissionsGranted = true;
           startAppProcess();
         } else {
+
           allPermissionsGranted = true;
           startAppProcess();
           Toast.makeText(
-                  this, "Some features may not work without media permission", Toast.LENGTH_SHORT)
+                  this,
+                  "Notifications are disabled. Some features may not work properly",
+                  Toast.LENGTH_SHORT)
               .show();
         }
         break;
@@ -172,6 +219,7 @@ public class MainActivity extends BaseCompat {
   @Override
   protected void onResume() {
     super.onResume();
+
     if (!isWaitingForPermissionResult && !allPermissionsGranted) {
       runtimePermissions();
     }
@@ -221,9 +269,15 @@ public class MainActivity extends BaseCompat {
       new AssetsSoft()
           .unzipFromAssets(this, "snippet.zip", "/storage/emulated/0/GhostWebIDE/snippet/");
     }
-    var ktPath = FileUtil.HOME + File.separator + "kt" + File.separator + "kotlin-stdlib-1.0.0.jar";
+    var ktPath =
+        getCacheDir().getAbsolutePath()
+            + File.separator
+            + "kt"
+            + File.separator
+            + "kotlin-stdlib-1.0.0.jar";
     if (!FileUtil.isExistFile(ktPath)) {
-      new AssetsSoft().unzipFromAssets(this, "kt.zip", FileUtil.HOME + File.separator + "kt");
+      new AssetsSoft()
+          .unzipFromAssets(this, "kt.zip", getCacheDir().getAbsolutePath() + File.separator + "kt");
     }
     try {
       if (!FileUtil.isExistFile("/storage/emulated/0/GhostWebIDE/android/android.jar")) {
@@ -296,10 +350,15 @@ public class MainActivity extends BaseCompat {
             startActivity(new Intent(getApplication(), SplashWord.class));
             finish();
           } else {
-            gotopage.setClass(getApplicationContext(), FileManagerActivity.class);
-            gotopage.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(gotopage);
-            finish();
+            new Handler(Looper.getMainLooper())
+                .postDelayed(
+                    () -> {
+                      gotopage.setClass(getApplicationContext(), FileManagerActivity.class);
+                      gotopage.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                      startActivity(gotopage);
+                      finish();
+                    },
+                    2000);
           }
         });
   }
@@ -346,5 +405,14 @@ public class MainActivity extends BaseCompat {
         break;
     }
     bind.iconSp.setImageResource(iconSize);
+  }
+
+  public boolean areNotificationsEnabled() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      return ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+          == PackageManager.PERMISSION_GRANTED;
+    } else {
+      return NotificationManagerCompat.from(this).areNotificationsEnabled();
+    }
   }
 }

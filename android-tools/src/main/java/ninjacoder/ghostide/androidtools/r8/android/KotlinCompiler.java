@@ -3,6 +3,7 @@ package ninjacoder.ghostide.androidtools.r8.android;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.widget.EditText;
 import com.android.tools.r8.D8Command;
 import com.android.tools.r8.OutputMode;
@@ -10,12 +11,13 @@ import com.android.tools.r8.CompilationMode;
 import com.android.tools.r8.D8;
 import dalvik.system.DexClassLoader;
 import dalvik.system.DexFile;
+import dalvik.system.InMemoryDexClassLoader;
 import ir.ninjacoder.prograsssheet.PrograssSheet;
 import java.io.FileOutputStream;
 import java.io.FileInputStream;
 import java.io.PrintStream;
-
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
 import org.jetbrains.kotlin.cli.common.arguments.K2JVMCompilerArguments;
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity;
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSourceLocation;
@@ -32,11 +34,11 @@ import java.util.List;
 import java.util.Enumeration;
 
 public class KotlinCompiler {
-  private final EditText outputEditText;
-  private final Context context;
-  private final String kotlinLibsPath = "/storage/emulated/0/GhostWebIDE/kt/";
-  private final String androidJarPath = "/storage/emulated/0/GhostWebIDE/android/android.jar";
-  private final String workspaces = "/storage/emulated/0/GhostWebIDE/kt/";
+  private EditText outputEditText;
+  private Context context;
+  private String kotlinLibsPath;
+  private String androidJarPath = "/storage/emulated/0/GhostWebIDE/android/android.jar";
+  private String workspaces;
   private PrograssSheet progressDialog;
 
   public interface OnDoneCompiler {
@@ -49,6 +51,8 @@ public class KotlinCompiler {
     this.outputEditText = outputEditText;
     this.context = context;
     this.com = com;
+    kotlinLibsPath = context.getCacheDir().getAbsolutePath() + File.separator + "kt/";
+    workspaces = context.getCacheDir().getAbsolutePath() + File.separator + "kt/";
   }
 
   public void compile(String filePath) {
@@ -69,9 +73,7 @@ public class KotlinCompiler {
       try {
         // publishProgress("در حال آماده‌سازی محیط کار...");
         File workspace = new File(workspaces);
-        if (workspace.isDirectory()) {
-          workspace.delete();
-        }
+
         if (!workspace.exists() && !workspace.mkdirs()) {
           publishProgress("Failed to create workspace directory");
           return false;
@@ -246,15 +248,33 @@ public class KotlinCompiler {
 
       System.setOut(createEditTextPrintStream());
 
-      DexClassLoader classLoader =
-          new DexClassLoader(
-              dexFile.getAbsolutePath(),
-              context.getDir("outdex", Context.MODE_PRIVATE).getAbsolutePath(),
-              null,
-              context.getClassLoader());
+      // برای اندروید ۸ و بالاتر از InMemoryDexClassLoader استفاده کنید
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        try {
+          byte[] dexBytes = java.nio.file.Files.readAllBytes(dexFile.toPath());
+          ClassLoader classLoader =
+              new InMemoryDexClassLoader(
+                  ByteBuffer.wrap(dexBytes), context.getClassLoader());
 
-      tryToRunMain(classLoader, "MainKt");
-      //   tryToRunMain(classLoader, "Main");
+          tryToRunMain(classLoader, "MainKt");
+        } catch (Exception e) {
+          appendOutput("InMemory loader error: " + e.getMessage());
+        }
+      } else {
+        // برای نسخه‌های قدیمی‌تر از DexClassLoader
+        try {
+          DexClassLoader classLoader =
+              new DexClassLoader(
+                  dexFile.getAbsolutePath(),
+                  context.getDir("outdex", Context.MODE_PRIVATE).getAbsolutePath(),
+                  null,
+                  context.getClassLoader());
+
+          tryToRunMain(classLoader, "MainKt");
+        } catch (Exception e) {
+          appendOutput("DexClassLoader error: " + e.getMessage());
+        }
+      }
 
     } catch (Exception e) {
       appendOutput("Runtime error: " + e.getMessage());
@@ -263,7 +283,7 @@ public class KotlinCompiler {
     }
   }
 
-  private void tryToRunMain(DexClassLoader classLoader, String className) {
+  private void tryToRunMain(ClassLoader classLoader, String className) {
     try {
       Class<?> compiledClass = classLoader.loadClass(className);
       try {
@@ -402,13 +422,12 @@ public class KotlinCompiler {
             .append("\n");
 
         if (message.location != null) {
-          sb.append("   at ")
-              .append(message.location.getPath())
-              .append(" (Line ")
+          sb.append(message.location.getPath())
+              .append(":")
               .append(message.location.getLine())
-              .append(", Column ")
+              .append(":")
               .append(message.location.getColumn())
-              .append(")\n");
+              .append("\n");
         }
       }
       return sb.toString();

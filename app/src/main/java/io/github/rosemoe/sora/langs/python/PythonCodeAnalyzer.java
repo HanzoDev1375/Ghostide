@@ -15,6 +15,7 @@ import android.util.Log;
 
 import io.github.rosemoe.sora.text.TextStyle;
 import io.github.rosemoe.sora.widget.ListCss3Color;
+import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import java.io.InputStreamReader;
 import java.util.List;
 import io.github.rosemoe.sora.data.NavigationItem;
@@ -270,6 +271,26 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
                       .anyMatch(name -> name.equalsIgnoreCase(token.getText()))) {
                 colorid = EditorColorScheme.pycolormatch3;
               }
+              // next
+              if (ObjectUtils.getNextLexer(lexer, '(')) {
+                colorid = EditorColorScheme.javafield;
+              }
+              if (ObjectUtils.getNextLexer(lexer, '.')) {
+                colorid = EditorColorScheme.javafun;
+              }
+              if (ObjectUtils.getNextLexer(lexer, ',')) {
+                colorid = EditorColorScheme.javaparament;
+              }
+              if (ObjectUtils.getNextLexer(lexer, ')')) {
+                colorid = EditorColorScheme.javaparament;
+              }
+              // -> str
+              if (ObjectUtils.getNextLexer(lexer, '>')) {
+                colorid = EditorColorScheme.javafun;
+              }
+			  if(ObjectUtils.getNextLexer(lexer,':')){
+				  colorid=EditorColorScheme.javanumber;
+			  }
               result.addIfNeeded(
                   line, column, TextStyle.makeStyle(colorid, 0, isBold, false, false, isUnderLine));
               break;
