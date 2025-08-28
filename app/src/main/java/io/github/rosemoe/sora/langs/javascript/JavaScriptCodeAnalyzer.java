@@ -4,6 +4,7 @@ import android.util.Log;
 
 import io.github.rosemoe.sora.data.RainbowBracketHelper;
 import io.github.rosemoe.sora.text.TextStyle;
+import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import java.util.Stack;
 import io.github.rosemoe.sora.data.BlockLine;
 import java.util.regex.Pattern;
@@ -293,6 +294,27 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
                   || previous == JavaScriptLexer.Yield) {
                 hasfunc = true;
                 mycolor = EditorColorScheme.jsoprator;
+              }
+
+              // next
+              if (ObjectUtils.getNextLexer(lexer, '(')) {
+                mycolor = EditorColorScheme.tsattr;
+              }
+              if (ObjectUtils.getNextLexer(lexer, '.')) {
+                mycolor = EditorColorScheme.tscolormatch1;
+              }
+              if (ObjectUtils.getNextLexer(lexer, ',')) {
+                mycolor = EditorColorScheme.tscolormatch3;
+              }
+              if (ObjectUtils.getNextLexer(lexer, ')')) {
+                mycolor = EditorColorScheme.tscolormatch3;
+              }
+              // -> str
+              if (ObjectUtils.getNextLexer(lexer, '>')) {
+                mycolor = EditorColorScheme.pycolormatch4;
+              }
+              if (ObjectUtils.getNextLexer(lexer, ':')) {
+                mycolor = EditorColorScheme.jskeyword;
               }
               if (!hasfunc) {
                 Pattern pattern = Pattern.compile("\\b[A-Z][a-zA-Z]*\\b");

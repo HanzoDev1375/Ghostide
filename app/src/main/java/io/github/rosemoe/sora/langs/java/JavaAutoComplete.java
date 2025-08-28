@@ -14,6 +14,7 @@ import io.github.rosemoe.sora.data.CompletionItem;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import ir.ninjacoder.ghostide.utils.FileUtil;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
+import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,6 +37,7 @@ public class JavaAutoComplete implements AutoCompleteProvider {
   private String name;
   List<CompletionItem> keywords;
   private final WeakReference<IdeEditor> mEditorReference;
+  
 
   public JavaAutoComplete(IdeEditor editor) {
     mEditorReference = new WeakReference<>(editor);
@@ -76,14 +78,6 @@ public class JavaAutoComplete implements AutoCompleteProvider {
       }
     }
     var toolsJava = new JavaPaserUtils(editor);
-    if (prefix.toLowerCase().startsWith("ins")) {
-      editor.getText().toString().replaceAll("ins", "");
-      keywords.add(new CompletionItem("ins ", toolsJava.addInstanceOf(), "ins"));
-    }
-    if (prefix.toLowerCase().startsWith("cons")) {
-      editor.getText().toString().replaceAll("cons", "");
-      keywords.add(new CompletionItem("cons ", toolsJava.addContractor(), "cons"));
-    }
     Collections.sort(keywords, CompletionItem.COMPARATOR_BY_NAME);
     Object extra = analyzeResult.getExtra();
     if (extra instanceof Identifiers) {
@@ -91,7 +85,7 @@ public class JavaAutoComplete implements AutoCompleteProvider {
       List<CompletionItem> words = new ArrayList<>();
 
       for (String word : userIdentifiers.getIdentifiers()) {
-        if (word.startsWith(match) || ObjectUtils.getFuzzySearchByString(match, word)) {
+        if (word.startsWith(match)) {
           words.add(new CompletionItem(word, "ABC"));
         }
       }
@@ -105,7 +99,6 @@ public class JavaAutoComplete implements AutoCompleteProvider {
     it = new ArrayList<>(keywords); // ایجاد کپی از لیست keywords
     keywords.addAll(CodeSnippet.runasList("java", prefix));
     var its = GhostIdeAppLoader.getShap();
-
     // keywords.addAll(CodeSnippet.getJar(prefix));
     return keywords;
   }

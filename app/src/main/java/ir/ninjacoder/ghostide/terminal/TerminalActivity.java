@@ -18,10 +18,12 @@ public class TerminalActivity extends BaseCompat {
     String path = getIntent().getStringExtra("path");
     String rbcode = getIntent().getStringExtra("rb");
     String phpCode = getIntent().getStringExtra("phpcode");
+    String dartCode = getIntent().getStringExtra("dart");
+    String javaCode = getIntent().getStringExtra("java");
     TerminalTabSeasonImpl tabSystem =
         new TerminalTabSeasonImpl(
             bin.tabLayout, getSupportFragmentManager(), R.id.terminal_container);
-    if (path != null || phpCode != null || rbcode != null) {
+    if (path != null || phpCode != null || rbcode != null || dartCode != null || javaCode != null) {
       Bundle args = new Bundle();
       if (path != null) {
         args.putString("path", path);
@@ -29,6 +31,10 @@ public class TerminalActivity extends BaseCompat {
         args.putString("phpcode", phpCode);
       } else if (rbcode != null) {
         args.putString("rb", rbcode);
+      } else if (dartCode != null) {
+        args.putString("dart", dartCode);
+      } else if (javaCode != null) {
+        args.putString("java", javaCode);
       }
       if (!tabSystem.fragments.isEmpty()) {
         tabSystem.fragments.get(0).setArguments(args);

@@ -18,6 +18,7 @@ import ir.ninjacoder.ghostide.compressor.XmlToSvg;
 import ir.ninjacoder.ghostide.compressor.ZxExtractor;
 import ir.ninjacoder.ghostide.databin.FileMaker;
 import ir.ninjacoder.ghostide.databinding.FiledirBinding;
+import ir.ninjacoder.ghostide.marco.binder.BindJpegWall;
 import ir.ninjacoder.ghostide.marco.editorface.ClassNodePaserImpl;
 import android.util.Log;
 import ir.ninjacoder.ghostide.filehelper.CreatorModule;
@@ -1286,6 +1287,8 @@ public class FileManagerActivity extends BaseCompat
       getabout.putExtra("img", staticstring);
       loadAnim(getabout);
     }
+    var bindjpegWall = new BindJpegWall();
+    bindjpegWall.bind(staticstring, this);
     _fontpost(files, "path", newpos);
     _themeinstall(files, newpos, "path");
   }

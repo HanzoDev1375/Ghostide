@@ -124,11 +124,11 @@ public class LayoutSheetEditText implements TextWatcher {
   }
 
   public void setSaveText(boolean save) {
-    if (save == true) {
-      Editor editor = prf.edit();
+    Editor editor = prf.edit();
+    if (save) {
       editor.putString("key", bind.etanim.getText().toString());
       editor.apply();
-    }
+    } else editor.clear();
   }
 
   String loadSaveText() {
@@ -216,7 +216,7 @@ public class LayoutSheetEditText implements TextWatcher {
           new ClickableSpan() {
             @Override
             public void onClick(View widget) {
-              //add line number form interface
+              // add line number form interface
               line.onLineNumber(Integer.parseInt(lineNumber));
             }
           };
@@ -224,6 +224,5 @@ public class LayoutSheetEditText implements TextWatcher {
     }
     get.setText(spannableString);
     get.setMovementMethod(LinkMovementMethod.getInstance());
-    
   }
 }

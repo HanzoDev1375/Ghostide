@@ -253,8 +253,7 @@ public class KotlinCompiler {
         try {
           byte[] dexBytes = java.nio.file.Files.readAllBytes(dexFile.toPath());
           ClassLoader classLoader =
-              new InMemoryDexClassLoader(
-                  ByteBuffer.wrap(dexBytes), context.getClassLoader());
+              new InMemoryDexClassLoader(ByteBuffer.wrap(dexBytes), context.getClassLoader());
 
           tryToRunMain(classLoader, "MainKt");
         } catch (Exception e) {

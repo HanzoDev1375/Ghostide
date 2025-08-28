@@ -1,5 +1,7 @@
 package io.github.rosemoe.sora.langs.python;
 
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -288,9 +290,9 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
               if (ObjectUtils.getNextLexer(lexer, '>')) {
                 colorid = EditorColorScheme.javafun;
               }
-			  if(ObjectUtils.getNextLexer(lexer,':')){
-				  colorid=EditorColorScheme.javanumber;
-			  }
+              if (ObjectUtils.getNextLexer(lexer, ':')) {
+                colorid = EditorColorScheme.javanumber;
+              }
               result.addIfNeeded(
                   line, column, TextStyle.makeStyle(colorid, 0, isBold, false, false, isUnderLine));
               break;

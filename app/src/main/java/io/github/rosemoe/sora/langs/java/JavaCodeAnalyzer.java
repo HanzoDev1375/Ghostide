@@ -36,11 +36,14 @@ import io.github.rosemoe.sora.data.Span;
 import io.github.rosemoe.sora.text.TextStyle;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Stack;
 import io.github.rosemoe.sora.data.BlockLine;
+import ninjacoder.ghostide.androidtools.r8.android.JavaAnalyzer;
+import ninjacoder.ghostide.androidtools.r8.android.CodeLine;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
 import org.antlr.v4.runtime.Token;
@@ -472,8 +475,12 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
       info.finish();
 
       JavaCodeA code = new JavaCodeA();
-      code.analyze(content, result, delegate);
-
+      // code.analyze(content, result, delegate);
+      List<CodeLine> code123 = JavaAnalyzer.analyze(content.toString());
+      code123.forEach(
+          item -> {
+            Utils.setErrorSpan(result, item.line, item.column);
+          });
       result.determine(lastLine);
       result.setExtra(info);
 

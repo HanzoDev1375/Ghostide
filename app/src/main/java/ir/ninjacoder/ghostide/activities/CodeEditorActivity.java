@@ -364,14 +364,15 @@ public class CodeEditorActivity extends BaseCompat {
             ic++;
           }
         });
-     getOnBackPressedDispatcher()
+    getOnBackPressedDispatcher()
         .addCallback(
             this,
             new OnBackPressedCallback(true) {
 
               @Override
               public void handleOnBackPressed() {
-                ObjectUtils.setSaveOprator(tabs_listmap,editor,tablayouteditor,CodeEditorActivity.this);
+                ObjectUtils.setSaveOprator(
+                    tabs_listmap, editor, tablayouteditor, CodeEditorActivity.this);
               }
             });
     redo.setOnClickListener(
@@ -640,7 +641,7 @@ public class CodeEditorActivity extends BaseCompat {
     }
   }
 
-   void setManagerpanel(final View _view) {
+  void setManagerpanel(final View _view) {
     pvr =
         new PowerMenu.Builder(CodeEditorActivity.this)
             .addItem(new PowerMenuItem("Search Text", false, R.drawable.textsearch))
@@ -744,7 +745,7 @@ public class CodeEditorActivity extends BaseCompat {
           }
         });
   }
- 
+
   void saveFileByIo() {
 
     FileChangeReceiver.stopWatching();
@@ -794,11 +795,11 @@ public class CodeEditorActivity extends BaseCompat {
     }
   }
 
-   void setCodeEditorFileReader(String _path) {
+  void setCodeEditorFileReader(String _path) {
     EditorRoaderFile.RuningTask(editor, _fab, _path, proanjctor);
   }
 
-   void setClosetab(int _position, ArrayList<HashMap<String, Object>> _data) {
+  void setClosetab(int _position, ArrayList<HashMap<String, Object>> _data) {
     if (FileUtil.isExistFile(_data.get(_position).get("path").toString())) {
       _data.remove((_position));
       if (_data.isEmpty()) {
@@ -857,7 +858,6 @@ public class CodeEditorActivity extends BaseCompat {
   void _Animwork(final View _view) {
     AnimUtils.Worker(_view);
   }
-
 
   void ReloadFileInPos() {
     if (shp.contains("path")) {
@@ -1212,22 +1212,30 @@ public class CodeEditorActivity extends BaseCompat {
         } else if (selectedFilePath.contains(".scss") || selectedFilePath.contains(".sass")) {
           SassForAndroid.run(CodeEditorActivity.this, selectedFilePath, selectedFilePath);
         } else if (selectedFilePath.contains(".java")) {
-          JavaCompilerBeta.run(CodeEditorActivity.this, editor.getTextAsString());
+          JavaCompilerBeta.run(CodeEditorActivity.this, new File(selectedFilePath));
         } else if (selectedFilePath.contains(".xml")) {
-          XmlLayoutDesignActivity.show(
-              CodeEditorActivity.this, "xml", selectedFilePath, false, false);
+          Intent intent = new Intent(CodeEditorActivity.this, XmlLayoutDesignActivity.class);
+          intent.putExtra(XmlLayoutDesignActivity.EXTRA_FILE, selectedFilePath);
+          intent.putExtra(XmlLayoutDesignActivity.EXTRA_LANGUAGE, "xml");
+          intent.putExtra(XmlLayoutDesignActivity.EXTRA_DEMO, false);
+          intent.putExtra(XmlLayoutDesignActivity.EXTRA_STANDALONE, false);
+          intent.putExtra(XmlLayoutDesignActivity.EXTRA_TRAINER, false);
+          loadAnim(intent);
+          //          XmlLayoutDesignActivity.show(
+          //              CodeEditorActivity.this, "xml", selectedFilePath, false, false);
         } else if (selectedFilePath.contains(".jj")) {
           var file = new File(selectedFilePath);
           JavaCcComplierImpl.main(file.toString(), file.getParent() + "/");
         } else if (selectedFilePath.contains(".kt")) {
+			
           new KotlinCompilerImpl(CodeEditorActivity.this, selectedFilePath, editor);
         } else if (selectedFilePath.contains(".ts")) {
           SassForAndroid.runObjectWeb(editor, selectedFilePath, CompilerModel.TYPESRCIPT);
         } else if (selectedFilePath.contains(".less")) {
           SassForAndroid.runObjectWeb(editor, selectedFilePath, CompilerModel.LESS);
-        } else if (selectedFilePath.contains(".rb")) {
+        } else if (selectedFilePath.contains(".dart")) {
           res.setClass(getApplicationContext(), TerminalActivity.class);
-          res.putExtra("rb", selectedFilePath);
+          res.putExtra("dart", selectedFilePath);
           loadAnim(res);
         }
       } else {
@@ -1259,7 +1267,7 @@ public class CodeEditorActivity extends BaseCompat {
     bottomSheetDialog.show();
   }
 
-   void setWallpaperParallaxEffect() {
+  void setWallpaperParallaxEffect() {
 
     effect = new WallpaperParallaxEffect(this);
     effect.setCallback(

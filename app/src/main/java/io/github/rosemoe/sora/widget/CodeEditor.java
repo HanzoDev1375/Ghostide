@@ -5904,9 +5904,6 @@ public class CodeEditor extends View
           pasteText();
         }
         return true;
-      case KeyEvent.KEYCODE_F:
-        formatCodeAsync();
-        return true;
       case KeyEvent.KEYCODE_COPY:
         copyText();
         return true;
@@ -5949,6 +5946,9 @@ public class CodeEditor extends View
                 redo();
               }
               return true;
+           case KeyEvent.KEYCODE_F:
+        formatCodeAsync();
+        return true;
             case KeyEvent.KEYCODE_D:
               if (isEditable()) {
                 setDuplicateLine();

@@ -1,37 +1,48 @@
 package ir.ninjacoder.ghostide.project;
 
-import ir.ninjacoder.ghostide.utils.FileUtil;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
-import android.text.TextUtils;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import com.android.tools.r8.D8;
+
 import com.github.javaparser.StaticJavaParser;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.github.javaparser.ast.CompilationUnit;
-import dalvik.system.InMemoryDexClassLoader;
-import ir.ninjacoder.prograsssheet.PrograssSheet;
-import java.util.Optional;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import ninjacoder.ghostide.androidtools.r8.android.JarPackager;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import dalvik.system.InMemoryDexClassLoader;
+import ir.ninjacoder.ghostide.terminal.TerminalActivity;
+import ir.ninjacoder.ghostide.utils.FileUtil;
+import ir.ninjacoder.prograsssheet.PrograssSheet;
 
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import com.android.tools.r8.D8;
+import ninjacoder.ghostide.androidtools.r8.android.JarPackager;
 
 public class JavaCompilerBeta {
 
-  public static void run(Context context, String inputs) {
-    final String className = extractFirstClassName(inputs);
+  public static void run(Context context, File javaDir) {
+    File[] javaFiles = javaDir.getParentFile().listFiles((dir, name) -> name.endsWith(".java"));
+    if (javaFiles == null || javaFiles.length == 0) {
+      dialog("Error", "No Java files found in: " + javaDir.getAbsolutePath(), context);
+      return;
+    }
 
-    new AsyncTask<String, String, String>() {
+    String className = extractFirstClassName(javaFiles[0]);
+
+    new AsyncTask<Void, String, String>() {
       PrograssSheet pr;
       long ecjTime, dxTime;
-      ArrayList<String> opt = new ArrayList<>();
       String binPath;
+      List<String> logs = new ArrayList<>();
+      String programOutput = "";
 
       @Override
       protected void onPreExecute() {
@@ -40,119 +51,98 @@ public class JavaCompilerBeta {
         pr.setCancelable(false);
         pr.show();
 
-        // تعیین مسیر bin
         binPath = FileUtil.getRoot(context).concat("/bin/");
+        FileUtil.deleteFile(binPath);
+        FileUtil.makeDir(binPath);
       }
 
       @Override
-      protected String doInBackground(String... params) {
-        // پاکسازی و ایجاد دایرکتوری‌ها
-        FileUtil.deleteFile(binPath);
-        FileUtil.makeDir(binPath);
-
-        // نوشتن فایل جاوا
+      protected String doInBackground(Void... voids) {
         try {
-          String fileName = className + ".java";
-          FileUtil.writeFile(binPath + fileName, inputs);
-        } catch (Exception e) {
-          return "Error writing Java file: " + e.getMessage();
-        }
-
-        // کپی cp.jar از assets
-        if (!FileUtil.isExistFile(binPath + "cp.jar")) {
-          try (InputStream input = context.getAssets().open("cp.jar");
-              OutputStream output = new FileOutputStream(binPath + "cp.jar")) {
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = input.read(buffer)) != -1) {
-              output.write(buffer, 0, length);
+          // کپی cp.jar از assets
+          File cpJar = new File(binPath + "cp.jar");
+          if (!cpJar.exists()) {
+            try (InputStream input = context.getAssets().open("cp.jar");
+                OutputStream output = new FileOutputStream(cpJar)) {
+              byte[] buffer = new byte[1024];
+              int length;
+              while ((length = input.read(buffer)) != -1) {
+                output.write(buffer, 0, length);
+              }
             }
-          } catch (IOException e) {
-            return "Error copying cp.jar: " + e.getMessage();
           }
-        }
 
-        // کامپایل با ECJ
-        long time = System.currentTimeMillis();
-        publishProgress("Compiling Java...");
-        opt.clear();
-        opt.add("-11");
-        opt.add("-nowarn");
-        opt.add("-deprecation");
-        opt.add("-d");
-        opt.add(binPath + "classes");
-        opt.add("-cp");
-        opt.add(binPath + "cp.jar");
-        opt.add("-proc:none");
-        opt.add("-sourcepath");
-        opt.add("ignore");
-        opt.add(binPath + className + ".java");
+          // کپی فایل‌های جاوا به bin
+          for (File f : javaFiles) {
+            copyFile(f, new File(binPath + f.getName()));
+          }
 
-        StringBuilder compileErrors = new StringBuilder();
-        PrintWriter printWriter =
-            new PrintWriter(
-                new StringWriter() {
-                  @Override
-                  public void write(int c) {
-                    compileErrors.append((char) c);
-                  }
-                });
+          // کامپایل همه فایل‌ها با هم
+          publishProgress("Compiling Java...");
+          long startEcj = System.currentTimeMillis();
 
-        org.eclipse.jdt.internal.compiler.batch.Main main =
-            new org.eclipse.jdt.internal.compiler.batch.Main(
-                printWriter, printWriter, false, null, null);
-        main.compile(opt.toArray(new String[0]));
+          ArrayList<String> ecjArgs = new ArrayList<>();
+          ecjArgs.add("-11");
+          ecjArgs.add("-nowarn");
+          ecjArgs.add("-deprecation");
+          ecjArgs.add("-d");
+          ecjArgs.add(binPath + "classes");
+          ecjArgs.add("-cp");
+          ecjArgs.add(binPath + "cp.jar");
+          ecjArgs.add("-proc:none");
+          ecjArgs.add("-sourcepath");
+          ecjArgs.add("ignore");
 
-        if (main.globalErrorsCount > 0) {
-          return compileErrors.toString();
-        }
-        ecjTime = System.currentTimeMillis() - time;
+          // اضافه کردن همه فایل‌های جاوا
+          for (File f : javaFiles) {
+            ecjArgs.add(binPath + f.getName());
+          }
 
-        // ایجاد JAR
-        publishProgress("Packaging JAR...");
-        try {
-          new JarPackager(
-                  FileUtil.getRoot(context).concat("/bin/classes/"),
-                  FileUtil.getRoot(context).concat("/bin/classes.jar"))
-              .create();
-        } catch (Exception e) {
-          return "Packaging JAR failed: " + e.toString();
-        }
+          StringBuilder compileErrors = new StringBuilder();
+          PrintWriter printWriter =
+              new PrintWriter(
+                  new StringWriter() {
+                    @Override
+                    public void write(int c) {
+                      compileErrors.append((char) c);
+                    }
+                  });
 
-        // تبدیل به DEX با D8
-        time = System.currentTimeMillis();
-        try {
+          org.eclipse.jdt.internal.compiler.batch.Main main =
+              new org.eclipse.jdt.internal.compiler.batch.Main(
+                  printWriter, printWriter, false, null, null);
+          main.compile(ecjArgs.toArray(new String[0]));
+
+          if (main.globalErrorsCount > 0) {
+            logs.add("Compilation Errors:\n" + compileErrors.toString());
+          } else {
+            logs.add("All files compiled successfully.");
+          }
+
+          ecjTime = System.currentTimeMillis() - startEcj;
+
+          // ساخت JAR
+          publishProgress("Packaging JAR...");
+          new JarPackager(binPath + "classes/", binPath + "classes.jar").create();
+
+          // اجرای D8 برای تبدیل به DEX
           publishProgress("Dexing with D8...");
-          opt.clear();
-          opt.add("--output");
-          opt.add(FileUtil.getRoot(context).concat("/bin/"));
-          opt.add("--lib");
-          opt.add(FileUtil.getRoot(context).concat("/bin/cp.jar"));
-          opt.add(FileUtil.getRoot(context).concat("/bin/classes.jar"));
-          D8.main(opt.toArray(new String[0]));
+          ArrayList<String> d8Args = new ArrayList<>();
+          d8Args.add("--output");
+          d8Args.add(binPath);
+          d8Args.add("--lib");
+          d8Args.add(binPath + "cp.jar");
 
-          // گرفتن خروجی D8 برای دیباگ
-          PrintStream originalOut = System.out;
-          PrintStream originalErr = System.err;
+          List<File> classFiles = getClassFiles(new File(binPath + "classes/"));
+          for (File f : classFiles) d8Args.add(f.getAbsolutePath());
 
-          try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            PrintStream ps = new PrintStream(baos);
-            System.setOut(ps);
-            System.setErr(ps);
-            String d8Output = baos.toString();
-            if (!d8Output.isEmpty()) {
-              FileUtil.writeFile(binPath + "d8_output.txt", d8Output);
-            }
-          } finally {
-            System.setOut(originalOut);
-            System.setErr(originalErr);
-          }
+          long startDx = System.currentTimeMillis();
+          D8.main(d8Args.toArray(new String[0]));
+          dxTime = System.currentTimeMillis() - startDx;
 
         } catch (Exception e) {
-          return "Dex failed: " + e.toString();
+          return e.toString();
         }
-        dxTime = System.currentTimeMillis() - time;
         return "";
       }
 
@@ -162,122 +152,79 @@ public class JavaCompilerBeta {
       }
 
       @Override
-      protected void onPostExecute(String _result) {
+      protected void onPostExecute(String result) {
         pr.dismiss();
 
-        // چک کردن وجود فایل‌های لازم
-        File binDir = new File(binPath);
-        if (!binDir.exists()) {
-          dialog("Error", "bin directory doesn't exist: " + binPath, context);
+        StringBuilder allLogs = new StringBuilder();
+        for (String log : logs) allLogs.append(log).append("\n\n");
+
+        if (!result.isEmpty()) {
+          dialog("Compilation Failed", result + "\n\n" + allLogs.toString(), context);
           return;
         }
 
-        // لیست فایل‌ها برای دیباگ
-        StringBuilder filesList = new StringBuilder();
-        File[] files = binDir.listFiles();
-        if (files != null) {
-          for (File file : files) {
-            filesList.append(file.getName()).append(" (").append(file.length()).append(" bytes)\n");
-          }
-        }
-
-        // چک کردن وجود classes.dex
         File dexFile = new File(binPath + "classes.dex");
         if (!dexFile.exists()) {
-          String errorMsg =
-              "DEX file not found!\n"
-                  + "Path: "
-                  + dexFile.getAbsolutePath()
-                  + "\n\n"
-                  + "Files in bin directory:\n"
-                  + filesList.toString();
-
-          dialog("DEX Error", errorMsg, context);
+          dialog("DEX Error", "classes.dex not found!\n\n" + allLogs.toString(), context);
           return;
         }
 
-        if (TextUtils.isEmpty(_result)) {
-          final EditText tx = new EditText(context);
-          tx.setLayoutParams(new LinearLayout.LayoutParams(-2, -2));
-          tx.setPadding(30, 30, 30, 30);
-          final ScrollView sc = new ScrollView(context);
-          sc.setLayoutParams(new LinearLayout.LayoutParams(-1, -2));
-          sc.addView(tx);
-          tx.setBackgroundColor(0);
-
-          OutputStream _outstream =
-              new OutputStream() {
-                @Override
-                public void write(int b) {
-                  tx.append(String.valueOf((char) b));
-                }
-
-                @Override
-                public String toString() {
-                  return tx.getText().toString();
-                }
-              };
-          System.setOut(new PrintStream(_outstream));
-          System.setErr(new PrintStream(_outstream));
-
-          try {
-            // خواندن فایل dex به صورت بایت‌آرایه
-            byte[] dexBytes = new byte[(int) dexFile.length()];
-            FileInputStream fis = new FileInputStream(dexFile);
+        try {
+          // اجرای کلاس اصلی با InMemoryDexClassLoader و گرفتن خروجی
+          byte[] dexBytes = new byte[(int) dexFile.length()];
+          try (FileInputStream fis = new FileInputStream(dexFile)) {
             fis.read(dexBytes);
-            fis.close();
-
-            // استفاده از InMemoryDexClassLoader
-            ByteBuffer dexBuffer = ByteBuffer.wrap(dexBytes);
-            InMemoryDexClassLoader dcl =
-                new InMemoryDexClassLoader(dexBuffer, context.getClassLoader());
-
-            // لود کلاس و اجرای متد main
-            Class<?> calledClass = dcl.loadClass(className);
-            java.lang.reflect.Method method = calledClass.getDeclaredMethod("main", String[].class);
-            String[] param = {};
-            method.invoke(null, new Object[] {param});
-
-          } catch (java.lang.reflect.InvocationTargetException i) {
-            dialog("Runtime Error", "Runtime error: " + i.getCause().toString(), context);
-            return;
-          } catch (Exception e) {
-            dialog("Execution Error", "Couldn't execute the dex: " + e.toString(), context);
-            return;
           }
+          ByteBuffer dexBuffer = ByteBuffer.wrap(dexBytes);
+          InMemoryDexClassLoader dcl =
+              new InMemoryDexClassLoader(dexBuffer, context.getClassLoader());
+          Class<?> calledClass = dcl.loadClass(className);
+          java.lang.reflect.Method method = calledClass.getDeclaredMethod("main", String[].class);
 
-          // نمایش نتیجه
-          new MaterialAlertDialogBuilder(context)
-              .setTitle("Output (ecj:" + ecjTime + "ms | d8:" + dxTime + "ms)")
-              .setView(sc)
-              .setPositiveButton("OK", null)
-              .setNegativeButton("Cancel", null)
-              .setOnDismissListener(
-                  new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialogInterface) {}
-                  })
-              .create()
-              .show();
-        } else {
-          dialog("Compilation Failed", _result, context);
+          // گرفتن خروجی برنامه
+          ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+          PrintStream printStream = new PrintStream(outputStream);
+          PrintStream originalOut = System.out;
+          PrintStream originalErr = System.err;
+          System.setOut(printStream);
+          System.setErr(printStream);
+
+          method.invoke(null, (Object) new String[] {});
+
+          System.out.flush();
+          System.err.flush();
+          System.setOut(originalOut);
+          System.setErr(originalErr);
+
+          programOutput = outputStream.toString("UTF-8");
+
+        } catch (Exception e) {
+          dialog("Runtime Error", e.getLocalizedMessage() + "\n\n" + allLogs.toString(), context);
+          return;
         }
+
+        dialog(
+            "Execution Finished (ecj:" + ecjTime + "ms | d8:" + dxTime + "ms)",
+            programOutput + allLogs.toString(),
+            context);
       }
-    }.execute(inputs);
+    }.execute();
   }
 
-  public static void dialog(String title, String message, Context c) {
-    new MaterialAlertDialogBuilder(c)
-        .setTitle(title)
-        .setMessage(message)
-        .setPositiveButton("OK", null)
-        .setNegativeButton("Cancel", null)
-        .show();
+  private static List<File> getClassFiles(File dir) {
+    List<File> files = new ArrayList<>();
+    File[] fileArr = dir.listFiles();
+    if (fileArr == null) return files;
+    for (File file : fileArr) {
+      if (file.isDirectory()) files.addAll(getClassFiles(file));
+      else if (file.getName().endsWith(".class")) files.add(file);
+    }
+    return files;
   }
 
-  public static String extractFirstClassName(String javaCode) {
+  public static String extractFirstClassName(File javaFile) {
     try {
-      CompilationUnit cu = StaticJavaParser.parse(javaCode);
+      CompilationUnit cu = StaticJavaParser.parse(javaFile);
       Optional<ClassOrInterfaceDeclaration> firstClass =
           cu.findFirst(ClassOrInterfaceDeclaration.class);
       return firstClass.map(ClassOrInterfaceDeclaration::getNameAsString).orElse("Main");
@@ -285,5 +232,53 @@ public class JavaCompilerBeta {
       e.printStackTrace();
       return "Main";
     }
+  }
+
+  public static void dialog(String title, String message, Context c) {
+    Intent it = new Intent();
+    it.setClass(c, TerminalActivity.class);
+    it.putExtra("java", message);
+    c.startActivity(it);
+  }
+
+  static void copyFile(File src, File dest) throws IOException {
+    if (src == null || dest == null) {
+      throw new IllegalArgumentException("Source or destination is null");
+    }
+    if (!src.exists()) {
+      throw new IOException("Source file does not exist: " + src.getAbsolutePath());
+    }
+    File parent = dest.getParentFile();
+    if (parent != null && !parent.exists() && !parent.mkdirs()) {
+      throw new IOException("Failed to create parent directories: " + parent.getAbsolutePath());
+    }
+    if (dest.exists() && dest.isDirectory()) {
+      dest = new File(dest, src.getName());
+    }
+    if (src.getCanonicalPath().equals(dest.getCanonicalPath())) {
+      return;
+    }
+    FileInputStream in = null;
+    FileOutputStream out = null;
+    try {
+      in = new FileInputStream(src);
+      out = new FileOutputStream(dest, false);
+      byte[] buffer = new byte[8192];
+      int length;
+      while ((length = in.read(buffer)) != -1) {
+        out.write(buffer, 0, length);
+      }
+      out.getFD().sync();
+    } finally {
+      try {
+        if (in != null) in.close();
+      } catch (IOException ignore) {
+      }
+      try {
+        if (out != null) out.close();
+      } catch (IOException ignore) {
+      }
+    }
+    dest.setLastModified(src.lastModified());
   }
 }

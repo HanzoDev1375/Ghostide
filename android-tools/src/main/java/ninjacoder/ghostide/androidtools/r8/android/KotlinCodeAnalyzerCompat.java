@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity;
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSourceLocation;
@@ -12,11 +14,17 @@ import org.jetbrains.kotlin.cli.jvm.K2JVMCompiler;
 import org.jetbrains.kotlin.cli.common.arguments.K2JVMCompilerArguments;
 import org.jetbrains.kotlin.config.Services;
 import org.jetbrains.kotlin.cli.common.ExitCode;
-import java.util.ArrayList;
-import java.util.List;
+import org.jetbrains.kotlin.diagnostics.Diagnostic;
+import org.jetbrains.kotlin.diagnostics.DiagnosticFactory;
+import org.jetbrains.kotlin.diagnostics.rendering.DefaultErrorMessages;
+import org.jetbrains.kotlin.cli.common.messages.CompilerMessageLocation;
+import org.jetbrains.kotlin.cli.common.messages.MessageUtil;
+import org.jetbrains.kotlin.psi.KtFile;
+import org.jetbrains.kotlin.diagnostics.Severity;
 
 public class KotlinCodeAnalyzerCompat {
   private final String kotlinCode;
+
   private final String[] classpath = {
     "kotlin-stdlib-1.8.0-RC.jar",
     "kotlin-stdlib-common-1.8.0-RC.jar",
@@ -48,8 +56,7 @@ public class KotlinCodeAnalyzerCompat {
     }
 
     // Add the temporary file to compile
-
-    args.setFreeArgs(Arrays.asList(new String[] {tempFile.getAbsolutePath()}));
+    args.setFreeArgs(Arrays.asList(tempFile.getAbsolutePath()));
 
     // Create a custom message collector
     AnalysisMessageCollector collector = new AnalysisMessageCollector();
@@ -122,43 +129,58 @@ public class KotlinCodeAnalyzerCompat {
     }
 
     public int getStartLineError() {
-      return getErrors().stream().findFirst().map(msg -> msg.getLocation().getLine()).orElse(1);
+      return getErrors().stream()
+          .findFirst()
+          .map(msg -> msg.getLocation() != null ? msg.getLocation().getLine() : 1)
+          .orElse(1);
     }
 
     public int getEndLineError() {
-      return getErrors().stream().findFirst().map(msg -> msg.getLocation().getLineEnd()).orElse(1);
+      return getErrors().stream()
+          .findFirst()
+          .map(msg -> msg.getLocation() != null ? msg.getLocation().getLine() : 1)
+          .orElse(1);
     }
 
     public int getStartColErrors() {
-      return getErrors().stream().findFirst().map(msg -> msg.getLocation().getColumn()).orElse(1);
+      return getErrors().stream()
+          .findFirst()
+          .map(msg -> msg.getLocation() != null ? msg.getLocation().getColumn() : 1)
+          .orElse(1);
     }
 
     public int getEndColErrors() {
       return getErrors().stream()
           .findFirst()
-          .map(msg -> msg.getLocation().getColumnEnd())
+          .map(msg -> msg.getLocation() != null ? msg.getLocation().getColumn() : 0)
           .orElse(0);
     }
 
     public int getStartLineWar() {
-      return getWarnings().stream().findFirst().map(msg -> msg.getLocation().getLine()).orElse(1);
+      return getWarnings().stream()
+          .findFirst()
+          .map(msg -> msg.getLocation() != null ? msg.getLocation().getLine() : 1)
+          .orElse(1);
     }
 
     public int getEndLineWar() {
       return getWarnings().stream()
           .findFirst()
-          .map(msg -> msg.getLocation().getLineEnd())
+          .map(msg -> msg.getLocation() != null ? msg.getLocation().getLine() : 1)
           .orElse(1);
     }
 
     public int getStartColWar() {
-      return getWarnings().stream().findFirst().map(msg -> msg.getLocation().getColumn()).orElse(1);
+      return getWarnings().stream()
+          .findFirst()
+          .map(msg -> msg.getLocation() != null ? msg.getLocation().getColumn() : 1)
+          .orElse(1);
     }
 
     public int getEndColWar() {
       return getWarnings().stream()
           .findFirst()
-          .map(msg -> msg.getLocation().getColumnEnd())
+          .map(msg -> msg.getLocation() != null ? msg.getLocation().getColumn() : 1)
           .orElse(1);
     }
   }

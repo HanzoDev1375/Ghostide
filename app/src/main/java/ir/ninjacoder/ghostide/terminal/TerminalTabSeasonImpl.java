@@ -29,10 +29,6 @@ public class TerminalTabSeasonImpl implements TabLayout.OnTabSelectedListener {
   void init() {
     List<Season> list = new ArrayList<>();
     list.add(new Season("Tab 1", 0));
-    list.add(new Season("Tab 2", 1));
-    list.add(new Season("Tab 3", 2));
-    list.add(new Season("Tab 4", 3));
-    list.add(new Season("Tab 5", 4));
 
     list.forEach(
         it -> {

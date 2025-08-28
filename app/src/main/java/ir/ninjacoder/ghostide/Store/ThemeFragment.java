@@ -181,7 +181,8 @@ public class ThemeFragment extends Fragment {
         new ThreadUtils.SimpleTask<Boolean>() {
           @Override
           public Boolean doInBackground() throws Throwable {
-            File themeDir = new File(THEME_DIR);
+            var themename = getThemeName(themeData.get(themeKey));
+            File themeDir = new File(THEME_DIR + themename + File.separator);
             if (!themeDir.exists()) {
               themeDir.mkdirs();
             }
@@ -234,21 +235,24 @@ public class ThemeFragment extends Fragment {
     SharedPreferences.Editor themeEditor = themePrefs.edit();
     SharedPreferences.Editor bgEditor = bgPrefs.edit();
 
-    // Save theme path if exists
+    String themeName = getThemeName(themeData.get(themeKey));
+    File themeDir = new File(THEME_DIR + themeName + "/");
+
+    // ذخیره مسیر فایل تم
     if (themeData.containsKey(themeKey)) {
       String themeUrl = themeData.get(themeKey);
       if (themeUrl != null && !themeUrl.isEmpty()) {
         String fileName = extractFileName(themeUrl);
-        themeEditor.putString("themes", new File(THEME_DIR, fileName).getAbsolutePath());
+        themeEditor.putString("themes", new File(themeDir, fileName).getAbsolutePath());
       }
     }
 
-    // Save background path if exists
+    // ذخیره مسیر فایل پس‌زمینه
     if (themeData.containsKey(backgroundKey)) {
       String bgUrl = themeData.get(backgroundKey);
       if (bgUrl != null && !bgUrl.isEmpty()) {
         String fileName = extractFileName(bgUrl);
-        bgEditor.putString("dir", new File(THEME_DIR, fileName).getAbsolutePath());
+        bgEditor.putString("dir", new File(themeDir, fileName).getAbsolutePath());
       }
     }
 
@@ -279,15 +283,15 @@ public class ThemeFragment extends Fragment {
 
   private void showInstallDialog(Map<String, String> themeData) {
     new MaterialAlertDialogBuilder(getContext())
-        .setTitle("نصب تم")
-        .setMessage("آیا میخواهید این تم را نصب کنید؟")
+        .setTitle("install theme?")
+        .setMessage("Do you want to install this theme?")
         .setPositiveButton(
-            "نصب",
+            "install",
             (dialog, which) -> {
               saveThemePaths(themeData);
-              showToast("تم با موفقیت نصب شد");
+              showToast("Theme installed successfully");
             })
-        .setNegativeButton("انصراف", null)
+        .setNegativeButton("no", null)
         .show();
   }
 
@@ -297,7 +301,7 @@ public class ThemeFragment extends Fragment {
   }
 
   private String getThemeName(String themeUrl) {
-    if (themeUrl == null || themeUrl.isEmpty()) return "بدون نام";
+    if (themeUrl == null || themeUrl.isEmpty()) return "No name";
     String fileName = extractFileName(themeUrl);
     return fileName.split("\\.")[0];
   }
