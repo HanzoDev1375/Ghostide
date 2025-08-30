@@ -9,6 +9,7 @@ import com.android.tools.r8.D8Command;
 import com.android.tools.r8.OutputMode;
 import com.android.tools.r8.CompilationMode;
 import com.android.tools.r8.D8;
+import com.tyron.javacompletion.tool.Indexer;
 import dalvik.system.DexClassLoader;
 import dalvik.system.DexFile;
 import dalvik.system.InMemoryDexClassLoader;
@@ -18,6 +19,7 @@ import java.io.FileInputStream;
 import java.io.PrintStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import org.jetbrains.kotlin.cli.common.arguments.K2JVMCompilerArguments;
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity;
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSourceLocation;
@@ -53,6 +55,13 @@ public class KotlinCompiler {
     this.com = com;
     kotlinLibsPath = context.getCacheDir().getAbsolutePath() + File.separator + "kt/";
     workspaces = context.getCacheDir().getAbsolutePath() + File.separator + "kt/";
+    // test
+    List<String> jarFiles = Arrays.asList("/storage/emulated/0/GhostWebIDE/android/android.jar");
+    String outputFile = "/sdcard/apk/output.json";
+    List<String> ignoredPaths = new ArrayList<>();
+    List<String> indexFiles = new ArrayList<>();
+
+    Indexer.createIndex(jarFiles, outputFile, ignoredPaths, indexFiles);
   }
 
   public void compile(String filePath) {

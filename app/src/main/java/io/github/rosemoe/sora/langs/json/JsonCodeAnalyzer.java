@@ -171,15 +171,16 @@ public class JsonCodeAnalyzer implements CodeAnalyzer {
             break;
         }
         first = false;
+        if (type != JSONLexer.WS) {
+        previous = type;
+      }
       }
       if (stack.isEmpty()) {
         if (currSwitch > maxSwitch) {
           maxSwitch = currSwitch;
         }
       }
-      if (type != JSONLexer.WS) {
-        previous = type;
-      }
+      
       result.determine(lastLine);
       var it = new JsonAz();
       it.analyze(content, result, delegate);

@@ -1,6 +1,7 @@
 package io.github.rosemoe.sora.langs.java;
 
 import com.github.javaparser.ParserConfiguration;
+import com.ninjacoder.jgit.childer.CharParser;
 import ir.ninjacoder.ghostide.IdeEditor;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.StaticJavaParser;
@@ -63,7 +64,7 @@ public class JavaLanguage implements EditorLanguage {
 
   @Override
   public boolean isAutoCompleteChar(char ch) {
-    return MyCharacter.isJavaIdentifierPart(ch) || Character.isLetter(ch) || Character.isDigit(ch);
+    return CharParser.parserChar(ch);
   }
 
   @Override

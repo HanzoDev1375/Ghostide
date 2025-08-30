@@ -11,7 +11,6 @@ import com.android.tools.r8.OutputMode;
 import com.android.tools.r8.CompilationMode;
 import ir.ninjacoder.prograsssheet.PrograssSheet;
 import java.nio.file.Paths;
-
 public class R8Tools {
   public static final String ANDROIDJARPATH = "/storage/emulated/0/GhostWebIDE/android/android.jar";
 

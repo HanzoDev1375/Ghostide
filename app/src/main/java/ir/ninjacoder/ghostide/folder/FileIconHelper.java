@@ -96,15 +96,15 @@ public class FileIconHelper {
     if (filePath.equals("")) fileIconRes = R.drawable.ic_material_folder;
     if (isDynamicFolderEnabled) {
       if (isEnvironmentEnabled) {
-        if (fileEnvHelper.angularjs().isAngularJsDirectory())
-          fileIconRes = R.drawable.ic_material_folder_angular;
-        else if (fileEnvHelper.vuejs().isVueJsDirectory())
-          fileIconRes = R.drawable.ic_material_folder_vue;
-        else if (fileEnvHelper.nodejs().isNodeJsDirectory())
-          fileIconRes = R.drawable.ic_material_folder_node;
-        else if (fileEnvHelper.react().isReactDirectory())
-          fileIconRes = R.drawable.ic_material_folder_react_component;
-        else if (fileEnvHelper.android().isAndroidDevDirectory())
+        //  if (fileEnvHelper.angularjs().isAngularJsDirectory())
+        //   fileIconRes = R.drawable.ic_material_folder_angular;
+        //  else if (fileEnvHelper.vuejs().isVueJsDirectory())
+        // fileIconRes = R.drawable.ic_material_folder_vue;
+        // else if (fileEnvHelper.nodejs().isNodeJsDirectory())
+        // fileIconRes = R.drawable.ic_material_folder_node;
+        // else if (fileEnvHelper.react().isReactDirectory())
+        //  fileIconRes = R.drawable.ic_material_folder_react_component;
+        if (fileEnvHelper.android().isAndroidDevDirectory())
           fileIconRes = R.drawable.ic_material_folder_android;
         else if (fileEnvHelper.git().isGitDirectory())
           fileIconRes = R.drawable.ic_material_folder_git;

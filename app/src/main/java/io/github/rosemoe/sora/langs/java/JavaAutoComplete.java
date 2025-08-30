@@ -6,6 +6,11 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import com.blankj.utilcode.util.ThreadUtils;
+import com.tyron.javacompletion.JavaCompletions;
+import com.tyron.javacompletion.completion.CompletionCandidate;
+import com.tyron.javacompletion.completion.CompletionResult;
+import com.tyron.javacompletion.options.JavaCompletionOptionsImpl;
+import io.github.rosemoe.sora.event.ContentChangeEvent;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.config.JavaPaserUtils;
@@ -16,6 +21,7 @@ import ir.ninjacoder.ghostide.utils.FileUtil;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -36,14 +42,15 @@ public class JavaAutoComplete implements AutoCompleteProvider {
   private String prf;
   private String name;
   List<CompletionItem> keywords;
+  private SharedPreferences shp;
   private final WeakReference<IdeEditor> mEditorReference;
-  
 
   public JavaAutoComplete(IdeEditor editor) {
     mEditorReference = new WeakReference<>(editor);
     if (editor == null) {
       return;
     }
+    shp = GhostIdeAppLoader.getContext().getSharedPreferences("shp", Context.MODE_PRIVATE);
   }
 
   public void setMd(boolean isMd) {
@@ -73,7 +80,7 @@ public class JavaAutoComplete implements AutoCompleteProvider {
     if (keywordArray != null) {
       for (String kw : keywordArray) {
         if (kw.startsWith(match)) {
-          keywords.add(new CompletionItem(kw, name != null ? name : "Keyword"));
+          // keywords.add(new CompletionItem(kw, name != null ? name : "Keyword"));
         }
       }
     }
@@ -95,11 +102,29 @@ public class JavaAutoComplete implements AutoCompleteProvider {
     }
     new JavaToGsonHelper(editor.getTextAsString());
     JavaToGsonHelper.installFormSora(keywords, prefix);
+    JavaCompletions completions = new JavaCompletions();
+    File mfile = new File(shp.getString("pos_path", ""));
+    Log.w("JavaPath", mfile.getParentFile().getAbsolutePath());
+    completions.initialize(
+        URI.create("file:///" + mfile.getParentFile().getAbsolutePath()),
+        new JavaCompletionOptionsImpl());
+    completions.getProject().loadTypeIndexFile("/sdcard/apk/output.json");
+    completions.openFile(mfile.getParentFile().toPath(), editor.getTextAsString());
+    var result = completions.getCompletions(mfile.getParentFile().toPath(), line, column, prefix);
+
+    for (var its : result.getCompletionCandidates()) {
+
+      var local = its.getDetail().orElse(its.getKind().name());
+      // اگر پیشوند (prefix) خالی نیست و آیتم یک متد است، نام کامل را درج کنید
+      // if (its.getName().startsWith(prefix)) {
+      keywords.add(new CompletionItem(its.getName(), local));
+
+      // }
+    }
 
     it = new ArrayList<>(keywords); // ایجاد کپی از لیست keywords
     keywords.addAll(CodeSnippet.runasList("java", prefix));
-    var its = GhostIdeAppLoader.getShap();
-    // keywords.addAll(CodeSnippet.getJar(prefix));
+
     return keywords;
   }
 
