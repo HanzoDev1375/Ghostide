@@ -40,7 +40,7 @@ dependencies {
     implementation("com.google.android.material:material:1.13.0-alpha11")
     implementation project(path: ":prograsssheetlib")
 	implementation project(path: ":jgit")
-	implementation 'com.github.HanzoDev1375:ktc:1'
+	implementation 'com.github.HanzoDev1375:ktc:4'
 	implementation("com.android.tools:sdklib:25.3.0") {
         exclude group: "com.intellij", module: "annotations"
     }

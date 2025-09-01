@@ -479,7 +479,8 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
       List<CodeLine> code123 = JavaAnalyzer.analyze(content.toString());
       code123.forEach(
           item -> {
-            Utils.setErrorSpan(result, item.line, item.column);
+            if (item.haserror) Utils.setErrorSpan(result, item.line, item.column);
+            else if (item.haswar) Utils.setWaringSpan(result, item.line, item.column);
           });
       result.determine(lastLine);
       result.setExtra(info);

@@ -282,13 +282,19 @@ public class EditorAutoCompleteWindow extends EditorPopupWindow {
     Cursor cursor = mEditor.getCursor();
     if (!cursor.isSelected()) {
       mCancelShowUp = true;
+      int length = mLastPrefix.length();
+
+      if (mLastPrefix.contains(".")) {
+        length -= mLastPrefix.lastIndexOf(".") + 1;
+      }
       mEditor
           .getText()
           .delete(
               cursor.getLeftLine(),
-              cursor.getLeftColumn() - mLastPrefix.length(),
+              cursor.getLeftColumn() - length,
               cursor.getLeftLine(),
               cursor.getLeftColumn());
+
       cursor.onCommitText(item.commit);
       if (item.cursorOffset != item.commit.length()) {
         int delta = (item.commit.length() - item.cursorOffset);

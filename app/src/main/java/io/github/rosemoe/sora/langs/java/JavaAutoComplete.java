@@ -2,23 +2,17 @@ package io.github.rosemoe.sora.langs.java;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
-import com.blankj.utilcode.util.ThreadUtils;
+import com.google.gson.Gson;
 import com.tyron.javacompletion.JavaCompletions;
-import com.tyron.javacompletion.completion.CompletionCandidate;
 import com.tyron.javacompletion.completion.CompletionResult;
 import com.tyron.javacompletion.options.JavaCompletionOptionsImpl;
-import io.github.rosemoe.sora.event.ContentChangeEvent;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.config.JavaPaserUtils;
 import ir.ninjacoder.ghostide.config.JavaToGsonHelper;
 import io.github.rosemoe.sora.data.CompletionItem;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
-import ir.ninjacoder.ghostide.utils.FileUtil;
-import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.net.URI;
@@ -27,6 +21,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
+import java.util.stream.Collectors;
 import lsp4custom.com.ninjacoder.customhtmllsp.CodeSnippet;
 import lsp4custom.com.ninjacoder.customhtmllsp.JavaCardshorts;
 import lsp4custom.com.ninjacoder.customhtmllsp.TypeScriptCardshorts;
@@ -41,6 +36,7 @@ public class JavaAutoComplete implements AutoCompleteProvider {
   private List<CompletionItem> it;
   private String prf;
   private String name;
+  String filterPrefix;
   List<CompletionItem> keywords;
   private SharedPreferences shp;
   private final WeakReference<IdeEditor> mEditorReference;
@@ -110,18 +106,34 @@ public class JavaAutoComplete implements AutoCompleteProvider {
         new JavaCompletionOptionsImpl());
     completions.getProject().loadTypeIndexFile("/sdcard/apk/output.json");
     completions.openFile(mfile.getParentFile().toPath(), editor.getTextAsString());
-    var result = completions.getCompletions(mfile.getParentFile().toPath(), line, column, prefix);
+    CompletionResult result =
+        completions.getCompletions(mfile.getParentFile().toPath(), line, column);
 
-    for (var its : result.getCompletionCandidates()) {
+    int lastDotIndex = prefix.lastIndexOf('.');
+     filterPrefix = prefix;
 
-      var local = its.getDetail().orElse(its.getKind().name());
-      // اگر پیشوند (prefix) خالی نیست و آیتم یک متد است، نام کامل را درج کنید
-      // if (its.getName().startsWith(prefix)) {
-      keywords.add(new CompletionItem(its.getName(), local));
-
-      // }
+    if (lastDotIndex != -1) {
+      filterPrefix = prefix.substring(lastDotIndex + 1);
     }
+    // مستقیماً بدون ذخیره فایل پردازش کنیم
+    List<CompletionItem> filteredItems =
+        result.getCompletionCandidates().stream()
+            .filter(candidate -> candidate != null)
+            .map(
+                candidate -> {
+                  CompletionItem item = new CompletionItem();
+                  item.label = candidate.getName();
+                  item.desc = candidate.getDetail().orElse(candidate.getKind().name());
+                  item.commit = candidate.getName();
+                  return item;
+                })
+            .filter(
+                item ->
+                    item.label != null
+                        && item.label.startsWith(filterPrefix)) // استفاده از filterPrefix
+            .collect(Collectors.toList());
 
+    keywords.addAll(filteredItems);
     it = new ArrayList<>(keywords); // ایجاد کپی از لیست keywords
     keywords.addAll(CodeSnippet.runasList("java", prefix));
 

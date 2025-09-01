@@ -1,6 +1,8 @@
 package com.tyron.javacompletion;
 
-import com.google.common.collect.ImmutableList;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
+
 import com.tyron.javacompletion.completion.CompletionResult;
 import com.tyron.javacompletion.file.FileManager;
 import com.tyron.javacompletion.file.FileManagerImpl;
@@ -15,21 +17,19 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
-
 public class JavaCompletions {
   private static final JLogger logger = JLogger.createForEnclosingClass();
-  private static final int NUM_THREADS = 10;
 
   private final ExecutorService mExecutor;
 
-  private boolean mInitialized;
+  private static final String notInit = "Not yet initialized.";
+
+  public boolean mInitialized;
   private FileManager mFileManager;
   private Project mProject;
 
   public JavaCompletions() {
-    mExecutor = Executors.newFixedThreadPool(NUM_THREADS);
+    mExecutor = Executors.newCachedThreadPool();
   }
 
   public synchronized void initialize(URI projectRootUri, JavaCompletionOptions options) {
@@ -40,7 +40,12 @@ public class JavaCompletions {
 
     logger.info("Initializing project: %s", projectRootUri);
     logger.info(
-        "Options:\n  logPath: %s\n  logLevel: %s\n" + "  ignorePaths: %s\n  typeIndexFiles: %s",
+        """
+                        Options:
+                          logPath: %s
+                          logLevel: %s
+                          ignorePaths: %s
+                          typeIndexFiles: %s""",
         options.getLogPath(),
         options.getLogLevel(),
         options.getIgnorePaths(),
@@ -51,7 +56,7 @@ public class JavaCompletions {
     if (options.getIgnorePaths() != null) {
       ignorePaths = options.getIgnorePaths();
     } else {
-      ignorePaths = ImmutableList.of();
+      ignorePaths = List.of();
     }
     mFileManager = new FileManagerImpl(projectRootUri, ignorePaths, mExecutor);
     mProject = new Project(mFileManager, projectRootUri, IndexOptions.FULL_INDEX_BUILDER.build());
@@ -73,15 +78,11 @@ public class JavaCompletions {
     checkState(mInitialized, "shutdown() called without being initialized.");
     mInitialized = false;
     mExecutor.shutdown();
-  }
-
-  public synchronized FileManager getFileManager() {
-    checkState(mInitialized, "Not yet initialized.");
-    return checkNotNull(mFileManager);
+    mFileManager.shutdown();
   }
 
   public synchronized Project getProject() {
-    checkState(mInitialized, "Not yet initialized.");
+    checkState(mInitialized, notInit);
     return checkNotNull(mProject);
   }
 
@@ -90,13 +91,13 @@ public class JavaCompletions {
    * code editors are not writing the changes to file immediately
    */
   public synchronized void updateFileContent(Path file, String newContent) {
-    checkState(mInitialized, "Not yet initialized.");
+    checkState(mInitialized, notInit);
     mFileManager.setSnaphotContent(file.toUri(), newContent);
   }
 
   public synchronized void openFile(Path file, String content) {
     try {
-      checkState(mInitialized, "Not yet initialized.");
+      checkState(mInitialized, notInit);
       mFileManager.openFileForSnapshot(file.toUri(), content);
     } catch (Exception err) {
       logger.warning(err.getLocalizedMessage());
@@ -110,8 +111,8 @@ public class JavaCompletions {
    * @param line 0 based line of the caret
    * @param column 0 based column of the caret
    */
-  public synchronized CompletionResult getCompletions(Path file, int line, int column,String prefix) {
-    checkState(mInitialized, "Not yet initialized.");
-    return mProject.getCompletionResult(file, line, column,prefix);
+  public synchronized CompletionResult getCompletions(Path file, int line, int column) {
+    checkState(mInitialized, notInit);
+    return mProject.getCompletionResult(file, line, column);
   }
 }

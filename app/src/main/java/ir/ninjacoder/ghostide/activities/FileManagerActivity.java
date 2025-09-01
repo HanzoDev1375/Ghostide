@@ -163,6 +163,8 @@ public class FileManagerActivity extends BaseCompat
   private FileWatcherServiceConnection fileEventRelay;
   private boolean isFileWatcherBound = false;
   private ShortcutInfoImpl sh;
+  private ExecutorService executor;
+        
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
@@ -215,7 +217,7 @@ public class FileManagerActivity extends BaseCompat
     base = getSharedPreferences("base", Activity.MODE_PRIVATE);
     save_path = getSharedPreferences("save_path", Activity.MODE_PRIVATE);
     materialYou = getSharedPreferences("materialYou", Activity.MODE_PRIVATE);
-
+    executor= Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     book = getSharedPreferences("hsipsot4444", Activity.MODE_PRIVATE);
     sh = new ShortcutInfoImpl(FileManagerActivity.this, Folder);
     bind.searchbar.setCallBack(
@@ -524,13 +526,15 @@ public class FileManagerActivity extends BaseCompat
     // TODO: Implement this method
     unbindFileWatcherService();
     stopService(new Intent(this, FileWatcherService.class));
+    if(executor != null){
+      executor.shutdown();
+    }
   }
 
   public void reLoadFile(boolean isSortFile) {
     bind.recyclerview2.setVisibility(View.GONE);
     bind.filedirBar.setVisibility(View.VISIBLE);
-    ExecutorService executor =
-        Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+   
     executor.execute(
         () -> {
           save_path.edit().putString("path", Folder).apply();
@@ -594,7 +598,7 @@ public class FileManagerActivity extends BaseCompat
                 ListSheet.bind(bind.recyclerview2, Folder);
               });
         });
-    executor.shutdown();
+    
   }
 
   void reLoadFile() {

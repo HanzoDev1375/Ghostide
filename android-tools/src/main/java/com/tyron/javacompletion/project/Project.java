@@ -113,12 +113,12 @@ public class Project {
      * @param line 0-based line number
      * @param column 0-based character offset of the line
      */
-    public synchronized CompletionResult getCompletionResult(Path filePath, int line, int column,String prefix) {
+    public synchronized CompletionResult getCompletionResult(Path filePath, int line, int column) {
         if (!filePath.equals(lastCompletedFile)) {
             lastCompletedFile = filePath;
             addOrUpdateFile(filePath);
         }
-        return completor.getCompletionResult(moduleManager, filePath, line, column,prefix);
+        return completor.getCompletionResult(moduleManager, filePath, line, column);
     }
 
     private static boolean isJavaFile(Path filePath) {

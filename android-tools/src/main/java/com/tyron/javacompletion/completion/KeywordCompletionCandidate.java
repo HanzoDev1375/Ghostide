@@ -53,7 +53,6 @@ enum KeywordCompletionCandidate implements CompletionCandidate {
     VOID,
     VOLATILE,
     WHILE,
-    YELD
     ;
 
     @Override

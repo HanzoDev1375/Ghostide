@@ -28,7 +28,22 @@ public class JavaAnalyzer {
                   lines[index],
                   diag.getMessage(null),
                   (int) diag.getLineNumber(),
-                  (int) diag.getColumnNumber()));
+                  (int) diag.getColumnNumber(),
+                  true,
+                  false));
+        }
+      }
+	  if (diag.getKind() == Diagnostic.Kind.MANDATORY_WARNING || diag.getKind() == Diagnostic.Kind.WARNING) {
+        int index = (int) (diag.getLineNumber() - 1);
+        if (index >= 0 && index < lines.length) {
+          errorsList.add(
+              new CodeLine(
+                  lines[index],
+                  diag.getMessage(null),
+                  (int) diag.getLineNumber(),
+                  (int) diag.getColumnNumber(),
+                  false,
+                  true));
         }
       }
     }

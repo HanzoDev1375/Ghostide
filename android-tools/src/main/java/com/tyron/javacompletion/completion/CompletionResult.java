@@ -8,63 +8,63 @@ import java.nio.file.Path;
 @AutoValue
 public abstract class CompletionResult {
 
-  public abstract Path getFilePath();
+    public abstract Path getFilePath();
 
-  public abstract int getLine();
+    public abstract int getLine();
 
-  public abstract int getColumn();
+    public abstract int getColumn();
 
-  public abstract String getPrefix();
+    public abstract String getPrefix();
 
-  public abstract ImmutableList<CompletionCandidate> getCompletionCandidates();
+    public abstract ImmutableList<CompletionCandidate> getCompletionCandidates();
 
-  public abstract TextEditOptions getTextEditOptions();
+    public abstract TextEditOptions getTextEditOptions();
 
-  public abstract Builder toBuilder();
+    public abstract Builder toBuilder();
 
-  public static Builder builder() {
-    return new AutoValue_CompletionResult.Builder();
-  }
-
-  /**
-   * Check if the completor is processing a completion request that is an incremental completion of
-   * the cached completion.
-   */
-  boolean isIncrementalCompletion(Path filePath, int line, int column, String prefix) {
-    if (!getFilePath().equals(filePath)) {
-      return false;
+    public static Builder builder() {
+        return new AutoValue_CompletionResult.Builder();
     }
-    if (getLine() != line) {
-      return false;
+
+    /**
+     * Check if the completor is processing a completion request that is an incremental completion of
+     * the cached completion.
+     */
+    boolean isIncrementalCompletion(Path filePath, int line, int column, String prefix) {
+        if (!getFilePath().equals(filePath)) {
+            return false;
+        }
+        if (getLine() != line) {
+            return false;
+        }
+        if (getColumn() > column) {
+            return false;
+        }
+        if (!prefix.startsWith(getPrefix())) {
+            return false;
+        }
+        if (prefix.length() - getPrefix().length() != column - getColumn()) {
+            // FIXME: This may break for complicated Unicodes.
+            return false;
+        }
+        return true;
     }
-    if (getColumn() > column) {
-      return false;
+
+    @AutoValue.Builder
+    public abstract static class Builder {
+        public abstract Builder setFilePath(Path filePath);
+
+        public abstract Builder setLine(int line);
+
+        public abstract Builder setColumn(int column);
+
+        public abstract Builder setPrefix(String prefix);
+
+        public abstract Builder setCompletionCandidates(
+                ImmutableList<CompletionCandidate> completionCandidates);
+
+        public abstract Builder setTextEditOptions(TextEditOptions textEditOptions);
+
+        public abstract CompletionResult build();
     }
-    if (!prefix.startsWith(getPrefix())) {
-      return false;
-    }
-    if (prefix.length() - getPrefix().length() != column - getColumn()) {
-      // FIXME: This may break for complicated Unicodes.
-      return false;
-    }
-    return true;
-  }
-
-  @AutoValue.Builder
-  public abstract static class Builder {
-    public abstract Builder setFilePath(Path filePath);
-
-    public abstract Builder setLine(int line);
-
-    public abstract Builder setColumn(int column);
-
-    public abstract Builder setPrefix(String prefix);
-
-    public abstract Builder setCompletionCandidates(
-        ImmutableList<CompletionCandidate> completionCandidates);
-
-    public abstract Builder setTextEditOptions(TextEditOptions textEditOptions);
-
-    public abstract CompletionResult build();
-  }
 }
