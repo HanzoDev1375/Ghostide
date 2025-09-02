@@ -373,7 +373,7 @@ public class Css3Server {
     if (!propeName.isEmpty()) {
       String typePrefix = prefix.substring(propeName.length() + 1).trim();
       for (var it : PermissionGroup.values()) {
-        if (it.name().startsWith(typePrefix)) {
+        if (it.name().contains(typePrefix)) {
           list.add(css(it.name(), it.name(), "android:name=" + "\"" + it.getConstant() + "\""));
         }
       }

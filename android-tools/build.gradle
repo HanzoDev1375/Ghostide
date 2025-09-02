@@ -40,10 +40,10 @@ dependencies {
     implementation("com.google.android.material:material:1.13.0-alpha11")
     implementation project(path: ":prograsssheetlib")
 	implementation project(path: ":jgit")
-	implementation 'com.github.HanzoDev1375:ktc:4'
+	implementation("com.github.HanzoDev1375:ktc:1") 
 	implementation("com.android.tools:sdklib:25.3.0") {
         exclude group: "com.intellij", module: "annotations"
-    }
+    } 
 	implementation 'javax.xml.stream:stax-api:1.0-2'
     compileOnly "org.jetbrains.kotlin:kotlin-compiler:2.1.21"
     implementation 'io.github.itsaky:nb-javac-android:17.0.0.3'

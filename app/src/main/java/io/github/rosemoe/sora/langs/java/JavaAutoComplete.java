@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.tyron.javacompletion.JavaCompletions;
 import com.tyron.javacompletion.completion.CompletionResult;
 import com.tyron.javacompletion.options.JavaCompletionOptionsImpl;
+import com.tyron.javacompletion.project.Project;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.config.JavaPaserUtils;
@@ -36,7 +37,7 @@ public class JavaAutoComplete implements AutoCompleteProvider {
   private List<CompletionItem> it;
   private String prf;
   private String name;
-  String filterPrefix;
+
   List<CompletionItem> keywords;
   private SharedPreferences shp;
   private final WeakReference<IdeEditor> mEditorReference;
@@ -67,77 +68,67 @@ public class JavaAutoComplete implements AutoCompleteProvider {
   @Override
   public List<CompletionItem> getAutoCompleteItems(
       String prefix, TextAnalyzeResult analyzeResult, int line, int column) {
-    keywords = new ArrayList<>();
-    final String[] keywordArray = mKeywords;
-    prf = prefix;
-    String match = prefix;
+
+    List<CompletionItem> allItems = new ArrayList<>();
     editor = mEditorReference.get();
-    // افزودن کلمات کلیدی
-    if (keywordArray != null) {
-      for (String kw : keywordArray) {
-        if (kw.startsWith(match)) {
-          // keywords.add(new CompletionItem(kw, name != null ? name : "Keyword"));
+    prf = prefix;
+
+    if (mKeywords != null) {
+      for (String kw : mKeywords) {
+        if (kw.contains(prefix)) {
+          allItems.add(new CompletionItem(kw, name != null ? name : "Keyword"));
         }
       }
     }
-    var toolsJava = new JavaPaserUtils(editor);
-    Collections.sort(keywords, CompletionItem.COMPARATOR_BY_NAME);
+
     Object extra = analyzeResult.getExtra();
     if (extra instanceof Identifiers) {
       Identifiers userIdentifiers = (Identifiers) extra;
-      List<CompletionItem> words = new ArrayList<>();
-
       for (String word : userIdentifiers.getIdentifiers()) {
-        if (word.startsWith(match)) {
-          words.add(new CompletionItem(word, "ABC"));
+        if (word.contains(prefix)) {
+          allItems.add(new CompletionItem(word, "ABC"));
         }
       }
-
-      Collections.sort(words, CompletionItem.COMPARATOR_BY_NAME);
-      keywords.addAll(words);
     }
-    new JavaToGsonHelper(editor.getTextAsString());
-    JavaToGsonHelper.installFormSora(keywords, prefix);
-    JavaCompletions completions = new JavaCompletions();
-    File mfile = new File(shp.getString("pos_path", ""));
-    Log.w("JavaPath", mfile.getParentFile().getAbsolutePath());
-    completions.initialize(
-        URI.create("file:///" + mfile.getParentFile().getAbsolutePath()),
-        new JavaCompletionOptionsImpl());
-    completions.getProject().loadTypeIndexFile("/sdcard/apk/output.json");
-    completions.openFile(mfile.getParentFile().toPath(), editor.getTextAsString());
-    CompletionResult result =
-        completions.getCompletions(mfile.getParentFile().toPath(), line, column);
 
-    int lastDotIndex = prefix.lastIndexOf('.');
-     filterPrefix = prefix;
+    if (editor != null) {
+      JavaCompletions completions = new JavaCompletions();
+      File mfile = new File(shp.getString("pos_path", ""));
+      if (mfile.getParentFile() != null) {
+        completions.initialize(
+            URI.create("file:///" + mfile.getParentFile().getAbsolutePath()),
+            new JavaCompletionOptionsImpl());
+        Project project = completions.getProject();
+        project.loadTypeIndexFile("/sdcard/apk/index.json");
 
-    if (lastDotIndex != -1) {
-      filterPrefix = prefix.substring(lastDotIndex + 1);
+        completions.openFile(mfile.getParentFile().toPath(), editor.getTextAsString());
+        CompletionResult result =
+            completions.getCompletions(mfile.getParentFile().toPath(), line, column);
+
+        String filterPrefix = prefix;
+        String userFilter =
+            (prefix.lastIndexOf('.') >= 0) ? prefix.substring(prefix.lastIndexOf('.') + 1) : prefix;
+
+        for (var candidate : result.getCompletionCandidates()) {
+          if (candidate != null) {
+            CompletionItem item = new CompletionItem();
+            item.label = candidate.getName();
+            item.desc = candidate.getDetail().orElse(candidate.getKind().name());
+            item.commit = candidate.getName();
+            item.cursorOffset(item.commit.length());
+
+            if (userFilter.isEmpty() || item.label.contains(userFilter)) {
+              allItems.add(item);
+            }
+          }
+        }
+      }
     }
-    // مستقیماً بدون ذخیره فایل پردازش کنیم
-    List<CompletionItem> filteredItems =
-        result.getCompletionCandidates().stream()
-            .filter(candidate -> candidate != null)
-            .map(
-                candidate -> {
-                  CompletionItem item = new CompletionItem();
-                  item.label = candidate.getName();
-                  item.desc = candidate.getDetail().orElse(candidate.getKind().name());
-                  item.commit = candidate.getName();
-                  return item;
-                })
-            .filter(
-                item ->
-                    item.label != null
-                        && item.label.startsWith(filterPrefix)) // استفاده از filterPrefix
-            .collect(Collectors.toList());
+    allItems.addAll(CodeSnippet.runasList("java", prefix));
+    allItems.sort(CompletionItem.COMPARATOR_BY_NAME);
+    it = new ArrayList<>(allItems);
 
-    keywords.addAll(filteredItems);
-    it = new ArrayList<>(keywords); // ایجاد کپی از لیست keywords
-    keywords.addAll(CodeSnippet.runasList("java", prefix));
-
-    return keywords;
+    return allItems;
   }
 
   public void setTsCardshorts() {

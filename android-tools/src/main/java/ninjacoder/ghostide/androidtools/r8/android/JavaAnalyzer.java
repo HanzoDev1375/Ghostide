@@ -1,5 +1,6 @@
 package ninjacoder.ghostide.androidtools.r8.android;
 
+import java.net.URI;
 import javax.tools.*;
 import java.util.*;
 
@@ -33,7 +34,8 @@ public class JavaAnalyzer {
                   false));
         }
       }
-	  if (diag.getKind() == Diagnostic.Kind.MANDATORY_WARNING || diag.getKind() == Diagnostic.Kind.WARNING) {
+      if (diag.getKind() == Diagnostic.Kind.MANDATORY_WARNING
+          || diag.getKind() == Diagnostic.Kind.WARNING) {
         int index = (int) (diag.getLineNumber() - 1);
         if (index >= 0 && index < lines.length) {
           errorsList.add(
@@ -61,9 +63,7 @@ public class JavaAnalyzer {
     final String code;
 
     JavaSourceFromString(String name, String code) {
-      super(
-          java.net.URI.create("string:///" + name.replace('.', '/') + Kind.SOURCE.extension),
-          Kind.SOURCE);
+      super(URI.create("string:///" + name.replace('.', '/') + Kind.SOURCE.extension), Kind.SOURCE);
       this.code = code;
     }
 

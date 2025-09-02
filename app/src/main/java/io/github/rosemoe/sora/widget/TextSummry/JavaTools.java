@@ -5,6 +5,7 @@ import ir.ninjacoder.ghostide.config.CreatorComment;
 import ir.ninjacoder.ghostide.config.GetterSetterGenerator;
 import ir.ninjacoder.ghostide.config.JavaPaserUtils;
 import ir.ninjacoder.ghostide.databinding.MakefolderBinding;
+import ir.ninjacoder.ghostide.marco.ActivityToFragmentConverter;
 import ir.ninjacoder.ghostide.marco.LicenseManagerImpl;
 import ir.ninjacoder.ghostide.marco.editorface.ConstructorMaker;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
@@ -68,6 +69,7 @@ public class JavaTools {
             .addItem(new PowerMenuItem("addIfStatement"))
             .addItem(new PowerMenuItem("fix import"))
             .addItem(new PowerMenuItem("Copy R"))
+            .addItem(new PowerMenuItem("Activity to Fragment"))
             .setIsMaterial(true)
             .build();
     menu.setMenuRadius(20f);
@@ -122,6 +124,9 @@ public class JavaTools {
           } else if (pos == 16) {
             var its = new LicenseManagerImpl();
             its.run((IdeEditor) editor);
+          } else if (pos == 17) {
+            editor.setText(
+                ActivityToFragmentConverter.convertActivityToFragment(editor.getTextAsString()));
           }
         });
   }

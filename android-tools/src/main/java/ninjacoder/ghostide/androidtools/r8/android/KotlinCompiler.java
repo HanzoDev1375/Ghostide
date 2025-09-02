@@ -9,6 +9,7 @@ import com.android.tools.r8.D8Command;
 import com.android.tools.r8.OutputMode;
 import com.android.tools.r8.CompilationMode;
 import com.android.tools.r8.D8;
+import com.tyron.javacompletion.tool.Indexer;
 import dalvik.system.DexClassLoader;
 import dalvik.system.DexFile;
 import dalvik.system.InMemoryDexClassLoader;
@@ -18,6 +19,7 @@ import java.io.FileInputStream;
 import java.io.PrintStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import org.jetbrains.kotlin.cli.common.arguments.K2JVMCompilerArguments;
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity;
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSourceLocation;
@@ -38,6 +40,7 @@ public class KotlinCompiler {
   private Context context;
   private String kotlinLibsPath;
   private String androidJarPath = "/storage/emulated/0/GhostWebIDE/android/android.jar";
+  private String workspaces;
   private PrograssSheet progressDialog;
 
   public interface OnDoneCompiler {
@@ -51,7 +54,14 @@ public class KotlinCompiler {
     this.context = context;
     this.com = com;
     kotlinLibsPath = context.getCacheDir().getAbsolutePath() + File.separator + "kt/";
-    
+    workspaces = context.getCacheDir().getAbsolutePath() + File.separator + "kt/";
+    // test
+    List<String> jarFiles = Arrays.asList("/storage/emulated/0/GhostWebIDE/android/android.jar");
+    String outputFile = "/sdcard/apk/output.json";
+    List<String> ignoredPaths = new ArrayList<>();
+    List<String> indexFiles = new ArrayList<>();
+
+    Indexer.createIndex(jarFiles, outputFile, ignoredPaths, indexFiles);
   }
 
   public void compile(String filePath) {
@@ -71,7 +81,7 @@ public class KotlinCompiler {
 
       try {
         // publishProgress("در حال آماده‌سازی محیط کار...");
-        File workspace = new File(kotlinLibsPath);
+        File workspace = new File(workspaces);
 
         if (!workspace.exists() && !workspace.mkdirs()) {
           publishProgress("Failed to create workspace directory");
@@ -98,29 +108,30 @@ public class KotlinCompiler {
 
         // publishProgress("در حال کامپایل کد Kotlin...");
         String classpath = buildClasspath();
+
         List<String> arguments = new ArrayList<>();
         arguments.add(inputFile.getAbsolutePath());
         arguments.add("-cp");
         arguments.add(classpath);
+        arguments.add("-d");
+        arguments.add(mClassOutput.getAbsolutePath());
+        arguments.add("-no-stdlib");
+
         K2JVMCompiler compiler = new K2JVMCompiler();
         K2JVMCompilerArguments args = new K2JVMCompilerArguments();
         compiler.parseArguments(arguments.toArray(new String[0]), args);
 
         args.setCompileJava(false);
         args.setIncludeRuntime(false);
-        args.setNoJdk(true);
+        args.setNoJdk(false);
         args.setNoReflect(false);
         args.setNoStdlib(false);
-		
-        args.setKotlinHome(kotlinLibsPath);
-        args.setDestination(mClassOutput.getAbsolutePath());
 
         MessageCollector collector = new MessageCollectorImpl();
         ExitCode exitCode = compiler.exec(collector, Services.EMPTY, args);
 
         if (exitCode != ExitCode.OK || collector.hasErrors()) {
           publishProgress("Compilation failed:\n" + collector.toString());
-
           return false;
         } else {
           String successMessage =
@@ -288,8 +299,8 @@ public class KotlinCompiler {
         mainMethod.invoke(null);
         appendOutput(className);
       } catch (NoSuchMethodException e) {
-        Method mainMethod = compiledClass.getMethod("main", Context.class);
-        mainMethod.invoke(null, (Object) Context.class);
+        Method mainMethod = compiledClass.getMethod("main", String[].class);
+        mainMethod.invoke(null, (Object) new String[] {});
         appendOutput(className);
       }
     } catch (ClassNotFoundException e) {
@@ -342,7 +353,7 @@ public class KotlinCompiler {
         } catch (NoSuchMethodException e1) {
           try {
             // حالت Java: متد main با آرگومان String[]
-            Method mainMethod = clazz.getMethod("main", Context.class);
+            Method mainMethod = clazz.getMethod("main", String[].class);
             if (mainMethod != null) {
               return className;
             }
@@ -362,9 +373,8 @@ public class KotlinCompiler {
     String[] requiredLibs = {
       "kotlin-stdlib.jar",
       "kotlin-stdlib-common.jar",
-      "kotlinx-coroutines-core-jvm-1.6.4.jar",
-      "kotlin-reflect.jar", // اضافه کردن
-      "kotlin-script-runtime.jar" // اضافه کردن
+      "kotlin-reflect.jar",
+      "kotlinx-coroutines-core-jvm-1.6.4.jar"
     };
 
     StringBuilder classpath = new StringBuilder();
@@ -379,8 +389,6 @@ public class KotlinCompiler {
       }
     }
 
-
-    appendOutput("Classpath: " + classpath.toString());
     return classpath.toString();
   }
 
