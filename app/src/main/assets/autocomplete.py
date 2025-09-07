@@ -8,11 +8,20 @@ import json
 import os
 import traceback
 
+
 def get_default_position(code):
     lines = code.splitlines()
-    line = len(lines)
-    column = len(lines[-1]) if line > 0 else 0
-    return line, column
+    if not lines:
+        return 1, 0
+
+    # از آخر به اول بگرد دنبال آخرین نقطه
+    for i in range(len(lines) - 1, -1, -1):
+        col = lines[i].rfind(".")
+        if col != -1:
+            return i + 1, col + 1  # jedi ستون رو یک واحد بعد از '.' می‌خواد
+
+    # اگر هیچ نقطه‌ای نبود، برگرد آخر فایل
+    return len(lines), len(lines[-1])
 
 
 def get_prefix_before_dot(code, line, column):
@@ -46,7 +55,6 @@ def main():
         code = f.read()
 
     try:
-        # تنظیم مسیر کش (همان‌طور که شما خواستید)
         cache_dir = os.path.expanduser("/data/data/ir.ninjacoder.ghostide/files/lib")
         os.makedirs(cache_dir, exist_ok=True)
         jedi.settings.cache_directory = cache_dir
@@ -58,8 +66,8 @@ def main():
 
         result = [
             {
-                "label": f"{prefix}.{c.name}" if prefix else c.name,
-                "commit": f"{prefix}.{c.name}" if prefix else c.name,
+                "label": c.name,
+                "commit": c.name,
                 "desc": c.type,
                 "prefix": prefix,
             }

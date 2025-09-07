@@ -29,8 +29,14 @@ public class ShortcutInfoImpl {
 
     List<FileShortcutInfo> infos = new ArrayList<>();
     File file = new File(path);
+
     FileIconHelper fileicon = new FileIconHelper(path);
-    info = new FileShortcutInfo(file.getName(), fileicon.getFileIcon(), path, ch);
+    info =
+        new FileShortcutInfo(
+            file.isDirectory() ? file.getName() : file.getParentFile().getName(),
+            fileicon.getFileIcon(),
+            path,
+            ch);
     infos.add(info);
     infos.forEach(
         it -> {

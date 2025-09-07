@@ -55,13 +55,6 @@ public class KotlinCompiler {
     this.com = com;
     kotlinLibsPath = context.getCacheDir().getAbsolutePath() + File.separator + "kt/";
     workspaces = context.getCacheDir().getAbsolutePath() + File.separator + "kt/";
-    // test
-    List<String> jarFiles = Arrays.asList("/storage/emulated/0/GhostWebIDE/android/android.jar");
-    String outputFile = "/sdcard/apk/output.json";
-    List<String> ignoredPaths = new ArrayList<>();
-    List<String> indexFiles = new ArrayList<>();
-
-    Indexer.createIndex(jarFiles, outputFile, ignoredPaths, indexFiles);
   }
 
   public void compile(String filePath) {

@@ -269,12 +269,13 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
             }
             /// colse
           case HTMLLexer.LPAREN:
-          case HTMLLexer.RBRACK:
+          case HTMLLexer.LBRACK:
+          
             hl.handleOpenBracket(result, line, column, EditorColorScheme.htmlblocknormal);
             break;
             // open
           case HTMLLexer.RPAREN:
-          case HTMLLexer.LBRACK:
+          case HTMLLexer.RBRACK:
             hl.handleCloseBracket(result, line, column, EditorColorScheme.htmlblocknormal);
             break;
           case HTMLLexer.SEMI:

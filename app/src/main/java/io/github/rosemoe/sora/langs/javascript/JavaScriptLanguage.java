@@ -1,5 +1,6 @@
 package io.github.rosemoe.sora.langs.javascript;
 
+import io.github.rosemoe.sora.langs.javascript.formatter.JavaScriptCodeFormatter;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import android.widget.Toast;
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
@@ -134,7 +135,7 @@ public class JavaScriptLanguage implements EditorLanguage {
   @Override
   public CharSequence format(CharSequence text) {
     try {
-      return JsBeautify.jsBeautify(text.toString());
+      return JavaScriptCodeFormatter.formatJavaScriptCode(GhostIdeAppLoader.getContext(),text.toString());
     } catch (Exception err) {
       return text;
     }

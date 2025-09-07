@@ -11,77 +11,106 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
          android:layout_height="match_parent"
          android:layout_width="match_parent"
+         android:background="@android:color/transparent"
          android:id="@+id/_coordinator">
 
         <com.google.android.material.appbar.AppBarLayout
              android:layout_height="wrap_content"
              android:layout_width="match_parent"
-             app:backgroundTint="@android:color/transparent"
+             app:liftOnScrollColor="@android:color/transparent"
+             android:background="@android:color/transparent"
+             app:liftOnScroll="false"
              android:id="@+id/_app_bar">
 
-            <com.ninjacoder.jgit.search.SearchBar
-                 android:layout_height="wrap_content"
+            <LinearLayout
+                 android:layout_height="56dp"
                  android:layout_width="match_parent"
-                 android:layout_marginEnd="8dp"
-                 android:layout_marginStart="8dp"
-				 android:visibility="gone"
+                 android:gravity="center"
+                 android:orientation="horizontal">
+
+                <ImageView
+                     android:layout_height="35dp"
+                     android:layout_width="35dp"
+                     android:scaleType="centerInside"
+                     android:src="@drawable/ic_more_vert_white"
+                     android:layout_marginRight="6dp"
+                     android:layout_marginLeft="10dp" />
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:gravity="center_vertical|center_horizontal"
+                     android:textSize="17sp"
+                     android:layout_weight="1.0"
+					 android:textAppearance="?attr/textAppearanceHeadlineMedium"
+                     android:text="@string/app_name" />
+
+                <ImageView
+                     android:layout_height="35dp"
+                     android:layout_width="35dp"
+					 android:scaleType="centerInside"
+					 android:src="@drawable/app_icon"
+                     android:layout_marginLeft="10dp"
+                     android:layout_marginRight="7dp" />
+
+            </LinearLayout>
+
+            <com.ninjacoder.jgit.search.SearchBar
+                 android:layout_height="56dp"
+                 android:layout_width="match_parent"
+                 android:visibility="gone"
                  android:id="@+id/searchbar" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.core.widget.NestedScrollView
+        <LinearLayout
              android:layout_height="match_parent"
              android:layout_width="match_parent"
              app:layout_behavior="@string/appbar_scrolling_view_behavior"
-             android:backgroundTint="@android:color/transparent">
+             android:background="?attr/colorSurfaceVariant">
 
             <LinearLayout
                  android:layout_height="match_parent"
                  android:layout_width="match_parent"
-                 android:padding="9dp">
+                 android:orientation="vertical"
+                 android:id="@+id/view_filedir">
+
+                <androidx.recyclerview.widget.RecyclerView
+                     android:layout_height="0dp"
+                     android:layout_width="match_parent"
+                     android:padding="8dp"
+                     android:layout_weight="1"
+                     android:id="@+id/recyclerview2" />
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:visibility="gone"
+                     android:indeterminate="true"
+                     app:trackThickness="5dp"
+                     android:layout_gravity="center"
+                     android:id="@+id/filedir_bar" />
 
                 <LinearLayout
                      android:layout_height="match_parent"
                      android:layout_width="match_parent"
-                     android:orientation="vertical">
+                     android:visibility="gone"
+                     android:gravity="center_horizontal"
+                     android:orientation="vertical"
+                     android:textSize="20dp"
+                     android:id="@+id/emptyview">
 
-                    <androidx.recyclerview.widget.RecyclerView
-                         android:layout_height="wrap_content"
-                         android:layout_width="match_parent"
-                         android:padding="8dp"
-                         android:id="@+id/recyclerview2" />
-
-                    <com.google.android.material.progressindicator.CircularProgressIndicator
+                    <TextView
                          android:layout_height="wrap_content"
                          android:layout_width="wrap_content"
-                         android:visibility="gone"
-                         android:indeterminate="true"
-                         app:trackThickness="5dp"
-                         android:layout_gravity="center"
-                         android:id="@+id/filedir_bar" />
-
-                    <LinearLayout
-                         android:layout_height="match_parent"
-                         android:layout_width="match_parent"
-                         android:visibility="gone"
-                         android:gravity="center_horizontal"
-                         android:orientation="vertical"
                          android:textSize="20dp"
-                         android:id="@+id/emptyview">
-
-                        <TextView
-                             android:layout_height="wrap_content"
-                             android:layout_width="wrap_content"
-                             android:textSize="20dp"
-                             android:text="Empty List" />
-
-                    </LinearLayout>
+                         android:text="Empty List" />
 
                 </LinearLayout>
 
             </LinearLayout>
 
-        </androidx.core.widget.NestedScrollView>
+        </LinearLayout>
 
         <ir.ninjacoder.ghostide.widget.ExrtaFab
              android:layout_height="80dp"

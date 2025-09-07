@@ -94,6 +94,7 @@ import storage.sdcard.SdCardUtil;
 import com.ninjacoder.jgit.childer.TextFind;
 import java.io.File;
 import java.util.*;
+import com.ninjacoder.jgit.childer.LayoutBinder;
 
 public class FileManagerActivity extends BaseCompat
     implements FileManagerAd.onClick, FileWatcher.OnFileChangeListener {
@@ -164,7 +165,6 @@ public class FileManagerActivity extends BaseCompat
   private boolean isFileWatcherBound = false;
   private ShortcutInfoImpl sh;
   private ExecutorService executor;
-        
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
@@ -217,9 +217,16 @@ public class FileManagerActivity extends BaseCompat
     base = getSharedPreferences("base", Activity.MODE_PRIVATE);
     save_path = getSharedPreferences("save_path", Activity.MODE_PRIVATE);
     materialYou = getSharedPreferences("materialYou", Activity.MODE_PRIVATE);
-    executor= Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+    executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     book = getSharedPreferences("hsipsot4444", Activity.MODE_PRIVATE);
     sh = new ShortcutInfoImpl(FileManagerActivity.this, Folder);
+    if (Build.VERSION.SDK_INT >= 21)
+      getWindow().setNavigationBarColor(MaterialColors.getColor(this, ObjectUtils.Back, 0));
+    if (Build.VERSION.SDK_INT >= 21)
+      getWindow().setStatusBarColor(MaterialColors.getColor(this, ObjectUtils.colorSurfaceContainerHigh, 0));
+    getWindow()
+        .getDecorView()
+        .setBackgroundColor(MaterialColors.getColor(this, ObjectUtils.colorSurfaceContainerHigh, 0));
     bind.searchbar.setCallBack(
         new SearchCallBack() {
 
@@ -249,6 +256,8 @@ public class FileManagerActivity extends BaseCompat
       setViewType(ViewType.ROW);
     }
     ThemeChaker();
+    View mview = findViewById(R.id.view_filedir);
+    LayoutBinder.of(mview, ObjectUtils.Back);
     var helper =
         new RecyclerViewHelper(
             bind.recyclerview2,
@@ -526,7 +535,7 @@ public class FileManagerActivity extends BaseCompat
     // TODO: Implement this method
     unbindFileWatcherService();
     stopService(new Intent(this, FileWatcherService.class));
-    if(executor != null){
+    if (executor != null) {
       executor.shutdown();
     }
   }
@@ -534,7 +543,7 @@ public class FileManagerActivity extends BaseCompat
   public void reLoadFile(boolean isSortFile) {
     bind.recyclerview2.setVisibility(View.GONE);
     bind.filedirBar.setVisibility(View.VISIBLE);
-   
+
     executor.execute(
         () -> {
           save_path.edit().putString("path", Folder).apply();
@@ -598,7 +607,6 @@ public class FileManagerActivity extends BaseCompat
                 ListSheet.bind(bind.recyclerview2, Folder);
               });
         });
-    
   }
 
   void reLoadFile() {
@@ -797,12 +805,12 @@ public class FileManagerActivity extends BaseCompat
     di.setTitle(tit);
     di.setMessage(msg);
     di.setNeutralButton(
-        "مشاهده",
+        "unzio",
         (p, d) -> {
           ZipFileShow.showAsDialog(FileManagerActivity.this, _path);
         });
     di.setPositiveButton(
-        "استخراج",
+        "view",
         (p1, d2) -> {
           UnZipDataFromDir(_path, Folder);
         });

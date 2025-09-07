@@ -58,13 +58,22 @@ public class CustomAdGhostWeb extends EditorCompletionAdapter {
     Spannable label =
         Spannable.Factory.getInstance().newSpannable(item.label != null ? item.label : "None");
     String prefix = getPrefix();
-    int index = TextUtils.indexOf(item.label, prefix);
-    if (index != -1) {
-      label.setSpan(
-          new ForegroundColorSpan(getThemeColor(EditorColorScheme.KEYWORD)),
-          index,
-          index + prefix.length(),
-          Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+    if (prefix != null && !prefix.isEmpty()) {
+      String userFilter;
+      if (prefix.contains(".")) {
+        userFilter = prefix.substring(prefix.lastIndexOf('.') + 1);
+      } else {
+        userFilter = prefix; 
+      }
+
+      int index = TextUtils.indexOf(item.label, userFilter);
+      if (index != -1) {
+        label.setSpan(
+            new ForegroundColorSpan(getThemeColor(EditorColorScheme.KEYWORD)),
+            index,
+            index + userFilter.length(),
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+      }
     }
     item_label.setText(label);
     item_type.setText(item.desc);

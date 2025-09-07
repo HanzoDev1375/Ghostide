@@ -84,6 +84,7 @@ public class ObjectUtils {
   public static boolean Api28 = Build.VERSION.SDK_INT >= 28;
   public static int Back = R.attr.colorSurface;
   public static int colorAccent = R.attr.colorSurface;
+  public static int sfv = R.attr.colorSurfaceVariant;
   public static int TvColor = R.attr.colorPrimary;
   public static int SecColor = R.attr.colorPrimaryContainer;
   public static int ColorNormal = R.attr.colorControlNormal;
@@ -95,6 +96,7 @@ public class ObjectUtils {
   public static int ColorFilter = R.attr.colorOnPrimaryContainer;
   public static int TvColorFab = R.attr.colorOnSecondaryFixed;
   public static int colorOnSurface = R.attr.colorOnSurface;
+  public static int colorSurfaceContainerHigh = R.attr.colorSurfaceContainerHigh;
   public static String name = "";
 
   public static void setColorBackground(View view) {
@@ -954,6 +956,7 @@ public class ObjectUtils {
   public static boolean getNextLexer(Lexer lexer, char ch) {
     return lexer._input.LA(1) == ch;
   }
+
   // برای مقایسه رشته (تعدادی کاراکتر پشت سر هم)
   public static boolean getNextLexer(Lexer lexer, String s) {
     for (int i = 0; i < s.length(); i++) {

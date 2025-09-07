@@ -91,7 +91,7 @@ public class RainbowBracketHelper {
         colorIndex--;
 
       } else {
-        result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
+        result.addIfNeeded(line, column, mcolor);
       }
     if (!listBl.isEmpty()) {
       BlockLine b = listBl.pop();

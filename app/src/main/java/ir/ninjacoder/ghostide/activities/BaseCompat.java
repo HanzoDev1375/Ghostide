@@ -77,6 +77,7 @@ public class BaseCompat extends AppCompatActivity {
     if (Build.VERSION.SDK_INT >= 21)
       getWindow().setStatusBarColor(MaterialColors.getColor(this, ObjectUtils.Back, 0));
 
+   
     setBackGroundIsMobile();
     // bad work to Android 14& 15
     // EdgeToEdgeUtils.applyEdgeToEdge(

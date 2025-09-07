@@ -73,14 +73,18 @@ public class PythonAutoCompleter {
     }
 
     try {
+
+      String userFilter =
+          (prefix.lastIndexOf('.') >= 0) ? prefix.substring(prefix.lastIndexOf('.') + 1) : prefix;
+
       JSONArray arr = new JSONArray(jsonStr);
       for (int i = 0; i < arr.length(); i++) {
         JSONObject obj = arr.getJSONObject(i);
         String label = obj.optString("label");
         String commit = obj.optString("commit");
-        String desc = obj.optString("desc","");
-        prefix = obj.optString("prefix");
-        if (label.startsWith(prefix)) {
+        String desc = obj.optString("desc", "");
+		
+        if (userFilter.isEmpty() || label.contains(userFilter)) {
           results.add(new CompletionItem(label, commit, desc));
         }
       }

@@ -182,11 +182,11 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
            * do not have time now
            */
           GlideCompat.LoadIconVsCode(myfile.toString(), viewHolder.icon);
-        }else if(myfile.toString().endsWith(".jsx")){
-			viewHolder.icon.setColorFilter(Color.parseColor("#ff9028"));
-		}else if(myfile.toString().endsWith(".tsx")) {
-			viewHolder.icon.setColorFilter(Color.parseColor("#FF5DC9DC"));
-		}
+        } else if (myfile.toString().endsWith(".jsx")) {
+          viewHolder.icon.setColorFilter(Color.parseColor("#ff9028"));
+        } else if (myfile.toString().endsWith(".tsx")) {
+          viewHolder.icon.setColorFilter(Color.parseColor("#FF5DC9DC"));
+        }
         // test
         JgitHelper.initbylazy(myfile, viewHolder.folderName);
         // test1
@@ -212,7 +212,8 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
   @NonNull
   public CharSequence getPopupText(int position) {
     HashMap<String, Object> map = getItem(position);
-    return map.get("path").toString().substring(0, 1).toUpperCase();
+    File file = new File(map.get("path").toString());
+    return file.getName().substring(0, 1).toUpperCase();
   }
 
   public void setSettingTextView(TextView tv) {
