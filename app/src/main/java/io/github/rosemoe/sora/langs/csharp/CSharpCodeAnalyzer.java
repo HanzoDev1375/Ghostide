@@ -11,6 +11,7 @@ import io.github.rosemoe.sora.langs.xml.analyzer.Utils;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.text.TextAnalyzer;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
+import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import java.io.StringReader;
 import java.util.Stack;
 import org.antlr.parser.antlr4.csharp.CSharpLexer;
@@ -26,7 +27,6 @@ import org.antlr.v4.runtime.Token;
 public class CSharpCodeAnalyzer implements CodeAnalyzer {
 
   private CSharpLexer lexer;
-  private int line, lastline, column, type, previous = -1;
   RainbowBracketHelper he;
 
   @Override
@@ -42,6 +42,7 @@ public class CSharpCodeAnalyzer implements CodeAnalyzer {
       var info = new CsAutoComplete.Identifiers();
       info.begin();
       Token token;
+      int line, lastline, column, type, previous = -1;
       while (delegate.shouldAnalyze()) {
         token = lexer.nextToken();
         if (token == null) break;
@@ -170,19 +171,23 @@ public class CSharpCodeAnalyzer implements CodeAnalyzer {
 
           case CSharpLexer.OPEN_BRACE:
             {
-              he.handleOpenBracket(result, line, column);
+              he.handleOpenBracket(result, line, column, true);
               break;
             }
           case CSharpLexer.CLOSE_BRACE:
             {
-              he.handleCloseBracket(result, line, column);
+              he.handleCloseBracket(result, line, column, true);
               break;
             }
 
           case CSharpLexer.OPEN_BRACKET:
-          case CSharpLexer.CLOSE_BRACKET:
           case CSharpLexer.OPEN_PARENS:
+            he.handleOpenBracket(result, line, column, false);
+            break;
+          case CSharpLexer.CLOSE_BRACKET:
           case CSharpLexer.CLOSE_PARENS:
+            he.handleCloseBracket(result, line, column, false);
+            break;
           case CSharpLexer.DOT:
           case CSharpLexer.COMMA:
           case CSharpLexer.COLON:
@@ -284,10 +289,15 @@ public class CSharpCodeAnalyzer implements CodeAnalyzer {
               if (previous == CSharpLexer.NAMESPACE) {
                 color = EditorColorScheme.javatype;
                 Span span = Span.obtain(column, color);
-                span.setAlphaCompat(120);
+                span.setAlphaCompat(0);
                 result.add(line, span);
               }
-
+              if (ObjectUtils.getNextLexer(lexer, '.')) {
+                color = EditorColorScheme.javafield;
+              }
+              if(ObjectUtils.getNextLexer(lexer,':')) {
+              	color=EditorColorScheme.javafun;
+              }
               if (token.getText().equals("Console")) {
                 color = EditorColorScheme.ATTRIBUTE_VALUE;
               }

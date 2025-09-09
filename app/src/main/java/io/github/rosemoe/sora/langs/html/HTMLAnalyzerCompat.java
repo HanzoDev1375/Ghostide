@@ -269,14 +269,17 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
             }
             /// colse
           case HTMLLexer.LPAREN:
+            hl.handleOpenBracket(result, line, column, true);
+            break;
           case HTMLLexer.LBRACK:
-          
-            hl.handleOpenBracket(result, line, column, EditorColorScheme.htmlblocknormal);
+            hl.handleOpenBracket(result, line, column, false);
             break;
             // open
           case HTMLLexer.RPAREN:
+            hl.handleCloseBracket(result, line, column, true);
+            break;
           case HTMLLexer.RBRACK:
-            hl.handleCloseBracket(result, line, column, EditorColorScheme.htmlblocknormal);
+            hl.handleCloseBracket(result, line, column, false);
             break;
           case HTMLLexer.SEMI:
           case HTMLLexer.COMMA:
@@ -411,18 +414,18 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
                 colorid = EditorColorScheme.javastring;
               }
               if (previous == HTMLLexer.VOID || previous == HTMLLexer.EXTENDS) {
-                colorid = EditorColorScheme.OPERATOR;
+                colorid = EditorColorScheme.jskeyword;
               }
               if (previous == HTMLLexer.RETURN || previous == HTMLLexer.NEW) {
-                colorid = EditorColorScheme.HTML_TAG;
+                colorid = EditorColorScheme.jskeyword;
               }
               if (previous == HTMLLexer.INT
                   || previous == HTMLLexer.LET
                   || previous == HTMLLexer.VAR) {
-                colorid = EditorColorScheme.LITERAL;
+                colorid = EditorColorScheme.jsoprator;
               }
               if (previous == HTMLLexer.CASE || previous == HTMLLexer.FINAL) {
-                colorid = EditorColorScheme.ATTRIBUTE_NAME;
+                colorid = EditorColorScheme.jsattr;
               }
               // hash #
               if (previous == HTMLLexer.HASH) {
@@ -442,7 +445,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
               }
               if (previous == HTMLLexer.DOLLAR) {
                 // $php
-                colorid = EditorColorScheme.ATTRIBUTE_VALUE;
+                colorid = EditorColorScheme.htmlattr;
               }
               if (previous == HTMLLexer.DOT) {
                 /// def code result -> Java.user();

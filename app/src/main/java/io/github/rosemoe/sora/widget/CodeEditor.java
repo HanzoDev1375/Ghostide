@@ -3395,8 +3395,8 @@ public class CodeEditor extends View
       if (lineIcon.getLineNumber() == line) {
         Bitmap defaultIconBitmap =
             BitmapFactory.decodeResource(getResources(), lineIcon.getIconRes());
-        int desiredWidth = 30;
-        int desiredHeight = 30;
+        int desiredWidth = (int) getDpUnit() * 30;
+        int desiredHeight = (int) getDpUnit() * 30;
         Bitmap scaledIconBitmap =
             Bitmap.createScaledBitmap(defaultIconBitmap, desiredWidth, desiredHeight, true);
 

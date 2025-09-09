@@ -158,7 +158,6 @@ public class FileManagerActivity extends BaseCompat
   private SharedPreferences book;
   private ArrayList<HashMap<String, Object>> a = new ArrayList<>();
   private HashMap<String, Object> mapz32 = new HashMap<>();
-  private AndroidUriFileUtil utils;
   private GridLayoutManager gridLayoutManager;
   private SharedPreferences sharedPreferences;
   private FileWatcherServiceConnection fileEventRelay;
@@ -223,10 +222,13 @@ public class FileManagerActivity extends BaseCompat
     if (Build.VERSION.SDK_INT >= 21)
       getWindow().setNavigationBarColor(MaterialColors.getColor(this, ObjectUtils.Back, 0));
     if (Build.VERSION.SDK_INT >= 21)
-      getWindow().setStatusBarColor(MaterialColors.getColor(this, ObjectUtils.colorSurfaceContainerHigh, 0));
+      getWindow()
+          .setStatusBarColor(
+              MaterialColors.getColor(this, ObjectUtils.colorSurfaceContainerHigh, 0));
     getWindow()
         .getDecorView()
-        .setBackgroundColor(MaterialColors.getColor(this, ObjectUtils.colorSurfaceContainerHigh, 0));
+        .setBackgroundColor(
+            MaterialColors.getColor(this, ObjectUtils.colorSurfaceContainerHigh, 0));
     bind.searchbar.setCallBack(
         new SearchCallBack() {
 
@@ -250,11 +252,7 @@ public class FileManagerActivity extends BaseCompat
     // WindowsMath(bind.Drawer, _coordinator);
     bind.viewChild.setVisibility(View.GONE);
     BackPressed();
-    if (gridMode.contains("gride")) {
-      setViewType(ViewType.GRID);
-    } else {
-      setViewType(ViewType.ROW);
-    }
+    TypeChange();
     ThemeChaker();
     View mview = findViewById(R.id.view_filedir);
     LayoutBinder.of(mview, ObjectUtils.Back);
@@ -333,6 +331,14 @@ public class FileManagerActivity extends BaseCompat
             });
   }
 
+  void TypeChange() {
+    if (gridMode.contains("gride")) {
+      setViewType(ViewType.GRID);
+    } else {
+      setViewType(ViewType.ROW);
+    }
+  }
+
   @Override
   public void onClick(View view, int pos) {
     staticstring = files.get((int) pos).get("path").toString();
@@ -402,7 +408,7 @@ public class FileManagerActivity extends BaseCompat
     Log.w("FilePath", save_path.getString("path", ""));
   }
 
-  public void setViewType(ViewType viewType) {
+  void setViewType(ViewType viewType) {
     if (fileListItem != null) {
       fileListItem.setViewType(viewType);
       if (viewType == ViewType.GRID) {
@@ -447,9 +453,9 @@ public class FileManagerActivity extends BaseCompat
     copypath =
         new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
     GradientDrawable u = new GradientDrawable();
-    u.setColor(0xFF2B2122);
+    u.setColor(MaterialColors.getColor(this,ObjectUtils.Back,0));
     u.setCornerRadius(25);
-    u.setStroke(1, 0xFFF8B09A);
+    u.setStroke(1, MaterialColors.getColor(this,ObjectUtils.TvColor,0));
     externalspace = new SdCardUtil(this);
     if (getIntent().hasExtra("bookmarkDir")) {
       Folder = getIntent().getStringExtra("bookmarkDir");
@@ -464,9 +470,6 @@ public class FileManagerActivity extends BaseCompat
         });
     startService(new Intent(this, FileEventUser.class));
     sharedPreferences = getSharedPreferences("fileSp", Context.MODE_PRIVATE);
-    utils = new AndroidUriFileUtil(sharedPreferences, FileManagerActivity.this).loadData();
-    // if not allowed
-    utils.requestPermissionAllFilesAccess();
     RefreshTabs();
 
     AnimUtils.Worker(bind.fabAdd);
@@ -527,6 +530,7 @@ public class FileManagerActivity extends BaseCompat
   public void onResume() {
     super.onResume();
     RefreshTabs();
+	TypeChange();
   }
 
   @Override
@@ -782,15 +786,6 @@ public class FileManagerActivity extends BaseCompat
     }
   }
 
-  @Override
-  protected void onActivityResult(int _requestCode, int _resultCode, Intent _data) {
-    super.onActivityResult(_requestCode, _resultCode, _data);
-    if (_resultCode == RESULT_OK) {
-      if (_data != null) {
-        utils.persistFolder(_data);
-      }
-    }
-  }
 
   public void InstallTakesZip(int pos, String path) {
     InstallTakes(pos, path, "UnZip", "UnZip File?");

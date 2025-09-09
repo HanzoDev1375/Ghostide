@@ -67,7 +67,7 @@
              android:layout_height="match_parent"
              android:layout_width="match_parent"
              app:layout_behavior="@string/appbar_scrolling_view_behavior"
-             android:background="?attr/colorSurfaceVariant">
+            >
 
             <LinearLayout
                  android:layout_height="match_parent"

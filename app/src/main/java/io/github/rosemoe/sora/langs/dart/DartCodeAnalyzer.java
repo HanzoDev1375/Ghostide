@@ -64,14 +64,18 @@ public class DartCodeAnalyzer implements CodeAnalyzer {
             break;
 
           case Dart2LexerCompat.CB:
-          case Dart2LexerCompat.CBC:
           case Dart2LexerCompat.CP:
-            helper.handleCloseBracket(result, line, column);
+            helper.handleCloseBracket(result, line, column, false);
+            break;
+          case Dart2LexerCompat.CBC:
+            helper.handleCloseBracket(result, line, column, true);
             break;
           case Dart2LexerCompat.OB:
-          case Dart2LexerCompat.OBC:
           case Dart2LexerCompat.OP:
-            helper.handleOpenBracket(result, line, column);
+            helper.handleOpenBracket(result, line, column,false);
+            break;
+          case Dart2LexerCompat.OBC:
+            helper.handleOpenBracket(result, line, column, true);
             break;
           case Dart2LexerCompat.A:
           case Dart2LexerCompat.AA:
@@ -260,7 +264,7 @@ public class DartCodeAnalyzer implements CodeAnalyzer {
               }
 
               result.addIfNeeded(line, column, colorid);
-			  break;
+              break;
             }
 
           default:

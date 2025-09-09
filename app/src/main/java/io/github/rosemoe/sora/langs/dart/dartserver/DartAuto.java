@@ -32,8 +32,8 @@ public class DartAuto implements AutoCompleteProvider {
       list.addAll(words);
     }
     for (var it : HotserverDart.keyword) {
-      if (it.startsWith(prefix)) {
-        list.add(new CompletionItem(it, "key"));
+      if (it.contains(prefix)) { //like fuzzy mod
+        list.add(new CompletionItem(it, "dart keyword"));
       }
     }
     list.addAll(CodeSnippet.runasList("dart", prefix));

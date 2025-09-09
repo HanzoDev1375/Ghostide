@@ -33,7 +33,8 @@ dependencies {
     implementation("org.eclipse.jgit:org.eclipse.jgit:6.8.0.202311291450-r")
     implementation("com.github.bumptech.glide:glide:5.0.0-rc01")
     implementation('com.sealwu.jsontokotlin:library:3.7.4')
-	implementation("org.antlr:antlr4:4.13.1") 
-	implementation 'org.apache.commons:commons-text:1.13.0'
-	implementation project(path: ":fuzzysearch")
+	  implementation("org.antlr:antlr4:4.13.1") 
+	  implementation 'org.apache.commons:commons-text:1.13.0'
+	  implementation project(path: ":fuzzysearch")
+    implementation("org.jsoup:jsoup:1.21.1")
 }

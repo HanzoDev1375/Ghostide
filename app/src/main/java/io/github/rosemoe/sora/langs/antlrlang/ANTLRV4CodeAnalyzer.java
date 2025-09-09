@@ -2,7 +2,9 @@ package io.github.rosemoe.sora.langs.antlrlang;
 
 import android.graphics.Color;
 import android.util.Log;
+import io.github.rosemoe.sora.data.RainbowBracketHelper;
 import io.github.rosemoe.sora.text.TextStyle;
+import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import java.util.Stack;
 import io.github.rosemoe.sora.data.BlockLine;
 import org.antlr.parser.antlr4.ANTLRv4Lexer;
@@ -20,6 +22,7 @@ public class ANTLRV4CodeAnalyzer implements CodeAnalyzer {
   private int COMPLETE = 25;
   private int INCOMPLETE = 24;
   private Antlr4Error error;
+  private RainbowBracketHelper helper;
 
   @Override
   public void analyze(
@@ -30,6 +33,7 @@ public class ANTLRV4CodeAnalyzer implements CodeAnalyzer {
       CodePointCharStream stream = CharStreams.fromReader(new StringReader(content.toString()));
       var lexer = new ANTLRv4Lexer(stream);
       var classNamePrevious = false;
+      helper = new RainbowBracketHelper(content);
       Token token, preToken = null, prePreToken = null;
       var com = new Antlr4AutoText();
       com.setKeywords(ANTLRV4Lang.word);
@@ -64,13 +68,11 @@ public class ANTLRV4CodeAnalyzer implements CodeAnalyzer {
             }
             break;
           case ANTLRv4Lexer.LPAREN:
+            helper.handleOpenBracket(result, line, column, true);
+            break;
           case ANTLRv4Lexer.RPAREN:
-            {
-              classNamePrevious = false;
-              result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
-
-              break;
-            }
+            helper.handleCloseBracket(result, line, column, true);
+            break;
           case ANTLRv4Lexer.TOKEN_REF:
             {
               result.addIfNeeded(line, column, EditorColorScheme.HTML_TAG);
@@ -133,15 +135,14 @@ public class ANTLRV4CodeAnalyzer implements CodeAnalyzer {
             result.addIfNeeded(
                 line,
                 column,
-                TextStyle.makeStyle(
-                    EditorColorScheme.AUTO_COMP_PANEL_CORNER, 0, true, false, false));
+                TextStyle.makeStyle(EditorColorScheme.javaoprator, 0, true, false, false));
             break;
           case ANTLRv4Lexer.PARSER:
           case ANTLRv4Lexer.GRAMMAR:
             result.addIfNeeded(
                 line,
                 column,
-                TextStyle.makeStyle(EditorColorScheme.NON_PRINTABLE_CHAR, 0, true, false, false));
+                TextStyle.makeStyle(EditorColorScheme.javaparament, 0, true, false, false));
             break;
 
           case ANTLRv4Lexer.DOC_COMMENT:
@@ -154,18 +155,16 @@ public class ANTLRV4CodeAnalyzer implements CodeAnalyzer {
           case ANTLRv4Lexer.UNTERMINATED_STRING_LITERAL:
           case ANTLRv4Lexer.BEGIN_ARGUMENT:
           case ANTLRv4Lexer.BEGIN_ACTION:
-            result.addIfNeeded(line, column, EditorColorScheme.ATTRIBUTE_VALUE);
+            result.addIfNeeded(line, column, EditorColorScheme.javastring);
             break;
           case ANTLRv4Lexer.LBRACE:
-          case ANTLRv4Lexer.RBRACE:
           case ANTLRv4Lexer.LT:
+            helper.handleOpenBracket(result, line, column, false);
+            break;
+          case ANTLRv4Lexer.RBRACE:
           case ANTLRv4Lexer.GT:
-            {
-              classNamePrevious = false;
-              result.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
-              break;
-            }
-
+            helper.handleCloseBracket(result, line, column, false);
+            break;
           case ANTLRv4Lexer.OPTIONS:
           case ANTLRv4Lexer.TOKENS:
           case ANTLRv4Lexer.CHANNELS:
@@ -173,7 +172,9 @@ public class ANTLRV4CodeAnalyzer implements CodeAnalyzer {
           case ANTLRv4Lexer.LEXER:
             classNamePrevious = false;
             result.addIfNeeded(
-                line, column, TextStyle.makeStyle(EditorColorScheme.Ninja, 0, true, false, false));
+                line,
+                column,
+                TextStyle.makeStyle(EditorColorScheme.javakeywordoprator, 0, true, false, false));
             break;
           case ANTLRv4Lexer.ID:
             {
@@ -182,23 +183,26 @@ public class ANTLRV4CodeAnalyzer implements CodeAnalyzer {
               boolean isBold = false, isItalic = false;
 
               if (previous == ANTLRv4Lexer.FRAGMENT) {
-                color = EditorColorScheme.Ninja;
+                color = EditorColorScheme.jsfun;
                 isBold = true;
               }
               if (previous == ANTLRv4Lexer.COLON
                   || previous == ANTLRv4Lexer.COLONCOLON
                   || previous == ANTLRv4Lexer.OR) {
-                color = EditorColorScheme.HTML_TAG;
+                color = EditorColorScheme.jsattr;
               }
               if (previous == ANTLRv4Lexer.MODE) {
-                color = EditorColorScheme.KEYWORD;
+                color = EditorColorScheme.jskeyword;
               }
               if (previous == ANTLRv4Lexer.LEXER
                   || previous == ANTLRv4Lexer.PARSER
                   || previous == ANTLRv4Lexer.GRAMMAR) {
-                color = EditorColorScheme.OPERATOR;
-                
+                color = EditorColorScheme.jsoprator;
+
                 isBold = true;
+              }
+              if (ObjectUtils.getNextLexer(lexer, ':')) {
+                color = EditorColorScheme.jsstring;
               }
 
               result.addIfNeeded(

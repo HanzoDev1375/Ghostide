@@ -53,6 +53,7 @@ import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.text.TextAnalyzer;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
+import ir.ninjacoder.ghostide.R;
 
 public class JavaCodeAnalyzer implements CodeAnalyzer {
   private final WeakReference<IdeEditor> mEditorReference;
@@ -244,14 +245,18 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             }
 
           case JavaLexer.LPAREN:
-          case JavaLexer.LBRACK:
-          case JavaLexer.LT:
             ha.handleOpenBracket(result, line, column, EditorColorScheme.htmlblocknormal);
             break;
+          case JavaLexer.LBRACK:
+          case JavaLexer.LT:
+            ha.handleOpenBracket(result, line, column, EditorColorScheme.htmlblocknormal, false);
+            break;
           case JavaLexer.RPAREN:
+            ha.handleCloseBracket(result, line, column, EditorColorScheme.htmlblocknormal, false);
+            break;
           case JavaLexer.RBRACK:
           case JavaLexer.GT:
-            ha.handleCloseBracket(result, line, column, EditorColorScheme.htmlblocknormal);
+            ha.handleCloseBracket(result, line, column, EditorColorScheme.htmlblocknormal, false);
             break;
           case JavaLexer.SEMI:
           case JavaLexer.COMMA:
@@ -319,7 +324,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             result.addIfNeeded(line, column, EditorColorScheme.COMMENT);
             break;
           case JavaLexer.AT:
-            result.addIfNeeded(line, column, EditorColorScheme.Ninja);
+            result.addIfNeeded(line, column, EditorColorScheme.javaoprator);
             break;
           case JavaLexer.IDENTIFIER:
             {
@@ -329,7 +334,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
 
               int colorid = EditorColorScheme.TEXT_NORMAL;
               if (previous == JavaLexer.AT) {
-                colorid = EditorColorScheme.Ninja;
+                colorid = EditorColorScheme.javaoprator;
               }
               if (previous == JavaLexer.CLASS
                   || previous == JavaLexer.IMPLEMENTS
@@ -353,13 +358,13 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 colorid = EditorColorScheme.javafun;
               }
               if (previous == JavaLexer.RETURN || previous == JavaLexer.NEW) {
-                colorid = EditorColorScheme.HTML_TAG;
+                colorid = EditorColorScheme.jsoprator;
               }
               if (previous == JavaLexer.INT) {
                 colorid = EditorColorScheme.javafield;
               }
               if (previous == JavaLexer.CASE || previous == JavaLexer.FINAL) {
-                colorid = EditorColorScheme.ATTRIBUTE_NAME;
+                colorid = EditorColorScheme.javakeywordoprator;
               }
 
               if (previous == JavaLexer.PRIVATE
@@ -587,7 +592,6 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                   incol.put(variableName, cl);
                   if (JavaPaserUtils.getDeprecated(arg0.getAnnotations()))
                     Utils.setWaringSpan(result, li, cl + 1);
-
                   super.visit(arg0, arg1);
                 }
 
