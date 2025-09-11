@@ -42,7 +42,9 @@ public class CSharpCodeAnalyzer implements CodeAnalyzer {
       var info = new CsAutoComplete.Identifiers();
       info.begin();
       Token token;
-      int line, lastline, column, type, previous = -1;
+      int type, currSwitch = 1, maxSwitch = 0, previous = -1;
+      int lastline = 1;
+      int line, column;
       while (delegate.shouldAnalyze()) {
         token = lexer.nextToken();
         if (token == null) break;
@@ -295,8 +297,8 @@ public class CSharpCodeAnalyzer implements CodeAnalyzer {
               if (ObjectUtils.getNextLexer(lexer, '.')) {
                 color = EditorColorScheme.javafield;
               }
-              if(ObjectUtils.getNextLexer(lexer,':')) {
-              	color=EditorColorScheme.javafun;
+              if (ObjectUtils.getNextLexer(lexer, ':')) {
+                color = EditorColorScheme.javafun;
               }
               if (token.getText().equals("Console")) {
                 color = EditorColorScheme.ATTRIBUTE_VALUE;
@@ -314,6 +316,7 @@ public class CSharpCodeAnalyzer implements CodeAnalyzer {
       }
       result.determine(lastline);
       result.setExtra(info);
+      info.finish();
       try {
         if (GhostIdeAppLoader.getAnalyzercod().getBoolean("Analyzercod", false) == true) {
           var antlrinputstream = new ANTLRInputStream(content.toString());

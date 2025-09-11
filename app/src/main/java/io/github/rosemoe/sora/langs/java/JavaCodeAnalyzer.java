@@ -245,18 +245,18 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             }
 
           case JavaLexer.LPAREN:
-            ha.handleOpenBracket(result, line, column, EditorColorScheme.htmlblocknormal);
+          case JavaLexer.LT:
+            ha.handleOpenBracket(result, line, column, false);
             break;
           case JavaLexer.LBRACK:
-          case JavaLexer.LT:
-            ha.handleOpenBracket(result, line, column, EditorColorScheme.htmlblocknormal, false);
+            ha.handleOpenBracket(result, line, column, true);
             break;
           case JavaLexer.RPAREN:
-            ha.handleCloseBracket(result, line, column, EditorColorScheme.htmlblocknormal, false);
+          case JavaLexer.GT:
+            ha.handleCloseBracket(result, line, column, false);
             break;
           case JavaLexer.RBRACK:
-          case JavaLexer.GT:
-            ha.handleCloseBracket(result, line, column, EditorColorScheme.htmlblocknormal, false);
+            ha.handleCloseBracket(result, line, column, true);
             break;
           case JavaLexer.SEMI:
           case JavaLexer.COMMA:

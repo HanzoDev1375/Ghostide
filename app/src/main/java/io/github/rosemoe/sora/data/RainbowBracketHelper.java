@@ -49,11 +49,12 @@ public class RainbowBracketHelper {
     } else {
       result.addIfNeeded(line, column, mcolor);
     }
-
-    BlockLine block = result.obtainNewBlock();
-    block.startLine = line;
-    block.startColumn = column;
-    if (hascodeblock) listBl.push(block);
+    if (hascodeblock) {
+      BlockLine block = result.obtainNewBlock();
+      block.startLine = line;
+      block.startColumn = column;
+      listBl.push(block);
+    }
   }
 
   // اورلود جدید برای int mcolor
@@ -103,8 +104,6 @@ public class RainbowBracketHelper {
     }
   }
 
-  // ------------------- CLOSE BRACKET -------------------
-
   public void handleCloseBracket(
       TextAnalyzeResult result, int line, int column, int mcolor, boolean hascodeblock) {
     if (isRgbEn()) {
@@ -116,16 +115,16 @@ public class RainbowBracketHelper {
         result.addIfNeeded(line, column, mcolor);
       }
     }
-    if (!listBl.isEmpty()) {
-      BlockLine b = listBl.pop();
-      b.endLine = line;
-      b.endColumn = column;
+    if (hascodeblock) {
+      if (!listBl.isEmpty()) {
+        BlockLine b = listBl.pop();
+        b.endLine = line;
+        b.endColumn = column;
 
-      if (b.startLine != b.endLine) {
-        if (hascodeblock) result.addBlockLine(b);
+        if (b.startLine != b.endLine) {
+          result.addBlockLine(b);
+        }
       }
-    } else {
-      result.addIfNeeded(line, column, mcolor);
     }
   }
 
@@ -142,9 +141,6 @@ public class RainbowBracketHelper {
       TextAnalyzeResult result, int line, int column, boolean codeblock) {
     handleCloseBracket(result, line, column, EditorColorScheme.htmlblockhash, codeblock);
   }
-
-  // ------------------- HELPERS -------------------
-
   private boolean isRgbEn() {
     return GhostIdeAppLoader.getAnalyzercod().getBoolean("Analyzercod", false);
   }

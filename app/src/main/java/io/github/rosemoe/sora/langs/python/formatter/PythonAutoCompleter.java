@@ -2,9 +2,8 @@ package io.github.rosemoe.sora.langs.python.formatter;
 
 import android.content.Context;
 import android.util.Log;
+import com.google.gson.stream.JsonReader;
 import io.github.rosemoe.sora.data.CompletionItem;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,24 +72,79 @@ public class PythonAutoCompleter {
     }
 
     try {
-
       String userFilter =
           (prefix.lastIndexOf('.') >= 0) ? prefix.substring(prefix.lastIndexOf('.') + 1) : prefix;
+      try (StringReader reader = new StringReader(jsonStr);
+          JsonReader jsonReader = new JsonReader(reader)) {
 
-      JSONArray arr = new JSONArray(jsonStr);
-      for (int i = 0; i < arr.length(); i++) {
-        JSONObject obj = arr.getJSONObject(i);
-        String label = obj.optString("label");
-        String commit = obj.optString("commit");
-        String desc = obj.optString("desc", "");
-		
-        if (userFilter.isEmpty() || label.contains(userFilter)) {
-          results.add(new CompletionItem(label, commit, desc));
+        jsonReader.beginArray();
+        while (jsonReader.hasNext()) {
+          PythonLsp item = readPythonLsp(jsonReader);
+          if (userFilter.isEmpty() || item.getLabel().contains(userFilter)) {
+            results.add(new CompletionItem(item.getLabel(), item.getCommit(), item.getDesc()));
+          }
+          if (results.size() > 50) {
+            break;
+          }
         }
+        jsonReader.endArray();
       }
+
     } catch (Exception e) {
       Log.e(TAG, "Error parsing completion JSON", e);
     }
     return results;
+  }
+
+  private PythonLsp readPythonLsp(JsonReader reader) throws IOException {
+    String label = "";
+    String commit = "";
+    String desc = "";
+
+    reader.beginObject();
+    while (reader.hasNext()) {
+      String name = reader.nextName();
+      switch (name) {
+        case "label":
+          label = reader.nextString();
+          break;
+        case "commit":
+          commit = reader.nextString();
+          break;
+        case "desc":
+          desc = reader.nextString();
+          break;
+        default:
+          reader.skipValue();
+          break;
+      }
+    }
+    reader.endObject();
+
+    return new PythonLsp(label, commit, desc);
+  }
+
+  class PythonLsp {
+    private final String label;
+    private final String commit;
+    private final String desc;
+
+    public PythonLsp(String label, String commit, String desc) {
+      this.label = label;
+      this.commit = commit;
+      this.desc = desc;
+    }
+
+    public String getLabel() {
+      return this.label;
+    }
+
+    public String getCommit() {
+      return this.commit;
+    }
+
+    public String getDesc() {
+      return this.desc;
+    }
   }
 }

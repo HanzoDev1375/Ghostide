@@ -75,42 +75,42 @@ public class FactoryModelProject implements ProjectManagerAdapter.OnProjectClick
   @Override
   public void onClick(View view, int pos) {
     switch (pos) {
-      case 0:
+      case 1:
         makeHtmlProject();
         dialogMain.dismiss();
         break;
 
-      case 1:
+      case 2:
         makeNodeJsProject();
         dialogMain.dismiss();
         break;
-      case 2:
+      case 3:
         makeCppProject();
         dialogMain.dismiss();
         break;
-      case 3:
+      case 4:
         {
           makeJavaProject();
           dialogMain.dismiss();
           break;
         }
-      case 4:
+      case 5:
         makePhpProject();
         dialogMain.dismiss();
         break;
-      case 5:
+      case 6:
         makeReactProject();
         dialogMain.dismiss();
         break;
-      case 6:
+      case 7:
         makeReactTypeScriptProject();
         dialogMain.dismiss();
         break;
-      case 7:
+      case 8:
         makeFlutterProject();
         dialogMain.dismiss();
         break;
-      case 8:
+      case 9:
         makeAndroidProject();
         dialogMain.dismiss();
         break;
@@ -166,6 +166,10 @@ public class FactoryModelProject implements ProjectManagerAdapter.OnProjectClick
   }
 
   public void makeHtmlProject() {
+    var maker = new ProjectMaker(folder,baseCompat,() ->{
+      call.refrash();
+    });
+    maker.setMakeHtmlProject();
   }
 
   public void makeNodeJsProject() {

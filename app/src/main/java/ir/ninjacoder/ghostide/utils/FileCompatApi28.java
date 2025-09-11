@@ -2,34 +2,55 @@ package ir.ninjacoder.ghostide.utils;
 
 import android.view.View;
 import android.widget.ProgressBar;
-import com.blankj.utilcode.util.FileUtils;
 import com.blankj.utilcode.util.ThreadUtils;
 import io.github.rosemoe.sora.widget.CodeEditor;
-import com.blankj.utilcode.util.FileIOUtils;
+import java.io.RandomAccessFile;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
 
 public class FileCompatApi28 {
 
-  public static void readFile(String fileRead, ProgressBar bar, CodeEditor editText)
-      throws Throwable {
+  public static void readFile(String fileRead, ProgressBar bar, CodeEditor editText) {
     ShowBar(bar, true);
 
     ThreadUtils.executeByIo(
         new ThreadUtils.SimpleTask<String>() {
+          @Override
+          public String doInBackground() {
+
+            try (RandomAccessFile raf = new RandomAccessFile(fileRead, "r")) {
+              FileChannel channel = raf.getChannel();
+              long fileSize = channel.size();
+              MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, fileSize);
+
+              int chunkSize = 1024 * 1024;
+              byte[] chunk = new byte[chunkSize];
+              int remaining;
+              StringBuilder sb = new StringBuilder();
+
+              for (int pos = 0; pos < fileSize; pos += chunkSize) {
+                remaining = (int) Math.min(chunkSize, fileSize - pos);
+                buffer.get(chunk, 0, remaining);
+                sb.append(new String(chunk, 0, remaining));
+
+                return sb.toString();
+              }
+            } catch (Exception e) {
+              return e.getLocalizedMessage();
+            }
+            return "";
+          }
 
           @Override
           public void onSuccess(String result) {
-            editText.setText(result);
             ShowBar(bar, false);
+            ThreadUtils.runOnUiThread(() -> editText.setText(result));
           }
 
           @Override
           public void onFail(Throwable throwable) {
             editText.setText(throwable.getLocalizedMessage());
-          }
-
-          @Override
-          public String doInBackground() {
-            return FileIOUtils.readFile2String(fileRead);
+            ShowBar(bar, false);
           }
 
           @Override

@@ -1,5 +1,6 @@
 package ir.ninjacoder.ghostide.project;
 
+import android.text.TextWatcher;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.compressor.SvgToPng;
 import ir.ninjacoder.ghostide.databinding.LayoutSvgSizeFiledirBinding;
@@ -75,7 +76,7 @@ public class ProjectMaker {
             te.setEndIconVisible(true);
           }
           editor.addTextChangedListener(
-              new android.text.TextWatcher() {
+              new TextWatcher() {
                 @Override
                 public void onTextChanged(
                     CharSequence _param1, int _param2, int _param3, int _param4) {
@@ -100,9 +101,6 @@ public class ProjectMaker {
           hs.setHorizontalScrollBarEnabled(false);
           hs.setVerticalScrollBarEnabled(false);
           hs.setOverScrollMode(ListView.OVER_SCROLL_NEVER);
-          te.setCounterTextColor(ColorStateList.valueOf(Color.parseColor("#FFF8B09A")));
-          te.setCounterEnabled(true);
-          te.setCounterMaxLength(100);
           te.setEndIconDrawable(R.drawable.closehsi);
           te.setEndIconVisible(false);
           te.setEndIconOnClickListener(
@@ -114,7 +112,7 @@ public class ProjectMaker {
                 dialog.dismiss();
                 DataUtil.hideKeyboard(context);
                 if (editor.getText().toString().isEmpty()) {
-                  DataUtil.showMessage(context, "نام پروژه را وارد کنید");
+                  DataUtil.showMessage(context, "Enter Name project");
                 } else {
                   if (ch.isChecked() || (ch2.isChecked() || (ch3.isChecked() || ch4.isChecked()))) {
                     FileUtil.makeDir(projectPath.concat("/".concat(editor.getText().toString())));

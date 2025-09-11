@@ -68,10 +68,12 @@ public class ANTLRV4CodeAnalyzer implements CodeAnalyzer {
             }
             break;
           case ANTLRv4Lexer.LPAREN:
-            helper.handleOpenBracket(result, line, column, true);
+          case ANTLRv4Lexer.LT:
+            helper.handleOpenBracket(result, line, column, false);
             break;
           case ANTLRv4Lexer.RPAREN:
-            helper.handleCloseBracket(result, line, column, true);
+          case ANTLRv4Lexer.GT:
+            helper.handleCloseBracket(result, line, column, false);
             break;
           case ANTLRv4Lexer.TOKEN_REF:
             {
@@ -158,12 +160,10 @@ public class ANTLRV4CodeAnalyzer implements CodeAnalyzer {
             result.addIfNeeded(line, column, EditorColorScheme.javastring);
             break;
           case ANTLRv4Lexer.LBRACE:
-          case ANTLRv4Lexer.LT:
-            helper.handleOpenBracket(result, line, column, false);
+            helper.handleOpenBracket(result, line, column, true);
             break;
           case ANTLRv4Lexer.RBRACE:
-          case ANTLRv4Lexer.GT:
-            helper.handleCloseBracket(result, line, column, false);
+            helper.handleCloseBracket(result, line, column, true);
             break;
           case ANTLRv4Lexer.OPTIONS:
           case ANTLRv4Lexer.TOKENS:
@@ -224,8 +224,8 @@ public class ANTLRV4CodeAnalyzer implements CodeAnalyzer {
         first = false;
       }
       result.determine(lastLine);
-      identifiers.finish();
       result.setExtra(identifiers);
+      identifiers.finish();
       error.analyze(content, result, delegate);
 
     } catch (IOException e) {
