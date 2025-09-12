@@ -40,7 +40,7 @@ public class FactoryModelProject implements ProjectManagerAdapter.OnProjectClick
   public FactoryModelProject(BaseCompat baseCompat, String folder, ProjectCallBack call) {
     this.baseCompat = baseCompat;
 
-    itemModel.add(new ProjectModel("html", R.drawable.ic_material_html, true));
+    itemModel.add(new ProjectModel("html", R.drawable.ic_material_html, false));
     itemModel.add(new ProjectModel("node js", R.drawable.ic_material_javascript, false));
     itemModel.add(new ProjectModel("cpp", R.drawable.ic_material_cpp, false));
     itemModel.add(new ProjectModel("java", R.drawable.ic_material_java, false));
@@ -75,42 +75,42 @@ public class FactoryModelProject implements ProjectManagerAdapter.OnProjectClick
   @Override
   public void onClick(View view, int pos) {
     switch (pos) {
-      case 1:
+      case 0:
         makeHtmlProject();
         dialogMain.dismiss();
         break;
 
-      case 2:
+      case 1:
         makeNodeJsProject();
         dialogMain.dismiss();
         break;
-      case 3:
+      case 2:
         makeCppProject();
         dialogMain.dismiss();
         break;
-      case 4:
+      case 3:
         {
           makeJavaProject();
           dialogMain.dismiss();
           break;
         }
-      case 5:
+      case 4:
         makePhpProject();
         dialogMain.dismiss();
         break;
-      case 6:
+      case 5:
         makeReactProject();
         dialogMain.dismiss();
         break;
-      case 7:
+      case 6:
         makeReactTypeScriptProject();
         dialogMain.dismiss();
         break;
-      case 8:
+      case 7:
         makeFlutterProject();
         dialogMain.dismiss();
         break;
-      case 9:
+      case 8:
         makeAndroidProject();
         dialogMain.dismiss();
         break;

@@ -1,147 +1,112 @@
 <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_height="wrap_content"
+  android:layout_width="match_parent"
+  android:orientation="vertical">
+  <LinearLayout
+    android:id="@+id/mlinear1"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:padding="3dp">
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/textinputlayoutserverName"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="3dp"
+      android:layout_marginTop="2dp"
+      android:layout_width="match_parent">
+      <EditText
+        android:focusable="true"
+        
+        android:hint="ServerName"
+        android:id="@+id/ftpserver"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-    <LinearLayout
-            android:id="@+id/mlinear1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="3dp"
-            android:orientation="vertical">
-        <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textinputlayoutserverName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="3dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-
-                app:shapeAppearance="@style/Cut">
-            <EditText
-                    android:id="@+id/ftpserver"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:textSize="14sp"
-                    android:textColor="#EEEEEE"
-                    android:hint="ServerName"
-                    android:textColorHint="#FDB69A"
-                    android:focusable="true"
-
-
-                    android:fontFamily="@font/ghostfont"/>
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textinputlayout2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="3dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-
-                app:shapeAppearance="@style/Cut">
-            <EditText
-                    android:id="@+id/ftpport"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:textSize="14sp"
-                    android:textColor="#EEEEEE"
-                    android:hint="port"
-                    android:textColorHint="#FDB69A"
-                    android:inputType="numberSigned"
-                    android:focusable="true"
-
-
-                    android:fontFamily="@font/ghostfont"/>
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textinputlayout3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="3dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-
-                app:shapeAppearance="@style/Cut">
-            <EditText
-                    android:id="@+id/ftpusername"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:textSize="14sp"
-                    android:textColor="#EEEEEE"
-                    android:hint="UserName"
-                    android:textColorHint="#FDB69A"
-                    android:focusable="true"
-
-
-                    android:fontFamily="@font/ghostfont"/>
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textinputlayout4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="3dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-
-                app:shapeAppearance="@style/Cut">
-            <EditText
-                    android:id="@+id/ftppass"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:textSize="14sp"
-                    android:textColor="#EEEEEE"
-                    android:hint="password"
-                    android:textColorHint="#FDB69A"
-                    android:inputType="textPassword"
-                    android:focusable="true"
-
-
-                    android:fontFamily="@font/ghostfont"/>
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textinputlayout5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="3dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-
-                app:shapeAppearance="@style/Cut">
-            <EditText
-                    android:id="@+id/ftpLocalRemote"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:textSize="14sp"
-                    android:textColor="#E0E0E0"
-                    android:hint="LocalRemote"
-                    android:textColorHint="#FDB69A"
-                    android:inputType="numberSigned"
-                    android:focusable="true"
-
-
-                    android:fontFamily="@font/ghostfont"/>
-        </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
-    <LinearLayout
-            android:id="@+id/linear2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:orientation="horizontal">
-        <ProgressBar
-                android:id="@+id/bar"
-                android:focusable="false"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:indeterminate="false"
-                style="?android:progressBarStyleHorizontal"/>
-    </LinearLayout>
+        android:layout_width="match_parent"
+        android:padding="8dp"
+        android:textSize="14sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/textinputlayout2"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="3dp"
+      android:layout_marginTop="2dp"
+      android:layout_width="match_parent">
+      <EditText
+        android:focusable="true"
+        
+        android:hint="port"
+        android:id="@+id/ftpport"
+        android:inputType="numberSigned"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:padding="8dp"
+        android:textSize="14sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/textinputlayout3"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="3dp"
+      android:layout_marginTop="2dp"
+      android:layout_width="match_parent">
+      <EditText
+        android:focusable="true"
+        
+        android:hint="UserName"
+        android:id="@+id/ftpusername"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:padding="8dp"
+        android:textSize="14sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/textinputlayout4"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="3dp"
+      android:layout_marginTop="2dp"
+      android:layout_width="match_parent">
+      <EditText
+        android:focusable="true"
+        
+        android:hint="password"
+        android:id="@+id/ftppass"
+        android:inputType="textPassword"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:padding="8dp"
+        android:textSize="14sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/textinputlayout5"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="3dp"
+      android:layout_marginTop="2dp"
+      android:layout_width="match_parent">
+      <EditText
+        android:focusable="true"
+        
+        android:hint="LocalRemote"
+        android:id="@+id/ftpLocalRemote"
+        android:inputType="numberSigned"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:padding="8dp"
+        android:textSize="14sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+  </LinearLayout>
+  <LinearLayout
+    android:id="@+id/linear2"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:padding="8dp">
+    <ProgressBar
+      android:focusable="false"
+      android:id="@+id/bar"
+      android:indeterminate="false"
+      android:layout_height="wrap_content"
+      android:layout_width="match_parent"
+      android:padding="8dp"
+      style="?android:progressBarStyleHorizontal" />
+  </LinearLayout>
 </LinearLayout>

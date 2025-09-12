@@ -10,6 +10,7 @@ import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 
 import io.github.rosemoe.sora.widget.Transilt;
 import ir.ninjacoder.ghostide.utils.DataUtil;
+import ir.ninjacoder.ghostide.utils.FileUtil;
 import java.io.InputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -20,12 +21,13 @@ import java.util.Map;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import lsp4custom.com.ninjacoder.customhtmllsp.js.NodeJsModel;
 
 public class Css3Server {
   private Random RANDOM = new Random();
   private int COLORS_TO_GENERATE = 20;
 
- public static String[] cssColorAttr = {
+  public static String[] cssColorAttr = {
     "color:",
     "background-color:",
     "border-color:",
@@ -298,11 +300,10 @@ public class Css3Server {
 
   String[] VALUE = {"left", "right", "center", "justify", "start", "end"};
 
-
   public void installCssColor(List<CompletionItem> list, String prefix) {
-    
+
     String propertyName = "";
-    if (prefix.startsWith("color:")) {
+    if (prefix.contains("color:") || prefix.contains("color: ")) {
       propertyName = "color";
     } else if (prefix.startsWith("background-color:")) {
       propertyName = "background-color";
@@ -355,8 +356,9 @@ public class Css3Server {
       }
     }
     TypeValue(list, prefix);
-	list.addAll(CodeSnippet.getCssShortcuts(prefix));
+    list.addAll(CodeSnippet.getCssShortcuts(prefix));
     try {
+
       toMaterialize(list, prefix);
     } catch (Exception err) {
 
@@ -499,11 +501,11 @@ public class Css3Server {
         }
       }
     }
-	if (prefix.startsWith("text-align:")) {
+    if (prefix.startsWith("text-align:")) {
       String langPrefix = prefix.substring("text-align:".length()).trim();
       for (var it : VALUE) {
         if (it.startsWith(langPrefix)) {
-          list.add(css("text-align:"  + it + " ;", "css Al"));
+          list.add(css("text-align:" + it + " ;", "css Al"));
         }
       }
     }
@@ -524,7 +526,7 @@ public class Css3Server {
       }
       return result;
     }
-    
+
     // حالت 2: عدد + واحد ناتمام (مثلاً "2p", "2em", "2pc")
     Matcher unitMatcher = Pattern.compile("^(\\d+)([a-z%]*)").matcher(prefix);
     if (unitMatcher.matches()) {
@@ -601,5 +603,4 @@ public class Css3Server {
   private String generateRandomHexColor() {
     return String.format("#%06X", RANDOM.nextInt(0xFFFFFF + 1));
   }
-
 }

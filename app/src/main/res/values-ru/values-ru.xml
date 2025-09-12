@@ -109,4 +109,18 @@
     <string name="customchareditor">Отдельные буквы кода редактора</string>
     <string name="cursoreditoricon">Значок курсораРедактор</string>
     <string name="backgroundimageeditor">Фоновое изображение </string>
+    <string name="menu_sandisk_card">Карта SanDisk</string>
+    <string name="menu_java_code">Java код</string>
+    <string name="menu_terminal">Терминал</string>
+    <string name="menu_settings">Настройки</string>
+    <string name="menu_logcat_reader">Чтение LogCat</string>
+    <string name="menu_icon_shop">Магазин иконок</string>
+    <string name="menu_update_app">Обновить приложение</string>
+    <string name="menu_plugins_manager">Менеджер плагинов</string>
+    <string name="menu_backup_theme">Резервная копия темы</string>
+    <string name="menu_bookmarks_beta">Закладки (Бета)</string>
+    <string name="menu_apk_manager">Менеджер APK</string>
+    <string name="menu_about">О программе</string>
+    <string name="menu_store">Магазин</string>
+    <string name="menu_exit">Выход</string>
 </resources>

@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.*;
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider;
 import lsp4custom.com.ninjacoder.customhtmllsp.CodeSnippet;
+import ir.ninjacoder.ghostide.utils.FileUtil;
 
 public class JsAutoComplete implements AutoCompleteProvider {
 
@@ -62,7 +63,6 @@ public class JsAutoComplete implements AutoCompleteProvider {
       keywords.addAll(CodeSnippet.getListFile(save_path.getString("path", ""), prefix));
 
       CompletionItem myitem = new CompletionItem();
-
       List<String> l = ChlidJavaList.getPhpMethodsList(GhostIdeAppLoader.getContext());
       for (var let : l) {
         if (prefix.startsWith(let)) {
@@ -88,6 +88,7 @@ public class JsAutoComplete implements AutoCompleteProvider {
   public void addVariable(String name, String type) {
     variables.put(name, type);
   }
+
   public void addFunction(String name, String returnType) {
     functions.put(name, returnType);
   }

@@ -105,8 +105,22 @@
     <string name="custom_icons">कस्टम चिह्न</string>
     <string name="termthemes">टर्मिनल थीम कॉन्फ़िगर करें</string>
     <string name="scriptcustom">चल रही स्क्रिप्ट कॉन्फ़िगर करें</string>
-    <string name="customthemeapp">ऐप थीम कस्टमाइज़ करें</string> 
+    <string name="customthemeapp">ऐप थीम कस्टमाइज़ करें</string>
     <string name="customchareditor">संपादक कोड के अलग-अलग अक्षर</string>
     <string name="cursoreditoricon">आइकन कर्सर संपादक </string>
     <string name="backgroundimageeditor">पृष्ठभूमि छवि </string>
+    <string name="menu_sandisk_card">SanDisk कार्ड</string>
+    <string name="menu_java_code">Java कोड</string>
+    <string name="menu_terminal">टर्मिनल</string>
+    <string name="menu_settings">सेटिंग्स</string>
+    <string name="menu_logcat_reader">LogCat रीडर</string>
+    <string name="menu_icon_shop">आइकन शॉप</string>
+    <string name="menu_update_app">ऐप अपडेट</string>
+    <string name="menu_plugins_manager">प्लगइन मैनेजर</string>
+    <string name="menu_backup_theme">बैकअप थीम</string>
+    <string name="menu_bookmarks_beta">बुकमार्क्स (बीटा)</string>
+    <string name="menu_apk_manager">APK मैनेजर</string>
+    <string name="menu_about">के बारे में</string>
+    <string name="menu_store">स्टोर</string>
+    <string name="menu_exit">बाहर निकलें</string>
 </resources>

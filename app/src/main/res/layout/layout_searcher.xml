@@ -1,65 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-     xmlns:android="http://schemas.android.com/apk/res/android"
-     xmlns:app="http://schemas.android.com/apk/res-auto"
-     android:layout_height="wrap_content"
-     android:layout_width="match_parent"
-     android:padding="5dp"
-     android:orientation="vertical">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:padding="5dp"
+    android:orientation="vertical">
 
     <EditText
-         android:layout_height="wrap_content"
-         android:layout_width="match_parent"
-         android:hint="search"
-         android:id="@+id/search_text" />
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:hint="search"
+        android:id="@+id/search_text" />
 
     <LinearLayout
-         android:layout_height="50dp"
-         android:layout_width="match_parent"
-         android:layout_below="@id/replace_text"
-         android:orientation="horizontal">
+        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_below="@id/replace_text"
+        android:orientation="horizontal">
 
         <com.google.android.material.button.MaterialButton
-             android:layout_height="match_parent"
-             android:layout_width="match_parent"
-             android:layout_margin="2dp"
-             style="@style/Widget.Material3.Button.TextButton"
-             android:layout_weight="1.0"
-             android:id="@+id/btn_close"
-             android:text="close" />
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_margin="2dp"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_weight="1.0"
+            android:id="@+id/btn_close"
+            android:text="close" />
 
         <com.google.android.material.button.MaterialButton
-             android:layout_height="match_parent"
-             android:layout_width="match_parent"
-             android:layout_margin="2dp"
-             style="@style/Widget.Material3.Button.TextButton"
-             android:layout_weight="1.0"
-             android:id="@+id/replace"
-             android:text="replace" />
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_margin="2dp"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_weight="1.0"
+            android:id="@+id/replace"
+            android:text="replace" />
 
         <com.google.android.material.button.MaterialButton
-             android:layout_height="match_parent"
-             android:layout_width="match_parent"
-             android:layout_margin="2dp"
-             style="@style/Widget.Material3.Button.TextButton"
-             android:layout_weight="1.0"
-             android:id="@+id/goto_next"
-             android:text="next" />
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_margin="2dp"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_weight="1.0"
+            android:id="@+id/goto_next"
+            android:text="next" />
 
         <com.google.android.material.button.MaterialButton
-             android:layout_height="match_parent"
-             android:layout_width="match_parent"
-             android:layout_margin="2dp"
-             style="@style/Widget.Material3.Button.TextButton"
-             android:layout_weight="1.0"
-             android:id="@+id/goto_last"
-             android:text="previos" />
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_margin="2dp"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_weight="1.0"
+            android:id="@+id/goto_last"
+            android:text="previos" />
 
     </LinearLayout>
-
-    <com.google.android.material.divider.MaterialDivider
-         android:layout_height="wrap_content"
-         android:layout_width="match_parent"
-         app:dividerColor="?@attr/colorOnSurface" />
-
 </LinearLayout>

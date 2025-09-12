@@ -109,4 +109,18 @@
     <string name="customchareditor">Tahrirlovchi kodining alohida harflari</string>
     <string name="cursoreditoricon">Belgilar kursori muharriri</string>
     <string name="backgroundimageeditor">Fon rasmi</string>
+    <string name="menu_sandisk_card">SanDisk karta</string>
+    <string name="menu_java_code">Java kodi</string>
+    <string name="menu_terminal">Terminal</string>
+    <string name="menu_settings">Sozlamalar</string>
+    <string name="menu_logcat_reader">LogCat o'quvchi</string>
+    <string name="menu_icon_shop">Icon do'koni</string>
+    <string name="menu_update_app">Dasturni yangilash</string>
+    <string name="menu_plugins_manager">Plagin menejeri</string>
+    <string name="menu_backup_theme">Mavzuni zaxiralash</string>
+    <string name="menu_bookmarks_beta">Xatcho'plar (Beta)</string>
+    <string name="menu_apk_manager">APK menejeri</string>
+    <string name="menu_about">Dastur haqida</string>
+    <string name="menu_store">Do'kon</string>
+    <string name="menu_exit">Chiqish</string>
 </resources>

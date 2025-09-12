@@ -109,4 +109,19 @@
     <string name="customchareditor">حروف تک نوشته شخصی کد ادیتور</string>
     <string name="cursoreditoricon">آیکون مکان نما</string>
     <string name="backgroundimageeditor">پس زمینه عکس</string>
+    <string name="pastjavacode">جایگذاری جاوا کد؟</string>
+    <string name="menu_sandisk_card">کارت SanDisk</string>
+    <string name="menu_java_code">کد جاوا</string>
+    <string name="menu_terminal">ترمینال</string>
+    <string name="menu_settings">تنظیمات</string>
+    <string name="menu_logcat_reader">خواننده LogCat</string>
+    <string name="menu_icon_shop">فروشگاه آیکون</string>
+    <string name="menu_update_app">بروزرسانی برنامه</string>
+    <string name="menu_plugins_manager">مدیریت پلاگین ها</string>
+    <string name="menu_backup_theme">پشتیبان گیری تم</string>
+    <string name="menu_bookmarks_beta">نشانه ها (بتا)</string>
+    <string name="menu_apk_manager">مدیریت APK</string>
+    <string name="menu_about">درباره</string>
+    <string name="menu_store">فروشگاه</string>
+    <string name="menu_exit">خروج</string>
 </resources>

@@ -11,47 +11,47 @@
     <string name="dkplayer_wifi_tip">Wi-Fi não disponível</string>
     <string name="word_separators">.,;:!?\10()[]*&amp;@{}/&lt;&gt;_+=|</string>
     <item
-            name="paste"
-            type="string">Colar</item>
+        name="paste"
+        type="string">Colar</item>
     <item
-            name="copy"
-            type="string">Copiar</item>
+        name="copy"
+        type="string">Copiar</item>
     <item
-            name="selectAll"
-            type="string"
-            formatted="true">Selecionar tudo</item>
+        name="selectAll"
+        type="string"
+        formatted="true">Selecionar tudo</item>
     <item
-            name="saveToProject"
-            type="string"
-            translatable="false">Salvar no projeto</item>
+        name="saveToProject"
+        type="string"
+        translatable="false">Salvar no projeto</item>
     <item
-            name="cut"
-            type="string">Cortar</item>
+        name="cut"
+        type="string">Cortar</item>
     <item
-            name="last"
-            type="string">Último</item>
+        name="last"
+        type="string">Último</item>
     <item
-            name="next"
-            type="string">Próximo</item>
+        name="next"
+        type="string">Próximo</item>
     <item
-            name="replace"
-            type="string">Substituir</item>
+        name="replace"
+        type="string">Substituir</item>
     <item
-            name="replaceAll"
-            type="string">Substituir tudo</item>
+        name="replaceAll"
+        type="string">Substituir tudo</item>
     <item
-            name="replacement"
-            type="string">Substituição</item>
+        name="replacement"
+        type="string">Substituição</item>
     <item
-            name="cancel"
-            type="string">Cancelar</item>
+        name="cancel"
+        type="string">Cancelar</item>
     <item
-            name="text_to_search"
-            type="string">Texto para pesquisa</item>
+        name="text_to_search"
+        type="string">Texto para pesquisa</item>
     <item
-            name="more"
-            type="string"
-            translatable="false">Mais</item>
+        name="more"
+        type="string"
+        translatable="false">Mais</item>
     <string name="sting">Configurações do aplicativo</string>
     <string name="java">Código Java</string>
     <string name="googleplay">Adicione uma estrela ao meu app no Myket</string>
@@ -139,4 +139,18 @@
     <string name="drawer_subtitles">O IDE completo</string>
     <string name="cursoreditoricon">Ícone CursorEditor</string>
     <string name="backgroundimageeditor">Imagem de fundo</string>
+    <string name="menu_sandisk_card">Cartão SanDisk</string>
+    <string name="menu_java_code">Código Java</string>
+    <string name="menu_terminal">Terminal</string>
+    <string name="menu_settings">Configurações</string>
+    <string name="menu_logcat_reader">Leitor LogCat</string>
+    <string name="menu_icon_shop">Loja de Ícones</string>
+    <string name="menu_update_app">Atualizar App</string>
+    <string name="menu_plugins_manager">Gerenciador de Plugins</string>
+    <string name="menu_backup_theme">Backup de Tema</string>
+    <string name="menu_bookmarks_beta">Favoritos (Beta)</string>
+    <string name="menu_apk_manager">Gerenciador APK</string>
+    <string name="menu_about">Sobre</string>
+    <string name="menu_store">Loja</string>
+    <string name="menu_exit">Sair</string>
 </resources>

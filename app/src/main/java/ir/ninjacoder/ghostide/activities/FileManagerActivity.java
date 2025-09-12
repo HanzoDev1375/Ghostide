@@ -480,20 +480,20 @@ public class FileManagerActivity extends BaseCompat
           DialogItemSheet();
         });
 
-    bind.navs.getMenu().add(0, 1, 0, "SanDisk Card").setIcon(R.drawable.drawer_item12);
-    bind.navs.getMenu().add(0, 2, 0, "Java code").setIcon(R.drawable.drawer_item14);
-    bind.navs.getMenu().add(0, 3, 0, "Terminal").setIcon(R.drawable.drawer_item13);
-    bind.navs.getMenu().add(0, 4, 0, "Settings").setIcon(R.drawable.drawer_item15);
-    bind.navs.getMenu().add(0, 5, 0, "LogCat Reader").setIcon(R.drawable.drawer_item6);
-    bind.navs.getMenu().add(0, 6, 0, "Icon Shop").setIcon(R.drawable.icshop);
-    bind.navs.getMenu().add(0, 7, 0, "Update App").setIcon(R.drawable.drawer_item8);
-    bind.navs.getMenu().add(0, 8, 0, "Plugins Manager").setIcon(R.drawable.drawer_item5);
-    bind.navs.getMenu().add(0, 9, 0, "Backup Theme").setIcon(R.drawable.drawer_item7);
-    bind.navs.getMenu().add(0, 10, 0, "Bookmarks (Beta)").setIcon(R.drawable.drawer_item4);
-    bind.navs.getMenu().add(0, 11, 0, "Apk Manager").setIcon(R.drawable.drawer_item3);
-    bind.navs.getMenu().add(0, 12, 0, "About").setIcon(R.drawable.drawer_item11);
-    bind.navs.getMenu().add(0, 14, 0, "Store").setIcon(R.drawable.shop_24);
-    bind.navs.getMenu().add(0, 13, 0, "exit").setIcon(R.drawable.drawer_item1);
+    bind.navs.getMenu().add(0, 1, 0, getString(R.string.menu_sandisk_card)).setIcon(R.drawable.drawer_item12);
+    bind.navs.getMenu().add(0, 2, 0, getString(R.string.menu_java_code)).setIcon(R.drawable.drawer_item14);
+    bind.navs.getMenu().add(0, 3, 0, getString(R.string.menu_terminal)).setIcon(R.drawable.drawer_item13);
+    bind.navs.getMenu().add(0, 4, 0, getString(R.string.menu_settings)).setIcon(R.drawable.drawer_item15);
+    bind.navs.getMenu().add(0, 5, 0, getString(R.string.menu_logcat_reader)).setIcon(R.drawable.drawer_item6);
+    bind.navs.getMenu().add(0, 6, 0, getString(R.string.menu_icon_shop)).setIcon(R.drawable.icshop);
+    bind.navs.getMenu().add(0, 7, 0, getString(R.string.menu_update_app)).setIcon(R.drawable.drawer_item8);
+    bind.navs.getMenu().add(0, 8, 0, getString(R.string.menu_plugins_manager)).setIcon(R.drawable.drawer_item5);
+    bind.navs.getMenu().add(0, 9, 0, getString(R.string.menu_backup_theme)).setIcon(R.drawable.drawer_item7);
+    bind.navs.getMenu().add(0, 10, 0, getString(R.string.menu_bookmarks_beta)).setIcon(R.drawable.drawer_item4);
+    bind.navs.getMenu().add(0, 11, 0, getString(R.string.menu_apk_manager)).setIcon(R.drawable.drawer_item3);
+    bind.navs.getMenu().add(0, 12, 0, getString(R.string.menu_about)).setIcon(R.drawable.drawer_item11);
+    bind.navs.getMenu().add(0, 14, 0, getString(R.string.menu_store)).setIcon(R.drawable.shop_24);
+    bind.navs.getMenu().add(0, 13, 0, getString(R.string.menu_exit)).setIcon(R.drawable.drawer_item1);
 
     DrowerHandler();
   }
@@ -1824,7 +1824,7 @@ public class FileManagerActivity extends BaseCompat
 
     sh.setSheetDialog(this);
     sh.addItem(getString(R.string.make_folder), R.drawable.create_new_folder_24px);
-    sh.addItem(getString(R.string.make_file), R.drawable.folders_0_5);
+    sh.addItem(getString(R.string.make_file), R.drawable.file);
     sh.addItem(getString(R.string.make_project), R.drawable.extension_24px);
     sh.addItem("FTP", R.drawable.iconmode);
     sh.addItem(getString(R.string.search_file), R.drawable.document_search_24px);
@@ -1834,7 +1834,7 @@ public class FileManagerActivity extends BaseCompat
     sh.addItem(getString(R.string.android_module), R.drawable.mdapk);
     sh.addItem(getString(R.string.git_tools), R.drawable.git);
     sh.addItem(getString(R.string.gson_to_class), R.drawable.file_json_24px);
-    sh.addItem("PastJavaCode?", R.drawable.ic_material_java);
+    sh.addItem(getString(R.string.pastjavacode), R.drawable.ic_material_java);
     sh.setOnItemClickLabe(
         (pos333) -> {
           switch (pos333) {

@@ -109,4 +109,18 @@
     <string name="customchareditor">編輯器代碼的不同字符</string>
     <string name="cursoreditoricon">图标光标编辑器</string>
     <string name="backgroundimageeditor">背景图像</string>
+    <string name="menu_sandisk_card">SanDisk 卡</string>
+    <string name="menu_java_code">Java 代码</string>
+    <string name="menu_terminal">终端</string>
+    <string name="menu_settings">设置</string>
+    <string name="menu_logcat_reader">LogCat 阅读器</string>
+    <string name="menu_icon_shop">图标商店</string>
+    <string name="menu_update_app">更新应用</string>
+    <string name="menu_plugins_manager">插件管理器</string>
+    <string name="menu_backup_theme">备份主题</string>
+    <string name="menu_bookmarks_beta">书签 (测试版)</string>
+    <string name="menu_apk_manager">APK 管理器</string>
+    <string name="menu_about">关于</string>
+    <string name="menu_store">商店</string>
+    <string name="menu_exit">退出</string>
 </resources>

@@ -1,31 +1,20 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    
->
+    android:orientation="vertical">
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:shapeAppearance="@style/Cut"
-        
-    >
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <EditText
             android:id="@+id/editor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:textSize="16sp"
-            android:textColorHint="?@attr/colorOnSurface"
-            android:focusable="true"
-            android:fontFamily="@font/ghostfont"
-            android:textColor="?@attr/colorOnSurface"
-            
-        />
+            android:focusable="true" />
     </com.google.android.material.textfield.TextInputLayout>
 </LinearLayout>

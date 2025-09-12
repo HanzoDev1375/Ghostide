@@ -1,56 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-     xmlns:android="http://schemas.android.com/apk/res/android"
-     android:layout_height="wrap_content"
-     android:layout_width="match_parent"
-     android:orientation="vertical">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
-         android:layout_height="wrap_content"
-         android:layout_width="match_parent"
-         android:gravity="center_vertical"
-         android:padding="4dp"
-         android:orientation="horizontal"
-         android:id="@+id/rooti">
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:gravity="center_vertical"
+        android:padding="4dp"
+        android:orientation="horizontal"
+        android:id="@+id/rooti">
         <LinearLayout
-             android:layout_height="wrap_content"
-             android:layout_width="wrap_content"
-             android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:orientation="vertical">
 
             <LinearLayout
-                 android:layout_height="40dp"
-                 android:layout_width="40dp"
-                 
-                 android:gravity="center_horizontal|center_vertical"
-                 android:orientation="horizontal"
-                 android:id="@+id/getTag">
+                android:layout_height="40dp"
+                android:layout_width="40dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:orientation="horizontal"
+                android:id="@+id/getTag">
 
                 <TextView
-                     android:layout_height="wrap_content"
-                     android:layout_width="wrap_content"
-                     android:textSize="18sp"
-                     android:focusable="false"
-                     android:id="@+id/titleview"
-                     android:text="A"
-                     android:textStyle="bold" />
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:textSize="18sp"
+                    android:focusable="false"
+                    android:id="@+id/titleview"
+                    android:text="A"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
-             android:layout_height="wrap_content"
-             android:layout_width="match_parent"
-             android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="vertical">
 
             <TextView
-                 android:layout_height="wrap_content"
-                 android:layout_width="match_parent"
-                 android:gravity="center_vertical"
-                 android:padding="6dp"
-                 android:textSize="18sp"
-                 android:id="@+id/normaltext"
-                 android:text="File file " />
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:padding="6dp"
+                android:textSize="18sp"
+                android:id="@+id/normaltext"
+                android:text="File file " />
 
         </LinearLayout>
 
