@@ -52,7 +52,7 @@ public class HTMLAutoComplete implements AutoCompleteProvider {
     htmlconfig = new HTMLConstants();
     userIdentifiers = new IdentifierAutoComplete.Identifiers();
     pathz = new ArrayList<>();
-    keyhtml = new ListKeyword();
+    keyhtml = new ListKeyword(editor);
 
     save_path =
         GhostIdeAppLoader.getContext().getSharedPreferences("save_path", Activity.MODE_PRIVATE);

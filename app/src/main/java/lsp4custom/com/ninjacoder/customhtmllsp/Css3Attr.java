@@ -1,75 +1,20 @@
 package lsp4custom.com.ninjacoder.customhtmllsp;
 
+import android.util.Log;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import io.github.rosemoe.sora.data.CompletionItem;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
+import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Map;
 
 public class Css3Attr {
   public static final String[] cssAttr = {
-    "px",
-    "em",
-    "flex",
-    "vim",
-    "rem",
-    "vh",
-    "vw",
-    "pt",
-    "cm",
-    "mm",
-    "in",
-    "pc",
-    "ex",
-    "ch",
-    "deg",
-    "grad",
-    "rad",
-    "turn",
-    "s",
-    "ms",
-    "%",
-    "fr",
-    "underline",
-    "italic",
-    "bold",
-    "normal",
-    "rgba(R, G, B, A)",
-    "hsl(H, S, L)",
-    "url(\"path/to/image\")",
-    "none",
-    "block",
-    "inline",
-    "inline-block",
-    "table",
-    "table-cell",
-    "table-row",
-    "absolute",
-    "relative",
-    "fixed",
-    "center",
-    "bottom",
-    "top",
-    "left",
-    "right",
-    "none",
-    "visible",
-    "hidden",
-    "collapse",
-    "visible",
-    "uppercase",
-    "lowercase",
-    "capitalize",
-    "wrap",
-    "nowrap",
-    "shrink",
-    "reverse",
-    "nowrap",
-    "horizontal",
-    "vertical",
-    "repeat",
-    "no-repeat",
-    "repeat-x",
-    "repeat-y"
+    "px", "em", "flex", "vim", "rem", "vh", "vw", "pt", "cm", "mm", "in", "pc", "ex", "ch", "deg",
+    "grad", "rad", "turn", "s", "ms",
   };
   protected HTMLConstants htmlConfig;
 
@@ -83,11 +28,43 @@ public class Css3Attr {
         list.add(cssAttr(last, htmlConfig.CssAttractions));
       }
     }
+    scopePath("css/cssproperty.kj", list, prfex);
+    scopePath("css/pseudo_classes.kj", list, prfex);
+  }
+
+  private void scopePath(String assterName, List<CompletionItem> mmber, String prfex) {
+    try {
+      var open = GhostIdeAppLoader.getContext().getAssets().open(assterName);
+      List<DataScope> data =
+          new Gson()
+              .fromJson(new InputStreamReader(open), new TypeToken<List<DataScope>>() {}.getType());
+      data.forEach(
+          it -> {
+            if (it.getName().startsWith(prfex)) {
+              mmber.add(new CompletionItem(it.getName(), it.getName(), it.getDesc()));
+            }
+          });
+    } catch (Exception err) {
+      Log.e("KJsonError", err.getMessage());
+    }
   }
 
   private final CompletionItem cssAttr(String lb, String des) {
     var items = new CompletionItem(lb + " ", des);
     items.cursorOffset(items.commit.length() - 1);
     return items;
+  }
+
+  class DataScope {
+    String name;
+    String desc;
+
+    public String getName() {
+      return this.name;
+    }
+
+    public String getDesc() {
+      return this.desc;
+    }
   }
 }

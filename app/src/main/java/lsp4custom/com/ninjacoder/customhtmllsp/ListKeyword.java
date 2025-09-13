@@ -1,10 +1,12 @@
 package lsp4custom.com.ninjacoder.customhtmllsp;
 
 import io.github.rosemoe.sora.data.CompletionItem;
+import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 
 import java.util.ArrayList;
 import java.util.List;
+import lsp4custom.com.ninjacoder.javapaserdata.HtmlUtil;
 
 public class ListKeyword {
 
@@ -163,9 +165,11 @@ public class ListKeyword {
     "xmp"
   };
   protected HTMLConstants htmlconfig;
+  protected CodeEditor editor;
 
-  public ListKeyword() {
+  public ListKeyword(CodeEditor editor) {
     htmlconfig = new HTMLConstants();
+    this.editor = editor;
   }
 
   public void installHtmlAttr(List<CompletionItem> items, String prfex) {
@@ -195,13 +199,21 @@ public class ListKeyword {
 
   public void randomColor(List<CompletionItem> item, String prfex) {
     var cssattr = new Css3Server();
-    cssattr.setColorRandom(item,prfex);
+    cssattr.setColorRandom(item, prfex);
   }
 
   public void installFromSora(List<CompletionItem> items, String prfex) {
-    for (var keylist : TAGS) {
-      if (keylist.startsWith(prfex)) {
-        items.add(getCustomTag(keylist, htmlconfig.HTMLTAG));
+    if (HtmlUtil.hasStyleTag(editor.getTextAsString())) {
+      for (var keylist : TAGS) {
+        if (keylist.startsWith(prfex)) {
+          items.add(getCustomTag(keylist, htmlconfig.HTMLTAG));
+        }
+      }
+    } else {
+      for (var keylist : TAGS) {
+        if (keylist.startsWith(prfex)) {
+          items.add(new CompletionItem(keylist,keylist,"Hash Tag"));
+        }
       }
     }
   }

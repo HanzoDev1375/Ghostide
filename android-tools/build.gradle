@@ -2,14 +2,14 @@ plugins {
     id "com.android.library"
 }
 
-android {
+android { 
     compileSdk 35
     namespace "ninjacoder.ghostide.androidtools.r8.android"
     defaultConfig {
         minSdkVersion 26
         targetSdkVersion 32
     }
-    buildTypes {
+    buildTypes { 
         release {
             minifyEnabled false
         }
@@ -31,7 +31,6 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
 }
-
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation("com.android.tools:r8:8.3.37")
