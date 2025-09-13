@@ -52,7 +52,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
-import com.google.android.material.R;
+import ir.ninjacoder.ghostide.R;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.color.MaterialColors;
@@ -92,7 +92,7 @@ public class ObjectUtils {
   public static int SubTitle = R.attr.colorPrimaryFixedDim;
   public static int ButtonBack = R.attr.colorSecondary;
   public static int colorOnPrimaryFixed = R.attr.colorOnPrimaryFixed;
-  public static int FabBack = R.attr.colorOnPrimary;
+  public static int FabBack = ir.ninjacoder.ghostide.R.attr.colorOnPrimary;
   public static int ColorFilter = R.attr.colorOnPrimaryContainer;
   public static int TvColorFab = R.attr.colorOnSecondaryFixed;
   public static int colorOnSurface = R.attr.colorOnSurface;

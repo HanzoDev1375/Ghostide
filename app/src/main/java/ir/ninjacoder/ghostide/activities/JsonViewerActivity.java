@@ -11,7 +11,7 @@ import android.widget.Toast;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
-import static com.google.android.material.R.attr.*;
+import static ir.ninjacoder.ghostide.R.attr.*;
 
 public class JsonViewerActivity extends BaseCompat {
 
