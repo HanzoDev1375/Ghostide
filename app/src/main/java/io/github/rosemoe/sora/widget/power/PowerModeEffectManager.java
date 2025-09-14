@@ -35,7 +35,7 @@ public class PowerModeEffectManager {
       return displayName;
     }
 
-    public String getString(int resId) {
+    static String getString(int resId) {
       return GhostIdeAppLoader.getContext().getString(resId);
     }
 
