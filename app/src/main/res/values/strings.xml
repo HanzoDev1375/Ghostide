@@ -203,4 +203,22 @@
     <string name="menu_about">About</string>
     <string name="menu_store">Store</string>
     <string name="menu_exit">exit</string>
+    <string name="particle">Particle</string>
+    <string name="lightning">Lightning</string>
+    <string name="flame">Flame</string>
+    <string name="spark">Spark</string>
+    <string name="rain">Rain</string>
+    <string name="magic">Magic</string>
+    <string name="none">None</string>
+    <string name="explosion">Explosion</string>
+    <string name="custom_theme_terminal">Custom Theme Terminal</string>
+    <string name="select_property_theme">Select Property theme</string>
+    <string name="custom_python_code">Custom Script From Terminal</string>
+    <string name="type_python_script">Type dir python script..</string>
+    <string name="custom_char_editor">Custom Char Editor</string>
+    <string name="select_char_name">Select Char name Like 👻</string>
+    <string name="custom_image_background">Custom Image Background from Editor</string>
+    <string name="select_dir_image">Select Dir Image</string>
+    <string name="select_icon_app">Select icon app</string>
+    <string name="set_custom_icon_message">You can set Custom icon from app</string>
 </resources>

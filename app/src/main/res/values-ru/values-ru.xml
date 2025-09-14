@@ -108,7 +108,7 @@
     <string name="customthemeapp">Настройте тему приложения</string>
     <string name="customchareditor">Отдельные буквы кода редактора</string>
     <string name="cursoreditoricon">Значок курсораРедактор</string>
-    <string name="backgroundimageeditor">Фоновое изображение </string>
+    <string name="backgroundimageeditor">Фоновое изображение</string>
     <string name="menu_sandisk_card">Карта SanDisk</string>
     <string name="menu_java_code">Java код</string>
     <string name="menu_terminal">Терминал</string>
@@ -123,4 +123,23 @@
     <string name="menu_about">О программе</string>
     <string name="menu_store">Магазин</string>
     <string name="menu_exit">Выход</string>
+    <string name="particle">Частица</string>
+    <string name="lightning">Молния</string>
+    <string name="flame">Пламя</string>
+    <string name="spark">Искра</string>
+    <string name="rain">Дождь</string>
+    <string name="magic">Магия</string>
+    <string name="none">Нет</string>
+    <string name="explosion">Взрыв</string>
+    <string name="custom_theme_terminal">Пользовательский Терминал Темы</string>
+    <string name="select_property_theme">Выбрать тему свойства</string>
+    <string name="custom_python_code">Пользовательский скрипт из терминала</string>
+    <string name="type_python_script">Введите dir python скрипт..</string>
+    <string name="custom_char_editor">Пользовательский редактор символов</string>
+    <string name="select_char_name">Выбрать имя символа Как 👻</string>
+    <string name="custom_image_background">Пользовательский фон изображения из редактора</string>
+    <string name="select_dir_image">Выбрать Dir изображения</string>
+    <string name="select_icon_app">Выбрать иконку приложения</string>
+    <string name="set_custom_icon_message">Вы можете установить пользовательскую иконку из приложения</string>
+
 </resources>

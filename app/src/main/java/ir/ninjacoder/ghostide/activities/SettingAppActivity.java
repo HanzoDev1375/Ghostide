@@ -1,10 +1,12 @@
 package ir.ninjacoder.ghostide.activities;
 
+import io.github.rosemoe.sora.widget.power.PowerModeEffectManager;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.adapter.ListAppIconAd;
 import ir.ninjacoder.ghostide.config.AppIconManager;
 import ir.ninjacoder.ghostide.config.PrfnsUtil;
+import ir.ninjacoder.ghostide.enums.EffectTypeManager;
 import ir.ninjacoder.ghostide.enums.ErudaThemeManager;
 import ir.ninjacoder.ghostide.enums.ErudaThemes;
 import ir.ninjacoder.ghostide.git.GitHubProfileView;
@@ -91,7 +93,7 @@ public class SettingAppActivity extends BaseCompat {
       gridMode,
       Analyzercod,
       iconSpash;
-  private PerfenceLayoutSubTitle themecustom, blurmod, windowsize, erudathemes,jointogithub;
+  private PerfenceLayoutSubTitle themecustom, blurmod, windowsize, erudathemes, jointogithub;
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
@@ -193,8 +195,9 @@ public class SettingAppActivity extends BaseCompat {
           customDataRow(
               "Custom Theme", "Select Theme in format .ghost", "themes", thememanagersoft);
         });
-        erudathemes.setOnClickListener(v ->{
-            showthemeeruda();
+    erudathemes.setOnClickListener(
+        v -> {
+          showthemeeruda();
         });
     blurmod.setOnClickListener(c -> _blursize());
     windowsize.setOnClickListener(
@@ -363,14 +366,16 @@ public class SettingAppActivity extends BaseCompat {
           if (is) GhostIdeAppLoader.getPrefManager().edit().putBoolean("breaks", true).apply();
           else GhostIdeAppLoader.getPrefManager().edit().putBoolean("breaks", false).apply();
         });
-        jointogithub.setOnClickListener(v ->{
-            var msheet = new LayoutSheetEditText(this);
-            msheet.show();
-            msheet.setokClick(i ->{
+    jointogithub.setOnClickListener(
+        v -> {
+          var msheet = new LayoutSheetEditText(this);
+          msheet.show();
+          msheet.setokClick(
+              i -> {
                 var git = new GitHubProfileView(this);
                 git.verifyToken(msheet.getText());
                 msheet.dismiss();
-            });
+              });
         });
 
     StartLuncherApp();
@@ -466,6 +471,7 @@ public class SettingAppActivity extends BaseCompat {
     fb.add("");
     fb.add("");
     fb.add("");
+    fb.add("");
     grids.setValue(gridMode.contains("gride"));
     rvsetting.setAdapter(new Recyclerview2Adapter(fb));
     rvsetting.setLayoutManager(new LinearLayoutManager(this));
@@ -484,7 +490,7 @@ public class SettingAppActivity extends BaseCompat {
       slider.setValue(thememanagersoft.getFloat("br", 1));
     }
     di.setNeutralButton(
-        "ok",
+        android.R.string.ok,
         (p, d) -> {
           thememanagersoft.edit().putFloat("br", slider.getValue()).apply();
         });
@@ -498,9 +504,9 @@ public class SettingAppActivity extends BaseCompat {
 
   private void initIconColors() {
     var dialog = new MaterialAlertDialogBuilder(this);
-    dialog.setTitle("Select icon app");
+    dialog.setTitle(getString(R.string.select_icon_app));
     dialog.setPositiveButton(android.R.string.cancel, null);
-    dialog.setMessage("You can set Custom icon from app");
+    dialog.setMessage(getString(R.string.set_custom_icon_message));
     var list = new ListView(this);
     list.setLayoutParams(
         new LinearLayout.LayoutParams(
@@ -677,6 +683,11 @@ public class SettingAppActivity extends BaseCompat {
         _view.setOnClickListener(v -> getVideoBackground());
         imageview1.setImageResource(0);
       }
+      if (_position == 8) {
+        textview1.setText(getString(R.string.backgroundimageeditor));
+        _view.setOnClickListener(v -> showEF());
+        imageview1.setImageResource(0);
+      }
     }
 
     @Override
@@ -692,19 +703,24 @@ public class SettingAppActivity extends BaseCompat {
   }
 
   void terminalTheme() {
-    datarow("Custom Theme Terminal", "Select Property theme", "themes");
+    datarow(
+        getString(R.string.custom_theme_terminal),
+        getString(R.string.select_property_theme),
+        "themes");
   }
 
   void CustomPythonCode() {
-    datarow("Custom Sctipt From Terminal ", "Type dir python script..", "Script");
+    datarow(
+        getString(R.string.custom_python_code), getString(R.string.type_python_script), "Script");
   }
 
   void getCustomChar() {
-    datarow("Custom Char Editor", "Select Char name Like 👻", "chars");
+    datarow(getString(R.string.custom_char_editor), getString(R.string.select_char_name), "chars");
   }
 
   void getVideoBackground() {
-    datarow("Custom Image Background from Editor", "Select Dir Image", "dir");
+    datarow(
+        getString(R.string.custom_image_background), getString(R.string.select_dir_image), "dir");
   }
 
   void datarow(String title, String hint, String key) {
@@ -770,9 +786,38 @@ public class SettingAppActivity extends BaseCompat {
             (dialog, which) -> {
               ErudaThemes selectedTheme = ErudaThemes.values()[which];
               ErudaThemeManager.saveTheme(SettingAppActivity.this, selectedTheme);
-              
             })
         .setNegativeButton(android.R.string.ok, null)
+        .show();
+  }
+
+  void showEF() {
+    PowerModeEffectManager.EffectType currentEffect = EffectTypeManager.getCurrentTheme(this);
+    String[] effectNames = PowerModeEffectManager.EffectType.getAllName();
+
+    int currentIndex = -1;
+    for (int i = 0; i < PowerModeEffectManager.EffectType.values().length; i++) {
+      if (PowerModeEffectManager.EffectType.values()[i] == currentEffect) {
+        currentIndex = i;
+        break;
+      }
+    }
+
+    new MaterialAlertDialogBuilder(this)
+        .setTitle("Select Effect Type")
+        .setSingleChoiceItems(
+            effectNames,
+            currentIndex,
+            (dialog, which) -> {
+              PowerModeEffectManager.EffectType selectedEffect =
+                  PowerModeEffectManager.EffectType.values()[which];
+              EffectTypeManager.saveTheme(SettingAppActivity.this, selectedEffect);
+            })
+        .setPositiveButton(
+            android.R.string.ok,
+            (dialog, which) -> {
+              dialog.dismiss();
+            })
         .show();
   }
 }

@@ -1,6 +1,8 @@
 package ir.ninjacoder.ghostide.activities;
 
+import com.blankj.utilcode.util.FileUtils;
 import ir.ninjacoder.ghostide.R;
+import ir.ninjacoder.ghostide.utils.FileUtil;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.widget.JsonViewLayout;
 import android.os.Bundle;
@@ -61,7 +63,7 @@ public class JsonViewerActivity extends BaseCompat {
         str = getIntent().getStringExtra("g");
         JsonViewLayout go = findViewById(R.id.go);
 
-        go.bindJson(str);
+        go.bindJson(FileUtil.readFile(str));
         go.ScrollView(true);
         go.setValueTextColor(MaterialColors.getColor(go, colorPrimary));
         go.setObjectKeyColor(MaterialColors.getColor(go, colorTertiary));

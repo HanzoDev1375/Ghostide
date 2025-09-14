@@ -123,4 +123,22 @@
     <string name="menu_about">关于</string>
     <string name="menu_store">商店</string>
     <string name="menu_exit">退出</string>
+    <string name="particle">粒子</string>
+    <string name="lightning">闪电</string>
+    <string name="flame">火焰</string>
+    <string name="spark">火花</string>
+    <string name="rain">雨</string>
+    <string name="magic">魔法</string>
+    <string name="none">无</string>
+    <string name="explosion">爆炸</string>
+    <string name="custom_theme_terminal">自定义主题终端</string>
+    <string name="select_property_theme">选择属性主题</string>
+    <string name="custom_python_code">从终端自定义脚本</string>
+    <string name="type_python_script">输入 python 脚本目录..</string>
+    <string name="custom_char_editor">自定义字符编辑器</string>
+    <string name="select_char_name">选择字符名称如 👻</string>
+    <string name="custom_image_background">从编辑器自定义图像背景</string>
+    <string name="select_dir_image">选择目录图像</string>
+    <string name="select_icon_app">选择应用图标</string>
+    <string name="set_custom_icon_message">您可以从应用设置自定义图标</string>
 </resources>

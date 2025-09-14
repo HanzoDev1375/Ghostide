@@ -9,8 +9,10 @@ import io.github.rosemoe.sora.langs.java.JavaLanguage;
 import io.github.rosemoe.sora.model.Inlay;
 import io.github.rosemoe.sora.model.LineIcon;
 import io.github.rosemoe.sora.util.IntPair;
+import io.github.rosemoe.sora.widget.power.PowerModeEffectManager;
 import ir.ninjacoder.ghostide.config.LOG;
 import ir.ninjacoder.ghostide.editor.EditorUtil;
+import ir.ninjacoder.ghostide.enums.EffectTypeManager;
 import ir.ninjacoder.ghostide.interfaces.CallBackErrorManager;
 import ir.ninjacoder.ghostide.marco.CommentList;
 import ir.ninjacoder.ghostide.marco.editorface.IEditor;
@@ -101,6 +103,11 @@ public class IdeEditor extends CodeEditor implements IEditor {
     if (saveTextSize != null) {
       setTextSizePx(getSize);
     }
+    setPowerModeEnabled(true);
+    PowerModeEffectManager.EffectType ef = EffectTypeManager.getCurrentTheme(getContext());
+
+    getPowerModeEffectManager().setEffect(ef);
+
     return this;
   }
 

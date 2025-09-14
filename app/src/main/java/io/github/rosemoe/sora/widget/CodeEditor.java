@@ -146,6 +146,7 @@ import io.github.rosemoe.sora.widget.layout.RowIterator;
 import io.github.rosemoe.sora.widget.layout.WordwrapLayout;
 import io.github.rosemoe.sora.widget.style.SelectionHandleStyle;
 import io.github.rosemoe.sora.widget.style.builtin.HandleStyleSideDrop;
+import io.github.rosemoe.sora.widget.power.*;
 
 /**
  * CodeEditor is an editor that can highlight text regions by doing basic syntax analyzing This
@@ -163,6 +164,8 @@ public class CodeEditor extends View
         TextAnalyzer.Callback,
         FormatThread.FormatResultReceiver,
         LineRemoveListener {
+
+  private PowerModeEffectManager mPowerModeEffectManager;
 
   /** The default size when creating the editor object. Unit is sp. */
   public static final int DEFAULT_TEXT_SIZE = 18;
@@ -739,7 +742,7 @@ public class CodeEditor extends View
   private void initialize() {
     Log.i(LOG_TAG, COPYRIGHT);
     helper = new CommentHelper(this);
-
+    mPowerModeEffectManager = new PowerModeEffectManager(this);
     mProps = new DirectAccessProps();
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -845,6 +848,7 @@ public class CodeEditor extends View
     setCursorAnimationEnabled(true);
     setEditable(true);
     setLineNumberEnabled(true);
+    setPowerModeEnabled(false);
     setAutoCompletionOnComposing(true);
     setAllowFullscreen(false);
     setHardwareAcceleratedDrawAllowed(true);
@@ -862,6 +866,42 @@ public class CodeEditor extends View
     if (getContext() instanceof ContextThemeWrapper) {
       setEdgeEffectColor(ThemeUtils.getColorPrimary((ContextThemeWrapper) getContext()));
     }
+  }
+
+  /**
+   * Get the PowerMode effect manager for this editor
+   *
+   * @return The PowerMode effect manager instance
+   */
+  public PowerModeEffectManager getPowerModeEffectManager() {
+    return mPowerModeEffectManager;
+  }
+
+  /**
+   * Enable or disable PowerMode effects
+   *
+   * @param enabled true to enable effects, false to disable
+   */
+  public void setPowerModeEnabled(boolean enabled) {
+    if (enabled) {
+        if (mPowerModeEffectManager == null) {
+            mPowerModeEffectManager = new PowerModeEffectManager(this);
+        }
+    } else {
+        if (mPowerModeEffectManager != null) {
+            mPowerModeEffectManager.clearEffects();
+        }
+    }
+    invalidate();
+   }
+
+  /**
+   * Check if PowerMode effects are enabled
+   *
+   * @return true if effects are enabled
+   */
+  public boolean isPowerModeEnabled() {
+    return mPowerModeEffectManager != null;
   }
 
   private void invalidateHwRenderer() {
@@ -1471,7 +1511,9 @@ public class CodeEditor extends View
       mPaint.setTextAlign(Paint.Align.LEFT);
       return;
     }
-
+    if (mPowerModeEffectManager != null) {
+      mPowerModeEffectManager.drawEffects(canvas);
+    }
     for (Inlay inlay : inlays) {
       drawInlay(canvas, inlay);
     }
@@ -2957,8 +2999,7 @@ public class CodeEditor extends View
             offsetX,
             baseline,
             line);
-        
-            
+
       } else {
         if (startIndex <= selectionStart) {
           if (endIndex >= selectionEnd) {
@@ -2974,7 +3015,7 @@ public class CodeEditor extends View
                 offsetX,
                 baseline,
                 line);
-            
+
             float deltaX = measureText(mBuffer, startIndex, selectionStart - startIndex, line);
             // selectionStart - selectionEnd
             mPaint.setColor(mColors.getColor(EditorColorScheme.TEXT_SELECTED));
@@ -2988,7 +3029,7 @@ public class CodeEditor extends View
                 offsetX + deltaX,
                 baseline,
                 line);
-            
+
             deltaX += measureText(mBuffer, selectionStart, selectionEnd - selectionStart, line);
             // selectionEnd - endIndex
             mPaint.setColor(color);
@@ -3002,7 +3043,7 @@ public class CodeEditor extends View
                 offsetX + deltaX,
                 baseline,
                 line);
-            
+
           } else {
             // Two regions
             // startIndex - selectionStart
@@ -3016,7 +3057,7 @@ public class CodeEditor extends View
                 offsetX,
                 baseline,
                 line);
-            
+
             mPaint.setColor(mColors.getColor(EditorColorScheme.TEXT_SELECTED));
             drawText(
                 canvas,
@@ -3028,7 +3069,6 @@ public class CodeEditor extends View
                 offsetX + measureText(mBuffer, startIndex, selectionStart - startIndex, line),
                 baseline,
                 line);
-            
           }
         } else {
           // selectionEnd > startIndex > selectionStart
@@ -3045,7 +3085,7 @@ public class CodeEditor extends View
                 offsetX + measureText(mBuffer, startIndex, selectionEnd - startIndex, line),
                 baseline,
                 line);
-            
+
             mPaint.setColor(mColors.getColor(EditorColorScheme.TEXT_SELECTED));
             drawText(
                 canvas,
@@ -3057,8 +3097,7 @@ public class CodeEditor extends View
                 offsetX,
                 baseline,
                 line);
-            
-        
+
           } else {
             // One region
             mPaint.setColor(mColors.getColor(EditorColorScheme.TEXT_SELECTED));
@@ -3664,6 +3703,7 @@ public class CodeEditor extends View
       canvas.drawText(src, st, end - st, offX, offY, mPaint);
     }
   }
+
   @UnsupportedUserUsage
   public float[] findFirstVisibleChar(
       float target, int start, int end, ContentLine line, int lineNumber) {
@@ -5351,7 +5391,7 @@ public class CodeEditor extends View
     invalidateHwRenderer();
     invalidate();
   }
-  
+
   /**
    * Set the editor's text size in sp unit. This value must be > 0
    *
@@ -5910,8 +5950,8 @@ public class CodeEditor extends View
       case KeyEvent.KEYCODE_SPACE:
         if (isEditable()) {
           getCursor().onCommitText(" ");
-         // notifyExternalCursorChange();
-         notifyIMEExternalCursorChange(); 
+          // notifyExternalCursorChange();
+          notifyIMEExternalCursorChange();
         }
 
         return true;
@@ -5946,9 +5986,9 @@ public class CodeEditor extends View
                 redo();
               }
               return true;
-           case KeyEvent.KEYCODE_F:
-        formatCodeAsync();
-        return true;
+            case KeyEvent.KEYCODE_F:
+              formatCodeAsync();
+              return true;
             case KeyEvent.KEYCODE_D:
               if (isEditable()) {
                 setDuplicateLine();
@@ -6094,6 +6134,9 @@ public class CodeEditor extends View
     super.onDetachedFromWindow();
     mCursorBlink.valid = false;
     removeCallbacks(mCursorBlink);
+    if (mPowerModeEffectManager != null) {
+      mPowerModeEffectManager.clearEffects();
+    }
   }
 
   @Override
@@ -6124,6 +6167,9 @@ public class CodeEditor extends View
     updateTimestamp();
 
     // save.OnStart(this);
+    if (mPowerModeEffectManager != null && insertedContent.length() > 0) {
+      mPowerModeEffectManager.spawnEffectAtCursor();
+    }
     for (int i = startLine; i <= endLine && i < getLineCount(); i++) {
       mText.getLine(i).widthCache = null;
     }

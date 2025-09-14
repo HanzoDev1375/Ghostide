@@ -153,4 +153,23 @@
     <string name="menu_about">Sobre</string>
     <string name="menu_store">Loja</string>
     <string name="menu_exit">Sair</string>
+    <string name="particle">Partícula</string>
+    <string name="lightning">Relâmpago</string>
+    <string name="flame">Chama</string>
+    <string name="spark">Faísca</string>
+    <string name="rain">Chuva</string>
+    <string name="magic">Magia</string>
+    <string name="none">Nenhum</string>
+    <string name="explosion">Explosão</string>
+    <string name="custom_theme_terminal">Terminal de Tema Personalizado</string>
+    <string name="select_property_theme">Selecionar tema de propriedade</string>
+    <string name="custom_python_code">Script Personalizado do Terminal</string>
+    <string name="type_python_script">Digite dir script python..</string>
+    <string name="custom_char_editor">Editor de Caracteres Personalizado</string>
+    <string name="select_char_name">Selecionar nome de caractere Como 👻</string>
+    <string name="custom_image_background">Plano de Fundo de Imagem Personalizada do Editor</string>
+    <string name="select_dir_image">Selecionar Dir Imagem</string>
+    <string name="select_icon_app">Selecionar ícone do aplicativo</string>
+<string name="set_custom_icon_message">Você pode definir um ícone personalizado do aplicativo</string>
+
 </resources>
