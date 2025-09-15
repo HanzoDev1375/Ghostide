@@ -211,6 +211,11 @@
     <string name="magic">Magic</string>
     <string name="none">None</string>
     <string name="explosion">Explosion</string>
+    <string name="bubbles">Bubbles</string>
+    <string name="neon">Neon</string>
+    <string name="glitch">Glitch</string>
+    <string name="galaxy">Galaxy</string>
+    <string name="typing">Typing</string>
     <string name="custom_theme_terminal">Custom Theme Terminal</string>
     <string name="select_property_theme">Select Property theme</string>
     <string name="custom_python_code">Custom Script From Terminal</string>
