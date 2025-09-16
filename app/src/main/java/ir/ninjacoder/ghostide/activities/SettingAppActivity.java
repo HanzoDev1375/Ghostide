@@ -684,7 +684,7 @@ public class SettingAppActivity extends BaseCompat {
         imageview1.setImageResource(0);
       }
       if (_position == 8) {
-        textview1.setText(getString(R.string.backgroundimageeditor));
+        textview1.setText(getString(R.string.glow_effect));
         _view.setOnClickListener(v -> showEF());
         imageview1.setImageResource(0);
       }

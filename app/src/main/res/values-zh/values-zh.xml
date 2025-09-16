@@ -146,4 +146,5 @@
     <string name="select_dir_image">选择目录图像</string>
     <string name="select_icon_app">选择应用图标</string>
     <string name="set_custom_icon_message">您可以从应用设置自定义图标</string>
+    <string name="glow_effect">发光效果</string>
 </resources>

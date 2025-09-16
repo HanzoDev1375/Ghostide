@@ -139,4 +139,5 @@
     <string name="typing">در حال تایپ</string>
     <string name="select_icon_app">انتخاب آیکون برنامه</string>
     <string name="set_custom_icon_message">میتوانید آیکون سفارشی از برنامه تنظیم کنید</string>
+    <string name="glow_effect">افکت درخشان</string>
 </resources>

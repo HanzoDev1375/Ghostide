@@ -12,8 +12,8 @@ android {
         applicationId "ir.ninjacoder.ghostide"
         minSdk 26
         targetSdk 35
-        versionCode 35
-        versionName "2.0.3"
+        versionCode 36
+        versionName "2.0.4"
         vectorDrawables {
             useSupportLibrary true
         }
@@ -51,7 +51,7 @@ android {
         exclude "plugin.xml"
         exclude "plugin.properties"
         exclude "baksmali.properties"
-		exclude "META-INF/buildinfo.xml"
+	    	exclude "META-INF/buildinfo.xml"
     }
     lintOptions {
         checkReleaseBuilds false

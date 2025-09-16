@@ -146,5 +146,5 @@
     <string name="select_dir_image">डिर इमेज चुनें</string>
     <string name="select_icon_app">ऐप आइकन चुनें</string>
     <string name="set_custom_icon_message">आप ऐप से कस्टम आइकन सेट कर सकते हैं</string>
-
+    <string name="glow_effect">ग्लो इफेक्ट</string>
 </resources>

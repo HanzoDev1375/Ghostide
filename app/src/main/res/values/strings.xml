@@ -226,4 +226,5 @@
     <string name="select_dir_image">Select Dir Image</string>
     <string name="select_icon_app">Select icon app</string>
     <string name="set_custom_icon_message">You can set Custom icon from app</string>
+    <string name="glow_effect">Glow Effect</string>
 </resources>

@@ -337,7 +337,7 @@ public class PowerModeEffectManager {
   }
 
   private void spawnRain(float x, float y) {
-    int count = (int) (15 * effectIntensity);
+    int count = (int) (20 * effectIntensity);
     for (int i = 0; i < count; i++) {
       float angle = (float) Math.toRadians(75 + random.nextInt(10));
       float speed = random.nextFloat() * 25 * effectIntensity + 15;
@@ -428,7 +428,7 @@ public class PowerModeEffectManager {
   }
 
   private void spawnBubbles(float x, float y) {
-    int count = (int) (8 * effectIntensity);
+    int count = (int) (13 * effectIntensity);
     for (int i = 0; i < count; i++) {
       float dx = (random.nextFloat() - 0.5f) * 2 * effectIntensity;
       float dy = -random.nextFloat() * 6 * effectIntensity - 2;
@@ -444,7 +444,7 @@ public class PowerModeEffectManager {
   }
 
   private void spawnNeonEffect(float x, float y) {
-    int count = (int) (12 * effectIntensity);
+    int count = (int) (15 * effectIntensity);
     for (int i = 0; i < count; i++) {
       float angle = random.nextFloat() * (float) Math.PI * 2;
       float speed = random.nextFloat() * 4 * effectIntensity + 1;
@@ -474,7 +474,7 @@ public class PowerModeEffectManager {
   }
 
   private void spawnGlitchEffect(float x, float y) {
-    int count = (int) (5 * effectIntensity);
+    int count = (int) (10 * effectIntensity);
     for (int i = 0; i < count; i++) {
       float dx = (random.nextFloat() - 0.5f) * 10 * effectIntensity;
       float dy = (random.nextFloat() - 0.5f) * 10 * effectIntensity;
@@ -528,7 +528,7 @@ public class PowerModeEffectManager {
   }
 
   private void spawnTypingEffect(float x, float y) {
-    int count = (int) (5 * effectIntensity);
+    int count = (int) (10 * effectIntensity);
     for (int i = 0; i < count; i++) {
       float dx = (random.nextFloat() - 0.5f) * 3 * effectIntensity;
       float dy = -random.nextFloat() * 5 * effectIntensity - 2;

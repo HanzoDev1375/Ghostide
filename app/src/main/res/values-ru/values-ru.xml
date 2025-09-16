@@ -146,5 +146,5 @@
     <string name="select_dir_image">Выбрать Dir изображения</string>
     <string name="select_icon_app">Выбрать иконку приложения</string>
     <string name="set_custom_icon_message">Вы можете установить пользовательскую иконку из приложения</string>
-
+    <string name="glow_effect">Эффект Свечения</string>
 </resources>
