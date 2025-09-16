@@ -131,6 +131,11 @@
     <string name="magic">Sehr</string>
     <string name="none">Yo q</string>
     <string name="explosion">Portlash</string>
+    <string name="bubbles">Pufakchalar</string>
+    <string name="neon">Neon</string>
+    <string name="glitch">Xato</string>
+    <string name="galaxy">Galaktika</string>
+    <string name="typing">Yozish</string>
     <string name="custom_theme_terminal">Maxsus Mavzu Terminali</string>
     <string name="select_property_theme">Xususiyat mavzusini tanlang</string>
     <string name="custom_python_code">Terminaldan Maxsus Skript</string>

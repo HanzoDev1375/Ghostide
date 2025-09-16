@@ -131,6 +131,11 @@
     <string name="magic">जादू</string>
     <string name="none">कोई नहीं</string>
     <string name="explosion">विस्फोट</string>
+    <string name="bubbles">बुलबुले</string>
+    <string name="neon">नियोन</string>
+    <string name="glitch">गड़बड़</string>
+    <string name="galaxy">आकाशगंगा</string>
+    <string name="typing">टाइपिंग</string>
     <string name="custom_theme_terminal">कस्टम थीम टर्मिनल</string>
     <string name="select_property_theme">प्रॉपर्टी थीम चुनें</string>
     <string name="custom_python_code">टर्मिनल से कस्टम स्क्रिप्ट</string>

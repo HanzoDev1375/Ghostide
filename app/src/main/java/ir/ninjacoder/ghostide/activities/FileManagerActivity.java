@@ -453,9 +453,9 @@ public class FileManagerActivity extends BaseCompat
     copypath =
         new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
     GradientDrawable u = new GradientDrawable();
-    u.setColor(MaterialColors.getColor(this,ObjectUtils.Back,0));
+    u.setColor(MaterialColors.getColor(this, ObjectUtils.Back, 0));
     u.setCornerRadius(25);
-    u.setStroke(1, MaterialColors.getColor(this,ObjectUtils.TvColor,0));
+    u.setStroke(1, MaterialColors.getColor(this, ObjectUtils.TvColor, 0));
     externalspace = new SdCardUtil(this);
     if (getIntent().hasExtra("bookmarkDir")) {
       Folder = getIntent().getStringExtra("bookmarkDir");
@@ -480,20 +480,56 @@ public class FileManagerActivity extends BaseCompat
           DialogItemSheet();
         });
 
-    bind.navs.getMenu().add(0, 1, 0, getString(R.string.menu_sandisk_card)).setIcon(R.drawable.drawer_item12);
-    bind.navs.getMenu().add(0, 2, 0, getString(R.string.menu_java_code)).setIcon(R.drawable.drawer_item14);
-    bind.navs.getMenu().add(0, 3, 0, getString(R.string.menu_terminal)).setIcon(R.drawable.drawer_item13);
-    bind.navs.getMenu().add(0, 4, 0, getString(R.string.menu_settings)).setIcon(R.drawable.drawer_item15);
-    bind.navs.getMenu().add(0, 5, 0, getString(R.string.menu_logcat_reader)).setIcon(R.drawable.drawer_item6);
+    bind.navs
+        .getMenu()
+        .add(0, 1, 0, getString(R.string.menu_sandisk_card))
+        .setIcon(R.drawable.drawer_item12);
+    bind.navs
+        .getMenu()
+        .add(0, 2, 0, getString(R.string.menu_java_code))
+        .setIcon(R.drawable.drawer_item14);
+    bind.navs
+        .getMenu()
+        .add(0, 3, 0, getString(R.string.menu_terminal))
+        .setIcon(R.drawable.drawer_item13);
+    bind.navs
+        .getMenu()
+        .add(0, 4, 0, getString(R.string.menu_settings))
+        .setIcon(R.drawable.drawer_item15);
+    bind.navs
+        .getMenu()
+        .add(0, 5, 0, getString(R.string.menu_logcat_reader))
+        .setIcon(R.drawable.drawer_item6);
     bind.navs.getMenu().add(0, 6, 0, getString(R.string.menu_icon_shop)).setIcon(R.drawable.icshop);
-    bind.navs.getMenu().add(0, 7, 0, getString(R.string.menu_update_app)).setIcon(R.drawable.drawer_item8);
-    bind.navs.getMenu().add(0, 8, 0, getString(R.string.menu_plugins_manager)).setIcon(R.drawable.drawer_item5);
-    bind.navs.getMenu().add(0, 9, 0, getString(R.string.menu_backup_theme)).setIcon(R.drawable.drawer_item7);
-    bind.navs.getMenu().add(0, 10, 0, getString(R.string.menu_bookmarks_beta)).setIcon(R.drawable.drawer_item4);
-    bind.navs.getMenu().add(0, 11, 0, getString(R.string.menu_apk_manager)).setIcon(R.drawable.drawer_item3);
-    bind.navs.getMenu().add(0, 12, 0, getString(R.string.menu_about)).setIcon(R.drawable.drawer_item11);
+    bind.navs
+        .getMenu()
+        .add(0, 7, 0, getString(R.string.menu_update_app))
+        .setIcon(R.drawable.drawer_item8);
+    bind.navs
+        .getMenu()
+        .add(0, 8, 0, getString(R.string.menu_plugins_manager))
+        .setIcon(R.drawable.drawer_item5);
+    bind.navs
+        .getMenu()
+        .add(0, 9, 0, getString(R.string.menu_backup_theme))
+        .setIcon(R.drawable.drawer_item7);
+    bind.navs
+        .getMenu()
+        .add(0, 10, 0, getString(R.string.menu_bookmarks_beta))
+        .setIcon(R.drawable.drawer_item4);
+    bind.navs
+        .getMenu()
+        .add(0, 11, 0, getString(R.string.menu_apk_manager))
+        .setIcon(R.drawable.drawer_item3);
+    bind.navs
+        .getMenu()
+        .add(0, 12, 0, getString(R.string.menu_about))
+        .setIcon(R.drawable.drawer_item11);
     bind.navs.getMenu().add(0, 14, 0, getString(R.string.menu_store)).setIcon(R.drawable.shop_24);
-    bind.navs.getMenu().add(0, 13, 0, getString(R.string.menu_exit)).setIcon(R.drawable.drawer_item1);
+    bind.navs
+        .getMenu()
+        .add(0, 13, 0, getString(R.string.menu_exit))
+        .setIcon(R.drawable.drawer_item1);
 
     DrowerHandler();
   }
@@ -530,7 +566,7 @@ public class FileManagerActivity extends BaseCompat
   public void onResume() {
     super.onResume();
     RefreshTabs();
-	TypeChange();
+    TypeChange();
   }
 
   @Override
@@ -550,49 +586,47 @@ public class FileManagerActivity extends BaseCompat
 
     executor.execute(
         () -> {
-          save_path.edit().putString("path", Folder).apply();
-          list.clear();
-          files.clear();
-          folderList.clear();
-          fileList.clear();
-          FileUtil.listDir(Folder, list);
-          Collections.sort(list, String.CASE_INSENSITIVE_ORDER);
-          GetTab = Folder;
-          if (isSortFile) {
-            Collections.sort(
-                list,
-                (f1, f2) -> {
-                  if (f1 == f2) return 0;
-                  if (FileUtil.isDirectory(f1) && FileUtil.isFile(f2)) return -1;
-                  if (FileUtil.isFile(f1) && FileUtil.isDirectory(f2)) return 1;
-                  return f1.compareToIgnoreCase(f2);
-                });
-          }
-          list.forEach(
-              item -> {
-                if (FileUtil.isDirectory(item)) {
-                  folderList.add(item);
-                } else {
-                  fileList.add(item);
-                }
-              });
-          List<HashMap<String, Object>> folderItems =
-              folderList.stream()
-                  .map(
-                      item -> {
-                        HashMap<String, Object> _item = new HashMap<>();
-                        _item.put("path", item);
-                        return _item;
-                      })
-                  .collect(Collectors.toList());
-          files.addAll(folderItems);
-          fileList.forEach(
-              item -> {
-                HashMap<String, Object> _item = new HashMap<>();
-                _item.put("path", item);
-                files.add(_item);
-              });
           try {
+            save_path.edit().putString("path", Folder).apply();
+            list.clear();
+            files.clear();
+            folderList.clear();
+            fileList.clear();
+            FileUtil.listDir(Folder, list);
+            Collections.sort(list, String.CASE_INSENSITIVE_ORDER);
+            GetTab = Folder;
+            if (isSortFile) {
+              Collections.sort(
+                  list,
+                  (f1, f2) -> {
+                    if (f1 == f2) return 0;
+                    if (FileUtil.isDirectory(f1) && FileUtil.isFile(f2)) return -1;
+                    if (FileUtil.isFile(f1) && FileUtil.isDirectory(f2)) return 1;
+                    return f1.compareToIgnoreCase(f2);
+                  });
+            }
+
+            for (String item : list) {
+              if (FileUtil.isDirectory(item)) {
+                folderList.add(item);
+              } else {
+                fileList.add(item);
+              }
+            }
+            List<HashMap<String, Object>> folderItems = new ArrayList<>();
+            for (String item : folderList) {
+              HashMap<String, Object> _item = new HashMap<>();
+              _item.put("path", item);
+              folderItems.add(_item);
+            }
+            files.addAll(folderItems);
+
+            for (String item : fileList) {
+              HashMap<String, Object> _item = new HashMap<>();
+              _item.put("path", item);
+              files.add(_item);
+            }
+
           } catch (Exception e) {
             runOnUiThread(
                 () -> DataUtil.showMessage(getApplicationContext(), "Error to " + e.toString()));
@@ -785,7 +819,6 @@ public class FileManagerActivity extends BaseCompat
       }
     }
   }
-
 
   public void InstallTakesZip(int pos, String path) {
     InstallTakes(pos, path, "UnZip", "UnZip File?");
@@ -1393,7 +1426,7 @@ public class FileManagerActivity extends BaseCompat
                     }
                     runOnUiThread(
                         () -> {
-                          reLoadFile();
+                          reLoadFile(false);
                           copydir.dismiss();
                         });
                   });
@@ -1421,7 +1454,7 @@ public class FileManagerActivity extends BaseCompat
 
               @Override
               public void onResult() {
-                reLoadFile();
+                reLoadFile(false);
               }
 
               @Override
@@ -1521,7 +1554,7 @@ public class FileManagerActivity extends BaseCompat
         new TarGzExtractor(
             this,
             () -> {
-              reLoadFile();
+              reLoadFile(false);
             });
     // input    //out
     extra.extract(new File(_in), new File(_ou));
@@ -1532,7 +1565,7 @@ public class FileManagerActivity extends BaseCompat
         new ZxExtractor(
             this,
             () -> {
-              reLoadFile();
+              reLoadFile(false);
             });
     zippos.extract(new File(_in), new File(_ou));
   }

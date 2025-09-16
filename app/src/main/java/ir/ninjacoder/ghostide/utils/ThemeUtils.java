@@ -98,7 +98,7 @@ public class ThemeUtils {
         "line_number_background",
         EditorColorScheme.LINE_NUMBER_BACKGROUND,
         "#fff00000");
-    getColor(imap, editor, "whole_background", EditorColorScheme.WHOLE_BACKGROUND, "#02FFFFFF");
+  //  getColor(imap, editor, "whole_background", EditorColorScheme.WHOLE_BACKGROUND, "#02FFFFFF");
     getColor(imap, editor, "html_tag", EditorColorScheme.HTML_TAG, "#ffc84100");
     getColor(imap, editor, "literal", EditorColorScheme.LITERAL, "#ff2017");
 
@@ -192,6 +192,8 @@ public class ThemeUtils {
     editor.getColorScheme().setColor(EditorColorScheme.searchcolor5, Color.parseColor("#ACB4DA43"));
     editor.getColorScheme().setColor(EditorColorScheme.searchcolor6, Color.parseColor("#ACAA6CFB"));
     editor.getColorScheme().setColor(EditorColorScheme.LINE_NUMBER_PANEL_TEXT, Color.WHITE);
+    //برای افکت ها حتما باید ترنس پرنت باشه مگر نه افکت نمایش داده نمیشه
+    editor.getColorScheme().setColor(EditorColorScheme.WHOLE_BACKGROUND,Color.TRANSPARENT);
 
     return this;
   }

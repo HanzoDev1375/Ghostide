@@ -43,12 +43,12 @@ dependencies {
 	implementation("com.android.tools:sdklib:25.3.0") {
         exclude group: "com.intellij", module: "annotations"
     } 
-	implementation 'javax.xml.stream:stax-api:1.0-2'
+  	implementation 'javax.xml.stream:stax-api:1.0-2'
     compileOnly "org.jetbrains.kotlin:kotlin-compiler:2.1.21"
     implementation 'io.github.itsaky:nb-javac-android:17.0.0.3'
     implementation 'com.google.auto.value:auto-value-annotations:1.8.2'
     annotationProcessor 'com.google.auto.value:auto-value:1.8.2'
-	implementation 'com.google.code.gson:gson:2.13.1'
+	  implementation 'com.google.code.gson:gson:2.13.1'
     implementation 'com.google.guava:guava:31.0.1-android'
     //implementation 'com.github.Cosmic-Ide.kotlinc-android:kotlinc:2a0a6a7291'
 }

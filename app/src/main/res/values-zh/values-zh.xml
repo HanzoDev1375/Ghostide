@@ -131,6 +131,11 @@
     <string name="magic">魔法</string>
     <string name="none">无</string>
     <string name="explosion">爆炸</string>
+    <string name="bubbles">气泡</string>
+    <string name="neon">霓虹</string>
+    <string name="glitch">故障</string>
+    <string name="galaxy">银河</string>
+    <string name="typing">正在输入</string>
     <string name="custom_theme_terminal">自定义主题终端</string>
     <string name="select_property_theme">选择属性主题</string>
     <string name="custom_python_code">从终端自定义脚本</string>

@@ -131,6 +131,11 @@
     <string name="magic">Магия</string>
     <string name="none">Нет</string>
     <string name="explosion">Взрыв</string>
+    <string name="bubbles">Пузыри</string>
+    <string name="neon">Неон</string>
+    <string name="glitch">Глитч</string>
+    <string name="galaxy">Галактика</string>
+    <string name="typing">Печатает</string>
     <string name="custom_theme_terminal">Пользовательский Терминал Темы</string>
     <string name="select_property_theme">Выбрать тему свойства</string>
     <string name="custom_python_code">Пользовательский скрипт из терминала</string>

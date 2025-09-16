@@ -132,6 +132,11 @@
     <string name="magic">جادو</string>
     <string name="none">هیچ</string>
     <string name="explosion">انفجار</string>
+    <string name="bubbles">حباب ها</string>
+    <string name="neon">نئون</string>
+    <string name="glitch">نقص فنی</string>
+    <string name="galaxy">کهکشان</string>
+    <string name="typing">در حال تایپ</string>
     <string name="select_icon_app">انتخاب آیکون برنامه</string>
-    <string name="set_custom_icon_message">می‌توانید آیکون سفارشی از برنامه تنظیم کنید</string>
+    <string name="set_custom_icon_message">میتوانید آیکون سفارشی از برنامه تنظیم کنید</string>
 </resources>

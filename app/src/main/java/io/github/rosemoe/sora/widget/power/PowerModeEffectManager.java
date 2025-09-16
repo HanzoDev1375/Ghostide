@@ -107,7 +107,7 @@ public class PowerModeEffectManager {
 
   private void init() {
     particlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-  //  particlePaint.setStyle(Paint.Style.FILL);
+
     lastUpdateTime = System.currentTimeMillis();
     rainbowColors = new int[] {Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE, Color.MAGENTA};
     sparkleBitmap = createSparkleBitmap(20);
@@ -125,11 +125,10 @@ public class PowerModeEffectManager {
     int line = cursor.getLeftLine();
     int column = cursor.getLeftColumn();
 
-    // محاسبه موقعیت cursor روی صفحه
     float[] pos = editor.getLayout().getCharLayoutOffset(line, column);
-    float x = pos[1] + editor.measureTextRegionOffset() - editor.getOffsetX();
-    float y = pos[0] - editor.getOffsetY() + editor.getRowBaseline(0);
-  //  y += editor.getRowHeight() / 0.05f;
+    float x = editor.getOffset(line, column);
+    float y = editor.getRowTop(line) - editor.getOffsetY() + editor.getRowHeight() / 2f;
+
     switch (currentEffect) {
       case PARTICLE:
         spawnParticles(x, y);
@@ -180,7 +179,6 @@ public class PowerModeEffectManager {
     float deltaTime = (currentTime - lastUpdateTime) / 1000.0f;
     lastUpdateTime = currentTime;
 
-    // به روزرسانی و رسم پارتیکل‌ها
     Iterator<Particle> iterator = particles.iterator();
     while (iterator.hasNext()) {
       Particle p = iterator.next();
@@ -221,7 +219,6 @@ public class PowerModeEffectManager {
       float friction = 0.97f;
       int life = (int) (30 + random.nextInt(20) * effectIntensity);
 
-      // 30% chance for a special particle
       if (random.nextFloat() < 0.3f) {
         particles.add(
             new SparkleParticle(x, y, dx, dy, color, size, gravity, friction, life, sparkleBitmap));
@@ -303,7 +300,6 @@ public class PowerModeEffectManager {
       float friction = 0.96f;
       int life = (int) (30 + random.nextInt(30) * effectIntensity);
 
-      // 20% chance for a smoke particle
       if (random.nextFloat() < 0.2f) {
         particles.add(
             new SmokeParticle(
@@ -399,7 +395,6 @@ public class PowerModeEffectManager {
       float friction = 0.98f;
       int life = (int) (40 + random.nextInt(30) * effectIntensity);
 
-      // 15% chance for a star particle
       if (random.nextFloat() < 0.15f) {
         particles.add(
             new StarParticle(
@@ -428,7 +423,6 @@ public class PowerModeEffectManager {
       particles.add(new CircleParticle(x, y, dx, dy, color, size, gravity, friction, life));
     }
 
-    // Add shockwave effect
     particles.add(
         new ShockwaveParticle(x, y, Color.argb(150, 255, 200, 50), 100 * effectIntensity, 30));
   }
@@ -458,12 +452,12 @@ public class PowerModeEffectManager {
       float dy = (float) Math.sin(angle) * speed;
 
       int[] neonColors = {
-        Color.argb(220, 255, 50, 50), // Red
-        Color.argb(220, 50, 255, 50), // Green
-        Color.argb(220, 50, 50, 255), // Blue
-        Color.argb(220, 255, 50, 255), // Pink
-        Color.argb(220, 50, 255, 255), // Cyan
-        Color.argb(220, 255, 255, 50) // Yellow
+        Color.argb(220, 255, 50, 50),
+        Color.argb(220, 50, 255, 50),
+        Color.argb(220, 50, 50, 255),
+        Color.argb(220, 255, 50, 255),
+        Color.argb(220, 50, 255, 255),
+        Color.argb(220, 255, 255, 50)
       };
       int color = neonColors[random.nextInt(neonColors.length)];
 
@@ -475,7 +469,6 @@ public class PowerModeEffectManager {
       particles.add(new NeonParticle(x, y, dx, dy, color, size, gravity, friction, life));
     }
 
-    // Add glow effect
     particles.add(
         new RadialGlowParticle(x, y, Color.argb(100, 100, 255, 255), 80 * effectIntensity, 20));
   }
@@ -496,7 +489,6 @@ public class PowerModeEffectManager {
       particles.add(new GlitchParticle(x, y, dx, dy, color, size, life));
     }
 
-    // Screen shake for glitch effect
     if (enableScreenShake) {
       editor.postDelayed(() -> shakeScreen(5 * shakeIntensity), 10);
     }
@@ -511,10 +503,10 @@ public class PowerModeEffectManager {
       float dy = (float) Math.sin(angle) * speed;
 
       int[] galaxyColors = {
-        Color.argb(220, 150, 100, 255), // Purple
-        Color.argb(220, 100, 150, 255), // Blue
-        Color.argb(220, 255, 100, 200), // Pink
-        Color.argb(220, 100, 255, 200) // Teal
+        Color.argb(220, 150, 100, 255),
+        Color.argb(220, 100, 150, 255),
+        Color.argb(220, 255, 100, 200),
+        Color.argb(220, 100, 255, 200)
       };
       int color = galaxyColors[random.nextInt(galaxyColors.length)];
 
@@ -523,7 +515,6 @@ public class PowerModeEffectManager {
       float friction = 0.98f;
       int life = (int) (50 + random.nextInt(30) * effectIntensity);
 
-      // 25% chance for a star particle
       if (random.nextFloat() < 0.25f) {
         particles.add(
             new StarParticle(x, y, dx, dy, color, size * 2, gravity, friction, life, starBitmap));
@@ -532,7 +523,6 @@ public class PowerModeEffectManager {
       }
     }
 
-    // Add spiral effect
     particles.add(
         new SpiralParticle(x, y, Color.argb(150, 200, 150, 255), 100 * effectIntensity, 40));
   }
@@ -552,8 +542,6 @@ public class PowerModeEffectManager {
       particles.add(new CircleParticle(x, y, dx, dy, color, size, gravity, friction, life));
     }
   }
-
-  // --- متدهای کمکی ---
 
   private int getCyclingColor() {
     if (System.currentTimeMillis() - lastColorChangeTime > 100) {
@@ -599,11 +587,9 @@ public class PowerModeEffectManager {
     Canvas canvas = new Canvas(bitmap);
     Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-    // Draw sparkle shape
     paint.setColor(Color.WHITE);
     canvas.drawCircle(size / 2, size / 2, size / 4, paint);
 
-    // Draw rays
     for (int i = 0; i < 8; i++) {
       float angle = (float) (i * Math.PI / 4);
       float x1 = (float) (size / 2 + Math.cos(angle) * size / 4);

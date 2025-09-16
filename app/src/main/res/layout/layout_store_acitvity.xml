@@ -1,27 +1,30 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-     xmlns:android="http://schemas.android.com/apk/res/android"
-     xmlns:app="http://schemas.android.com/apk/res-auto"
-     android:layout_height="match_parent"
-     android:layout_width="match_parent">
-
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbarstore"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_width="match_parent" />
+    </com.google.android.material.appbar.AppBarLayout>
     <LinearLayout
-         android:layout_height="match_parent"
-         android:layout_width="match_parent"
-         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-         android:orientation="vertical">
-
-        <com.google.android.material.tabs.TabLayout
-             android:layout_height="wrap_content"
-             android:layout_width="match_parent"
-             app:tabMode="fixed"
-             android:id="@+id/tabmodel" />
-
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
         <androidx.viewpager2.widget.ViewPager2
-             android:layout_height="match_parent"
-             android:layout_width="match_parent"
-             android:id="@+id/viewpagerstore" />
-
+            android:id="@+id/viewpagerstore"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent" />
     </LinearLayout>
-
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        app:elevation="8dp"
+        app:layout_anchor="@id/viewpagerstore"
+        app:menu="@menu/store_menu" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
