@@ -260,8 +260,8 @@ public class MainActivity extends BaseCompat {
     var pyauto = getFilesDir().getAbsolutePath() + File.separator + "autocomplete.py";
     if (!FileUtil.isExistFile(pyauto)) {
       var soft = new AssetsSoft();
-      soft.copyOneFileFromAssets(
-          "autocomplete.py", getFilesDir().getAbsolutePath() + File.separator, this);
+      soft.unzipFromAssets(
+          "pythondata.zip", getFilesDir().getAbsolutePath() + File.separator, this);
     }
 
     var snippetPath = FileUtil.HOMESNIPPET;

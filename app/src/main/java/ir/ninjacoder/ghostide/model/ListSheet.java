@@ -1,5 +1,6 @@
 package ir.ninjacoder.ghostide.model;
 
+import android.widget.LinearLayout;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import android.content.Context;

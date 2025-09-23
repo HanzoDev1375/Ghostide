@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.widget.Toast;
+import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import java.io.File;
 import com.blankj.utilcode.util.ThreadUtils;
 import android.view.Gravity;
@@ -42,6 +43,9 @@ public class FontFragment extends Fragment {
   private String link =
       "https://raw.githubusercontent.com/HanzoDev1375/ghostfont/refs/heads/main/github_font.json";
   private List<Map<String, String>> listFont = new ArrayList<>();
+  private List<Map<String, String>> originalList = new ArrayList<>();
+  private String currentQuery = "";
+  private FontAd adapter;
 
   @Override
   public View onCreateView(
@@ -63,14 +67,29 @@ public class FontFragment extends Fragment {
             listFont =
                 new Gson()
                     .fromJson(response, new TypeToken<List<Map<String, String>>>() {}.getType());
+
+            // پر کردن originalList با داده‌های دریافتی
+            originalList.clear();
+            originalList.addAll(listFont);
+
             bin.rv.setLayoutManager(new GridLayoutManager(getContext(), 2));
-            bin.rv.setAdapter(new FontAd(listFont));
+            adapter = new FontAd(listFont);
+            bin.rv.setAdapter(adapter);
           }
 
           @Override
-          public void onErrorResponse(String tag, String message) {}
+          public void onErrorResponse(String tag, String message) {
+            Toast.makeText(getContext(), "خطا در دریافت فونت‌ها", Toast.LENGTH_SHORT).show();
+          }
         };
     network.startRequestNetwork(RequestNetworkController.GET, link, "", call);
+  }
+
+  public void filter(String query) {
+    currentQuery = query;
+    if (adapter != null) {
+      adapter.filter(query);
+    }
   }
 
   class FontAd extends RecyclerView.Adapter<FontAd.Holder> {
@@ -94,12 +113,37 @@ public class FontFragment extends Fragment {
     @Override
     public void onBindViewHolder(Holder holder, int pos) {
       String fontUrl = list.get(pos).get(key);
+
+      // استخراج نام فونت از URL
+      String fontName = extractFontNameFromUrl(fontUrl);
+      holder.textContent.setText(fontName);
+
       FontManager.setFontFromUrl(getContext(), holder.textContent, fontUrl);
+
+      // هایلایت کردن متن جستجو
+      ObjectUtils.setHighlightSearchText(holder.textContent, fontName, currentQuery);
 
       holder.itemView.setOnClickListener(
           v -> {
             downloadAndSaveFont(getContext(), fontUrl);
           });
+    }
+
+    public void filter(String query) {
+      list.clear();
+      if (query.isEmpty()) {
+        list.addAll(originalList);
+      } else {
+        for (Map<String, String> item : originalList) {
+          String fontUrl = item.get("font");
+          String fontName = extractFontNameFromUrl(fontUrl);
+
+          if (fontName.toLowerCase().contains(query.toLowerCase())) {
+            list.add(item);
+          }
+        }
+      }
+      notifyDataSetChanged();
     }
 
     class Holder extends RecyclerView.ViewHolder {
@@ -108,8 +152,25 @@ public class FontFragment extends Fragment {
       public Holder(LayoutFontViewBinding v) {
         super(v.getRoot());
         textContent = v.textContent;
-        
       }
+    }
+  }
+
+  // متد برای استخراج نام فونت از URL
+  private String extractFontNameFromUrl(String url) {
+    try {
+      String fileName = url.substring(url.lastIndexOf('/') + 1);
+      // حذف پسوند فایل
+      if (fileName.contains(".")) {
+        fileName = fileName.substring(0, fileName.lastIndexOf('.'));
+      }
+      // جایگزینی underline با فاصله
+      fileName = fileName.replace("_", " ");
+      // حذف اعداد و کاراکترهای خاص (اختیاری)
+      fileName = fileName.replaceAll("[0-9]", "");
+      return fileName.trim();
+    } catch (Exception e) {
+      return url; // اگر خطایی رخ داد، خود URL را برگردان
     }
   }
 

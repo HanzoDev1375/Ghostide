@@ -528,7 +528,8 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
           case HTMLLexer.LinkLiteral:
             Span span =
                 Span.obtain(
-                    column, TextStyle.makeStyle(EditorColorScheme.Ninja, 0, true, true, false));
+                    column, TextStyle.makeStyle(EditorColorScheme.Ninja,EditorColorScheme.Ninja, true, true, false));
+                    
             result.addIfNeeded(line, column, EditorColorScheme.Ninja);
             if (span != null) result.add(line, span);
             break;

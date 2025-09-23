@@ -176,21 +176,9 @@ public class KotilnAnalyzer implements CodeAnalyzer {
             break;
           case KotlinLexer.QUOTE_OPEN:
           case KotlinLexer.TRIPLE_QUOTE_OPEN:
-          case KotlinLexer.QUOTE_CLOSE:
-          case KotlinLexer.LineStrRef:
-          case KotlinLexer.LineStrText:
-          case KotlinLexer.LineStrEscapedChar:
-          case KotlinLexer.LineStrExprStart:
-          case KotlinLexer.TRIPLE_QUOTE_CLOSE:
-          case KotlinLexer.MultiLineStringQuote:
-          case KotlinLexer.MultiLineStrRef:
-          case KotlinLexer.MultiLineStrText:
-          case KotlinLexer.MultiLineStrExprStart:
-            result.addIfNeeded(
-                line,
-                column,
-                TextStyle.makeStyle(EditorColorScheme.javanumber, 0, true, false, false));
-            break;
+          result.addIfNeeded(line,column,EditorColorScheme.javastring);
+          break;
+          
           case KotlinLexer.RESERVED:
           case KotlinLexer.DOT:
           case KotlinLexer.COMMA:

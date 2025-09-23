@@ -8,12 +8,30 @@
 
     <com.google.android.material.appbar.AppBarLayout
          android:layout_height="wrap_content"
-         android:layout_width="match_parent">
+         android:layout_width="match_parent"
+         android:background="?attr/colorSurface">
 
-        <com.google.android.material.appbar.MaterialToolbar
-             android:layout_height="?attr/actionBarSize"
+        <com.google.android.material.textfield.TextInputLayout
+             android:layout_height="wrap_content"
              android:layout_width="match_parent"
-             android:id="@+id/toolbarstore" />
+             app:endIconMode="clear_text"
+             app:boxCornerRadiusTopEnd="16dp"
+             app:boxCornerRadiusTopStart="16dp"
+             app:placeholderText="@string/search_file"
+             android:layout_margin="16dp"
+             app:boxBackgroundColor="?attr/colorSurfaceContainer"
+             style="@style/Widget.Material3.TextInputLayout.FilledBox"
+             app:startIconDrawable="@drawable/imgsearch"
+             android:id="@+id/toolbarstore">
+
+            <com.google.android.material.textfield.TextInputEditText
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:imeOptions="actionSearch"
+                 android:textColorHint="?android:attr/textColorSecondary"
+                 android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 

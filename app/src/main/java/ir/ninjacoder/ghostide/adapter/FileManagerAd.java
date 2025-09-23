@@ -3,7 +3,7 @@ package ir.ninjacoder.ghostide.adapter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.util.Log;
-import android.widget.CheckBox;
+
 import com.google.android.material.color.MaterialColors;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.databin.FileMaker;
@@ -15,6 +15,7 @@ import ir.ninjacoder.ghostide.glidecompat.GlideCompat;
 import ir.ninjacoder.ghostide.interfaces.FileCallBack;
 import ir.ninjacoder.ghostide.marco.FileCounter;
 import ir.ninjacoder.ghostide.marco.binder.BinderRecyclerview1;
+import ir.ninjacoder.ghostide.marco.binder.ThemeChkerErrorBinder;
 import ir.ninjacoder.ghostide.utils.AnimUtils;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.utils.FileUtil;
@@ -119,6 +120,7 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
 
       FileIconHelperPath fileIconPath = new FileIconHelperPath(myfile.toString());
       fileIconPath.bind(viewHolder.icon);
+
       if (BinderRecyclerview1.TaskVideo(myfile.toString())) {
         GlideCompat.GlideNormal(viewHolder.icon, myfile.toString());
       } else if (BinderRecyclerview1.PhotoView(myfile.toString())) {
@@ -186,6 +188,12 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
           viewHolder.icon.setColorFilter(Color.parseColor("#ff9028"));
         } else if (myfile.toString().endsWith(".tsx")) {
           viewHolder.icon.setColorFilter(Color.parseColor("#FF5DC9DC"));
+        } else if (myfile.toString().endsWith(".ghost")) {
+          if (!ThemeChkerErrorBinder.runbinder(myfile.toString())) {
+            viewHolder.icon.setColorFilter(Color.parseColor("#fff00000"));
+          } else {
+            viewHolder.icon.clearColorFilter();
+          }
         }
         // test
         JgitHelper.initbylazy(myfile, viewHolder.folderName);
@@ -286,7 +294,6 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     protected LinearLayout roots;
     protected ImageView icon;
     View getPos;
-    private CheckBox box;
 
     public VH(View view) {
       super(view);
@@ -295,8 +302,6 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
       tvTools = view.findViewById(R.id.tvTools);
       roots = view.findViewById(R.id.roots);
       icon = view.findViewById(R.id.icon);
-      box = view.findViewById(R.id.box);
-      box.setVisibility(View.GONE);
 
       roots.setOnClickListener(
           c -> {

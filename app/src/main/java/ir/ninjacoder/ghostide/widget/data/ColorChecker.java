@@ -11,6 +11,8 @@ import com.helger.css.reader.CSSReaderSettings;
 import com.helger.css.writer.CSSWriter;
 import com.helger.css.decl.CascadingStyleSheet;
 import com.helger.css.writer.CSSWriterSettings;
+import io.github.rosemoe.sora.langs.javascript.formatter.JavaScriptCodeFormatter;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.IdeEditor;
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -72,7 +74,8 @@ public class ColorChecker {
     }
     for (var jsTag : scriptTags) {
       String originaljs = jsTag.html();
-      String processedjs = JsBeautify.jsBeautify(originaljs);
+      String processedjs =
+          JavaScriptCodeFormatter.formatJavaScriptCode(GhostIdeAppLoader.getContext(), originaljs);
       String indentedjs =
           Arrays.stream(processedjs.split("\n"))
               .map(line -> " \t\t\t   " + line)
@@ -82,7 +85,7 @@ public class ColorChecker {
     return doc.outerHtml();
   }
 
-  static String getCss4(String code) {
+  public static String getCss4(String code) {
     CascadingStyleSheet aCSS = CSSReader.readFromString(code, ECSSVersion.CSS30);
     CSSWriterSettings aSettings = new CSSWriterSettings(ECSSVersion.LATEST, false);
     CSSWriter aWriter = new CSSWriter(aSettings).setWriteHeaderText(false);

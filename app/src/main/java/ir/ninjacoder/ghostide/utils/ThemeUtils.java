@@ -98,7 +98,7 @@ public class ThemeUtils {
         "line_number_background",
         EditorColorScheme.LINE_NUMBER_BACKGROUND,
         "#fff00000");
-  //  getColor(imap, editor, "whole_background", EditorColorScheme.WHOLE_BACKGROUND, "#02FFFFFF");
+    //  getColor(imap, editor, "whole_background", EditorColorScheme.WHOLE_BACKGROUND, "#02FFFFFF");
     getColor(imap, editor, "html_tag", EditorColorScheme.HTML_TAG, "#ffc84100");
     getColor(imap, editor, "literal", EditorColorScheme.LITERAL, "#ff2017");
 
@@ -192,8 +192,8 @@ public class ThemeUtils {
     editor.getColorScheme().setColor(EditorColorScheme.searchcolor5, Color.parseColor("#ACB4DA43"));
     editor.getColorScheme().setColor(EditorColorScheme.searchcolor6, Color.parseColor("#ACAA6CFB"));
     editor.getColorScheme().setColor(EditorColorScheme.LINE_NUMBER_PANEL_TEXT, Color.WHITE);
-    //برای افکت ها حتما باید ترنس پرنت باشه مگر نه افکت نمایش داده نمیشه
-    editor.getColorScheme().setColor(EditorColorScheme.WHOLE_BACKGROUND,Color.TRANSPARENT);
+    // برای افکت ها حتما باید ترنس پرنت باشه مگر نه افکت نمایش داده نمیشه
+    editor.getColorScheme().setColor(EditorColorScheme.WHOLE_BACKGROUND, Color.TRANSPARENT);
 
     return this;
   }
@@ -349,13 +349,13 @@ public class ThemeUtils {
 
   public static Map<String, String> getMapObjectTheme() {
     Map<String, String> map = new HashMap<>();
-    map.put("toolbartextcolor", "#B0BEC5");
-    map.put("block_line_current", "#4DD0E1");
-    map.put("line_divider", "#4B4B4B");
-    map.put("syombolbartextcolor", "#B0BEC5");
+    map.put("toolbartextcolor", "#ffffaab1");
+    map.put("block_line_current", "#ffe14ba7");
+    map.put("line_divider", "#ff4b0600");
+    map.put("syombolbartextcolor", "#ffc5984d");
     map.put("html_tag", "#80CBC4");
     map.put("fabcolorstroker", "#4DFFFFFF");
-    map.put("line_number", "#B0BEC5");
+    map.put("line_number", "#ffee9191");
     map.put("keyword", "#FFAB40");
     map.put("auto_comp_panel_corner", "#FF8A65");
     map.put("selection_handle", "#66BB6A");
@@ -369,30 +369,30 @@ public class ThemeUtils {
     map.put("selection_insert", "#4DB6AC");
     map.put("ninja", "#E1BEE7");
     map.put("textcolorhder", "#FFAB91");
-    map.put("tabtextcolor", "#B0BEC5");
-    map.put("block_line", "#81D4FA");
-    map.put("menubackground", "#1E1E1E");
-    map.put("literal", "#64B5F6");
-    map.put("fabbackgroundcolorcolor", "#303030");
+    map.put("tabtextcolor", "#ffff8ea2");
+    map.put("block_line", "#fffa928b");
+    map.put("menubackground", "#ff1e0004");
+    map.put("literal", "#fff6b76d");
+    map.put("fabbackgroundcolorcolor", "#ff250009");
     map.put("attribute_value", "#80DEEA");
-    map.put("tabback", "#515151");
-    map.put("textcolorforgrand", "#B0BEC5");
+    map.put("tabback", "#ff510002");
+    map.put("textcolorforgrand", "#ffffaabf");
     map.put("imagecolor", "#B0BEC5");
     map.put("text_normal", "#FFFFFF");
     map.put("attribute_name", "#64B5F6");
     map.put("print", "#FF8A65");
     map.put("operator", "#FFB74D");
-    map.put("current_line", "#37474F");
+    map.put("current_line", "#52240005");
     map.put("whole_background", "#1E1E1E");
-    map.put("backgroundcolorlinear", "#1c1c1c");
-    map.put("fabimagecolor", "#B0BEC5");
-    map.put("line_number_background", "#1E1E1E");
+    map.put("backgroundcolorlinear", "#1B1110");
+    map.put("fabimagecolor", "#ffff9c9c");
+    map.put("line_number_background", "#00000000");
     map.put("textcolorigor", "#F06292");
-    map.put("textcolorinier", "#EF5350");
+    map.put("textcolorinier", "#ffef929f");
     map.put("javakeyword", "#FFAC80");
     map.put("javaoprator", "#90CAF9");
     map.put("javafun", "#FFCC60");
-    map.put("javafield", "#FFAB60");
+    map.put("javafield", "#E8BF6A");
     map.put("javatype", "#64B5F6");
     map.put("javaparament", "#FFAB40");
     map.put("javanumber", "#A5D6A7");
@@ -400,7 +400,7 @@ public class ThemeUtils {
     map.put("htmltag", "#FFAB49");
     map.put("htmlattr", "#FFAB80");
     map.put("htmlattrname", "#64B5F6");
-    map.put("htmlstr", "#FFCC80");
+    map.put("htmlstr", "#E8BF6A");
     map.put("csskeyword", "#81D4FA");
     map.put("htmlsymbol", "#FF33A8");
     map.put("htmlblockhash", "#FF5252");
@@ -420,25 +420,25 @@ public class ThemeUtils {
     map.put("pycolormatch4", "#FFC300");
     map.put("phpkeyword", "#FF5733");
     map.put("phpattr", "#33FF57");
-    map.put("phpsymbol", "#3357FF");
+    map.put("phpsymbol", "#09EB9E");
     map.put("phphtmlattr", "#F0E68C");
     map.put("phphtmlkeyword", "#FF33F6");
     map.put("phpcolormatch1", "#FF8C00");
     map.put("phpcolormatch2", "#00FA9A");
-    map.put("phpcolormatch3", "#8A2BE2");
+    map.put("phpcolormatch3", "#FF8282");
     map.put("phpcolormatch4", "#FFD700");
     map.put("phpcolormatch5", "#FF69B4");
     map.put("phpcolormatch6", "#20B2AA");
     map.put("tskeyword", "#FF5733");
-    map.put("tsattr", "#33FF57");
+    map.put("tsattr", "#ffff8e95");
     map.put("tssymbols", "#3357FF");
     map.put("tscolormatch1", "#F5D04D");
     map.put("tscolormatch2", "#D04DF5");
     map.put("tscolormatch3", "#FFDA44");
     map.put("tscolormatch4", "#1FA3A5");
     map.put("tscolormatch5", "#ACAA6C");
-    map.put("tscolormatch6", "#B06DFF");
-    map.put("tscolormatch7", "#FF7E1A");
+    map.put("tscolormatch6", "#fff3ff9c");
+    map.put("tscolormatch7", "#ffff80d3");
     map.put("breaklevel1", "#FF5733");
     map.put("breaklevel2", "#33FF57");
     map.put("breaklevel3", "#3357FF");
@@ -446,11 +446,11 @@ public class ThemeUtils {
     map.put("breaklevel5", "#FFF733");
     map.put("breaklevel6", "#FF8C33");
     map.put("breaklevel7", "#33FFF5");
-    map.put("menuPosBackground", "#ffffff");
-    map.put("menuPosTextColor", "#000000");
+    map.put("menuPosBackground", "#ff1e0100");
+    map.put("menuPosTextColor", "#ffff8ea2");
     map.put("breaklevel8", "#F1C40F");
-    map.put("javakeywordoprator", "#340178");
-    map.put("navstatusbar", "#ff000000");
+    map.put("javakeywordoprator", "#E8B25B");
+    map.put("navstatusbar", "#1B1110");
     return map;
   }
 
@@ -524,110 +524,110 @@ public class ThemeUtils {
 
   public static String themeAsString() {
     return """
-{
-    "javastring": "#89BA62",
-    "javafield": "#DF6C75",
-    "tabimagecolorfilter": "#B0BEC5",
-    "fabbackgroundcolorcolor": "#FF1A2144",
-    "backgroundcolorlinear": "#1A1B20",
-    "htmlstr": "#FFCC80",
-    "operator": "#FFB74D",
-    "pysymbol": "#64B5F6",
-    "pykeyword": "#FFAB40",
-    "text_normal": "#FFFFFF",
-    "line_number_background": "#0E1C1C1C",
-    "selection_handle": "#66BB6A",
-    "phpkeyword": "#FFB800",
-    "tabback": "#282c34",
-    "javafun": "#5DA6E2",
-    "keyword": "#ffff24c8",
-    "jsfun": "#FFCC80",
-    "auto_comp_panel_corner": "#FF8C00",
-    "pycolormatch3": "#FF33FF",
-    "pycolormatch4": "#FFC300",
-    "htmltag": "#FFAB49",
-    "phphtmlkeyword": "#41FFE4",
-    "htmlattrname": "#64B5F6",
-    "pycolormatch1": "#FFFF33",
-    "phpsymbol": "#ACFF70",
-    "pycolormatch2": "#33FFFF",
-    "javaparament": "#D19A66",
-    "identifier_name": "#FF9E80",
-    "ninja": "#E1BEE7",
-    "toolbarcolor": "#121212",
-    "pynumber": "#A5D6A7",
-    "javatype": "#E0BD75",
-    "fabcolorstroker": "#4DFFFFFF",
-    "htmlblocknormal": "#FF4081",
-    "auto_comp_panel_bg": "#000000",
-    "tabtextcolor": "#dcdcdc",
-    "csskeyword": "#81D4FA",
-    "block_line": "#81D4FA",
-    "htmlblockhash": "#FF5252",
-    "literal": "#64B5F6",
-    "toolbartextcolor": "#B0BEC5",
-    "phphtmlattr": "#F0E68C",
-    "line_number": "#B0BEC5",
-    "block_line_current": "#4DD0E1",
-    "selection_insert": "#4DB6AC",
-    "whole_background": "#0E1C1C1C",
-    "attribute_name": "#50DAFF",
-    "textcolorigor": "#F06292",
-    "javanumber": "#89BA62",
-    "menubackground": "#1E1E1E",
-    "jsattr": "#64B5F6",
-    "imagecolor": "#B0BEC5",
-    "javakeyword": "#B972D0",
-    "phpcolormatch3": "#E1C1FF",
-    "phpcolormatch2": "#A7B8F3",
-    "phpcolormatch5": "#E89CC2",
-    "phpattr": "#FFE333",
-    "phpcolormatch4": "#FFD700",
-    "jsstring": "#FFCC80",
-    "phpcolormatch6": "#C5FFA3",
-    "line_divider": "#00000000",
-    "fabimagecolor": "#B0BEC5",
-    "html_tag": "#80CBC4",
-    "textcolorforgrand": "#B0BEC5",
-    "javaoprator": "#E0BD75",
-    "phpcolormatch1": "#E98989",
-    "current_line": "#37474F",
-    "htmlattr": "#FFAB80",
-    "htmlsymbol": "#FF33A8",
-    "pystring": "#FFCC80",
-    "print": "#FF8A65",
-    "jskeyword": "#FFAB40",
-    "textcolorhder": "#FFAB91",
-    "syombolbartextcolor": "#B0BEC5",
-    "displaytextcolortab": "#dcdcdc",
-    "comment": "#757575",
-    "attribute_value": "#33D77E",
-    "textcolorinier": "#EF5350",
-    "jsoprator": "#FF5252",
-    "non_printable_char": "#90CAF9",
-    "tskeyword": "#84FFFE",
-    "tsattr": "#FF7979",
-    "tssymbols": "#91FFDA",
-    "tscolormatch1": "#FFBC88",
-    "tscolormatch2": "#99D0FF",
-    "tscolormatch3": "#FFDA44",
-    "tscolormatch4": "#1FA3A5",
-    "tscolormatch5": "#FFFB8C",
-    "tscolormatch6": "#C1AEFF",
-    "tscolormatch7": "#FFCEFF7F",
-    "breaklevel1": "#FF5733",
-    "breaklevel2": "#33FF57",
-    "breaklevel3": "#FF33A7",
-    "breaklevel4": "#3357FF",
-    "breaklevel5": "#FFD733",
-    "breaklevel6": "#FF33FF",
-    "breaklevel7": "#57FF33",
-    "breaklevel8": "#FFD733",
-    "javakeywordoprator": "#FF8C33",
-    "menuPosBackground": "#ffffff",
-    "menuPosTextColor": "#000000",
-	"navstatusbar":"#ff000000"
-}
+    {
+      "javafield": "#E8BF6A",
+      "tabimagecolorfilter": "#B0BEC5",
+      "fabbackgroundcolorcolor": "#ff250009",
+      "htmlstr": "#E8BF6A",
+      "pykeyword": "#FFAB40",
+      "text_normal": "#FFFFFF",
+      "tskeyword": "#FF5733",
+      "line_number_background": "#00000000",
+      "auto_comp_panel_corner": "#FF8A65",
+      "menuPosBackground": "#ff1e0100",
+      "breaklevel8": "#F1C40F",
+      "breaklevel7": "#33FFF5",
+      "phpsymbol": "#09EB9E",
+      "breaklevel6": "#FF8C33",
+      "breaklevel5": "#FFF733",
+      "breaklevel4": "#FF33A1",
+      "breaklevel3": "#3357FF",
+      "breaklevel2": "#33FF57",
+      "breaklevel1": "#FF5733",
+      "toolbarcolor": "#121212",
+      "pynumber": "#A5D6A7",
+      "javatype": "#64B5F6",
+      "auto_comp_panel_bg": "#263238",
+      "tssymbols": "#3357FF",
+      "csskeyword": "#81D4FA",
+      "literal": "#fff6b76d",
+      "toolbartextcolor": "#ffffaab1",
+      "phphtmlattr": "#F0E68C",
+      "line_number": "#ffee9191",
+      "block_line_current": "#ffe14ba7",
+      "tscolormatch3": "#FFDA44",
+      "whole_background": "#1E1E1E",
+      "tscolormatch4": "#1FA3A5",
+      "attribute_name": "#64B5F6",
+      "tscolormatch1": "#F5D04D",
+      "tscolormatch2": "#D04DF5",
+      "tscolormatch7": "#ffff80d3",
+      "javanumber": "#A5D6A7",
+      "javakeywordoprator": "#E8B25B",
+      "menubackground": "#ff1e0004",
+      "tscolormatch5": "#ACAA6C",
+      "javakeyword": "#FFAC80",
+      "tscolormatch6": "#fff3ff9c",
+      "phpcolormatch3": "#FF8282",
+      "phpcolormatch2": "#00FA9A",
+      "phpcolormatch5": "#FF69B4",
+      "phpcolormatch4": "#FFD700",
+      "phpcolormatch6": "#20B2AA",
+      "line_divider": "#ff4b0600",
+      "fabimagecolor": "#ffff9c9c",
+      "textcolorforgrand": "#ffffaabf",
+      "navstatusbar": "#1B1110",
+      "phpcolormatch1": "#FF8C00",
+      "current_line": "#52240005",
+      "pystring": "#FFCC80",
+      "jskeyword": "#FFAB40",
+      "textcolorinier": "#ffef929f",
+      "javastring": "#E0E0E0",
+      "tsattr": "#ffff8e95",
+      "backgroundcolorlinear": "#1B1110",
+      "operator": "#FFB74D",
+      "pysymbol": "#64B5F6",
+      "selection_handle": "#66BB6A",
+      "phpkeyword": "#FF5733",
+      "tabback": "#ff510002",
+      "javafun": "#FFCC60",
+      "keyword": "#FFAB40",
+      "jsfun": "#FFCC80",
+      "pycolormatch3": "#FF33FF",
+      "pycolormatch4": "#FFC300",
+      "htmltag": "#FFAB49",
+      "phphtmlkeyword": "#FF33F6",
+      "htmlattrname": "#64B5F6",
+      "pycolormatch1": "#FFFF33",
+      "pycolormatch2": "#33FFFF",
+      "javaparament": "#FFAB40",
+      "identifier_name": "#FF9E80",
+      "ninja": "#E1BEE7",
+      "fabcolorstroker": "#4DFFFFFF",
+      "htmlblocknormal": "#FF4081",
+      "tabtextcolor": "#ffff8ea2",
+      "block_line": "#fffa928b",
+      "htmlblockhash": "#FF5252",
+      "menuPosTextColor": "#ffff8ea2",
+      "selection_insert": "#4DB6AC",
+      "textcolorigor": "#F06292",
+      "jsattr": "#64B5F6",
+      "imagecolor": "#B0BEC5",
+      "phpattr": "#33FF57",
+      "jsstring": "#FFCC80",
+      "html_tag": "#80CBC4",
+      "javaoprator": "#90CAF9",
+      "htmlattr": "#FFAB80",
+      "htmlsymbol": "#FF33A8",
+      "print": "#FF8A65",
+      "textcolorhder": "#FFAB91",
+      "syombolbartextcolor": "#ffc5984d",
+      "displaytextcolortab": "#FFD54F",
+      "comment": "#757575",
+      "attribute_value": "#80DEEA",
+      "jsoprator": "#FF5252",
+      "non_printable_char": "#90CAF9"
+    }
     """;
   }
 }

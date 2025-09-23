@@ -227,4 +227,15 @@
     <string name="select_icon_app">Select icon app</string>
     <string name="set_custom_icon_message">You can set Custom icon from app</string>
     <string name="glow_effect">Glow Effect</string>
+    <string name="no_methods_found">No methods found in code</string>
+    <string name="code_parsing_error">Code parsing error: %s</string>
+    <string name="select_method_for_overload">Select method to overload</string>
+    <string name="method_has_no_parameters">This method has no parameters</string>
+    <string name="select_parameters_for_overload">Select parameters for overload: %s</string>
+    <string name="select_at_least_one_parameter">Please select at least one parameter</string>
+    <string name="modify_selected_parameters">Modify selected parameters</string>
+    <string name="type">Type</string>
+    <string name="name">Name</string>
+    <string name="overload_created_successfully">Overloaded method created successfully</string>
+    <string name="overload_creation_error">Error creating overload: %s</string>
 </resources>

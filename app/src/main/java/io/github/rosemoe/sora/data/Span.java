@@ -172,7 +172,8 @@ public class Span {
     problemFlags = column = underlineColor = backgroundColorMy = 0;
     style = 0;
     alpha = 1;
-    drawminiText = "";
+    alphacompat = 0;
+    drawminiText = null;
     renderer = null;
     return cacheQueue.offer(this);
   }
@@ -199,8 +200,9 @@ public class Span {
         && underlineColor == span.underlineColor
         && problemFlags == span.problemFlags
         && alpha == span.alpha
+        && alphacompat == span.alphacompat
         && backgroundColorMy == span.backgroundColorMy
-        && drawminiText == span.drawminiText
+        && Objects.equals(drawminiText, span.drawminiText)
         && Objects.equals(renderer, span.renderer);
   }
 
@@ -211,7 +213,9 @@ public class Span {
     hash = 31 * hash + underlineColor;
     hash = 31 * hash + backgroundColorMy;
     hash = 31 * hash + alpha;
+    hash = 31 * hash + alphacompat;
     hash = 31 * hash + problemFlags;
+    hash = 31 * hash + (drawminiText == null ? 0 : drawminiText.hashCode());
     hash = 31 * hash + (renderer == null ? 0 : renderer.hashCode());
     return hash;
   }
@@ -224,17 +228,24 @@ public class Span {
         + column
         + ", style="
         + style
+        + ", underline="
+        + isUnderline()
         + ", underlineColor="
         + underlineColor
-        + ", backgroundColorMy = "
+        + ", backgroundColorMy="
         + backgroundColorMy
         + ", problemFlags="
         + problemFlags
+        + ", alpha="
+        + alpha
+        + ", alphacompat="
+        + alphacompat
+        + ", drawminiText='"
+        + drawminiText
+        + '\''
         + ", renderer="
         + renderer
-        + ", alpha ="
-        + alpha
-        + "}";
+        + '}';
   }
 
   public int getBackgroundColorMy() {
@@ -269,7 +280,16 @@ public class Span {
     this.drawminiText = drawminiText;
   }
 
-  
+  public void setUnderline(boolean underline) {
+    if (underline) {
+      style |= TextStyle.UNDERLINE_BIT;
+    } else {
+      style &= ~TextStyle.UNDERLINE_BIT;
+    }
+  }
 
-  
+  public boolean isUnderline() {
+    return TextStyle.isUnderline(style);
+  }
+
 }

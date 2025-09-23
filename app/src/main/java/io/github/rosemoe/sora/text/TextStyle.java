@@ -29,17 +29,16 @@ package io.github.rosemoe.sora.text;
  * @author Rosemoe
  */
 public class TextStyle {
-
   public static final int COLOR_ID_BIT_COUNT = 19;
   public static final long FOREGROUND_BITS = ((1 << (COLOR_ID_BIT_COUNT)) - 1);
   public static final long BACKGROUND_BITS = FOREGROUND_BITS << COLOR_ID_BIT_COUNT;
   public static final long BOLD_BIT = 1L << (COLOR_ID_BIT_COUNT * 2);
   public static final long ITALICS_BIT = BOLD_BIT << 1;
   public static final long STRIKETHROUGH_BIT = ITALICS_BIT << 1;
-  public static final long BELOWLINE = STRIKETHROUGH_BIT << 2;
+  public static final long UNDERLINE_BIT = STRIKETHROUGH_BIT << 1; // افزودن بیت زیر خط
+  public static final long BELOWLINE = UNDERLINE_BIT << 1;
   public static final long ShadowColor = BELOWLINE << 3;
   public static final String hexColor = "#3FFD091D";
-  
 
   /** Convenient method */
   public static long makeStyle(int foregroundColorId) {
@@ -83,6 +82,29 @@ public class TextStyle {
         + (strikeThrough ? STRIKETHROUGH_BIT : 0)
         + (blow ? BELOWLINE : 0);
   }
+
+  public static long makeStyle(
+      int foregroundColorId,
+      int backgroundColorId,
+      boolean bold,
+      boolean italic,
+      boolean strikeThrough,
+      boolean underline,
+      int fake) {
+    checkColorId(foregroundColorId);
+    checkColorId(backgroundColorId);
+    return ((long) foregroundColorId)
+        + (((long) backgroundColorId) << COLOR_ID_BIT_COUNT)
+        + (bold ? BOLD_BIT : 0)
+        + (italic ? ITALICS_BIT : 0)
+        + (strikeThrough ? STRIKETHROUGH_BIT : 0)
+        + (underline ? UNDERLINE_BIT : 0);
+  }
+
+  public static boolean isUnderline(long style) {
+    return (style & UNDERLINE_BIT) != 0;
+  }
+
   @Deprecated()
   public static long makeStyle(
       int foregroundColorId,
@@ -141,8 +163,8 @@ public class TextStyle {
           "color id must be positive and bit count is less than " + COLOR_ID_BIT_COUNT);
     }
   }
-  public static String getHexColor(){
+
+  public static String getHexColor() {
     return hexColor;
   }
-  
 }

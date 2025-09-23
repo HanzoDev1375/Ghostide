@@ -32,6 +32,23 @@ public class Css3Attr {
     scopePath("css/pseudo_classes.kj", list, prfex);
   }
 
+  private void getCssColor(List<CompletionItem> item, String prefix) {
+    try {
+      var open = GhostIdeAppLoader.getContext().getAssets().open("csscolors.kj");
+      List<DataScope> list =
+          new Gson()
+              .fromJson(new InputStreamReader(open), new TypeToken<List<DataScope>>() {}.getType());
+      list.forEach(
+          it -> {
+            if (it.getName().startsWith(prefix)) {
+              item.add(new CompletionItem(it.getName(), it.getName(), it.getDesc()));
+            }
+          });
+    } catch (Exception err) {
+
+    }
+  }
+
   private void scopePath(String assterName, List<CompletionItem> mmber, String prfex) {
     try {
       var open = GhostIdeAppLoader.getContext().getAssets().open(assterName);
@@ -41,7 +58,7 @@ public class Css3Attr {
       data.forEach(
           it -> {
             if (it.getName().startsWith(prfex)) {
-              mmber.add(new CompletionItem(it.getName(), it.getName(), it.getDesc()));
+              mmber.add(new CompletionItem(it.getName(), it.getName() + ":", it.getDesc()));
             }
           });
     } catch (Exception err) {

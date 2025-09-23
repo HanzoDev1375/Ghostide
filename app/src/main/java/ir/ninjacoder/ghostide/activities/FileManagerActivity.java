@@ -19,6 +19,7 @@ import ir.ninjacoder.ghostide.compressor.ZxExtractor;
 import ir.ninjacoder.ghostide.databin.FileMaker;
 import ir.ninjacoder.ghostide.databinding.FiledirBinding;
 import ir.ninjacoder.ghostide.marco.binder.BindJpegWall;
+import ir.ninjacoder.ghostide.marco.binder.BinderRecyclerview1;
 import ir.ninjacoder.ghostide.marco.editorface.ClassNodePaserImpl;
 import android.util.Log;
 import ir.ninjacoder.ghostide.filehelper.CreatorModule;
@@ -255,6 +256,9 @@ public class FileManagerActivity extends BaseCompat
     TypeChange();
     ThemeChaker();
     View mview = findViewById(R.id.view_filedir);
+    bind.opendraw.setOnClickListener(c ->{
+      bind.Drawer.open();
+    });
     LayoutBinder.of(mview, ObjectUtils.Back);
     var helper =
         new RecyclerViewHelper(
@@ -845,7 +849,7 @@ public class FileManagerActivity extends BaseCompat
     di.build();
   }
 
-  public void _fontpost(
+   void _fontpost(
       final ArrayList<HashMap<String, Object>> _map, final String _path, final double _pos) {
     if (_map.get((int) _pos).get(_path).toString().endsWith(".ttf")
         || _map.get((int) _pos).get(_path).toString().endsWith(".otf")) {
@@ -855,7 +859,7 @@ public class FileManagerActivity extends BaseCompat
     }
   }
 
-  public void _themeinstall(
+   void _themeinstall(
       final ArrayList<HashMap<String, Object>> _list, final double _pos, final String _str) {
     if (_list.get((int) _pos).get(_str).toString().endsWith(".aa")
         || _list.get((int) _pos).get(_str).toString().endsWith(".AA")) {
@@ -1292,7 +1296,7 @@ public class FileManagerActivity extends BaseCompat
       musicsheet.show();
       musicsheet.playMusic();
     }
-    if (staticstring.endsWith(".mp4")) {
+    if (BinderRecyclerview1.TaskVideo(staticstring)) {
       govirwFilm.setClass(getApplicationContext(), VideoViewsActivity.class);
       govirwFilm.putExtra("getPath", staticstring);
       govirwFilm.putExtra("getTitle", Uri.parse(staticstring).getLastPathSegment());

@@ -32,7 +32,11 @@ public class Css3Server {
   public Css3Server() {
     htmlconfig = new HTMLConstants();
   }
-
+  public void hot(List<CompletionItem> item,String prefix){
+    var iv= new Css3Attr();
+    iv.install(item,prefix);
+    
+  }
   public void install(List<CompletionItem> list, String prfex) {
     
   }

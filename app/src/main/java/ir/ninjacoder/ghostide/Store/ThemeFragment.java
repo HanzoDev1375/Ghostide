@@ -7,6 +7,7 @@ import androidx.annotation.MainThread;
 import androidx.recyclerview.widget.GridLayoutManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import ir.ninjacoder.ghostide.RequestNetworkController;
+import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.prograsssheet.PrograssSheet;
 import java.io.File;
 import android.view.LayoutInflater;
@@ -52,6 +53,9 @@ public class ThemeFragment extends Fragment {
   private RequestNetwork req;
   private OneRvBinding bind;
   private LayoutCustomimagepreviewBinding previewBinding;
+  private ThemeAdapter adapter;
+  private List<Map<String, String>> originalList = new ArrayList<>();
+  private String currentQuery = "";
 
   @Override
   public View onCreateView(
@@ -66,6 +70,13 @@ public class ThemeFragment extends Fragment {
     binds();
   }
 
+  public void filter(String query) {
+    currentQuery = query;
+    if (adapter != null) {
+      adapter.filter(query);
+    }
+  }
+
   void binds() {
     req = new RequestNetwork((Activity) getContext());
     var call =
@@ -76,7 +87,8 @@ public class ThemeFragment extends Fragment {
             var type = new TypeToken<List<Map<String, String>>>() {}.getType();
             listAll = new Gson().fromJson(response, type);
             bind.rv.setLayoutManager(new GridLayoutManager(getContext(), 2));
-            bind.rv.setAdapter(new ThemeAdapter(listAll));
+            adapter = new ThemeAdapter(listAll);
+            bind.rv.setAdapter(adapter);
           }
 
           @Override
@@ -88,10 +100,26 @@ public class ThemeFragment extends Fragment {
 
   private class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ThemeViewHolder> {
 
-    private final List<Map<String, String>> themes;
+    private List<Map<String, String>> filteredList;
 
     public ThemeAdapter(List<Map<String, String>> themes) {
-      this.themes = themes;
+      this.filteredList = themes;
+      originalList = new ArrayList<>(themes);
+    }
+
+    public void filter(String query) {
+      filteredList.clear();
+      if (query.isEmpty()) {
+        filteredList.addAll(originalList);
+      } else {
+        for (Map<String, String> item : originalList) {
+          String themeName = item.get(themeKey);
+          if (themeName.toLowerCase().contains(query.toLowerCase())) {
+            filteredList.add(item);
+          }
+        }
+      }
+      notifyDataSetChanged();
     }
 
     @Override
@@ -103,12 +131,17 @@ public class ThemeFragment extends Fragment {
 
     @Override
     public void onBindViewHolder(ThemeViewHolder holder, int position) {
-      holder.bind(themes.get(position));
+      Map<String, String> themeData = filteredList.get(position);
+      String themeName = getThemeName(themeData.get(themeKey));
+
+      ObjectUtils.setHighlightSearchText(holder.binding.nametheme, themeName, currentQuery);
+
+      holder.bind(filteredList.get(position));
     }
 
     @Override
     public int getItemCount() {
-      return themes.size();
+      return filteredList.size();
     }
 
     class ThemeViewHolder extends RecyclerView.ViewHolder {

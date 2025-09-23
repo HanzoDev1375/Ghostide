@@ -160,6 +160,7 @@ public class EditorAutoCompleteWindow extends EditorPopupWindow {
 
     public void applyColorScheme() {
         gd.setShape(GradientDrawable.RECTANGLE);
+        gd.setCornerRadius(55);
         gd.setColor(getThemeColor(EditorColorScheme.AUTO_COMP_PANEL_BG));
         gd.setStroke(2, getThemeColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER));
     }

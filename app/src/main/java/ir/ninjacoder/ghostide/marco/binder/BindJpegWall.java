@@ -14,7 +14,7 @@ public class BindJpegWall {
   public void bind(String staticString, BaseCompat context) {
 
     getVb = context.getSharedPreferences("getvb", Context.MODE_PRIVATE);
-    if (staticString.endsWith(".jpeg")) {
+    if (BinderRecyclerview1.PhotoView(staticString)) {
       if (getVb != null) {
         var sheet = new ListSheet();
         sheet.setSheetDialog(context);

@@ -1,6 +1,7 @@
 package com.ninjacoder.jgit;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.SpannableString;
@@ -53,6 +54,7 @@ public class GitWrapper {
   /** Log TAG */
   private static final String TAG = GitWrapper.class.getSimpleName();
 
+  private static SharedPreferences tokenSave;
   public static boolean isPro = true;
 
   /**
@@ -65,7 +67,7 @@ public class GitWrapper {
     try {
       Git git = Git.init().setDirectory(repo).call();
       Toast.makeText(context, "Git init from " + git.getRepository().getDirectory(), 2).show();
-
+      tokenSave = context.getSharedPreferences("id", Context.MODE_PRIVATE);
     } catch (GitAPIException e) {
       Log.e(TAG, e.toString());
     }
@@ -226,7 +228,7 @@ public class GitWrapper {
     }
 
     if (log != null) {
-      for (RevCommit commit : log) {
+      for (var commit : log) {
         revCommits.add(commit);
       }
     }
@@ -384,8 +386,12 @@ public class GitWrapper {
                         bin.thin.isChecked(),
                         bin.tags.isChecked()
                       },
-                      bin.pushUsername.getText().toString(),
-                      bin.pushPassword.getText().toString())
+                      tokenSave.contains("key")
+                          ? tokenSave.getString("key", "")
+                          : bin.pushUsername.getText().toString(),
+                      tokenSave.contains("pass")
+                          ? tokenSave.getString("pass", "")
+                          : bin.pushPassword.getText().toString())
                   .execute((String) bin.remotesSpinner.getSelectedItem());
             })
         .show();
@@ -442,7 +448,9 @@ public class GitWrapper {
         // Get user.name
         String userName = config.getString("user", null, "name");
         if (userName != null) {
-          bin.userName.getEditText().setText(userName);
+          bin.userName
+              .getEditText()
+              .setText(tokenSave.contains("key") ? tokenSave.getString("key", "") : userName);
         }
 
         // Get user.email
@@ -492,7 +500,10 @@ public class GitWrapper {
   public static void fetch(Context context, File repo) {
     LayoutGitpullBinding bin = LayoutGitpullBinding.inflate(LayoutInflater.from(context));
     var rm = bin.remote.getEditText().getText().toString();
-    var user = bin.userName.getEditText().getText().toString();
+    var user =
+        tokenSave.contains("key")
+            ? tokenSave.getString("key", "")
+            : bin.userName.getEditText().getText().toString();
     var pass = bin.token.getEditText().getText().toString();
     ArrayList<String> rem = getRemotes(repo);
     for (var txt : rem) {

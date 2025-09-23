@@ -393,7 +393,7 @@ public class EditorTextActionWindow extends EditorPopupWindow
         var gr = new GradientDrawable();
         gr.setColor(getThemeColor(EditorColorScheme.AUTO_COMP_PANEL_BG));
         gr.setStroke(2, getThemeColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER));
-        gr.setInnerRadius(30);
+        gr.setCornerRadius(45);
         return gr;
     }
 

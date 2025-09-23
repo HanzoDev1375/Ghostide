@@ -7,6 +7,7 @@ import ir.ninjacoder.ghostide.config.JavaPaserUtils;
 import ir.ninjacoder.ghostide.databinding.MakefolderBinding;
 import ir.ninjacoder.ghostide.marco.ActivityToFragmentConverter;
 import ir.ninjacoder.ghostide.marco.LicenseManagerImpl;
+import ir.ninjacoder.ghostide.marco.MethodOverloaderDialog;
 import ir.ninjacoder.ghostide.marco.editorface.ConstructorMaker;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import android.widget.ArrayAdapter;
@@ -70,6 +71,7 @@ public class JavaTools {
             .addItem(new PowerMenuItem("fix import"))
             .addItem(new PowerMenuItem("Copy R"))
             .addItem(new PowerMenuItem("Activity to Fragment"))
+            .addItem(new PowerMenuItem("MethodOverloader"))
             .setIsMaterial(true)
             .build();
     menu.setMenuRadius(20f);
@@ -127,6 +129,10 @@ public class JavaTools {
           } else if (pos == 17) {
             editor.setText(
                 ActivityToFragmentConverter.convertActivityToFragment(editor.getTextAsString()));
+          } else if (pos == 18) {
+            var dialogs =
+                new MethodOverloaderDialog(context, editor.getTextAsString(), (IdeEditor) editor);
+            dialogs.analyzeAndShowOverloadDialog();
           }
         });
   }

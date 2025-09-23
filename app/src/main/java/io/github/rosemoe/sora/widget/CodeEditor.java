@@ -884,16 +884,16 @@ public class CodeEditor extends View
    */
   public void setPowerModeEnabled(boolean enabled) {
     if (enabled) {
-        if (mPowerModeEffectManager == null) {
-            mPowerModeEffectManager = new PowerModeEffectManager(this);
-        }
+      if (mPowerModeEffectManager == null) {
+        mPowerModeEffectManager = new PowerModeEffectManager(this);
+      }
     } else {
-        if (mPowerModeEffectManager != null) {
-            mPowerModeEffectManager.clearEffects();
-        }
+      if (mPowerModeEffectManager != null) {
+        mPowerModeEffectManager.clearEffects();
+      }
     }
     invalidate();
-   }
+  }
 
   /**
    * Check if PowerMode effects are enabled
@@ -2389,7 +2389,7 @@ public class CodeEditor extends View
               spanEnd,
               columnCount,
               mColors.getColor(span.getForegroundColorId()));
-
+          
           // Draw strikethrough
           if ((span.problemFlags & Span.FLAG_DEPRECATED) != 0
               || TextStyle.isStrikeThrough(styleBits)) {
@@ -2986,6 +2986,7 @@ public class CodeEditor extends View
     if (line == mCursor.getRightLine()) {
       selectionEnd = mCursor.getRightColumn();
     }
+
     mPaint.setColor(color);
     if (hasSelectionOnLine && mColors.getColor(EditorColorScheme.TEXT_SELECTED) != 0) {
       if (endIndex <= selectionStart || startIndex >= selectionEnd) {

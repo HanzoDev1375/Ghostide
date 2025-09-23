@@ -56,6 +56,9 @@ public class WallpaperFragment extends Fragment {
   private RequestNetwork setDataForGithub;
   private RequestNetwork.RequestListener callback;
   private LayoutCustomimagepreviewBinding imgbind;
+  private WallAd adapter;
+  private List<Map<String, String>> originalList = new ArrayList<>(); // لیست اصلی برای فیلتر کردن
+  private String currentQuery = "";
 
   @Override
   @MainThread
@@ -81,16 +84,23 @@ public class WallpaperFragment extends Fragment {
               listAllImage =
                   new Gson()
                       .fromJson(response, new TypeToken<List<Map<String, String>>>() {}.getType());
+
+              // پر کردن لیست اصلی برای فیلتر کردن
+              originalList.clear();
+              originalList.addAll(listAllImage);
+
               bi.rv.setLayoutManager(new GridLayoutManager(getContext(), 2));
-              bi.rv.setAdapter(new WallAd(listAllImage));
+              adapter = new WallAd(listAllImage);
+              bi.rv.setAdapter(adapter);
             } catch (Exception e) {
-              Toast.makeText(getContext(), e.getMessage(), 2).show();
+              Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }
           }
 
           @Override
           public void onErrorResponse(String param1, String param2) {
-            Toast.makeText(getContext(), "Error you offilne please see netWork", 2).show();
+            Toast.makeText(getContext(), "Error you offilne please see netWork", Toast.LENGTH_SHORT)
+                .show();
           }
         };
     setDataForGithub.startRequestNetwork(
@@ -100,6 +110,13 @@ public class WallpaperFragment extends Fragment {
         callback);
   }
 
+  public void filter(String query) {
+    currentQuery = query;
+    if (adapter != null) {
+      adapter.filter(query);
+    }
+  }
+
   class WallAd extends RecyclerView.Adapter<WallAd.VH> {
     private List<Map<String, String>> list;
 
@@ -107,8 +124,25 @@ public class WallpaperFragment extends Fragment {
       this.list = list;
     }
 
+    public void filter(String query) {
+      list.clear();
+      if (query.isEmpty()) {
+        list.addAll(originalList);
+      } else {
+        for (Map<String, String> item : originalList) {
+          String imageUrl = item.get("image");
+          String imageName = extractImageNameFromUrl(imageUrl);
+
+          if (imageName.toLowerCase().contains(query.toLowerCase())) {
+            list.add(item);
+          }
+        }
+      }
+      notifyDataSetChanged();
+    }
+
     class VH extends RecyclerView.ViewHolder {
-      LayoutWallsBinding binding; // اتصال داده‌ها به ViewHolder
+      LayoutWallsBinding binding;
 
       public VH(LayoutWallsBinding binding) {
         super(binding.getRoot());
@@ -123,7 +157,6 @@ public class WallpaperFragment extends Fragment {
 
     @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
-      // ایجاد binding جدید برای هر ViewHolder
       LayoutWallsBinding binding =
           LayoutWallsBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
       return new VH(binding);
@@ -131,16 +164,22 @@ public class WallpaperFragment extends Fragment {
 
     @Override
     public void onBindViewHolder(VH holder, int position) {
-      // دسترسی به binding مخصوص این ViewHolder
       LayoutWallsBinding binding = holder.binding;
+      String imageUrl = list.get(position).get("image");
+      String imageName = extractImageNameFromUrl(imageUrl);
 
       Glide.with(binding.icon.getContext())
-          .load(list.get(position).get("image")) // نیازی به Uri.parse نیست اگر لینک است
+          .load(imageUrl)
           .placeholder(R.drawable.share)
           .error(R.drawable.errorxml)
           .fitCenter()
-          .diskCacheStrategy(DiskCacheStrategy.ALL) // بهتر است کش شود
+          .diskCacheStrategy(DiskCacheStrategy.ALL)
           .into(binding.icon);
+
+      holder.binding.Texttitle.setText(imageName);
+
+      // هایلایت کردن متن جستجو
+      ObjectUtils.setHighlightSearchText(holder.binding.Texttitle, imageName, currentQuery);
 
       binding
           .getRoot()
@@ -223,11 +262,31 @@ public class WallpaperFragment extends Fragment {
     }
   }
 
+  // متد برای استخراج نام تصویر از URL
+  private String extractImageNameFromUrl(String url) {
+    try {
+      String fileName = url.substring(url.lastIndexOf('/') + 1);
+      // حذف پارامترهای URL اگر وجود دارند
+      if (fileName.contains("?")) {
+        fileName = fileName.substring(0, fileName.indexOf('?'));
+      }
+      // حذف پسوند فایل
+      if (fileName.contains(".")) {
+        fileName = fileName.substring(0, fileName.lastIndexOf('.'));
+      }
+      // جایگزینی underline با فاصله
+      fileName = fileName.replace("_", " ");
+      // حذف اعداد و کاراکترهای خاص (اختیاری)
+      fileName = fileName.replaceAll("[0-9]", "");
+      return fileName.trim();
+    } catch (Exception e) {
+      return url; // اگر خطایی رخ داد، خود URL را برگردان
+    }
+  }
+
   private String getFileNameFromUrl(String url) {
     try {
-
       String baseName = url.substring(url.lastIndexOf('/') + 1);
-
       String fileName = baseName.split("\\?")[0];
       if (fileName.matches(".+\\.(jpg|jpeg|png|webp|gif)$")) {
         return fileName;
@@ -252,7 +311,7 @@ public class WallpaperFragment extends Fragment {
     File outputFile = new File(dir, fileName);
 
     try (FileOutputStream out = new FileOutputStream(outputFile)) {
-      
+
       Bitmap.CompressFormat format;
       if (fileName.toLowerCase().endsWith(".jpg") || fileName.toLowerCase().endsWith(".jpeg")) {
         format = Bitmap.CompressFormat.JPEG;
@@ -313,7 +372,7 @@ public class WallpaperFragment extends Fragment {
 
           @Override
           public void onSuccess(File result) {
-            
+
             SharedPreferences pref =
                 getContext().getSharedPreferences("getvb", Context.MODE_PRIVATE);
             pref.edit().putString("dir", result.getAbsolutePath()).apply();
