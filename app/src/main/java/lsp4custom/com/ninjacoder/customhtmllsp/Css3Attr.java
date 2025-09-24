@@ -33,20 +33,7 @@ public class Css3Attr {
   }
 
   private void getCssColor(List<CompletionItem> item, String prefix) {
-    try {
-      var open = GhostIdeAppLoader.getContext().getAssets().open("csscolors.kj");
-      List<DataScope> list =
-          new Gson()
-              .fromJson(new InputStreamReader(open), new TypeToken<List<DataScope>>() {}.getType());
-      list.forEach(
-          it -> {
-            if (it.getName().startsWith(prefix)) {
-              item.add(new CompletionItem(it.getName(), it.getName(), it.getDesc()));
-            }
-          });
-    } catch (Exception err) {
-
-    }
+     ///bad work
   }
 
   private void scopePath(String assterName, List<CompletionItem> mmber, String prfex) {

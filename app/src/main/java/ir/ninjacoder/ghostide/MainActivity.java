@@ -261,7 +261,7 @@ public class MainActivity extends BaseCompat {
     if (!FileUtil.isExistFile(pyauto)) {
       var soft = new AssetsSoft();
       soft.unzipFromAssets(
-          "pythondata.zip", getFilesDir().getAbsolutePath() + File.separator, this);
+          MainActivity.this, "pythondata.zip", getFilesDir().getAbsolutePath() + File.separator);
     }
 
     var snippetPath = FileUtil.HOMESNIPPET;

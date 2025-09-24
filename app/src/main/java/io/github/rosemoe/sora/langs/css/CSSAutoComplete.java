@@ -12,17 +12,7 @@ public class CSSAutoComplete implements AutoCompleteProvider {
     public List<CompletionItem> getAutoCompleteItems(String prefix, TextAnalyzeResult analyzeResult, int line,
                                                      int column) {
         List<CompletionItem> items = new ArrayList<>();
-        for (String tag : CSSLanguage.MCSS)
-            if (tag.startsWith(prefix))
-                items.add(ColorcssAttrAsCompletion(tag, "CSS KeyWord"));
-
-        for (String attr : CSSLanguage.colorsCss)
-            if (attr.startsWith(prefix))
-                items.add(ColorcssAttrAsCompletion(attr, "Parperty"));
-
-        for (String attr : CSSLanguage.cssAttr)
-            if (attr.startsWith(prefix))
-                items.add(ColorcssAttrAsCompletion(attr, "Css Attr"));
+       
 
         return items;
     }

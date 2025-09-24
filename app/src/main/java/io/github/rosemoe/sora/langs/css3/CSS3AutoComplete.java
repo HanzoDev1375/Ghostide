@@ -25,7 +25,7 @@ public class CSS3AutoComplete implements AutoCompleteProvider {
 
     Css3Server server = new Css3Server();
     server.installCssColor(items,prefix);
-    server.hot(item,prefix);
+    server.hot(items,prefix);
     SharedPreferences save_path = GhostIdeAppLoader.getContext().getSharedPreferences("save_path", Activity.MODE_PRIVATE);
     // Add file path completion item
     items.addAll(CodeSnippet.getListFile(save_path.getString("path",""),prefix));

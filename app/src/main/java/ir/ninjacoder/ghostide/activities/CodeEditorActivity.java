@@ -25,6 +25,7 @@ import ir.ninjacoder.ghostide.marco.KotlinCompilerImpl;
 import ir.ninjacoder.ghostide.marco.WallpaperParallaxEffect;
 import ir.ninjacoder.ghostide.model.EditorViewModel;
 import ir.ninjacoder.ghostide.navigator.EditorRoaderFile;
+import ir.ninjacoder.ghostide.pl.PluginLoaderImpl;
 import ir.ninjacoder.ghostide.project.JavaCompilerBeta;
 import ir.ninjacoder.ghostide.project.ProjectManager;
 import ir.ninjacoder.ghostide.tasks.FileChangeReceiver;
@@ -407,7 +408,6 @@ public class CodeEditorActivity extends BaseCompat {
     proanjctor.setVisibility(View.GONE);
     barSymoble.setVisibility(View.VISIBLE);
     setWallpaperParallaxEffect();
-
     imap = new HashMap<>();
 
     if (FileUtil.isExistFile(thememanagersoft.getString("themes", ""))) {
@@ -433,7 +433,7 @@ public class CodeEditorActivity extends BaseCompat {
     n4 = soundPool.load(getApplicationContext(), R.raw.typespace, 1);
     editor.setFirstLineNumberAlwaysVisible(true);
     editor.setOverScrollEnabled(true);
-
+    new PluginLoaderImpl().run((CodeEditor) editor);
     editor.setInputType(
         EditorInfo.TYPE_TEXT_FLAG_NO_SUGGESTIONS
             | EditorInfo.TYPE_CLASS_TEXT
@@ -1227,7 +1227,7 @@ public class CodeEditorActivity extends BaseCompat {
           var file = new File(selectedFilePath);
           JavaCcComplierImpl.main(file.toString(), file.getParent() + "/");
         } else if (selectedFilePath.contains(".kt")) {
-			
+
           new KotlinCompilerImpl(CodeEditorActivity.this, selectedFilePath, editor);
         } else if (selectedFilePath.contains(".ts")) {
           SassForAndroid.runObjectWeb(editor, selectedFilePath, CompilerModel.TYPESRCIPT);
