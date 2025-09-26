@@ -290,4 +290,4 @@ Ghost IDE offers a variety of keyboard shortcuts for physical keyboards from Fil
 - `breaklevel1-8`: Colors for different breakpoint levels like in (`{}()[]`)
 
 # Plugins
-- see in [link](Api.md)
+- see in [link](https://github.com/HanzoDev1375/Ghostide/blob/main/Api.md)
