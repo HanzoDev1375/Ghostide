@@ -3,8 +3,6 @@ package io.github.rosemoe.sora.widget.style.builtin;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.util.TypedValue;
 
@@ -19,8 +17,8 @@ import io.github.rosemoe.sora.widget.style.SelectionHandleStyle;
 public class HandleStyleDrop implements SelectionHandleStyle {
 
   private Drawable drawable;
-  private final int width;
-  private final int height;
+  private int width;
+  private int height;
   private int lastColor = 0;
   private SharedPreferences prf;
   private Context context; // local context

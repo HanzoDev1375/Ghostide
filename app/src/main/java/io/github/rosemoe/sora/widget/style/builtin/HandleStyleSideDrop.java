@@ -10,8 +10,11 @@ import androidx.annotation.NonNull;
 
 public class HandleStyleSideDrop extends HandleStyleDrop {
 
-  private final int size;
-  private  Drawable drawable;
+  private int size;
+  private Drawable drawable;
+
+  private int width;
+  private int height;
   private SharedPreferences prf;
   private Context context; // /local context
 
@@ -47,13 +50,11 @@ public class HandleStyleSideDrop extends HandleStyleDrop {
     } else {
       boolean isLeftType = handleType == HANDLE_TYPE_LEFT;
       float cx = isLeftType ? x - radius : x + radius;
-
-      // تنظیم محوطه drawable
       drawable.setBounds((int) (cx - radius), (int) (y), (int) (cx + radius), (int) (y + size));
-      //  drawable.setColorFilter(color, PorterDuff.Mode.SRC_ATOP); // اعمال رنگ
-      drawable.draw(canvas); // رسم drawable
+      drawable.draw(canvas);
 
       descriptor.set(cx - radius, y, cx + radius, y + size, isLeftType ? ALIGN_LEFT : ALIGN_RIGHT);
     }
   }
+
 }
