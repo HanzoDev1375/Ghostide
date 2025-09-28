@@ -31,6 +31,7 @@ import ir.ninjacoder.ghostide.model.IconShop;
 import ir.ninjacoder.ghostide.model.ListSheet;
 import ir.ninjacoder.ghostide.model.ZipFileShow;
 import ir.ninjacoder.ghostide.model.dataobject.ShortcutInfoImpl;
+import ir.ninjacoder.ghostide.pl.PluginLoaderImpl;
 import ir.ninjacoder.ghostide.project.ProjectMaker;
 import ir.ninjacoder.ghostide.recyclerview.RecyclerViewHelper;
 import ir.ninjacoder.ghostide.services.FileEventUser;
@@ -220,6 +221,7 @@ public class FileManagerActivity extends BaseCompat
     executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     book = getSharedPreferences("hsipsot4444", Activity.MODE_PRIVATE);
     sh = new ShortcutInfoImpl(FileManagerActivity.this, Folder);
+    new PluginLoaderImpl().runInFileManager(this);
     if (Build.VERSION.SDK_INT >= 21)
       getWindow().setNavigationBarColor(MaterialColors.getColor(this, ObjectUtils.Back, 0));
     if (Build.VERSION.SDK_INT >= 21)

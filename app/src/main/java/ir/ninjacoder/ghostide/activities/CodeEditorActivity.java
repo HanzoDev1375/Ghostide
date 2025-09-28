@@ -433,7 +433,7 @@ public class CodeEditorActivity extends BaseCompat {
     n4 = soundPool.load(getApplicationContext(), R.raw.typespace, 1);
     editor.setFirstLineNumberAlwaysVisible(true);
     editor.setOverScrollEnabled(true);
-    new PluginLoaderImpl().run((CodeEditor) editor);
+    new PluginLoaderImpl().runInCodeEditor((CodeEditor) editor,this);
     editor.setInputType(
         EditorInfo.TYPE_TEXT_FLAG_NO_SUGGESTIONS
             | EditorInfo.TYPE_CLASS_TEXT

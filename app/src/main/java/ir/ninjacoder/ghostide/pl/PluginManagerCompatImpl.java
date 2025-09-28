@@ -1,6 +1,8 @@
 package ir.ninjacoder.ghostide.pl;
 
 import io.github.rosemoe.sora.widget.CodeEditor;
+import ir.ninjacoder.ghostide.activities.FileManagerActivity;
+import ir.ninjacoder.ghostide.activities.CodeEditorActivity;
 
 public class PluginManagerCompatImpl implements PluginManagerCompat {
 
@@ -16,4 +18,10 @@ public class PluginManagerCompatImpl implements PluginManagerCompat {
   public String setName() {
     return null;
   }
+
+  @Override
+  public void getCodeEditorAc(CodeEditorActivity activity) {}
+
+  @Override
+  public void getFileManagerAc(FileManagerActivity activity) {}
 }

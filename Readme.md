@@ -86,6 +86,8 @@
 - [x] C++
 - [x] C#
 - [x] Ruby
+- [x] SQL(code formatter bad work)
+- [x] Rust
 - [x] Shell
 - [x] Markdown
 - [x] Go

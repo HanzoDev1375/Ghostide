@@ -1,8 +1,11 @@
 package ir.ninjacoder.ghostide.pl;
 
+import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 import io.github.rosemoe.sora.widget.CodeEditor;
+import ir.ninjacoder.ghostide.activities.FileManagerActivity;
+import ir.ninjacoder.ghostide.activities.CodeEditorActivity;
 import java.io.File;
 import java.io.FileInputStream;
 import java.nio.ByteBuffer;
@@ -11,8 +14,41 @@ import dalvik.system.InMemoryDexClassLoader;
 
 public class PluginLoader {
 
-  public void loadAllPlugins(CodeEditor editor, String configPath) {
-    var context = editor.getContext();
+  private FileManagerActivity fileManagerActivity;
+  private CodeEditorActivity codeEditorActivity;
+  private CodeEditor editor;
+  private Context context;
+
+  public PluginLoader setEditor(CodeEditor editor) {
+    this.editor = editor;
+    if (editor != null) {
+      this.context = editor.getContext();
+    }
+    return this;
+  }
+
+  public PluginLoader setFileManagerActivity(FileManagerActivity activity) {
+    this.fileManagerActivity = activity;
+    if (context == null) {
+      this.context = activity;
+    }
+    return this;
+  }
+
+  public PluginLoader setCodeEditorActivity(CodeEditorActivity activity) {
+    this.codeEditorActivity = activity;
+    if (context == null) {
+      this.context = activity;
+    }
+    return this;
+  }
+
+  public void loadAllPlugins(String configPath) {
+    if (context == null) {
+      Log.e("PluginLoader", "Context تنظیم نشده است");
+      return;
+    }
+
     List<PluginConfig.PluginInfo> plugins = JsonFileManager.loadMainConfig(configPath);
 
     if (plugins.isEmpty()) {
@@ -25,7 +61,7 @@ public class PluginLoader {
 
     int loadedCount = 0;
     for (PluginConfig.PluginInfo pluginInfo : plugins) {
-      if (loadSinglePlugin(editor, pluginInfo)) {
+      if (loadSinglePlugin(pluginInfo)) {
         loadedCount++;
       }
     }
@@ -37,32 +73,27 @@ public class PluginLoader {
         .show();
   }
 
-  private boolean loadSinglePlugin(CodeEditor editor, PluginConfig.PluginInfo pluginInfo) {
-    var context = editor.getContext();
+  private boolean loadSinglePlugin(PluginConfig.PluginInfo pluginInfo) {
     try {
       Log.d("PluginLoader", "در حال لود پلاگین: " + pluginInfo.getName());
 
-      // بارگذاری manifest پلاگین
       PluginManifest manifest = JsonFileManager.loadPluginManifest(pluginInfo.getDir());
       if (manifest == null) {
         Log.e("PluginLoader", "Manifest پلاگین یافت نشد: " + pluginInfo.getDir());
         return false;
       }
 
-      // بررسی وجود فایل DEX
       File dexFile = new File(manifest.getDexpath());
       if (!dexFile.exists()) {
         Log.e("PluginLoader", "فایل DEX وجود ندارد: " + manifest.getDexpath());
         return false;
       }
 
-      // خواندن فایل DEX
       FileInputStream fis = new FileInputStream(dexFile);
       byte[] dexBytes = new byte[(int) dexFile.length()];
       fis.read(dexBytes);
       fis.close();
 
-      // ایجاد ClassLoader و لود کلاس
       ByteBuffer dexBuffer = ByteBuffer.wrap(dexBytes);
       InMemoryDexClassLoader classLoader =
           new InMemoryDexClassLoader(dexBuffer, getClass().getClassLoader());
@@ -70,7 +101,6 @@ public class PluginLoader {
       String fullClassName = manifest.getPkgname() + "." + manifest.getDexname();
       Class<?> pluginClass = classLoader.loadClass(fullClassName);
 
-      // بررسی اینکه کلاس PluginManagerCompat را پیاده سازی کرده باشد
       if (!PluginManagerCompat.class.isAssignableFrom(pluginClass)) {
         Log.e(
             "PluginLoader",
@@ -78,11 +108,20 @@ public class PluginLoader {
         return false;
       }
 
-      // ایجاد نمونه از پلاگین
       PluginManagerCompat pluginInstance = (PluginManagerCompat) pluginClass.newInstance();
 
-      // فراخوانی متدهای اینترفیس
-      pluginInstance.getEditor(editor);
+      // فراخوانی getEditor فقط اگر editor وجود دارد
+      if (editor != null) {
+        pluginInstance.getEditor(editor);
+      }
+
+      if (fileManagerActivity != null) {
+        pluginInstance.getFileManagerAc(fileManagerActivity);
+      }
+
+      if (codeEditorActivity != null) {
+        pluginInstance.getCodeEditorAc(codeEditorActivity);
+      }
 
       String pluginName = pluginInstance.setName();
       boolean isUsing = pluginInstance.hasuseing();
@@ -95,5 +134,4 @@ public class PluginLoader {
       return false;
     }
   }
-
 }

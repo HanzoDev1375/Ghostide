@@ -8,16 +8,22 @@ With this plugin, which will add new features in the future, you can add a serie
 package ir.ninjacoder.ghostide.pl;
 
 import io.github.rosemoe.sora.widget.CodeEditor;
+import ir.ninjacoder.ghostide.activities.FileManagerActivity;
+import ir.ninjacoder.ghostide.activities.CodeEditorActivity;
 
 public interface PluginManagerCompat {
 
-void getEditor(CodeEditor editor);
+    void getEditor(CodeEditor editor);
 
-String setName();
+    String setName();
 
-boolean hasuseing();
+    boolean hasuseing();
 
- }
+    void getFileManagerAc(FileManagerActivity activity);
+
+    void getCodeEditorAc(CodeEditorActivity activity);
+}
+
 
 ```
 - From the methods and actions it is clear what you need to do
@@ -35,7 +41,7 @@ And place the created plugin in this path with this Json input
 ``` json
  {
 	 "dexpath":  "/storage/emulated/0/GhostWebIDE/plugins/dialog/DialogPlugin.dex",
-   "dexname": "DialogPlugin",
+     "dexname": "DialogPlugin",
 	 "pkgname": "ir.ninjacoder.plloader"
  }
   
