@@ -80,6 +80,7 @@ import io.github.rosemoe.sora.langs.html.HTMLLanguage;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.EditorAutoCompleteWindow;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
+import ir.ninjacoder.prograsssheet.VideoSurfaceView;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -178,6 +179,7 @@ public class CodeEditorActivity extends BaseCompat {
   private String Paths, path;
   private boolean isSvg = false;
   private IdeEditor editor;
+  private VideoSurfaceView mvideo;
   private boolean isFileChangeDialogShowing = false;
 
   @Override
@@ -234,6 +236,7 @@ public class CodeEditorActivity extends BaseCompat {
     ghost_searchs.hide();
     editor = findViewById(R.id.editor);
     syspiar = findViewById(R.id.syspiar);
+    mvideo = findViewById(R.id.videoback);
     savecursor = getSharedPreferences("editor", MODE_PRIVATE);
     word = getSharedPreferences("word", MODE_PRIVATE);
     line = getSharedPreferences("line", MODE_PRIVATE);
@@ -400,7 +403,7 @@ public class CodeEditorActivity extends BaseCompat {
     _fab.setOnClickListener(
         (it) -> {
           FabFileRuner();
-          new JavaToGsonHelper(editor.getText().toString());
+          
         });
   }
 
@@ -431,18 +434,6 @@ public class CodeEditorActivity extends BaseCompat {
     n2 = soundPool.load(getApplicationContext(), R.raw.typeremoved, 1);
     n3 = soundPool.load(getApplicationContext(), R.raw.ddoc, 1);
     n4 = soundPool.load(getApplicationContext(), R.raw.typespace, 1);
-    editor.setFirstLineNumberAlwaysVisible(true);
-    editor.setOverScrollEnabled(true);
-    new PluginLoaderImpl().runInCodeEditor((CodeEditor) editor,this);
-    editor.setInputType(
-        EditorInfo.TYPE_TEXT_FLAG_NO_SUGGESTIONS
-            | EditorInfo.TYPE_CLASS_TEXT
-            | EditorInfo.TYPE_TEXT_FLAG_MULTI_LINE
-            | EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      editor.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO);
-    }
-
     editor.setKeyboardOperation(
         new CodeEditor.OnKeyboardOperation() {
           @Override
@@ -568,7 +559,7 @@ public class CodeEditorActivity extends BaseCompat {
 
     AnimUtils.ClickAnimation(undo);
     AnimUtils.ClickAnimation(redo);
-    setPinLineNumberEditor();
+    
     _Animwork(_fab);
     editor
         .getColorScheme()
@@ -600,6 +591,14 @@ public class CodeEditorActivity extends BaseCompat {
           Typeface.createFromAsset(getAssets(), "fonts/ghostfont.ttf"), Typeface.NORMAL);
     }
     var data = thememanagersoft.contains("br") ? thememanagersoft.getFloat("br", 2) : 3;
+    mvideo.setLifecycle(getLifecycle());
+    if (getvb.getString("dir", "").endsWith(".mp4")) {
+      mvideo.setPath(getvb.getString("dir", ""));
+      mvideo.setVisibility(View.VISIBLE);
+    } else {
+      mvideo.setVisibility(View.GONE);
+      mvideo.releasePlayer();
+    }
     BlurImage.setBlurInWallpaperMobile(this, data, ghostIcon);
 
     getColorPass.setBackgroundColor(Color.parseColor(imap.get("backgroundcolorlinear").toString()));
@@ -750,7 +749,7 @@ public class CodeEditorActivity extends BaseCompat {
 
     FileChangeReceiver.stopWatching();
 
-    if (editor.getText().toString().isEmpty()) {
+    if (editor.getTextAsString().isEmpty()) {
       DataUtil.showMessage(getApplicationContext(), getString(R.string.errorEmptyFile));
     } else {
       try {
@@ -785,15 +784,7 @@ public class CodeEditorActivity extends BaseCompat {
     }
   }
 
-  void setPinLineNumberEditor() {
-    if (line.getString("getline", "").equals("true")) {
-      editor.setPinLineNumber(true);
-    } else {
-      if (line.getString("getline", "").equals("false")) {
-        editor.setPinLineNumber(false);
-      }
-    }
-  }
+  
 
   void setCodeEditorFileReader(String _path) {
     EditorRoaderFile.RuningTask(editor, _fab, _path, proanjctor);

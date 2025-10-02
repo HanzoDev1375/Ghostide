@@ -151,6 +151,57 @@ public class PowerModeEffectManager {
     }
   }
 
+  // custom svg
+  private void spawnGhostEffectCustom(float x, float y, String svgcode, boolean hascolor) {
+    if (ghostSvg == null) return;
+
+    int[] ghostColors = {
+      Color.argb(220, 255, 100, 100),
+      Color.argb(220, 100, 255, 100),
+      Color.argb(220, 100, 100, 255),
+      Color.argb(220, 255, 255, 100),
+      Color.argb(220, 255, 100, 255),
+      Color.argb(220, 100, 255, 255),
+      Color.argb(220, 255, 150, 50),
+      Color.argb(220, 200, 100, 255)
+    };
+
+    int count = (int) (10 * effectIntensity);
+    for (int i = 0; i < count; i++) {
+      float angle = random.nextFloat() * (float) Math.PI * 2;
+      float speed = random.nextFloat() * 6 * effectIntensity + 2;
+      float dx = (float) Math.cos(angle) * speed;
+      float dy = (float) Math.sin(angle) * speed - 3;
+
+      float size = random.nextFloat() * 60 * effectIntensity + 30;
+      float gravity = 0.1f * effectIntensity;
+      float friction = 0.97f;
+      int life = (int) (40 + random.nextInt(30) * effectIntensity);
+      float rotationSpeed = (random.nextFloat() - 0.5f) * 8 * effectIntensity;
+
+      // انتخاب رنگ رندوم از آرایه
+      int ghostColor = ghostColors[random.nextInt(ghostColors.length)];
+      try {
+        SVG msvg = SVG.getFromString(svgcode);
+        particles.add(
+            new SvgParticle(
+                x,
+                y,
+                msvg,
+                size,
+                dx,
+                dy,
+                gravity,
+                friction,
+                life,
+                rotationSpeed,
+                hascolor ? ghostColor : 0));
+      } catch (Exception err) {
+        Log.e("ErrorToParser svg", err.getLocalizedMessage());
+      }
+    }
+  }
+
   private void spawnGhostEffect(float x, float y) {
     if (ghostSvg == null) return;
 

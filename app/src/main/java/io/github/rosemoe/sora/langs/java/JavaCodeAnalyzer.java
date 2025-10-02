@@ -42,6 +42,7 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.Stack;
 import io.github.rosemoe.sora.data.BlockLine;
+import java.util.regex.Pattern;
 import ninjacoder.ghostide.androidtools.r8.android.JavaAnalyzer;
 import ninjacoder.ghostide.androidtools.r8.android.CodeLine;
 import org.antlr.v4.runtime.CharStreams;
@@ -248,6 +249,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           case JavaLexer.LT:
             ha.handleOpenBracket(result, line, column, false);
             break;
+          case JavaLexer.LBRACE:
           case JavaLexer.LBRACK:
             ha.handleOpenBracket(result, line, column, true);
             break;
@@ -256,6 +258,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             ha.handleCloseBracket(result, line, column, false);
             break;
           case JavaLexer.RBRACK:
+          case JavaLexer.RBRACE:
             ha.handleCloseBracket(result, line, column, true);
             break;
           case JavaLexer.SEMI:
@@ -330,81 +333,93 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             {
               info.addIdentifier(token.getText());
 
-              boolean isDot = true;
+              boolean isDot = true, hasUpperCase = false;
 
               int colorid = EditorColorScheme.TEXT_NORMAL;
               if (previous == JavaLexer.AT) {
                 colorid = EditorColorScheme.javaoprator;
+                hasUpperCase = true;
               }
               if (previous == JavaLexer.CLASS
                   || previous == JavaLexer.IMPLEMENTS
                   || previous == JavaLexer.VOID) {
                 colorid = EditorColorScheme.javafun;
+                hasUpperCase = true;
               }
 
-              if (previous == JavaLexer.LBRACK || previous == JavaLexer.ASSERT) {
-                colorid = EditorColorScheme.LITERAL;
+              if (previous == JavaLexer.LBRACK) {
+                colorid = EditorColorScheme.tsattr;
+                hasUpperCase = true;
               }
-              if (previous == JavaLexer.PACKAGE
-                  || previous == JavaLexer.IMPORT
-                  || prePreToken != null && prePreToken.getType() == JavaLexer.DOT) {
+              if (previous == JavaLexer.PACKAGE || previous == JavaLexer.IMPORT) {
                 isDot = false;
-                colorid = EditorColorScheme.javafield;
+                colorid = EditorColorScheme.javaoprator;
               }
 
-              if (previous == JavaLexer.EXTENDS
-                  || previous == JavaLexer.FLOAT_LITERAL
-                  || previous == JavaLexer.BOOLEAN) {
+              if (previous == JavaLexer.EXTENDS) {
                 colorid = EditorColorScheme.javafun;
+                hasUpperCase = true;
               }
               if (previous == JavaLexer.RETURN || previous == JavaLexer.NEW) {
-                colorid = EditorColorScheme.jsoprator;
+                colorid = EditorColorScheme.javakeywordoprator;
+                hasUpperCase = false;
               }
               if (previous == JavaLexer.INT) {
                 colorid = EditorColorScheme.javafield;
               }
               if (previous == JavaLexer.CASE || previous == JavaLexer.FINAL) {
                 colorid = EditorColorScheme.javakeywordoprator;
+                hasUpperCase = false;
               }
 
               if (previous == JavaLexer.PRIVATE
                   || previous == JavaLexer.PROTECTED
                   || previous == JavaLexer.PUBLIC) {
-                colorid = EditorColorScheme.HTML_TAG;
+                colorid = EditorColorScheme.javafun;
+                hasUpperCase = true;
               }
 
-              if (previous == JavaLexer.LPAREN
-                  || prePreToken != null && prePreToken.getType() == JavaLexer.LPAREN
-                  || previous == JavaLexer.RPAREN
-                  || prePreToken != null && prePreToken.getType() == JavaLexer.RPAREN) {
-
+              if (previous == JavaLexer.LPAREN || previous == JavaLexer.RPAREN) {
+                hasUpperCase = true;
                 colorid = EditorColorScheme.javaparament;
               }
-              if (previous == JavaLexer.LT
-                  || prePreToken != null && prePreToken.getType() == JavaLexer.LT
-                  || previous == JavaLexer.GT
-                  || prePreToken != null && prePreToken.getType() == JavaLexer.GT) {
+              if (previous == JavaLexer.LT || previous == JavaLexer.GT) {
+                hasUpperCase = true;
                 colorid = EditorColorScheme.javafun;
               }
               // next
               if (ObjectUtils.getNextLexer(lexer, '(')) {
                 colorid = EditorColorScheme.tsattr;
+                hasUpperCase = true;
               }
               if (ObjectUtils.getNextLexer(lexer, '.')) {
                 colorid = EditorColorScheme.tscolormatch1;
+                hasUpperCase = true;
               }
               if (ObjectUtils.getNextLexer(lexer, ',')) {
                 colorid = EditorColorScheme.tscolormatch2;
+                hasUpperCase = true;
               }
               if (ObjectUtils.getNextLexer(lexer, ')')) {
                 colorid = EditorColorScheme.tscolormatch3;
+                hasUpperCase = true;
               }
               // -> str
               if (ObjectUtils.getNextLexer(lexer, '>')) {
                 colorid = EditorColorScheme.pycolormatch4;
+                hasUpperCase = true;
               }
               if (ObjectUtils.getNextLexer(lexer, ':')) {
                 colorid = EditorColorScheme.jskeyword;
+                hasUpperCase = true;
+              }
+              if (!hasUpperCase) {
+                Pattern pattern = Pattern.compile("\\b[A-Z][a-zA-Z]*\\b");
+                var matcher = pattern.matcher(token.getText());
+                if (matcher.matches()) {
+
+                  colorid = EditorColorScheme.javaparament;
+                }
               }
               result.addIfNeeded(line, column, colorid);
 
@@ -414,51 +429,6 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           case JavaLexer.HEX_LITERAL:
             ListCss3Color.setColorBinery(token, line, column, result);
             break;
-
-          case JavaLexer.RBRACE:
-            {
-              if (!stack.isEmpty()) {
-                BlockLine b = stack.pop();
-                b.endLine = line;
-                b.endColumn = column;
-                if (b.startLine != b.endLine) {
-                  result.addBlockLine(b); // اضافه کردن بلوک به نتایج
-                }
-              }
-              var lists = result.getBlocks();
-              var colorid = EditorColorScheme.htmlblocknormal;
-
-              if (GhostIdeAppLoader.getPrefManager().getBoolean("breaks", false) == true)
-                colorid = HTMLConstants.get(stack.size());
-              else colorid = EditorColorScheme.htmlblocknormal;
-              result.addIfNeeded(line, column, colorid);
-              break;
-            }
-
-          case JavaLexer.LBRACE:
-            {
-              BlockLine block = result.obtainNewBlock();
-              block.startLine = line;
-              block.startColumn = column;
-              // اضافه کردن بلوک به استک
-              var lists = result.getBlocks();
-              var colorres = EditorColorScheme.htmlblocknormal;
-              // using HTMLConstants faster in java
-              if (GhostIdeAppLoader.getPrefManager().getBoolean("breaks", false) == true)
-                colorres = HTMLConstants.get(stack.size());
-              else colorres = EditorColorScheme.htmlblocknormal;
-              stack.push(block);
-              result.addIfNeeded(line, column, colorres);
-              // بررسی maxSwitch
-              if (stack.isEmpty()) {
-                if (currSwitch > maxSwitch) {
-                  maxSwitch = currSwitch;
-                }
-                currSwitch = 0;
-              }
-              currSwitch++; // ا
-              break;
-            }
 
           default:
             result.addIfNeeded(line, column, EditorColorScheme.TEXT_NORMAL);
@@ -578,7 +548,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 public void visit(TypeExpr arg0, Void arg1) {
                   var l = arg0.getBegin().get().line;
                   var c = arg0.getBegin().get().column;
-                  Utils.setSpanEFO(result, l, c + 1, EditorColorScheme.javastring);
+                  Utils.setSpanEFO(result, l, c + 1, EditorColorScheme.javaparament);
                   super.visit(arg0, arg1);
                 }
 

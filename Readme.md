@@ -4,7 +4,8 @@
 </div>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/HanzoDev1375/Ghostide/refs/heads/main/gbost%20ide.svg" alt="Ghost IDE Logo" width="150">
+  <img src="https://raw.githubusercontent.com/HanzoDev1375/Ghostide/refs/heads/main/gbost%20ide.svg
+  " alt="Ghost IDE Logo" width="150">
 </p>
 
 ![GitHub stars](https://img.shields.io/github/stars/HanzoDev1375/Ghostide?style=social)

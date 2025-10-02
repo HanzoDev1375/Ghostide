@@ -23,15 +23,12 @@
  */
 package io.github.rosemoe.sora.widget;
 
-import ir.ninjacoder.ghostide.marco.ColorCompat;
-import android.graphics.Color;
 import android.util.SparseIntArray;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Random;
 
 /**
  * This class manages the colors of editor. You can use color ids that are not in pre-defined id

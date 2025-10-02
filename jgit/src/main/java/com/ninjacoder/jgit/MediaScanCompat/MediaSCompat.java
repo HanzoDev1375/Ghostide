@@ -3,7 +3,6 @@ package com.ninjacoder.jgit.MediaScanCompat;
 import android.content.Context;
 import android.content.ContentResolver;
 import android.net.Uri;
-import android.util.Log;
 import android.database.Cursor;
 import android.provider.MediaStore;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,7 +22,7 @@ public class MediaSCompat {
     builder.append(String.valueOf(video.size())).append(" Video").append("\n");
     builder.append(String.valueOf(audio.size())).append(" Audio").append("\n");
     builder.append(String.valueOf(allMedia.size())).append(" AllFiles").append("\n");
-
+    
     path = builder.toString();
   }
 

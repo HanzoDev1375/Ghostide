@@ -87,14 +87,11 @@ public class IdeEditor extends CodeEditor implements IEditor {
   public IdeEditor init() {
     setTabWidth(2);
     listitem = new CommentList();
-    setScrollBarSize(1);
-    setLigatureEnabled(true);
     showSoftInput();
-    setLineInfoTextSize(18f);
     setScalable(true);
     setPinLineNumber(true);
     setNonPrintablePaintingFlags(FLAG_GHOSTWEB | FLAG_Scrop);
-    subscribeEvent(ClickEvent.class, ((event, unsubscribe) -> ta(event)));
+    
     subscribeEvent(ContentChangeEvent.class, ((event, unsubscribe) -> handleContentChange(event)));
     subscribeEvent(TextSizeChangeEvent.class, ((event, unsubscribe) -> textSize(event)));
     subscribeEvent(LongPressEvent.class, (ev, un) -> setLongEvent(ev));
@@ -107,7 +104,7 @@ public class IdeEditor extends CodeEditor implements IEditor {
     PowerModeEffectManager.EffectType ef = EffectTypeManager.getCurrentTheme(getContext());
 
     getPowerModeEffectManager().setEffect(ef);
-
+    
     return this;
   }
 

@@ -234,10 +234,9 @@ public class JgitHelper {
         JgitHelper gitHelper = new JgitHelper(file);
 
         if (!gitHelper.isInitialized()) {
-          return null; // مخزن Git معتبر نیست
+          return null;
         }
 
-        // فقط نام فایل را مقایسه کنید (ساده‌تر)
         String fileName = file.getName();
 
         if (gitHelper.getAllModified().stream().anyMatch(s -> s.endsWith(fileName))) {
@@ -257,7 +256,9 @@ public class JgitHelper {
     protected void onPostExecute(Integer color) {
       TextView textView = textViewRef.get();
       if (textView != null && color != null) {
-        textView.setTextColor(color);
+        int startcolor = color;
+        int endcolor = MaterialColors.getColor(textView, ObjectUtils.colorOnSurface, 0);
+        JgitColorAnimHanlder.animTextColor(textView, startcolor, endcolor);
       }
     }
   }

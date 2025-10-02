@@ -10,7 +10,19 @@ import com.google.android.material.shape.ShapeAppearanceModel;
 import static com.google.android.material.R.attr.*;
 
 class Shape {
-
+  public static Drawable normal(View v){
+    MaterialShapeDrawable shapeDrawable =
+        new MaterialShapeDrawable(
+            ShapeAppearanceModel.builder()
+                .setTopLeftCornerSize(19f)
+                .setTopRightCornerSize(19f)
+                .setBottomLeftCornerSize(19f)
+                .setBottomRightCornerSize(19f)
+                .build());
+    shapeDrawable.setFillColor(
+        ColorStateList.valueOf(MaterialColors.getColor(v, colorSurfaceContainer)));
+    return createRippleDrawable(v, shapeDrawable);
+  }
   public static Drawable bottom(View v) {
     MaterialShapeDrawable shapeDrawable =
         new MaterialShapeDrawable(

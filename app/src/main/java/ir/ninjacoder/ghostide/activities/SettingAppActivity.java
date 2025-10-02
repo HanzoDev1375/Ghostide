@@ -1,11 +1,13 @@
 package ir.ninjacoder.ghostide.activities;
 
+import com.google.android.material.shape.MaterialShapes;
 import io.github.rosemoe.sora.widget.power.PowerModeEffectManager;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.adapter.ListAppIconAd;
 import ir.ninjacoder.ghostide.config.AppIconManager;
 import ir.ninjacoder.ghostide.config.PrfnsUtil;
+import ir.ninjacoder.ghostide.databinding.LayoutEditorSizeBlurBinding;
 import ir.ninjacoder.ghostide.enums.EffectTypeManager;
 import ir.ninjacoder.ghostide.enums.ErudaThemeManager;
 import ir.ninjacoder.ghostide.enums.ErudaThemes;
@@ -478,23 +480,21 @@ public class SettingAppActivity extends BaseCompat {
   }
 
   public void _blursize() {
-    var di = new GhostWebMaterialDialog(SettingAppActivity.this);
-    ViewGroup viewGroup = findViewById(android.R.id.content);
-    View dialogview =
-        getLayoutInflater().inflate(R.layout.layout_editor_size_blur, viewGroup, false);
-    ir.ninjacoder.ghostide.layoutmanager.SliderCompat slider = dialogview.findViewById(R.id.slider);
+    var di = new MaterialAlertDialogBuilder(this);
+    var bind = LayoutEditorSizeBlurBinding.inflate(getLayoutInflater());
+    bind.slider.setTrackIconActiveStart(MaterialShapes.createShapeDrawable(MaterialShapes.SOFT_BURST));
     di.setTitle("Blur Size");
     di.setMessage("Set Number 1~25");
     if (thememanagersoft != null) {
 
-      slider.setValue(thememanagersoft.getFloat("br", 1));
+      bind.slider.setValue(thememanagersoft.getFloat("br", 1));
     }
     di.setNeutralButton(
         android.R.string.ok,
         (p, d) -> {
-          thememanagersoft.edit().putFloat("br", slider.getValue()).apply();
+          thememanagersoft.edit().putFloat("br", bind.slider.getValue()).apply();
         });
-    di.setView(dialogview);
+    di.setView(bind.getRoot());
     di.show();
   }
 

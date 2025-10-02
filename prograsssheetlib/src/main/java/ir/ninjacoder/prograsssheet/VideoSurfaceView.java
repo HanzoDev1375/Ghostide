@@ -8,48 +8,20 @@ import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import androidx.annotation.NonNull;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.DefaultLifecycleObserver;
+import androidx.lifecycle.LifecycleOwner;
 import com.google.android.material.color.MaterialColors;
 import java.io.IOException;
-import static com.google.android.material.R.attr.colorSurface;
 
-/**
- * code by ninja coder This class is created for Ghost IDE application but you can still use it for
- * your own applications. You need to add a layout frame and add this layout to your xml and then
- * findviewbyid or if you are using the binding system, use the bind and call the setPath method and
- * pass the path of the mp4 file. <?xml version="1.0" encoding="utf-8"?> <FrameLayout
- * xmlns:android="http://schemas.android.com/apk/res/android"
- * xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_height="match_parent"
- * android:layout_width="match_parent"
- *
- * <p>android:orientation="vertical">
- *
- * <p><ir.ninjacoder.prograsssheet.VideoSurfaceView android:layout_height="match_parent"
- * android:layout_width="match_parent" android:id="@+id/videoview" />
- *
- * <p><LinearLayout android:layout_height="match_parent" android:layout_width="match_parent"
- * android:gravity="center" android:orientation="vertical">
- *
- * <p><EditText android:layout_height="wrap_content" android:layout_width="wrap_content"
- * android:hint="add music file" android:layout_marginTop="9dp" android:id="@+id/musicfile" />
- *
- * <p><Button android:layout_height="wrap_content" android:layout_width="wrap_content"
- * android:text="Click!" android:id="@+id/btn" />
- *
- * <p><Button android:layout_height="wrap_content" android:layout_width="wrap_content"
- * android:text="Click!" android:id="@+id/btn2" />
- *
- * <p></LinearLayout>
- *
- * <p></FrameLayout>
- *
- * <p>deom layout
- */
-public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
+public class VideoSurfaceView extends SurfaceView
+    implements SurfaceHolder.Callback, DefaultLifecycleObserver {
 
   private MediaPlayer mediaPlayer;
   private String path;
   private int currentPosition = 0;
   private boolean isPrepared = false;
+  private Lifecycle lifecycle;
 
   public VideoSurfaceView(Context context) {
     super(context);
@@ -68,7 +40,16 @@ public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callb
 
   private void init() {
     getHolder().addCallback(this);
-    setBackgroundColor(MaterialColors.getColor(this, colorSurface));
+    
+  }
+  
+  
+  public void setLifecycle(Lifecycle lifecycle) {
+    if (this.lifecycle != null) {
+      this.lifecycle.removeObserver(this);
+    }
+    this.lifecycle = lifecycle;
+    this.lifecycle.addObserver(this);
   }
 
   @Override
@@ -107,12 +88,10 @@ public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callb
       mediaPlayer.setOnErrorListener(
           (mp, what, extra) -> {
             releasePlayer();
-            setBackgroundColor(MaterialColors.getColor(getContext(), colorSurface, 0));
             return true;
           });
     } catch (IOException e) {
       e.printStackTrace();
-      setBackgroundColor(Color.GRAY);
       releasePlayer();
     }
   }
@@ -140,14 +119,17 @@ public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     return path;
   }
 
-  public void pause() {
+  // متدهای DefaultLifecycleObserver
+  @Override
+  public void onPause(@NonNull LifecycleOwner owner) {
     if (mediaPlayer != null && mediaPlayer.isPlaying()) {
       mediaPlayer.pause();
       currentPosition = mediaPlayer.getCurrentPosition();
     }
   }
 
-  public void resume() {
+  @Override
+  public void onResume(@NonNull LifecycleOwner owner) {
     if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
       mediaPlayer.start();
     } else if (mediaPlayer == null && path != null && getHolder().getSurface().isValid()) {
@@ -155,7 +137,8 @@ public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     }
   }
 
-  public void start() {
+  @Override
+  public void onStart(@NonNull LifecycleOwner owner) {
     if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
       mediaPlayer.start();
     } else if (mediaPlayer == null && path != null && getHolder().getSurface().isValid()) {
@@ -163,12 +146,21 @@ public class VideoSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     }
   }
 
-  public void stop() {
+  @Override
+  public void onStop(@NonNull LifecycleOwner owner) {
     if (mediaPlayer != null) {
       if (mediaPlayer.isPlaying()) {
         mediaPlayer.stop();
       }
       currentPosition = 0;
+    }
+  }
+
+  @Override
+  public void onDestroy(@NonNull LifecycleOwner owner) {
+    releasePlayer();
+    if (lifecycle != null) {
+      lifecycle.removeObserver(this);
     }
   }
 

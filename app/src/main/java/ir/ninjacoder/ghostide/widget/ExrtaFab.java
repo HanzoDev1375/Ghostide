@@ -23,12 +23,10 @@ public class ExrtaFab extends ExtendedFloatingActionButton {
   public void init() {
     setIconResource(R.drawable.ic_fab_play);
     shrink();
-	setBackground(ObjectUtils.getCookieShape());
+    setBackground(ObjectUtils.getCookieShape());
   }
 
-  public void setColorFilter(int color) {
-    
-  }
+  public void setColorFilter(int color) {}
 
   public boolean isHide() {
     return getVisibility() == GONE ? true : false;
@@ -37,11 +35,11 @@ public class ExrtaFab extends ExtendedFloatingActionButton {
   public boolean isShow() {
     return getVisibility() == VISIBLE ? true : false;
   }
+
   @Override
   public void setOnClickListener(OnClickListener arg0) {
-  	super.setOnClickListener(arg0);
-  	// TODO: Implement this method
-	  AnimUtils.Sacla(this);
+    super.setOnClickListener(arg0);
+    // TODO: Implement this method
+    AnimUtils.Sacla(this);
   }
-  
 }
