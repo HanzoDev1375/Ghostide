@@ -52,7 +52,7 @@ public class SquigglyProgress extends Drawable {
   public float phaseSpeed = 0f;
 
   // Progress stroke width, both for wave and solid line
-  private float strokeWidth = 0f;
+  public float strokeWidth = 0f;
 
   public float getStrokeWidth() {
     return strokeWidth;
@@ -76,7 +76,7 @@ public class SquigglyProgress extends Drawable {
   }
 
   // Enables a transition region where the amplitude of the wave is reduced linearly across it.
-  private boolean transitionEnabled = true;
+  public boolean transitionEnabled = true;
 
   public boolean isTransitionEnabled() {
     return transitionEnabled;
@@ -87,7 +87,7 @@ public class SquigglyProgress extends Drawable {
     invalidateSelf();
   }
 
-  private boolean animate = false;
+  public boolean animate = false;
 
   public boolean isAnimate() {
     return animate;

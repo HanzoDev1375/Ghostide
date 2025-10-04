@@ -5,6 +5,7 @@ import android.transition.Explode;
 import com.blankj.utilcode.util.FileIOUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.marco.WallpaperParallaxEffect;
 import ir.ninjacoder.ghostide.utils.EdgeToEdgeUtils;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
@@ -56,8 +57,9 @@ public class BaseCompat extends AppCompatActivity {
   protected File file;
   protected MaterialAlertDialogBuilder dialogerror;
   protected GradientDrawable gb = new GradientDrawable();
-  private SharedPreferences thememanagersoft;
+  private SharedPreferences thememanagersoft, themechange;
   private WallpaperParallaxEffect effect;
+
   private static String ThemePath = "/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost";
 
   @Nullable
@@ -66,7 +68,7 @@ public class BaseCompat extends AppCompatActivity {
     super.onCreate(saveInStatous);
     initErrorDialogpackageAPP();
     thememanagersoft = getSharedPreferences("thememanagersoft", MODE_PRIVATE);
-
+    themechange = getSharedPreferences("themechange", MODE_PRIVATE);
     initParseWallpapaer();
     if (Build.VERSION.SDK_INT >= 28)
       getWindow()
@@ -77,7 +79,16 @@ public class BaseCompat extends AppCompatActivity {
     if (Build.VERSION.SDK_INT >= 21)
       getWindow().setStatusBarColor(MaterialColors.getColor(this, ObjectUtils.Back, 0));
 
-   
+    try {
+      if (themechange.contains("themechange")) {
+        if (themechange.getBoolean("themechange", false) == true) {
+          ((GhostIdeAppLoader) getApplicationContext()).onThemeChange();
+          
+        }
+      }
+    } catch (Exception err) {
+      Log.e("THEME", err.getLocalizedMessage());
+    }
     setBackGroundIsMobile();
     // bad work to Android 14& 15
     // EdgeToEdgeUtils.applyEdgeToEdge(

@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
+import ir.ninjacoder.prograsssheet.R;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import androidx.annotation.NonNull;
@@ -50,12 +51,25 @@ public class MusicSheet implements SeekBar.OnSeekBarChangeListener {
     dialog = new Sheet(context);
     bind.titlemusic.setText(md.getNameArtist());
     bind.submusic.setText(md.getNameAlbom());
-	bars = new SquigglyProgress();
-	bars.setdefaultSettring();
+    bars = new SquigglyProgress();
+    var seekBarProgressWavelength =
+        context.getResources().getDimensionPixelSize(R.dimen.media_seekbar_progress_wavelength);
+    var seekBarProgressAmplitude =
+        context.getResources().getDimensionPixelSize(R.dimen.media_seekbar_progress_amplitude);
+    var seekBarProgressPhase =
+        context.getResources().getDimensionPixelSize(R.dimen.media_seekbar_progress_phase);
+    var seekBarProgressStrokeWidth =
+        context.getResources().getDimensionPixelSize(R.dimen.media_seekbar_progress_stroke_width);
+    bars.waveLength = seekBarProgressWavelength;
+    bars.lineAmplitude = seekBarProgressAmplitude;
+    bars.phaseSpeed = seekBarProgressPhase;
+    bars.strokeWidth = seekBarProgressStrokeWidth;
+    bars.transitionEnabled = true;
+    bars.animate = false;
     setMatchParentDialog(true);
     showandP(true);
     bind.musicseekbar.setProgressDrawable(bars);
-    
+
     dialog
         .getBehavior()
         .addBottomSheetCallback(
@@ -198,7 +212,7 @@ public class MusicSheet implements SeekBar.OnSeekBarChangeListener {
   public void playMusic() {
     if (dialog.isShowing()) {
       md.start();
-	  bars.setAnimate(true);
+      bars.setAnimate(true);
     }
   }
 

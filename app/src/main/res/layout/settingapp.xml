@@ -18,15 +18,15 @@
             android:layout_height="?attr/collapsingToolbarLayoutMediumSize"
             android:layout_width="match_parent"
             app:expandedTitleTextAppearance="?textAppearanceHeadlineLarge"
-            app:contentScrim="#03FFFFFF"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-            app:title="@string/Settings"
             app:expandedTitleMarginStart="24dp"
+            app:titleCollapseMode="scale"
+            app:expandedTitleTextColor="?attr/colorOnSurface"
+            app:contentScrim="#03FFFFFF"
+            app:title="@string/Settings"
+            app:liftOnScroll="false"
             app:collapsedTitleTextAppearance="?textAppearanceTitleLarge"
             style="?attr/collapsingToolbarLayoutMediumStyle"
-            app:titleCollapseMode="scale"
-			app:liftOnScroll="false"
-            app:expandedTitleTextColor="?attr/colorOnSurface"
             app:collapsedTitleTextColor="?attr/colorOnSurface">
 
             <com.google.android.material.appbar.MaterialToolbar
@@ -34,7 +34,6 @@
                 android:layout_width="match_parent"
                 android:paddingEnd="8dp"
                 android:elevation="0dp"
-				
                 app:layout_collapseMode="pin"
                 android:paddingStart="24dp"
                 android:id="@+id/_toolbar" />
@@ -42,7 +41,7 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
-
+   
     <androidx.core.widget.NestedScrollView
         android:layout_height="match_parent"
         android:layout_width="match_parent"
@@ -176,6 +175,7 @@
                     android:layout_marginTop="4dp"
                     android:layout_marginStart="8dp"
                     android:id="@+id/jointogithub" />
+
                 <ir.ninjacoder.prograsssheet.perfence.PerfenceLayoutSubTitle
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
@@ -188,12 +188,13 @@
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:nestedScrollingEnabled="false"
                 android:layout_width="match_parent"
-                android:layout_marginEnd="8dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginStart="8dp"
+                android:padding="8dp"
                 android:id="@+id/rvsetting" />
+
 
         </LinearLayout>
 

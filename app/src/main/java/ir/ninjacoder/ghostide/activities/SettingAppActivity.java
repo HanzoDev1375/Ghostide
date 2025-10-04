@@ -8,10 +8,12 @@ import ir.ninjacoder.ghostide.adapter.ListAppIconAd;
 import ir.ninjacoder.ghostide.config.AppIconManager;
 import ir.ninjacoder.ghostide.config.PrfnsUtil;
 import ir.ninjacoder.ghostide.databinding.LayoutEditorSizeBlurBinding;
+import ir.ninjacoder.ghostide.databinding.Mp2Binding;
 import ir.ninjacoder.ghostide.enums.EffectTypeManager;
 import ir.ninjacoder.ghostide.enums.ErudaThemeManager;
 import ir.ninjacoder.ghostide.enums.ErudaThemes;
 import ir.ninjacoder.ghostide.git.GitHubProfileView;
+import ir.ninjacoder.prograsssheet.perfence.ShapeList;
 import java.util.Arrays;
 import ir.ninjacoder.ghostide.filehelper.IconCursorImpl;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
@@ -94,7 +96,8 @@ public class SettingAppActivity extends BaseCompat {
       sf,
       gridMode,
       Analyzercod,
-      iconSpash;
+      iconSpash,
+      themechange;
   private PerfenceLayoutSubTitle themecustom, blurmod, windowsize, erudathemes, jointogithub;
 
   @Override
@@ -137,7 +140,7 @@ public class SettingAppActivity extends BaseCompat {
     setfont = getSharedPreferences("setfont", Activity.MODE_PRIVATE);
     ru = getSharedPreferences("ru", Activity.MODE_PRIVATE);
     sve = getSharedPreferences("sve", Activity.MODE_PRIVATE);
-
+    themechange = getSharedPreferences("themechange", MODE_PRIVATE);
     materialYou = getSharedPreferences("materialYou", Activity.MODE_PRIVATE);
     thememanagersoft = getSharedPreferences("thememanagersoft", Activity.MODE_PRIVATE);
     sf = getSharedPreferences("sf", Activity.MODE_PRIVATE);
@@ -475,14 +478,15 @@ public class SettingAppActivity extends BaseCompat {
     fb.add("");
     fb.add("");
     grids.setValue(gridMode.contains("gride"));
-    rvsetting.setAdapter(new Recyclerview2Adapter(fb));
     rvsetting.setLayoutManager(new LinearLayoutManager(this));
+    rvsetting.setAdapter(new Recyclerview2Adapter(fb));
   }
 
   public void _blursize() {
     var di = new MaterialAlertDialogBuilder(this);
     var bind = LayoutEditorSizeBlurBinding.inflate(getLayoutInflater());
-    bind.slider.setTrackIconActiveStart(MaterialShapes.createShapeDrawable(MaterialShapes.SOFT_BURST));
+    bind.slider.setTrackIconActiveStart(
+        MaterialShapes.createShapeDrawable(MaterialShapes.SOFT_BURST));
     di.setTitle("Blur Size");
     di.setMessage("Set Number 1~25");
     if (thememanagersoft != null) {
@@ -518,11 +522,11 @@ public class SettingAppActivity extends BaseCompat {
         new AdapterView.OnItemClickListener() {
           @Override
           public void onItemClick(AdapterView<?> _param1, View _param2, int _param3, long _param4) {
-            final int _position = _param3;
-            var myicon = new AppIconManager(SettingAppActivity.this, _position);
+            final int position = _param3;
+            var myicon = new AppIconManager(SettingAppActivity.this, position);
             myicon.setIconManager();
             int iconput = 0;
-            switch (_position) {
+            switch (position) {
               case 0:
                 iconput = 0;
                 break;
@@ -586,74 +590,69 @@ public class SettingAppActivity extends BaseCompat {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-      LayoutInflater _inflater = getLayoutInflater();
-      View _v = _inflater.inflate(R.layout.mp2, null);
-      RecyclerView.LayoutParams _lp =
+      Mp2Binding f = Mp2Binding.inflate(LayoutInflater.from(parent.getContext()));
+      var param =
           new RecyclerView.LayoutParams(
-              ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-      _v.setLayoutParams(_lp);
-      return new ViewHolder(_v);
+              new RecyclerView.LayoutParams(
+                  RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
+      f.getRoot().setLayoutParams(param);
+      return new ViewHolder(f);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder _holder, final int _position) {
-      View _view = _holder.itemView;
+    public void onBindViewHolder(ViewHolder holder, int position) {
+      View view = holder.itemView;
 
-      final LinearLayout text = _view.findViewById(R.id.text);
-      final TextView textview1 = _view.findViewById(R.id.textview1);
-      final ImageView imageview1 = _view.findViewById(R.id.imageview1);
-      String api = bind.get(_position);
+      var titlemodel = holder.title;
+      var modelicon = holder.icon;
+      String api = bind.get(position);
 
-      ObjectUtils.setColorFilter(imageview1);
-      ObjectUtils.setTextColor(textview1);
-
-      if (_position == 0) {
-        textview1.setText(R.string.Customize_font);
-        imageview1.setImageResource(R.drawable.mfont);
-        _view.setOnClickListener(
-            new View.OnClickListener() {
-              @Override
-              public void onClick(View _view) {
-                customDataRow(
-                    "Custom Font Editor", "type dir font .ttf format... ", "mfont", setfont);
-              }
+      ObjectUtils.setColorFilter(modelicon);
+      ObjectUtils.setTextColor(titlemodel);
+      ShapeList.getShapeListStatus(bind, position, view);
+      if (position == 0) {
+        titlemodel.setText(R.string.Customize_font);
+        modelicon.setImageResource(R.drawable.mfont);
+        view.setOnClickListener(
+            c -> {
+              customDataRow(
+                  "Custom Font Editor", "type dir font .ttf format... ", "mfont", setfont);
             });
       }
-      if (_position == 1) {
-        _view.setOnClickListener(
+      if (position == 1) {
+        view.setOnClickListener(
             c -> {
               initIconColors();
             });
-        textview1.setText(getString(R.string.custom_icons));
-        imageview1.setImageResource(R.drawable.keyboardlisnertalluserpost_3);
+        titlemodel.setText(getString(R.string.custom_icons));
+        modelicon.setImageResource(R.drawable.keyboardlisnertalluserpost_3);
       }
-      if (_position == 2) {
-        _view.setOnClickListener(_riee_ -> terminalTheme());
-        textview1.setText(getString(R.string.termthemes));
-        imageview1.setImageResource(R.drawable.ic_material_settings);
+      if (position == 2) {
+        view.setOnClickListener(_riee_ -> terminalTheme());
+        titlemodel.setText(getString(R.string.termthemes));
+        modelicon.setImageResource(R.drawable.ic_material_settings);
       }
-      if (_position == 3) {
-        _view.setOnClickListener(_ddd_ -> CustomPythonCode());
-        textview1.setText(getString(R.string.scriptcustom));
-        imageview1.setImageResource(R.drawable.ic_material_console);
+      if (position == 3) {
+        view.setOnClickListener(_ddd_ -> CustomPythonCode());
+        titlemodel.setText(getString(R.string.scriptcustom));
+        modelicon.setImageResource(R.drawable.ic_material_console);
       }
-      if (_position == 4) {
-        textview1.setText(getString(R.string.customthemeapp));
-        imageview1.setImageResource(R.drawable.ghosttheme);
-        _view.setOnClickListener(
+      if (position == 4) {
+        titlemodel.setText(getString(R.string.customthemeapp));
+        modelicon.setImageResource(R.drawable.ghosttheme);
+        view.setOnClickListener(
             _dddrr_ -> {
               ThemeChooserDialogBuilder dialog =
                   new ThemeChooserDialogBuilder(SettingAppActivity.this);
               dialog.setPositiveButton(
-                  "OK",
-                  (position, theme) -> {
+                  android.R.string.ok,
+                  (positin, theme) -> {
                     GhostIdeAppLoader.getThemeEngine().setStaticTheme(theme);
                     themeEngine.setStaticTheme(theme);
                     ((GhostIdeAppLoader) getApplicationContext()).onThemeChange();
-                    recreate();
-                    finishAffinity();
+                    themechange.edit().putBoolean("themechange", true).apply();
                   });
-              dialog.setNegativeButton("Cancel");
+              dialog.setNegativeButton(android.R.string.cancel);
               dialog.setNeutralButton(
                   "Default",
                   (param1, param2) -> {
@@ -665,28 +664,28 @@ public class SettingAppActivity extends BaseCompat {
               dialog.create().show();
             });
       }
-      if (_position == 5) {
-        textview1.setText(getString(R.string.customchareditor));
-        _view.setOnClickListener(v -> getCustomChar());
-        imageview1.setImageResource(0);
+      if (position == 5) {
+        titlemodel.setText(getString(R.string.customchareditor));
+        view.setOnClickListener(v -> getCustomChar());
+        modelicon.setImageResource(0);
       }
-      if (_position == 6) {
-        textview1.setText(getString(R.string.cursoreditoricon));
-        _view.setOnClickListener(
+      if (position == 6) {
+        titlemodel.setText(getString(R.string.cursoreditoricon));
+        view.setOnClickListener(
             g -> {
               new IconCursorImpl(SettingAppActivity.this);
             });
-        imageview1.setImageResource(0);
+        modelicon.setImageResource(0);
       }
-      if (_position == 7) {
-        textview1.setText(getString(R.string.backgroundimageeditor));
-        _view.setOnClickListener(v -> getVideoBackground());
-        imageview1.setImageResource(0);
+      if (position == 7) {
+        titlemodel.setText(getString(R.string.backgroundimageeditor));
+        view.setOnClickListener(v -> getVideoBackground());
+        modelicon.setImageResource(0);
       }
-      if (_position == 8) {
-        textview1.setText(getString(R.string.glow_effect));
-        _view.setOnClickListener(v -> showEF());
-        imageview1.setImageResource(0);
+      if (position == 8) {
+        titlemodel.setText(getString(R.string.glow_effect));
+        view.setOnClickListener(v -> showEF());
+        modelicon.setImageResource(0);
       }
     }
 
@@ -695,9 +694,14 @@ public class SettingAppActivity extends BaseCompat {
       return bind.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-      public ViewHolder(View v) {
-        super(v);
+    class ViewHolder extends RecyclerView.ViewHolder {
+      TextView title;
+      ImageView icon;
+
+      public ViewHolder(Mp2Binding v) {
+        super(v.getRoot());
+        title = v.mytitleViews;
+        icon = v.imageview1;
       }
     }
   }
