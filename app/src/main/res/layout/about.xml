@@ -11,8 +11,7 @@
          android:layout_height="match_parent"
          android:layout_width="match_parent"
          android:padding="8dp"
-         android:orientation="vertical"
-         android:id="@+id/rootlayout">
+         android:orientation="vertical">
 
         <com.google.android.material.card.MaterialCardView
              android:layout_height="wrap_content"
@@ -31,8 +30,7 @@
                      android:layout_marginBottom="1dp"
                      android:src="@drawable/app_icon"
                      android:scaleType="centerInside"
-                     android:layout_marginTop="2dp"
-                     android:id="@+id/showappicon" />
+                     android:layout_marginTop="2dp" />
 
                 <TextView
                      android:layout_height="wrap_content"
@@ -68,8 +66,7 @@
         <com.google.android.material.card.MaterialCardView
              android:layout_height="wrap_content"
              android:layout_width="match_parent"
-             android:layout_marginTop="10dp"
-             android:id="@+id/cardsoclise">
+             android:layout_marginTop="10dp">
 
             <LinearLayout
                  android:layout_height="match_parent"
@@ -95,14 +92,12 @@
                 <LinearLayout
                      android:layout_height="match_parent"
                      android:layout_width="match_parent"
-                     android:orientation="horizontal"
-                     android:id="@+id/lie">
+                     android:orientation="horizontal">
 
                     <androidx.recyclerview.widget.RecyclerView
                          android:layout_height="wrap_content"
                          android:layout_width="match_parent"
-                         android:padding="8dp"
-                         android:id="@+id/rv_socias" />
+                         android:padding="8dp" />
 
                 </LinearLayout>
 

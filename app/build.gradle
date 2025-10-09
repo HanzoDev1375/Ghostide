@@ -42,22 +42,18 @@ android {
     }
     lint {
         baseline = file("lint-baseline.xml")
+        abortOnError false
+        checkReleaseBuilds false
     }
+
     packagingOptions.jniLibs.useLegacyPackaging true
     packagingOptions {
+        resources {
+            excludes += ['META-INF/eclipse.inf', 'about_files/LICENSE-2.0.txt', 'plugin.xml', 'plugin.properties', 'baksmali.properties', 'META-INF/buildinfo.xml']
+        }
         resources.excludes.add("license/*")
-        exclude "META-INF/eclipse.inf"
-        exclude "about_files/LICENSE-2.0.txt"
-        exclude "plugin.xml"
-        exclude "plugin.properties"
-        exclude "baksmali.properties"
-	    	exclude "META-INF/buildinfo.xml"
     }
-    lintOptions {
-        checkReleaseBuilds false
-        abortOnError false
-    }
-    
+
     buildFeatures {
         viewBinding true
     }

@@ -8,7 +8,6 @@
     tools:layout_width="56dp">
 
     <com.quickersilver.themeengine.CircleImageView
-        android:id="@+id/color_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"

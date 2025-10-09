@@ -22,9 +22,8 @@
             android:gravity="center"
             android:padding="8dp"
             android:orientation="vertical"
-            android:id="@+id/container"
-            
-        >
+
+            >
 
             <ImageView
                 android:layout_height="80dp"
@@ -106,9 +105,8 @@
                     android:layout_marginLeft="4dp"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_weight="1"
-                    android:id="@+id/textinputlayout3"
-                    
-                >
+
+                    >
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_height="wrap_content"
@@ -151,9 +149,8 @@
                 android:layout_marginRight="10dp"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_marginTop="8dp"
-                android:id="@+id/textinputlayout4"
-                
-            >
+
+                >
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_height="wrap_content"
@@ -198,9 +195,8 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:id="@+id/textinputlayout5"
-                
-            >
+
+                >
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_height="wrap_content"

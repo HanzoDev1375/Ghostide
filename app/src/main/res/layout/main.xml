@@ -5,8 +5,7 @@
      android:layout_height="match_parent"
      android:layout_width="match_parent"
      android:layout_marginRight="9dp"
-     android:layout_marginLeft="9dp"
-     android:id="@+id/shapeviews">
+     android:layout_marginLeft="9dp">
 
     <LinearLayout
          android:layout_height="match_parent"
@@ -44,16 +43,14 @@
              android:layout_width="wrap_content"
              android:gravity="bottom"
              android:textAppearance="?android:attr/textAppearanceSmall"
-             android:id="@+id/unzipFiles"
-             android:text="app by ninja coder" />
+            android:text="app by ninja coder" />
 
         <LinearLayout
              android:layout_height="wrap_content"
              android:layout_width="match_parent"
              android:visibility="gone"
              android:gravity="center"
-             android:orientation="vertical"
-             android:id="@+id/layout_vis_main">
+             android:orientation="vertical">
 
             <TextView
                  android:layout_height="wrap_content"
@@ -65,13 +62,11 @@
                  android:singleLine="true"
                  android:textColor="?@attr/colorOnSurface"
                  android:layout_marginTop="10dp"
-                 android:id="@+id/tv_main_unzip"
-                 android:text="hello" />
+                android:text="hello" />
 
             <com.google.android.material.progressindicator.LinearProgressIndicator
                  android:layout_height="wrap_content"
-                 android:layout_width="wrap_content"
-                 android:id="@+id/prograssBar_Main_UnZip" />
+                 android:layout_width="wrap_content" />
 
         </LinearLayout>
 

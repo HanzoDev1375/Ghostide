@@ -22,9 +22,7 @@
                 android:layout_margin="2dp"
                 app:endIconDrawable="@drawable/textsearch"
                 app:endIconMinSize="20dp"
-                app:endIconScaleType="centerInside"
-                android:id="@+id/inputlayoutsearch"
-        >
+                app:endIconScaleType="centerInside">
 
             <EditText
                     android:layout_height="wrap_content"

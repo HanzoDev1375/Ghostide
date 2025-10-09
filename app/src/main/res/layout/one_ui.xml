@@ -41,8 +41,7 @@
          android:layout_marginStart="2dp"
          android:layout_toEndOf="@id/item_icon"
          android:layout_below="@id/item_label"
-         android:id="@+id/item_desc"
-         android:text="ejeieiei" />
+        android:text="ejeieiei" />
 
     <TextView
          android:layout_height="wrap_content"
@@ -55,7 +54,6 @@
          android:layout_alignParentEnd="true"
          android:textSize="11sp"
          android:textColor="?attr/colorSecondaryVariant"
-         android:id="@+id/item_type"
-         android:text="Tag" />
+        android:text="Tag" />
 
 </RelativeLayout>

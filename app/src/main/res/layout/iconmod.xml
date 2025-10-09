@@ -16,8 +16,7 @@
 
         <com.google.android.material.appbar.MaterialToolbar
                 android:layout_height="56dp"
-                android:layout_width="match_parent"
-                android:id="@+id/iconmode_toolbar"/>
+                android:layout_width="match_parent" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

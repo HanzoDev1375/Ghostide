@@ -8,7 +8,6 @@ android {
     namespace "dev.trindadedev.lib.ui.components"
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 34
     }
     buildTypes {
         release {

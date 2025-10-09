@@ -37,8 +37,7 @@
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:padding="8dp"
-                    android:choiceMode="none"
-                    android:id="@+id/listview_bookmark">
+                    android:choiceMode="none">
 
             </ListView>
 
@@ -47,8 +46,7 @@
                     android:layout_width="match_parent"
                     android:gravity="center_horizontal|center_vertical"
                     android:padding="8dp"
-                    android:orientation="vertical"
-                    android:id="@+id/layout_bookmark_emptyview">
+                    android:orientation="vertical">
 
                 <TextView
                         android:layout_height="wrap_content"

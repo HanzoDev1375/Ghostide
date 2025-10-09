@@ -56,8 +56,7 @@
             <LinearLayout
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:id="@+id/layoutChilderHelper">
+                android:orientation="vertical">
 
                 <ir.ninjacoder.prograsssheet.perfence.PreferenceSwitchGroup
                     android:layout_height="wrap_content"

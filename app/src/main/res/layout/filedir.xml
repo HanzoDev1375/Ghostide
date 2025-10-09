@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    tools:openDrawer="start"
-    android:id="@+id/_drawer">
+    tools:openDrawer="start">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_height="match_parent"
@@ -89,8 +88,7 @@
                     android:visibility="gone"
                     android:indeterminate="true"
                     app:trackThickness="5dp"
-                    android:layout_gravity="center"
-                    android:id="@+id/filedir_bar" />
+                    android:layout_gravity="center" />
 
                 <LinearLayout
                     android:layout_height="match_parent"
@@ -139,8 +137,7 @@
                 android:gravity="center_horizontal|center_vertical"
                 android:background="?attr/selectableItemBackground"
                 android:padding="8dp"
-                android:orientation="vertical"
-                android:id="@+id/mdel">
+                android:orientation="vertical">
 
                 <ImageView
                     android:layout_height="25dp"

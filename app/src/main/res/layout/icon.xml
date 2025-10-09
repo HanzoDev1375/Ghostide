@@ -36,8 +36,7 @@
                         android:scaleType="fitXY"
                         android:tint="?attr/colorPrimary"
                         android:focusable="false"
-                        android:id="@+id/icon_from_iconmode"
-                        android:layout_gravity="center"/>
+                    android:layout_gravity="center"/>
 
                 <TextView
                         android:layout_height="wrap_content"
@@ -46,8 +45,7 @@
                         android:textSize="14sp"
                         android:textColor="?attr/colorOnSurface"
                         tools:text="TextView"
-                        android:layout_weight="1"
-                        android:id="@+id/name_icon_fromiconmode"/>
+                        android:layout_weight="1" />
 
             </LinearLayout>
 
