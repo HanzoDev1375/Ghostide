@@ -9,8 +9,7 @@
             android:gravity="center">
 
         <TextView
-                android:id="@+id/textView1"
-                android:layout_width="fill_parent"
+            android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10.0dip"
                 android:layout_weight="1.0"
@@ -18,8 +17,7 @@
     </LinearLayout>
 
     <RadioGroup
-            android:id="@+id/rg_type"
-            android:layout_width="fill_parent"
+        android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="right"
             android:orientation="horizontal">
@@ -50,8 +48,7 @@
     </RadioGroup>
 
     <ScrollView
-            android:id="@+id/scroll"
-            android:layout_width="fill_parent"
+        android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:padding="20.0dip">
 
@@ -116,8 +113,7 @@
                         android:text="طرز لایه بندی رنگ ها"/>
 
                 <RadioGroup
-                        android:id="@+id/rg_color"
-                        android:layout_width="fill_parent"
+                    android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:gravity="right"
                         android:paddingRight="20.0dip">
@@ -157,8 +153,7 @@
                             android:text="جهت چیدن رنگ ها"/>
 
                     <RadioGroup
-                            android:id="@+id/rg_liner"
-                            android:layout_width="fill_parent"
+                        android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:gravity="right"
                             android:orientation="horizontal"
@@ -200,8 +195,7 @@
                             android:text="محل محور گردش"/>
 
                     <RadioGroup
-                            android:id="@+id/rg_circle"
-                            android:layout_width="fill_parent"
+                        android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:gravity="right"
                             android:orientation="horizontal"

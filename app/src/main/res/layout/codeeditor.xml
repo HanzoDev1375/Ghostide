@@ -33,8 +33,7 @@
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
                 android:gravity="center_vertical"
-                android:orientation="vertical"
-                android:id="@+id/Mainlinear">
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_height="wrap_content"

@@ -24,7 +24,6 @@
             android:layout_margin="2dp"
             style="@style/Widget.Material3.Button.TextButton"
             android:layout_weight="1.0"
-            android:id="@+id/btn_close"
             android:text="close" />
 
         <com.google.android.material.button.MaterialButton

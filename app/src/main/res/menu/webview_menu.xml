@@ -56,9 +56,7 @@
             android:id="@+id/consolefromsheet"
             android:title="open Dialog sheet Console"
     />
-    <item
-            android:id="@+id/exit"
-            android:title="exit"
+    <item android:title="exit"
 
     />
 

@@ -18,8 +18,7 @@
                 android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
                 android:layout_width="match_parent"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                android:fitsSystemWindows="true"
-                android:id="@+id/collapsingtoolbar1">
+                android:fitsSystemWindows="true">
 
             <com.google.android.material.appbar.MaterialToolbar
                     android:layout_height="?attr/actionBarSize"
@@ -35,8 +34,7 @@
     <LinearLayout
             android:layout_height="match_parent"
             android:layout_width="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:id="@+id/need">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
                 android:layout_height="match_parent"

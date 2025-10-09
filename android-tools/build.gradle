@@ -14,6 +14,14 @@ android {
             minifyEnabled false
         }
     }
+    packagingOptions {
+        jniLibs {
+            excludes += ['com/sun/jna/**']
+        }
+        resources {
+            excludes += ['com/sun/jna/**']
+        }
+    }
     configurations.implementation {
         exclude group: 'javax.inject', module: 'javax.inject'
         exclude group: 'org.codehaus.woodstox', module: 'stax2-api'
@@ -21,10 +29,6 @@ android {
         exclude group: "org.jetbrains.kotlin", module: "kotlin-scripting-common"
         exclude group: "org.jetbrains.kotlin", module: "kotlin-scripting-jvm"
         exclude group: "org.jetbrains.kotlin", module: "kotlin-script-runtime"
-    }
-    packagingOptions {
-        exclude 'com/sun/jna/**'
-        // یا مشخص کردن فایل‌های خاصی که تداخل دارند
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17

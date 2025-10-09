@@ -27,8 +27,7 @@
             android:id="@+id/tabtest" />
         <androidx.recyclerview.widget.RecyclerView
             android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:id="@+id/rv1" />
+            android:layout_width="match_parent" />
 
         <ir.ninjacoder.ghostide.IdeEditor
             android:layout_height="match_parent"
