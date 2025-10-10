@@ -275,7 +275,7 @@ public class EditorColorScheme {
   public static final int javaparament = 5517;
   public static final int javanumber = 1372;
   public static final int javastring = 8362;
-  public static final int javakeywordoprator = 72081;	
+  public static final int javakeywordoprator = 72081;
 
   /// for html
   public static final int htmltag = 1733;
@@ -343,6 +343,7 @@ public class EditorColorScheme {
   public static final int breaklevel6 = 6727;
   public static final int breaklevel7 = 24702;
   public static final int breaklevel8 = 3749;
+  public static final int wars = 12820;
 
   /** Min pre-defined color id */
   protected static final int START_COLOR_ID = 1;

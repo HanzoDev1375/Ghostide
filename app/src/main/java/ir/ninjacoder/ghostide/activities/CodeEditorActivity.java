@@ -91,30 +91,16 @@ import java.util.TimerTask;
 public class CodeEditorActivity extends BaseCompat {
 
   public final int REQ_CD_SETPASZAMINE = 101;
-  protected Sound sound;
   protected EditorAutoCompleteWindow window;
   protected ExrtaFab _fab;
   private WallpaperParallaxEffect effect;
   private CoordinatorLayout Coordinator;
-
   private HashMap<String, Object> imap = new HashMap<>();
-  private double n = 0;
-
   private final String code = "";
-  private double click2var = 0;
-  private double pos10 = 0;
   private ThemeUtils themeForJson2;
-  private double n1 = 0;
-  private double n2 = 0;
-  private double n3 = 0;
-  private double n4 = 0;
-  private String datas = "";
   private double itemPosRemoved = 0;
   private final String GetTab = "";
-  private final double index = 0;
-  private double ic = 0;
-  private final String vasteh = "";
-
+  private double ic = 1;
   private ArrayList<HashMap<String, Object>> tabs_listmap = new ArrayList<>();
   private ArrayList<HashMap<String, Object>> staticSymbiolPiare = new ArrayList<>();
   private final ArrayList<String> string = new ArrayList<>();
@@ -147,9 +133,8 @@ public class CodeEditorActivity extends BaseCompat {
   private final Intent further = new Intent();
   private SharedPreferences re;
   private SharedPreferences war;
-  private SharedPreferences tab100;
+
   private SharedPreferences setfont;
-  private SharedPreferences atx;
   private SharedPreferences ru;
   private final ObjectAnimator objectAnim = new ObjectAnimator();
   private SharedPreferences auto;
@@ -164,7 +149,6 @@ public class CodeEditorActivity extends BaseCompat {
   private SharedPreferences pss;
   private SharedPreferences sve;
   private TabLayout tablayouteditor;
-  private SoundPool soundPool;
   private SharedPreferences getinitdir;
   private SharedPreferences mthemepost;
   private ImageView ghostIcon;
@@ -189,24 +173,6 @@ public class CodeEditorActivity extends BaseCompat {
     setContentView(R.layout.codeeditor);
     initialize(_savedInstanceState);
     initializeLogic();
-  }
-
-  private boolean isJsonError(String string) {
-    HashMap<String, Object> map = new HashMap<>();
-    ArrayList<HashMap<String, Object>> listmap = new ArrayList<>();
-    try {
-      map = new Gson().fromJson(string, new TypeToken<HashMap<String, Object>>() {}.getType());
-      return true;
-    } catch (Exception e0) {
-      try {
-        listmap =
-            new Gson()
-                .fromJson(string, new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
-        return true;
-      } catch (Exception e1) {
-        return false;
-      }
-    }
   }
 
   private void initialize(Bundle _savedInstanceState) {
@@ -248,9 +214,8 @@ public class CodeEditorActivity extends BaseCompat {
     getvb = getSharedPreferences("getvb", Activity.MODE_PRIVATE);
     re = getSharedPreferences("re", Activity.MODE_PRIVATE);
     war = getSharedPreferences("war", Activity.MODE_PRIVATE);
-    tab100 = getSharedPreferences("tab100", Activity.MODE_PRIVATE);
     setfont = getSharedPreferences("setfont", Activity.MODE_PRIVATE);
-    atx = getSharedPreferences("atx", Activity.MODE_PRIVATE);
+
     ru = getSharedPreferences("ru", Activity.MODE_PRIVATE);
     auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
     tabimageview = getSharedPreferences("tabimageview", Activity.MODE_PRIVATE);
@@ -282,10 +247,6 @@ public class CodeEditorActivity extends BaseCompat {
         .animate()
         .scaleX(1.0f)
         .scaleY(1.0f)
-        // .translationX(minScale)
-        // .translationY(minScale)
-        /// .x(minScale)
-        /// .y(minScale)
         .setDuration(1000)
         .start();
     mRootView
@@ -306,16 +267,7 @@ public class CodeEditorActivity extends BaseCompat {
 
                 if (keypadHeight > screenHeight * 0.15) {
                   float minScale = 1.0f;
-                  ghostIcon
-                      .animate()
-                      .scaleX(minScale)
-                      .scaleY(minScale)
-                      // .translationX(minScale)
-                      // .translationY(minScale)
-                      /// .x(minScale)
-                      /// .y(minScale)
-                      .setDuration(1000)
-                      .start();
+                  ghostIcon.animate().scaleX(minScale).scaleY(minScale).setDuration(1000).start();
 
                   ObjectUtils.showViewWithAnimation(syspiar);
 
@@ -325,10 +277,6 @@ public class CodeEditorActivity extends BaseCompat {
                       .animate()
                       .scaleX(Math.max(max, 1))
                       .scaleY(Math.max(max, 1))
-                      //                      .translationX(max / 2)
-                      //                      .translationY(max * max - 1)
-                      //                      .x(Math.max(max / 5, 6))
-                      //                      .y(Math.min(max * max, 6))
                       .setDuration(1000)
                       .start();
 
@@ -403,7 +351,6 @@ public class CodeEditorActivity extends BaseCompat {
     _fab.setOnClickListener(
         (it) -> {
           FabFileRuner();
-          
         });
   }
 
@@ -429,11 +376,6 @@ public class CodeEditorActivity extends BaseCompat {
                   new TypeToken<HashMap<String, Object>>() {}.getType());
     }
 
-    soundPool = new SoundPool(3, AudioManager.STREAM_MUSIC, 0);
-    n1 = soundPool.load(getApplicationContext(), R.raw.typenormal, 1);
-    n2 = soundPool.load(getApplicationContext(), R.raw.typeremoved, 1);
-    n3 = soundPool.load(getApplicationContext(), R.raw.ddoc, 1);
-    n4 = soundPool.load(getApplicationContext(), R.raw.typespace, 1);
     editor.setKeyboardOperation(
         new CodeEditor.OnKeyboardOperation() {
           @Override
@@ -443,18 +385,10 @@ public class CodeEditorActivity extends BaseCompat {
           public void Space() {}
 
           @Override
-          public void Removed() {
-
-            n1 = soundPool.load(getApplicationContext(), R.raw.typenormal, 1);
-          }
+          public void Removed() {}
 
           @Override
-          public void Enter() {
-            n2 = soundPool.play(2, 1.0f, 1.0f, 1, 0, 1.0f);
-            if (editor.getEditorLanguage() instanceof HTMLLanguage) {
-              editor.formatCodeAsync();
-            }
-          }
+          public void Enter() {}
         });
     if (sf.contains("sd100")) {
       if (sf.getInt("sd100", 1) == 1) {
@@ -496,7 +430,7 @@ public class CodeEditorActivity extends BaseCompat {
             ContentChangeEvent.class,
             (event, subscribe) -> {
               try {
-
+                FileChangeReceiver.stopWatching();
                 int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
                 if (selectedTabPosition >= 0 && selectedTabPosition < tabs_listmap.size()) {
                   String selectedFilePath =
@@ -510,7 +444,24 @@ public class CodeEditorActivity extends BaseCompat {
               }
             });
       } else {
-
+        int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
+        if (selectedTabPosition >= 0 && selectedTabPosition < tabs_listmap.size()) {
+          String selectedFilePath = tabs_listmap.get(selectedTabPosition).get("path").toString();
+          String fileContent = editor.getText().toString();
+          FileUtil.writeFile(selectedFilePath, fileContent);
+          ObjectUtils.removedStarToTab(selectedTabPosition, tablayouteditor);
+          FileChangeReceiver.startWatching(
+              CodeEditorActivity.this,
+              selectedFilePath,
+              (filePath) -> {
+                FileChangeReceiver.showFileChangedDialog(
+                    CodeEditorActivity.this,
+                    filePath,
+                    () -> {
+                      setCodeEditorFileReader(filePath);
+                    });
+              });
+        }
       }
     }
     Symbloinit();
@@ -533,7 +484,6 @@ public class CodeEditorActivity extends BaseCompat {
             WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
                 | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
-    editor.setLineNumberAlign(Paint.Align.CENTER);
     themeForJson2.setThemeCodeEditor(editor, imap, false, this);
     themeForJson2.addTextColor(
         titleauthor, KeySet.syombolbartextcolor, Color.parseColor("#FFFFA0FB"), this, imap);
@@ -559,19 +509,12 @@ public class CodeEditorActivity extends BaseCompat {
 
     AnimUtils.ClickAnimation(undo);
     AnimUtils.ClickAnimation(redo);
-    
-    _Animwork(_fab);
+
+    AnimUtils.Worker(_fab);
     editor
         .getColorScheme()
         .setColor(EditorColorScheme.MATCHED_TEXT_BACKGROUND, Color.parseColor("#75800F31"));
 
-    if (tab100.contains("mpcnullgogo")) {
-      try {
-        _tabsize(Double.parseDouble(tab100.getString("mpcnullgogo", "")));
-      } catch (Exception e) {
-        DataUtil.showMessage(getApplicationContext(), "error");
-      }
-    }
     if (setfont.contains("mfont")) {
       if (!FileUtil.isFile(setfont.getString("mfont", ""))) {
         editor.setTypefaceText(Typeface.createFromAsset(getAssets(), "ghostfont.ttf"));
@@ -784,8 +727,6 @@ public class CodeEditorActivity extends BaseCompat {
     }
   }
 
-  
-
   void setCodeEditorFileReader(String _path) {
     EditorRoaderFile.RuningTask(editor, _fab, _path, proanjctor);
   }
@@ -798,7 +739,6 @@ public class CodeEditorActivity extends BaseCompat {
         _data.clear();
         shp.edit().remove("pos_path").apply();
         shp.edit().remove("path").apply();
-        n = 0;
         finish();
       } else {
         if ((_position == 0) && (_data.size() > 1)) {
@@ -844,10 +784,6 @@ public class CodeEditorActivity extends BaseCompat {
       }
       shp.edit().putString("path", new Gson().toJson(_data)).apply();
     }
-  }
-
-  void _Animwork(final View _view) {
-    AnimUtils.Worker(_view);
   }
 
   void ReloadFileInPos() {
@@ -964,6 +900,7 @@ public class CodeEditorActivity extends BaseCompat {
                     setCodeEditorFileReader(filePath);
                   }
                 }
+                setDistreeView();
               }
 
               @Override
@@ -1020,16 +957,12 @@ public class CodeEditorActivity extends BaseCompat {
     channel.insertSymbol(input, input.length());
   }
 
-  public void _tabsize(final double _tab) {
-    editor.setTabWidth((int) _tab);
-  }
-
-  public void setFontEditorFromFile(final String _files) {
+  void setFontEditorFromFile(final String _files) {
     editor.setTypefaceText(Typeface.createFromFile(new File(_files)));
     editor.setTypefaceLineNumber(Typeface.createFromFile(new File(_files)));
   }
 
-  public void Symbloinit() {
+  void Symbloinit() {
     try {
       InputStream inputstream5 = getAssets().open("symbol.json");
       staticSymbiolPiare =
@@ -1061,7 +994,7 @@ public class CodeEditorActivity extends BaseCompat {
     }
   }
 
-  public void setCloseall() {
+  void setCloseall() {
     tabs_listmap.clear();
     shp.edit().remove("pos_path").apply();
     shp.edit().remove("positionTabs").apply();
@@ -1071,7 +1004,7 @@ public class CodeEditorActivity extends BaseCompat {
     finish();
   }
 
-  public void setCloseother() {
+  void setCloseother() {
     tabs_listmap.clear();
     {
       HashMap<String, Object> _item = new HashMap<>();
@@ -1106,7 +1039,7 @@ public class CodeEditorActivity extends BaseCompat {
     return filteredItems;
   }
 
-  public void setDistreeView() {
+  void setDistreeView() {
     List<String> pospath = spiltIntoBreadcrumbItems(shp.getString("pos_path", ""));
 
     var adps =
@@ -1127,7 +1060,7 @@ public class CodeEditorActivity extends BaseCompat {
     dir.smoothScrollToPosition(pospath.size());
   }
 
-  public void FabFileRuner() {
+  void FabFileRuner() {
     try {
       FileChangeReceiver.stopWatching();
 
@@ -1212,8 +1145,7 @@ public class CodeEditorActivity extends BaseCompat {
           intent.putExtra(XmlLayoutDesignActivity.EXTRA_STANDALONE, false);
           intent.putExtra(XmlLayoutDesignActivity.EXTRA_TRAINER, false);
           loadAnim(intent);
-          //          XmlLayoutDesignActivity.show(
-          //              CodeEditorActivity.this, "xml", selectedFilePath, false, false);
+
         } else if (selectedFilePath.contains(".jj")) {
           var file = new File(selectedFilePath);
           JavaCcComplierImpl.main(file.toString(), file.getParent() + "/");
@@ -1238,9 +1170,7 @@ public class CodeEditorActivity extends BaseCompat {
     }
   }
 
-  public void setAllSaveFile() {}
-
-  public void setAntlr4Compiler(String path) {
+  void setAntlr4Compiler(String path) {
     final var bottomSheetDialog = new BottomSheetDialog(this);
 
     Antcomp8lerBinding bind = Antcomp8lerBinding.inflate(getLayoutInflater());

@@ -20,10 +20,10 @@
 ### App Screenshots
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/appt2/Ghost-web-ide/main/images/img1.jpg" alt="Screenshot 1" style="width: 25%; height: auto; margin: 5px; border-radius: 9px;">
-  <img src="https://raw.githubusercontent.com/appt2/Ghost-web-ide/main/images/img2.jpg" alt="Screenshot 2" style="width: 25%; height: auto; margin: 5px; border-radius: 9px;">
-  <img src="https://raw.githubusercontent.com/appt2/Ghost-web-ide/main/images/img3.jpg" alt="Screenshot 3" style="width: 25%; height: auto; margin: 5px; border-radius: 9px;">
-  <img src="https://raw.githubusercontent.com/appt2/Ghost-web-ide/main/images/img4.jpg" alt="Screenshot 4" style="width: 25%; height: auto; margin: 5px; border-radius: 9px;">
+  <img src="https://raw.githubusercontent.com/HanzoDev1375/Ghostide/refs/heads/main/images/img1.jpg" alt="Screenshot 1" style="width: 25%; height: auto; margin: 5px; border-radius: 9px;">
+  <img src="https://raw.githubusercontent.com/HanzoDev1375/Ghostide/refs/heads/main/images/img2.jpg" alt="Screenshot 2" style="width: 25%; height: auto; margin: 5px; border-radius: 9px;">
+  <img src="https://raw.githubusercontent.com/HanzoDev1375/Ghostide/refs/heads/main/images/img3.jpg" alt="Screenshot 3" style="width: 25%; height: auto; margin: 5px; border-radius: 9px;">
+  <img src="https://raw.githubusercontent.com/HanzoDev1375/Ghostide/refs/heads/main/images/img4.jpg" alt="Screenshot 4" style="width: 25%; height: auto; margin: 5px; border-radius: 9px;">
 </div>
 
 ---
@@ -64,8 +64,7 @@
 - [x] Less Compiler
 - [x] JavaCc Compiler
 - [x] Git manager (30%) (Need help)
-- [x] CodeFormatter (60%)
-- [ ] Ruby compiler (coming soon hard mod help!!)
+- [x] CodeFormatter (80%)
 - [ ] Ninja Compiler (my lang)
 - [x] Physical keyboard support
 
@@ -79,7 +78,7 @@
 - [x] TypeScript
 - [x] Python
 - [x] Php
-- [x] Sass Scss
+- [x] Sass Scss Less
 - [x] Java
 - [x] Javacc
 - [x] Kotlin
@@ -94,7 +93,7 @@
 - [x] Go
 - [x] Tsx(not) && jsx(ok)
 - [ ] zig
-
+- [ ] C
 ---
 
 ### Notes
@@ -126,8 +125,6 @@ We invite you to collaborate on Ghost IDE under the following conditions:
 
 Ghost IDE supports code snippets. Here's an example:
 
-
-## Not implemented
 
 #### FA Json Example:
 

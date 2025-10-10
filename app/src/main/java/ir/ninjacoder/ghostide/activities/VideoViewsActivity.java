@@ -107,6 +107,8 @@ public class VideoViewsActivity extends BaseCompat {
     mWidthPixels = getResources().getDisplayMetrics().widthPixels;
     //  mVideoView.setLayoutParams(
     //   new LinearLayout.LayoutParams(mWidthPixels, mWidthPixels * 9 / 16 + 1));
+    
+    //mVideoView.startFullScreen();
     mVideoView.setUrl(path);
     mController = new StandardVideoController(this);
     mController.addControlComponent(new CompleteView(this));

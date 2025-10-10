@@ -194,7 +194,9 @@ public class ThemeUtils {
     editor.getColorScheme().setColor(EditorColorScheme.LINE_NUMBER_PANEL_TEXT, Color.WHITE);
     // برای افکت ها حتما باید ترنس پرنت باشه مگر نه افکت نمایش داده نمیشه
     editor.getColorScheme().setColor(EditorColorScheme.WHOLE_BACKGROUND, Color.TRANSPARENT);
-
+    // برای اخطار ها و متتودهای منسوخ شده
+    // رنگ غیرقابل ادیت کردن است و به راحتی در کد ادیتور نشون میده
+    editor.getColorScheme().setColor(EditorColorScheme.wars,Color.parseColor("#56F6CA50"));
     return this;
   }
 

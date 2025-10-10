@@ -1,10 +1,15 @@
 package ir.ninjacoder.ghostide;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.util.Log;
 import android.view.DragEvent;
+import android.widget.Toast;
+import io.github.rosemoe.sora.event.DoubleClickEvent;
 import io.github.rosemoe.sora.event.LongPressEvent;
 import io.github.rosemoe.sora.event.TextSizeChangeEvent;
+import io.github.rosemoe.sora.langs.html.HTMLLexer;
 import io.github.rosemoe.sora.langs.java.JavaLanguage;
 import io.github.rosemoe.sora.model.Inlay;
 import io.github.rosemoe.sora.model.LineIcon;
@@ -38,6 +43,7 @@ import io.github.rosemoe.sora.interfaces.EditorLanguage;
 import io.github.rosemoe.sora.langs.xml.XMLLanguage;
 import io.github.rosemoe.sora.langs.xml.XMLLexer;
 import java.io.StringReader;
+import java.util.regex.Matcher;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.Token;
 import java.util.ArrayList;
@@ -61,11 +67,6 @@ public class IdeEditor extends CodeEditor implements IEditor {
   private CommentList listitem;
   private ToolTipHelper toolTipHelper;
   private SharedPreferences saveTextSize;
-
-  // for test
-  private Pattern URL_PATTERN =
-      Pattern.compile(
-          "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)");
   // test
   private SymbolInputView mSymbolInputView;
 
@@ -91,10 +92,11 @@ public class IdeEditor extends CodeEditor implements IEditor {
     setScalable(true);
     setPinLineNumber(true);
     setNonPrintablePaintingFlags(FLAG_GHOSTWEB | FLAG_Scrop);
-    
+
     subscribeEvent(ContentChangeEvent.class, ((event, unsubscribe) -> handleContentChange(event)));
     subscribeEvent(TextSizeChangeEvent.class, ((event, unsubscribe) -> textSize(event)));
     subscribeEvent(LongPressEvent.class, (ev, un) -> setLongEvent(ev));
+    subscribeEvent(DoubleClickEvent.class, (ev, un) -> handleDoubleClick(ev));
     saveTextSize = getContext().getSharedPreferences("saveItem", Context.MODE_PRIVATE);
     var getSize = saveTextSize.getFloat("newTextSize", 16);
     if (saveTextSize != null) {
@@ -104,7 +106,7 @@ public class IdeEditor extends CodeEditor implements IEditor {
     PowerModeEffectManager.EffectType ef = EffectTypeManager.getCurrentTheme(getContext());
 
     getPowerModeEffectManager().setEffect(ef);
-    
+
     return this;
   }
 
@@ -118,13 +120,35 @@ public class IdeEditor extends CodeEditor implements IEditor {
     //// addLineIcon(R.drawable.ic_material_python, 5);
   }
 
-  void ta(ClickEvent ev) {
-    //    if (getEditorLanguage() instanceof HTMLLanguage) {
+  void handleDoubleClick(DoubleClickEvent db) {
+    try {
+      int clickIndex = db.getIndex();
+      String fullText = getTextAsString();
+      Pattern URL_PATTERN =
+          Pattern.compile(
+              "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)");
 
-    //  var it = new FloatingNavigationWindow(ev.getEditor());
-    //    it.setText("data " + HtmlHelper.code(ev.getEditor().getText().toString()));
-    // it.displayWindow();
-    //  }
+      Matcher matcher = URL_PATTERN.matcher(fullText);
+      while (matcher.find()) {
+        if (clickIndex >= matcher.start() && clickIndex <= matcher.end()) {
+          String url = matcher.group();
+          new MaterialAlertDialogBuilder(getContext())
+              .setTitle("Open Link")
+              .setMessage("Open Link " + url + " ?")
+              .setPositiveButton(
+                  android.R.string.ok,
+                  (x, c) -> {
+                    var intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    if (intent != null) getContext().startActivity(intent);
+                  })
+              .setNegativeButton(android.R.string.cancel, null)
+              .show();
+          return;
+        }
+      }
+    } catch (Exception err) {
+      Log.e("Link click error", err.getLocalizedMessage());
+    }
   }
 
   public void setFadein() {}

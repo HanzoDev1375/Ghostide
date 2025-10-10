@@ -421,6 +421,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                   colorid = EditorColorScheme.javaparament;
                 }
               }
+              
               result.addIfNeeded(line, column, colorid);
 
               break;
@@ -507,7 +508,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 public void visit(VariableDeclarationExpr variableDeclarationExpr, Void arg) {
                   for (VariableDeclarator variable : variableDeclarationExpr.getVariables()) {
                     String variableName = variable.getNameAsString();
-                    int line = variable.getBegin().get().line - 1;
+                    int line = variable.getBegin().get().line ;
                     int column = variable.getBegin().get().column;
                     declaredVariables.add(variableName);
                     inline.put(variableName, line);
@@ -613,6 +614,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 false,
                 true);
           }
+          FieldUsageChecker.run(editor.getTextAsString(),result);
         }
       } catch (Exception err) {
 
