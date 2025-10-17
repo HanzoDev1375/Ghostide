@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.rosemoe.sora.data.RainbowBracketHelper;
 import io.github.rosemoe.sora.data.Span;
+import io.github.rosemoe.sora.langs.internal.CodeHighlighter;
 import io.github.rosemoe.sora.langs.python.formatter.PythonCodeAnalyzerAst;
 import io.github.rosemoe.sora.langs.python.formatter.PythonSyntaxChecker;
 import io.github.rosemoe.sora.langs.xml.analyzer.Utils;
@@ -191,8 +192,9 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
             break;
 
           case PythonLexerCompat.STRING:
-            int colors = EditorColorScheme.pystring;
-            result.addIfNeeded(line, column, TextStyle.makeStyle(colors, 0, true, false, false));
+            CodeHighlighter.highlightFString(token.getText(),line,column,result);
+//            int colors = EditorColorScheme.pystring;
+//            result.addIfNeeded(line, column, TextStyle.makeStyle(colors, 0, true, false, false));
             break;
           case PythonLexerCompat.NUMBER:
             result.addIfNeeded(

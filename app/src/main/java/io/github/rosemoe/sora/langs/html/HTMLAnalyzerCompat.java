@@ -6,6 +6,7 @@ import io.github.rosemoe.sora.langs.less.LessParser;
 import io.github.rosemoe.sora.langs.less.LessParserBaseListener;
 import io.github.rosemoe.sora.langs.xml.analyzer.Utils;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
+import io.github.rosemoe.sora.widget.map.SpanModel;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.marco.RegexUtilCompat;
@@ -526,18 +527,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
 
             break;
           case HTMLLexer.LinkLiteral:
-            Span span =
-                Span.obtain(
-                    column,
-                    TextStyle.makeStyle(
-                        EditorColorScheme.tsattr,
-                        EditorColorScheme.wars,
-                        true,
-                        true,
-                        false));
-            
-            result.addIfNeeded(line, column, EditorColorScheme.Ninja);
-            if (span != null) result.add(line, span);
+            SpanModel.get(result,line,column,Color.parseColor("#2FFFA44A"),token);
             break;
           default:
             result.addIfNeeded(line, column, EditorColorScheme.TEXT_NORMAL);

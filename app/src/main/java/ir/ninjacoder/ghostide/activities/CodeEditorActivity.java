@@ -133,13 +133,10 @@ public class CodeEditorActivity extends BaseCompat {
   private final Intent further = new Intent();
   private SharedPreferences re;
   private SharedPreferences war;
-
   private SharedPreferences setfont;
   private SharedPreferences ru;
   private final ObjectAnimator objectAnim = new ObjectAnimator();
-  private SharedPreferences auto;
   private SharedPreferences tabimageview;
-  private SharedPreferences moalaqfragment;
   private PowerMenu mmenucog;
   private PowerMenu mmenuitempos;
   private final Intent icon = new Intent();
@@ -160,7 +157,7 @@ public class CodeEditorActivity extends BaseCompat {
   private GhostWebEditorSearch ghost_searchs;
   private int tabPos = -1;
   private EditorViewModel modelEditor;
-  private String Paths, path;
+  private String path;
   private boolean isSvg = false;
   private IdeEditor editor;
   private VideoSurfaceView mvideo;
@@ -217,9 +214,7 @@ public class CodeEditorActivity extends BaseCompat {
     setfont = getSharedPreferences("setfont", Activity.MODE_PRIVATE);
 
     ru = getSharedPreferences("ru", Activity.MODE_PRIVATE);
-    auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
     tabimageview = getSharedPreferences("tabimageview", Activity.MODE_PRIVATE);
-    moalaqfragment = getSharedPreferences("moalaqfragment", Activity.MODE_PRIVATE);
     setPaszamine.setType("image/*");
     setPaszamine.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
     pss = getSharedPreferences("pss", Activity.MODE_PRIVATE);
@@ -543,11 +538,7 @@ public class CodeEditorActivity extends BaseCompat {
       mvideo.releasePlayer();
     }
     BlurImage.setBlurInWallpaperMobile(this, data, ghostIcon);
-
     getColorPass.setBackgroundColor(Color.parseColor(imap.get("backgroundcolorlinear").toString()));
-
-    editor.setAutoCompletionEnabled(!auto.contains("mauto"));
-
     if (getinitdir.contains("mdir")) {
       if (getinitdir.getString("mdir", "").equals("true")) {
         dir.setVisibility(View.GONE);

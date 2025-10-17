@@ -90,7 +90,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
       JavaLexer lexer = new JavaLexer(stream);
 
       var classNamePrevious = false;
-      Token token, preToken = null, prePreToken = null;
+      Token token, preprevious = null;
       boolean first = true;
       JavaAutoComplete auto = new JavaAutoComplete(editor);
       auto.setMd(true);
@@ -107,7 +107,8 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
 
       Stack<BlockLine> stack = new Stack<>();
       TrieTree<Object> tree = new TrieTree<>();
-      int type, currSwitch = 1, maxSwitch = 0, previous = 0;
+      int type, currSwitch = 1, maxSwitch = 0;
+      int previous = 0;
       int lastLine = 1;
       int line, column;
 
@@ -318,112 +319,82 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             break;
           case JavaLexer.BLOCK_COMMENT:
           case JavaLexer.LINE_COMMENT:
-            if (previous == JavaLexer.AT) {
-              result.addIfNeeded(
-                  line,
-                  column,
-                  TextStyle.makeStyle(EditorColorScheme.javafield, 0, false, true, false));
+            {
+              String commentText = token.getText();
+              int currentLine = line;
+              int currentColumn = column;
+
+              String[] lines = commentText.split("\n", -1);
+
+              for (int i = 0; i < lines.length; i++) {
+                String lineText = lines[i];
+                int lineStartColumn = (i == 0) ? currentColumn : 0;
+
+                for (int j = 0; j < lineText.length(); j++) {
+                  result.addIfNeeded(
+                      currentLine + i, lineStartColumn + j, EditorColorScheme.COMMENT);
+                }
+
+                var pattern = Pattern.compile("@\\w+");
+                var matcher = pattern.matcher(lineText);
+
+                while (matcher.find()) {
+                  int start = matcher.start();
+                  int end = matcher.end();
+                  for (int j = start; j < end; j++) {
+                    result.addIfNeeded(
+                        currentLine + i, lineStartColumn + j, EditorColorScheme.javastring);
+                  }
+                }
+              }
+              break;
             }
-            result.addIfNeeded(line, column, EditorColorScheme.COMMENT);
-            break;
           case JavaLexer.AT:
             result.addIfNeeded(line, column, EditorColorScheme.javaoprator);
             break;
           case JavaLexer.IDENTIFIER:
             {
               info.addIdentifier(token.getText());
-
-              boolean isDot = true, hasUpperCase = false;
-
-              int colorid = EditorColorScheme.TEXT_NORMAL;
-              if (previous == JavaLexer.AT) {
-                colorid = EditorColorScheme.javaoprator;
-                hasUpperCase = true;
-              }
+              int colorNormal = EditorColorScheme.TEXT_NORMAL;
+              boolean isClassName = false;
               if (previous == JavaLexer.CLASS
-                  || previous == JavaLexer.IMPLEMENTS
-                  || previous == JavaLexer.VOID) {
-                colorid = EditorColorScheme.javafun;
-                hasUpperCase = true;
-              }
-
-              if (previous == JavaLexer.LBRACK) {
-                colorid = EditorColorScheme.tsattr;
-                hasUpperCase = true;
-              }
-              if (previous == JavaLexer.PACKAGE || previous == JavaLexer.IMPORT) {
-                isDot = false;
-                colorid = EditorColorScheme.javaoprator;
-              }
-
-              if (previous == JavaLexer.EXTENDS) {
-                colorid = EditorColorScheme.javafun;
-                hasUpperCase = true;
-              }
-              if (previous == JavaLexer.RETURN || previous == JavaLexer.NEW) {
-                colorid = EditorColorScheme.javakeywordoprator;
-                hasUpperCase = false;
-              }
-              if (previous == JavaLexer.INT) {
-                colorid = EditorColorScheme.javafield;
-              }
-              if (previous == JavaLexer.CASE || previous == JavaLexer.FINAL) {
-                colorid = EditorColorScheme.javakeywordoprator;
-                hasUpperCase = false;
-              }
-
-              if (previous == JavaLexer.PRIVATE
-                  || previous == JavaLexer.PROTECTED
-                  || previous == JavaLexer.PUBLIC) {
-                colorid = EditorColorScheme.javafun;
-                hasUpperCase = true;
-              }
-
-              if (previous == JavaLexer.LPAREN || previous == JavaLexer.RPAREN) {
-                hasUpperCase = true;
-                colorid = EditorColorScheme.javaparament;
-              }
-              if (previous == JavaLexer.LT || previous == JavaLexer.GT) {
-                hasUpperCase = true;
-                colorid = EditorColorScheme.javafun;
-              }
-              // next
-              if (ObjectUtils.getNextLexer(lexer, '(')) {
-                colorid = EditorColorScheme.tsattr;
-                hasUpperCase = true;
-              }
-              if (ObjectUtils.getNextLexer(lexer, '.')) {
-                colorid = EditorColorScheme.tscolormatch1;
-                hasUpperCase = true;
-              }
-              if (ObjectUtils.getNextLexer(lexer, ',')) {
-                colorid = EditorColorScheme.tscolormatch2;
-                hasUpperCase = true;
-              }
-              if (ObjectUtils.getNextLexer(lexer, ')')) {
-                colorid = EditorColorScheme.tscolormatch3;
-                hasUpperCase = true;
-              }
-              // -> str
-              if (ObjectUtils.getNextLexer(lexer, '>')) {
-                colorid = EditorColorScheme.pycolormatch4;
-                hasUpperCase = true;
-              }
-              if (ObjectUtils.getNextLexer(lexer, ':')) {
-                colorid = EditorColorScheme.jskeyword;
-                hasUpperCase = true;
-              }
-              if (!hasUpperCase) {
-                Pattern pattern = Pattern.compile("\\b[A-Z][a-zA-Z]*\\b");
+                  || previous == JavaLexer.INTERFACE
+                  || previous == JavaLexer.ENUM
+                  || previous == JavaLexer.EXTENDS
+                  || previous == JavaLexer.IMPLEMENTS) {
+                colorNormal = EditorColorScheme.javafun;
+                isClassName = true;
+              } else if (previous == JavaLexer.VOID
+                  || previous == JavaLexer.BOOLEAN
+                  || previous == JavaLexer.BYTE
+                  || previous == JavaLexer.CHAR
+                  || previous == JavaLexer.DOUBLE
+                  || previous == JavaLexer.FLOAT
+                  || previous == JavaLexer.INT
+                  || previous == JavaLexer.LONG
+                  || previous == JavaLexer.SHORT
+                  || previous == JavaLexer.IDENTIFIER) {
+                  colorNormal = EditorColorScheme.javafun;
+                if (lexer._input.LA(1) == '(') {
+                  colorNormal = EditorColorScheme.tsattr;
+                }
+              } else if (previous == JavaLexer.CASE) {
+                colorNormal = EditorColorScheme.javakeywordoprator;
+              } else if (lexer._input.LA(1) == '.') {
+                colorNormal = EditorColorScheme.tscolormatch1;
+              } else if (lexer._input.LA(1) == '[' || lexer._input.LA(1) == ']') {
+                colorNormal = EditorColorScheme.tscolormatch1;
+              } else if (previous == JavaLexer.DOT) {
+                colorNormal = EditorColorScheme.tscolormatch3;
+              } else if (!isClassName && Character.isUpperCase(token.getText().charAt(0))) {
+                Pattern pattern = Pattern.compile("^[A-Z][a-zA-Z0-9_]*$");
                 var matcher = pattern.matcher(token.getText());
                 if (matcher.matches()) {
-
-                  colorid = EditorColorScheme.javaparament;
+                  colorNormal = EditorColorScheme.javaparament;
                 }
               }
-              
-              result.addIfNeeded(line, column, colorid);
 
+              result.addIfNeeded(line, column, colorNormal);
               break;
             }
 
@@ -434,13 +405,6 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           default:
             result.addIfNeeded(line, column, EditorColorScheme.TEXT_NORMAL);
             break;
-        }
-
-        if (type != JavaLexer.WS) {
-          if (preToken != null) {
-            prePreToken = preToken;
-          }
-          preToken = token;
         }
 
         if (type != JavaLexer.WS) {
@@ -456,7 +420,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
       code123.forEach(
           item -> {
             if (item.haserror) Utils.setErrorSpan(result, item.line, item.column);
-            else if (item.haswar) Utils.setWaringSpan(result, item.line, item.column);
+            if (item.haswar) Utils.setWaringSpan(result, item.line, item.column);
           });
       result.determine(lastLine);
       result.setExtra(info);
@@ -491,14 +455,6 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                     declaredVariables.add(variableName);
                     inline.put(variableName, line);
                     incol.put(variableName, column);
-
-                    Utils.setSpanEFO(
-                        result,
-                        variable.getName().getBegin().get().line,
-                        variable.getName().getBegin().get().column,
-                        EditorColorScheme.javafield,
-                        true,
-                        false);
                   }
 
                   super.visit(fieldDeclaration, arg);
@@ -508,7 +464,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 public void visit(VariableDeclarationExpr variableDeclarationExpr, Void arg) {
                   for (VariableDeclarator variable : variableDeclarationExpr.getVariables()) {
                     String variableName = variable.getNameAsString();
-                    int line = variable.getBegin().get().line ;
+                    int line = variable.getBegin().get().line;
                     int column = variable.getBegin().get().column;
                     declaredVariables.add(variableName);
                     inline.put(variableName, line);
@@ -546,14 +502,6 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 }
 
                 @Override
-                public void visit(TypeExpr arg0, Void arg1) {
-                  var l = arg0.getBegin().get().line;
-                  var c = arg0.getBegin().get().column;
-                  Utils.setSpanEFO(result, l, c + 1, EditorColorScheme.javaparament);
-                  super.visit(arg0, arg1);
-                }
-
-                @Override
                 public void visit(MethodDeclaration arg0, Void arg1) {
                   var variableName = arg0.getNameAsString();
                   int li = arg0.getName().getBegin().get().line;
@@ -588,15 +536,6 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                   }
                   super.visit(arg0, arg1);
                 }
-
-                @Override
-                public void visit(JavadocComment arg0, Void arg1) {
-                  var i = arg0.getBegin().get().line;
-                  var c = arg0.getBegin().get().column;
-                  Utils.setSpanEFO(result, i, c, EditorColorScheme.COMMENT);
-
-                  super.visit(arg0, arg1);
-                }
               },
               null);
 
@@ -614,7 +553,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 false,
                 true);
           }
-          FieldUsageChecker.run(editor.getTextAsString(),result);
+          FieldUsageChecker.run(editor.getTextAsString(), result);
         }
       } catch (Exception err) {
 
@@ -634,7 +573,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
   }
 
   long forString() {
-    return TextStyle.makeStyle(EditorColorScheme.LITERAL, 0, true, true, false);
+    return TextStyle.makeStyle(EditorColorScheme.javastring, 0, true, true, false);
   }
 
   private void get(int color, int line, int col, TextAnalyzeResult result) {

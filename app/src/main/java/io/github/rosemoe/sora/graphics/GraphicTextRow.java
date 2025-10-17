@@ -24,7 +24,7 @@
 package io.github.rosemoe.sora.graphics;
 
 import io.github.rosemoe.sora.data.Span;
-import static io.github.rosemoe.sora.text.TextStyle.isBold;
+import static io.github.rosemoe.sora.text.TextStyle.*;
 import static io.github.rosemoe.sora.text.TextStyle.isItalics;
 import android.annotation.SuppressLint;
 import java.util.List;
@@ -148,6 +148,9 @@ public class GraphicTextRow {
         if (isBold(style) != isBold(lastStyle)) {
           mPaint.setFakeBoldText(isBold(style));
         }
+        if(isStrikeThrough(style) != isStrikeThrough(style)){
+          mPaint.setUnderlineText(isStrikeThrough(style));
+        }
         if (isItalics(style) != isItalics(lastStyle)) {
           mPaint.setTextSkewX(isItalics(style) ? SKEW_X : 0f);
         }
@@ -210,6 +213,8 @@ public class GraphicTextRow {
     }
     if (lastStyle != 0L) {
       mPaint.setFakeBoldText(false);
+      mPaint.setUnderlineText(false);
+      
       mPaint.setTextSkewX(0f);
     }
     if (currentPosition > advance && offset > start) {
@@ -264,6 +269,9 @@ public class GraphicTextRow {
         if (isBold(style) != isBold(lastStyle)) {
           mPaint.setFakeBoldText(isBold(style));
         }
+        if(isStrikeThrough(style) != isStrikeThrough(lastStyle)) {
+        	mPaint.setUnderlineText(isStrikeThrough(style));
+        }
         if (isItalics(style) != isItalics(lastStyle)) {
           mPaint.setTextSkewX(isItalics(style) ? SKEW_X : 0f);
         }
@@ -278,6 +286,7 @@ public class GraphicTextRow {
     }
     if (lastStyle != 0L) {
       mPaint.setFakeBoldText(false);
+      mPaint.setUnderlineText(false);
       mPaint.setTextSkewX(0f);
     }
     return width;

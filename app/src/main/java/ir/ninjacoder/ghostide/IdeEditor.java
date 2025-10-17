@@ -10,6 +10,7 @@ import io.github.rosemoe.sora.event.DoubleClickEvent;
 import io.github.rosemoe.sora.event.LongPressEvent;
 import io.github.rosemoe.sora.event.TextSizeChangeEvent;
 import io.github.rosemoe.sora.langs.html.HTMLLexer;
+import io.github.rosemoe.sora.langs.java.FieldUsageChecker;
 import io.github.rosemoe.sora.langs.java.JavaLanguage;
 import io.github.rosemoe.sora.model.Inlay;
 import io.github.rosemoe.sora.model.LineIcon;
@@ -106,7 +107,9 @@ public class IdeEditor extends CodeEditor implements IEditor {
     PowerModeEffectManager.EffectType ef = EffectTypeManager.getCurrentTheme(getContext());
 
     getPowerModeEffectManager().setEffect(ef);
-
+    if (getEditorLanguage() instanceof JavaLanguage) {
+      FieldUsageChecker.ovrinEditor(this);
+    }
     return this;
   }
 
@@ -330,8 +333,7 @@ public class IdeEditor extends CodeEditor implements IEditor {
       final var content = event.getChangedText();
       final var endLine = event.getChangeEnd().line;
       final var endColumn = event.getChangeEnd().column;
-      if (getEditorLanguage() instanceof XMLLanguage
-          && getEditorLanguage() instanceof HTMLLanguage) {
+      if (getEditorLanguage() instanceof XMLLanguage) {
         boolean isOpen = false;
         try {
           isOpen = editor.getText().charAt(editor.getCursor().getLeft() - 2) == '<';

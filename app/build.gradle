@@ -163,12 +163,25 @@ dependencies {
     implementation 'org.mozilla:rhino-runtime:1.7.15'
 	//run ts tsx js jsx in Android
 	
-	implementation("com.caoccao.javet:swc4j:1.6.0") // Must Have
-	arm32Implementation("com.caoccao.javet:swc4j-android-arm:1.6.0")
+  	implementation("com.caoccao.javet:swc4j:1.6.0") // Must Have
+  	arm32Implementation("com.caoccao.javet:swc4j-android-arm:1.6.0")
     arm64Implementation("com.caoccao.javet:swc4j-android-arm64:1.6.0")
     runtimeOnly 'androidx.graphics:graphics-shapes:1.1.0-alpha01' 
 	//lib for run less code and add javax.script
 //	implementation "io.apisense:rhino-android:1.3.0"
-	implementation "de.inetsoftware:jlessc:1.12"
+   	implementation "de.inetsoftware:jlessc:1.12"
+     implementation 'io.noties.markwon:core:4.6.2'
+  
+    implementation("io.noties.markwon:syntax-highlight:4.6.2") {
+      exclude group: "org.jetbrains", module: "annotations"
+      exclude group: "org.jetbrains", module: "annotations-java5"
+      
+    }
+    // https://mvnrepository.com/artifact/io.noties.markwon/html
+    implementation("io.noties.markwon:html:4.6.2")
+    implementation("io.noties.markwon:image:4.6.2")
+    annotationProcessor 'io.noties:prism4j-bundler:2.0.0'
+    implementation 'io.noties.markwon:ext-tasklist:4.6.2'
+    implementation 'io.noties.markwon:image-glide:4.6.2'
 }
 

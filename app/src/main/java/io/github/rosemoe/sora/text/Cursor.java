@@ -31,7 +31,7 @@ import io.github.rosemoe.sora.util.IntPair;
  * @author Rose Warning:The cursor position will update automatically when the content has been
  *     changed by other way
  */
-public  class Cursor {
+public class Cursor {
 
   private final Content mContent;
   private final CachedIndexer mIndexer;
@@ -288,17 +288,87 @@ public  class Cursor {
       if (isSelected()) {
         mContent.delete(getLeftLine(), getLeftColumn(), getRightLine(), getRightColumn());
       } else {
-        int col = getLeftColumn(), len = 1;
-        // Do not put cursor inside an emotion character
-        if (col > 1) {
-          int left = TextLayoutHelper.get().getCurPosLeft(col, mContent.getLine(getLeftLine()));
-          len = col - left;
+        int line = getLeftLine();
+        int col = getLeftColumn();
+
+        if (col > 0) {
+          String lineText = mContent.getLineString(line);
+
+          // اگر متن فارسی است یا فاصله بین کلمات فارسی داره
+          if (isRtlText(lineText) || isRtlContext(lineText, col)) {
+            if (col <= lineText.length()) {
+              // محاسبه صحیح طول کاراکتر قبلی
+              int codePoint = Character.codePointBefore(lineText, col);
+              int charCount = Character.charCount(codePoint);
+              mContent.delete(line, col - charCount, line, col);
+            } else {
+              mContent.delete(line, col - 1, line, col);
+            }
+          } else {
+            // منطق اصلی برای متن انگلیسی
+            int left = TextLayoutHelper.get().getCurPosLeft(col, lineText);
+            mContent.delete(line, left, line, col);
+          }
+        } else if (line > 0) {
+          // اگر در ابتدای خط هستیم
+          int prevLineLength = mContent.getColumnCount(line - 1);
+          mContent.delete(line - 1, prevLineLength, line, 0);
         }
-        mContent.delete(getLeftLine(), getLeftColumn() - len, getLeftLine(), getLeftColumn());
       }
     } catch (Exception e) {
-
+      Log.e("Cursor", "Error in delete", e);
     }
+  }
+
+  private boolean isRtlText(String text) {
+    if (text == null || text.length() == 0) return false;
+
+    for (int i = 0; i < Math.min(text.length(), 10); i++) {
+      char c = text.charAt(i);
+      // محدوده کاراکترهای فارسی، عربی و سایر زبان‌های RTL
+      if ((c >= '\u0600' && c <= '\u06FF')
+          || (c >= '\u0750' && c <= '\u077F')
+          || (c >= '\u08A0' && c <= '\u08FF')
+          || (c >= '\uFB50' && c <= '\uFDFF')
+          || (c >= '\uFE70' && c <= '\uFEFF')) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private boolean isRtlContext(String text, int cursorPosition) {
+    if (cursorPosition <= 0 || cursorPosition > text.length()) {
+      return false;
+    }
+
+    // بررسی کاراکتر قبلی
+    if (cursorPosition > 0) {
+      char prevChar = text.charAt(cursorPosition - 1);
+      if (isRtlChar(prevChar)) {
+        return true;
+      }
+    }
+
+    // بررسی کاراکتر بعدی (اگر وجود دارد)
+    if (cursorPosition < text.length()) {
+      char nextChar = text.charAt(cursorPosition);
+      if (isRtlChar(nextChar)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  private boolean isRtlChar(char c) {
+    return (c >= '\u0600' && c <= '\u06FF')
+        || (c >= '\u0750' && c <= '\u077F')
+        || (c >= '\u08A0' && c <= '\u08FF')
+        || (c >= '\uFB50' && c <= '\uFDFF')
+        || (c >= '\uFE70' && c <= '\uFEFF')
+        || c == ' '
+        || c == '\t'; // فاصله و تب هم در نظر بگیر
   }
 
   /**

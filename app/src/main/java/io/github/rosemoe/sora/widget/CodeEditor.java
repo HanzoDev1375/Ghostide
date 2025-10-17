@@ -1945,7 +1945,7 @@ public class CodeEditor extends View
       long styleBits = span.getStyleBits();
       if (span.getStyleBits() != lastStyle) {
         mPaint.setFakeBoldText(TextStyle.isBold(styleBits));
-        mPaint.setUnderlineText(TextStyle.isBELOWLINE(styleBits));
+        mPaint.setUnderlineText(TextStyle.isStrikeThrough(styleBits));
         mPaint.setAlpha(span.getAlphacompat() == 0 ? 255 : span.getAlphacompat());
         if (TextStyle.isItalics(styleBits)) {
           mPaint.setTextSkewX(-0.2f);
@@ -2438,7 +2438,7 @@ public class CodeEditor extends View
           long styleBits = span.getStyleBits();
           if (span.getStyleBits() != lastStyle) {
             mPaint.setFakeBoldText(TextStyle.isBold(styleBits));
-            mPaint.setUnderlineText(TextStyle.isBELOWLINE(styleBits));
+            mPaint.setUnderlineText(TextStyle.isStrikeThrough(styleBits));
             mPaint.setAlpha(span.getAlphacompat() == 0 ? 255 : span.getAlphacompat());
             if (TextStyle.isItalics(styleBits)) {
               mPaint.setTextSkewX(-0.2f);

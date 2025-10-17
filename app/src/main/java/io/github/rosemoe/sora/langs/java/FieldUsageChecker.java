@@ -5,31 +5,50 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.Position;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.ConstructorDeclaration;
+import com.github.javaparser.ast.stmt.ForStmt;
+import com.github.javaparser.ast.stmt.ForEachStmt;
+import com.github.javaparser.ast.stmt.CatchClause;
+import com.github.javaparser.ast.body.Parameter;
 import io.github.rosemoe.sora.langs.xml.analyzer.Utils;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
-import io.github.rosemoe.sora.widget.EditorColorScheme;
+import io.github.rosemoe.sora.widget.tooltip.ToolItemPop;
+import ir.ninjacoder.ghostide.IdeEditor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class FieldUsageChecker {
+  public static void ovrinEditor(IdeEditor editor) {
+    CompilationUnit cu = StaticJavaParser.parse(editor.getTextAsString());
+    List<UnusedField> unusedFields = getUnusedFields(cu);
+    var tool = new ToolItemPop(editor);
+    unusedFields.forEach(
+        it -> {
+          tool.show(it.declarationLine, it.declarationColumn);
+          tool.run(it.fieldName);
+        });
+  }
 
   public static void run(String token, TextAnalyzeResult result) {
+    try {
+      CompilationUnit cu = StaticJavaParser.parse(token);
+      List<UnusedField> unusedFields = getUnusedFields(cu);
+      List<UnusedLocalVariable> unusedLocalVars = getUnusedLocalVariables(cu);
+      for (UnusedField unusedField : unusedFields) {
+        Utils.setWaringSpan(result, unusedField.declarationLine, unusedField.declarationColumn);
+      }
 
-    CompilationUnit cu = StaticJavaParser.parse(token);
-
-    List<UnusedField> unusedFields = getUnusedFields(cu);
-
-    for (UnusedField unusedField : unusedFields) {
-      Utils.setSpanEFO(
-          result,
-          unusedField.declarationLine,
-          unusedField.declarationColumn + unusedField.fieldName.length(),
-          EditorColorScheme.COMMENT,
-          false,
-          true);
+      for (UnusedLocalVariable unusedLocalVar : unusedLocalVars) {
+        Utils.setWaringSpan(
+            result, unusedLocalVar.declarationLine, unusedLocalVar.declarationColumn);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
     }
   }
 
@@ -48,13 +67,28 @@ public class FieldUsageChecker {
     return unusedFields;
   }
 
+  public static List<UnusedLocalVariable> getUnusedLocalVariables(CompilationUnit cu) {
+    List<LocalVariableInfo> allLocalVars = getAllLocalVariables(cu);
+    List<UnusedLocalVariable> unusedLocalVars = new ArrayList<>();
+
+    for (LocalVariableInfo localVar : allLocalVars) {
+      if (!isLocalVariableUsed(cu, localVar)) {
+        unusedLocalVars.add(
+            new UnusedLocalVariable(
+                localVar.variableName, localVar.declarationLine, localVar.declarationColumn));
+      }
+    }
+
+    return unusedLocalVars;
+  }
+
   private static FieldPosition getFieldDeclarationPosition(CompilationUnit cu, String fieldName) {
     FieldDeclarationFinder finder = new FieldDeclarationFinder(fieldName);
     cu.accept(finder, null);
     return finder.getDeclarationPosition();
   }
 
-  /** دریافت تمام نام فیلدهای کلاس */
+  /** دریافت تمام نام فیلدهای کلاس (فقط فیلدهای غیر-public) */
   public static List<String> getAllFieldNames(CompilationUnit cu) {
     List<String> fieldNames = new ArrayList<>();
 
@@ -62,8 +96,11 @@ public class FieldUsageChecker {
         new VoidVisitorAdapter<Void>() {
           @Override
           public void visit(FieldDeclaration fd, Void arg) {
-            for (VariableDeclarator vd : fd.getVariables()) {
-              fieldNames.add(vd.getNameAsString());
+            // بررسی می‌کنیم که فیلد public یا public static نباشد
+            if (!fd.isPublic()) {
+              for (VariableDeclarator vd : fd.getVariables()) {
+                fieldNames.add(vd.getNameAsString());
+              }
             }
             super.visit(fd, arg);
           }
@@ -73,11 +110,115 @@ public class FieldUsageChecker {
     return fieldNames;
   }
 
+  /** دریافت تمام متغیرهای محلی */
+  public static List<LocalVariableInfo> getAllLocalVariables(CompilationUnit cu) {
+    List<LocalVariableInfo> localVars = new ArrayList<>();
+
+    cu.accept(
+        new VoidVisitorAdapter<Void>() {
+          @Override
+          public void visit(MethodDeclaration md, Void arg) {
+            // پارامترهای متد
+            for (Parameter param : md.getParameters()) {
+              Optional<Position> begin = param.getName().getBegin();
+              if (begin.isPresent()) {
+                localVars.add(
+                    new LocalVariableInfo(
+                        param.getNameAsString(), begin.get().line, begin.get().column));
+              }
+            }
+            super.visit(md, arg);
+          }
+
+          @Override
+          public void visit(ConstructorDeclaration cd, Void arg) {
+            // پارامترهای constructor
+            for (Parameter param : cd.getParameters()) {
+              Optional<Position> begin = param.getName().getBegin();
+              if (begin.isPresent()) {
+                localVars.add(
+                    new LocalVariableInfo(
+                        param.getNameAsString(), begin.get().line, begin.get().column));
+              }
+            }
+            super.visit(cd, arg);
+          }
+
+          @Override
+          public void visit(com.github.javaparser.ast.body.VariableDeclarator vd, Void arg) {
+            // متغیرهای محلی داخل بلاک‌ها
+            if (isInMethodOrBlock(vd)) {
+              Optional<Position> begin = vd.getName().getBegin();
+              if (begin.isPresent()) {
+                localVars.add(
+                    new LocalVariableInfo(
+                        vd.getNameAsString(), begin.get().line, begin.get().column));
+              }
+            }
+            super.visit(vd, arg);
+          }
+
+          @Override
+          public void visit(ForStmt forStmt, Void arg) {
+
+            forStmt
+                .getInitialization()
+                .forEach(
+                    expr -> {
+                      if (expr instanceof VariableDeclarationExpr) {
+                        VariableDeclarationExpr varExpr = (VariableDeclarationExpr) expr;
+                        for (VariableDeclarator vd : varExpr.getVariables()) {
+                          Optional<Position> begin = vd.getName().getBegin();
+                          if (begin.isPresent()) {
+                            localVars.add(
+                                new LocalVariableInfo(
+                                    vd.getNameAsString(), begin.get().line, begin.get().column));
+                          }
+                        }
+                      }
+                    });
+            super.visit(forStmt, arg);
+          }
+
+          @Override
+          public void visit(CatchClause catchClause, Void arg) {
+            Optional<Position> begin = catchClause.getParameter().getName().getBegin();
+            if (begin.isPresent()) {
+              localVars.add(
+                  new LocalVariableInfo(
+                      catchClause.getParameter().getNameAsString(),
+                      begin.get().line,
+                      begin.get().column));
+            }
+            super.visit(catchClause, arg);
+          }
+        },
+        null);
+
+    return localVars;
+  }
+
+  /** بررسی آیا متغیر محلی استفاده شده است یا نه */
+  public static boolean isLocalVariableUsed(CompilationUnit cu, LocalVariableInfo localVar) {
+    LocalVariableUsageVisitor visitor =
+        new LocalVariableUsageVisitor(
+            localVar.variableName, localVar.declarationLine, localVar.declarationColumn);
+    cu.accept(visitor, null);
+    return visitor.isVariableUsed();
+  }
+
   /** بررسی آیا فیلد خاصی استفاده شده است یا نه */
   public static boolean isFieldUsed(CompilationUnit cu, String fieldName) {
     FieldUsageVisitor visitor = new FieldUsageVisitor(fieldName);
     cu.accept(visitor, null);
     return visitor.isFieldUsed();
+  }
+
+  /** بررسی آیا VariableDeclarator داخل متد یا بلاک است */
+  private static boolean isInMethodOrBlock(com.github.javaparser.ast.body.VariableDeclarator vd) {
+    return vd.getParentNode().isPresent()
+        && (vd.getParentNode().get() instanceof com.github.javaparser.ast.body.FieldDeclaration)
+            == false;
   }
 
   /** کلاس برای ذخیره موقعیت */
@@ -104,6 +245,32 @@ public class FieldUsageChecker {
     }
   }
 
+  /** کلاس برای ذخیره اطلاعات متغیر محلی */
+  public static class LocalVariableInfo {
+    public final String variableName;
+    public final int declarationLine;
+    public final int declarationColumn;
+
+    public LocalVariableInfo(String variableName, int declarationLine, int declarationColumn) {
+      this.variableName = variableName;
+      this.declarationLine = declarationLine;
+      this.declarationColumn = declarationColumn;
+    }
+  }
+
+  /** کلاس برای ذخیره اطلاعات متغیر محلی استفاده نشده */
+  public static class UnusedLocalVariable {
+    public final String variableName;
+    public final int declarationLine;
+    public final int declarationColumn;
+
+    public UnusedLocalVariable(String variableName, int declarationLine, int declarationColumn) {
+      this.variableName = variableName;
+      this.declarationLine = declarationLine;
+      this.declarationColumn = declarationColumn;
+    }
+  }
+
   /** ویزیتر برای پیدا کردن موقعیت تعریف فیلد */
   private static class FieldDeclarationFinder extends VoidVisitorAdapter<Void> {
     private final String targetFieldName;
@@ -115,14 +282,16 @@ public class FieldUsageChecker {
 
     @Override
     public void visit(FieldDeclaration fd, Void arg) {
-      for (VariableDeclarator vd : fd.getVariables()) {
-        if (vd.getNameAsString().equals(targetFieldName)) {
-          Optional<Position> beginPosition = vd.getName().getBegin();
-          if (beginPosition.isPresent()) {
-            Position pos = beginPosition.get();
-            declarationPosition = new FieldPosition(pos.line, pos.column);
+      if (!fd.isPublic()) {
+        for (VariableDeclarator vd : fd.getVariables()) {
+          if (vd.getNameAsString().equals(targetFieldName)) {
+            Optional<Position> beginPosition = vd.getName().getBegin();
+            if (beginPosition.isPresent()) {
+              Position pos = beginPosition.get();
+              declarationPosition = new FieldPosition(pos.line, pos.column);
+            }
+            break;
           }
-          break;
         }
       }
       super.visit(fd, arg);
@@ -146,9 +315,13 @@ public class FieldUsageChecker {
     @Override
     public void visit(FieldDeclaration fd, Void arg) {
 
-      inFieldDeclaration = true;
-      super.visit(fd, arg);
-      inFieldDeclaration = false;
+      if (!fd.isPublic()) {
+        inFieldDeclaration = true;
+        super.visit(fd, arg);
+        inFieldDeclaration = false;
+      } else {
+        super.visit(fd, arg);
+      }
     }
 
     @Override
@@ -161,6 +334,62 @@ public class FieldUsageChecker {
 
     public boolean isFieldUsed() {
       return fieldUsed;
+    }
+  }
+
+  private static class LocalVariableUsageVisitor extends VoidVisitorAdapter<Void> {
+    private final String targetVariableName;
+    private final int declarationLine;
+    private final int declarationColumn;
+    private boolean variableUsed = false;
+    private boolean inDeclaration = false;
+
+    public LocalVariableUsageVisitor(String variableName, int declLine, int declColumn) {
+      this.targetVariableName = variableName;
+      this.declarationLine = declLine;
+      this.declarationColumn = declColumn;
+    }
+
+    @Override
+    public void visit(VariableDeclarator vd, Void arg) {
+      
+      Optional<Position> begin = vd.getName().getBegin();
+      if (begin.isPresent()
+          && begin.get().line == declarationLine
+          && begin.get().column == declarationColumn) {
+        inDeclaration = true;
+        super.visit(vd, arg);
+        inDeclaration = false;
+      } else {
+        super.visit(vd, arg);
+      }
+    }
+
+    @Override
+    public void visit(Parameter param, Void arg) {
+      Optional<Position> begin = param.getName().getBegin();
+      if (begin.isPresent()
+          && begin.get().line == declarationLine
+          && begin.get().column == declarationColumn) {
+        inDeclaration = true;
+        super.visit(param, arg);
+        inDeclaration = false;
+      } else {
+        super.visit(param, arg);
+      }
+    }
+
+
+    @Override
+    public void visit(SimpleName name, Void arg) {
+      if (name.asString().equals(targetVariableName) && !inDeclaration) {
+        variableUsed = true;
+      }
+      super.visit(name, arg);
+    }
+
+    public boolean isVariableUsed() {
+      return variableUsed;
     }
   }
 }

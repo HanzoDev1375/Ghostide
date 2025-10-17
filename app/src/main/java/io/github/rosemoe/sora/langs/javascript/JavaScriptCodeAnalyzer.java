@@ -329,6 +329,7 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
             }
 
           case JavaScriptLexer.StringLiteral:
+          case JavaScriptLexer.BikTikString:
             result.addIfNeeded(line, column, EditorColorScheme.LITERAL);
             break;
           default:

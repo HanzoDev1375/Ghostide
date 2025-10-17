@@ -13,8 +13,6 @@ import androidx.core.content.ContextCompat;
 
 import com.blankj.utilcode.util.SizeUtils;
 import ir.ninjacoder.ghostide.R;
-
-import io.github.rosemoe.sora.event.SelectionChangeEvent;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.EditorPopupWindow;
 
@@ -39,7 +37,7 @@ public class ToolTipHelper extends EditorPopupWindow {
   }
 
   private static int getFeatureFlags() {
-    return FEATURE_SHOW_OUTSIDE_VIEW_ALLOWED;
+    return FEATURE_SCROLL_AS_CONTENT | FEATURE_SHOW_OUTSIDE_VIEW_ALLOWED;
   }
 
   protected View onCreateContentView(@NonNull Context context) {
