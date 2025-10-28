@@ -1,7 +1,7 @@
 package ir.ninjacoder.ghostide;
 
+import ir.ninjacoder.codesnap.colorhelper.ThemeLoader;
 import ir.ninjacoder.ghostide.activities.ErrorManagerActivity;
-import ir.ninjacoder.ghostide.config.PrfnsUtil;
 import ir.ninjacoder.ghostide.utils.AssetsSoft;
 import ir.ninjacoder.ghostide.utils.DataUtil;
 import ir.ninjacoder.ghostide.utils.FileUtil;
@@ -102,10 +102,12 @@ public class GhostIdeAppLoader extends Application {
       soft.copyOneFileFromAssets("icon.png", getFilesDir().getAbsolutePath() + "/", this);
     }
     try (SassCompiler compiler = AndroidSassCompilerFactory.bundled(this)) {
-      DataUtil.showMessage(getApplicationContext(), compiler.getVersion().toString());
+    ///  DataUtil.showMessage(getApplicationContext(), compiler.getVersion().toString());
     } catch (Exception err) {
       err.printStackTrace();
     }
+    
+    ThemeLoader.init(this);
     themeEngine = ThemeEngine.getInstance(this);
     themeEngine.setThemeMode(ThemeMode.DARK);
     mApplicationContext = getApplicationContext();

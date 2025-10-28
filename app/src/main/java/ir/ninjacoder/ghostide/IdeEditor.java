@@ -107,9 +107,9 @@ public class IdeEditor extends CodeEditor implements IEditor {
     PowerModeEffectManager.EffectType ef = EffectTypeManager.getCurrentTheme(getContext());
 
     getPowerModeEffectManager().setEffect(ef);
-    if (getEditorLanguage() instanceof JavaLanguage) {
-      FieldUsageChecker.ovrinEditor(this);
-    }
+
+    setBracketHighlightEnabled(true);
+    setBracketHighlightColor(0xFFFF0000);
     return this;
   }
 
@@ -125,6 +125,10 @@ public class IdeEditor extends CodeEditor implements IEditor {
 
   void handleDoubleClick(DoubleClickEvent db) {
     try {
+      if (getEditorLanguage() instanceof JavaLanguage) {
+        FieldUsageChecker.ovrinEditor(this);
+      }
+
       int clickIndex = db.getIndex();
       String fullText = getTextAsString();
       Pattern URL_PATTERN =

@@ -20,6 +20,7 @@ import io.github.rosemoe.sora.text.TextStyle;
 import io.github.rosemoe.sora.widget.ListCss3Color;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.List;
 import io.github.rosemoe.sora.data.NavigationItem;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.Stack;
 import io.github.rosemoe.sora.data.BlockLine;
+import java.util.regex.Pattern;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
 import org.antlr.v4.runtime.Token;
@@ -42,7 +44,7 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
   private PythonErrorManager errors;
   protected IdeEditor editor;
   private RainbowBracketHelper rb;
-  Token token = null, preToken = null, prePreToken = null;
+  Token token = null;
 
   public PythonCodeAnalyzer(IdeEditor editor) {
     this.editor = editor;
@@ -192,9 +194,7 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
             break;
 
           case PythonLexerCompat.STRING:
-            CodeHighlighter.highlightFString(token.getText(),line,column,result);
-//            int colors = EditorColorScheme.pystring;
-//            result.addIfNeeded(line, column, TextStyle.makeStyle(colors, 0, true, false, false));
+            CodeHighlighter.highlightFString(token.getText(), line, column, result);
             break;
           case PythonLexerCompat.NUMBER:
             result.addIfNeeded(
@@ -208,95 +208,59 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
 
           case PythonLexerCompat.IDENTIFIER:
             {
-              int colorid = EditorColorScheme.TEXT_NORMAL;
-              boolean isBold = false;
-              boolean isUnderLine = false;
-              info.addIdentifier(token.getText());
-
-              if (previous == PythonLexerCompat.CLASS) {
-                colorid = EditorColorScheme.pycolormatch1;
-                isBold = true;
-                isUnderLine = false;
-              }
-              //              if (previous == PythonLexerCompat.DEF) {
-              //                colorid = EditorColorScheme.pycolormatch2;
-              //              }
-              if (previous == PythonLexerCompat.IF) {
-                colorid = EditorColorScheme.pycolormatch3;
-                isBold = true;
-                isUnderLine = false;
-              }
-              if (previous == PythonLexerCompat.FROM) {
-                colorid = EditorColorScheme.pycolormatch3;
-                isBold = false;
-                isUnderLine = false;
-              }
-              if (previous == PythonLexerCompat.IMPORT) {
-                colorid = EditorColorScheme.pycolormatch3;
-                isBold = false;
-                isUnderLine = false;
-              }
-              if (previous == PythonLexerCompat.EQUAL) {
-                colorid = EditorColorScheme.pycolormatch1;
-                isUnderLine = false;
-                isBold = true;
-              }
-              if (previous == PythonLexerCompat.AT) {
-                colorid = EditorColorScheme.pysymbol;
-                isBold = true;
-              }
-              if (previous == PythonLexerCompat.OR
-                  || previous == PythonLexerCompat.DOT
-                  || previous == PythonLexerCompat.RETURN
-                  || previous == PythonLexerCompat.YIELD
-                  || previous == PythonLexerCompat.COLON) {
-                colorid = EditorColorScheme.pycolormatch2;
-                isBold = true;
-                isUnderLine = false;
-              }
-              Set<String> methodNames = new HashSet<>();
-
-              try {
-                var input = GhostIdeAppLoader.getContext().getAssets().open("methods.json");
-                var array = JsonParser.parseReader(new InputStreamReader(input)).getAsJsonArray();
-                array.forEach(
-                    it -> {
-                      JsonObject obj = it.getAsJsonObject();
-                      if (obj.has("name")) {
-                        methodNames.add(obj.get("name").getAsString());
-                      }
-                    });
-              } catch (Exception err) {
-                Log.e("JsonErrorToRun" + PythonCodeAnalyzer.class.getName(), err.getMessage());
+              int colorId = EditorColorScheme.TEXT_NORMAL;
+              String text = token.getText();
+              boolean isbold = false;
+              if (previous == PythonLexerCompat.CLASS || previous == PythonLexerCompat.DEF) {
+                colorId = EditorColorScheme.pysymbol;
+                isbold = true;
+              } else if (previous == PythonLexerCompat.FROM
+                  || previous == PythonLexerCompat.IMPORT
+                  || previous == PythonLexerCompat.AS) {
+                colorId = EditorColorScheme.javaoprator;
+              } else if (previous == PythonLexerCompat.AT) {
+                colorId = EditorColorScheme.pysymbol;
+              } else if (previous == PythonLexerCompat.RETURN
+                  || previous == PythonLexerCompat.YIELD) {
+                colorId = EditorColorScheme.javafield;
+              } else if (previous == PythonLexerCompat.IF
+                  || previous == PythonLexerCompat.ELIF
+                  || previous == PythonLexerCompat.WHILE
+                  || previous == PythonLexerCompat.FOR) {
+                colorId = EditorColorScheme.javakeywordoprator;
+              } else if (previous == PythonLexerCompat.IDENTIFIER) {
+                if (ObjectUtils.getNextLexer(lexer, '(')) {
+                  colorId = EditorColorScheme.pycolormatch1;
+                }
               }
 
-              if (methodNames.contains(token.getText())
-                  || methodNames.stream()
-                      .anyMatch(name -> name.equalsIgnoreCase(token.getText()))) {
-                colorid = EditorColorScheme.pycolormatch3;
-              }
-              // next
               if (ObjectUtils.getNextLexer(lexer, '(')) {
-                colorid = EditorColorScheme.javafield;
+                colorId = EditorColorScheme.pycolormatch2;
+              } else if (ObjectUtils.getNextLexer(lexer, '.')) {
+                colorId = EditorColorScheme.pycolormatch3;
+              } else if (ObjectUtils.getNextLexer(lexer, '[')) {
+                colorId = EditorColorScheme.phpcolormatch4;
+              } else if (ObjectUtils.getNextLexer(lexer, ':')) {
+                colorId = EditorColorScheme.phpcolormatch6;
               }
-              if (ObjectUtils.getNextLexer(lexer, '.')) {
-                colorid = EditorColorScheme.javafun;
+
+              Set<String> builtinFuncs =
+                  new HashSet<>(
+                      Arrays.asList(
+                          "print", "range", "len", "input", "int", "str", "list", "dict", "set",
+                          "tuple", "open"));
+              if (builtinFuncs.contains(text)) {
+                colorId = EditorColorScheme.pycolormatch1;
               }
-              if (ObjectUtils.getNextLexer(lexer, ',')) {
-                colorid = EditorColorScheme.javaparament;
+
+              if (Character.isUpperCase(text.charAt(0))) {
+                Pattern pattern = Pattern.compile("^[A-Z][a-zA-Z0-9_]*$");
+                if (pattern.matcher(text).matches()) {
+                  colorId = EditorColorScheme.javaparament;
+                }
               }
-              if (ObjectUtils.getNextLexer(lexer, ')')) {
-                colorid = EditorColorScheme.javaparament;
-              }
-              // -> str
-              if (ObjectUtils.getNextLexer(lexer, '>')) {
-                colorid = EditorColorScheme.javafun;
-              }
-              if (ObjectUtils.getNextLexer(lexer, ':')) {
-                colorid = EditorColorScheme.javanumber;
-              }
-              result.addIfNeeded(
-                  line, column, TextStyle.makeStyle(colorid, 0, isBold, false, false, isUnderLine));
+
+              result.addIfNeeded(line,column,TextStyle.makeStyle(colorId,0,isbold,false,false));
               break;
             }
 

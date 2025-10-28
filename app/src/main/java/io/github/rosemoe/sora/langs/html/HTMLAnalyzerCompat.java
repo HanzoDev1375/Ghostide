@@ -153,7 +153,8 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
             result.addIfNeeded(
                 line,
                 column,
-                TextStyle.makeStyle(EditorColorScheme.jskeyword, 0, true, false, false, false));
+                TextStyle.makeStyle(
+                    EditorColorScheme.jskeyword, 0, true, false, false, false, true));
             break;
           case HTMLLexer.DECIMAL_LITERAL:
           case HTMLLexer.OCT_LITERAL:
@@ -527,7 +528,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
 
             break;
           case HTMLLexer.LinkLiteral:
-            SpanModel.get(result,line,column,Color.parseColor("#2FFFA44A"),token);
+            SpanModel.get(result, line, column, Color.parseColor("#2FFFA44A"), token);
             break;
           default:
             result.addIfNeeded(line, column, EditorColorScheme.TEXT_NORMAL);

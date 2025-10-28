@@ -51,7 +51,7 @@
 - [x] Material Colors
 - [x] Auto-save functionality
 - [x] Git integration
-- [ ] Plugin system (coming soon)
+- [x] Plugin system
 - [x] HTML file reader(show system icon svg png ...)
 - [x] Sass and Scss compiler
 - [x] Java fx compiler 

@@ -148,11 +148,19 @@ public class GraphicTextRow {
         if (isBold(style) != isBold(lastStyle)) {
           mPaint.setFakeBoldText(isBold(style));
         }
-        if(isStrikeThrough(style) != isStrikeThrough(style)){
+        if (isStrikeThrough(style) != isStrikeThrough(style)) {
           mPaint.setUnderlineText(isStrikeThrough(style));
         }
         if (isItalics(style) != isItalics(lastStyle)) {
           mPaint.setTextSkewX(isItalics(style) ? SKEW_X : 0f);
+        }
+        if (isShadowLine(style) != isShadowLine(lastStyle)) {
+          mPaint.setShadowLayer(
+              5f, // radius
+              4f, // dx
+              4f, // dy
+              0x80000000 // رنگ سایه
+              );
         }
         lastStyle = style;
       }
@@ -214,7 +222,7 @@ public class GraphicTextRow {
     if (lastStyle != 0L) {
       mPaint.setFakeBoldText(false);
       mPaint.setUnderlineText(false);
-      
+      mPaint.clearShadowLayer();
       mPaint.setTextSkewX(0f);
     }
     if (currentPosition > advance && offset > start) {
@@ -240,7 +248,7 @@ public class GraphicTextRow {
         return width;
       }
     } catch (Exception err) {
-   
+
     }
     return measureTextInternal(start, end, null);
   }
@@ -269,11 +277,19 @@ public class GraphicTextRow {
         if (isBold(style) != isBold(lastStyle)) {
           mPaint.setFakeBoldText(isBold(style));
         }
-        if(isStrikeThrough(style) != isStrikeThrough(lastStyle)) {
-        	mPaint.setUnderlineText(isStrikeThrough(style));
+        if (isStrikeThrough(style) != isStrikeThrough(lastStyle)) {
+          mPaint.setUnderlineText(isStrikeThrough(style));
         }
         if (isItalics(style) != isItalics(lastStyle)) {
           mPaint.setTextSkewX(isItalics(style) ? SKEW_X : 0f);
+        }
+        if (isShadowLine(style) != isShadowLine(lastStyle)) {
+          mPaint.setShadowLayer(
+              5f, // radius
+              4f, // dx
+              4f, // dy
+              0x80000000 // رنگ سایه
+              );
         }
         lastStyle = style;
       }
@@ -288,6 +304,7 @@ public class GraphicTextRow {
       mPaint.setFakeBoldText(false);
       mPaint.setUnderlineText(false);
       mPaint.setTextSkewX(0f);
+      mPaint.clearShadowLayer();
     }
     return width;
   }

@@ -1,11 +1,10 @@
 package io.github.rosemoe.sora.langs.csharp;
 
 import io.github.rosemoe.sora.data.RainbowBracketHelper;
+import io.github.rosemoe.sora.text.TextStyle;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
-import android.graphics.Color;
 import android.util.Log;
 import io.github.rosemoe.sora.data.BlockLine;
-import io.github.rosemoe.sora.data.Span;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 import io.github.rosemoe.sora.langs.xml.analyzer.Utils;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
@@ -14,6 +13,7 @@ import io.github.rosemoe.sora.widget.EditorColorScheme;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import java.io.StringReader;
 import java.util.Stack;
+import java.util.regex.Pattern;
 import org.antlr.parser.antlr4.csharp.CSharpLexer;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -270,40 +270,45 @@ public class CSharpCodeAnalyzer implements CodeAnalyzer {
 
           case CSharpLexer.IDENTIFIER:
             {
-              info.addIdentifier(token.getText());
-              int color = EditorColorScheme.TEXT_NORMAL;
+              boolean isClassName = false;
+              int mcolor = EditorColorScheme.TEXT_NORMAL;
+
               if (previous == CSharpLexer.ABSTRACT
                   || previous == CSharpLexer.USING
                   || previous == CSharpLexer.DELEGATE
                   || previous == CSharpLexer.VOID
-                  || previous == CSharpLexer.VAR) {
-                color = EditorColorScheme.javaparament;
-              }
-              if (previous == CSharpLexer.BOOL
+                  || previous == CSharpLexer.CLASS
+                  || previous == CSharpLexer.VAR
+                  || previous == CSharpLexer.IDENTIFIER) {
+                mcolor = EditorColorScheme.javaoprator;
+                isClassName = true;
+                if (lexer._input.LA(1) == '(') {
+                  mcolor = EditorColorScheme.javafun;
+                }
+              } else if (previous == CSharpLexer.BOOL
                   || previous == CSharpLexer.AS
                   || previous == CSharpLexer.IS
                   || previous == CSharpLexer.STRING) {
-                color = EditorColorScheme.javafield;
+                mcolor = EditorColorScheme.javakeywordoprator;
+              } else if (previous == CSharpLexer.DOT) {
+                mcolor = EditorColorScheme.javatype;
+              } else if (previous == CSharpLexer.NAMESPACE) {
+                mcolor = EditorColorScheme.jsoprator;
+              } else if (ObjectUtils.getNextLexer(lexer, '.')) {
+                mcolor = EditorColorScheme.tscolormatch1;
+              } else if (ObjectUtils.getNextLexer(lexer, ':')) {
+                mcolor = EditorColorScheme.tscolormatch2;
+              } else if (lexer._input.LA(1) == '[' || lexer._input.LA(1) == ']') {
+                mcolor = EditorColorScheme.tscolormatch4;
+              } else if (!isClassName && Character.isUpperCase(token.getText().charAt(0))) {
+                Pattern pattern = Pattern.compile("^[A-Z][a-zA-Z0-9_]*$");
+                var matcher = pattern.matcher(token.getText());
+                if (matcher.matches()) {
+                  mcolor = EditorColorScheme.javaparament;
+                }
               }
-              if (previous == CSharpLexer.DOT) {
-                color = EditorColorScheme.javafun;
-              }
-              if (previous == CSharpLexer.NAMESPACE) {
-                color = EditorColorScheme.javatype;
-                Span span = Span.obtain(column, color);
-                span.setAlphaCompat(0);
-                result.add(line, span);
-              }
-              if (ObjectUtils.getNextLexer(lexer, '.')) {
-                color = EditorColorScheme.javafield;
-              }
-              if (ObjectUtils.getNextLexer(lexer, ':')) {
-                color = EditorColorScheme.javafun;
-              }
-              if (token.getText().equals("Console")) {
-                color = EditorColorScheme.ATTRIBUTE_VALUE;
-              }
-              result.addIfNeeded(line, column, color);
+
+              result.addIfNeeded(line, column, TextStyle.makeStyle(mcolor,0,isClassName,false,false));
               break;
             }
           default:

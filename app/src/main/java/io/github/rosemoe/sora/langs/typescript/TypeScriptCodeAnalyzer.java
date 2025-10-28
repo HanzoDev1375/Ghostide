@@ -5,6 +5,7 @@ import io.github.rosemoe.sora.text.TextStyle;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 import java.util.Stack;
 import io.github.rosemoe.sora.data.BlockLine;
+import java.util.regex.Pattern;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
 import org.antlr.v4.runtime.Token;
@@ -238,70 +239,52 @@ public class TypeScriptCodeAnalyzer implements CodeAnalyzer {
             break;
           case TypeScriptLexer.Identifier:
             {
-              int colorid = EditorColorScheme.TEXT_NORMAL;
-              info.addIdentifier(token.getText());
-              boolean isPart = false;
-              int types = previous;
-              if (types == TypeScriptLexer.At) {
-                colorid = EditorColorScheme.tssymbols;
-                isPart = false;
+              int colorNormal = EditorColorScheme.TEXT_NORMAL;
+              boolean isClassName = false, isbold = false, Varunderline = false;
+              if (type == TypeScriptLexer.Class
+                  || type == TypeScriptLexer.Interface
+                  || type == TypeScriptLexer.Enum
+                  || type == TypeScriptLexer.Extends
+                  || type == TypeScriptLexer.Function_
+                  || type == TypeScriptLexer.Implements) {
+                colorNormal = EditorColorScheme.tsattr;
+                isbold = true;
+                isClassName = true;
+              } else if (type == TypeScriptLexer.Void
+                  || type == TypeScriptLexer.Boolean
+                  || type == TypeScriptLexer.Any
+                  || type == TypeScriptLexer.Const
+                  || type == TypeScriptLexer.Async
+                  || type == TypeScriptLexer.Instanceof
+                  || type == TypeScriptLexer.Let
+                  || type == TypeScriptLexer.Not
+                  || type == TypeScriptLexer.Var
+                  || type == TypeScriptLexer.Abstract
+                  || type == TypeScriptLexer.Identifier) {
+                Varunderline = true;
+
+                colorNormal = EditorColorScheme.tssymbols;
+                isbold = true;
+                if (lexer._input.LA(1) == '(') {
+                  colorNormal = EditorColorScheme.tscolormatch1;
+                }
+              } else if (lexer._input.LA(1) == '.') {
+                colorNormal = EditorColorScheme.tscolormatch2;
+              } else if (lexer._input.LA(1) == '[' || lexer._input.LA(1) == ']') {
+                colorNormal = EditorColorScheme.tscolormatch3;
+              } else if (type == TypeScriptLexer.Dot) {
+                colorNormal = EditorColorScheme.tscolormatch4;
+              } else if (!isClassName && Character.isUpperCase(token.getText().charAt(0))) {
+                Pattern pattern = Pattern.compile("^[A-Z][a-zA-Z0-9_]*$");
+                var matcher = pattern.matcher(token.getText());
+                if (matcher.matches()) {
+                  colorNormal = EditorColorScheme.tscolormatch6;
+                }
               }
-              if (types == TypeScriptLexer.Dot) {
-                colorid = EditorColorScheme.tscolormatch1;
-                isPart = false;
-              }
-              if (types == TypeScriptLexer.Class
-                  || types == TypeScriptLexer.Interface
-                  || types == TypeScriptLexer.Abstract
-                  || types == TypeScriptLexer.Export
-                  || types == TypeScriptLexer.Extends) {
-                colorid = EditorColorScheme.tscolormatch2;
-                isPart = false;
-              }
-              if (types == TypeScriptLexer.Package
-                  || types == TypeScriptLexer.Public
-                  || types == TypeScriptLexer.Protected
-                  || types == TypeScriptLexer.Private
-                  || types == TypeScriptLexer.Void) {
-                colorid = EditorColorScheme.tscolormatch3;
-                isPart = false;
-              }
-              if (types == TypeScriptLexer.Colon
-                  || types == TypeScriptLexer.From
-                  || types == TypeScriptLexer.This
-                  || types == TypeScriptLexer.Or
-                  || types == TypeScriptLexer.And
-                  || types == TypeScriptLexer.Any
-                  || types == TypeScriptLexer.Yield) {
-                colorid = EditorColorScheme.tscolormatch4;
-                isPart = false;
-              }
-              if (types == TypeScriptLexer.Implements
-                  || types == TypeScriptLexer.Import
-                  || types == TypeScriptLexer.Var
-                  || types == TypeScriptLexer.Let) {
-                colorid = EditorColorScheme.tscolormatch5;
-                isPart = false;
-              }
-              if (types == TypeScriptLexer.Enum
-                  || types == TypeScriptLexer.New
-                  || types == TypeScriptLexer.Typeof
-                  || types == TypeScriptLexer.TypeAlias
-                  || types == TypeScriptLexer.Super) {
-                colorid = EditorColorScheme.tscolormatch6;
-                isPart = false;
-              }
-              if (types == TypeScriptLexer.OpenParen
-                  || types == TypeScriptLexer.CloseParen
-                  || types == TypeScriptLexer.Assign) {
-                colorid = EditorColorScheme.tscolormatch7;
-                isPart = false;
-              }
-              isPart = true;
-              result.addIfNeeded(line, column, colorid);
+
+              result.addIfNeeded(line, column, TextStyle.makeStyle(colorNormal,0,isbold,false,false));
               break;
             }
-
           default:
             int colorIds = EditorColorScheme.TEXT_NORMAL;
             result.addIfNeeded(line, column, colorIds);

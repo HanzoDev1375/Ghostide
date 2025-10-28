@@ -37,7 +37,7 @@ public class TextStyle {
   public static final long STRIKETHROUGH_BIT = ITALICS_BIT << 1;
   public static final long UNDERLINE_BIT = STRIKETHROUGH_BIT << 1; // افزودن بیت زیر خط
   public static final long BELOWLINE = UNDERLINE_BIT << 1;
-  public static final long ShadowColor = BELOWLINE << 3;
+  public static final long ShadowColor = BELOWLINE << 1;
   public static final String hexColor = "#3FFD091D";
 
   /** Convenient method */
@@ -105,7 +105,26 @@ public class TextStyle {
     return (style & UNDERLINE_BIT) != 0;
   }
 
-  @Deprecated()
+  public static long makeStyleSh(
+      int foregroundColorId,
+      int backgroundColorId,
+      boolean bold,
+      boolean italic,
+      boolean strikeThrough,
+      boolean blow,
+      boolean sh,
+      int id) {
+    checkColorId(foregroundColorId);
+    checkColorId(backgroundColorId);
+    return ((long) foregroundColorId)
+        + (((long) backgroundColorId) << COLOR_ID_BIT_COUNT)
+        + (bold ? BOLD_BIT : 0)
+        + (italic ? ITALICS_BIT : 0)
+        + (strikeThrough ? STRIKETHROUGH_BIT : 0)
+        + (blow ? BELOWLINE : 0)
+        + (sh ? ShadowColor : 0);
+  }
+
   public static long makeStyle(
       int foregroundColorId,
       int backgroundColorId,

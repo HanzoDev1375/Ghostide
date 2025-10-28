@@ -3,6 +3,8 @@ package io.github.rosemoe.sora.langs.kotlin;
 import android.graphics.Color;
 import android.util.Log;
 import io.github.rosemoe.sora.data.Span;
+import io.github.rosemoe.sora.langs.internal.CodeHighlighter;
+import io.github.rosemoe.sora.langs.kotlin.jum.KotlinLexer;
 import io.github.rosemoe.sora.langs.kotlin.jum.KtJu;
 import io.github.rosemoe.sora.langs.xml.analyzer.Utils;
 import io.github.rosemoe.sora.text.TextStyle;
@@ -113,9 +115,7 @@ public class KotilnAnalyzer implements CodeAnalyzer {
           case KotlinLexer.WHERE:
           case KotlinLexer.CONST:
           case KotlinLexer.SUSPEND:
-          case KotlinLexer.RETURN_AT:
-          case KotlinLexer.CONTINUE_AT:
-          case KotlinLexer.BREAK_AT:
+          
           case KotlinLexer.PACKAGE:
           case KotlinLexer.CLASS:
           case KotlinLexer.INTERFACE:
@@ -142,8 +142,7 @@ public class KotilnAnalyzer implements CodeAnalyzer {
           case KotlinLexer.AS:
           case KotlinLexer.IS:
           case KotlinLexer.IN:
-          case KotlinLexer.NOT_IS:
-          case KotlinLexer.NOT_IN:
+         
             result.addIfNeeded(
                 line,
                 column,
@@ -158,7 +157,6 @@ public class KotilnAnalyzer implements CodeAnalyzer {
           case KotlinLexer.LongLiteral:
           case KotlinLexer.BooleanLiteral:
           case KotlinLexer.NullLiteral:
-          case KotlinLexer.CharacterLiteral:
           case KotlinLexer.HexLiteral:
             Span span = Span.obtain(column, EditorColorScheme.javatype);
             if (token.getType() == KotlinLexer.HexLiteral) {
@@ -174,10 +172,6 @@ public class KotilnAnalyzer implements CodeAnalyzer {
                 column,
                 TextStyle.makeStyle(EditorColorScheme.javatype, 0, true, false, false));
             break;
-          case KotlinLexer.QUOTE_OPEN:
-          case KotlinLexer.TRIPLE_QUOTE_OPEN:
-          result.addIfNeeded(line,column,EditorColorScheme.javastring);
-          break;
           
           case KotlinLexer.RESERVED:
           case KotlinLexer.DOT:
@@ -219,16 +213,18 @@ public class KotilnAnalyzer implements CodeAnalyzer {
           case KotlinLexer.EQEQ:
           case KotlinLexer.EQEQEQ:
           case KotlinLexer.HASH:
-          case KotlinLexer.SINGLE_QUOTE:
             result.addIfNeeded(
                 line,
                 column,
                 TextStyle.makeStyle(EditorColorScheme.javaparament, 0, true, false, false));
             break;
+          case KotlinLexer.STRING:
+            CodeHighlighter.highlightFStringkt(token.getText(), line, column, result);
+            break;
           case KotlinLexer.LineComment:
           case KotlinLexer.ShebangLine:
           case KotlinLexer.DelimitedComment:
-          case KotlinLexer.Inside_Comment:
+          
             result.addIfNeeded(
                 line,
                 column,
@@ -419,7 +415,7 @@ public class KotilnAnalyzer implements CodeAnalyzer {
         }
 
         first = false;
-        if (token.getType() != KotlinLexer.WS && token.getType() != KotlinLexer.NL) {
+        if (token.getType() != KotlinLexer.WS) {
           previous = token;
         }
       }

@@ -148,6 +148,7 @@ import io.github.rosemoe.sora.widget.layout.WordwrapLayout;
 import io.github.rosemoe.sora.widget.style.SelectionHandleStyle;
 import io.github.rosemoe.sora.widget.style.builtin.HandleStyleSideDrop;
 import io.github.rosemoe.sora.widget.power.*;
+import io.github.rosemoe.sora.lang.brackets.*;
 
 /**
  * CodeEditor is an editor that can highlight text regions by doing basic syntax analyzing This
@@ -369,10 +370,25 @@ public class CodeEditor extends View
   private String minidraw;
   private List<LineIcon> lineIcons = new ArrayList<>();
   private MiniMap minimap;
+  private PairedBracket currentPairedBracket;
+  private int bracketHighlightColor = 0xFFFF0000; // رنگ قرمز برای هایلایت
+  private boolean highlightBrackets = true;
+  private OnlineBracketsMatcher bracketsMatcher;
 
   public void addLineIcon(int lineNumber, int iconRes) {
     LineIcon lineIcon = new LineIcon(iconRes, lineNumber);
     lineIcons.add(lineIcon);
+  }
+
+  private void updateMatchingBrackets() {
+    if (!highlightBrackets || bracketsMatcher == null) {
+      currentPairedBracket = null;
+      return;
+    }
+    Cursor cursor = getCursor();
+    int index = getText().getCharIndex(cursor.getLeftLine(), cursor.getLeftColumn());
+    currentPairedBracket = bracketsMatcher.getPairedBracketAt(getText(), index);
+    invalidate();
   }
 
   public List<Rect> geticonRect() {
@@ -758,7 +774,7 @@ public class CodeEditor extends View
     helper = new CommentHelper(this);
     mPowerModeEffectManager = new PowerModeEffectManager(this);
     mProps = new DirectAccessProps();
-
+    bracketsMatcher = new OnlineBracketsMatcher(new char[] {'(', ')', '{', '}', '[', ']'}, 1000);
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       var configuration = ViewConfiguration.get(getContext());
       mVerticalScrollFactor = configuration.getScaledVerticalScrollFactor();
@@ -3063,6 +3079,23 @@ public class CodeEditor extends View
     }
   }
 
+  public void setBracketHighlightEnabled(boolean enabled) {
+    this.highlightBrackets = enabled;
+    if (!enabled) {
+      currentPairedBracket = null;
+    }
+    invalidate();
+  }
+
+  public void setBracketHighlightColor(int color) {
+    this.bracketHighlightColor = color;
+    invalidate();
+  }
+
+  public boolean isBracketHighlightEnabled() {
+    return highlightBrackets;
+  }
+
   /**
    * Draw text region with highlighting selected text
    *
@@ -3097,7 +3130,27 @@ public class CodeEditor extends View
     if (line == mCursor.getRightLine()) {
       selectionEnd = mCursor.getRightColumn();
     }
+    boolean isBracketHighlighted = false;
+    if (currentPairedBracket != null) {
+      int currentIndex = getText().getCharIndex(line, startIndex);
+      int bracketStart = currentPairedBracket.leftIndex;
+      int bracketEnd = currentPairedBracket.rightIndex;
 
+      if (currentIndex >= bracketStart
+          && currentIndex < bracketStart + currentPairedBracket.leftLength) {
+        mPaint.setColor(bracketHighlightColor);
+        mPaint.setFakeBoldText(true);
+        isBracketHighlighted = true;
+      } else if (currentIndex >= bracketEnd
+          && currentIndex < bracketEnd + currentPairedBracket.rightLength) {
+        mPaint.setColor(bracketHighlightColor);
+        mPaint.setFakeBoldText(true);
+        isBracketHighlighted = true;
+      }
+    }
+    if (isBracketHighlighted) {
+      mPaint.setFakeBoldText(false);
+    }
     mPaint.setColor(color);
     if (hasSelectionOnLine && mColors.getColor(EditorColorScheme.TEXT_SELECTED) != 0) {
       if (endIndex <= selectionStart || startIndex >= selectionEnd) {
@@ -5291,6 +5344,7 @@ public class CodeEditor extends View
     } else {
       invalidate();
     }
+    updateMatchingBrackets();
     onSelectionChanged();
   }
 
@@ -5944,6 +5998,7 @@ public class CodeEditor extends View
       case KeyEvent.KEYCODE_DPAD_RIGHT:
       case KeyEvent.KEYCODE_MOVE_HOME:
       case KeyEvent.KEYCODE_MOVE_END:
+        post(this::updateMatchingBrackets);
         if (isShiftPressed && (!mCursor.isSelected())) {
           mLockedSelection = mCursor.left();
         } else if (!isShiftPressed && mLockedSelection != null) {
@@ -6290,7 +6345,7 @@ public class CodeEditor extends View
       int endColumn,
       CharSequence insertedContent) {
     updateTimestamp();
-
+    post(this::updateMatchingBrackets);
     // save.OnStart(this);
     if (mPowerModeEffectManager != null && insertedContent.length() > 0) {
       mPowerModeEffectManager.spawnEffectAtCursor();
@@ -6393,7 +6448,7 @@ public class CodeEditor extends View
     for (int i = startLine; i <= startLine + 1 && i < getLineCount(); i++) {
       mText.getLine(i).widthCache = null;
     }
-
+    post(this::updateMatchingBrackets);
     if (isSpanMapPrepared(false, endLine - startLine)) {
       if (startLine == endLine) {
         SpanMapUpdater.shiftSpansOnSingleLineDelete(

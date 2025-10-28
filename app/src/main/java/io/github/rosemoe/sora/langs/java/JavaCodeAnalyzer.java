@@ -356,7 +356,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             {
               info.addIdentifier(token.getText());
               int colorNormal = EditorColorScheme.TEXT_NORMAL;
-              boolean isClassName = false;
+              boolean isClassName = false, isSh = false;
               if (previous == JavaLexer.CLASS
                   || previous == JavaLexer.INTERFACE
                   || previous == JavaLexer.ENUM
@@ -364,6 +364,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                   || previous == JavaLexer.IMPLEMENTS) {
                 colorNormal = EditorColorScheme.javafun;
                 isClassName = true;
+                isSh = true;
               } else if (previous == JavaLexer.VOID
                   || previous == JavaLexer.BOOLEAN
                   || previous == JavaLexer.BYTE
@@ -374,7 +375,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                   || previous == JavaLexer.LONG
                   || previous == JavaLexer.SHORT
                   || previous == JavaLexer.IDENTIFIER) {
-                  colorNormal = EditorColorScheme.javafun;
+                colorNormal = EditorColorScheme.javafun;
                 if (lexer._input.LA(1) == '(') {
                   colorNormal = EditorColorScheme.tsattr;
                 }
@@ -394,7 +395,10 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 }
               }
 
-              result.addIfNeeded(line, column, colorNormal);
+              result.addIfNeeded(
+                  line,
+                  column,
+                  TextStyle.makeStyleSh(colorNormal, 0, false, false, false, false, true,0));
               break;
             }
 

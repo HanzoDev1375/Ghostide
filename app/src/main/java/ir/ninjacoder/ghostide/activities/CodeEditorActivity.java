@@ -18,6 +18,7 @@ import ir.ninjacoder.ghostide.databinding.Antcomp8lerBinding;
 import ir.ninjacoder.ghostide.enums.CompilerModel;
 import ir.ninjacoder.ghostide.enums.Mode;
 import ir.ninjacoder.ghostide.layoutmanager.LogCatBottomSheet;
+import ir.ninjacoder.ghostide.marco.CodeSnap;
 import ir.ninjacoder.ghostide.marco.ColorView;
 import ir.ninjacoder.ghostide.marco.FactoryCodeError;
 import ir.ninjacoder.ghostide.marco.GhostWebEditorSearch;
@@ -112,7 +113,7 @@ public class CodeEditorActivity extends BaseCompat {
   private ProgressBar progressbar1;
   private RecyclerView dir;
   private TextView titleauthor;
-  private ImageView image, redo, undo, menupopnew, iconAuthor;
+  private ImageView image, redo, undo, menupopnew, iconAuthor, codesnapimg;
   private LinearLayout FrameLayout02;
   private LinearLayout linear3, getColorPass;
   private ProgressBar proanjctor;
@@ -188,6 +189,7 @@ public class CodeEditorActivity extends BaseCompat {
     image = findViewById(R.id.image);
     redo = findViewById(R.id.redo);
     undo = findViewById(R.id.undo);
+    codesnapimg = findViewById(R.id.codesnapimg);
     tablayouteditor = findViewById(R.id.tablayouteditor);
     menupopnew = findViewById(R.id.menupopnew);
     FrameLayout02 = findViewById(R.id.FrameLayout02);
@@ -238,12 +240,7 @@ public class CodeEditorActivity extends BaseCompat {
         .circleCrop()
         .error(R.drawable.app_icon)
         .into(avatargithubuser);
-    ghostIcon
-        .animate()
-        .scaleX(1.0f)
-        .scaleY(1.0f)
-        .setDuration(1000)
-        .start();
+    ghostIcon.animate().scaleX(1.0f).scaleY(1.0f).setDuration(1000).start();
     mRootView
         .getViewTreeObserver()
         .addOnGlobalLayoutListener(
@@ -347,6 +344,18 @@ public class CodeEditorActivity extends BaseCompat {
         (it) -> {
           FabFileRuner();
         });
+    codesnapimg.setOnClickListener(
+        v -> {
+          new CodeSnap(CodeEditorActivity.this, getTabPathCode(), editor);
+        });
+  }
+
+  String getTabPathCode() {
+    int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
+    if (selectedTabPosition >= 0 && selectedTabPosition < tabs_listmap.size()) {
+      return tabs_listmap.get(selectedTabPosition).get("path").toString();
+    }
+    return "";
   }
 
   private void initializeLogic() {

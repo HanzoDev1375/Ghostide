@@ -261,42 +261,40 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
               boolean hasfunc = false;
               identifiers.addIdentifier(token.getText());
               int mycolor = EditorColorScheme.TEXT_NORMAL;
+
               if (previous == JavaScriptLexer.Import || previous == JavaScriptLexer.From) {
-                mycolor = EditorColorScheme.ATTRIBUTE_NAME;
+                mycolor = EditorColorScheme.jsattr;
               }
               if (previous == JavaScriptLexer.LessThan) {
-                mycolor = EditorColorScheme.ATTRIBUTE_VALUE;
+                mycolor = EditorColorScheme.jsoprator;
               }
-              // symbol like in vscode
               if (previous == JavaScriptLexer.Dot || previous == JavaScriptLexer.Colon) {
-                mycolor = EditorColorScheme.IDENTIFIER_NAME;
+                mycolor = EditorColorScheme.javafield;
               }
               if (previous == JavaScriptLexer.Function_
                   || previous == JavaScriptLexer.Class
                   || previous == JavaScriptLexer.Package
                   || previous == JavaScriptLexer.Export
-                  || previous == JavaScriptLexer.Extends) {
+                  || previous == JavaScriptLexer.Extends
+                  || previous == JavaScriptLexer.Identifier) {
                 hasfunc = true;
-                mycolor = EditorColorScheme.HTML_TAG;
+                mycolor = EditorColorScheme.javakeywordoprator;
               }
-              // var
               if (previous == JavaScriptLexer.Var
                   || previous == JavaScriptLexer.NonStrictLet
                   || previous == JavaScriptLexer.StrictLet
                   || previous == JavaScriptLexer.Const) {
                 hasfunc = true;
-                mycolor = EditorColorScheme.LITERAL;
+                mycolor = EditorColorScheme.javatype;
               }
-              // retrun and .....
               if (previous == JavaScriptLexer.Return
                   || previous == JavaScriptLexer.As
                   || previous == JavaScriptLexer.Interface
                   || previous == JavaScriptLexer.Yield) {
                 hasfunc = true;
-                mycolor = EditorColorScheme.jsoprator;
+                mycolor = EditorColorScheme.javatype;
               }
 
-              // next
               if (ObjectUtils.getNextLexer(lexer, '(')) {
                 mycolor = EditorColorScheme.tsattr;
               }
@@ -309,7 +307,6 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
               if (ObjectUtils.getNextLexer(lexer, ')')) {
                 mycolor = EditorColorScheme.tscolormatch3;
               }
-              // -> str
               if (ObjectUtils.getNextLexer(lexer, '>')) {
                 mycolor = EditorColorScheme.pycolormatch4;
               }
@@ -320,14 +317,12 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
                 Pattern pattern = Pattern.compile("\\b[A-Z][a-zA-Z]*\\b");
                 var matcher = pattern.matcher(token.getText());
                 if (matcher.matches()) {
-
                   mycolor = EditorColorScheme.javatype;
                 }
               }
               result.addIfNeeded(line, column, mycolor);
               break;
             }
-
           case JavaScriptLexer.StringLiteral:
           case JavaScriptLexer.BikTikString:
             result.addIfNeeded(line, column, EditorColorScheme.LITERAL);
