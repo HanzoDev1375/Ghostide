@@ -346,6 +346,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                         currentLine + i, lineStartColumn + j, EditorColorScheme.javastring);
                   }
                 }
+                
               }
               break;
             }
@@ -362,7 +363,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                   || previous == JavaLexer.ENUM
                   || previous == JavaLexer.EXTENDS
                   || previous == JavaLexer.IMPLEMENTS) {
-                colorNormal = EditorColorScheme.javafun;
+                colorNormal = EditorColorScheme.jsfun;
                 isClassName = true;
                 isSh = true;
               } else if (previous == JavaLexer.VOID
@@ -375,30 +376,32 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                   || previous == JavaLexer.LONG
                   || previous == JavaLexer.SHORT
                   || previous == JavaLexer.IDENTIFIER) {
-                colorNormal = EditorColorScheme.javafun;
-                if (lexer._input.LA(1) == '(') {
-                  colorNormal = EditorColorScheme.tsattr;
-                }
+                colorNormal = EditorColorScheme.tssymbols;
+
+              } else if (previous == JavaLexer.THROW) {
+                colorNormal = EditorColorScheme.jsoprator;
               } else if (previous == JavaLexer.CASE) {
                 colorNormal = EditorColorScheme.javakeywordoprator;
               } else if (lexer._input.LA(1) == '.') {
-                colorNormal = EditorColorScheme.tscolormatch1;
+                colorNormal = EditorColorScheme.pystring;
               } else if (lexer._input.LA(1) == '[' || lexer._input.LA(1) == ']') {
                 colorNormal = EditorColorScheme.tscolormatch1;
+              } else if (lexer._input.LA(1) == '(') {
+                colorNormal = EditorColorScheme.tscolormatch4;
               } else if (previous == JavaLexer.DOT) {
                 colorNormal = EditorColorScheme.tscolormatch3;
               } else if (!isClassName && Character.isUpperCase(token.getText().charAt(0))) {
                 Pattern pattern = Pattern.compile("^[A-Z][a-zA-Z0-9_]*$");
                 var matcher = pattern.matcher(token.getText());
                 if (matcher.matches()) {
-                  colorNormal = EditorColorScheme.javaparament;
+                  colorNormal = EditorColorScheme.LITERAL;
                 }
               }
 
               result.addIfNeeded(
                   line,
                   column,
-                  TextStyle.makeStyleSh(colorNormal, 0, false, false, false, false, true,0));
+                  TextStyle.makeStyleSh(colorNormal, 0, false, false, false, false, true, 0));
               break;
             }
 

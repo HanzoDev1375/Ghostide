@@ -5,6 +5,7 @@ import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.text.TextStyle;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
+import java.util.List;
 import java.util.Stack;
 
 public class RainbowBracketHelper {
@@ -141,7 +142,8 @@ public class RainbowBracketHelper {
       TextAnalyzeResult result, int line, int column, boolean codeblock) {
     handleCloseBracket(result, line, column, EditorColorScheme.htmlblockhash, codeblock);
   }
-  private boolean isRgbEn() {
+
+  public boolean isRgbEn() {
     return GhostIdeAppLoader.getAnalyzercod().getBoolean("Analyzercod", false);
   }
 
@@ -152,5 +154,22 @@ public class RainbowBracketHelper {
         || m.equals("]")
         || m.equals("<")
         || m.equals(">");
+  }
+
+  public int getColorForLevel(int level) {
+    if (!isRgbEn()) {
+      return EditorColorScheme.BLOCK_LINE;
+    }
+    return RAINBOW_COLORS[level % RAINBOW_COLORS.length];
+  }
+
+  public int calculateNestingLevel(BlockLine block, List<BlockLine> blocks) {
+    int level = 0;
+    for (BlockLine bl : blocks) {
+      if (bl.startLine < block.startLine && bl.endLine > block.endLine) {
+        level++;
+      }
+    }
+    return level;
   }
 }

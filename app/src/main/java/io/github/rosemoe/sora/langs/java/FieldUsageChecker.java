@@ -14,6 +14,9 @@ import com.github.javaparser.ast.stmt.ForStmt;
 import com.github.javaparser.ast.stmt.ForEachStmt;
 import com.github.javaparser.ast.stmt.CatchClause;
 import com.github.javaparser.ast.body.Parameter;
+import com.skydoves.powermenu.MenuAnimation;
+import com.skydoves.powermenu.PowerMenu;
+import com.skydoves.powermenu.PowerMenuItem;
 import io.github.rosemoe.sora.langs.xml.analyzer.Utils;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.widget.tooltip.ToolItemPop;
@@ -23,15 +26,44 @@ import java.util.List;
 import java.util.Optional;
 
 public class FieldUsageChecker {
-  public static void ovrinEditor(IdeEditor editor) {
-    CompilationUnit cu = StaticJavaParser.parse(editor.getTextAsString());
-    List<UnusedField> unusedFields = getUnusedFields(cu);
-    var tool = new ToolItemPop(editor);
-    unusedFields.forEach(
-        it -> {
-          tool.show(it.declarationLine, it.declarationColumn);
-          tool.run(it.fieldName);
-        });
+  public static void showWarningIfCursorOnField(IdeEditor editor) {
+    try {
+      CompilationUnit cu = StaticJavaParser.parse(editor.getTextAsString());
+      List<UnusedField> unusedFields = getUnusedFields(cu);
+
+      int cursorLine = editor.getCursor().getLeftLine();
+      int cursorColumn = editor.getCursor().getLeftColumn();
+
+      for (UnusedField warning : unusedFields) {
+        if (warning.declarationLine == cursorLine + 1) {
+          String lineText = editor.getText().getLineString(cursorLine);
+          if (lineText.contains(warning.fieldName)) {
+            int fieldStart = lineText.indexOf(warning.fieldName);
+            int fieldEnd = fieldStart + warning.fieldName.length();
+
+            if (cursorColumn >= fieldStart && cursorColumn <= fieldEnd) {
+              String message = "⚠️ فیلد استفاده نشده: " + warning.fieldName;
+
+              PowerMenu powerMenu =
+                  new PowerMenu.Builder(editor.getContext())
+                      .addItem(new PowerMenuItem(message))
+                      .setIsMaterial(true)
+                      .setShowBackground(false)
+                      .setAnimation(MenuAnimation.ELASTIC_CENTER)
+                      .setMenuRadius(20f)
+                      .setTextSize(14)
+                      .setAutoDismiss(true)
+                      .build();
+
+              powerMenu.showAsAnchorLeftTop(editor);
+              return;
+            }
+          }
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   public static void run(String token, TextAnalyzeResult result) {
@@ -352,7 +384,7 @@ public class FieldUsageChecker {
 
     @Override
     public void visit(VariableDeclarator vd, Void arg) {
-      
+
       Optional<Position> begin = vd.getName().getBegin();
       if (begin.isPresent()
           && begin.get().line == declarationLine
@@ -378,7 +410,6 @@ public class FieldUsageChecker {
         super.visit(param, arg);
       }
     }
-
 
     @Override
     public void visit(SimpleName name, Void arg) {

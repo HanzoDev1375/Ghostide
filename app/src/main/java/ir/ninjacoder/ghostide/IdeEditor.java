@@ -8,6 +8,7 @@ import android.view.DragEvent;
 import android.widget.Toast;
 import io.github.rosemoe.sora.event.DoubleClickEvent;
 import io.github.rosemoe.sora.event.LongPressEvent;
+import io.github.rosemoe.sora.event.SelectionChangeEvent;
 import io.github.rosemoe.sora.event.TextSizeChangeEvent;
 import io.github.rosemoe.sora.langs.html.HTMLLexer;
 import io.github.rosemoe.sora.langs.java.FieldUsageChecker;
@@ -98,6 +99,7 @@ public class IdeEditor extends CodeEditor implements IEditor {
     subscribeEvent(TextSizeChangeEvent.class, ((event, unsubscribe) -> textSize(event)));
     subscribeEvent(LongPressEvent.class, (ev, un) -> setLongEvent(ev));
     subscribeEvent(DoubleClickEvent.class, (ev, un) -> handleDoubleClick(ev));
+    subscribeEvent(SelectionChangeEvent.class, (ev, un) -> onSelectionChanged(ev));
     saveTextSize = getContext().getSharedPreferences("saveItem", Context.MODE_PRIVATE);
     var getSize = saveTextSize.getFloat("newTextSize", 16);
     if (saveTextSize != null) {
@@ -123,11 +125,14 @@ public class IdeEditor extends CodeEditor implements IEditor {
     //// addLineIcon(R.drawable.ic_material_python, 5);
   }
 
+  void onSelectionChanged(SelectionChangeEvent event) {
+    if (getEditorLanguage() instanceof JavaLanguage) {
+      FieldUsageChecker.showWarningIfCursorOnField(this);
+    }
+  }
+
   void handleDoubleClick(DoubleClickEvent db) {
     try {
-      if (getEditorLanguage() instanceof JavaLanguage) {
-        FieldUsageChecker.ovrinEditor(this);
-      }
 
       int clickIndex = db.getIndex();
       String fullText = getTextAsString();

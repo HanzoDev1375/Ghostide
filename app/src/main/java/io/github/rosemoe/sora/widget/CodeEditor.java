@@ -23,6 +23,8 @@
  */
 package io.github.rosemoe.sora.widget;
 
+import android.graphics.Color;
+import io.github.rosemoe.sora.data.RainbowBracketHelper;
 import io.github.rosemoe.sora.event.TextSizeChangeEvent;
 import io.github.rosemoe.sora.graphics.BubbleHelper;
 import io.github.rosemoe.sora.model.Inlay;
@@ -374,6 +376,7 @@ public class CodeEditor extends View
   private int bracketHighlightColor = 0xFFFF0000; // رنگ قرمز برای هایلایت
   private boolean highlightBrackets = true;
   private OnlineBracketsMatcher bracketsMatcher;
+  private RainbowBracketHelper hls;
 
   public void addLineIcon(int lineNumber, int iconRes) {
     LineIcon lineIcon = new LineIcon(iconRes, lineNumber);
@@ -774,6 +777,7 @@ public class CodeEditor extends View
     helper = new CommentHelper(this);
     mPowerModeEffectManager = new PowerModeEffectManager(this);
     mProps = new DirectAccessProps();
+    hls = new RainbowBracketHelper("");
     bracketsMatcher = new OnlineBracketsMatcher(new char[] {'(', ')', '{', '}', '[', ']'}, 1000);
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       var configuration = ViewConfiguration.get(getContext());
@@ -3138,13 +3142,13 @@ public class CodeEditor extends View
 
       if (currentIndex >= bracketStart
           && currentIndex < bracketStart + currentPairedBracket.leftLength) {
-        mPaint.setColor(bracketHighlightColor);
+        // mPaint.setColor(bracketHighlightColor);
         mPaint.setFakeBoldText(true);
         isBracketHighlighted = true;
       } else if (currentIndex >= bracketEnd
           && currentIndex < bracketEnd + currentPairedBracket.rightLength) {
-        mPaint.setColor(bracketHighlightColor);
-        mPaint.setFakeBoldText(true);
+        // mPaint.setColor(bracketHighlightColor);
+        //  mPaint.setFakeBoldText(true);
         isBracketHighlighted = true;
       }
     }
@@ -3359,19 +3363,25 @@ public class CodeEditor extends View
     if (blocks == null || blocks.isEmpty()) {
       return;
     }
+
+    RainbowBracketHelper rainbowHelper = new RainbowBracketHelper("");
+
     int first = getFirstVisibleRow();
     int last = getLastVisibleRow();
     boolean mark = false;
     int invalidCount = 0;
     int maxCount = Integer.MAX_VALUE;
+
     if (mSpanner != null) {
       TextAnalyzeResult colors = mSpanner.getResult();
       if (colors != null) {
         maxCount = colors.getSuppressSwitch();
       }
     }
+
     int mm = binarySearchEndBlock(first, blocks);
     int cursorIdx = mCursorPosition;
+
     for (int curr = mm; curr < blocks.size(); curr++) {
       BlockLine block = blocks.get(curr);
       if (hasVisibleRegion(block.startLine, block.endLine, first, last)) {
@@ -3389,6 +3399,7 @@ public class CodeEditor extends View
                   block.startLine);
           float offset = Math.min(offset1, offset2);
           float centerX = offset + offsetX;
+
           mRect.top = Math.max(0, getRowBottom(block.startLine) - getOffsetY());
           mRect.bottom =
               Math.min(
@@ -3398,17 +3409,43 @@ public class CodeEditor extends View
           mRect.left = centerX - mDpUnit * mBlockLineWidth / 2;
           mRect.right = centerX + mDpUnit * mBlockLineWidth / 2;
 
-          drawColor(
-              canvas,
-              mColors.getColor(
-                  curr == cursorIdx
-                      ? EditorColorScheme.BLOCK_LINE_CURRENT
-                      : EditorColorScheme.BLOCK_LINE),
-              mRect);
+          int blockColor;
+          if (curr == cursorIdx) {
+            blockColor = EditorColorScheme.BLOCK_LINE_CURRENT;
+          } else if (rainbowHelper.isRgbEn()) {
+            int nestingLevel = rainbowHelper.calculateNestingLevel(block, blocks);
+            blockColor = rainbowHelper.getColorForLevel(nestingLevel);
+          } else {
+            blockColor = EditorColorScheme.BLOCK_LINE;
+          }
+
+          drawColor(canvas, mColors.getColor(blockColor), mRect);
+
+          if (curr == cursorIdx) {
+            int color = 0x33FFFF00;
+            Paint paint = new Paint();
+            paint.setColor(color);
+            ContentLine startLine = mText.getLine(block.startLine);
+            float startLeft =
+                measureText(startLine, 0, block.startColumn, block.startLine) + offsetX;
+            float startRight =
+                measureText(startLine, 0, block.startColumn + 1, block.startLine) + offsetX;
+            mRect.top = getRowTop(block.startLine) - getOffsetY();
+            mRect.bottom = getRowBottom(block.startLine) - getOffsetY();
+            mRect.left = startLeft;
+            mRect.right = startRight;
+            canvas.drawRect(mRect, paint);
+            ContentLine endLine = mText.getLine(block.endLine);
+            float endLeft = measureText(endLine, 0, block.endColumn, block.endLine) + offsetX;
+            float endRight = measureText(endLine, 0, block.endColumn + 1, block.endLine) + offsetX;
+            mRect.top = getRowTop(block.endLine) - getOffsetY();
+            mRect.bottom = getRowBottom(block.endLine) - getOffsetY();
+            mRect.left = endLeft;
+            mRect.right = endRight;
+            canvas.drawRect(mRect, paint);
+          }
 
         } catch (IndexOutOfBoundsException e) {
-          // Ignored
-          // Because the exception usually occurs when the content changed.
         }
         mark = true;
       } else if (mark) {
@@ -3432,6 +3469,11 @@ public class CodeEditor extends View
     Random random = new Random();
     int color = colors[random.nextInt(colors.length)];
     return color;
+  }
+
+  private boolean isBracket(char ch) {
+    return ch == '(' || ch == ')' || ch == '{' || ch == '}' || ch == '[' || ch == ']' || ch == '<'
+        || ch == '>';
   }
 
   /**
@@ -5843,6 +5885,7 @@ public class CodeEditor extends View
   protected void onSelectionChanged() {
     mCursorBlink.onSelectionChanged();
     dispatchEvent(new SelectionChangeEvent(this));
+    invalidate();
   }
 
   // -------------------------------------------------------------------------------

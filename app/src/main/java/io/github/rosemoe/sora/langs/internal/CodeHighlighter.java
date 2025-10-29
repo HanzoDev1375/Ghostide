@@ -9,16 +9,19 @@ import java.util.regex.Matcher;
 
 public class CodeHighlighter {
   public static void highlightFStringkt(
-      String fstringtext, int line, int column, TextAnalyzeResult result) {
+      String fstringtext, int line, int column, TextAnalyzeResult result, int innerColor) {
     Pattern pattern = Pattern.compile("(\\{[^}]+\\})|(\\$\\w+)");
     Matcher matcher = pattern.matcher(fstringtext);
     var rbcolorHelper = new RainbowBracketHelper(fstringtext);
+
     int lastIndex = 0;
     int currentLine = line;
     int currentColumn = column;
 
     while (matcher.find()) {
       int matchStart = matcher.start();
+
+      // بخش عادی (قبل از براکت)
       if (matchStart > lastIndex) {
         String normalText = fstringtext.substring(lastIndex, matchStart);
         addTextWithColor(
@@ -29,21 +32,22 @@ public class CodeHighlighter {
       String matchedText = matcher.group();
 
       if (matchedText.startsWith("{")) {
-        // براکت باز
+        // براکت باز رنگی
         rbcolorHelper.handleOpenBracket(result, currentLine, currentColumn, false);
         currentColumn++;
-        // اینجا هم محتوای فایل باید خونده در اینده نزدیک حلش میکنم مانند vscode
+
+        // ✅ محتوای داخل {} با رنگ pretoken (innerColor)
         String content = matchedText.substring(1, matchedText.length() - 1);
         if (!content.isEmpty()) {
-          addTextWithColor(content, currentLine, currentColumn, EditorColorScheme.jsattr, result);
+          addTextWithColor(content, currentLine, currentColumn, innerColor, result);
           currentColumn += content.length();
         }
 
-        // براکت بسته - باید از handleCloseBracket استفاده شود
+        // براکت بسته رنگی
         rbcolorHelper.handleCloseBracket(result, currentLine, currentColumn, false);
         currentColumn++;
-
       } else if (matchedText.startsWith("$")) {
+        // متغیرهای مستقیم $var → رنگ خاص خودشون
         addTextWithColor(
             matchedText, currentLine, currentColumn, EditorColorScheme.javanumber, result, true);
         currentColumn += matchedText.length();
@@ -52,6 +56,7 @@ public class CodeHighlighter {
       lastIndex = matcher.end();
     }
 
+    // ادامه‌ی رشته بعد از آخرین براکت
     if (lastIndex < fstringtext.length()) {
       String remainingText = fstringtext.substring(lastIndex);
       addTextWithColor(

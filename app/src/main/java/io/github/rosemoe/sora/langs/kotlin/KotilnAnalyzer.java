@@ -3,7 +3,6 @@ package io.github.rosemoe.sora.langs.kotlin;
 import android.graphics.Color;
 import android.util.Log;
 import io.github.rosemoe.sora.data.Span;
-import io.github.rosemoe.sora.langs.internal.CodeHighlighter;
 import io.github.rosemoe.sora.langs.kotlin.jum.KotlinLexer;
 import io.github.rosemoe.sora.langs.kotlin.jum.KtJu;
 import io.github.rosemoe.sora.langs.xml.analyzer.Utils;
@@ -16,12 +15,11 @@ import java.util.Arrays;
 import java.util.Stack;
 
 import io.github.rosemoe.sora.data.BlockLine;
+import lsp4custom.com.ninjacoder.customhtmllsp.lexer.LexerStyleModel;
 import ninjacoder.ghostide.androidtools.r8.android.KotlinCodeAnalyzerCompat;
-import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
-import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 
 import java.io.IOException;
@@ -32,8 +30,6 @@ import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.text.TextAnalyzer;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
 import org.antlr.v4.runtime.TokenSource;
-import org.antlr.v4.runtime.tree.ErrorNode;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 public class KotilnAnalyzer implements CodeAnalyzer {
 
@@ -51,17 +47,19 @@ public class KotilnAnalyzer implements CodeAnalyzer {
       var lexer = new KotlinLexer(stream);
       int maxSwitch = 1, currSwitch = 0;
       Token token;
-      Token previous = UnknownToken.INSTANCE;
+      int typemode = -1;
       Token prePreToken = null;
       boolean first = true;
       int lastLine = 1;
       int line, column;
+      int type;
 
       Stack<BlockLine> stack = new Stack<>();
       while (delegate.shouldAnalyze()) {
         token = lexer.nextToken();
         if (token == null) break;
-        if (token.getType() == KotlinLexer.EOF) {
+        type = token.getType();
+        if (type == KotlinLexer.EOF) {
           lastLine = token.getLine() - 1;
           break;
         }
@@ -69,7 +67,7 @@ public class KotilnAnalyzer implements CodeAnalyzer {
         column = token.getCharPositionInLine();
         lastLine = line;
 
-        switch (token.getType()) {
+        switch (type) {
           case KotlinLexer.WS:
             if (first) result.addNormalIfNull();
             break;
@@ -115,7 +113,7 @@ public class KotilnAnalyzer implements CodeAnalyzer {
           case KotlinLexer.WHERE:
           case KotlinLexer.CONST:
           case KotlinLexer.SUSPEND:
-          
+
           case KotlinLexer.PACKAGE:
           case KotlinLexer.CLASS:
           case KotlinLexer.INTERFACE:
@@ -142,7 +140,6 @@ public class KotilnAnalyzer implements CodeAnalyzer {
           case KotlinLexer.AS:
           case KotlinLexer.IS:
           case KotlinLexer.IN:
-         
             result.addIfNeeded(
                 line,
                 column,
@@ -172,7 +169,7 @@ public class KotilnAnalyzer implements CodeAnalyzer {
                 column,
                 TextStyle.makeStyle(EditorColorScheme.javatype, 0, true, false, false));
             break;
-          
+
           case KotlinLexer.RESERVED:
           case KotlinLexer.DOT:
           case KotlinLexer.COMMA:
@@ -219,12 +216,11 @@ public class KotilnAnalyzer implements CodeAnalyzer {
                 TextStyle.makeStyle(EditorColorScheme.javaparament, 0, true, false, false));
             break;
           case KotlinLexer.STRING:
-            CodeHighlighter.highlightFStringkt(token.getText(), line, column, result);
+            LexerStyleModel.makeStyleLexer(line, column, result, typemode, lexer, token.getText());
             break;
           case KotlinLexer.LineComment:
           case KotlinLexer.ShebangLine:
           case KotlinLexer.DelimitedComment:
-          
             result.addIfNeeded(
                 line,
                 column,
@@ -238,7 +234,6 @@ public class KotilnAnalyzer implements CodeAnalyzer {
               ktinfo.addIdentifier(token.getText());
               var mytext = token.getText();
               boolean hasktpr = false;
-              int typemode = previous.getType();
               if (typemode == KotlinLexer.AT) {
                 color = EditorColorScheme.ATTRIBUTE_NAME;
               }
@@ -413,10 +408,10 @@ public class KotilnAnalyzer implements CodeAnalyzer {
             result.addIfNeeded(line, column, EditorColorScheme.TEXT_NORMAL);
             break;
         }
-
+        
         first = false;
-        if (token.getType() != KotlinLexer.WS) {
-          previous = token;
+        if (type != KotlinLexer.WS) {
+          typemode = type;
         }
       }
       result.determine(lastLine);
@@ -446,61 +441,6 @@ public class KotilnAnalyzer implements CodeAnalyzer {
     } catch (IOException e) {
       e.printStackTrace();
       Log.e("TAG", e.getMessage());
-    }
-  }
-
-  private static class UnknownToken implements Token {
-
-    public static UnknownToken INSTANCE = new UnknownToken();
-
-    @Override
-    public String getText() {
-      return "";
-    }
-
-    @Override
-    public int getType() {
-      return -1;
-    }
-
-    @Override
-    public int getLine() {
-      return 0;
-    }
-
-    @Override
-    public int getCharPositionInLine() {
-      return 0;
-    }
-
-    @Override
-    public int getChannel() {
-      return 0;
-    }
-
-    @Override
-    public int getTokenIndex() {
-      return 0;
-    }
-
-    @Override
-    public int getStartIndex() {
-      return 0;
-    }
-
-    @Override
-    public int getStopIndex() {
-      return 0;
-    }
-
-    @Override
-    public TokenSource getTokenSource() {
-      return null;
-    }
-
-    @Override
-    public CharStream getInputStream() {
-      return null;
     }
   }
 }
