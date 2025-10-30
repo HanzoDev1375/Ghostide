@@ -1,8 +1,8 @@
 package io.github.rosemoe.sora.widget.TextSummry;
 
+import io.github.rosemoe.sora.widget.EditorColorScheme;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.tasks.app.HtmlToCssGenerator;
-import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.marco.ColorView;
 import ir.ninjacoder.ghostide.marco.HtmlTagView;
@@ -10,11 +10,9 @@ import android.content.Context;
 import android.view.View;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
-import com.google.android.material.color.MaterialColors;
 import com.skydoves.powermenu.MenuAnimation;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.Transilt;
-import ir.ninjacoder.ghostide.widget.data.ColorChecker;
 import java.io.File;
 import java.io.Serializable;
 
@@ -45,8 +43,10 @@ public class HtmlTool implements Serializable {
     menu.setAutoDismiss(true);
     menu.setTextSize(14);
 
-    menu.setMenuColor(MaterialColors.getColor(context, ObjectUtils.Back, 0));
-    menu.setTextColor(MaterialColors.getColor(context, ObjectUtils.TvColor, 0));
+    menu.setMenuColor(
+        EditorColorUtil.get((IdeEditor) editor, EditorColorScheme.AUTO_COMP_PANEL_BG));
+    menu.setTextColor(
+        EditorColorUtil.get((IdeEditor) editor, EditorColorScheme.AUTO_COMP_PANEL_CORNER));
     menu.showAsAnchorRightBottom(view);
     menu.setAnimation(MenuAnimation.ELASTIC_CENTER);
     menu.setHeaderView(item.getCustomHader("Html Helper", context));

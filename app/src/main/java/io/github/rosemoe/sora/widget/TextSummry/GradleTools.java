@@ -3,10 +3,10 @@ package io.github.rosemoe.sora.widget.TextSummry;
 import android.content.Context;
 import android.view.View;
 import android.widget.Toast;
-import com.google.android.material.color.MaterialColors;
 import com.skydoves.powermenu.MenuAnimation;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
+import io.github.rosemoe.sora.widget.EditorColorScheme;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.utils.GradleDependencyManager;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
@@ -30,8 +30,8 @@ public class GradleTools {
     menu.addItem(new PowerMenuItem("Task manager"));
     menu.addItem(new PowerMenuItem("My library"));
     menu.setShowBackground(false);
-    menu.setMenuColor(getColor(ObjectUtils.Back));
-    menu.setTextColor(getColor(ObjectUtils.TvColor));
+    menu.setMenuColor(getColor(EditorColorScheme.AUTO_COMP_PANEL_BG));
+    menu.setTextColor(getColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER));
     menu.setAnimation(MenuAnimation.FADE);
     menu.setOnMenuItemClickListener(
         (pos, item) -> {
@@ -67,6 +67,6 @@ public class GradleTools {
   }
 
   int getColor(int color) {
-    return MaterialColors.getColor(context, color, 0);
+    return EditorColorUtil.get(editor,color);
   }
 }

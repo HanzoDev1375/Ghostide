@@ -1,5 +1,8 @@
 package ir.ninjacoder.ghostide.adapter;
 
+import android.graphics.PorterDuff;
+import io.github.rosemoe.sora.widget.CodeEditor;
+import io.github.rosemoe.sora.widget.EditorColorScheme;
 import ir.ninjacoder.ghostide.R;
 import ir.ninjacoder.ghostide.model.TextActionModel;
 import android.view.LayoutInflater;
@@ -16,10 +19,12 @@ public class TextActionAd extends RecyclerView.Adapter<TextActionAd.ViewHolder> 
 
   protected List<TextActionModel> listmodel;
   protected OnItemClick onItemClick;
+  protected CodeEditor editor;
 
-  public TextActionAd(List<TextActionModel> listmodel, OnItemClick onItemClick) {
+  public TextActionAd(List<TextActionModel> listmodel, OnItemClick onItemClick, CodeEditor editor) {
     this.listmodel = listmodel;
     this.onItemClick = onItemClick;
+    this.editor = editor;
   }
 
   @NonNull
@@ -34,7 +39,8 @@ public class TextActionAd extends RecyclerView.Adapter<TextActionAd.ViewHolder> 
     TextActionModel model = listmodel.get(position);
     holder.icon.setImageResource(model.getIcomName());
     holder.tv.setVisibility(View.GONE);
-
+    holder.icon.setColorFilter(
+        editor.getColorScheme().getColor(EditorColorScheme.javakeyword), PorterDuff.Mode.SRC_IN);
     if (onItemClick != null) {
       holder.itemView.setOnClickListener(
           v -> onItemClick.onItemClickChange(position, v, holder.icon));

@@ -1,10 +1,9 @@
 package io.github.rosemoe.sora.widget.TextSummry;
 
-import ir.ninjacoder.ghostide.utils.ObjectUtils;
+import io.github.rosemoe.sora.widget.EditorColorScheme;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.marco.HtmlTagView;
 import android.view.View;
-import com.google.android.material.color.MaterialColors;
 import com.skydoves.powermenu.MenuAnimation;
 import android.content.Context;
 import com.skydoves.powermenu.PowerMenu;
@@ -32,8 +31,10 @@ public class KotlinTools {
     menu.setTextSize(14);
     menu.setDividerHeight(0);
     menu.setHeaderView(item.getCustomHader("Kt Helper", context));
-    menu.setMenuColor(MaterialColors.getColor(context, ObjectUtils.Back, 0));
-    menu.setTextColor(MaterialColors.getColor(context, ObjectUtils.TvColor, 0));
+    menu.setMenuColor(
+        EditorColorUtil.get((IdeEditor) editor, EditorColorScheme.AUTO_COMP_PANEL_BG));
+    menu.setTextColor(
+        EditorColorUtil.get((IdeEditor) editor, EditorColorScheme.AUTO_COMP_PANEL_CORNER));
     menu.showAsAnchorRightBottom(view);
     menu.setAutoDismiss(true);
     menu.setAnimation(MenuAnimation.ELASTIC_CENTER);

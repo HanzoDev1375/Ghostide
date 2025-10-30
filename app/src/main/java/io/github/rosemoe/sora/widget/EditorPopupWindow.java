@@ -106,6 +106,7 @@ public class EditorPopupWindow {
             applyWindowAttributes(false);
           }
         });
+        
     register();
   }
 
@@ -113,8 +114,18 @@ public class EditorPopupWindow {
   @NonNull
   public CodeEditor getEditor() {
     return mEditor;
+    
   }
-
+  public void setOutsideTouchable(boolean is){
+    mWindow.setOutsideTouchable(is);
+  }
+  public void setFocusable(boolean is){
+    mWindow.setFocusable(is);
+  }
+  public void dismissByTime(){
+    mEditor.postDelayed(()-> dismiss(),2000);
+  }
+  
   /**
    * Checks whether a single feature is enabled
    *

@@ -1,5 +1,6 @@
 package io.github.rosemoe.sora.widget.TextSummry;
 
+import io.github.rosemoe.sora.widget.EditorColorScheme;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.config.CreatorComment;
 import ir.ninjacoder.ghostide.config.GetterSetterGenerator;
@@ -9,7 +10,6 @@ import ir.ninjacoder.ghostide.marco.ActivityToFragmentConverter;
 import ir.ninjacoder.ghostide.marco.LicenseManagerImpl;
 import ir.ninjacoder.ghostide.marco.MethodOverloaderDialog;
 import ir.ninjacoder.ghostide.marco.editorface.ConstructorMaker;
-import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -20,8 +20,6 @@ import io.github.rosemoe.sora.widget.SymbolChannel;
 import io.github.rosemoe.sora.widget.Transilt;
 import io.github.rosemoe.sora.widget.schemes.GhostThemeDark;
 import java.lang.reflect.Field;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import android.view.LayoutInflater;
 import android.content.Context;
@@ -33,7 +31,6 @@ import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
 import io.github.rosemoe.sora.text.Cursor;
 import io.github.rosemoe.sora.widget.CodeEditor;
-import com.google.android.material.color.MaterialColors;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -80,8 +77,10 @@ public class JavaTools {
     menu.setTextSize(14);
     menu.setDividerHeight(20);
     menu.setDivider(item.getDiverAuto(context));
-    menu.setMenuColor(MaterialColors.getColor(context, ObjectUtils.Back, 0));
-    menu.setTextColor(MaterialColors.getColor(context, ObjectUtils.TvColor, 0));
+    menu.setMenuColor(
+        EditorColorUtil.get((IdeEditor) editor, EditorColorScheme.AUTO_COMP_PANEL_BG));
+    menu.setTextColor(
+        EditorColorUtil.get((IdeEditor) editor, EditorColorScheme.AUTO_COMP_PANEL_CORNER));
     menu.showAsAnchorRightBottom(view);
     menu.setAutoDismiss(true);
     menu.setAnimation(MenuAnimation.ELASTIC_CENTER);

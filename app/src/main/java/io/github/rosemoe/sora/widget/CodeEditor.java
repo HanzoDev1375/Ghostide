@@ -5701,6 +5701,9 @@ public class CodeEditor extends View
     if (mCompletionWindow != null) {
       mCompletionWindow.applyColorScheme();
     }
+    if (mTextActionWindow != null) {
+      mTextActionWindow.apply();
+    }
     invalidateHwRenderer();
     invalidate();
   }
@@ -5851,8 +5854,12 @@ public class CodeEditor extends View
     if (type == EditorColorScheme.AUTO_COMP_PANEL_BG
         || type == EditorColorScheme.AUTO_COMP_PANEL_CORNER) {
       if (mCompletionWindow != null) mCompletionWindow.applyColorScheme();
+      if (mTextActionWindow != null) {
+        mTextActionWindow.apply();
+      }
       return;
     }
+
     dispatchEvent(new ColorSchemeUpdateEvent(this));
     invalidateHwRenderer();
     invalidate();
@@ -5865,6 +5872,9 @@ public class CodeEditor extends View
   /** Called by color scheme to init colors */
   protected void onColorFullUpdate() {
     if (mCompletionWindow != null) mCompletionWindow.applyColorScheme();
+    if (mTextActionWindow != null) {
+      mTextActionWindow.apply();
+    }
     dispatchEvent(new ColorSchemeUpdateEvent(this));
     invalidateHwRenderer();
     invalidate();
