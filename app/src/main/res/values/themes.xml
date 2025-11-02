@@ -11,6 +11,6 @@
 
     <style
         name="Theme.Bases"
-        parent="Theme.Material3.Dark.NoActionBar">
+        parent="Theme.Material3Expressive.Dark.NoActionBar">
     </style>
 </resources>

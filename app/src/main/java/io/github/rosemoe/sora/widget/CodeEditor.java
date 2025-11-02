@@ -690,7 +690,7 @@ public class CodeEditor extends View
 
   /** Get using EditorAutoCompleteWindow */
   @NonNull
-  protected EditorAutoCompleteWindow getAutoCompleteWindow() {
+  public EditorAutoCompleteWindow getAutoCompleteWindow() {
     return mCompletionWindow;
   }
 
@@ -2122,6 +2122,21 @@ public class CodeEditor extends View
     mPaint.setTextSkewX(0);
     mPaint.setFakeBoldText(false);
     mPaint.setUnderlineText(false);
+  }
+
+  public float getCharOffsetX(int line, int column) {
+    return mLayout.getCharLayoutOffset(line, column)[1] + measureTextRegionOffset() - getOffsetX();
+  }
+
+  /**
+   * Get the character's y offset on view
+   *
+   * @param line The line position of character
+   * @param column The column position of character
+   * @return The y offset on view
+   */
+  public float getCharOffsetY(int line, int column) {
+    return mLayout.getCharLayoutOffset(line, column)[0] - getOffsetY();
   }
 
   /**

@@ -78,10 +78,8 @@ public class CodeSnap {
       binding.group.setType(LangType.GRADLE);
     } else if (path.endsWith(".rs")) {
       binding.group.setType(LangType.RUST);
-
     } else if (path.endsWith(".md")) {
       binding.group.setType(LangType.MARKDOWN);
-
     } else if (path.endsWith(".json")) {
       binding.group.setType(LangType.JSON);
     } else if (path.endsWith(".go")) {
@@ -92,7 +90,12 @@ public class CodeSnap {
       binding.group.setType(LangType.RUBY);
     } else if (path.endsWith(".xml")) {
       binding.group.setType(LangType.XML);
+    } else if (path.endsWith(".zig")) {
+      binding.group.setType(LangType.ZIG);
+    } else if (path.endsWith(".lua")) {
+      binding.group.setType(LangType.LUA);
     } else binding.group.setType(LangType.NONE);
+    
   }
 
   class Sheets extends CustomSheet {

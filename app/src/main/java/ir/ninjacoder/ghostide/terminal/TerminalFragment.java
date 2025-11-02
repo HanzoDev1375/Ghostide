@@ -53,7 +53,7 @@ public class TerminalFragment extends Fragment implements TerminalViewClient {
 
     protected SharedPreferences getvb;
 
-    private boolean mIsVisible;
+    private boolean mIsVisible = true;
 
     private TerminalView terminals;
 

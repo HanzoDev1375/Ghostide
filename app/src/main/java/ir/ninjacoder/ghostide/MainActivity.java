@@ -281,7 +281,7 @@ public class MainActivity extends BaseCompat {
             var pythonPath = getFilesDir().getAbsolutePath() + File.separator + "env.sh";
             var phpPath = getFilesDir().getAbsolutePath() + File.separator + "lib" + File.separator + "libx265.so";
             var ghostPath = "/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost";
-            if (!FileUtil.isExistFile(pythonPath) || !FileUtil.isExistFile(phpPath) || !FileUtil.isExistFile(mypath) || !FileUtil.isExistFile(ghostPath)) {
+            if (!FileUtil.isExistFile(pythonPath) || !FileUtil.isExistFile(phpPath) || !FileUtil.isExistFile(mypath) || !FileUtil.isExistFile(ghostPath) ||FileUtil.getFileLength(mypath) < 19163) {
                 startActivity(new Intent(getApplication(), SplashWord.class));
                 finish();
             } else {

@@ -8,6 +8,7 @@ import com.tyron.javacompletion.JavaCompletions;
 import com.tyron.javacompletion.completion.CompletionResult;
 import com.tyron.javacompletion.options.JavaCompletionOptionsImpl;
 import com.tyron.javacompletion.project.Project;
+import io.github.rosemoe.sora.langs.internal.Identifiers;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.config.JavaPaserUtils;
@@ -135,32 +136,5 @@ public class JavaAutoComplete implements AutoCompleteProvider {
     new TypeScriptCardshorts(it, prf);
   }
 
-  public static class Identifiers {
-    private static final Object SIGN = new Object();
-    private final List<String> identifiers = new ArrayList<>();
-    private HashMap<String, Object> cache;
-
-    public void addIdentifier(String identifier) {
-      if (cache == null) {
-        throw new IllegalStateException("begin() has not been called");
-      }
-      if (cache.put(identifier, SIGN) == SIGN) {
-        return;
-      }
-      identifiers.add(identifier);
-    }
-
-    public void begin() {
-      cache = new HashMap<>();
-    }
-
-    public void finish() {
-      cache.clear();
-      cache = null;
-    }
-
-    public List<String> getIdentifiers() {
-      return identifiers;
-    }
-  }
+  
 }

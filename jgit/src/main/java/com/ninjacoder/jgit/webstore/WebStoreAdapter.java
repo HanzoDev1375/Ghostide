@@ -1,42 +1,53 @@
-package com.ninjacoder.jgit.svgstore.svgadapter;
+package com.ninjacoder.jgit.webstore;
 
 import android.graphics.Color;
+import com.bumptech.glide.Glide;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.Spannable;
+import android.text.style.StyleSpan;
+import android.graphics.Typeface;
+import android.util.Log;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.PictureDrawable;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
-import com.bumptech.glide.Glide;
-import com.caverock.androidsvg.SVG;
 import com.ninjacoder.jgit.R;
-import com.ninjacoder.jgit.svgstore.svgmodel.SvgShopModel;
-import java.io.InputStream;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
-import java.net.URL;
 import java.util.ArrayList;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
-import android.text.Spannable;
-import android.text.style.StyleSpan;
-import android.graphics.Typeface;
 import java.util.List;
 
-public class SvgShopAdapter extends RecyclerView.Adapter<SvgShopAdapter.Holder> {
-  private List<SvgShopModel> originalList;
-  private List<SvgShopModel> list;
+public class WebStoreAdapter extends RecyclerView.Adapter<WebStoreAdapter.Holder> {
+
+  private List<WebModel> originalList;
+  private List<WebModel> list;
   private OnDownloadSvg download;
   private String currentSearchText = "";
 
-  public SvgShopAdapter(List<SvgShopModel> list, OnDownloadSvg download) {
+  public WebStoreAdapter(List<WebModel> list, OnDownloadSvg download) {
     this.originalList = new ArrayList<>(list);
     this.list = list;
     this.download = download;
+  }
+
+  @Override
+  public Holder onCreateViewHolder(ViewGroup p, int arg1) {
+    return new Holder(
+        LayoutInflater.from(p.getContext()).inflate(R.layout.layout_webstore_adapter, p, false));
+  }
+
+  @Override
+  public void onBindViewHolder(Holder holder, int pos) {
+    WebModel ir = list.get(pos);
+    holder.bind(ir, currentSearchText);
+    holder.size.setText(ir.getSize());
+  }
+
+  @Override
+  public int getItemCount() {
+    return list.size();
   }
 
   public void filter(String query) {
@@ -46,7 +57,7 @@ public class SvgShopAdapter extends RecyclerView.Adapter<SvgShopAdapter.Holder> 
       list.addAll(originalList);
     } else {
       String lowerCaseQuery = query.toLowerCase();
-      for (SvgShopModel item : originalList) {
+      for (var item : originalList) {
         if (item.getName().toLowerCase().contains(lowerCaseQuery)) {
           list.add(item);
         }
@@ -55,40 +66,22 @@ public class SvgShopAdapter extends RecyclerView.Adapter<SvgShopAdapter.Holder> 
     notifyDataSetChanged();
   }
 
-  @Override
-  public Holder onCreateViewHolder(ViewGroup p, int arg1) {
-    return new Holder(
-        LayoutInflater.from(p.getContext()).inflate(R.layout.layout_svg_view, p, false));
-  }
-
-  @Override
-  public void onBindViewHolder(Holder holder, int pos) {
-    var ir = list.get(pos);
-    holder.bind(ir, currentSearchText);
-  }
-
-  @Override
-  public int getItemCount() {
-    return list.size();
-  }
-
   class Holder extends RecyclerView.ViewHolder {
-    TextView titleName;
-    ImageView iconName;
-    View v;
+    private TextView size, names;
+    private ImageView icons;
 
     public Holder(View v) {
       super(v);
-      v = v;
-      titleName = v.findViewById(R.id.titles);
-      iconName = v.findViewById(R.id.iconshop);
+      size = v.findViewById(R.id.size);
+      names = v.findViewById(R.id.name);
+      icons = v.findViewById(R.id.icon);
     }
 
-    public void bind(SvgShopModel model, String searchText) {
+    public void bind(WebModel model, String searchText) {
       try {
-        String svgUrl = model.getIcon();
+        String img = model.getImage();
 
-        Glide.with(iconName.getContext()).load(svgUrl).error(Color.CYAN).into(iconName);
+        Glide.with(icons.getContext()).load(img).error(Color.CYAN).into(icons);
         String name = model.getName();
         SpannableString spannableString = new SpannableString(name);
 
@@ -110,19 +103,19 @@ public class SvgShopAdapter extends RecyclerView.Adapter<SvgShopAdapter.Holder> 
           }
         }
 
-        titleName.setText(spannableString);
-        iconName.setOnClickListener(
+        names.setText(spannableString);
+        icons.setOnClickListener(
             x -> {
               download.onDownload(x, model);
             });
       } catch (Exception err) {
         Log.e("SVGLoadError", "Error loading SVG", err);
-        iconName.setImageDrawable(new ColorDrawable(Color.CYAN));
+        icons.setImageDrawable(new ColorDrawable(Color.CYAN));
       }
     }
   }
 
   public interface OnDownloadSvg {
-    void onDownload(View v, SvgShopModel m);
+    void onDownload(View v, WebModel m);
   }
 }

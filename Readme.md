@@ -90,8 +90,10 @@
 - [x] Shell
 - [x] Markdown
 - [x] Go
-- [x] Tsx(not) && jsx(ok)
-- [ ] zig
+- [x] Tsx && jsx
+- [x] zig
+- [x] lua
+- [ ] r
 - [ ] C
 ---
 

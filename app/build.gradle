@@ -180,7 +180,7 @@ dependencies {
    	arm32Implementation("com.caoccao.javet:swc4j-android-arm:1.6.0")
      arm64Implementation("com.caoccao.javet:swc4j-android-arm64:1.6.0")
      runtimeOnly 'androidx.graphics:graphics-shapes:1.1.0-alpha01' 
-     implementation ('com.github.HanzoDev1375:Android-code-snap:1.1.1'){
+     implementation ('com.github.HanzoDev1375:Android-code-snap:1.1.2'){
        exclude group: "org.jetbrains", module: "annotations"
        exclude group: "org.jetbrains", module: "annotations-java5"
      }

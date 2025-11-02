@@ -110,7 +110,7 @@ public class SplashWord extends AppIntro2 {
           }
         });
 
-    if (!FileUtil.isExistFile(mypath)) {
+    if (!FileUtil.isExistFile(mypath) || FileUtil.getFileLength(mypath) <19163) {
       nameFile("databins.7z");
     } else {
       Log.d("Done", "");
@@ -172,17 +172,17 @@ public class SplashWord extends AppIntro2 {
                     @Override
                     public void onProgress(String s, long tr) {
                       runOnUiThread(
-                          () -> {
-                            dialog.setPrograss((int) tr, false);
-                          });
+                          () -> 
+                            dialog.setPrograss((int) tr, false)
+                          );
                     }
 
                     @Override
                     public void onStart() {
                       runOnUiThread(
-                          () -> {
-                            dialog.setTitle("Start...");
-                          });
+                          () -> 
+                            dialog.setTitle("Start...")
+                          );
                     }
 
                     @Override
@@ -194,6 +194,4 @@ public class SplashWord extends AppIntro2 {
             })
         .start();
   }
-
-  
 }

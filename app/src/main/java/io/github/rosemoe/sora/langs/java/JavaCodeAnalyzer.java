@@ -6,6 +6,7 @@ import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import io.github.rosemoe.sora.data.RainbowBracketHelper;
+import io.github.rosemoe.sora.langs.internal.Identifiers;
 import io.github.rosemoe.sora.widget.ListCss3Color;
 import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
 import ir.ninjacoder.ghostide.GhostIdeAppLoader;
@@ -95,7 +96,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
       JavaAutoComplete auto = new JavaAutoComplete(editor);
       auto.setMd(true);
       auto.setKeywords(JavaLanguage.keywords);
-      JavaAutoComplete.Identifiers info = new JavaAutoComplete.Identifiers();
+      Identifiers info = new Identifiers();
       info.begin();
       int[] mcolors = {
         EditorColorScheme.ATTRIBUTE_NAME,
