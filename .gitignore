@@ -84,3 +84,14 @@ lint/tmp/
  
 # AndroidIDE
 .androidide
+/.idea/AndroidProjectSystem.xml
+/.idea/copilot.data.migration.agent.xml
+/.idea/copilot.data.migration.ask.xml
+/.idea/copilot.data.migration.ask2agent.xml
+/.idea/copilot.data.migration.edit.xml
+/.idea/deploymentTargetSelector.xml
+/.idea/deviceManager.xml
+/app/lint-baseline.xml
+/.idea/migrations.xml
+/.idea/runConfigurations.xml
+/.kotlin/
