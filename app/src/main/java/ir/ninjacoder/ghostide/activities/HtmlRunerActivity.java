@@ -71,11 +71,11 @@ public class HtmlRunerActivity extends BaseCompat {
 
   private void findAndMatchIdInview() {
 
-    setSupportActionBar(bin.Toolbar);
+    setSupportActionBar(bin.toolbar);
 
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     getSupportActionBar().setHomeButtonEnabled(true);
-    bin.Toolbar.setNavigationOnClickListener(
+    bin.toolbar.setNavigationOnClickListener(
         (v) -> {
           finish();
         });
@@ -211,10 +211,10 @@ public class HtmlRunerActivity extends BaseCompat {
           }
         });
 
-    bin.Toolbar.setOverflowIcon(getDrawable(R.drawable.border_color));
-    bin.Fab.setIconResource(R.drawable.cog);
+    bin.toolbar.setOverflowIcon(getDrawable(R.drawable.border_color));
+    bin.fab.setIconResource(R.drawable.cog);
 
-    bin.Fab.setOnClickListener(
+    bin.fab.setOnClickListener(
         vv -> {
           var di = new MaterialAlertDialogBuilder(HtmlRunerActivity.this);
 
@@ -253,9 +253,9 @@ public class HtmlRunerActivity extends BaseCompat {
 
   private void installToRun() {
     //   bin.web.setCustomDialog();
-    bin.Toolbar.setNavigationIcon(R.drawable.arrow_back);
+    bin.toolbar.setNavigationIcon(R.drawable.arrow_back);
     initWebView();
-    ObjectUtils.setToolbarinit(bin.Toolbar);
+    ObjectUtils.setToolbarinit(bin.toolbar);
     if (getIntent().hasExtra("run")) {
       bin.web.loadUrl("file:///".concat(getIntent().getStringExtra("run")));
     }
@@ -322,7 +322,7 @@ public class HtmlRunerActivity extends BaseCompat {
       WebSettingsCompat.setForceDark(
           bin.web.getSettings(),
           item.isChecked() ? WebSettingsCompat.FORCE_DARK_ON : WebSettingsCompat.FORCE_DARK_OFF);
-    } else if (id == R.id.exits) {
+    } else if (id == R.id.exit) {
       finish();
     } else if (id == R.id.injector) {
       bin.web.reload();

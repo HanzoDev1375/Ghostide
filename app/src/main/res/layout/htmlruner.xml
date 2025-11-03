@@ -16,7 +16,7 @@
         <com.google.android.material.appbar.MaterialToolbar
              android:layout_height="?attr/actionBarSize"
              android:layout_width="match_parent"
-             android:id="@+id/_toolbar" />
+             android:id="@+id/toolbar" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -51,7 +51,7 @@
          android:layout_height="80dp"
          android:layout_width="80dp"
          android:layout_margin="16dp"
-         android:id="@+id/_fab"
+         android:id="@+id/fab"
          android:layout_gravity="left|bottom" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

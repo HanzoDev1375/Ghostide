@@ -31,7 +31,6 @@
     <string name="group_">\"Group \"</string>
     <string name="item_">\"Item \"</string>
     <string name="parent_view_">Родительский виджет…</string>
-    <string name="source_code_">Исходный код…</string>
     <string name="add_inside_">Добавить внутрь…</string>
     <string name="add_inside">\"Добавить внутрь \"</string>
     <string name="add_above_">Добавить выше…</string>
