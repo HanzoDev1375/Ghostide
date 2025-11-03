@@ -4,8 +4,10 @@ import com.blankj.utilcode.util.ThreadUtils;
 import io.github.rosemoe.sora.langs.glsllang.GLSLLang;
 import io.github.rosemoe.sora.langs.jsx.JavaScriptJsxLanguage;
 import io.github.rosemoe.sora.langs.less.LessLang;
+import io.github.rosemoe.sora.langs.lua.LuaLang;
 import io.github.rosemoe.sora.langs.rust.RustLang;
 import io.github.rosemoe.sora.langs.yml.YmlLang;
+import io.github.rosemoe.sora.langs.zig.ZigLanguage;
 import ir.ninjacoder.ghostide.IdeEditor;
 import ir.ninjacoder.ghostide.utils.FileCompatApi28;
 import ir.ninjacoder.ghostide.utils.FileUtil;
@@ -61,6 +63,7 @@ public class EditorRoaderFile {
       var CSS = new CSS3Language(editor);
       editor.setEditorLanguage(CSS);
       ReadFileCompat(editor, path, bar);
+      fab.postDelayed(fab::hide, 400);
     } else if (path.endsWith(".py")) {
       editor.setEditorLanguage(new PythonLang(editor));
       ReadFileCompat(editor, path, bar);
@@ -71,7 +74,7 @@ public class EditorRoaderFile {
         || path.endsWith(".h")
         || path.endsWith(".hpp")) {
       editor.setEditorLanguage(new CppLanguage());
-      fab.postDelayed(fab::show, 400);
+      fab.postDelayed(fab::hide, 400);
       ReadFileCompat(editor, path, bar);
     } else if (path.endsWith(".html")) {
       var htmllang = new HTMLLanguage(editor);
@@ -102,6 +105,7 @@ public class EditorRoaderFile {
     } else if (path.endsWith(".cs")) {
       ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new CSharpLanguage());
+      fab.postDelayed(fab::hide, 400);
     } else if (path.endsWith(".xml")) {
       ReadFileCompat(editor, path, bar);
       //	editor.setEditorLanguage(new io.github.rosemoe.sora.langs.xml.XMLLanguage());
@@ -115,14 +119,13 @@ public class EditorRoaderFile {
     } else if (path.endsWith(".ninja")) {
       ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new NinjaLang());
+      fab.postDelayed(fab::hide, 400);
     } else if (path.endsWith(".sh")) {
       ReadFileCompat(editor, path, bar);
       fab.postDelayed(fab::show, 400);
       editor.setEditorLanguage(new UniversalLanguage(new ShellDescription()));
     } else if (path.endsWith(".svg")) {
       ReadFileCompat(editor, path, bar);
-      //  ic.setVisibility(View.VISIBLE);
-      //  GlideCompat.LoadSvg(path, ic);
       fab.postDelayed(fab::show, 400);
       var htmllang = new SvgLang(editor);
       editor.setEditorLanguage(htmllang);
@@ -155,9 +158,6 @@ public class EditorRoaderFile {
     } else if (path.endsWith(".groovy") || path.endsWith(".gradle")) {
       ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new GroovyLanguage());
-    } else if (path.endsWith("jdjeje")) {
-      ReadFileCompat(editor, path, bar);
-      editor.setEditorLanguage(new UniversalLanguage(new CppDescription()));
     } else if (path.endsWith(".smali")) {
       ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new SMLang());
@@ -233,7 +233,15 @@ public class EditorRoaderFile {
     } else if (path.endsWith(".rs")) {
       ReadFileCompat(editor, path, bar);
       editor.setEditorLanguage(new RustLang(editor));
-      fab.postDelayed(fab::show, 400);
+      fab.postDelayed(fab::hide, 400);
+    } else if (path.endsWith(".zig")) {
+      ReadFileCompat(editor, path, bar);
+      editor.setEditorLanguage(new ZigLanguage(editor));
+      fab.postDelayed(fab::hide, 400);
+    } else if (path.endsWith(".lua")) {
+      ReadFileCompat(editor, path, bar);
+      editor.setEditorLanguage(new LuaLang());
+      fab.postDelayed(fab::hide, 400);
     } else {
       ReadFileCompat(editor, path, bar);
       fab.postDelayed(fab::hide, 400);

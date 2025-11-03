@@ -258,9 +258,10 @@ public class FileManagerActivity extends BaseCompat
     TypeChange();
     ThemeChaker();
     View mview = findViewById(R.id.view_filedir);
-    bind.opendraw.setOnClickListener(c ->{
-      bind.Drawer.open();
-    });
+    bind.opendraw.setOnClickListener(
+        c -> {
+          bind.Drawer.open();
+        });
     LayoutBinder.of(mview, ObjectUtils.Back);
     var helper =
         new RecyclerViewHelper(
@@ -851,7 +852,7 @@ public class FileManagerActivity extends BaseCompat
     di.build();
   }
 
-   void _fontpost(
+  void _fontpost(
       final ArrayList<HashMap<String, Object>> _map, final String _path, final double _pos) {
     if (_map.get((int) _pos).get(_path).toString().endsWith(".ttf")
         || _map.get((int) _pos).get(_path).toString().endsWith(".otf")) {
@@ -861,7 +862,7 @@ public class FileManagerActivity extends BaseCompat
     }
   }
 
-   void _themeinstall(
+  void _themeinstall(
       final ArrayList<HashMap<String, Object>> _list, final double _pos, final String _str) {
     if (_list.get((int) _pos).get(_str).toString().endsWith(".aa")
         || _list.get((int) _pos).get(_str).toString().endsWith(".AA")) {
@@ -1218,6 +1219,12 @@ public class FileManagerActivity extends BaseCompat
       loadjadx();
     }
     if (staticstring.endsWith(".py")) {
+      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+    }
+    if (staticstring.endsWith(".zig")) {
+      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+    }
+    if (staticstring.endsWith(".lua")) {
       SendDataFromCodeEditor(newpos, "path", files, newlistmap);
     }
     if (staticstring.endsWith(".yml")) {

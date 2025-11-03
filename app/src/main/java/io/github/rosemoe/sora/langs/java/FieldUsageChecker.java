@@ -1,9 +1,9 @@
 package io.github.rosemoe.sora.langs.java;
 
+import android.graphics.Color;
 import android.graphics.RectF;
-import android.view.Gravity;
+import android.graphics.Typeface;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -18,12 +18,12 @@ import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.stmt.ForStmt;
 import com.github.javaparser.ast.stmt.CatchClause;
 import com.github.javaparser.ast.body.Parameter;
-import com.skydoves.powermenu.CustomPowerMenu;
-import com.skydoves.powermenu.MenuAnimation;
-import com.skydoves.powermenu.MenuBaseAdapter;
+import com.ninjacoder.jgit.SimpleMarkdownRenderer;
 import io.github.rosemoe.sora.langs.xml.analyzer.Utils;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
+import io.github.rosemoe.sora.widget.CodeEditor;
+import io.github.rosemoe.sora.widget.EditorPopupWindow;
 import ir.ninjacoder.ghostide.IdeEditor;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,56 +31,46 @@ import java.util.Optional;
 
 public class FieldUsageChecker {
 
-  static class CustomModel {
-    String name;
-
-    public CustomModel(String name) {
-      this.name = name;
-    }
-
-    public String getName() {
-      return this.name;
-    }
-  }
-
-  static class MenuAdapter extends MenuBaseAdapter<CustomModel> {
-    private IdeEditor editor;
-
-    public MenuAdapter(IdeEditor editor) {
-      this.editor = editor;
-    }
-
-    @Override
-    public View getView(int index, View view, ViewGroup viewGroup) {
-      var item = (CustomModel) getItem(index);
-      var tv = new TextView(viewGroup.getContext());
-      tv.setSingleLine(true);
-      tv.setPadding(9, 9, 9, 9);
-      tv.setBackgroundColor(editor.getColorScheme().getColor(EditorColorScheme.AUTO_COMP_PANEL_BG));
-      tv.setTextColor(editor.getColorScheme().getColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER));
-      tv.setTextSize(14);
-      tv.setText(item.getName());
-      return tv;
-    }
-  }
-
   public static void showWarningIfCursorOnField(IdeEditor editor) {
     try {
       CompilationUnit cu = StaticJavaParser.parse(editor.getTextAsString());
       List<UnusedField> unusedFields = getUnusedFields(cu);
+      List<UnusedLocalVariable> unusedLocalVars = getUnusedLocalVariables(cu);
 
       int cursorLine = editor.getCursor().getLeftLine();
       int cursorColumn = editor.getCursor().getLeftColumn();
 
       for (UnusedField warning : unusedFields) {
-        if (warning.declarationLine == cursorLine + 1) {
+        int declarationLineInEditor = warning.declarationLine - 1;
+
+        if (declarationLineInEditor == cursorLine) {
           String lineText = editor.getText().getLineString(cursorLine);
           if (lineText.contains(warning.fieldName)) {
             int fieldStart = lineText.indexOf(warning.fieldName);
             int fieldEnd = fieldStart + warning.fieldName.length();
 
             if (cursorColumn >= fieldStart && cursorColumn <= fieldEnd) {
-              String message = "not using: " + warning.fieldName;
+              String message = "*not used*  " + "**" + warning.fieldName + "**";
+              // استفاده از PowerMenu به جای EditorToolTipWindow
+              showPowerMenuAtCursor(editor, message);
+              return;
+            }
+          }
+        }
+      }
+
+      for (UnusedLocalVariable localVar : unusedLocalVars) {
+        int declarationLineInEditor = localVar.declarationLine - 1;
+
+        if (declarationLineInEditor == cursorLine) {
+          String lineText = editor.getText().getLineString(cursorLine);
+          if (lineText.contains(localVar.variableName)) {
+            int varStart = lineText.indexOf(localVar.variableName);
+            int varEnd = varStart + localVar.variableName.length();
+
+            if (cursorColumn >= varStart && cursorColumn <= varEnd) {
+              String message = "*not used* " + "**" + localVar.variableName + "**";
+              // استفاده از PowerMenu به جای EditorToolTipWindow
               showPowerMenuAtCursor(editor, message);
               return;
             }
@@ -92,94 +82,84 @@ public class FieldUsageChecker {
     }
   }
 
+  // تست موقعیت یابی میکنیم
+
   public static void showPowerMenuAtCursor(IdeEditor editor, String message) {
     try {
-      CustomPowerMenu powerMenu =
-          new CustomPowerMenu.Builder<>(editor.getContext(), new MenuAdapter(editor))
-              .addItem(new CustomModel(message))
-              .setShowBackground(false)
-              .setAnimation(MenuAnimation.ELASTIC_CENTER)
-              .setMenuRadius(16f)
-              .setAutoDismiss(true)
-              .build();
+      // ایجاد EditorPopupWindow
+      EditorPopupWindow popupWindow =
+          new EditorPopupWindow(
+              (CodeEditor)editor,
+              EditorPopupWindow.FEATURE_SCROLL_AS_CONTENT
+                  | EditorPopupWindow.FEATURE_SHOW_OUTSIDE_VIEW_ALLOWED);
 
-      var cursor = editor.getCursor();
-      int line = cursor.getLeftLine();
-      int column = cursor.getLeftColumn();
+      // ایجاد TextView برای محتوا
+      TextView textView = new TextView(editor.getContext());
+      textView.setSingleLine(true);
+      textView.setPadding(32, 16, 32, 16);
+      textView.setBackgroundColor(
+          editor.getColorScheme().getColor(EditorColorScheme.AUTO_COMP_PANEL_BG));
+      textView.setTextSize(14);
+      textView.setTextColor(editor.getColorScheme().getColor(EditorColorScheme.TEXT_NORMAL));
 
-      // استفاده از منطق موقعیت‌یابی مشابه EditorTextActionWindow
-      float handleX = editor.getOffset(line, column);
-      float handleY = editor.getRowTop(line);
+      // رندر متن markdown
+      var render = new SimpleMarkdownRenderer();
+      var result =
+          render.render(
+              message,
+              editor.getColorScheme().getColor(EditorColorScheme.KEYWORD),
+              Color.CYAN,
+              Color.YELLOW,
+              Typeface.MONOSPACE);
+      textView.setText(result);
 
-      // محاسبه موقعیت بالای پاپ‌آپ (مشابه selectTop در EditorTextActionWindow)
-      int rowHeight = editor.getRowHeight();
-      int popupHeight = (int) (rowHeight * 2.5); // ارتفاع تقریبی پاور منو
+      // تنظیم محتوا
+      popupWindow.setContentView(textView);
+      //popupWindow.setFocusable(true);
+      popupWindow.setOutsideTouchable(true);
 
-      int top;
-      if (handleY - rowHeight * 3 / 2F > popupHeight) {
-        top = (int) (handleY - rowHeight * 3 / 2 - popupHeight);
+      // محاسبه سایز
+      textView.measure(
+          View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+          View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+
+      int width = textView.getMeasuredWidth();
+      int height = textView.getMeasuredHeight();
+      popupWindow.setSize(width, height);
+
+      // محاسبه موقعیت
+      var selection = editor.getCursor().left();
+      float charX = editor.getCharOffsetX(selection.getLine(), selection.getColumn());
+      float charY =
+          editor.getCharOffsetY(selection.getLine(), selection.getColumn()) - editor.getRowHeight();
+
+      var locationBuffer = new int[2];
+      editor.getLocationInWindow(locationBuffer);
+      float restAbove = charY + locationBuffer[1];
+      float restBottom = editor.getHeight() - charY - editor.getRowHeight();
+
+      boolean completionShowing = editor.getAutoCompleteWindow().isShowing();
+      float windowY;
+      if (restAbove > restBottom || completionShowing) {
+        windowY = charY - popupWindow.getHeight();
       } else {
-        top = (int) (handleY + rowHeight / 2);
+        windowY = charY + editor.getRowHeight() * 1.5f;
       }
 
-      top = Math.max(0, Math.min(top, editor.getHeight() - popupHeight - 5));
+      if (completionShowing && windowY < 0) {
+        return;
+      }
 
-      // تنظیم موقعیت X در وسط کرسر
-      int panelX = (int) handleX;
-
-      // استفاده از منطق نمایش مشابه EditorPopupWindow
-      int[] editorLocation = new int[2];
-      editor.getLocationInWindow(editorLocation);
-
-      int left = panelX + editorLocation[0];
-      int finalTop = top + editorLocation[1];
-
-      // نمایش پاور منو
-      powerMenu.showAtLocation(editor, Gravity.START | Gravity.TOP, left, finalTop);
-
-    } catch (Exception e) {
-      e.printStackTrace();
-      // فال‌بک: استفاده از روش ساده‌تر
-
-    }
-  }
-
-  /*
-  public static void showPowerMenuAtCursor(IdeEditor editor, String message) {
-    try {
-      CustomPowerMenu powerMenu =
-          new CustomPowerMenu.Builder<>(editor.getContext(), new MenuAdapter(editor))
-              .addItem(new CustomModel(message))
-              .setShowBackground(false)
-              .setAnimation(MenuAnimation.ELASTIC_CENTER)
-              .setMenuRadius(16f)
-              .setAutoDismiss(true)
-              .build();
-
-      var cursor = editor.getCursor();
-      int line = cursor.getLeftLine();
-      int column = cursor.getLeftColumn();
-
-      // موقعیت کرسر داخل ویو
-      float cursorX = editor.getOffset(line, column);
-      float cursorY = editor.getRowTop(line);
-
-      // تبدیل مختصات به موقعیت قابل نمایش
-      int offsetY = (int) (cursorY - editor.getOffsetY());
-      int offsetX = (int) (cursorX - editor.getOffsetX());
-
-      // فاصله‌ی کوچک از کرسر
-      int popupOffsetY = (int) (editor.getRowHeight() * 1.2f);
-
-      // نمایش منو زیر کرسر
-      powerMenu.showAsAnchorLeftBottom(editor, offsetX, offsetY + popupOffsetY);
+      float windowX = Math.max(charX - popupWindow.getWidth() / 2f, 0f);
+      popupWindow.setLocationAbsolutely((int) windowX, (int) windowY);
+      popupWindow.show();
+      popupWindow
+          .dismissByTime();
 
     } catch (Exception e) {
       e.printStackTrace();
     }
   }
-
-  */
 
   private static int selectTop(IdeEditor editor, RectF rect, int popupHeight) {
     int rowHeight = editor.getRowHeight();
@@ -252,7 +232,7 @@ public class FieldUsageChecker {
         new VoidVisitorAdapter<Void>() {
           @Override
           public void visit(FieldDeclaration fd, Void arg) {
-            // بررسی می‌کنیم که فیلد public یا public static نباشد
+
             if (!fd.isPublic()) {
               for (VariableDeclarator vd : fd.getVariables()) {
                 fieldNames.add(vd.getNameAsString());
@@ -274,7 +254,7 @@ public class FieldUsageChecker {
         new VoidVisitorAdapter<Void>() {
           @Override
           public void visit(MethodDeclaration md, Void arg) {
-            // پارامترهای متد
+
             for (Parameter param : md.getParameters()) {
               Optional<Position> begin = param.getName().getBegin();
               if (begin.isPresent()) {
@@ -288,7 +268,7 @@ public class FieldUsageChecker {
 
           @Override
           public void visit(ConstructorDeclaration cd, Void arg) {
-            // پارامترهای constructor
+
             for (Parameter param : cd.getParameters()) {
               Optional<Position> begin = param.getName().getBegin();
               if (begin.isPresent()) {
@@ -302,7 +282,7 @@ public class FieldUsageChecker {
 
           @Override
           public void visit(com.github.javaparser.ast.body.VariableDeclarator vd, Void arg) {
-            // متغیرهای محلی داخل بلاک‌ها
+
             if (isInMethodOrBlock(vd)) {
               Optional<Position> begin = vd.getName().getBegin();
               if (begin.isPresent()) {

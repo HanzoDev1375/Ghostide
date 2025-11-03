@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_height="wrap_content"
+     android:layout_width="match_parent"
+     android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+         android:layout_height="250dp"
+         android:layout_width="match_parent"
+         android:layout_marginBottom="4dp"
+         android:layout_marginEnd="4dp"
+         app:cardElevation="4dp"
+         app:cardUseCompatPadding="true"
+         android:layout_marginTop="4dp"
+         android:layout_marginStart="4dp"
+         app:cardCornerRadius="20dp"
+         android:id="@+id/cardview1">
+
+        <ImageView
+             android:layout_height="match_parent"
+             android:layout_width="match_parent"
+             android:scaleType="centerCrop"
+             android:id="@+id/icon" />
+
+        <LinearLayout
+             android:layout_height="match_parent"
+             android:layout_width="match_parent"
+             android:gravity="bottom"
+             android:layout_margin="4dp"
+             android:orientation="vertical">
+
+            <LinearLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:background="#55000000"
+                 android:alpha="0.9"
+                 android:padding="2dp"
+                 android:orientation="vertical"
+                 android:layout_marginTop="0dp">
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:gravity="center_horizontal|center_vertical"
+                     android:padding="4dp"
+                     android:textSize="18sp"
+                     android:singleLine="true"
+                     android:id="@+id/name"
+                     android:textStyle="bold" />
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:gravity="center_horizontal|center_vertical"
+                     android:padding="2dp"
+                     android:textSize="14sp"
+                     android:singleLine="true"
+                     android:id="@+id/size"
+                     android:layout_gravity="center_horizontal|center_vertical" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

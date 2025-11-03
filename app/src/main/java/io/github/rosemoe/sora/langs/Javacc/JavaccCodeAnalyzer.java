@@ -1,5 +1,6 @@
 package io.github.rosemoe.sora.langs.Javacc;
 
+import io.github.rosemoe.sora.langs.internal.Identifiers;
 import ir.ninjacoder.ghostide.IdeEditor;
 import android.util.Log;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
@@ -40,7 +41,7 @@ public class JavaccCodeAnalyzer implements CodeAnalyzer {
     try {
       var stream = CharStreams.fromReader(new StringReader(content.toString()));
       JavaAutoComplete auto = new JavaAutoComplete(editor);
-      JavaAutoComplete.Identifiers info = new JavaAutoComplete.Identifiers();
+      Identifiers info = new Identifiers();
       var lexer = new JavaccLexer(stream);
       Token token = null;
       int line = 0, lastline = 1, column = 0, type = 0, previous = -1;

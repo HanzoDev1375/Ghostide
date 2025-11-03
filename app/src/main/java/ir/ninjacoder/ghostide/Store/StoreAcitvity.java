@@ -125,6 +125,8 @@ public class StoreAcitvity extends BaseCompat {
       ((WallpaperFragment) it).filter(newText);
     } else if (it instanceof SvgStoreFragment) {
       ((SvgStoreFragment) it).filter(newText);
+    }else if (it instanceof WebShopFragment) {
+      ((WebShopFragment) it).filter(newText);
     }
   }
 
