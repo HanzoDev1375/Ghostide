@@ -2,6 +2,7 @@ package ir.ninjacoder.ghostide.Store;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import com.ninjacoder.jgit.svgstore.svgadapter.SvgShopAdapter;
 import com.ninjacoder.jgit.svgstore.svgmodel.SvgShopModel;
 import ir.ninjacoder.ghostide.RequestNetwork;
 import ir.ninjacoder.ghostide.RequestNetworkController;
+import ir.ninjacoder.ghostide.glidecompat.GlideCompat;
 import ir.ninjacoder.ghostide.model.ListSheet;
 import ir.ninjacoder.ghostide.utils.DataUtil;
 import ir.ninjacoder.ghostide.utils.FileUtil;
@@ -147,10 +149,12 @@ public class SvgStoreFragment extends Fragment {
     img.setLayoutParams(
         new ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        img.setColorFilter(Color.WHITE,PorterDuff.Mode.SRC_IN);
+        img.setScaleType(ImageView.ScaleType.FIT_XY);
     img.setPadding(10, 10, 10, 10);
     Glide.with(img.getContext())
         .load(model.getIcon())
-        .placeholder(R.drawable.ic_material_svg)
+        .placeholder(GlideCompat.CircelPrograssBar())
         .error(Color.RED)
         .into(img);
       img.setScaleType(ImageView.ScaleType.CENTER_INSIDE);

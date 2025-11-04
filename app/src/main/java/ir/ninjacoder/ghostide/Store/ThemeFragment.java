@@ -7,6 +7,7 @@ import androidx.annotation.MainThread;
 import androidx.recyclerview.widget.GridLayoutManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import ir.ninjacoder.ghostide.RequestNetworkController;
+import ir.ninjacoder.ghostide.glidecompat.GlideCompat;
 import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import ir.ninjacoder.prograsssheet.PrograssSheet;
 import java.io.File;
@@ -154,10 +155,15 @@ public class ThemeFragment extends Fragment {
 
       void bind(Map<String, String> themeData) {
         binding.nametheme.setText(getThemeName(themeData.get(themeKey)));
-
+        binding.sizetheme.setText(
+            "theme : "
+                + themeData.get("theme_size_formatted")
+                + " background: "
+                + themeData.get("background_size_formatted"));
         if (themeData.containsKey(imageKey)) {
           Glide.with(binding.previewicon.getContext())
               .load(themeData.get(imageKey))
+              .placeholder(GlideCompat.CircelPrograssBar())
               .fitCenter()
               .diskCacheStrategy(DiskCacheStrategy.ALL)
               .into(binding.previewicon);
@@ -188,7 +194,7 @@ public class ThemeFragment extends Fragment {
 
     previewBinding.fab1.setVisibility(View.INVISIBLE);
     previewBinding.fab2.setVisibility(View.INVISIBLE);
-    previewBinding.fab3.setText("ذخیره تم");
+    previewBinding.fab3.setText("save theme");
 
     if (themeData.containsKey(imageKey)) {
       Glide.with(previewBinding.backgroundImage.getContext())

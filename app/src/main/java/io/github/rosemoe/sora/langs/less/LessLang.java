@@ -28,7 +28,7 @@ public class LessLang implements EditorLanguage {
   @Override
   public CodeAnalyzer getAnalyzer() {
     var compat = new HTMLAnalyzerCompat((IdeEditor) editor);
-	compat.setIsLess(true);
+    compat.setIsLess(true);
     return compat;
   }
 

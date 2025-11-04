@@ -10,6 +10,7 @@ import io.github.rosemoe.sora.widget.EditorColorScheme;
 import ir.ninjacoder.codesnap.antlr4.zig.ZigLexer;
 import ir.ninjacoder.ghostide.IdeEditor;
 import java.io.StringReader;
+import io.github.rosemoe.sora.langs.internal.*;
 import java.util.regex.Pattern;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.Token;
@@ -33,6 +34,8 @@ public class ZigCodeAnalyzer implements CodeAnalyzer {
       int type, previous = -1;
       int lastline = 1;
       int line, column;
+      var info = new Identifiers();
+      info.begin();
       while (delegate.shouldAnalyze()) {
         token = lexer.nextToken();
         if (token == null) {
@@ -198,7 +201,7 @@ public class ZigCodeAnalyzer implements CodeAnalyzer {
               boolean isBold = false;
               boolean isClassName = false;
               boolean isShadow = false;
-
+              info.addIdentifier(token.getText());
               if (previous == ZigLexer.CONST || previous == ZigLexer.VAR) {
                 mcolor = EditorColorScheme.jsoprator;
                 isBold = true;
@@ -244,7 +247,9 @@ public class ZigCodeAnalyzer implements CodeAnalyzer {
           previous = type;
         }
       }
+      info.finish();
       result.determine(lastline);
+      result.setExtra(info);
     } catch (Exception err) {
 
     }

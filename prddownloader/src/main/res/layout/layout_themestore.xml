@@ -6,9 +6,9 @@
      android:layout_height="220dp"
      android:layout_width="match_parent"
      android:layout_margin="6dp"
+     app:cardElevation="0dp"
      app:cardBackgroundColor="@android:color/transparent"
      app:cardCornerRadius="24dp"
-     app:cardElevation="0dp"
      app:cardPreventCornerOverlap="true">
 
     <FrameLayout
@@ -32,6 +32,8 @@
              android:layout_height="80dp"
              android:layout_width="match_parent"
              android:gravity="center"
+             android:background="#5D000000"
+             android:orientation="vertical"
              android:layout_gravity="bottom">
 
             <TextView
@@ -40,6 +42,13 @@
                  android:textSize="18sp"
                  android:id="@+id/nametheme"
                  android:textStyle="bold" />
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:textSize="15sp"
+                 android:layout_marginTop="6dp"
+                 android:id="@+id/sizetheme" />
 
         </LinearLayout>
 

@@ -432,9 +432,6 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           });
       result.determine(lastLine);
       result.setExtra(info);
-
-      // fast read();
-
       try {
         if (GhostIdeAppLoader.getAnalyzercod().getBoolean("Analyzercod", false) == true) {
 

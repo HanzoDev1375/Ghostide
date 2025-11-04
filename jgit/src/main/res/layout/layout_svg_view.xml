@@ -18,7 +18,8 @@
         <ImageView
              android:layout_height="250dp"
              android:layout_width="250dp"
-             android:scaleType="centerInside"
+             android:scaleType="center"
+             android:layout_margin="9dp"
              android:contentDescription="wallpaper_desc"
              android:adjustViewBounds="true"
              android:background="@android:color/transparent"

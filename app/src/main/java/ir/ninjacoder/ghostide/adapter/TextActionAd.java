@@ -40,7 +40,7 @@ public class TextActionAd extends RecyclerView.Adapter<TextActionAd.ViewHolder> 
     holder.icon.setImageResource(model.getIcomName());
     holder.tv.setVisibility(View.GONE);
     holder.icon.setColorFilter(
-        editor.getColorScheme().getColor(EditorColorScheme.javakeyword), PorterDuff.Mode.SRC_IN);
+        editor.getColorScheme().getColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER), PorterDuff.Mode.SRC_IN);
     if (onItemClick != null) {
       holder.itemView.setOnClickListener(
           v -> onItemClick.onItemClickChange(position, v, holder.icon));

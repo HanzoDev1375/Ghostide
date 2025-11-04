@@ -1,6 +1,7 @@
 package com.ninjacoder.jgit.svgstore.svgadapter;
 
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.PictureDrawable;
 import android.net.Uri;
@@ -87,7 +88,7 @@ public class SvgShopAdapter extends RecyclerView.Adapter<SvgShopAdapter.Holder> 
     public void bind(SvgShopModel model, String searchText) {
       try {
         String svgUrl = model.getIcon();
-
+        iconName.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
         Glide.with(iconName.getContext()).load(svgUrl).error(Color.CYAN).into(iconName);
         String name = model.getName();
         SpannableString spannableString = new SpannableString(name);

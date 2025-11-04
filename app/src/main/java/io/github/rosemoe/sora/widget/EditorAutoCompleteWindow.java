@@ -60,7 +60,8 @@ public class EditorAutoCompleteWindow extends EditorPopupWindow {
    * @param editor Target editor
    */
   public EditorAutoCompleteWindow(CodeEditor editor) {
-    super(editor, FEATURE_HIDE_WHEN_FAST_SCROLL | FEATURE_SCROLL_AS_CONTENT);
+    // super(editor, FEATURE_HIDE_WHEN_FAST_SCROLL | FEATURE_SCROLL_AS_CONTENT);
+    super(editor, FEATURE_SCROLL_AS_CONTENT | FEATURE_SHOW_OUTSIDE_VIEW_ALLOWED);
     mEditor = editor;
     mAdapter = new CustomAdGhostWeb();
     var vis =

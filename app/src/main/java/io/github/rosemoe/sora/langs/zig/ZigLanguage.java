@@ -31,7 +31,7 @@ public class ZigLanguage implements EditorLanguage {
 
   @Override
   public AutoCompleteProvider getAutoCompleteProvider() {
-    return null;
+    return new ZigAutoComplete();
   }
 
   @Override

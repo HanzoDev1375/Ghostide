@@ -2,6 +2,8 @@ package ir.ninjacoder.ghostide.terminal.key;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -20,6 +22,8 @@ import android.widget.PopupWindow;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.material.color.MaterialColors;
+import ir.ninjacoder.ghostide.utils.ObjectUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -371,13 +375,14 @@ public final class VirtualKeysView extends GridLayout {
           button = createSpecialButton(buttonInfo.getKey(), true);
           if (button == null) return;
         } else {
-          button = new Button(getContext(), null, android.R.attr.buttonBarButtonStyle);
+          button = new Button(getContext());
         }
 
         button.setText(buttonInfo.getDisplay());
         button.setTextColor(mButtonTextColor);
         button.setAllCaps(mButtonTextAllCaps);
         button.setPadding(0, 0, 0, 0);
+        button.setBackgroundColor(mButtonBackgroundColor);
 
         button.setOnClickListener(
             view -> {
@@ -544,7 +549,7 @@ public final class VirtualKeysView extends GridLayout {
       button = createSpecialButton(extraButton.getKey(), false);
       if (button == null) return;
     } else {
-      button = new Button(getContext(), null, android.R.attr.buttonBarButtonStyle);
+      button = new Button(getContext());
       button.setTextColor(mButtonTextColor);
     }
     button.setText(extraButton.getDisplay());
@@ -556,13 +561,19 @@ public final class VirtualKeysView extends GridLayout {
     button.setMinimumHeight(0);
     button.setWidth(width);
     button.setHeight(height);
-    button.setBackgroundColor(mButtonActiveBackgroundColor);
+    button.setBackgroundColor(mButtonBackgroundColor);
     mPopupWindow = new PopupWindow(this);
     mPopupWindow.setWidth(LayoutParams.WRAP_CONTENT);
     mPopupWindow.setHeight(LayoutParams.WRAP_CONTENT);
     mPopupWindow.setContentView(button);
     mPopupWindow.setOutsideTouchable(true);
     mPopupWindow.setFocusable(false);
+    //mPopupWindow.setAnimationStyle(R)
+    GradientDrawable g = new GradientDrawable();
+    g.setColor(MaterialColors.getColor(view,ObjectUtils.Back,0));
+    g.setStroke(1,MaterialColors.getColor(view,ObjectUtils.TvColor,0));
+    g.setCornerRadius(25);
+    mPopupWindow.setBackgroundDrawable(g);
     mPopupWindow.showAsDropDown(view, 0, -2 * height);
   }
 
@@ -581,7 +592,8 @@ public final class VirtualKeysView extends GridLayout {
     SpecialButtonState state = mSpecialButtons.get(SpecialButton.valueOf(buttonKey));
     if (state == null) return null;
     state.setIsCreated(true);
-    Button button = new Button(getContext(), null, android.R.attr.buttonBarButtonStyle);
+    Button button = new Button(getContext());
+    button.setBackgroundColor(mButtonBackgroundColor);
     button.setTextColor(state.isActive ? mButtonActiveTextColor : mButtonTextColor);
     if (needUpdate) {
       state.buttons.add(button);

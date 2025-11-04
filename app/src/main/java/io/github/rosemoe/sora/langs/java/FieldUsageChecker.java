@@ -89,7 +89,7 @@ public class FieldUsageChecker {
       // ایجاد EditorPopupWindow
       EditorPopupWindow popupWindow =
           new EditorPopupWindow(
-              (CodeEditor)editor,
+              (CodeEditor) editor,
               EditorPopupWindow.FEATURE_SCROLL_AS_CONTENT
                   | EditorPopupWindow.FEATURE_SHOW_OUTSIDE_VIEW_ALLOWED);
 
@@ -115,7 +115,7 @@ public class FieldUsageChecker {
 
       // تنظیم محتوا
       popupWindow.setContentView(textView);
-      //popupWindow.setFocusable(true);
+      // popupWindow.setFocusable(true);
       popupWindow.setOutsideTouchable(true);
 
       // محاسبه سایز
@@ -153,8 +153,7 @@ public class FieldUsageChecker {
       float windowX = Math.max(charX - popupWindow.getWidth() / 2f, 0f);
       popupWindow.setLocationAbsolutely((int) windowX, (int) windowY);
       popupWindow.show();
-      popupWindow
-          .dismissByTime();
+      popupWindow.dismissByTime();
 
     } catch (Exception e) {
       e.printStackTrace();

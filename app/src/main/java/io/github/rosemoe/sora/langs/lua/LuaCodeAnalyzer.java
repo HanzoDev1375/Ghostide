@@ -196,6 +196,7 @@ public class LuaCodeAnalyzer implements CodeAnalyzer {
       }
       result.determine(lastLine);
       info.finish();
+      result.setExtra(info);
     } catch (Exception err) {
 
     }

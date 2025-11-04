@@ -38,17 +38,16 @@ public class RainbowBracketHelper {
   private int colorIndex = 0;
   private int colonColorIndex = 0;
 
-  // ------------------- OPEN BRACKET -------------------
-
   public void handleOpenBracket(
       TextAnalyzeResult result, int line, int column, int mcolor, boolean hascodeblock) {
     if (isRgbEn()) {
       int color = RAINBOW_COLORS[colorIndex % RAINBOW_COLORS.length];
       result.addIfNeeded(line, column, TextStyle.makeStyle(color, 0, true, false, false));
-      bracketStack.push(color);
+      bracketStack.push(colorIndex);
       colorIndex++;
     } else {
       result.addIfNeeded(line, column, mcolor);
+      bracketStack.push(-1);
     }
     if (hascodeblock) {
       BlockLine block = result.obtainNewBlock();
@@ -58,7 +57,6 @@ public class RainbowBracketHelper {
     }
   }
 
-  // اورلود جدید برای int mcolor
   public void handleOpenBracket(TextAnalyzeResult result, int line, int column, int mcolor) {
     handleOpenBracket(result, line, column, mcolor, true);
   }
@@ -70,8 +68,6 @@ public class RainbowBracketHelper {
   public void handleOpenBracket(TextAnalyzeResult result, int line, int column) {
     handleOpenBracket(result, line, column, EditorColorScheme.htmlblockhash, true);
   }
-
-  // ------------------- CUSTOM -------------------
 
   public void handleCustom(TextAnalyzeResult result, int line, int column, int mcolor) {
     if (isRgbEn()) {
@@ -99,7 +95,7 @@ public class RainbowBracketHelper {
     if (isRgbEn()) {
       int color = RAINBOW_COLORS[colonColorIndex % RAINBOW_COLORS.length];
       Utils.setSpanEFO(result, line, column, color, isBold, isItalic);
-      colonColorIndex = (colorIndex + 1) % RAINBOW_COLORS.length;
+      colonColorIndex = (colonColorIndex + 1) % RAINBOW_COLORS.length;
     } else {
       Utils.setSpanEFO(result, line, column, mcolor, isBold, isItalic);
     }
@@ -109,11 +105,19 @@ public class RainbowBracketHelper {
       TextAnalyzeResult result, int line, int column, int mcolor, boolean hascodeblock) {
     if (isRgbEn()) {
       if (!bracketStack.isEmpty()) {
-        int color = bracketStack.pop();
-        result.addIfNeeded(line, column, TextStyle.makeStyle(color, 0, true, false, false));
-        colorIndex--;
+        int storedIndex = bracketStack.pop();
+        if (storedIndex >= 0) {
+          int color = RAINBOW_COLORS[storedIndex % RAINBOW_COLORS.length];
+          result.addIfNeeded(line, column, TextStyle.makeStyle(color, 0, true, false, false));
+          colorIndex--;
+        }
       } else {
         result.addIfNeeded(line, column, mcolor);
+      }
+    } else {
+      result.addIfNeeded(line, column, mcolor);
+      if (!bracketStack.isEmpty()) {
+        bracketStack.pop();
       }
     }
     if (hascodeblock) {
@@ -129,7 +133,6 @@ public class RainbowBracketHelper {
     }
   }
 
-  // اورلود جدید برای int mcolor
   public void handleCloseBracket(TextAnalyzeResult result, int line, int column, int mcolor) {
     handleCloseBracket(result, line, column, mcolor, true);
   }

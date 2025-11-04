@@ -140,6 +140,7 @@ public class BasicSyntaxJavaScriptAnalyzer implements CodeAnalyzer {
         (name, pos) -> {
           if (!calledFunctions.contains(name)) {
             Utils.setWaringSpan(colors, pos.line, pos.column);
+            
           }
         });
   }
