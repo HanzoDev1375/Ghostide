@@ -3,6 +3,7 @@ package ir.ninjacoder.prograsssheet.perfence;
 import android.view.View;
 import java.util.List;
 import ir.ninjacoder.prograsssheet.R;
+
 public class ShapeList {
   public static void getShapeListStatus(List<?> list, int pos, View view) {
     if (list.isEmpty()) {
@@ -26,7 +27,7 @@ public class ShapeList {
     } else if (position == list.size() - 1) {
       return R.drawable.shape_bottom;
     } else {
-      
+
       return R.drawable.shape_middle;
     }
   }

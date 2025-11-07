@@ -6,13 +6,15 @@ import ir.ninjacoder.ghostide.activities.CodeEditorActivity;
 
 public interface PluginManagerCompat {
 
-    void getEditor(CodeEditor editor);
+  void getEditor(CodeEditor editor);
 
-    String setName();
+  String setName();
 
-    boolean hasuseing();
+  boolean hasuseing();
 
-    void getFileManagerAc(FileManagerActivity activity);
+  void getFileManagerAc(FileManagerActivity activity);
 
-    void getCodeEditorAc(CodeEditorActivity activity);
+  void getCodeEditorAc(CodeEditorActivity activity);
+
+  String langModel();
 }

@@ -34,6 +34,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import ir.ninjacoder.prograsssheet.perfence.ListItemView;
 import ir.ninjacoder.prograsssheet.perfence.ShapeList;
 import java.io.File;
 import java.util.ArrayList;
@@ -202,7 +203,7 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
 
       }
     }
-    if (viewType == ViewType.ROW) viewHolder.itemView.setBackgroundResource(ShapeList.get(files,pos));
+    if (viewType == ViewType.ROW) viewHolder.roots.setBackground(viewHolder.roots.get(files, pos));
     viewHolder.itemView.setClickable(true);
   }
 
@@ -292,7 +293,7 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
 
   public class VH extends RecyclerView.ViewHolder {
     protected TextView folderName, tvTools;
-    protected LinearLayout roots;
+    protected ListItemView roots;
     protected ImageView icon;
     View getPos;
 

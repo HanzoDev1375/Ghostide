@@ -17,6 +17,8 @@ public class PluginConfig {
     private String name;
     private String dir;
     private String dev;
+    private boolean isusing;
+    private String type;
 
     // getters and setters
     public String getName() {
@@ -41,6 +43,22 @@ public class PluginConfig {
 
     public void setDev(String dev) {
       this.dev = dev;
+    }
+
+    public boolean isIsusing() {
+      return isusing;
+    }
+
+    public void setIsusing(boolean isusing) {
+      this.isusing = isusing;
+    }
+
+    public String getType() {
+      return type;
+    }
+
+    public void setType(String type) {
+      this.type = type;
     }
   }
 }

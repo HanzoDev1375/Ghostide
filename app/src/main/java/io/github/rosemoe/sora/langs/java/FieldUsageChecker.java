@@ -19,6 +19,7 @@ import com.github.javaparser.ast.stmt.ForStmt;
 import com.github.javaparser.ast.stmt.CatchClause;
 import com.github.javaparser.ast.body.Parameter;
 import com.ninjacoder.jgit.SimpleMarkdownRenderer;
+import io.github.rosemoe.sora.event.ScrollEvent;
 import io.github.rosemoe.sora.langs.xml.analyzer.Utils;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
@@ -30,6 +31,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class FieldUsageChecker {
+  private static float[] buffer;
 
   public static void showWarningIfCursorOnField(IdeEditor editor) {
     try {
@@ -70,7 +72,6 @@ public class FieldUsageChecker {
 
             if (cursorColumn >= varStart && cursorColumn <= varEnd) {
               String message = "*not used* " + "**" + localVar.variableName + "**";
-              // استفاده از PowerMenu به جای EditorToolTipWindow
               showPowerMenuAtCursor(editor, message);
               return;
             }
@@ -82,7 +83,72 @@ public class FieldUsageChecker {
     }
   }
 
-  // تست موقعیت یابی میکنیم
+  public static void showPowerMeniAtCutsorByCustomView(IdeEditor editor, View v) {
+    try {
+      EditorPopupWindow popupWindow =
+          new EditorPopupWindow(
+              (CodeEditor) editor,
+              EditorPopupWindow.FEATURE_SCROLL_AS_CONTENT
+                  | EditorPopupWindow.FEATURE_SHOW_OUTSIDE_VIEW_ALLOWED);
+      popupWindow.setContentView(v);
+      popupWindow.setOutsideTouchable(true);
+      buffer = new float[2];
+      v.measure(
+          View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+          View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+
+      int width = v.getMeasuredWidth();
+      int height = v.getMeasuredHeight();
+      popupWindow.setSize(width, height);
+      var selection = editor.getCursor().left();
+      float charX = editor.getCharOffsetX(selection.getLine(), selection.getColumn());
+      float charY =
+          editor.getCharOffsetY(selection.getLine(), selection.getColumn()) - editor.getRowHeight();
+
+      var locationBuffer = new int[2];
+      editor.getLocationInWindow(locationBuffer);
+      float restAbove = charY + locationBuffer[1];
+      float restBottom = editor.getHeight() - charY - editor.getRowHeight();
+
+      boolean completionShowing = editor.getAutoCompleteWindow().isShowing();
+      float windowY;
+      if (restAbove > restBottom || completionShowing) {
+        windowY = charY - popupWindow.getHeight();
+      } else {
+        windowY = charY + editor.getRowHeight() * 1.5f;
+      }
+
+      if (completionShowing && windowY < 0) {
+        return;
+      }
+
+      float windowX = Math.max(charX - popupWindow.getWidth() / 2f, 0f);
+      popupWindow.setLocationAbsolutely((int) windowX, (int) windowY);
+      popupWindow.show();
+      editor.subscribeEvent(
+          ScrollEvent.class,
+          (event, unsubscribe) -> {
+            if (popupWindow.isShowing()) {
+              if (!isSelectionVisible(editor)) {
+                popupWindow.dismiss();
+              } else {
+                popupWindow.show();
+              }
+            }
+          });
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  private static boolean isSelectionVisible(IdeEditor editor) {
+    var selection = editor.getCursor().left();
+    editor.getLayout().getCharLayoutOffset(selection.getLine(), selection.getColumn(), buffer);
+    return buffer[0] >= editor.getOffsetY()
+        && buffer[0] - editor.getRowHeight() <= editor.getOffsetY() + editor.getHeight()
+        && buffer[1] >= editor.getOffsetX()
+        && buffer[1] - 100f <= editor.getOffsetX() + editor.getWidth();
+  }
 
   public static void showPowerMenuAtCursor(IdeEditor editor, String message) {
     try {
@@ -92,8 +158,6 @@ public class FieldUsageChecker {
               (CodeEditor) editor,
               EditorPopupWindow.FEATURE_SCROLL_AS_CONTENT
                   | EditorPopupWindow.FEATURE_SHOW_OUTSIDE_VIEW_ALLOWED);
-
-      // ایجاد TextView برای محتوا
       TextView textView = new TextView(editor.getContext());
       textView.setSingleLine(true);
       textView.setPadding(32, 16, 32, 16);
@@ -112,13 +176,9 @@ public class FieldUsageChecker {
               Color.YELLOW,
               Typeface.MONOSPACE);
       textView.setText(result);
-
-      // تنظیم محتوا
       popupWindow.setContentView(textView);
-      // popupWindow.setFocusable(true);
       popupWindow.setOutsideTouchable(true);
 
-      // محاسبه سایز
       textView.measure(
           View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
           View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
@@ -126,8 +186,6 @@ public class FieldUsageChecker {
       int width = textView.getMeasuredWidth();
       int height = textView.getMeasuredHeight();
       popupWindow.setSize(width, height);
-
-      // محاسبه موقعیت
       var selection = editor.getCursor().left();
       float charX = editor.getCharOffsetX(selection.getLine(), selection.getColumn());
       float charY =

@@ -308,7 +308,7 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
       // error manager not work
       //   errors.analyze(content, result, delegate);
       result.setSuppressSwitch(maxSwitch + 10);
-      var pyast = new PythonCodeAnalyzerAst();
+      var pyast = new PythonCodeAnalyzerAst(editor);
       pyast.analyze(GhostIdeAppLoader.getContext(), content.toString());
       var listAst = pyast.getElements();
       pyast

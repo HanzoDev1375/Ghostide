@@ -4,12 +4,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    
     android:layout_marginBottom="4dp"
     android:orientation="vertical"
 >
 
-    <LinearLayout
+    <ir.ninjacoder.prograsssheet.perfence.ListItemView
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:background="?android:attr/selectableItemBackground"
@@ -60,6 +59,6 @@
 
         </LinearLayout>
 
-    </LinearLayout>
+    </ir.ninjacoder.prograsssheet.perfence.ListItemView>
 
 </LinearLayout>

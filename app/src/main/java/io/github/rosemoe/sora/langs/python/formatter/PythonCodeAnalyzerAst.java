@@ -1,6 +1,10 @@
 package io.github.rosemoe.sora.langs.python.formatter;
 
 import android.content.Context;
+import android.util.Log;
+import io.github.rosemoe.sora.event.SelectionChangeEvent;
+import io.github.rosemoe.sora.langs.java.FieldUsageChecker;
+import ir.ninjacoder.ghostide.IdeEditor;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.*;
@@ -9,6 +13,11 @@ import java.util.List;
 
 public class PythonCodeAnalyzerAst {
   private final List<CodeElement> elements = new ArrayList<>();
+  private IdeEditor editor;
+
+  public PythonCodeAnalyzerAst(IdeEditor editor) {
+    this.editor = editor;
+  }
 
   public static class CodeElement {
     public final String type; // "class", "method", "function", "variable", "import", etc.
@@ -127,8 +136,8 @@ public class PythonCodeAnalyzerAst {
                 element.optInt("end_column", element.getInt("column")));
         elements.add(codeElement);
       }
-    } catch (Exception e) {
-      // Handle parsing error
+    } catch (Exception err) {
+      Log.e("ErrortoLoadJson", err.getLocalizedMessage());
     }
   }
 }

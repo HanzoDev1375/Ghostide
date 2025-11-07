@@ -729,6 +729,14 @@ public class CodeEditorActivity extends BaseCompat {
 
   void setCodeEditorFileReader(String _path) {
     EditorRoaderFile.RuningTask(editor, _fab, _path, proanjctor);
+
+    new Handler()
+        .postDelayed(
+            () -> {
+              String extension = _path.substring(_path.lastIndexOf("."));
+              new PluginLoaderImpl().runInCodeEditor(editor, CodeEditorActivity.this, extension);
+            },
+            300);
   }
 
   void setClosetab(int _position, ArrayList<HashMap<String, Object>> _data) {

@@ -30,7 +30,14 @@ public class JsonFileManager {
       List<PluginConfig.PluginInfo> plugins = new ArrayList<>();
       if (pluginsArray != null) {
         for (PluginConfig.PluginInfo plugin : pluginsArray) {
-          plugins.add(plugin);
+          if (plugin.isIsusing()) {
+            plugins.add(plugin);
+            Log.d(
+                TAG,
+                "پلاگین فعال بارگذاری شد: " + plugin.getName() + " - نوع: " + plugin.getType());
+          } else {
+            Log.d(TAG, "پلاگین غیرفعال نادیده گرفته شد: " + plugin.getName());
+          }
         }
       }
       return plugins;
@@ -57,6 +64,20 @@ public class JsonFileManager {
     } catch (Exception e) {
       Log.e(TAG, "خطا در خواندن manifest", e);
       return null;
+    }
+  }
+
+  public static boolean saveMainConfig(String configPath, List<PluginConfig.PluginInfo> plugins) {
+    try {
+      File configFile = new File(configPath);
+      FileWriter writer = new FileWriter(configFile);
+      gson.toJson(plugins.toArray(new PluginConfig.PluginInfo[0]), writer);
+      writer.close();
+      Log.d(TAG, "کانفیگ با موفقیت ذخیره شد");
+      return true;
+    } catch (Exception e) {
+      Log.e(TAG, "خطا در ذخیره کانفیگ", e);
+      return false;
     }
   }
 }

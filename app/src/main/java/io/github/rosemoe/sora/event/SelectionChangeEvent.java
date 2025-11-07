@@ -79,4 +79,8 @@ public class SelectionChangeEvent extends Event {
   public boolean isSelected() {
     return left.index != right.index;
   }
+
+  public int getCause() {
+    return this.cause;
+  }
 }

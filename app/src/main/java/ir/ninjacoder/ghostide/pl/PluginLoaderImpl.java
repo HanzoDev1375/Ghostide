@@ -16,23 +16,20 @@ public class PluginLoaderImpl {
     return this;
   }
 
-  // برای CodeEditorActivity (با CodeEditor)
-  public PluginLoaderImpl runInCodeEditor(CodeEditor editor, CodeEditorActivity ceActivity) {
-    PluginLoader loader = new PluginLoader().setEditor(editor).setCodeEditorActivity(ceActivity);
+  // برای CodeEditorActivity (با CodeEditor) - نسخه جدید با پارامتر fileType
+  public PluginLoaderImpl runInCodeEditor(
+      CodeEditor editor, CodeEditorActivity ceActivity, String fileType) {
+    PluginLoader loader =
+        new PluginLoader()
+            .setEditor(editor)
+            .setCodeEditorActivity(ceActivity)
+            .setFileType(fileType);
     loader.loadAllPlugins(DEFAULT_CONFIG_PATH);
     return this;
   }
 
-  // متدهای با مسیر کانفیگ دلخواه
   public PluginLoaderImpl runInFileManager(FileManagerActivity fmActivity, String configPath) {
     PluginLoader loader = new PluginLoader().setFileManagerActivity(fmActivity);
-    loader.loadAllPlugins(configPath);
-    return this;
-  }
-
-  public PluginLoaderImpl runInCodeEditor(
-      CodeEditor editor, CodeEditorActivity ceActivity, String configPath) {
-    PluginLoader loader = new PluginLoader().setEditor(editor).setCodeEditorActivity(ceActivity);
     loader.loadAllPlugins(configPath);
     return this;
   }

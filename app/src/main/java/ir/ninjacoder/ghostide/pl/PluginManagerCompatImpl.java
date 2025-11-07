@@ -16,7 +16,7 @@ public class PluginManagerCompatImpl implements PluginManagerCompat {
 
   @Override
   public String setName() {
-    return null;
+    return "پلاگین پیش‌فرض";
   }
 
   @Override
@@ -24,4 +24,10 @@ public class PluginManagerCompatImpl implements PluginManagerCompat {
 
   @Override
   public void getFileManagerAc(FileManagerActivity activity) {}
+
+  @Override
+  public String langModel() {
+
+    return null;
+  }
 }
