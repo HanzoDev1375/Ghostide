@@ -1,0 +1,2582 @@
+[
+    {
+        "csskey": "pos",
+        "cssvalue": "position:relative;"
+    },
+    {
+        "csskey": "pos:s",
+        "cssvalue": "position:static;"
+    },
+    {
+        "csskey": "pos:a",
+        "cssvalue": "position:absolute;"
+    },
+    {
+        "csskey": "pos:r",
+        "cssvalue": "position:relative;"
+    },
+    {
+        "csskey": "pos:f",
+        "cssvalue": "position:fixed;"
+    },
+    {
+        "csskey": "t",
+        "cssvalue": "top:;"
+    },
+    {
+        "csskey": "t:a",
+        "cssvalue": "top:auto;"
+    },
+    {
+        "csskey": "r",
+        "cssvalue": "right:;"
+    },
+    {
+        "csskey": "r:a",
+        "cssvalue": "right:auto;"
+    },
+    {
+        "csskey": "b",
+        "cssvalue": "bottom:;"
+    },
+    {
+        "csskey": "b:a",
+        "cssvalue": "bottom:auto;"
+    },
+    {
+        "csskey": "l",
+        "cssvalue": "left:;"
+    },
+    {
+        "csskey": "l:a",
+        "cssvalue": "left:auto;"
+    },
+    {
+        "csskey": "z",
+        "cssvalue": "z-index:;"
+    },
+    {
+        "csskey": "z:a",
+        "cssvalue": "z-index:auto;"
+    },
+    {
+        "csskey": "fl",
+        "cssvalue": "float:left;"
+    },
+    {
+        "csskey": "fl:n",
+        "cssvalue": "float:none;"
+    },
+    {
+        "csskey": "fl:l",
+        "cssvalue": "float:left;"
+    },
+    {
+        "csskey": "fl:r",
+        "cssvalue": "float:right;"
+    },
+    {
+        "csskey": "cl",
+        "cssvalue": "clear:both;"
+    },
+    {
+        "csskey": "cl:n",
+        "cssvalue": "clear:none;"
+    },
+    {
+        "csskey": "cl:l",
+        "cssvalue": "clear:left;"
+    },
+    {
+        "csskey": "cl:r",
+        "cssvalue": "clear:right;"
+    },
+    {
+        "csskey": "cl:b",
+        "cssvalue": "clear:both;"
+    },
+    {
+        "csskey": "d",
+        "cssvalue": "display:block;"
+    },
+    {
+        "csskey": "d:n",
+        "cssvalue": "display:none;"
+    },
+    {
+        "csskey": "d:b",
+        "cssvalue": "display:block;"
+    },
+    {
+        "csskey": "d:f",
+        "cssvalue": "display:flex;"
+    },
+    {
+        "csskey": "d:if",
+        "cssvalue": "display:inline-flex;"
+    },
+    {
+        "csskey": "d:i",
+        "cssvalue": "display:inline;"
+    },
+    {
+        "csskey": "d:ib",
+        "cssvalue": "display:inline-block;"
+    },
+    {
+        "csskey": "d:li",
+        "cssvalue": "display:list-item;"
+    },
+    {
+        "csskey": "d:ri",
+        "cssvalue": "display:run-in;"
+    },
+    {
+        "csskey": "d:cp",
+        "cssvalue": "display:compact;"
+    },
+    {
+        "csskey": "d:tb",
+        "cssvalue": "display:table;"
+    },
+    {
+        "csskey": "d:itb",
+        "cssvalue": "display:inline-table;"
+    },
+    {
+        "csskey": "d:tbcp",
+        "cssvalue": "display:table-caption;"
+    },
+    {
+        "csskey": "d:tbcl",
+        "cssvalue": "display:table-column;"
+    },
+    {
+        "csskey": "d:tbclg",
+        "cssvalue": "display:table-column-group;"
+    },
+    {
+        "csskey": "d:tbhg",
+        "cssvalue": "display:table-header-group;"
+    },
+    {
+        "csskey": "d:tbfg",
+        "cssvalue": "display:table-footer-group;"
+    },
+    {
+        "csskey": "d:tbr",
+        "cssvalue": "display:table-row;"
+    },
+    {
+        "csskey": "d:tbrg",
+        "cssvalue": "display:table-row-group;"
+    },
+    {
+        "csskey": "d:tbc",
+        "cssvalue": "display:table-cell;"
+    },
+    {
+        "csskey": "d:rb",
+        "cssvalue": "display:ruby;"
+    },
+    {
+        "csskey": "d:rbb",
+        "cssvalue": "display:ruby-base;"
+    },
+    {
+        "csskey": "d:rbbg",
+        "cssvalue": "display:ruby-base-group;"
+    },
+    {
+        "csskey": "d:rbt",
+        "cssvalue": "display:ruby-text;"
+    },
+    {
+        "csskey": "d:rbtg",
+        "cssvalue": "display:ruby-text-group;"
+    },
+    {
+        "csskey": "v",
+        "cssvalue": "visibility:hidden;"
+    },
+    {
+        "csskey": "v:v",
+        "cssvalue": "visibility:visible;"
+    },
+    {
+        "csskey": "v:h",
+        "cssvalue": "visibility:hidden;"
+    },
+    {
+        "csskey": "v:c",
+        "cssvalue": "visibility:collapse;"
+    },
+    {
+        "csskey": "ov",
+        "cssvalue": "overflow:hidden;"
+    },
+    {
+        "csskey": "ov:v",
+        "cssvalue": "overflow:visible;"
+    },
+    {
+        "csskey": "ov:h",
+        "cssvalue": "overflow:hidden;"
+    },
+    {
+        "csskey": "ov:s",
+        "cssvalue": "overflow:scroll;"
+    },
+    {
+        "csskey": "ov:a",
+        "cssvalue": "overflow:auto;"
+    },
+    {
+        "csskey": "ovx",
+        "cssvalue": "overflow-x:hidden;"
+    },
+    {
+        "csskey": "ovx:v",
+        "cssvalue": "overflow-x:visible;"
+    },
+    {
+        "csskey": "ovx:h",
+        "cssvalue": "overflow-x:hidden;"
+    },
+    {
+        "csskey": "ovx:s",
+        "cssvalue": "overflow-x:scroll;"
+    },
+    {
+        "csskey": "ovx:a",
+        "cssvalue": "overflow-x:auto;"
+    },
+    {
+        "csskey": "ovy",
+        "cssvalue": "overflow-y:hidden;"
+    },
+    {
+        "csskey": "ovy:v",
+        "cssvalue": "overflow-y:visible;"
+    },
+    {
+        "csskey": "ovy:h",
+        "cssvalue": "overflow-y:hidden;"
+    },
+    {
+        "csskey": "ovy:s",
+        "cssvalue": "overflow-y:scroll;"
+    },
+    {
+        "csskey": "ovy:a",
+        "cssvalue": "overflow-y:auto;"
+    },
+    {
+        "csskey": "ovs",
+        "cssvalue": "overflow-style:scrollbar;"
+    },
+    {
+        "csskey": "ovs:a",
+        "cssvalue": "overflow-style:auto;"
+    },
+    {
+        "csskey": "ovs:s",
+        "cssvalue": "overflow-style:scrollbar;"
+    },
+    {
+        "csskey": "ovs:p",
+        "cssvalue": "overflow-style:panner;"
+    },
+    {
+        "csskey": "ovs:m",
+        "cssvalue": "overflow-style:move;"
+    },
+    {
+        "csskey": "ovs:mq",
+        "cssvalue": "overflow-style:marquee;"
+    },
+    {
+        "csskey": "zoo, zm",
+        "cssvalue": "zoom:1;"
+    },
+    {
+        "csskey": "cp",
+        "cssvalue": "clip:;"
+    },
+    {
+        "csskey": "cp:a",
+        "cssvalue": "clip:auto;"
+    },
+    {
+        "csskey": "cp:r",
+        "cssvalue": "clip:rect(top right bottom left);"
+    },
+    {
+        "csskey": "rsz",
+        "cssvalue": "resize:;"
+    },
+    {
+        "csskey": "rsz:n",
+        "cssvalue": "resize:none;"
+    },
+    {
+        "csskey": "rsz:b",
+        "cssvalue": "resize:both;"
+    },
+    {
+        "csskey": "rsz:h",
+        "cssvalue": "resize:horizontal;"
+    },
+    {
+        "csskey": "rsz:v",
+        "cssvalue": "resize:vertical;"
+    },
+    {
+        "csskey": "cur",
+        "cssvalue": "cursor:${pointer};"
+    },
+    {
+        "csskey": "cur:a",
+        "cssvalue": "cursor:auto;"
+    },
+    {
+        "csskey": "cur:d",
+        "cssvalue": "cursor:default;"
+    },
+    {
+        "csskey": "cur:c",
+        "cssvalue": "cursor:crosshair;"
+    },
+    {
+        "csskey": "cur:ha",
+        "cssvalue": "cursor:hand;"
+    },
+    {
+        "csskey": "cur:he",
+        "cssvalue": "cursor:help;"
+    },
+    {
+        "csskey": "cur:m",
+        "cssvalue": "cursor:move;"
+    },
+    {
+        "csskey": "cur:p",
+        "cssvalue": "cursor:pointer;"
+    },
+    {
+        "csskey": "cur:t",
+        "cssvalue": "cursor:text;"
+    },
+    {
+        "csskey": "Margin & Padding",
+        "cssvalue": "m"
+    },
+    {
+        "csskey": "margin:;",
+        "cssvalue": "m:a"
+    },
+    {
+        "csskey": "margin:auto;",
+        "cssvalue": "mt"
+    },
+    {
+        "csskey": "margin-top:;",
+        "cssvalue": "mt:a"
+    },
+    {
+        "csskey": "margin-top:auto;",
+        "cssvalue": "mr"
+    },
+    {
+        "csskey": "margin-right:;",
+        "cssvalue": "mr:a"
+    },
+    {
+        "csskey": "margin-right:auto;",
+        "cssvalue": "mb"
+    },
+    {
+        "csskey": "margin-bottom:;",
+        "cssvalue": "mb:a"
+    },
+    {
+        "csskey": "margin-bottom:auto;",
+        "cssvalue": "ml"
+    },
+    {
+        "csskey": "margin-left:;",
+        "cssvalue": "ml:a"
+    },
+    {
+        "csskey": "margin-left:auto;",
+        "cssvalue": "p"
+    },
+    {
+        "csskey": "padding:;",
+        "cssvalue": "pt"
+    },
+    {
+        "csskey": "padding-top:;",
+        "cssvalue": "pr"
+    },
+    {
+        "csskey": "padding-right:;",
+        "cssvalue": "pb"
+    },
+    {
+        "csskey": "padding-bottom:;",
+        "cssvalue": "pl"
+    },
+    {
+        "csskey": "padding-left:;",
+        "cssvalue": "Box Sizing"
+    },
+    {
+        "csskey": "bxz",
+        "cssvalue": "box-sizing:border-box;"
+    },
+    {
+        "csskey": "bxz:cb",
+        "cssvalue": "box-sizing:content-box;"
+    },
+    {
+        "csskey": "bxz:bb",
+        "cssvalue": "box-sizing:border-box;"
+    },
+    {
+        "csskey": "bxsh",
+        "cssvalue": "box-shadow:inset hoff voff blur color;"
+    },
+    {
+        "csskey": "bxsh:r",
+        "cssvalue": "box-shadow:inset hoff voff blur spread rgb(0, 0, 0);"
+    },
+    {
+        "csskey": "bxsh:ra",
+        "cssvalue": "box-shadow:inset h v blur spread rgba(0, 0, 0, .5);"
+    },
+    {
+        "csskey": "bxsh:n",
+        "cssvalue": "box-shadow:none;"
+    },
+    {
+        "csskey": "w",
+        "cssvalue": "width:;"
+    },
+    {
+        "csskey": "w:a",
+        "cssvalue": "width:auto;"
+    },
+    {
+        "csskey": "h",
+        "cssvalue": "height:;"
+    },
+    {
+        "csskey": "h:a",
+        "cssvalue": "height:auto;"
+    },
+    {
+        "csskey": "maw",
+        "cssvalue": "max-width:;"
+    },
+    {
+        "csskey": "maw:n",
+        "cssvalue": "max-width:none;"
+    },
+    {
+        "csskey": "mah",
+        "cssvalue": "max-height:;"
+    },
+    {
+        "csskey": "mah:n",
+        "cssvalue": "max-height:none;"
+    },
+    {
+        "csskey": "miw",
+        "cssvalue": "min-width:;"
+    },
+    {
+        "csskey": "mih",
+        "cssvalue": "min-height:;"
+    },
+    {
+        "csskey": "Font",
+        "cssvalue": "f"
+    },
+    {
+        "csskey": "font:;",
+        "cssvalue": "f+"
+    },
+    {
+        "csskey": "font:1em Arial,sans-serif;",
+        "cssvalue": "fw"
+    },
+    {
+        "csskey": "font-weight:;",
+        "cssvalue": "fw:n"
+    },
+    {
+        "csskey": "font-weight:normal;",
+        "cssvalue": "fw:b"
+    },
+    {
+        "csskey": "font-weight:bold;",
+        "cssvalue": "fw:br"
+    },
+    {
+        "csskey": "font-weight:bolder;",
+        "cssvalue": "fw:lr"
+    },
+    {
+        "csskey": "font-weight:lighter;",
+        "cssvalue": "fs"
+    },
+    {
+        "csskey": "font-style:${italic};",
+        "cssvalue": "fs:n"
+    },
+    {
+        "csskey": "font-style:normal;",
+        "cssvalue": "fs:i"
+    },
+    {
+        "csskey": "font-style:italic;",
+        "cssvalue": "fs:o"
+    },
+    {
+        "csskey": "font-style:oblique;",
+        "cssvalue": "fv"
+    },
+    {
+        "csskey": "font-variant:;",
+        "cssvalue": "fv:n"
+    },
+    {
+        "csskey": "font-variant:normal;",
+        "cssvalue": "fv:sc"
+    },
+    {
+        "csskey": "font-variant:small-caps;",
+        "cssvalue": "fz"
+    },
+    {
+        "csskey": "font-size:;",
+        "cssvalue": "fza"
+    },
+    {
+        "csskey": "font-size-adjust:;",
+        "cssvalue": "fza:n"
+    },
+    {
+        "csskey": "font-size-adjust:none;",
+        "cssvalue": "ff"
+    },
+    {
+        "csskey": "font-family:;",
+        "cssvalue": "ff:s"
+    },
+    {
+        "csskey": "font-family:serif;",
+        "cssvalue": "ff:ss"
+    },
+    {
+        "csskey": "font-family:sans-serif;",
+        "cssvalue": "ff:c"
+    },
+    {
+        "csskey": "font-family:cursive;",
+        "cssvalue": "ff:f"
+    },
+    {
+        "csskey": "font-family:fantasy;",
+        "cssvalue": "ff:m"
+    },
+    {
+        "csskey": "font-family:monospace;",
+        "cssvalue": "ff:a"
+    },
+    {
+        "csskey": "font-family: Arial, \"Helvetica Neue\", Helvetica, sans-serif;",
+        "cssvalue": "ff:t"
+    },
+    {
+        "csskey": "font-family: \"Times New Roman\", Times, Baskerville, Georgia, serif;",
+        "cssvalue": "ff:v"
+    },
+    {
+        "csskey": "font-family: Verdana, Geneva, sans-serif;",
+        "cssvalue": "fef"
+    },
+    {
+        "csskey": "font-effect:;",
+        "cssvalue": "fef:n"
+    },
+    {
+        "csskey": "font-effect:none;",
+        "cssvalue": "fef:eg"
+    },
+    {
+        "csskey": "font-effect:engrave;",
+        "cssvalue": "fef:eb"
+    },
+    {
+        "csskey": "font-effect:emboss;",
+        "cssvalue": "fef:o"
+    },
+    {
+        "csskey": "font-effect:outline;",
+        "cssvalue": "fem"
+    },
+    {
+        "csskey": "font-emphasize:;",
+        "cssvalue": "femp"
+    },
+    {
+        "csskey": "font-emphasize-position:;",
+        "cssvalue": "femp:b"
+    },
+    {
+        "csskey": "font-emphasize-position:before;",
+        "cssvalue": "femp:a"
+    },
+    {
+        "csskey": "font-emphasize-position:after;",
+        "cssvalue": "fems"
+    },
+    {
+        "csskey": "font-emphasize-style:;",
+        "cssvalue": "fems:n"
+    },
+    {
+        "csskey": "font-emphasize-style:none;",
+        "cssvalue": "fems:ac"
+    },
+    {
+        "csskey": "font-emphasize-style:accent;",
+        "cssvalue": "fems:dt"
+    },
+    {
+        "csskey": "font-emphasize-style:dot;",
+        "cssvalue": "fems:c"
+    },
+    {
+        "csskey": "font-emphasize-style:circle;",
+        "cssvalue": "fems:ds"
+    },
+    {
+        "csskey": "font-emphasize-style:disc;",
+        "cssvalue": "fsm"
+    },
+    {
+        "csskey": "font-smooth:;",
+        "cssvalue": "fsm:a"
+    },
+    {
+        "csskey": "font-smooth:auto;",
+        "cssvalue": "fsm:n"
+    },
+    {
+        "csskey": "font-smooth:never;",
+        "cssvalue": "fsm:aw"
+    },
+    {
+        "csskey": "font-smooth:always;",
+        "cssvalue": "fst"
+    },
+    {
+        "csskey": "font-stretch:;",
+        "cssvalue": "fst:n"
+    },
+    {
+        "csskey": "font-stretch:normal;",
+        "cssvalue": "fst:uc"
+    },
+    {
+        "csskey": "font-stretch:ultra-condensed;",
+        "cssvalue": "fst:ec"
+    },
+    {
+        "csskey": "font-stretch:extra-condensed;",
+        "cssvalue": "fst:c"
+    },
+    {
+        "csskey": "font-stretch:condensed;",
+        "cssvalue": "fst:sc"
+    },
+    {
+        "csskey": "font-stretch:semi-condensed;",
+        "cssvalue": "fst:se"
+    },
+    {
+        "csskey": "font-stretch:semi-expanded;",
+        "cssvalue": "fst:e"
+    },
+    {
+        "csskey": "font-stretch:expanded;",
+        "cssvalue": "fst:ee"
+    },
+    {
+        "csskey": "font-stretch:extra-expanded;",
+        "cssvalue": "fst:ue"
+    },
+    {
+        "csskey": "font-stretch:ultra-expanded;",
+        "cssvalue": "va"
+    },
+    {
+        "csskey": "vertical-align:top;",
+        "cssvalue": "va:sup"
+    },
+    {
+        "csskey": "vertical-align:super;",
+        "cssvalue": "va:t"
+    },
+    {
+        "csskey": "vertical-align:top;",
+        "cssvalue": "va:tt"
+    },
+    {
+        "csskey": "vertical-align:text-top;",
+        "cssvalue": "va:m"
+    },
+    {
+        "csskey": "vertical-align:middle;",
+        "cssvalue": "va:bl"
+    },
+    {
+        "csskey": "vertical-align:baseline;",
+        "cssvalue": "va:b"
+    },
+    {
+        "csskey": "vertical-align:bottom;",
+        "cssvalue": "va:tb"
+    },
+    {
+        "csskey": "vertical-align:text-bottom;",
+        "cssvalue": "va:sub"
+    },
+    {
+        "csskey": "vertical-align:sub;",
+        "cssvalue": "ta"
+    },
+    {
+        "csskey": "text-align:left;",
+        "cssvalue": "ta:l"
+    },
+    {
+        "csskey": "text-align:left;",
+        "cssvalue": "ta:c"
+    },
+    {
+        "csskey": "text-align:center;",
+        "cssvalue": "ta:r"
+    },
+    {
+        "csskey": "text-align:right;",
+        "cssvalue": "ta:j"
+    },
+    {
+        "csskey": "text-align:justify;",
+        "cssvalue": "ta-lst"
+    },
+    {
+        "csskey": "text-align-last:;",
+        "cssvalue": "tal:a"
+    },
+    {
+        "csskey": "text-align-last:auto;",
+        "cssvalue": "tal:l"
+    },
+    {
+        "csskey": "text-align-last:left;",
+        "cssvalue": "tal:c"
+    },
+    {
+        "csskey": "text-align-last:center;",
+        "cssvalue": "tal:r"
+    },
+    {
+        "csskey": "text-align-last:right;",
+        "cssvalue": "td"
+    },
+    {
+        "csskey": "text-decoration:none;",
+        "cssvalue": "td:n"
+    },
+    {
+        "csskey": "text-decoration:none;",
+        "cssvalue": "td:u"
+    },
+    {
+        "csskey": "text-decoration:underline;",
+        "cssvalue": "td:o"
+    },
+    {
+        "csskey": "text-decoration:overline;",
+        "cssvalue": "td:l"
+    },
+    {
+        "csskey": "text-decoration:line-through;",
+        "cssvalue": "te"
+    },
+    {
+        "csskey": "text-emphasis:;",
+        "cssvalue": "te:n"
+    },
+    {
+        "csskey": "text-emphasis:none;",
+        "cssvalue": "te:ac"
+    },
+    {
+        "csskey": "text-emphasis:accent;",
+        "cssvalue": "te:dt"
+    },
+    {
+        "csskey": "text-emphasis:dot;",
+        "cssvalue": "te:c"
+    },
+    {
+        "csskey": "text-emphasis:circle;",
+        "cssvalue": "te:ds"
+    },
+    {
+        "csskey": "text-emphasis:disc;",
+        "cssvalue": "te:b"
+    },
+    {
+        "csskey": "text-emphasis:before;",
+        "cssvalue": "te:a"
+    },
+    {
+        "csskey": "text-emphasis:after;",
+        "cssvalue": "th"
+    },
+    {
+        "csskey": "text-height:;",
+        "cssvalue": "th:a"
+    },
+    {
+        "csskey": "text-height:auto;",
+        "cssvalue": "th:f"
+    },
+    {
+        "csskey": "text-height:font-size;",
+        "cssvalue": "th:t"
+    },
+    {
+        "csskey": "text-height:text-size;",
+        "cssvalue": "th:m"
+    },
+    {
+        "csskey": "text-height:max-size;",
+        "cssvalue": "ti"
+    },
+    {
+        "csskey": "text-indent:;",
+        "cssvalue": "ti:-"
+    },
+    {
+        "csskey": "text-indent:-9999px;",
+        "cssvalue": "tj"
+    },
+    {
+        "csskey": "text-justify:;",
+        "cssvalue": "tj:a"
+    },
+    {
+        "csskey": "text-justify:auto;",
+        "cssvalue": "tj:iw"
+    },
+    {
+        "csskey": "text-justify:inter-word;",
+        "cssvalue": "tj:ii"
+    },
+    {
+        "csskey": "text-justify:inter-ideograph;",
+        "cssvalue": "tj:ic"
+    },
+    {
+        "csskey": "text-justify:inter-cluster;",
+        "cssvalue": "tj:d"
+    },
+    {
+        "csskey": "text-justify:distribute;",
+        "cssvalue": "tj:k"
+    },
+    {
+        "csskey": "text-justify:kashida;",
+        "cssvalue": "tj:t"
+    },
+    {
+        "csskey": "text-justify:tibetan;",
+        "cssvalue": "to"
+    },
+    {
+        "csskey": "text-outline:;",
+        "cssvalue": "to+"
+    },
+    {
+        "csskey": "text-outline:0 0 #000;",
+        "cssvalue": "to:n"
+    },
+    {
+        "csskey": "text-outline:none;",
+        "cssvalue": "tr"
+    },
+    {
+        "csskey": "text-replace:;",
+        "cssvalue": "tr:n"
+    },
+    {
+        "csskey": "text-replace:none;",
+        "cssvalue": "tt"
+    },
+    {
+        "csskey": "text-transform:uppercase;",
+        "cssvalue": "tt:n"
+    },
+    {
+        "csskey": "text-transform:none;",
+        "cssvalue": "tt:c"
+    },
+    {
+        "csskey": "text-transform:capitalize;",
+        "cssvalue": "tt:u"
+    },
+    {
+        "csskey": "text-transform:uppercase;",
+        "cssvalue": "tt:l"
+    },
+    {
+        "csskey": "text-transform:lowercase;",
+        "cssvalue": "tw"
+    },
+    {
+        "csskey": "text-wrap:;",
+        "cssvalue": "tw:n"
+    },
+    {
+        "csskey": "text-wrap:normal;",
+        "cssvalue": "tw:no"
+    },
+    {
+        "csskey": "text-wrap:none;",
+        "cssvalue": "tw:u"
+    },
+    {
+        "csskey": "text-wrap:unrestricted;",
+        "cssvalue": "tw:s"
+    },
+    {
+        "csskey": "text-wrap:suppress;",
+        "cssvalue": "tsh"
+    },
+    {
+        "csskey": "text-shadow:hoff voff blur #000;",
+        "cssvalue": "tsh:r"
+    },
+    {
+        "csskey": "text-shadow:h v blur rgb(0, 0, 0);",
+        "cssvalue": "tsh:ra"
+    },
+    {
+        "csskey": "text-shadow:h v blur rgba(0, 0, 0, .5);",
+        "cssvalue": "tsh+"
+    },
+    {
+        "csskey": "text-shadow:0 0 0 #000;",
+        "cssvalue": "tsh:n"
+    },
+    {
+        "csskey": "text-shadow:none;",
+        "cssvalue": "lh"
+    },
+    {
+        "csskey": "line-height:;",
+        "cssvalue": "lts"
+    },
+    {
+        "csskey": "letter-spacing:;",
+        "cssvalue": "lts-n"
+    },
+    {
+        "csskey": "letter-spacing:normal;",
+        "cssvalue": "whs"
+    },
+    {
+        "csskey": "white-space:;",
+        "cssvalue": "whs:n"
+    },
+    {
+        "csskey": "white-space:normal;",
+        "cssvalue": "whs:p"
+    },
+    {
+        "csskey": "white-space:pre;",
+        "cssvalue": "whs:nw"
+    },
+    {
+        "csskey": "white-space:nowrap;",
+        "cssvalue": "whs:pw"
+    },
+    {
+        "csskey": "white-space:pre-wrap;",
+        "cssvalue": "whs:pl"
+    },
+    {
+        "csskey": "white-space:pre-line;",
+        "cssvalue": "whsc"
+    },
+    {
+        "csskey": "white-space-collapse:;",
+        "cssvalue": "whsc:n"
+    },
+    {
+        "csskey": "white-space-collapse:normal;",
+        "cssvalue": "whsc:k"
+    },
+    {
+        "csskey": "white-space-collapse:keep-all;",
+        "cssvalue": "whsc:l"
+    },
+    {
+        "csskey": "white-space-collapse:loose;",
+        "cssvalue": "whsc:bs"
+    },
+    {
+        "csskey": "white-space-collapse:break-strict;",
+        "cssvalue": "whsc:ba"
+    },
+    {
+        "csskey": "white-space-collapse:break-all;",
+        "cssvalue": "wob"
+    },
+    {
+        "csskey": "word-break:;",
+        "cssvalue": "wob:n"
+    },
+    {
+        "csskey": "word-break:normal;",
+        "cssvalue": "wob:k"
+    },
+    {
+        "csskey": "word-break:keep-all;",
+        "cssvalue": "wob:ba"
+    },
+    {
+        "csskey": "word-break:break-all;",
+        "cssvalue": "wos"
+    },
+    {
+        "csskey": "word-spacing:;",
+        "cssvalue": "wow"
+    },
+    {
+        "csskey": "word-wrap:;",
+        "cssvalue": "wow:nm"
+    },
+    {
+        "csskey": "word-wrap:normal;",
+        "cssvalue": "wow:n"
+    },
+    {
+        "csskey": "word-wrap:none;",
+        "cssvalue": "wow:u"
+    },
+    {
+        "csskey": "word-wrap:unrestricted;",
+        "cssvalue": "wow:s"
+    },
+    {
+        "csskey": "word-wrap:suppress;",
+        "cssvalue": "wow:b"
+    },
+    {
+        "csskey": "word-wrap:break-word;",
+        "cssvalue": "Background"
+    },
+    {
+        "csskey": "bg",
+        "cssvalue": "background:#000;"
+    },
+    {
+        "csskey": "bg+",
+        "cssvalue": "background:#fff url() 0 0 no-repeat;"
+    },
+    {
+        "csskey": "bg:n",
+        "cssvalue": "background:none;"
+    },
+    {
+        "csskey": "bgc",
+        "cssvalue": "background-color:#fff;"
+    },
+    {
+        "csskey": "bgc:t",
+        "cssvalue": "background-color:transparent;"
+    },
+    {
+        "csskey": "bgi",
+        "cssvalue": "background-image:url();"
+    },
+    {
+        "csskey": "bgi:n",
+        "cssvalue": "background-image:none;"
+    },
+    {
+        "csskey": "bgr",
+        "cssvalue": "background-repeat:;"
+    },
+    {
+        "csskey": "bgr:n",
+        "cssvalue": "background-repeat:no-repeat;"
+    },
+    {
+        "csskey": "bgr:x",
+        "cssvalue": "background-repeat:repeat-x;"
+    },
+    {
+        "csskey": "bgr:y",
+        "cssvalue": "background-repeat:repeat-y;"
+    },
+    {
+        "csskey": "bgr:sp",
+        "cssvalue": "background-repeat:space;"
+    },
+    {
+        "csskey": "bgr:rd",
+        "cssvalue": "background-repeat:round;"
+    },
+    {
+        "csskey": "bga",
+        "cssvalue": "background-attachment:;"
+    },
+    {
+        "csskey": "bga:f",
+        "cssvalue": "background-attachment:fixed;"
+    },
+    {
+        "csskey": "bga:s",
+        "cssvalue": "background-attachment:scroll;"
+    },
+    {
+        "csskey": "bgp",
+        "cssvalue": "background-position:0 0;"
+    },
+    {
+        "csskey": "bgpx",
+        "cssvalue": "background-position-x:;"
+    },
+    {
+        "csskey": "bgpy",
+        "cssvalue": "background-position-y:;"
+    },
+    {
+        "csskey": "bgbk",
+        "cssvalue": "background-break:;"
+    },
+    {
+        "csskey": "bgbk:bb",
+        "cssvalue": "background-break:bounding-box;"
+    },
+    {
+        "csskey": "bgbk:eb",
+        "cssvalue": "background-break:each-box;"
+    },
+    {
+        "csskey": "bgbk:c",
+        "cssvalue": "background-break:continuous;"
+    },
+    {
+        "csskey": "bgcp",
+        "cssvalue": "background-clip:padding-box;"
+    },
+    {
+        "csskey": "bgcp:bb",
+        "cssvalue": "background-clip:border-box;"
+    },
+    {
+        "csskey": "bgcp:pb",
+        "cssvalue": "background-clip:padding-box;"
+    },
+    {
+        "csskey": "bgcp:cb",
+        "cssvalue": "background-clip:content-box;"
+    },
+    {
+        "csskey": "bgcp:nc",
+        "cssvalue": "background-clip:no-clip;"
+    },
+    {
+        "csskey": "bgo",
+        "cssvalue": "background-origin:;"
+    },
+    {
+        "csskey": "bgo:pb",
+        "cssvalue": "background-origin:padding-box;"
+    },
+    {
+        "csskey": "bgo:bb",
+        "cssvalue": "background-origin:border-box;"
+    },
+    {
+        "csskey": "bgo:cb",
+        "cssvalue": "background-origin:content-box;"
+    },
+    {
+        "csskey": "bgsz",
+        "cssvalue": "background-size:;"
+    },
+    {
+        "csskey": "bgsz:a",
+        "cssvalue": "background-size:auto;"
+    },
+    {
+        "csskey": "bgsz:ct",
+        "cssvalue": "background-size:contain;"
+    },
+    {
+        "csskey": "bgsz:cv",
+        "cssvalue": "background-size:cover;"
+    },
+    {
+        "csskey": "Color",
+        "cssvalue": "c"
+    },
+    {
+        "csskey": "color:#000;",
+        "cssvalue": "c:r"
+    },
+    {
+        "csskey": "color:rgb(0, 0, 0);",
+        "cssvalue": "c:ra"
+    },
+    {
+        "csskey": "color:rgba(0, 0, 0, .5);",
+        "cssvalue": "op"
+    },
+    {
+        "csskey": "opacity:;",
+        "cssvalue": "Generated content"
+    },
+    {
+        "csskey": "cnt",
+        "cssvalue": "content:'';"
+    },
+    {
+        "csskey": "cnt:n, ct:n",
+        "cssvalue": "content:normal;"
+    },
+    {
+        "csskey": "cnt:oq, ct:oq",
+        "cssvalue": "content:open-quote;"
+    },
+    {
+        "csskey": "cnt:noq, ct:noq",
+        "cssvalue": "content:no-open-quote;"
+    },
+    {
+        "csskey": "cnt:cq, ct:cq",
+        "cssvalue": "content:close-quote;"
+    },
+    {
+        "csskey": "cnt:ncq, ct:ncq",
+        "cssvalue": "content:no-close-quote;"
+    },
+    {
+        "csskey": "cnt:a, ct:a",
+        "cssvalue": "content:attr();"
+    },
+    {
+        "csskey": "cnt:c, ct:c",
+        "cssvalue": "content:counter();"
+    },
+    {
+        "csskey": "cnt:cs, ct:cs",
+        "cssvalue": "content:counters();"
+    },
+    {
+        "csskey": "ct",
+        "cssvalue": "content:;"
+    },
+    {
+        "csskey": "q",
+        "cssvalue": "quotes:;"
+    },
+    {
+        "csskey": "q:n",
+        "cssvalue": "quotes:none;"
+    },
+    {
+        "csskey": "q:ru",
+        "cssvalue": "quotes:'\\00AB' '\\00BB' '\\201E' '\\201C';"
+    },
+    {
+        "csskey": "q:en",
+        "cssvalue": "quotes:'\\201C' '\\201D' '\\2018' '\\2019';"
+    },
+    {
+        "csskey": "coi",
+        "cssvalue": "counter-increment:;"
+    },
+    {
+        "csskey": "cor",
+        "cssvalue": "counter-reset:;"
+    },
+    {
+        "csskey": "Outline",
+        "cssvalue": "ol"
+    },
+    {
+        "csskey": "outline:;",
+        "cssvalue": "ol:n"
+    },
+    {
+        "csskey": "outline:none;",
+        "cssvalue": "olo"
+    },
+    {
+        "csskey": "outline-offset:;",
+        "cssvalue": "olw"
+    },
+    {
+        "csskey": "outline-width:;",
+        "cssvalue": "olw:tn"
+    },
+    {
+        "csskey": "outline-width:thin;",
+        "cssvalue": "olw:m"
+    },
+    {
+        "csskey": "outline-width:medium;",
+        "cssvalue": "olw:tc"
+    },
+    {
+        "csskey": "outline-width:thick;",
+        "cssvalue": "ols"
+    },
+    {
+        "csskey": "outline-style:;",
+        "cssvalue": "ols:n"
+    },
+    {
+        "csskey": "outline-style:none;",
+        "cssvalue": "ols:dt"
+    },
+    {
+        "csskey": "outline-style:dotted;",
+        "cssvalue": "ols:ds"
+    },
+    {
+        "csskey": "outline-style:dashed;",
+        "cssvalue": "ols:s"
+    },
+    {
+        "csskey": "outline-style:solid;",
+        "cssvalue": "ols:db"
+    },
+    {
+        "csskey": "outline-style:double;",
+        "cssvalue": "ols:g"
+    },
+    {
+        "csskey": "outline-style:groove;",
+        "cssvalue": "ols:r"
+    },
+    {
+        "csskey": "outline-style:ridge;",
+        "cssvalue": "ols:i"
+    },
+    {
+        "csskey": "outline-style:inset;",
+        "cssvalue": "ols:o"
+    },
+    {
+        "csskey": "outline-style:outset;",
+        "cssvalue": "olc"
+    },
+    {
+        "csskey": "outline-color:#000;",
+        "cssvalue": "olc:i"
+    },
+    {
+        "csskey": "outline-color:invert;",
+        "cssvalue": "Tables"
+    },
+    {
+        "csskey": "tbl",
+        "cssvalue": "table-layout:;"
+    },
+    {
+        "csskey": "tbl:a",
+        "cssvalue": "table-layout:auto;"
+    },
+    {
+        "csskey": "tbl:f",
+        "cssvalue": "table-layout:fixed;"
+    },
+    {
+        "csskey": "cps",
+        "cssvalue": "caption-side:;"
+    },
+    {
+        "csskey": "cps:t",
+        "cssvalue": "caption-side:top;"
+    },
+    {
+        "csskey": "cps:b",
+        "cssvalue": "caption-side:bottom;"
+    },
+    {
+        "csskey": "ec",
+        "cssvalue": "empty-cells:;"
+    },
+    {
+        "csskey": "ec:s",
+        "cssvalue": "empty-cells:show;"
+    },
+    {
+        "csskey": "ec:h",
+        "cssvalue": "empty-cells:hide;"
+    },
+    {
+        "csskey": "Border",
+        "cssvalue": "bd"
+    },
+    {
+        "csskey": "border:;",
+        "cssvalue": "bd+"
+    },
+    {
+        "csskey": "border:1px solid #000;",
+        "cssvalue": "bd:n"
+    },
+    {
+        "csskey": "border:none;",
+        "cssvalue": "bdbk"
+    },
+    {
+        "csskey": "border-break:close;",
+        "cssvalue": "bdbk:c"
+    },
+    {
+        "csskey": "border-break:close;",
+        "cssvalue": "bdcl"
+    },
+    {
+        "csskey": "border-collapse:;",
+        "cssvalue": "bdcl:c"
+    },
+    {
+        "csskey": "border-collapse:collapse;",
+        "cssvalue": "bdcl:s"
+    },
+    {
+        "csskey": "border-collapse:separate;",
+        "cssvalue": "bdc"
+    },
+    {
+        "csskey": "border-color:#000;",
+        "cssvalue": "bdc:t"
+    },
+    {
+        "csskey": "border-color:transparent;",
+        "cssvalue": "bdi"
+    },
+    {
+        "csskey": "border-image:url();",
+        "cssvalue": "bdi:n"
+    },
+    {
+        "csskey": "border-image:none;",
+        "cssvalue": "bdti"
+    },
+    {
+        "csskey": "border-top-image:url();",
+        "cssvalue": "bdti:n"
+    },
+    {
+        "csskey": "border-top-image:none;",
+        "cssvalue": "bdri"
+    },
+    {
+        "csskey": "border-right-image:url();",
+        "cssvalue": "bdri:n"
+    },
+    {
+        "csskey": "border-right-image:none;",
+        "cssvalue": "bdbi"
+    },
+    {
+        "csskey": "border-bottom-image:url();",
+        "cssvalue": "bdbi:n"
+    },
+    {
+        "csskey": "border-bottom-image:none;",
+        "cssvalue": "bdli"
+    },
+    {
+        "csskey": "border-left-image:url();",
+        "cssvalue": "bdli:n"
+    },
+    {
+        "csskey": "border-left-image:none;",
+        "cssvalue": "bdci"
+    },
+    {
+        "csskey": "border-corner-image:url();",
+        "cssvalue": "bdci:n"
+    },
+    {
+        "csskey": "border-corner-image:none;",
+        "cssvalue": "bdci:c"
+    },
+    {
+        "csskey": "border-corner-image:continue;",
+        "cssvalue": "bdtli"
+    },
+    {
+        "csskey": "border-top-left-image:url();",
+        "cssvalue": "bdtli:n"
+    },
+    {
+        "csskey": "border-top-left-image:none;",
+        "cssvalue": "bdtli:c"
+    },
+    {
+        "csskey": "border-top-left-image:continue;",
+        "cssvalue": "bdtri"
+    },
+    {
+        "csskey": "border-top-right-image:url();",
+        "cssvalue": "bdtri:n"
+    },
+    {
+        "csskey": "border-top-right-image:none;",
+        "cssvalue": "bdtri:c"
+    },
+    {
+        "csskey": "border-top-right-image:continue;",
+        "cssvalue": "bdbri"
+    },
+    {
+        "csskey": "border-bottom-right-image:url();",
+        "cssvalue": "bdbri:n"
+    },
+    {
+        "csskey": "border-bottom-right-image:none;",
+        "cssvalue": "bdbri:c"
+    },
+    {
+        "csskey": "border-bottom-right-image:continue;",
+        "cssvalue": "bdbli"
+    },
+    {
+        "csskey": "border-bottom-left-image:url();",
+        "cssvalue": "bdbli:n"
+    },
+    {
+        "csskey": "border-bottom-left-image:none;",
+        "cssvalue": "bdbli:c"
+    },
+    {
+        "csskey": "border-bottom-left-image:continue;",
+        "cssvalue": "bdf"
+    },
+    {
+        "csskey": "border-fit:repeat;",
+        "cssvalue": "bdf:c"
+    },
+    {
+        "csskey": "border-fit:clip;",
+        "cssvalue": "bdf:r"
+    },
+    {
+        "csskey": "border-fit:repeat;",
+        "cssvalue": "bdf:sc"
+    },
+    {
+        "csskey": "border-fit:scale;",
+        "cssvalue": "bdf:st"
+    },
+    {
+        "csskey": "border-fit:stretch;",
+        "cssvalue": "bdf:ow"
+    },
+    {
+        "csskey": "border-fit:overwrite;",
+        "cssvalue": "bdf:of"
+    },
+    {
+        "csskey": "border-fit:overflow;",
+        "cssvalue": "bdf:sp"
+    },
+    {
+        "csskey": "border-fit:space;",
+        "cssvalue": "bdlen"
+    },
+    {
+        "csskey": "border-length:;",
+        "cssvalue": "bdlen:a"
+    },
+    {
+        "csskey": "border-length:auto;",
+        "cssvalue": "bdsp"
+    },
+    {
+        "csskey": "border-spacing:;",
+        "cssvalue": "bds"
+    },
+    {
+        "csskey": "border-style:;",
+        "cssvalue": "bds:n"
+    },
+    {
+        "csskey": "border-style:none;",
+        "cssvalue": "bds:h"
+    },
+    {
+        "csskey": "border-style:hidden;",
+        "cssvalue": "bds:dt"
+    },
+    {
+        "csskey": "border-style:dotted;",
+        "cssvalue": "bds:ds"
+    },
+    {
+        "csskey": "border-style:dashed;",
+        "cssvalue": "bds:s"
+    },
+    {
+        "csskey": "border-style:solid;",
+        "cssvalue": "bds:db"
+    },
+    {
+        "csskey": "border-style:double;",
+        "cssvalue": "bds:dtds"
+    },
+    {
+        "csskey": "border-style:dot-dash;",
+        "cssvalue": "bds:dtdtds"
+    },
+    {
+        "csskey": "border-style:dot-dot-dash;",
+        "cssvalue": "bds:w"
+    },
+    {
+        "csskey": "border-style:wave;",
+        "cssvalue": "bds:g"
+    },
+    {
+        "csskey": "border-style:groove;",
+        "cssvalue": "bds:r"
+    },
+    {
+        "csskey": "border-style:ridge;",
+        "cssvalue": "bds:i"
+    },
+    {
+        "csskey": "border-style:inset;",
+        "cssvalue": "bds:o"
+    },
+    {
+        "csskey": "border-style:outset;",
+        "cssvalue": "bdw"
+    },
+    {
+        "csskey": "border-width:;",
+        "cssvalue": "bdt, bt"
+    },
+    {
+        "csskey": "border-top:;",
+        "cssvalue": "bdt+"
+    },
+    {
+        "csskey": "border-top:1px solid #000;",
+        "cssvalue": "bdt:n"
+    },
+    {
+        "csskey": "border-top:none;",
+        "cssvalue": "bdtw"
+    },
+    {
+        "csskey": "border-top-width:;",
+        "cssvalue": "bdts"
+    },
+    {
+        "csskey": "border-top-style:;",
+        "cssvalue": "bdts:n"
+    },
+    {
+        "csskey": "border-top-style:none;",
+        "cssvalue": "bdtc"
+    },
+    {
+        "csskey": "border-top-color:#000;",
+        "cssvalue": "bdtc:t"
+    },
+    {
+        "csskey": "border-top-color:transparent;",
+        "cssvalue": "bdr, br"
+    },
+    {
+        "csskey": "border-right:;",
+        "cssvalue": "bdr+"
+    },
+    {
+        "csskey": "border-right:1px solid #000;",
+        "cssvalue": "bdr:n"
+    },
+    {
+        "csskey": "border-right:none;",
+        "cssvalue": "bdrw"
+    },
+    {
+        "csskey": "border-right-width:;",
+        "cssvalue": "bdrst"
+    },
+    {
+        "csskey": "border-right-style:;",
+        "cssvalue": "bdrst:n"
+    },
+    {
+        "csskey": "border-right-style:none;",
+        "cssvalue": "bdrc"
+    },
+    {
+        "csskey": "border-right-color:#000;",
+        "cssvalue": "bdrc:t"
+    },
+    {
+        "csskey": "border-right-color:transparent;",
+        "cssvalue": "bdb, bb"
+    },
+    {
+        "csskey": "border-bottom:;",
+        "cssvalue": "bdb+"
+    },
+    {
+        "csskey": "border-bottom:1px solid #000;",
+        "cssvalue": "bdb:n"
+    },
+    {
+        "csskey": "border-bottom:none;",
+        "cssvalue": "bdbw"
+    },
+    {
+        "csskey": "border-bottom-width:;",
+        "cssvalue": "bdbs"
+    },
+    {
+        "csskey": "border-bottom-style:;",
+        "cssvalue": "bdbs:n"
+    },
+    {
+        "csskey": "border-bottom-style:none;",
+        "cssvalue": "bdbc"
+    },
+    {
+        "csskey": "border-bottom-color:#000;",
+        "cssvalue": "bdbc:t"
+    },
+    {
+        "csskey": "border-bottom-color:transparent;",
+        "cssvalue": "bdl, bl"
+    },
+    {
+        "csskey": "border-left:;",
+        "cssvalue": "bdl+"
+    },
+    {
+        "csskey": "border-left:1px solid #000;",
+        "cssvalue": "bdl:n"
+    },
+    {
+        "csskey": "border-left:none;",
+        "cssvalue": "bdlw"
+    },
+    {
+        "csskey": "border-left-width:;",
+        "cssvalue": "bdls"
+    },
+    {
+        "csskey": "border-left-style:;",
+        "cssvalue": "bdls:n"
+    },
+    {
+        "csskey": "border-left-style:none;",
+        "cssvalue": "bdlc"
+    },
+    {
+        "csskey": "border-left-color:#000;",
+        "cssvalue": "bdlc:t"
+    },
+    {
+        "csskey": "border-left-color:transparent;",
+        "cssvalue": "bdrs"
+    },
+    {
+        "csskey": "border-radius:;",
+        "cssvalue": "bdtrrs"
+    },
+    {
+        "csskey": "border-top-right-radius:;",
+        "cssvalue": "bdtlrs"
+    },
+    {
+        "csskey": "border-top-left-radius:;",
+        "cssvalue": "bdbrrs"
+    },
+    {
+        "csskey": "border-bottom-right-radius:;",
+        "cssvalue": "bdblrs"
+    },
+    {
+        "csskey": "border-bottom-left-radius:;",
+        "cssvalue": "Lists"
+    },
+    {
+        "csskey": "lis",
+        "cssvalue": "list-style:;"
+    },
+    {
+        "csskey": "lis:n",
+        "cssvalue": "list-style:none;"
+    },
+    {
+        "csskey": "lisp",
+        "cssvalue": "list-style-position:;"
+    },
+    {
+        "csskey": "lisp:i",
+        "cssvalue": "list-style-position:inside;"
+    },
+    {
+        "csskey": "lisp:o",
+        "cssvalue": "list-style-position:outside;"
+    },
+    {
+        "csskey": "list",
+        "cssvalue": "list-style-type:;"
+    },
+    {
+        "csskey": "list:n",
+        "cssvalue": "list-style-type:none;"
+    },
+    {
+        "csskey": "list:d",
+        "cssvalue": "list-style-type:disc;"
+    },
+    {
+        "csskey": "list:c",
+        "cssvalue": "list-style-type:circle;"
+    },
+    {
+        "csskey": "list:s",
+        "cssvalue": "list-style-type:square;"
+    },
+    {
+        "csskey": "list:dc",
+        "cssvalue": "list-style-type:decimal;"
+    },
+    {
+        "csskey": "list:dclz",
+        "cssvalue": "list-style-type:decimal-leading-zero;"
+    },
+    {
+        "csskey": "list:lr",
+        "cssvalue": "list-style-type:lower-roman;"
+    },
+    {
+        "csskey": "list:ur",
+        "cssvalue": "list-style-type:upper-roman;"
+    },
+    {
+        "csskey": "lisi",
+        "cssvalue": "list-style-image:;"
+    },
+    {
+        "csskey": "lisi:n",
+        "cssvalue": "list-style-image:none;"
+    },
+    {
+        "csskey": "Print",
+        "cssvalue": "pgbb"
+    },
+    {
+        "csskey": "page-break-before:;",
+        "cssvalue": "pgbb:au"
+    },
+    {
+        "csskey": "page-break-before:auto;",
+        "cssvalue": "pgbb:al"
+    },
+    {
+        "csskey": "page-break-before:always;",
+        "cssvalue": "pgbb:l"
+    },
+    {
+        "csskey": "page-break-before:left;",
+        "cssvalue": "pgbb:r"
+    },
+    {
+        "csskey": "page-break-before:right;",
+        "cssvalue": "pgbi"
+    },
+    {
+        "csskey": "page-break-inside:;",
+        "cssvalue": "pgbi:au"
+    },
+    {
+        "csskey": "page-break-inside:auto;",
+        "cssvalue": "pgbi:av"
+    },
+    {
+        "csskey": "page-break-inside:avoid;",
+        "cssvalue": "pgba"
+    },
+    {
+        "csskey": "page-break-after:;",
+        "cssvalue": "pgba:au"
+    },
+    {
+        "csskey": "page-break-after:auto;",
+        "cssvalue": "pgba:al"
+    },
+    {
+        "csskey": "page-break-after:always;",
+        "cssvalue": "pgba:l"
+    },
+    {
+        "csskey": "page-break-after:left;",
+        "cssvalue": "pgba:r"
+    },
+    {
+        "csskey": "page-break-after:right;",
+        "cssvalue": "orp"
+    },
+    {
+        "csskey": "orphans:;",
+        "cssvalue": "wid"
+    },
+    {
+        "csskey": "widows:;",
+        "cssvalue": "!important"
+    },
+    {
+        "csskey": "@f",
+        "cssvalue": "@font-face {"
+    },
+    {
+        "csskey": "font-family:;",
+        "cssvalue": "src:url(|);"
+    },
+    {
+        "csskey": "}",
+        "cssvalue": "@f+"
+    },
+    {
+        "csskey": "@font-face {",
+        "cssvalue": "font-family: 'FontName';"
+    },
+    {
+        "csskey": "src: url('FileName.eot');",
+        "cssvalue": "src: url('FileName.eot?#iefix') format('embedded-opentype'),"
+    },
+    {
+        "csskey": "url('FileName.woff') format('woff'),",
+        "cssvalue": "url('FileName.ttf') format('truetype'),"
+    },
+    {
+        "csskey": "url('FileName.svg#FontName') format('svg');",
+        "cssvalue": "font-style: normal;"
+    },
+    {
+        "csskey": "font-weight: normal;",
+        "cssvalue": "}"
+    },
+    {
+        "csskey": "@i, @import",
+        "cssvalue": "@import url();"
+    },
+    {
+        "csskey": "@kf",
+        "cssvalue": "@-webkit-keyframes identifier {"
+    },
+    {
+        "csskey": "from {  }",
+        "cssvalue": "to {  }"
+    },
+    {
+        "csskey": "}",
+        "cssvalue": "@-o-keyframes identifier {"
+    },
+    {
+        "csskey": "from {  }",
+        "cssvalue": "to {  }"
+    },
+    {
+        "csskey": "}",
+        "cssvalue": "@-moz-keyframes identifier {"
+    },
+    {
+        "csskey": "from {  }",
+        "cssvalue": "to {  }"
+    },
+    {
+        "csskey": "}",
+        "cssvalue": "@keyframes identifier {"
+    },
+    {
+        "csskey": "from {  }",
+        "cssvalue": "to {  }"
+    },
+    {
+        "csskey": "}",
+        "cssvalue": "@m, @media"
+    },
+    {
+        "csskey": "@media screen {",
+        "cssvalue": ""
+    },
+    {
+        "csskey": "}",
+        "cssvalue": "ac"
+    },
+    {
+        "csskey": "align-content:;",
+        "cssvalue": "ac:c"
+    },
+    {
+        "csskey": "align-content:center;",
+        "cssvalue": "ac:fe"
+    },
+    {
+        "csskey": "align-content:flex-end;",
+        "cssvalue": "ac:fs"
+    },
+    {
+        "csskey": "align-content:flex-start;",
+        "cssvalue": "ac:s"
+    },
+    {
+        "csskey": "align-content:stretch;",
+        "cssvalue": "ac:sa"
+    },
+    {
+        "csskey": "align-content:space-around;",
+        "cssvalue": "ac:sb"
+    },
+    {
+        "csskey": "align-content:space-between;",
+        "cssvalue": "ai"
+    },
+    {
+        "csskey": "align-items:;",
+        "cssvalue": "ai:b"
+    },
+    {
+        "csskey": "align-items:baseline;",
+        "cssvalue": "ai:c"
+    },
+    {
+        "csskey": "align-items:center;",
+        "cssvalue": "ai:fe"
+    },
+    {
+        "csskey": "align-items:flex-end;",
+        "cssvalue": "ai:fs"
+    },
+    {
+        "csskey": "align-items:flex-start;",
+        "cssvalue": "ai:s"
+    },
+    {
+        "csskey": "align-items:stretch;",
+        "cssvalue": "anim"
+    },
+    {
+        "csskey": "animation:;",
+        "cssvalue": "anim-"
+    },
+    {
+        "csskey": "animation:name duration timing-function delay iteration-count direction fill-mode;",
+        "cssvalue": "animdel"
+    },
+    {
+        "csskey": "animation-delay:time;",
+        "cssvalue": "animdir"
+    },
+    {
+        "csskey": "animation-direction:normal;",
+        "cssvalue": "animdir:a"
+    },
+    {
+        "csskey": "animation-direction:alternate;",
+        "cssvalue": "animdir:ar"
+    },
+    {
+        "csskey": "animation-direction:alternate-reverse;",
+        "cssvalue": "animdir:n"
+    },
+    {
+        "csskey": "animation-direction:normal;",
+        "cssvalue": "animdir:r"
+    },
+    {
+        "csskey": "animation-direction:reverse;",
+        "cssvalue": "animdur"
+    },
+    {
+        "csskey": "animation-duration:0s;",
+        "cssvalue": "animfm"
+    },
+    {
+        "csskey": "animation-fill-mode:both;",
+        "cssvalue": "animfm:b"
+    },
+    {
+        "csskey": "animation-fill-mode:backwards;",
+        "cssvalue": "animfm:bt, animfm:bh"
+    },
+    {
+        "csskey": "animation-fill-mode:both;",
+        "cssvalue": "animfm:f"
+    },
+    {
+        "csskey": "animation-fill-mode:forwards;",
+        "cssvalue": "animic"
+    },
+    {
+        "csskey": "animation-iteration-count:1;",
+        "cssvalue": "animic:i"
+    },
+    {
+        "csskey": "animation-iteration-count:infinite;",
+        "cssvalue": "animn"
+    },
+    {
+        "csskey": "animation-name:none;",
+        "cssvalue": "animps"
+    },
+    {
+        "csskey": "animation-play-state:running;",
+        "cssvalue": "animps:p"
+    },
+    {
+        "csskey": "animation-play-state:paused;",
+        "cssvalue": "animps:r"
+    },
+    {
+        "csskey": "animation-play-state:running;",
+        "cssvalue": "animtf"
+    },
+    {
+        "csskey": "animation-timing-function:linear;",
+        "cssvalue": "animtf:cb"
+    },
+    {
+        "csskey": "animation-timing-function:cubic-bezier(0.1, 0.7, 1.0, 0.1);",
+        "cssvalue": "animtf:e"
+    },
+    {
+        "csskey": "animation-timing-function:ease;",
+        "cssvalue": "animtf:ei"
+    },
+    {
+        "csskey": "animation-timing-function:ease-in;",
+        "cssvalue": "animtf:eio"
+    },
+    {
+        "csskey": "animation-timing-function:ease-in-out;",
+        "cssvalue": "animtf:eo"
+    },
+    {
+        "csskey": "animation-timing-function:ease-out;",
+        "cssvalue": "animtf:l"
+    },
+    {
+        "csskey": "animation-timing-function:linear;",
+        "cssvalue": "ap"
+    },
+    {
+        "csskey": "appearance:${none};",
+        "cssvalue": "as"
+    },
+    {
+        "csskey": "align-self:;",
+        "cssvalue": "as:a"
+    },
+    {
+        "csskey": "align-self:auto;",
+        "cssvalue": "as:b"
+    },
+    {
+        "csskey": "align-self:baseline;",
+        "cssvalue": "as:c"
+    },
+    {
+        "csskey": "align-self:center;",
+        "cssvalue": "as:fe"
+    },
+    {
+        "csskey": "align-self:flex-end;",
+        "cssvalue": "as:fs"
+    },
+    {
+        "csskey": "align-self:flex-start;",
+        "cssvalue": "as:s"
+    },
+    {
+        "csskey": "align-self:stretch;",
+        "cssvalue": "bfv"
+    },
+    {
+        "csskey": "backface-visibility:;",
+        "cssvalue": "bfv:h"
+    },
+    {
+        "csskey": "backface-visibility:hidden;",
+        "cssvalue": "bfv:v"
+    },
+    {
+        "csskey": "backface-visibility:visible;",
+        "cssvalue": "bg:ie"
+    },
+    {
+        "csskey": "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='x.png',sizingMethod='crop');",
+        "cssvalue": "cm"
+    },
+    {
+        "csskey": "/* ${child} */",
+        "cssvalue": "colm"
+    },
+    {
+        "csskey": "columns:;",
+        "cssvalue": "colmc"
+    },
+    {
+        "csskey": "column-count:;",
+        "cssvalue": "colmf"
+    },
+    {
+        "csskey": "column-fill:;",
+        "cssvalue": "colmg"
+    },
+    {
+        "csskey": "column-gap:;",
+        "cssvalue": "colmr"
+    },
+    {
+        "csskey": "column-rule:;",
+        "cssvalue": "colmrc"
+    },
+    {
+        "csskey": "column-rule-color:;",
+        "cssvalue": "colmrs"
+    },
+    {
+        "csskey": "column-rule-style:;",
+        "cssvalue": "colmrw"
+    },
+    {
+        "csskey": "column-rule-width:;",
+        "cssvalue": "colms"
+    },
+    {
+        "csskey": "column-span:;",
+        "cssvalue": "colmw"
+    },
+    {
+        "csskey": "column-width:;",
+        "cssvalue": "d:ib+"
+    },
+    {
+        "csskey": "display: inline-block;",
+        "cssvalue": "*display: inline;"
+    },
+    {
+        "csskey": "*zoom: 1;",
+        "cssvalue": "fx"
+    },
+    {
+        "csskey": "flex:;",
+        "cssvalue": "fxb"
+    },
+    {
+        "csskey": "flex-basis:;",
+        "cssvalue": "fxd"
+    },
+    {
+        "csskey": "flex-direction:;",
+        "cssvalue": "fxd:c"
+    },
+    {
+        "csskey": "flex-direction:column;",
+        "cssvalue": "fxd:cr"
+    },
+    {
+        "csskey": "flex-direction:column-reverse;",
+        "cssvalue": "fxd:r"
+    },
+    {
+        "csskey": "flex-direction:row;",
+        "cssvalue": "fxd:rr"
+    },
+    {
+        "csskey": "flex-direction:row-reverse;",
+        "cssvalue": "fxf"
+    },
+    {
+        "csskey": "flex-flow:;",
+        "cssvalue": "fxg"
+    },
+    {
+        "csskey": "flex-grow:;",
+        "cssvalue": "fxsh"
+    },
+    {
+        "csskey": "flex-shrink:;",
+        "cssvalue": "fxw"
+    },
+    {
+        "csskey": "flex-wrap: ;",
+        "cssvalue": "fxw:n"
+    },
+    {
+        "csskey": "flex-wrap:nowrap;",
+        "cssvalue": "fxw:w"
+    },
+    {
+        "csskey": "flex-wrap:wrap;",
+        "cssvalue": "fxw:wr"
+    },
+    {
+        "csskey": "flex-wrap:wrap-reverse;",
+        "cssvalue": "jc"
+    },
+    {
+        "csskey": "justify-content:;",
+        "cssvalue": "jc:c"
+    },
+    {
+        "csskey": "justify-content:center;",
+        "cssvalue": "jc:fe"
+    },
+    {
+        "csskey": "justify-content:flex-end;",
+        "cssvalue": "jc:fs"
+    },
+    {
+        "csskey": "justify-content:flex-start;",
+        "cssvalue": "jc:sa"
+    },
+    {
+        "csskey": "justify-content:space-around;",
+        "cssvalue": "jc:sb"
+    },
+    {
+        "csskey": "justify-content:space-between;",
+        "cssvalue": "mar"
+    },
+    {
+        "csskey": "max-resolution:res;",
+        "cssvalue": "mir"
+    },
+    {
+        "csskey": "min-resolution:res;",
+        "cssvalue": "op+"
+    },
+    {
+        "csskey": "opacity: ;",
+        "cssvalue": "filter: alpha(opacity=);"
+    },
+    {
+        "csskey": "op:ie",
+        "cssvalue": "filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=100);"
+    },
+    {
+        "csskey": "op:ms",
+        "cssvalue": "-ms-filter:'progid:DXImageTransform.Microsoft.Alpha(Opacity=100)';"
+    },
+    {
+        "csskey": "ord",
+        "cssvalue": "order:;"
+    },
+    {
+        "csskey": "ori",
+        "cssvalue": "orientation:;"
+    },
+    {
+        "csskey": "ori:l",
+        "cssvalue": "orientation:landscape;"
+    },
+    {
+        "csskey": "ori:p",
+        "cssvalue": "orientation:portrait;"
+    },
+    {
+        "csskey": "tov",
+        "cssvalue": "text-overflow:${ellipsis};"
+    },
+    {
+        "csskey": "tov:c",
+        "cssvalue": "text-overflow:clip;"
+    },
+    {
+        "csskey": "tov:e",
+        "cssvalue": "text-overflow:ellipsis;"
+    },
+    {
+        "csskey": "trf",
+        "cssvalue": "transform:;"
+    },
+    {
+        "csskey": "trf:r",
+        "cssvalue": "transform: rotate(angle);"
+    },
+    {
+        "csskey": "trf:rx",
+        "cssvalue": "transform: rotateX(angle);"
+    },
+    {
+        "csskey": "trf:ry",
+        "cssvalue": "transform: rotateY(angle);"
+    },
+    {
+        "csskey": "trf:rz",
+        "cssvalue": "transform: rotateZ(angle);"
+    },
+    {
+        "csskey": "trf:sc",
+        "cssvalue": "transform: scale(x, y);"
+    },
+    {
+        "csskey": "trf:sc3",
+        "cssvalue": "transform: scale3d(x, y, z);"
+    },
+    {
+        "csskey": "trf:scx",
+        "cssvalue": "transform: scaleX(x);"
+    },
+    {
+        "csskey": "trf:scy",
+        "cssvalue": "transform: scaleY(y);"
+    },
+    {
+        "csskey": "trf:scz",
+        "cssvalue": "transform: scaleZ(z);"
+    },
+    {
+        "csskey": "trf:skx",
+        "cssvalue": "transform: skewX(angle);"
+    },
+    {
+        "csskey": "trf:sky",
+        "cssvalue": "transform: skewY(angle);"
+    },
+    {
+        "csskey": "trf:t",
+        "cssvalue": "transform: translate(x, y);"
+    },
+    {
+        "csskey": "trf:t3",
+        "cssvalue": "transform: translate3d(tx, ty, tz);"
+    },
+    {
+        "csskey": "trf:tx",
+        "cssvalue": "transform: translateX(x);"
+    },
+    {
+        "csskey": "trf:ty",
+        "cssvalue": "transform: translateY(y);"
+    },
+    {
+        "csskey": "trf:tz",
+        "cssvalue": "transform: translateZ(z);"
+    },
+    {
+        "csskey": "trfo",
+        "cssvalue": "transform-origin:;"
+    },
+    {
+        "csskey": "trfs",
+        "cssvalue": "transform-style:preserve-3d;"
+    },
+    {
+        "csskey": "trs",
+        "cssvalue": "transition:prop time;"
+    },
+    {
+        "csskey": "trsde",
+        "cssvalue": "transition-delay:time;"
+    },
+    {
+        "csskey": "trsdu",
+        "cssvalue": "transition-duration:time;"
+    },
+    {
+        "csskey": "trsp",
+        "cssvalue": "transition-property:prop;"
+    },
+    {
+        "csskey": "trstf",
+        "cssvalue": "transition-timing-function:tfunc;"
+    },
+    {
+        "csskey": "us",
+        "cssvalue": "user-select:${none};"
+    },
+    {
+        "csskey": "wfsm",
+        "cssvalue": "-webkit-font-smoothing:${antialiased};"
+    },
+    {
+        "csskey": "wfsm:a",
+        "cssvalue": "-webkit-font-smoothing:antialiased;"
+    },
+    {
+        "csskey": "wfsm:n",
+        "cssvalue": "-webkit-font-smoothing:none;"
+    },
+    {
+        "csskey": "wfsm:s, wfsm:sa",
+        "cssvalue": "-webkit-font-smoothing:subpixel-antialiased;"
+    },
+    {
+        "csskey": "wm",
+        "cssvalue": "writing-mode:lr-tb;"
+    },
+    {
+        "csskey": "wm:btl",
+        "cssvalue": "writing-mode:bt-lr;"
+    },
+    {
+        "csskey": "wm:btr",
+        "cssvalue": "writing-mode:bt-rl;"
+    },
+    {
+        "csskey": "wm:lrb",
+        "cssvalue": "writing-mode:lr-bt;"
+    },
+    {
+        "csskey": "wm:lrt",
+        "cssvalue": "writing-mode:lr-tb;"
+    },
+    {
+        "csskey": "wm:rlb",
+        "cssvalue": "writing-mode:rl-bt;"
+    },
+    {
+        "csskey": "wm:rlt",
+        "cssvalue": "writing-mode:rl-tb;"
+    },
+    {
+        "csskey": "wm:tbl",
+        "cssvalue": "writing-mode:tb-lr;"
+    },
+    {
+        "csskey": "wm:tbr",
+        "cssvalue": "writing-mode:tb-rl;"
+    }
+]

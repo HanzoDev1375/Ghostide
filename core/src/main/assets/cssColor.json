@@ -1,0 +1,566 @@
+[
+    {
+        "csskey": "aliceblue",
+        "cssDoc": "This is a helper Color css3 aliceblueTo review and analyze your code"
+    },
+    {
+        "csskey": "antiquewhite",
+        "cssDoc": "This is a helper Color css3 antiquewhiteTo review and analyze your code"
+    },
+    {
+        "csskey": "aqua",
+        "cssDoc": "This is a helper Color css3 aquaTo review and analyze your code"
+    },
+    {
+        "csskey": "aquamarine",
+        "cssDoc": "This is a helper Color css3 aquamarineTo review and analyze your code"
+    },
+    {
+        "csskey": "azure",
+        "cssDoc": "This is a helper Color css3 azureTo review and analyze your code"
+    },
+    {
+        "csskey": "beige",
+        "cssDoc": "This is a helper Color css3 beigeTo review and analyze your code"
+    },
+    {
+        "csskey": "bisque",
+        "cssDoc": "This is a helper Color css3 bisqueTo review and analyze your code"
+    },
+    {
+        "csskey": "black",
+        "cssDoc": "This is a helper Color css3 blackTo review and analyze your code"
+    },
+    {
+        "csskey": "blanchedalmond",
+        "cssDoc": "This is a helper Color css3 blanchedalmondTo review and analyze your code"
+    },
+    {
+        "csskey": "blue",
+        "cssDoc": "This is a helper Color css3 blueTo review and analyze your code"
+    },
+    {
+        "csskey": "blueviolet",
+        "cssDoc": "This is a helper Color css3 bluevioletTo review and analyze your code"
+    },
+    {
+        "csskey": "brown",
+        "cssDoc": "This is a helper Color css3 brownTo review and analyze your code"
+    },
+    {
+        "csskey": "burlywood",
+        "cssDoc": "This is a helper Color css3 burlywoodTo review and analyze your code"
+    },
+    {
+        "csskey": "cadetblue",
+        "cssDoc": "This is a helper Color css3 cadetblueTo review and analyze your code"
+    },
+    {
+        "csskey": "chartreuse",
+        "cssDoc": "This is a helper Color css3 chartreuseTo review and analyze your code"
+    },
+    {
+        "csskey": "chocolate",
+        "cssDoc": "This is a helper Color css3 chocolateTo review and analyze your code"
+    },
+    {
+        "csskey": "coral",
+        "cssDoc": "This is a helper Color css3 coralTo review and analyze your code"
+    },
+    {
+        "csskey": "cornflowerblue",
+        "cssDoc": "This is a helper Color css3 cornflowerblueTo review and analyze your code"
+    },
+    {
+        "csskey": "cornsilk",
+        "cssDoc": "This is a helper Color css3 cornsilkTo review and analyze your code"
+    },
+    {
+        "csskey": "crimson",
+        "cssDoc": "This is a helper Color css3 crimsonTo review and analyze your code"
+    },
+    {
+        "csskey": "cyan",
+        "cssDoc": "This is a helper Color css3 cyanTo review and analyze your code"
+    },
+    {
+        "csskey": "darkblue",
+        "cssDoc": "This is a helper Color css3 darkblueTo review and analyze your code"
+    },
+    {
+        "csskey": "darkcyan",
+        "cssDoc": "This is a helper Color css3 darkcyanTo review and analyze your code"
+    },
+    {
+        "csskey": "darkgoldenrod",
+        "cssDoc": "This is a helper Color css3 darkgoldenrodTo review and analyze your code"
+    },
+    {
+        "csskey": "darkgray",
+        "cssDoc": "This is a helper Color css3 darkgrayTo review and analyze your code"
+    },
+    {
+        "csskey": "darkgreen",
+        "cssDoc": "This is a helper Color css3 darkgreenTo review and analyze your code"
+    },
+    {
+        "csskey": "darkkhaki",
+        "cssDoc": "This is a helper Color css3 darkkhakiTo review and analyze your code"
+    },
+    {
+        "csskey": "darkmagenta",
+        "cssDoc": "This is a helper Color css3 darkmagentaTo review and analyze your code"
+    },
+    {
+        "csskey": "darkolivegreen",
+        "cssDoc": "This is a helper Color css3 darkolivegreenTo review and analyze your code"
+    },
+    {
+        "csskey": "darkorange",
+        "cssDoc": "This is a helper Color css3 darkorangeTo review and analyze your code"
+    },
+    {
+        "csskey": "darkorchid",
+        "cssDoc": "This is a helper Color css3 darkorchidTo review and analyze your code"
+    },
+    {
+        "csskey": "darkred",
+        "cssDoc": "This is a helper Color css3 darkredTo review and analyze your code"
+    },
+    {
+        "csskey": "darksalmon",
+        "cssDoc": "This is a helper Color css3 darksalmonTo review and analyze your code"
+    },
+    {
+        "csskey": "darkseagreen",
+        "cssDoc": "This is a helper Color css3 darkseagreenTo review and analyze your code"
+    },
+    {
+        "csskey": "darkslateblue",
+        "cssDoc": "This is a helper Color css3 darkslateblueTo review and analyze your code"
+    },
+    {
+        "csskey": "darkslategray",
+        "cssDoc": "This is a helper Color css3 darkslategrayTo review and analyze your code"
+    },
+    {
+        "csskey": "darkturquoise",
+        "cssDoc": "This is a helper Color css3 darkturquoiseTo review and analyze your code"
+    },
+    {
+        "csskey": "darkviolet",
+        "cssDoc": "This is a helper Color css3 darkvioletTo review and analyze your code"
+    },
+    {
+        "csskey": "deeppink",
+        "cssDoc": "This is a helper Color css3 deeppinkTo review and analyze your code"
+    },
+    {
+        "csskey": "deepskyblue",
+        "cssDoc": "This is a helper Color css3 deepskyblueTo review and analyze your code"
+    },
+    {
+        "csskey": "dimgray",
+        "cssDoc": "This is a helper Color css3 dimgrayTo review and analyze your code"
+    },
+    {
+        "csskey": "dodgerblue",
+        "cssDoc": "This is a helper Color css3 dodgerblueTo review and analyze your code"
+    },
+    {
+        "csskey": "firebrick",
+        "cssDoc": "This is a helper Color css3 firebrickTo review and analyze your code"
+    },
+    {
+        "csskey": "floralwhite",
+        "cssDoc": "This is a helper Color css3 floralwhiteTo review and analyze your code"
+    },
+    {
+        "csskey": "forestgreen",
+        "cssDoc": "This is a helper Color css3 forestgreenTo review and analyze your code"
+    },
+    {
+        "csskey": "fuchsia",
+        "cssDoc": "This is a helper Color css3 fuchsiaTo review and analyze your code"
+    },
+    {
+        "csskey": "gainsboro",
+        "cssDoc": "This is a helper Color css3 gainsboroTo review and analyze your code"
+    },
+    {
+        "csskey": "ghostwhite",
+        "cssDoc": "This is a helper Color css3 ghostwhiteTo review and analyze your code"
+    },
+    {
+        "csskey": "gold",
+        "cssDoc": "This is a helper Color css3 goldTo review and analyze your code"
+    },
+    {
+        "csskey": "goldenrod",
+        "cssDoc": "This is a helper Color css3 goldenrodTo review and analyze your code"
+    },
+    {
+        "csskey": "gray",
+        "cssDoc": "This is a helper Color css3 grayTo review and analyze your code"
+    },
+    {
+        "csskey": "green",
+        "cssDoc": "This is a helper Color css3 greenTo review and analyze your code"
+    },
+    {
+        "csskey": "greenyellow",
+        "cssDoc": "This is a helper Color css3 greenyellowTo review and analyze your code"
+    },
+    {
+        "csskey": "honeydew",
+        "cssDoc": "This is a helper Color css3 honeydewTo review and analyze your code"
+    },
+    {
+        "csskey": "hotpink",
+        "cssDoc": "This is a helper Color css3 hotpinkTo review and analyze your code"
+    },
+    {
+        "csskey": "indianred",
+        "cssDoc": "This is a helper Color css3 indianredTo review and analyze your code"
+    },
+    {
+        "csskey": "indigo",
+        "cssDoc": "This is a helper Color css3 indigoTo review and analyze your code"
+    },
+    {
+        "csskey": "ivory",
+        "cssDoc": "This is a helper Color css3 ivoryTo review and analyze your code"
+    },
+    {
+        "csskey": "khaki",
+        "cssDoc": "This is a helper Color css3 khakiTo review and analyze your code"
+    },
+    {
+        "csskey": "lavender",
+        "cssDoc": "This is a helper Color css3 lavenderTo review and analyze your code"
+    },
+    {
+        "csskey": "lavenderblush",
+        "cssDoc": "This is a helper Color css3 lavenderblushTo review and analyze your code"
+    },
+    {
+        "csskey": "lawngreen",
+        "cssDoc": "This is a helper Color css3 lawngreenTo review and analyze your code"
+    },
+    {
+        "csskey": "lemonchiffon",
+        "cssDoc": "This is a helper Color css3 lemonchiffonTo review and analyze your code"
+    },
+    {
+        "csskey": "lightblue",
+        "cssDoc": "This is a helper Color css3 lightblueTo review and analyze your code"
+    },
+    {
+        "csskey": "lightcoral",
+        "cssDoc": "This is a helper Color css3 lightcoralTo review and analyze your code"
+    },
+    {
+        "csskey": "lightcyan",
+        "cssDoc": "This is a helper Color css3 lightcyanTo review and analyze your code"
+    },
+    {
+        "csskey": "lightgoldenrodyellow",
+        "cssDoc": "This is a helper Color css3 lightgoldenrodyellowTo review and analyze your code"
+    },
+    {
+        "csskey": "lightgray",
+        "cssDoc": "This is a helper Color css3 lightgrayTo review and analyze your code"
+    },
+    {
+        "csskey": "lightgreen",
+        "cssDoc": "This is a helper Color css3 lightgreenTo review and analyze your code"
+    },
+    {
+        "csskey": "lightpink",
+        "cssDoc": "This is a helper Color css3 lightpinkTo review and analyze your code"
+    },
+    {
+        "csskey": "lightsalmon",
+        "cssDoc": "This is a helper Color css3 lightsalmonTo review and analyze your code"
+    },
+    {
+        "csskey": "lightseagreen",
+        "cssDoc": "This is a helper Color css3 lightseagreenTo review and analyze your code"
+    },
+    {
+        "csskey": "lightskyblue",
+        "cssDoc": "This is a helper Color css3 lightskyblueTo review and analyze your code"
+    },
+    {
+        "csskey": "lightslategray",
+        "cssDoc": "This is a helper Color css3 lightslategrayTo review and analyze your code"
+    },
+    {
+        "csskey": "lightsteelblue",
+        "cssDoc": "This is a helper Color css3 lightsteelblueTo review and analyze your code"
+    },
+    {
+        "csskey": "lightyellow",
+        "cssDoc": "This is a helper Color css3 lightyellowTo review and analyze your code"
+    },
+    {
+        "csskey": "lime",
+        "cssDoc": "This is a helper Color css3 limeTo review and analyze your code"
+    },
+    {
+        "csskey": "limegreen",
+        "cssDoc": "This is a helper Color css3 limegreenTo review and analyze your code"
+    },
+    {
+        "csskey": "linen",
+        "cssDoc": "This is a helper Color css3 linenTo review and analyze your code"
+    },
+    {
+        "csskey": "magenta",
+        "cssDoc": "This is a helper Color css3 magentaTo review and analyze your code"
+    },
+    {
+        "csskey": "maroon",
+        "cssDoc": "This is a helper Color css3 maroonTo review and analyze your code"
+    },
+    {
+        "csskey": "mediumaquamarine",
+        "cssDoc": "This is a helper Color css3 mediumaquamarineTo review and analyze your code"
+    },
+    {
+        "csskey": "mediumblue",
+        "cssDoc": "This is a helper Color css3 mediumblueTo review and analyze your code"
+    },
+    {
+        "csskey": "mediumorchid",
+        "cssDoc": "This is a helper Color css3 mediumorchidTo review and analyze your code"
+    },
+    {
+        "csskey": "mediumpurple",
+        "cssDoc": "This is a helper Color css3 mediumpurpleTo review and analyze your code"
+    },
+    {
+        "csskey": "mediumseagreen",
+        "cssDoc": "This is a helper Color css3 mediumseagreenTo review and analyze your code"
+    },
+    {
+        "csskey": "mediumslateblue",
+        "cssDoc": "This is a helper Color css3 mediumslateblueTo review and analyze your code"
+    },
+    {
+        "csskey": "mediumspringgreen",
+        "cssDoc": "This is a helper Color css3 mediumspringgreenTo review and analyze your code"
+    },
+    {
+        "csskey": "mediumturquoise",
+        "cssDoc": "This is a helper Color css3 mediumturquoiseTo review and analyze your code"
+    },
+    {
+        "csskey": "mediumvioletred",
+        "cssDoc": "This is a helper Color css3 mediumvioletredTo review and analyze your code"
+    },
+    {
+        "csskey": "midnightblue",
+        "cssDoc": "This is a helper Color css3 midnightblueTo review and analyze your code"
+    },
+    {
+        "csskey": "mintcream",
+        "cssDoc": "This is a helper Color css3 mintcreamTo review and analyze your code"
+    },
+    {
+        "csskey": "mistyrose",
+        "cssDoc": "This is a helper Color css3 mistyroseTo review and analyze your code"
+    },
+    {
+        "csskey": "moccasin",
+        "cssDoc": "This is a helper Color css3 moccasinTo review and analyze your code"
+    },
+    {
+        "csskey": "navajowhite",
+        "cssDoc": "This is a helper Color css3 navajowhiteTo review and analyze your code"
+    },
+    {
+        "csskey": "navy",
+        "cssDoc": "This is a helper Color css3 navyTo review and analyze your code"
+    },
+    {
+        "csskey": "oldlace",
+        "cssDoc": "This is a helper Color css3 oldlaceTo review and analyze your code"
+    },
+    {
+        "csskey": "olive",
+        "cssDoc": "This is a helper Color css3 oliveTo review and analyze your code"
+    },
+    {
+        "csskey": "olivedrab",
+        "cssDoc": "This is a helper Color css3 olivedrabTo review and analyze your code"
+    },
+    {
+        "csskey": "orange",
+        "cssDoc": "This is a helper Color css3 orangeTo review and analyze your code"
+    },
+    {
+        "csskey": "orangered",
+        "cssDoc": "This is a helper Color css3 orangeredTo review and analyze your code"
+    },
+    {
+        "csskey": "orchid",
+        "cssDoc": "This is a helper Color css3 orchidTo review and analyze your code"
+    },
+    {
+        "csskey": "palegoldenrod",
+        "cssDoc": "This is a helper Color css3 palegoldenrodTo review and analyze your code"
+    },
+    {
+        "csskey": "palegreen",
+        "cssDoc": "This is a helper Color css3 palegreenTo review and analyze your code"
+    },
+    {
+        "csskey": "paleturquoise",
+        "cssDoc": "This is a helper Color css3 paleturquoiseTo review and analyze your code"
+    },
+    {
+        "csskey": "palevioletred",
+        "cssDoc": "This is a helper Color css3 palevioletredTo review and analyze your code"
+    },
+    {
+        "csskey": "papayawhip",
+        "cssDoc": "This is a helper Color css3 papayawhipTo review and analyze your code"
+    },
+    {
+        "csskey": "peachpuff",
+        "cssDoc": "This is a helper Color css3 peachpuffTo review and analyze your code"
+    },
+    {
+        "csskey": "peru",
+        "cssDoc": "This is a helper Color css3 peruTo review and analyze your code"
+    },
+    {
+        "csskey": "pink",
+        "cssDoc": "This is a helper Color css3 pinkTo review and analyze your code"
+    },
+    {
+        "csskey": "plum",
+        "cssDoc": "This is a helper Color css3 plumTo review and analyze your code"
+    },
+    {
+        "csskey": "powderblue",
+        "cssDoc": "This is a helper Color css3 powderblueTo review and analyze your code"
+    },
+    {
+        "csskey": "purple",
+        "cssDoc": "This is a helper Color css3 purpleTo review and analyze your code"
+    },
+    {
+        "csskey": "rebeccapurple",
+        "cssDoc": "This is a helper Color css3 rebeccapurpleTo review and analyze your code"
+    },
+    {
+        "csskey": "red",
+        "cssDoc": "This is a helper Color css3 redTo review and analyze your code"
+    },
+    {
+        "csskey": "rosybrown",
+        "cssDoc": "This is a helper Color css3 rosybrownTo review and analyze your code"
+    },
+    {
+        "csskey": "royalblue",
+        "cssDoc": "This is a helper Color css3 royalblueTo review and analyze your code"
+    },
+    {
+        "csskey": "saddlebrown",
+        "cssDoc": "This is a helper Color css3 saddlebrownTo review and analyze your code"
+    },
+    {
+        "csskey": "salmon",
+        "cssDoc": "This is a helper Color css3 salmonTo review and analyze your code"
+    },
+    {
+        "csskey": "sandybrown",
+        "cssDoc": "This is a helper Color css3 sandybrownTo review and analyze your code"
+    },
+    {
+        "csskey": "seagreen",
+        "cssDoc": "This is a helper Color css3 seagreenTo review and analyze your code"
+    },
+    {
+        "csskey": "seashell",
+        "cssDoc": "This is a helper Color css3 seashellTo review and analyze your code"
+    },
+    {
+        "csskey": "sienna",
+        "cssDoc": "This is a helper Color css3 siennaTo review and analyze your code"
+    },
+    {
+        "csskey": "silver",
+        "cssDoc": "This is a helper Color css3 silverTo review and analyze your code"
+    },
+    {
+        "csskey": "skyblue",
+        "cssDoc": "This is a helper Color css3 skyblueTo review and analyze your code"
+    },
+    {
+        "csskey": "slateblue",
+        "cssDoc": "This is a helper Color css3 slateblueTo review and analyze your code"
+    },
+    {
+        "csskey": "slategray",
+        "cssDoc": "This is a helper Color css3 slategrayTo review and analyze your code"
+    },
+    {
+        "csskey": "snow",
+        "cssDoc": "This is a helper Color css3 snowTo review and analyze your code"
+    },
+    {
+        "csskey": "springgreen",
+        "cssDoc": "This is a helper Color css3 springgreenTo review and analyze your code"
+    },
+    {
+        "csskey": "steelblue",
+        "cssDoc": "This is a helper Color css3 steelblueTo review and analyze your code"
+    },
+    {
+        "csskey": "tan",
+        "cssDoc": "This is a helper Color css3 tanTo review and analyze your code"
+    },
+    {
+        "csskey": "teal",
+        "cssDoc": "This is a helper Color css3 tealTo review and analyze your code"
+    },
+    {
+        "csskey": "thistle",
+        "cssDoc": "This is a helper Color css3 thistleTo review and analyze your code"
+    },
+    {
+        "csskey": "tomato",
+        "cssDoc": "This is a helper Color css3 tomatoTo review and analyze your code"
+    },
+    {
+        "csskey": "turquoise",
+        "cssDoc": "This is a helper Color css3 turquoiseTo review and analyze your code"
+    },
+    {
+        "csskey": "violet",
+        "cssDoc": "This is a helper Color css3 violetTo review and analyze your code"
+    },
+    {
+        "csskey": "wheat",
+        "cssDoc": "This is a helper Color css3 wheatTo review and analyze your code"
+    },
+    {
+        "csskey": "white",
+        "cssDoc": "This is a helper Color css3 whiteTo review and analyze your code"
+    },
+    {
+        "csskey": "whitesmoke",
+        "cssDoc": "This is a helper Color css3 whitesmokeTo review and analyze your code"
+    },
+    {
+        "csskey": "yellow",
+        "cssDoc": "This is a helper Color css3 yellowTo review and analyze your code"
+    },
+    {
+        "csskey": "yellowgreen",
+        "cssDoc": "This is a helper Color css3 yellowgreenTo review and analyze your code"
+    }
+]

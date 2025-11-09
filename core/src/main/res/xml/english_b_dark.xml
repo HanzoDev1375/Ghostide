@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Keyboard xmlns:android="http://schemas.android.com/apk/res/android" android:keyWidth="10.000002%p"
+          android:keyHeight="53.0sp" android:horizontalGap="0.0px" android:verticalGap="0.0px">
+    <Row>
+        <Key android:isSticky="true" android:keyLabel="q"/>
+        <Key android:isSticky="true" android:keyLabel="w"/>
+        <Key android:isSticky="true" android:keyLabel="e"/>
+        <Key android:isSticky="true" android:keyLabel="r"/>
+        <Key android:isSticky="true" android:keyLabel="t"/>
+        <Key android:isSticky="true" android:keyLabel="y"/>
+        <Key android:isSticky="true" android:keyLabel="u"/>
+        <Key android:isSticky="true" android:keyLabel="i"/>
+        <Key android:isSticky="true" android:keyLabel="o"/>
+        <Key android:isSticky="true" android:keyLabel="p"/>
+    </Row>
+    <Row>
+        <Key android:horizontalGap="4.999995%p" android:keyEdgeFlags="left" android:isSticky="true"
+             android:keyLabel="a"/>
+        <Key android:isSticky="true" android:keyLabel="s"/>
+        <Key android:isSticky="true" android:keyLabel="d"/>
+        <Key android:isSticky="true" android:keyLabel="f"/>
+        <Key android:isSticky="true" android:keyLabel="g"/>
+        <Key android:isSticky="true" android:keyLabel="h"/>
+        <Key android:isSticky="true" android:keyLabel="j"/>
+        <Key android:isSticky="true" android:keyLabel="k"/>
+        <Key android:keyEdgeFlags="right" android:isSticky="true" android:keyLabel="l"/>
+    </Row>
+    <Row>
+        <Key android:keyWidth="13.600004%p" android:codes="-1" android:isModifier="true"
+             android:keyIcon="@drawable/key_shift_dark"/>
+        <Key android:horizontalGap="1.4000058%p" android:isSticky="true" android:keyLabel="z"/>
+        <Key android:isSticky="true" android:keyLabel="x"/>
+        <Key android:isSticky="true" android:keyLabel="c"/>
+        <Key android:isSticky="true" android:keyLabel="v"/>
+        <Key android:isSticky="true" android:keyLabel="b"/>
+        <Key android:isSticky="true" android:keyLabel="n"/>
+        <Key android:isSticky="true" android:keyLabel="m"/>
+        <Key android:keyWidth="13.600004%p" android:horizontalGap="1.4000058%p" android:codes="-5"
+             android:isModifier="true" android:isRepeatable="true" android:keyIcon="@drawable/key_del_dark"/>
+    </Row>
+    <Row>
+        <Key android:keyWidth="14.999998%p" android:codes="1382" android:isModifier="true"
+             android:keyIcon="@drawable/key_symbol_dark"/>
+        <Key android:keyWidth="10.000002%p" android:codes="-1382" android:isSticky="true"
+             android:keyIcon="@drawable/key_plant_dark"/>
+        <Key android:keyWidth="50.0%p" android:codes="32" android:isSticky="true"
+             android:keyIcon="@drawable/key_space_dark"/>
+        <Key android:keyWidth="10.000002%p" android:codes="46" android:popupKeyboard="@xml/n_en" android:isSticky="true"
+             android:keyIcon="@drawable/key_noghteh_dark"/>
+        <Key android:keyWidth="14.999998%p" android:codes="10" android:isModifier="true"
+             android:keyIcon="@drawable/key_enter_dark"/>
+    </Row>
+</Keyboard>

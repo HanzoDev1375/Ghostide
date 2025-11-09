@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+>
+
+    <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+    >
+
+        <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+        >
+
+            <com.google.android.material.textfield.TextInputLayout
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    app:boxStrokeColor="?@attr/colorPrimary"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:boxStrokeWidth="0.5dp"
+                    android:id="@+id/myinputLayout"
+            >
+
+                <EditText
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:hint="Search Log"
+                        android:textColorHint="?@attr/colorPrimary"
+                        android:textSize="16sp"
+                        android:textColor="?@attr/colorPrimary"
+                        android:id="@+id/et_filter"
+                />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <ir.ninjacoder.ghostide.core.layoutmanager.NestedScrollListView
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:padding="8dp"
+                android:choiceMode="none"
+                android:layout_weight="5"
+                android:id="@+id/lv_traces"
+        />
+
+        <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:background="#04FFFFFF"
+                android:padding="8dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:id="@+id/mainlayout"
+        >
+
+            <Spinner
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:padding="8dp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:spinnerMode="dropdown"
+                    android:id="@+id/sp_filter"
+            >
+
+            </Spinner>
+
+            <ImageButton
+                    android:layout_height="30dp"
+                    android:layout_width="30dp"
+                    android:src="@drawable/share"
+                    android:scaleType="centerInside"
+                    android:background="@android:color/transparent"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="1dp"
+                    android:id="@+id/ib_share"
+            />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

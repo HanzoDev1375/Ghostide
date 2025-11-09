@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+    <ir.ninjacoder.ghostide.core.keyboard.Keyboard_View
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/KeyboardView"
+            android:background="@color/Background_full_bright"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:keyBackground="@drawable/full_bright"
+            android:shadowColor="#00000000"
+            android:keyTextColor="#ff000000"
+            android:keyPreviewLayout="@layout/preview_full_bright"
+            android:popupLayout="@layout/popup_full_bright"/>
+
+</LinearLayout>
+

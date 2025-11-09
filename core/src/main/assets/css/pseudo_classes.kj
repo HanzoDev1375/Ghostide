@@ -1,0 +1,186 @@
+[
+    {
+        "name": ":indeterminate",
+        "desc": "The :indeterminate CSS pseudo-class represents any form element whose state is indeterminate."
+    },
+    {
+        "name": ":required",
+        "desc": "The :required CSS pseudo-class represents any <input>, <select>, or <textarea> element that has the required attribute set on it."
+    },
+    {
+        "name": ":first",
+        "desc": "The :first CSS pseudo-class, used with the @page at-rule, represents the first page of a printed document."
+    },
+    {
+        "name": ":hover",
+        "desc": "The :hover CSS pseudo-class matches when the user interacts with an element with a pointing device, but does not necessarily activate it.\nIt is generally triggered when the user hovers over an element with the cursor (mouse pointer)."
+    },
+    {
+        "name": ":out-of-range",
+        "desc": "The :out-of-range CSS pseudo-class represents an <input> element whose current value is outside the range limits specified by the min and max attributes."
+    },
+    {
+        "name": ":matches()",
+        "desc": "The :matches() CSS pseudo-class function takes a selector list as its argument, and selects any element that can be selected by one of the selectors in that list.\nThis is useful for writing large selectors in a more compact form."
+    },
+    {
+        "name": ":nth-last-of-type()",
+        "desc": "The :nth-last-of-type() CSS pseudo-class matches elements of a given type, based on their position among a group of siblings, counting from the end."
+    },
+    {
+        "name": ":target",
+        "desc": "The :target CSS pseudo-class represents a unique element (the target element) with an id matching the URL's fragment."
+    },
+    {
+        "name": ":right",
+        "desc": "The :right CSS pseudo-class, used with the @page at-rule, represents all right-hand pages of a printed document."
+    },
+    {
+        "name": ":enabled",
+        "desc": "The :enabled CSS pseudo-class represents any enabled element.\nAn element is enabled if it can be activated (selected, clicked on, typed into, etc.) or accept focus.\nThe element also has a disabled state, in which it can't be activated or accept focus."
+    },
+    {
+        "name": ":fullscreen",
+        "desc": "The :fullscreen CSS pseudo-class represents an element that's displayed when the browser is in fullscreen mode."
+    },
+    {
+        "name": ":first-child",
+        "desc": "The :first-child CSS pseudo-class represents the first element among a group of sibling elements."
+    },
+    {
+        "name": ":focus",
+        "desc": "The :focus CSS pseudo-class represents an element (such as a form input) that has received focus.\nIt is generally triggered when the user clicks or taps on an element or selects it with the keyboard's \"tab\" key."
+    },
+    {
+        "name": ":host()",
+        "desc": "The :host() CSS pseudo-class function selects the shadow host of the shadow DOM containing the CSS it is used inside (so you can select a custom element from inside its shadow DOM) — but only if the selector given as the function's parameter matches the shadow host."
+    },
+    {
+        "name": ":valid",
+        "desc": "The :valid CSS pseudo-class represents any <input> or other <form> element whose contents validate successfully.\nThis allows to easily make valid fields adopt an appearance that helps the user confirm that their data is formatted properly."
+    },
+    {
+        "name": ":nth-of-type()",
+        "desc": "The :nth-of-type() CSS pseudo-class matches elements of a given type, based on their position among a group of siblings."
+    },
+    {
+        "name": ":host-context()",
+        "desc": "The :host-context() CSS pseudo-class function selects the shadow host of the shadow DOM containing the CSS it is used inside (so you can select a custom element from inside its shadow DOM) — but only if the selector given as the function's parameter matches the shadow host's ancestor(s) in the place it sits inside the DOM hierarchy."
+    },
+    {
+        "name": ":first-of-type",
+        "desc": "The :first-of-type CSS pseudo-class represents the first element of its type among a group of sibling elements."
+    },
+    {
+        "name": ":dir()",
+        "desc": "The :dir() CSS pseudo-class matches elements based on the directionality of the text contained in them."
+    },
+    {
+        "name": ":only-of-type",
+        "desc": "The :only-of-type CSS pseudo-class represents an element that has no siblings of the same type."
+    },
+    {
+        "name": ":left",
+        "desc": "The :left CSS pseudo-class, used with the @page at-rule, represents all left-hand pages of a printed document."
+    },
+    {
+        "name": ":read-write",
+        "desc": "The :read-write CSS pseudo-class represents an element (such as a text input) that is editable by the user."
+    },
+    {
+        "name": ":last-of-type",
+        "desc": "The :last-of-type CSS pseudo-class represents the last element of its type among a group of sibling elements."
+    },
+    {
+        "name": ":visited",
+        "desc": "The :visited CSS pseudo-class represents links that the user has already visited.\nFor privacy reasons, the styles that can be modified using this selector are very limited."
+    },
+    {
+        "name": ":any-link",
+        "desc": "The :any-link CSS pseudo-class selector represents an element that acts as the source anchor of a hyperlink, independent of whether it has been visited.\nIn other words, it matches every <a>, <area>, or <link> element that has an href attribute.\nThus, it matches all elements that match :link or :visited."
+    },
+    {
+        "name": ":checked",
+        "desc": "The :checked CSS pseudo-class selector represents any radio (<input type=\"radio\">), checkbox (<input type=\"checkbox\">), or option (<option> in a <select>) element that is checked or toggled to an on state."
+    },
+    {
+        "name": ":nth-child()",
+        "desc": "The :nth-child() CSS pseudo-class matches elements based on their position in a group of siblings."
+    },
+    {
+        "name": ":link",
+        "desc": "The :link CSS pseudo-class represents an element that has not yet been visited.\nIt matches every unvisited <a>, <area>, or <link> element that has an href attribute."
+    },
+    {
+        "name": ":last-child",
+        "desc": "The :last-child CSS pseudo-class represents the last element among a group of sibling elements."
+    },
+    {
+        "name": ":lang()",
+        "desc": "The :lang() CSS pseudo-class matches elements based on the language they are determined to be in."
+    },
+    {
+        "name": ":scope",
+        "desc": "The :scope CSS pseudo-class represents elements that are a reference point for selectors to match against."
+    },
+    {
+        "name": ":optional",
+        "desc": "The :optional CSS pseudo-class represents any <input>, <select>, or <textarea> element that does not have the required attribute set on it."
+    },
+    {
+        "name": ":empty",
+        "desc": "The :empty CSS pseudo-class represents any element that has no children.\nChildren can be either element nodes or text (including whitespace).\nComments or processing instructions do not affect whether an element is considered empty."
+    },
+    {
+        "name": ":read-only",
+        "desc": "The :read-only CSS pseudo-class represents an element (such as a locked text input) that is not editable by the user."
+    },
+    {
+        "name": ":in-range",
+        "desc": "The :in-range CSS pseudo-class represents an <input> element whose current value is within the range limits specified by the min and max attributes."
+    },
+    {
+        "name": ":host",
+        "desc": "The :host CSS pseudo-class selects the shadow host of the shadow DOM containing the CSS it is used inside — in other words, this allows you select a custom element from inside its shadow DOM."
+    },
+    {
+        "name": ":focus-visible",
+        "desc": "The :focus-visible pseudo-class applies while an element matches the :focus pseudo-class and the UA determines via heuristics that the focus should be made evident on the element.\n(Many browsers show a “focus ring” by default in this case.)"
+    },
+    {
+        "name": ":defined",
+        "desc": "The :defined CSS pseudo-class represents any element that has been defined.\nThis includes any standard element built in to the browser, and custom elements that have been successfully defined (i.e. with the CustomElementRegistry.define() method)."
+    },
+    {
+        "name": ":root",
+        "desc": "The :root CSS pseudo-class matches the root element of a tree representing the document.\nIn HTML, :root represents the <html> element and is identical to the selector html, except that its specificity is higher."
+    },
+    {
+        "name": ":invalid",
+        "desc": "The :invalid CSS pseudo-class represents any <input> or other <form> element whose contents fail to validate."
+    },
+    {
+        "name": ":only-child",
+        "desc": "The :only-child CSS pseudo-class represents an element without any siblings.\nThis is the same as :first-child:last-child or :nth-child(1):nth-last-child(1), but with a lower specificity."
+    },
+    {
+        "name": ":active",
+        "desc": "The :active CSS pseudo-class represents an element (such as a button) that is being activated by the user.\nWhen using a mouse, \"activation\" typically starts when the user presses down the primary mouse button."
+    },
+    {
+        "name": ":nth-last-child()",
+        "desc": "The :nth-last-child() CSS pseudo-class matches elements based on their position among a group of siblings, counting from the end."
+    },
+    {
+        "name": ":disabled",
+        "desc": "The :disabled CSS pseudo-class represents any disabled element.\nAn element is disabled if it can't be activated (selected, clicked on, typed into, etc.) or accept focus.\nThe element also has an enabled state, in which it can be activated or accept focus."
+    },
+    {
+        "name": ":not()",
+        "desc": "The :not() CSS pseudo-class represents elements that do not match a list of selectors.\nSince it prevents specific items from being selected, it is known as the negation pseudo-class."
+    },
+    {
+        "name": ":default",
+        "desc": "The :default CSS pseudo-class represents any form element that is the default among a group of related elements."
+    }
+]

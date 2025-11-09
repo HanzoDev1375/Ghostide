@@ -1,0 +1,2936 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable = no">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h2>معرفی زبان HTML</h2>
+<p>
+عبارت HTML مخفف (Hyper Text Markup Language) است . Html زبان استاندارد طراحی صفحات وب است و کليه کدهای صفحه اعم از طرف سرور و طرف مشتری در نهايت به کدهای HTML تبديل شده و توسط مرورگر نمايش داده می شوند.
+</p>
+<p>
+HTML یک زبان نشانه گذاری است ، به اين معنی که بخش های مختلف توسط اجزايی به نام تگ از هم جدا شده ، که هر کدام دارای کاربرد و خواص مربوط خود هستند . اين تگ ها به مرورگر اعلام می کنند که هر بخش از صفحه چه نوع عنصری است و بايد به چه صورت نمايش داده شود .
+</p>
+<p>
+در يک صحفه HTML می توان انواع عناصر از قبيل متن ، تيتر ، عکس ، جدول و ... را قرار داد ، که برای هر عنصر بايد از تگ مربوط به آن استفاده کرد . صفحات HTML فقط از کد ها که به صورت متن هستند تشکيل شده اند . 
+</p>
+<h2>مفهوم تگ های HTML</h2>
+<p>
+تگ های HTML برای نشانه گذاری محتويات صفحات به کار می روند و باعث می شوند که مرورگر بتواند تشخيص دهد هر بخش چه نوع عنصری است. هر تگ HTML ، يک بخش ابتدايی و يک بخش انتهايی دارد که هم نام بوده و به صورت استاندارد طبق شکل کلی زير به کار می روند :
+</p>
+<div class="pre"><pre style="margin: 0; line-height: 125%">&lt;تگ انتها/&gt; محتويات &lt;تگ ابتدا&gt;</pre>
+</div>
+<p>
+مثال :
+</p>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;label</span><span style="color: #6ab825; font-weight: bold">&gt;</span> ..... <span style="color: #6ab825; font-weight: bold">&lt;/label&gt;</span>
+</pre>
+</div>
+
+<p>
+تگ ابتدايی مشخص کننده آغاز تگ و تگ پايانی ، مشخص کننده انتهای تگ است . هر تگ HTML ، بايد حتما در ادامه توسط تگ پايانی بسته شود . کليه نوشته ها و تگ های ديگری که در بين تگ ابتدا و پايان نوشته می شوند ، محتويات تگ را تشکيل می دهند . 
+</p>
+
+<h2>خواص تگ های HTML</h2>
+
+<p>
+هر تگ دارای مجموعه از خواص است که ويژگی های مختلف آنها را تعيين می کند . هر يک از اين خواص را می توان در درون تگ ابتدايي معرفی و مقدار دهی کرد .  
+</p>
+
+<p>
+راهنمايي : در ادامه هر يک از تگ های HTML معرفی شده و در صفحه مربوط به آنها خواص مربوطه نيز در جدول خواص مهم قرار داده شده اند . در ستون نام خاصيت نام آن و در ستون نوع خاصيت انواع مقادير قابل قبول برای آن خاصيت تعيين شده است .  
+</p>
+
+<p>
+برای مثال تگ table دارای خاصيتی به نام Border است ، که به دور جدول کادر يا حاشيه ايجاد می کند . نحوه تعريف و مقدار دهی آن به صورت زير است :
+</p>
+
+<p>
+توجه : در هنگام تعريف بايد بين خاصيت و مقدار آن علامت = قرار داده و همچنين مقدارها بايد درون علامت " " قرار بگيرند . 
+</p>
+
+<div class="pre">
+<pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;table</span> <span style="color: #bbbbbb">border=</span><span style="color: #ed9d13">&quot;1&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> محتویات <span style="color: #6ab825; font-weight: bold">&lt;/table&gt;</span>
+</pre>
+</div>
+
+<p>
+راهنمايی 2 : در بخش آموزش تگ ها سعی شده تا با ارائه مثال های مناسب مطالب توضيحی را در عمل نشان داد . برای اين منظور از جدول Example استفاده شده است ، که اين جدول دارای 2 قسمت است . در قسمت کد ، کد واقعی مورد نياز برای هدف ارائه شده و در قسمت خروجی نيز خروجی کد که به صورت اکتيو توسط مرورگر توليد شده ، نشان داده شده است .
+</p>
+
+<p>
+توجه : تمام مثال های قسمت آموزش HTML بر طبق استانداردهای نرم افزار Microsoft Visual Studio 2005 طراحی شده و توسط مرورگرهاي مطرح Internet Explorer و FireFox تست شده است . 
+</p>
+
+<p>
+نکات مهم : <br />
+<ol>
+<li>تگ های HTML نسبت به بزرگ و کوچک بودن حروف حساس نيستند ، يعنی تگ های < b > با < B > برابر هستند .</li>
+<li>می توان يک تگ را در تگ ابتدايي نيز بست . برای اين کار از يک علامت / بعد از نام تگ و خواص مورد نظر تعريف شده استفاده می کنيم . در اين حالت نمی توان متن يا تگ ديگری را به عنوان محتويات برای آن تگ در نظر گرفت . <br />
+توجه: کاربرد اين روش در مورد تگ هايي مثل < table > , < td > , < tr > و ... امکان پذير نيست . 
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;br</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;input</span> <span style="color: #bbbbbb">type=</span><span style="color: #ed9d13">&quot;text&quot;</span> <span style="color: #bbbbbb">name=</span><span style="color: #ed9d13">&quot;family&quot;</span> <span style="color: #a61717; background-color: #e3d2d2">...</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span> 
+</pre></div>
+</li>
+<li>هر تگ HTML محتویات درون خود را تحت تاثير قرار می دهد . برای مثال تگ < b > برای توپر کردن ( bold ) نوشته به کار می رود و چنانچه متنی بين تگ باز و بسته < b > قرار بگيرد ، توپر می شود .</li>
+</ol>
+</p>
+
+<h2>خصوصيات استاندارد تگ ها</h2>
+
+<p>
+در اين قسمت خصوصيات استاندارد تگ های HTML معرفی شده اند . اين خصوصيات در اکثر تگ های HTML مشترک بوده و دارای کاربرد يکسانی هستند .
+اين خصوصيات به دليل مشترک بودن ، فقط در اين قسمت ذکر شده و از تکرار آنها در صفحات ديگر خودداری شده است .
+</p>
+
+<h2>خصوصيات اصلی</h2>
+<p>
+نکته : اين خاصيت ها در تگ های base , head , html , meta , param , style , title و script وجود ندارد .</p>
+
+<table class="main-tings">
+	<tr>
+        <td>نام</td>
+        <td>نوع</td>
+        <td>شرح</td>
+    </tr>
+    <tr>
+        <td>class</td>
+        <td>نام کلاس عنصر</td>
+        <td>مشخص کننده کلاس تگ در کد نويسی برنامه است . اين کلاس در کدنويسی CSS و زبان های اسکريپتی کاربرد دارد .</td>
+    </tr>
+    <tr>
+        <td>id</td>
+        <td>id عنصر</td>
+        <td>مشخص کننده يک شناسه منحصر به فرد برای تگ در درون سند HTML است . id هر تگ در کدنويسی CSS و زبان های اسکرپيتی کاربرد دارد . توسط id می توان به تگ مورد نظر دست يافت .</td>
+    </tr>
+    <tr>
+        <td>style</td>
+        <td>استایل</td>
+        <td>يک خاصيت چند مقداري است که خصوصيات قالب دهی و اعمال سبک ها ( CSS ) را برای تگ مورد نظر مشخص می کند .</td>
+    </tr>
+    <tr>
+        <td>title</td>
+        <td>متن text</td>
+        <td>متنی است که به صورت tooltip در يک کادر ، در هنگام قرار گرفتن موس بر روی عنصر نمايش داده می شود .</td>
+    </tr>
+</table>
+
+<h2>خصوصيات زبان</h2>
+<p>نکته : اين خاصيت ها در تگ های base , br , frame , hr , iframe , param و script وجود ندارد .</p>
+
+<table class="main-tings">
+	<tr>
+        <td>نام</td>
+        <td>نوع</td>
+        <td>شرح</td>
+    </tr>
+    <tr>
+        <td>dir</td>
+        <td>rtl ltr</td>
+        <td>تعيين کننده جهت قرار گرفتن نوشته را تعيين می کند ، که يکی از 2 حالت زير را می تواند داشته باشد :
+ltr : چپ به راست
+rtl : راست به چپ</td>
+    </tr>
+    <tr>
+        <td>language</td>
+        <td>نام زبان</td>
+        <td>مشخص کننده زبان برنامه نويسی کد مربوط به تگ است .</td>
+    </tr>
+</table>
+<p>
+</p>
+<h2>تگ &lt;html&gt;</h2>
+<p>
+محدوده کد صفحه HTML را مشخص می کند و به مرورگر مي فهماند که اين يک صفحه HTML است . فقط کدهاي درون اين محدوده توسط مرورگر اجرا می شود .
+</p>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;html&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;head&gt;</span>
+    <span style="color: #6ab825; font-weight: bold">&lt;title&gt;</span> The title of the page <span style="color: #6ab825; font-weight: bold">&lt;/title&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;/head&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;body&gt;</span>
+    ...
+    The content of the page
+    ...
+  <span style="color: #6ab825; font-weight: bold">&lt;/body&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;/html&gt;</span>
+</pre></div>
+
+
+<h2>تگ &lt;body&gt;</h2>
+<p>
+ اين تگ بدنه اصلی صفحه HTML را معرفی می کند و شامل کليه محتويات قابل نمايش در صفحه ازقبيل نوشته ها ، عکس ها ، لينک ها و ... است . فقط محتويات اين قسمت توسط مرورگر به عنوان خروجی نمايش داده می شوند .
+کدهای محتويات خروجی بين تگ باز و بسته < body > تعريف می شوند .
+</p>
+<h3>خواص مهم &lt;body&gt;</h3>
+
+<table class="main-tings">
+	<tr>
+        <td>نام</td>
+        <td>نوع</td>
+        <td>شرح</td>
+    </tr>
+    <tr>
+        <td>background</td>
+        <td>URL</td>
+        <td>آدرس عکس يا فایلی که به عنوان پس زمينه صفحه مورد استفاده قرار می گيرد را تعيين می کند .</td>
+    </tr>
+    <tr>
+        <td>bgcolor </td>
+        <td>نام رنگ</td>
+        <td>می توان توسط اين خاصيت يک رنگ را به عنوان رنگ پس زمينه صفحه قرار داد . #xxxxxx</td>
+    </tr>
+    <tr>
+        <td>link </td>
+        <td>نام رنگ</td>
+        <td>مشخص کننده رنگ کليه لينک های صفحه است . </td>
+    </tr>
+    <tr>
+        <td>text</td>
+        <td>نام رنگ</td>
+        <td>رنگ پيش فرض نوشته های درون صفحه را تعيين می کند که به صورت استاندارد مشکی است .</td>
+    </tr>
+</table>
+
+<h2>تگ &lt;head&gt;</h2>
+
+<p>
+تگ < head > در بر گيرنده ااطلاعات کلی درباره سند وب است که اين اطلاعات Meta-Information به معنای (اطلاعات درباره) ناميده می شود .
+</p>
+
+<p>
+کليه اطلاعات درون تگ < head > توسط مرورگر نمايش داده نمی شوند .براساس استاندارد HTML فقط تگ های زیر قابل استفاده در بخش head هستند :
+< base > , < link > , < meta > , < title > , < style > , < script >
+</p>
+
+<h3>خواص مهم &lt;head&gt;</h3>
+
+<table class="main-tings">
+	<tr>
+        <td>نام</td>
+        <td>نوع</td>
+        <td>شرح</td>
+    </tr>
+    <tr>
+        <td>profile</td>
+        <td>URL</td>
+        <td>ليستی از آدرس فايل ها يا صفحاتی که در بر گيرنده اطلاعات کلی (meta-information) راجع به محتويات صفحه هستند ، را شامل می شود .</td>
+    </tr>
+</table>
+
+<h2>تگ &lt;title&gt;</h2>
+
+<p>
+اين تگ عنوان صفحه را که مرورگر در هنگام باز کردن صفحه در نوار عنوان نمايش می دهد را مشخص می کند . متنی که بين تگ باز وبسته < title > قرار بگيرد عنوان صفحه را تعيين می کند . تگ < title > بايد در قسمت head صفحه قرار بگيرد .
+</p>
+
+<p>
+عنوان صفحه ارتباطی به نام فايل صفحه ندارد و بهتر است حداکثر تا 15 حرف باشد . 
+</p>
+
+<p>
+یک مثال کلی :
+</p>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;html&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;head&gt;</span>
+    <span style="color: #6ab825; font-weight: bold">&lt;title&gt;</span> The title of the page <span style="color: #6ab825; font-weight: bold">&lt;/title&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;/head&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;body&gt;</span>
+    ...
+    The content of the page
+    ...
+  <span style="color: #6ab825; font-weight: bold">&lt;/body&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;/html&gt;</span>
+</pre></div>
+
+<h2>تگ &lt;meta&gt;</h2>
+
+<p>
+اين تگ اطلاعات کلی درباره مطالب درون صفحه وب ، توضيحات ضروری و واژه های کليدی مرتبط با موضوع صفحه جهت استفاده موتورهای جستجو را شامل می شود .
+</p>
+
+<p>
+چيدمان مناسب و استفاده از کليد واژه های مرتبط به موضوع صفحه ، باعث بهتر نمايش داده شدن صفحه و سايت در قسمت جستجوی موتورهای جستجو می شود . 
+</p>
+
+<h4>تعيين کليدواژه ها برای موتورهای جستجو</h4>
+
+<p>
+موتورهای جستجو ، هنگام جستجو برای يافتن مطالب در مورد يک موضوع خاص ، آن مطلب را با کليدواژه های تعريف شده در سايت مقايسه کرده و در صورت يکسان بودن ، صفحه وب سايت شما را در ليست نتايج جستجو نمايش می دهند .
+</p>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;meta</span> <span style="color: #bbbbbb">name=</span><span style="color: #ed9d13">&quot;keywords&quot;</span> <span style="color: #bbbbbb">content=</span><span style="color: #ed9d13">&quot;Html,CSS,XML,Java Script,VB Script&quot;</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span>
+</pre></div>
+
+<h4>تعيين يک توضيح درباره مطالب صفحه</h4>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;meta</span> <span style="color: #bbbbbb">name=</span><span style="color: #ed9d13">&quot;discription&quot;</span> <span style="color: #bbbbbb">content=</span><span style="color: #ed9d13">&quot;Free web teaching on Html,CSS,XML,Java Script and VB script&quot;</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span> 
+</pre></div>
+
+<h4>تعيين آخرين زمان بازبينی و به روز کردن صفحه</h4>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;meta</span> <span style="color: #bbbbbb">name=</span><span style="color: #ed9d13">&quot;rivised&quot;</span> <span style="color: #bbbbbb">content=</span><span style="color: #ed9d13">&quot;6/11/07&quot;</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span>
+</pre></div>
+
+<h4>تعيين زمان refresh شدن صفحه برای هر 5 ثانيه يکبار</h4>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;meta</span> <span style="color: #bbbbbb">http-equiv=</span><span style="color: #ed9d13">&quot;refresh&quot;</span> <span style="color: #bbbbbb">content=</span><span style="color: #ed9d13">&quot;5&quot;</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span> 
+</pre></div>
+
+<h3>خواص مهم &lt;meta&gt;</h3>
+
+<table class="main-tings">
+	<tr>
+        <td>نام</td>
+        <td>نوع</td>
+        <td>شرح</td>
+    </tr>
+    <tr>
+        <td>content</td>
+        <td>متن Text</td>
+        <td>اطلاعات درون content خود را به سرور اتقال می دهد . </td>
+    </tr>
+    <tr>
+        <td>http-equiv</td>
+        <td>content-type</td>
+        <td>اطلاعات مربوط به خاصيت تعيين شده در قسمت name يا http-equiv را نگهداری می کند .</td>
+    </tr>
+    <tr>
+        <td>name</td>
+        <td>auther<br />
+description<br />
+keywords<br />
+generator<br />
+revised<br />
+others</td>
+        <td>
+        اطلاعات درون content خود را به نام تعيين شده ارتباط می دهد که می تواند يکی از حالت های زير را داشته باشد : <br />
+        - auther : نام نويسنده یا گروه نويسندگان و طراحان صفحه وب را مشخص می کند . <br />
+        - description : توضيح مختصری راجع به محتويات درون صفحه ارائه می دهد . <br />
+        - keywords : کليدواژه های مورد استفاده موتورهای جستجو را تعيين می کند .<br />
+        - generator : مشخصاتی راجع به نرم افزاری که صفحه با آن طراحی و توليد شده است را ارائه می دهد . <br />
+        - revised : برای اعمال آخرين تاريخ به روز رسانی سايت استفاده می شود .<br />
+        - others : برای ذرج ساير اطلاعات مورد نظر استفاده می شود .
+        </td>
+    </tr>
+    <tr>
+        <td>scheme</td>
+        <td>متن Text</td>
+        <td>قالبی را برای تفسير و اجرای اطلاعات درون خاصيت content مشخص میکند .</td>
+    </tr>
+<h2>تگ &lt;p&gt;</h2>
+<p>
+برای ايجاد يک پاراگراف جديد در صفحه به کار می رود . هر متنی که در بين تگ باز و بسته < p > قرار بگيرد ، محتويات آن پاراگراف را تشکيل می دهد . با ايجاد يک پاراگراف جديد ، نوشته به ابتدای خط بعدی انتقال می يابد .
+</p>
+
+<h3>خواص مهم &lt;p&gt;</h3>
+
+<table class="main-tings">
+	<tr>
+        <td>نام</td>
+        <td>نوع</td>
+        <td>شرح</td>
+    </tr>
+    <tr>
+        <td>align</td>
+        <td>left<br />
+right<br />
+center<br />
+justify</td>
+        <td>
+       تراز بندی افقی نوشته را در پاراگراف تعيين می کند ، که می تولند يکی از حالت های زير را داشته باشد : <br />
+        -left : نوشته را از سمت چپ تراز می کند . <br />
+        -right : نوشته را از سمت راست تراز می کند . <br />
+        -center : نوشته در وسط صفحه يا خانه جدول تراز می شود . <br />
+        -justify : نوشته به اندازه ای که کل عرض صفحه يا خانه جدول را پر کند ، کش می آيد . 
+        </td>
+    </tr>
+</table>
+
+<h3>مثال &lt;p&gt;</h3>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;p&gt;</span> This is a sample paragraph <span style="color: #6ab825; font-weight: bold">&lt;/p&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;p&gt;</span> This is another paragraph <span style="color: #6ab825; font-weight: bold">&lt;/p&gt;</span>
+</pre></div>
+
+<h2>تگ های &lt;h1&gt;-&lt;h6&gt;</h2>
+
+<p>
+اين تگ معمولا برای ايجاد تيترها و عنوان ها مورد استفاده قرار می گيرد . متنی که قرار است به عنوان تيتر نمايش داده شود ، بین تگ باز و بسته قرار می گيرد .
+</p>
+
+<p>
+< h1 > بزرگترين سایز نوشته را ارائه داده و با بزرگتر شدن عدد بعد از h ، سايز نوشته آن کاهش می يابد و < h6 > کوچکترين سايز نوشته را ارائه می دهد . 
+</p>
+
+<h3>خواص مهم &lt;h1&gt;-&lt;h6&gt;</h3>
+
+<table class="main-tings">
+	<tr>
+        <td>نام</td>
+        <td>نوع</td>
+        <td>شرح</td>
+    </tr>
+    <tr>
+        <td>align</td>
+        <td>left<br />
+right<br />
+center<br />
+justify</td>
+        <td>
+       تراز بندی افقی نوشته را در پاراگراف تعيين می کند ، که می تولند يکی از حالت های زير را داشته باشد : <br />
+        -left : نوشته را از سمت چپ تراز می کند . <br />
+        -right : نوشته را از سمت راست تراز می کند . <br />
+        -center : نوشته در وسط صفحه يا خانه جدول تراز می شود . <br />
+        -justify : نوشته به اندازه ای که کل عرض صفحه يا خانه جدول را پر کند ، کش می آيد . 
+        </td>
+    </tr>
+</table>
+
+<h3>مثال &lt;h1&gt;-&lt;h6&gt;</h3>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;h1&gt;</span> This is header 1 <span style="color: #6ab825; font-weight: bold">&lt;/h1&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;h2&gt;</span> This is header 2 <span style="color: #6ab825; font-weight: bold">&lt;/h2&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;h3&gt;</span> This is header 3 <span style="color: #6ab825; font-weight: bold">&lt;/h3&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;h4&gt;</span> This is header 4 <span style="color: #6ab825; font-weight: bold">&lt;/h4&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;h5&gt;</span> This is header 5 <span style="color: #6ab825; font-weight: bold">&lt;/h5&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;h6&gt;</span> This is header 6 <span style="color: #6ab825; font-weight: bold">&lt;/h6&gt;</span>
+</pre></div>
+
+<h3>خروجی مثال &lt;h1&gt;-&lt;h6&gt;</h3>
+
+<h1> This is header 1 </h1>
+<h2> This is header 2 </h2>
+<h3> This is header 3 </h3>
+<h4> This is header 4 </h4>
+<h5> This is header 5 </h5>
+<h6> This is header 6 </h6>
+
+<h2>تگ &lt;br&gt;</h2>
+
+<p>
+به کاربردن اين تگ باعث ايجاد يک خط جديد و انتقال نوشته به اول سطر پايينی می شود . همچنين به وسيله آن می توان يک خط خالی ايجاد کرد .
+</p>
+
+<p>
+نکته : تگ < br > دارای تگ پايانی نيست و ترکيب < br > ... < /br > غلط است . اين تگ بايد به وسيله يک علامت / در درون تگ ابتدايی بسته شود . 
+</p>
+
+<h3>مثال &lt;br&gt;</h3>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;p&gt;</span> My name is : <span style="color: #6ab825; font-weight: bold">&lt;br</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span> Mehrdad <span style="color: #6ab825; font-weight: bold">&lt;/p&gt;</span>
+</pre></div>
+
+<h2>تگ &lt;hr&gt;</h2>
+<hr />
+<p>
+به کاربردن اين تگ باعث ايجاد يک خط افقی درون صفحه می شود ، که پهنای آن همواره کمی کمتر از عنصر در برگيرنده آن (مثل خانه جدول يا صفحه) است . به طور مثال در پایین تيتر تگ < hr > ، يک خط افقی قرار داده ايم .
+</p>
+
+<p>
+نکته : اين تگ نيز همانند تگ < br > دارای تگ پايانی نيست و بايد در تگ ابتدايي بسته شود .</p>
+
+<h3>مثال &lt;hr&gt;</h3>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%">This is a line <span style="color: #6ab825; font-weight: bold">&lt;hr</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span> ok!
+</pre></div>
+
+<h2>تگ &lt;b&gt;</h2>
+
+<p><b>
+باعث توپر شدن متنی که درون تگ باز و بسته < b > قرار بگيرد می شود .
+</b></p>
+
+<h3>مثال &lt;b&gt;</h3>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;b&gt;</span> This is Bold Text <span style="color: #6ab825; font-weight: bold">&lt;/b&gt;</span>
+</pre></div>
+
+<h2>تگ &lt;u&gt;</h2>
+
+<p><u>
+باعث می شود تا متنی که بين تگ باز و بسته < u > قرار بگيرد ، به صورت خط زير دار نمايش داده شود .
+</u></p>
+
+<h3>مثال &lt;u&gt;</h3>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;u&gt;</span> This is underline Text <span style="color: #6ab825; font-weight: bold">&lt;/u&gt;</span>
+</pre></div>
+
+<h2>تگ &lt;i&gt; , &lt;em&gt;</h2>
+
+<p><i>
+باعث می شود تا متن درون آن به صورت کج (italic) نماِش داده شود .
+</i></p>
+
+<h3>مثال &lt;i&gt; , &lt;em&gt;</h3>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;i&gt;</span> This is italic Text <span style="color: #6ab825; font-weight: bold">&lt;/i&gt;</span>
+</pre></div>
+
+<h2>تگ &lt;big&gt;</h2>
+
+<p>
+اين تگ باعث نمايش <big>بزرگتر</big> محتويات درون آن نسبت به متن خطوط همجوار می شود . 
+</p>
+
+<h3>مثال &lt;big&gt;</h3>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%">My name is <span style="color: #6ab825; font-weight: bold">&lt;big&gt;</span> Saeed <span style="color: #6ab825; font-weight: bold">&lt;/big&gt;</span>
+</pre></div>
+
+
+<h2>تگ &lt;small&gt;</h2>
+
+<p>
+اين تگ باعث <small>کوچکتر</small> نمايش دادن محتويات درون آن نسبت به متن خطوط همجوار در صفحه می شود
+</p>
+
+<h3>مثال &lt;samll&gt;</h3>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%">My name is <span style="color: #6ab825; font-weight: bold">&lt;small&gt;</span> Saeed <span style="color: #6ab825; font-weight: bold">&lt;/small&gt;</span>
+</pre></div>
+
+<h2>تگ &lt;strong&gt;</h2>
+
+<p>
+اين تگ باعث نمايش <strong>توپر و بزرگتر</strong> محتويات درون خود نسبت به متن خطوط همجوار آن می شود .
+</p>
+
+<h3>مثال &lt;strong&gt;</h3>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%">My name is <span style="color: #6ab825; font-weight: bold">&lt;strong&gt;</span> Saeed <span style="color: #6ab825; font-weight: bold">&lt;/strong&gt;</span>
+</pre></div>
+
+<h2>تگ &lt;cite&gt;</h2>
+
+<p>
+اين تگ باعث نمايش محتويات درون خود به صورت <cite>کج و متمايز</cite> نسبت به متن خطوط همجوار آن می شود . 
+</p>
+
+<h3>مثال &lt;cite&gt;</h3>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%">My name is <span style="color: #6ab825; font-weight: bold">&lt;cite&gt;</span> Saeed <span style="color: #6ab825; font-weight: bold">&lt;/cite&gt;</span>
+</pre></div>
+
+<h2>تگ &lt;pre&gt;</h2>
+
+<p>
+چنانچه در محيط کد نويسی صفحات وب ، بين متن های نوشته شده با کليد space فاصله ايجاد کرده یا با کليد Enter به خط بعدی برويد ، مرورگر اين مسئله را ناديده گرفته ، تمام فاصله ها را از بين برده و حداکثر به اندازه يک کاراکتر فاصله ايجاد می کند . برای جلوگيری از اين مسئله ، از تگ < pre > استفاده می کنيم . اين تگ باعث نمايش متن درون خود با همان شکل و ساختاری که در محيط کد نويسی صفحه وارد شده است ، می شود . همانطور که قبلا ذکر شد ، برای ايجاد فاصله بين حروف از کاراکتر ;nbsp& و رفتن به خط بعدی از تگ < br/ > استفاده می کنيم . 
+</p>
+
+<h3>مثال &lt;pre&gt;</h3>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;pre&gt;</span> This is a pre
+formatted paragraph
+it does not have any
+space or linebrake <span style="color: #6ab825; font-weight: bold">&lt;/ pre&gt;</span>
+</pre></div>
+
+سایر تگ ها در لیست تگ ها آمده است و استفاده ای شبیه به همین تگ ها دارند .
+</table>
+<h2>تگ &lt;a&gt;</h2>
+<p>از لينک ها در HTML ، برای پيوند به يک صفحه ديگر در هر جای وب ، پيوند به نقطه يا مکانی در داخل همان صفحه يا صفحه ديگر و يا يک فايل خارجی مثل عکس ،موسيقی ، فيلم و ... به سند وب استفاده می شود . شکل کلی ايجاد يک پيوند در (HyperLink) در HTML به صورت زير است : 
+</p>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;a</span> <span style="color: #bbbbbb">href=</span><span style="color: #ed9d13">&quot;URL&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> متن عنوان پيوند <span style="color: #6ab825; font-weight: bold">&lt;/a&gt;</span>
+</pre></div>
+
+<p>خاصيت href که از نوع URL است برای تعيين مقصد پيوند به کار می رود .اين خاصيت شامل آدرس صفحه يا فايلی است که با کليک بر روی آن پيوند باز خواهد شد . متن عنوان ، متنی است رنگی و خط زير دار که نشان دهنده پيوند است . 
+</p>
+
+<h3>مثال &lt;a&gt;</h3>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;a</span> <span style="color: #bbbbbb">href=</span><span style="color: #ed9d13">&quot;http://www.solodesign.ir&quot;</span> <span style="color: #6ab825; font-weight: bold">&gt;</span> Click to visit HomePage <span style="color: #6ab825; font-weight: bold">&lt;/a&gt;</span>
+</pre></div>
+
+<h3>ايجاد يک لنگر با استفاده از &lt;a&gt;</h3>
+
+<p>تعريف لنگر : لنگر نقطه ای از يک صفحه است که با تگ < a > مشخص می شود ، که می توان به وسيله کليک بر روی يک پيوند ، مستقيما به آن نقطه پرش کرد .
+</p>
+
+<p>با استفاده از تگ < a > می توان هر نقطه ای از صفحه را به صورت يک لنگر مشخص کرد و سپس با کليک برروی يک پيوند مستقيما به آن نقطه در صفحه پرش کرد.
+</p>
+
+<p>برای اين منظور در هر نقطه ای از صفحه که می خواهيم به صورت لنگر در بيايد ، يک تگ < a > قرار می دهيم . سپس به وسيله خاصيت Name ، يک نام به آن لنگر اختصاص داده که به اين کار در اصطلاح (Bookmark) می گويند .سپس در خاصيت Href يک پيوند ديگر آدرس لنگر مورد نظر را داده ، که از اين به بعد با کليک بروی آن پيوند ، مستقيما به مکان آن لنگر در صفحه پرش می کنيم .
+</p>
+
+<p>نحوه آدرس دهی درِيک لنگر به صورت زير است : 
+</p>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%">href=&quot; نام لنگر مورد نظر در صفحه # نام صفحه مورد نظر &quot;
+</pre></div>
+
+<h3>مثال &lt;a&gt;</h3>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;a</span> <span style="color: #bbbbbb">href=</span><span style="color: #ed9d13">&quot;http://www.solodesign.ir#download&quot;</span> <span style="color: #6ab825; font-weight: bold">&gt;</span> Click to visit HomePage download <span style="color: #6ab825; font-weight: bold">&lt;/a&gt;</span>
+</pre></div>
+
+<h3>خواص مهم &lt;a&gt;</h3>
+
+<table class="main-tings">
+	<tr>
+        <td>نام</td>
+        <td>نوع</td>
+        <td>شرح</td>
+    </tr>
+    <tr>
+        <td>Charset</td>
+        <td>Charset - encoding</td>
+        <td>مشخص کننده نوع کدينگ کاراکترهای صفحه مقصد است . </td>
+    </tr>
+    <tr>
+        <td>Coords</td>
+        <td>---</td>
+        <td>
+        ابتدا به خاصيت shape توجه کنيد .<br />
+مشخص کننده مختصات نقاط مختلف يک چند ضلعی (مربع ، مستطيل و ... ) برای تعيين قسمتی از يک عکس يا نقشه به عنوان ناحيه ای قابل کليک شدن برای ايجاد پيوند است که دارای حالت های زير است :<br />
+rect : مربع . تعيين کننده مختصات چهار نقطه مختلف يک مربع يا مستطيل<br />
+coords =left,top,right,bottom<br />
+circ : دايره . مشخص کننده نقطه مرکز و شعاع يک دايره<br />
+coords=center X, center Y ,radius<br />
+poly : چند ضلعی مشخص کننده مختصات انواع نقاط مختلف يک چند ضلعی<br />
+coords = X1 Y1, X2 Y2, ... , Xn Yn 
+        </td>
+    </tr>
+    <tr>
+        <td>href</td>
+        <td>URL</td>
+        <td>برای تعيين آدرس کامل صفحه يا فایل مقصد پيوند به کار می رود .
+        </td>
+    </tr>
+    <tr>
+        <td>hreflang</td>
+        <td>language</td>
+        <td>مشخص کننده زبان اصلی و پيش فرض صفحه مقصد پيوند است .
+        </td>
+    </tr>
+    <tr>
+        <td>name</td>
+        <td>text</td>
+        <td>برای تعيين يک نام برای ايجاد لنگر به کار می رود .
+        </td>
+    </tr>
+    <tr>
+        <td>rel</td>
+        <td>alternate<br />
+designates<br />
+stylesheet<br />
+start<br />
+next<br />
+prev<br />
+contents<br />
+index<br />
+glossary<br />
+chapter<br />
+section<br />
+appendix<br />
+help<br />
+bookmark</td>
+        <td>تعيين کننده نوع ارتباط بين صفحه جاری و صفحه مقصد پيوند است که می تواند يکی از حالت های زير باشد :<br />
+alternate : يک در ميان<br />
+designates : انتخاب شده<br />
+stylesheet : صفحه قالب دهی (CSS)<br />
+start : ابتدا<br />
+next : بعدی<br />
+pre : صفحه قبلی<br />
+contents : صفحه محتویات<br />
+index : صفحه آغازين<br />
+chapter : بخش<br />
+section : بخشی از برنامه<br />
+appendix : ضميمه<br />
+help : صفحه يا فايل راهنما<br />
+bookmark : يک لنگر در همان صفحه يا صفحه ای ديگر 
+        </td>
+    </tr>
+    <tr>
+        <td>rev</td>
+        <td>---</td>
+        <td>تعيين کننده نوع ارتباط بين صفحه مقصد پيوند و صفحه جاری است (بر عکس rel ) و دارای همان مقادير است. 
+        </td>
+    </tr>
+    <tr>
+        <td>shape</td>
+        <td>rect<br />
+rectangle<br />
+circ<br />
+circle<br />
+poly<br />
+polygon </td>
+        <td>چنانچه پيوند ناحيه ای از يک عکس يا نقشه تصويری باشد که قابل کليک شدن است ، نوع شکل ناحيه قابل کليک شدن را مشخص می کند ، که مختصات آن توسط خاصيت coords در همين تگ مقدار دهی می شود . انواع اشکال ممکن عبارتند از :<br />
+rect , rectangle : مربع يا مستطيل<br />
+circ , circle : دایره يا بيضی<br />
+poly , polygon : چند ضلعی
+        </td>
+    </tr>
+    <tr>
+        <td>target</td>
+        <td>_blank<br />
+_parent<br />
+_self<br />
+_top </td>
+        <td>
+        نحوه باز شدن و نمايش پنجره صفحه مقصد را تعيين می کند که دارای حالت های زير است :<br />
+- blank : لينک در يک پنجره جديد باز خواهد شد .<br />
+- self : لينک در همان پنجره يا قابی که کليک شده است باز خواهد شد .<br />
+-parent : لينک در قاب اصلی يا مادر باز خواهد شد .<br />
+-top : لينک در همان پنجره ای که کليک شده است به طور کامل باز خواهد شد . 
+        </td>
+    </tr>
+</table>
+
+<h2>تگ &lt;link&gt;</h2>
+<p>تگ لينک برای برقراری ارتباط بين صفحه جاری و يک صفحه يا فايل خارجی مورد استفاده قرار می گيرد . تگ لينک تگ پايانی ندارد و با علامت / در همان تگ ابتدايی بسسته می شود .اين تگ می تواند به دفعات دلخواه و برای مقاصد مختلف ، در قسمت Head مورد استفاده قرار بگيرد .
+</p>
+<p>برای مثال از تگ link می توان برای اتصال صفحه به يک فايل قالب دهی ( Style Sheet CSS ) ، فايل حاوی دستورات اسکريپتی مثل js و ... استفاده کرد .
+</p>
+<p>مثال : استفاده از تگ لينک برای برقراری ارتباط بين صفحه جاری و يک فايل CSS : 
+</p>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;head&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;link</span> <span style="color: #bbbbbb">rel=</span><span style="color: #ed9d13">&quot;Stylesheet&quot;</span> <span style="color: #bbbbbb">type=</span><span style="color: #ed9d13">&quot;text/css&quot;</span> <span style="color: #bbbbbb">href=</span><span style="color: #ed9d13">&quot;../themes.css&quot;</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;/head&gt;</span> 
+</pre></div>
+
+<h3>خواص مهم &lt;link&gt;</h3>
+
+<table class="main-tings">
+	<tr>
+        <td>نام</td>
+        <td>نوع</td>
+        <td>شرح</td>
+    </tr>
+    <tr>
+        <td>Charset</td>
+        <td>charset</td>
+        <td>شيوه و متد کدينگ صفحه مقصد پيوند را مشخص می کند .</td>
+    </tr>
+    <tr>
+        <td>href</td>
+        <td>URL</td>
+        <td>آدرس کامل اينترنتی صفحه يا فايل مقصد پيوند را تعيين می کند .</td>
+    </tr>
+    <tr>
+        <td>hreflang</td>
+        <td>language</td>
+        <td>زبان پيش فرض و پايه صفحه مقصد پيوند را مشخص می کند .</td>
+    </tr>
+    <tr>
+        <td>media</td>
+        <td>screen<br />
+tty<br />
+ty<br />
+projection<br />
+handheld<br />
+print<br />
+braille<br />
+auarl<br />
+all</td>
+        <td>مشخص کننده نوع وسيله ای است که قرار است صفحه مقصد پيوند را نمايش دهد که ذکر آن آن در اين قسمت برای کمک به مرورگر برای اعمال تنظيمات متناسب با نوع خروجی است ، که می تواند انواع حالات زير را داشته باشد :<br />
+screen : صفحه نمايش کامپيوترهای معمولی .<br />
+tty : ماشين تحرير راه دور ، تله تايپ ( برای ماشين هايی که دارای نحوه نمايش ثابت هستند ) .<br />
+tv : وسايلی همچون تلويزيون با رزوليشن پايين .<br />
+projection : برای نمايش در پروژکتورها .<br />
+handheld : برای کامپيوتر های دستی و جيبی .<br />
+barille : در اسناد مخصوص به افراد نابينا ( بريل ) .<br />
+print : برای پرينت در دستگاه های چاپگر .<br />
+auarl : برای سيستم های صوتی .<br />
+all : برای همه نوع سيستم ها . </td>
+    </tr>
+    <tr>
+        <td>rel</td>
+        <td>alternate<br />
+designates<br />
+stylesheet<br />
+start<br />
+next<br />
+prev<br />
+contents<br />
+index<br />
+glossary<br />
+chapter<br />
+section<br />
+appendix<br />
+help<br />
+bookmark </td>
+        <td>تعيين کننده نوع ارتباط بين صفحه جاری و صفحه مقصد پيوند است که می تواند يکی از حالت های زير باشد :<br />
+alternate : يک در ميان<br />
+designates : انتخاب شده<br />
+stylesheet : صفحه قالب دهی (CSS)<br />
+start : ابتدا<br />
+next : بعدی<br />
+pre : صفحه قبلی<br />
+contents : صفحه محتویات<br />
+index : صفحه آغازين<br />
+chapter : بخش<br />
+section : بخشی از برنامه<br />
+appendix : ضميمه<br />
+help : صفحه يا فايل راهنما<br />
+bookmark : يک لنگر در همان صفحه يا صفحه ای ديگر </td>
+    </tr>
+     <tr>
+        <td>rev</td>
+        <td>---</td>
+        <td>تعيين کننده نوع ارتباط بين صفحه مقصد پيوند و صفحه جاری است (بر عکس rel ) و دارای همان مقادير است. </td>
+    </tr>
+    <tr>
+        <td>target</td>
+        <td>_blank<br />
+_parent<br />
+_self<br />
+_top </td>
+        <td>
+        نحوه باز شدن و نمايش پنجره صفحه مقصد را تعيين می کند که دارای حالت های زير است:<br />
+- blank : لينک در يک پنجره جديد باز خواهد شد .<br />
+- self : لينک در همان پنجره يا قابی که کليک شده است باز خواهد شد .<br />
+-parent : لينک در قاب اصلی يا مادر باز خواهد شد .<br />
+-top : لينک در همان پنجره ای که کليک شده است به طور کامل باز خواهد شد . 
+        </td>
+    </tr>
+    <tr>
+        <td>type</td>
+        <td>MIME_Type<br />
+text/css<br />
+text/javascript<br />
+text/vbscript<br />
+text/asp<br />
+text/xml<br />
+images/gif </td>
+        <td>
+        نوع MIME صفحه يا فايل مقصد را مشخص می کند که چند حالت آن عبارتند از :<br />
+text/css : از نوع متن و برای استفاده در صفحات قالب دهی به صفحات CSS .<br />
+text/javascript : از نوع متن و حاوی دستورات اسکريپتی نوشته شده با زبان javascript .<br />
+text/vbscript : از نوع متن و حاوی دستورات اسکريپتی نوشته شده با زبان vbscript .
+text/asp : از نوع متن و حاوی صفحه اينترنتی نوشته شده با زبان ASP .<br />
+text/xml : از نوع متن و حاوی دستورات اسکريپتی نوشته شده با زبان XML .<br />
+image/gif : از نوع تصوير و با پسوند gif .
+        </td>
+    </tr>
+</table>
+<h2>تگ &lt;table&gt;</h2>
+<p>اين تگ برای ايجاد جدول ها در صفحه استفاده می شود . به طور کلی جدول ها به 2 منظور ايجاد می شوند : </p>
+<p><ol>
+<li>ايجاد يک جدول معمولی با تعدادی خانه ، برای نمايش مطالب مورد نظر در سطرها و ستون های جدا از هم .</li>
+<li>تقسيم فضای صفحه با استفاده از چهارچوب جدول ها برای منظم چيدن محتويات صفحه . به طور مثال مطالب اين صفحه در تعدادی خانه جدول مرتب شده است . در اين حالت می توان با عدم تعيين حاشيه ( border ) برای خانه های جدول ، از چهارچوب جدول ها استفاده کرد در حالی که آنها عملا از ديد کاربر مخفی هستند .</li>
+</ol>
+</p>
+<p>
+جدول ها برای هر منظوری به کار روند ، بايد با استفاده از تگ < table > ايجاد شوند . هر جدول مجموعه ای از سطرها و ستون هاست . برای ايجاد يک سطر جديد از يک تگ < tr > استفاده می شود که هر خانه ( ستون ) درون سطر هم توسط يک تگ < td > مشخص می شود . 
+</p>
+<h3>الگوریتم طراحی جدول</h3>
+<p>
+در طراحی جدول بايد به نکات زير دقت کرد :
+</p>
+<p>
+<ol>
+<li>در هنگام ايجاد يک سطر یا استفاده از تگ < tr > ، قبل از ايجاد سطر جديد حتما بايد تگ  < tr > قبلی بسته شود و در هر سطر نيز بايد در صورت ايجاد هر خانه با تگ  < td > قبل از ايجاد يک خانه جديد بايد تگ < td > قبلی بسته شود .</li>
+<li>درون تگ < table > فقط می توان تگ < tr > و درون تگ < tr > نيز فقط می توان از تگ < td > استفاده کرد .</li>
+<li>خانه هاو سطرهای يک جدول منظم و مرتب هستند . به عبارت ديگر به طور مثال نمی توان  در يک سطر جدول 3 خانه و در سطر پايينی آن 2 خانه با پهناهای متفاوت ايجاد کرد . در چنين مواردی بايد با استفاده از خاصيت colspan در تگ < td > سطر با خانه کمتر و استفاده از تکنيک جدول های تو در تو اين مسئله را بر طرف کرد .</li>
+</ol>
+</p>
+<p>
+جدول های تو در تو : می توان در درون يک جدول ، جدول های ديگری نيز ايجاد کرد . در اين حالت جدول درونی همانند يک خانه جدول بيرونی خواهد بود . جدول درونی را بايد در يک تگ < td > جدول بيرونی ايجاد کرد . در اين حالت چيدمان خانه های جدول درونی به چيدمان خانه های جدول بيرونی ارتباطی ندارند .
+</p>
+<h3>مثال &lt;table&gt;</h3>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;table</span> <span style="color: #bbbbbb">cellpadding=</span><span style="color: #ed9d13">&quot;5&quot;</span> <span style="color: #bbbbbb">cellspacing=</span><span style="color: #ed9d13">&quot;0&quot;</span> <span style="color: #bbbbbb">style=</span><span style="color: #ed9d13">&quot;border:solid 2px blue; width:100%&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>
+   <span style="color: #6ab825; font-weight: bold">&lt;tr&gt;</span>
+      <span style="color: #6ab825; font-weight: bold">&lt;td</span> <span style="color: #bbbbbb">class=</span><span style="color: #ed9d13">&quot;header&quot;</span> <span style="color: #bbbbbb">colspan=</span><span style="color: #ed9d13">&quot;2&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>
+         Header
+      <span style="color: #6ab825; font-weight: bold">&lt;/td&gt;</span>
+   <span style="color: #6ab825; font-weight: bold">&lt;/tr&gt;</span>
+   <span style="color: #6ab825; font-weight: bold">&lt;tr&gt;</span>
+      <span style="color: #6ab825; font-weight: bold">&lt;td</span> <span style="color: #bbbbbb">class=</span><span style="color: #ed9d13">&quot;body&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>
+         Body 1
+      <span style="color: #6ab825; font-weight: bold">&lt;/td&gt;</span>
+      <span style="color: #6ab825; font-weight: bold">&lt;td</span> <span style="color: #bbbbbb">class=</span><span style="color: #ed9d13">&quot;body&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>
+         Body 2
+      <span style="color: #6ab825; font-weight: bold">&lt;/td&gt;</span>
+   <span style="color: #6ab825; font-weight: bold">&lt;/tr&gt;</span>
+   <span style="color: #6ab825; font-weight: bold">&lt;tr&gt;</span>
+      <span style="color: #6ab825; font-weight: bold">&lt;td</span> <span style="color: #bbbbbb">class=</span><span style="color: #ed9d13">&quot;body&quot;</span> <span style="color: #bbbbbb">colspan=</span><span style="color: #ed9d13">&quot;2&quot;</span> <span style="color: #bbbbbb">style=</span><span style="color: #ed9d13">&quot;padding:0&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>
+            <span style="color: #6ab825; font-weight: bold">&lt;table</span> <span style="color: #bbbbbb">cellpadding=</span><span style="color: #ed9d13">&quot;5&quot;</span> <span style="color: #bbbbbb">cellspacing=</span><span style="color: #ed9d13">&quot;0&quot;</span> <span style="color: #bbbbbb">style=</span><span style="color: #ed9d13">&quot;width :100%&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>
+               <span style="color: #6ab825; font-weight: bold">&lt;tr&gt;</span>
+                  <span style="color: #6ab825; font-weight: bold">&lt;td</span> <span style="color: #bbbbbb">style=</span><span style="color: #ed9d13">&quot;border:solid 1px green&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>
+                     C1
+                  <span style="color: #6ab825; font-weight: bold">&lt;/td&gt;</span>
+                  <span style="color: #6ab825; font-weight: bold">&lt;td</span> <span style="color: #bbbbbb">style=</span><span style="color: #ed9d13">&quot;border:solid 1px green&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>
+                     C2
+                  <span style="color: #6ab825; font-weight: bold">&lt;/td&gt;</span>
+                  <span style="color: #6ab825; font-weight: bold">&lt;td</span> <span style="color: #bbbbbb">style=</span><span style="color: #ed9d13">&quot;border:solid 1px green&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>
+                     C3
+                  <span style="color: #6ab825; font-weight: bold">&lt;/td&gt;</span>
+             <span style="color: #6ab825; font-weight: bold">&lt;/tr&gt;</span>
+             <span style="color: #6ab825; font-weight: bold">&lt;tr&gt;</span>
+                  <span style="color: #6ab825; font-weight: bold">&lt;td</span> <span style="color: #bbbbbb">style=</span><span style="color: #ed9d13">&quot;border:solid 1px green&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>
+                     C4
+                 <span style="color: #6ab825; font-weight: bold">&lt;/td&gt;</span>
+                 <span style="color: #6ab825; font-weight: bold">&lt;td</span> <span style="color: #bbbbbb">style=</span><span style="color: #ed9d13">&quot;border:solid 1px green&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>
+                     C5
+                 <span style="color: #6ab825; font-weight: bold">&lt;/td&gt;</span>
+                 <span style="color: #6ab825; font-weight: bold">&lt;td</span> <span style="color: #bbbbbb">style=</span><span style="color: #ed9d13">&quot;border:solid 1px green&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>
+                     C6
+                 <span style="color: #6ab825; font-weight: bold">&lt;/td&gt;</span>
+             <span style="color: #6ab825; font-weight: bold">&lt;/tr&gt;</span>
+          <span style="color: #6ab825; font-weight: bold">&lt;/table&gt;</span>
+       <span style="color: #6ab825; font-weight: bold">&lt;/td&gt;</span>
+   <span style="color: #6ab825; font-weight: bold">&lt;/tr&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;/table&gt;</span>
+</pre></div>
+
+<h3>خروجی &lt;table&gt;</h3>
+
+<table cellpadding="5" cellspacing="0" style="border:solid 2px blue; width:100%; border-collapse: initial; margin-bottom:10px; text-align:left;">
+   <tr>
+      <td class="header" colspan="2">
+         Header
+      </td>
+   </tr>
+   <tr>
+      <td class="body">
+         Body 1
+      </td>
+      <td class="body">
+         Body 2
+      </td>
+   </tr>
+   <tr>
+      <td class="body" colspan="2" style="padding:0;  text-align:left;">
+            <table cellpadding="5" cellspacing="0" style="width :100%">
+               <tr>
+                  <td style="border:solid 1px green;  text-align:left;">
+                     C1
+                  </td>
+                  <td style="border:solid 1px green;  text-align:left;">
+                     C2
+                  </td>
+                  <td style="border:solid 1px green; text-align:left;">
+                     C3
+                  </td>
+             </tr>
+             <tr>
+                  <td style="border:solid 1px green; text-align:left;">
+                     C4
+                 </td>
+                 <td style="border:solid 1px green; text-align:left;">
+                     C5
+                 </td>
+                 <td style="border:solid 1px green; text-align:left;">
+                     C6
+                 </td>
+             </tr>
+          </table>
+       </td>
+   </tr>
+</table>
+
+<h3>توضیحات</h3>
+
+<p>
+<ol>
+<li>سطر دوم جدول بيرونی دارای يک خانه و سطر دوم دارای دو خانه است . نتظيم خاصيت colspan = 2 در سطر اول باعث می شود تا بين سطر اول و دوم هماهنگی ايجاد شده و تک خانه سطر اول کش آمده و دو خانه سطر دوم را پوشش بدهد .</li>
+<li> نوشتن متن فقط درون تگ باز و بسته td مجاز است .</li>
+<li>سطر سوم ( سومين تگ tr ) محدوده جدول درونی را مشخص می کند ، که بخش کدهای سبز را شامل می شود .</li>
+<li>به جدول هم می توان در بخش style و هم در داخل تگ table ، حاشيه border داد . حاشيه ای که در قسمت style تعيين شود فقط باعث نمايش خطوط دور جدول می شود و خطوط درونی را شامل نمی شود . اما حاشيه تعيين شده در تگ table باعث نمايش خطوط بيرونی و درونی جدول می شود . همچنين می توان به هر td به صورت مجزا حاشيه اختصاص داد . </li>
+</ol>
+</p>
+
+<h3>خواص مهم &lt;table&gt;</h3>
+
+<table class="main-tings">
+	<tr>
+        <td>نام</td>
+        <td>نوع</td>
+        <td>شرح</td>
+    </tr>
+    <tr>
+        <td>align</td>
+        <td>left<br />
+right<br />
+center </td>
+        <td>نحوه ترازبندی و قرار گيری جدول را در صفحه مشخص می کند که 3 حالت دارد :<br />
+1) left : چپ<br />
+2) right : راست<br />
+3) center : وسط </td>
+    </tr>
+    <tr>
+        <td>bgcolor</td>
+        <td>نام رنگ<br />
+color name</td>
+        <td>
+       رنگ پس زمينه جدول را تعيين می کند . </td>
+    </tr>
+    <tr>
+        <td>border</td>
+        <td>pixel</td>
+        <td>ضخامت و پهنای خطوط حاشيه دور جدول را تعيين می کند . 
+        </td>
+    </tr>
+    <tr>
+        <td>cellpadding</td>
+        <td>pixel</td>
+        <td>ميزان فاصله بين خطوط حاشيه جدول و محتويات دورن خانه های درون آن را تعيين می کند . 
+        </td>
+    </tr>
+    <tr>
+        <td>cellspacing</td>
+        <td>pixel</td>
+        <td>فاصله بين خانه های جدول را تعيين می کند . در صورتی که مقدار اين خاصيت صفر باشد ، خانه های جدول به هم می چسبند . 
+        </td>
+    </tr>
+    <tr>
+        <td>frame</td>
+        <td>above<br />
+below<br />
+border<br />
+box<br />
+hsides<br />
+lhs<br />
+rhs<br />
+vsides </td>
+        <td>مشخص می کند که کدام قسمت از خطوط حاشيه های جدول بايد نمايش داده شوند که می تواند يکی از حالت های زير را داشته باشد :<br />
+- above : خطوط بالايي جدول نمايش داده خواهند شد .<br />
+- below : خطوط پايينی جدول نمايش داده خواهند شد .<br />
+- border : کليه خطوط حاشيه های خانه های جدول نمايش داده خواهند شد .<br />
+- box : کليه خطوط حاشيه خانه های جدول نمايش داده خواهند شد .<br />
+- hsides : فقط خطوط افقی حاشيه خانه های جدول نمايش داده خواهند شد .<br />
+- lhs : فقط خطوط افقی سمت چپ حاشيه خانه های جدول نمايش داده خواهند شد .<br />
+- rhs : فقط خطوط افقی سمت راست حاشيه خانه های جدول نمايش داده خواهند شد .<br />
+- vsides : فقط خطوط عمودی حاشيه خانه های جدول نمايش داده خواهند شد .<br />
+- void : هيچ کدام از خطوط حاشيه های خانه های جدول نمايش داده خواهند شد . </td>
+    </tr>
+    <tr>
+        <td>rules</td>
+        <td>cols<br />
+rows<br />
+group<br />
+all </td>
+        <td>مشخص کننده نوع و حالت خطوط تقسيم کننده خانه های جدول به خانه های کوچکتر است که انواع ممکن آن عبارتند از :<br />
+- cols : خانه های جدول فقط بر حسب ستون ها با خطوط از هم جدا می شوند .<br />
+- rows : خانه های جدول فقط بر حسب سطرها با خطوط از هم جدا می شوند .<br />
+- group : خانه های جدول بر حسب گروه بندی داخلی در جدول با خطوط از هم جدا می شوند .<br />
+- all : تمام خانه های جدول با خطوط عمودی و افقی از هم جدا می شوند . 
+        </td>
+    </tr>
+    <tr>
+        <td>summary</td>
+        <td>text</td>
+        <td> 	يک متن خلاصه در مورد جدول است که برای برخی مرورگرهای صوتی يا بدون تصوير استفاده می شود . 
+        </td>
+    </tr>
+    <tr>
+        <td>width</td>
+        <td>pixel<br />
+% درصد </td>
+        <td>
+      ميزان پهنا و عرض جدول را تعيين می کند . 
+        </td>
+    </tr>
+</table>
+
+<h2>تگ &lt;th&gt;</h2>
+<p>از اين تگ برای ايجاد يک سر عنوان ( Header ) در بالای ستون های يک جدول استفاده می شود . متنی که قرار است به عنوان سر عنوان قرار بگيرد ، در درون تگ باز و بسته < th > تعريف شده و معمولا به صورت درشت ( Bold ) توسط مرورگر نمايش داده می شود .</p>
+<p>تگ سر عنوان بايد در اولين سطر جدول قرار گرفته و برای هر ستون به طور مجزا تعريف شوند . 
+</p>
+
+<h3>مثال &lt;th&gt;</h3>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;table</span> <span style="color: #bbbbbb">width=</span><span style="color: #ed9d13">&quot;400px&quot;</span> <span style="color: #bbbbbb">border=</span><span style="color: #ed9d13">&quot;1&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;tr&gt;</span>
+    <span style="color: #6ab825; font-weight: bold">&lt;th&gt;</span>
+      Header 1
+    <span style="color: #6ab825; font-weight: bold">&lt;/th&gt;</span>
+    <span style="color: #6ab825; font-weight: bold">&lt;th&gt;</span>
+      Header 2
+    <span style="color: #6ab825; font-weight: bold">&lt;/th&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;/tr&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;tr&gt;</span>
+    <span style="color: #6ab825; font-weight: bold">&lt;td&gt;</span>
+      ستون 1
+    <span style="color: #6ab825; font-weight: bold">&lt;/td&gt;</span>
+    <span style="color: #6ab825; font-weight: bold">&lt;td&gt;</span>
+      ستون 2
+    <span style="color: #6ab825; font-weight: bold">&lt;/td&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;/tr&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;/table&gt;</span> 
+</pre></div>
+
+<h3>خروجی &lt;th&gt;</h3>
+
+<table width="400px" border="1">
+  <tr>
+    <th style="border:1px solid #ccc;">
+      Header 1
+    </th>
+    <th style="border:1px solid #ccc;">
+      Header 2
+    </th>
+  </tr>
+  <tr>
+    <td style="border:1px solid #ccc;">
+      ستون 1
+    </td>
+    <td style="border:1px solid #ccc;">
+      ستون 2
+    </td>
+  </tr>
+</table> 
+
+<h3>خواص مهم &lt;th&gt;</h3>
+
+<table class="main-tings">
+	<tr>
+        <td>نام</td>
+        <td>نوع</td>
+        <td>شرح</td>
+    </tr>
+    <tr>
+        <td>abbr</td>
+        <td>Text</td>
+        <td>با استفاده از اين خاصيت می توان يک عبارت خلاصه شده در مورد محتويات خانه جدول تعيين کرد . </td>
+    </tr>
+    <tr>
+        <td>align</td>
+        <td> 	left<br />
+right<br />
+center<br />
+Justify<br />
+Char </td>
+        <td>نحوه ترازبندی و قرار گيری محتويات درون خانه جدول را مشخص می کند که 5 حالت دارد :<br />
+1) left : چپ<br />
+2) right : راست<br />
+3) center : وسط<br />
+4) Justify : در کل عرض شی گسترش داده می شود .<br />
+5) Char : ترازبندی با توجه به يک کاراکتر خاص تعيين می شود . </td>
+    </tr>
+    <tr>
+        <td>axis</td>
+        <td>Text </td>
+        <td> 	يک نام را برای خانه جدول تعيين می کند . </td>
+    </tr>
+    <tr>
+        <td>bgcolor </td>
+        <td>color name </td>
+        <td>مشخص کننده نوع وسيله ای است که قرار است صفحه مقصد پيوند را نمايش دهد که ذکر آن آن در اين قسمت برای کمک به مرورگر برای اعمالرنگ پس زمينه خانه جدول را تعيين می کند . </td>
+    </tr>
+    <tr>
+        <td>char </td>
+        <td>Character</td>
+        <td>تعيين کننده نوع ارتباط بين صفحه جاری و صفحه مقصد پيوند است که می تواند يکی از حالت های زير باشدکاراکتری که قرار است متن دورن خانه جدول حول آن تراز شود را تعيين می کند .<br />
+توجه : فقط در صورتی کاربرد دارد که خاصيت Align روی مقدار Char تنظيم شده باشد . </td>
+    </tr>
+     <tr>
+        <td>charoff </td>
+        <td> 	Pixel<br />
+درصد %</td>
+        <td>میزان حاشيه ای که به کاراکتر اول متن اختصاص داده می شود ، تا متن درون خانه جدول را تراز کند .<br />
+توجه : فقط در صورتی کاربرد دارد که خاصيت Align روی مقدار Char تنظيم شده باشد .  </td>
+    </tr>
+    <tr>
+        <td>colspan </td>
+        <td>عدد<br />
+Number </td>
+        <td>
+       تعداد خانه های که اين خانه جدول آنها را پوشش می دهد را تعيين می کند .
+        </td>
+    </tr>
+    <tr>
+        <td>height </td>
+        <td>pixel </td>
+        <td>میزان ارتفاع خانه جدول را تعيين می کند . اين خاصيت قديمی شده و به جای آن از CSS استفاده می شود . 
+        </td>
+    </tr>
+     <tr>
+        <td>nowrap </td>
+        <td>nowrap </td>
+        <td> 	تعيين می کند که اگر پهنای خانه جدول از پهنای متن درون آن کمتر بود ، خطوط متن شکسته شده و برای هم اندازه شدن با پهنای خانه جدول به بخش های کوچکتر تقسيم شوند يا خير . اين خاصيت قديمی شده و به جای آن از CSS استفاده می شود . 
+        </td>
+    </tr>
+     <tr>
+        <td>rowspan </td>
+        <td>عدد<br />
+Number </td>
+        <td>تعداد سطرهايی که اين خانه جدول آنها را پوشش می دهد را تعيين می کند . 
+        </td>
+    </tr>
+     <tr>
+        <td>scope </td>
+        <td>Col<br />
+Colgroup<br />
+Row<br />
+Rowgroup </td>
+        <td>مشخص می کند که اين خانه جدول اطلاعاتی را راجع به بقيه سطری که آن را در برگرفته ( Row ) ، يا بقيه ستونی که اين خانه جز آن است ( Col ) ، يا گروه سطرهايی که آن خانه را در بر گرفته اند ( Rowgroup ) و يا گروه ستون هايی که اين خانه جزء آن است ( Colgroup ) شامل می شود .  
+        </td>
+    </tr>
+     <tr>
+        <td>valign</td>
+        <td>top<br />
+bottom<br />
+middle<br />
+baseline </td>
+        <td> نحوه ترازبندی عمودی محتويات درون خانه جدول را تعيين می کند .<br />
+- top : محتوِيات دورن خانه جدول از بالا تراز می شوند .<br />
+- bottom : محتوِيات دورن خانه جدول از وسط خانه جدول تراز می شوند .<br />
+- middle : محتوِيات دورن خانه جدول از پايين خانه جدول تراز می شوند .  
+        </td>
+    </tr>
+     <tr>
+        <td>width </td>
+        <td> 	pixel<br />
+% درصد </td>
+        <td>ميزان پهنا و عرض جدول را تعيين می کند .  
+        </td>
+    </tr>
+</table>
+<h2>ليست های نشانه ای ، تگ &lt;ul&gt;</h2>
+<p>
+يک ليست نشانه ای ، مجموعه ای از موارد و آيتم های متفاوت در مورد يک موضوع خاص است که در ابتدای خط تعريف هر آيتم ، يک نشانه ( Bullet ) قرار می گيرد .
+</p>
+<p>
+برای ايجاد ليست های نشانه ای از تگ < ul > مخفف عبارت ( Unordered List ) به معنای ليست های بدون ترتيب استفاده می شود . هر يک از آيتم های ليست توسط يک تگ دروني < li > در تگ< ol > تعريف می شود . متن بين تگ باز و بسته < li > ، عنوان يا متن آن آيتم است . 
+</p>
+
+<h2>مثال &lt;ul&gt;</h2>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;ul&gt;</span> List of Lessons
+   <span style="color: #6ab825; font-weight: bold">&lt;li&gt;</span> English <span style="color: #6ab825; font-weight: bold">&lt;/li&gt;</span>
+   <span style="color: #6ab825; font-weight: bold">&lt;li&gt;</span> MathMatic <span style="color: #6ab825; font-weight: bold">&lt;/li&gt;</span>
+   <span style="color: #6ab825; font-weight: bold">&lt;li&gt;</span> History <span style="color: #6ab825; font-weight: bold">&lt;/li&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;/ul&gt;</span>
+</pre></div>
+
+<h2>خروجی &lt;ul&gt;</h2>
+
+<ul style="direction:ltr;"> List of Lessons
+   <li> English </li>
+   <li> MathMatic </li>
+   <li> History </li>
+</ul>
+
+<h3>خواص مهم &lt;ul&gt;</h3>
+
+<table class="main-tings">
+	<tr>
+        <td>نام</td>
+        <td>نوع</td>
+        <td>شرح</td>
+    </tr>
+    <tr>
+        <td>type</td>
+        <td>disc<br />
+square<br />
+circle</td>
+        <td>نوع نشانه ( شکل ) ليست را مشخص می کند ، که يکی از موارد زير می تواند باشد :<br />
+1) disc : دایره های توپر<br />
+2) circle : دايره های توخالی<br />
+3) square : مربع
+ </td>
+    </tr>
+</table>
+
+<h2>ليست های ترتیبی ، تگ &lt;ol&gt;</h2>
+
+<p>
+يک ليست ترتيبی ، مجموعه ای از موارد و آيتم های متفاوت در مورد يک موضوع خاص است که در ابتدای خط تعريف هر آيتم ، يک شماره يا حرف ( نماد نشانه گذاری ) قرار گرفته ، که با معرفی هر آيتم جديد شمارنده يا حرف يک واحد افزايش می يابد .
+</p>
+
+<p>
+برای ايجاد ليست های ترتيبی از تگ < ol > مخفف عبارت ( Ordered List ) به معنای ليست های ترتيبي استفاده می شود . هر يک از آيتم های ليست توسط يک تگ دروني < li > در تگ< ol > تعريف می شود . متن بين تگ باز و بسته < li > ، عنوان يا متن آن آيتم است . 
+</p>
+
+<h2>مثال &lt;ol&gt;</h2>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;ol&gt;</span> List of Lessons
+   <span style="color: #6ab825; font-weight: bold">&lt;li&gt;</span> English <span style="color: #6ab825; font-weight: bold">&lt;/li&gt;</span>
+   <span style="color: #6ab825; font-weight: bold">&lt;li&gt;</span> MathMatic <span style="color: #6ab825; font-weight: bold">&lt;/li&gt;</span>
+   <span style="color: #6ab825; font-weight: bold">&lt;li&gt;</span> History <span style="color: #6ab825; font-weight: bold">&lt;/li&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;/ol&gt;</span>
+</pre></div>
+
+<h2>خروجی &lt;ol&gt;</h2>
+
+<ol style="direction:ltr;"> List of Lessons
+   <li> English </li>
+   <li> MathMatic </li>
+   <li> History </li>
+</ol>
+
+<h3>خواص مهم &lt;ol&gt;</h3>
+
+<table class="main-tings">
+	<tr>
+        <td>نام</td>
+        <td>نوع</td>
+        <td>شرح</td>
+    </tr>
+    <tr>
+        <td>start</td>
+        <td>number</td>
+        <td>عدد يا حرف شروع ليست را معين می کند . 
+ </td>
+    </tr>
+    <tr>
+        <td>type</td>
+        <td>A<br />
+a<br />
+I<br />
+i<br />
+1 </td>
+        <td>نوع نمايش عدد يا حرف نشانه گذاری ليست را مشخص می کند ، که يکی از حالت های زير می تواند باشد :<br />
+1) A : حروف بزرگ انگليسی<br />
+2) a : حروف کوچک انگليسی<br />
+3) I : حروف بزرگ يونانی<br />
+4) i : حروف کوچک يونانی<br />
+5) 1 : اعداد انگليسی  
+ </td>
+    </tr>
+</table>
+
+<p>نکته : همجنين می توان ليست ها را به صورت تو در تو نيز ايجاد کرد . در اين حالت انواع ليست های ترتيبی و نشانه ای را می توان در درون يکديگر استفاده کرد . به مثال زير دقت کنيد : 
+</p>
+
+<h2>مثال ترکیبی</h2>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;p&gt;</span> List of Programing Languges <span style="color: #6ab825; font-weight: bold">&lt;/p&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;ul&gt;</span>
+    <span style="color: #6ab825; font-weight: bold">&lt;li&gt;</span> Scripting Languages
+      <span style="color: #6ab825; font-weight: bold">&lt;ol&gt;</span>
+        <span style="color: #6ab825; font-weight: bold">&lt;li&gt;</span> Java Script <span style="color: #6ab825; font-weight: bold">&lt;/li&gt;</span>
+        <span style="color: #6ab825; font-weight: bold">&lt;li&gt;</span> VB Script <span style="color: #6ab825; font-weight: bold">&lt;/li&gt;</span>
+      <span style="color: #6ab825; font-weight: bold">&lt;/ol&gt;</span>
+    <span style="color: #6ab825; font-weight: bold">&lt;/li&gt;</span>
+    <span style="color: #6ab825; font-weight: bold">&lt;li&gt;</span> Non-Scripting Languages
+      <span style="color: #6ab825; font-weight: bold">&lt;ol&gt;</span>
+        <span style="color: #6ab825; font-weight: bold">&lt;li&gt;</span> Visual Basic <span style="color: #6ab825; font-weight: bold">&lt;/li&gt;</span>
+        <span style="color: #6ab825; font-weight: bold">&lt;li&gt;</span> ASP.NET <span style="color: #6ab825; font-weight: bold">&lt;/li&gt;</span>
+        <span style="color: #6ab825; font-weight: bold">&lt;li&gt;</span> Visual C# <span style="color: #6ab825; font-weight: bold">&lt;/li&gt;</span>
+      <span style="color: #6ab825; font-weight: bold">&lt;/ol&gt;</span>
+    <span style="color: #6ab825; font-weight: bold">&lt;/li&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;/ul&gt;</span> 
+</pre></div>
+
+<h2>خروجی ترکیبی</h2>
+
+<p style="direction:ltr;"> List of Programing Languges </p>
+  <ul style="direction:ltr;">
+    <li> Scripting Languages
+      <ol>
+        <li> Java Script </li>
+        <li> VB Script </li>
+      </ol>
+    </li>
+    <li> Non-Scripting Languages
+      <ol>
+        <li> Visual Basic </li>
+        <li> ASP.NET </li>
+        <li> Visual C# </li>
+      </ol>
+    </li>
+  </ul> 
+ <h2>تگ فرم &lt;form&gt;</h2>
+<p>يک فرم HTML ، فضايی است که می تواند کنترل های مختلف را در خود جای دهد .
+</p>
+<p>
+کنترل های HTML ، ابزارهايي هستند که کاربر را قادر می سازند تا داده های خود را از طريق کادرهای متنی ( TextBox ) ، ليست های بازشو ( Drop-Down Lists ) ، دکمه های گزينشی ( CheckBox ) و ... در فرم وارد کرده و سپس آنها را به مقصد ارسال کند .
+</p>
+
+<p>
+يک فرم با تگ < form > ايجاد شده و ساير کنترل های درون آن تعريف می شوند . برای ارسال اطلاعات يک فرم ، بايد دکمه فرمان Submit درون آن ايجاد کرد که با کليک بر روی آن ، اطلاعات فرم ارسال خواهد شد .
+</p>
+<p>
+نکته : کنترل های درون فرم های HTML ، توسط تگ < input > ايجاد می شوند . در ادامه با این تگ نیز آشنا خواهیم شد .
+</p>
+
+<h3>خواص مهم &lt;form&gt;</h3>
+
+<table class="main-tings">
+	<tr>
+        <td>نام</td>
+        <td>نوع</td>
+        <td>شرح</td>
+    </tr>
+    <tr>
+        <td>action </td>
+        <td>URL</td>
+        <td>آدرس مقصدی است که در هنگام کليک بر روی دکمه Submit فرم اطلاعات خود را به آنجا ارسال می کند. </td>
+    </tr>
+    <tr>
+        <td>accept </td>
+        <td>---</td>
+        <td>يک ليست از مجموعه قابل قبول برای اين فرم است ، که سرور پردازش کننده فرم آنها را قبول می کند .هر يک از اين مقادير به وسيله يک کاما از هم جدا می شوند . </td>
+    </tr>
+    <tr>
+        <td>accept - charset </td>
+        <td>char list </td>
+        <td>ليست مجموعه کاراکترهای مجاز برای اين فرم است که هر کدام توسط يک کاما از هم جدا می شوند . </td>
+    </tr>
+    <tr>
+        <td>enctype </td>
+        <td>Mime Type </td>
+        <td>روش استاندارد کدينگ اطلاعات فرم را جهت ارسال تعيين می کند . </td>
+    </tr>
+    <tr>
+        <td>method </td>
+        <td>post<br />
+get </td>
+        <td>متد Http مورد استفاده برای ارسال اطلاعات فرم به مقصد را مشخص می کند ، که می تواند 2 حالت زير را داشته باشد :<br />
+get : اين متد محتويات کنترل های فرم را به صورت زير ارسال می کند . منظور از URL آدرس صفحه مقصد است :<br />
+
+URL ? نام کنترل2 = مقدار 2 & نام کنترل 1 = مقدار 1 & ... .<br />
+نکته : چنانچه مقادير کنترل های فرم شامل کاراکترهايی غير از کاراکترهای کد اسکی بوده يا طول آنها بيش از 100 کلمه باشد ، بايد از روش post برای ارسال اطلاعات فرم استفاده کرد .<br />
+post : اين روش اطلاعات کنترل های فرم را به صورت پک کامل به آدرس مقصد ارسال می کند . </td>
+    </tr>
+    <tr>
+        <td>name </td>
+        <td>name </td>
+        <td> 	يک نام منحصر به فرد برای فرم در صفحه تعيين می کند . </td>
+    </tr>
+    <tr>
+        <td>target </td>
+        <td>_blank<br />
+_parent<br />
+_self<br />
+_top </td>
+        <td>نحوه باز شدن و نمايش پنجره صفحه مقصد را تعيين می کند که دارای حالت های زير است:<br />
+- blank : لينک در يک پنجره جديد باز خواهد شد .<br />
+- self : لينک در همان پنجره يا قابی که کليک شده است باز خواهد شد .<br />
+-parent : لينک در قاب اصلی يا مادر باز خواهد شد .<br />
+-top : لينک در همان پنجره ای که کليک شده است به طور کامل باز خواهد شد . </td>
+    </tr>
+</table>
+
+<h2>مثال &lt;form&gt;</h2>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;form</span> <span style="color: #bbbbbb">action=</span><span style="color: #ed9d13">&quot;http://www.solodesign.ir&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>
+   Name : <span style="color: #6ab825; font-weight: bold">&lt;input</span> <span style="color: #bbbbbb">type=</span><span style="color: #ed9d13">&quot;text&quot;</span> <span style="color: #bbbbbb">name=</span><span style="color: #ed9d13">&quot;txtname&quot;</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span> <span style="color: #6ab825; font-weight: bold">&lt;br</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span>
+   Family : <span style="color: #6ab825; font-weight: bold">&lt;input</span> <span style="color: #bbbbbb">type=</span><span style="color: #ed9d13">&quot;text&quot;</span> <span style="color: #bbbbbb">name=</span><span style="color: #ed9d13">&quot;txtfamily&quot;</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span> <span style="color: #6ab825; font-weight: bold">&lt;br</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span>
+   <span style="color: #6ab825; font-weight: bold">&lt;input</span> <span style="color: #bbbbbb">type=</span><span style="color: #ed9d13">&quot;submit&quot;</span> <span style="color: #bbbbbb">name=</span><span style="color: #ed9d13">&quot;cmdsubmit&quot;</span> <span style="color: #bbbbbb">value=</span><span style="color: #ed9d13">&quot;Send Information&quot;</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;/form&gt;</span>
+</pre></div>
+
+<h2>خروجی &lt;form&gt;</h2>
+
+<form action="http://www.DeveloperStudio.ir/Default.aspx" style="direction:ltr;">
+   Name : <input type="text" name="txtname" /> <br /><br />
+   Family : <input type="text" name="txtfamily" /> <br /><br />
+   <input type="submit" name="cmdsubmit" value="Send Information" />
+</form>
+
+
+<h2>تگ &lt;input&gt;</h2>
+
+<p>
+تگ < input > برای ساختن انواع کنترل های HTML از قبيل کادر های متن ، ليست های بازشو ، دکمه های فرمان و انتخابی و ... درون فرم ها استفاده می شود . نوع کنترل توسط خاصيت Type در درون تگ input مشخص می شود .
+</p>
+
+<p>
+نکته : تگ < input > بايد در درون تگ < form > استفاده شود .
+</p>
+
+<p>
+شکل کلی تعريف يک کنترل به صورت زير است : 
+</p>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;input</span> <span style="color: #bbbbbb">type=</span><span style="color: #ed9d13">&quot;نوع کنترل&quot;</span> <span style="color: #bbbbbb">name=</span><span style="color: #ed9d13">&quot;يک نام منحصر به فرد&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>
+</pre></div>
+
+
+<h2>خواص مهم &lt;input&gt;</h2>
+
+<table class="main-tings">
+	<tr>
+        <td>نام</td>
+        <td>نوع</td>
+        <td>شرح</td>
+    </tr>
+    <tr>
+        <td>accept </td>
+        <td>---</td>
+        <td>
+	يک ليست از مجموعه قابل قبول برای اين کنترل است ، که سرور پردازش کننده فرم آنها را قبول می کند .هر يک از اين مقادير به وسيله يک کاما از هم جدا می شوند . </td>
+    </tr>
+    <tr>
+        <td>alt </td>
+        <td>Text</td>
+        <td>يک متن جايگزين را در صورت عدم نمايش کنترل توسط مرورگر ، نمايش می دهد . </td>
+    </tr>
+    <tr>
+        <td>accept - charset </td>
+        <td>char list </td>
+        <td>ليست مجموعه کاراکترهای مجاز برای اين فرم است که هر کدام توسط يک کاما از هم جدا می شوند . </td>
+    </tr>
+    <tr>
+        <td>checked  </td>
+        <td>checked  </td>
+        <td> 	مشخص می کند که اگر کنترل مورد نظر يک دکمه انتخابي ( radio button يا chechbox ) باشد ، به صورت پيش فرض انتخاب شده باشد يا خير . </td>
+    </tr>
+    <tr>
+        <td>disabled </td>
+        <td>disabled </td>
+        <td>متدچنانچه مقدار اين خاصيت بر روی disabled تنظيم شده باشد ، آن کنترل غير فعال بوده و کاربر عملا امکان استفاده از آن را نخواهد داشت .<br />
+        نکته : با کنترل از نوع hidden به کار نمی رود . </tr>
+    <tr>
+        <td>maxlength</td>
+        <td>number </td>
+        <td> جنانچه کنترل مورد نظر يک کادر متن ( textbox ) باشد ، حداکثر تعداد کاراکترهايی که می توان در آن کنترل وارد کرد را تعيين می کند . </td>
+    </tr>
+    <tr>
+        <td>name </td>
+        <td>name </td>
+        <td>يک نام منحصر به فرد برای کنترل در فرم در صفحه تعيين می کند .<br />نکته : تعيين و مقدار دهی اين خاصيت برای کنترل های button , checkbox , file , hidden , image , password , text و radio ضرروی است .  </td>
+    </tr>
+     <tr>
+        <td>readonly </td>
+        <td>readonly </td>
+        <td>در اين حالت کنترل به صورت فقط خواندنی در می آيد . در صورتی که مقدار اين خاصيت برابر readonly تنظيم شده باشد ، کاربر مجاز به تغيير متن درون کادرهای متني ( textbox ) و يا تغيير وضعيت دکمه های انتخابی ( checkbox يا radiobutton ) نخواهد بود . </td>
+    </tr>
+     <tr>
+        <td>size </td>
+        <td>تعداد کارکتر </td>
+        <td> 	سايز و اندازه کاراکترهای کنترل را تعيين می کند . </td>
+    </tr>
+     <tr>
+        <td>src</td>
+        <td>URL </td>
+        <td>اين خاصيت فقط در مورد کنتزل image به کار رفته و مسير عکس کنترل را مشخص می کند .</td>
+    </tr>
+     <tr>
+        <td>type </td>
+        <td>button<br />
+checkbox<br />
+file<br />
+hidden<br />
+image<br />
+password<br />
+radio<br />
+reset<br />
+submit<br />
+text </td>
+        <td>اين خاصيت نوع کنترل را تعيين می کند که يکی از اين موارد زير می تواند باشد :<br />
+button : دکمه فرمان .<br />
+checkbox : کادر يا دکمه گزينشی .<br />
+file : يک فايل خارجی مثل يک صفحه اينترنتی و ... .<br />
+hidden : يک کنترل مخفی دلخواه را بر روی صفحه ايجاد می کند .<br />
+image : يک کنترل برای نمايش عکس يا تصوير ايجاد می کند .<br />
+password : يک کادر متن است که به جای نمايش اعداد يا حروف وارد شده ، ستاره يا دايره نمايش می دهد تا اطلاعات ورودی توسط کاربر مخفی بماند .<br />
+radio : دکمه انتخابی .<br />
+reset : يک دکمه فرمان است که با کليک بر روی آن ، محتويات درون کليه کنترل های فرم پاک می شود .<br />
+submit : يک دکمه فرمان است که با کليک بر روی آن ، اطلاعات درون کنترل های فرم به مقصد ارسال می شود .<br />
+text : يک کادر متن ايجاد می کند . </td>
+    </tr>
+     <tr>
+        <td>value</td>
+        <td>مقدار </td>
+        <td>اين خاصيت برای کنترل های مختلف ، حالت های زير را دارد :
+        <ul>
+                    <li>در دکمه فرمان ها ( button , reset buttons , submit buttons ) :
+                        <br>
+                        متن روی دکمه فرمان را تعيين می کند .</li>
+                    <li>در تصاوير ( images ) :
+                        <br>
+                        مقداری که در هنگام ارسال اطلاعات فرم به جای مقدار عکس می نشيند .</li>
+                    <li>در دکمه های انتخابی ( radio buttons , checkbox ) :
+                        <br>
+                        مقداری است که در صورت انتخاب کردن ( تيک زدن ) دکمه انتخابی در هنگام ارسال اطلاعات
+                        فرم به عنوان مقدار آن کنترل ارسال می شود .</li>
+                    <li>در کادرهای متن يا کنترل های مخفی( textbox , password , hidden ) :<br>
+                        مقدار پيش فرض کنترل را تعيين می کند .</li></ul>
+                        نکته : اين خاصيت با کنترل file به کار نمی رود . 
+        </td>
+    </tr>
+</table>
+
+<h2>مثال &lt;input&gt;</h2>
+<p>
+در مثال زير يک فرم جامع برای ثبت نام فرضی در يک سايت ايجاد کرده ايم و برخی از کنترل های HTML را در اين قسمت به ترتيب مشاهده می کنيد :
+</p>
+<p>
+نکات مثال : نکات ذکر شده در مثال با عدد مشخص شده اند .
+</p>
+
+<ol>
+        <li>TextBox ها ابزارهايی هستند برای دريافت اطلاعات از کاربران . </li>
+        <li>از تمام کنترل های CheckBox موجود در يک فرم می توان هر تعداد دلخواه را انتخاب کرد
+            ، ولي از ميان کنترل های Radio Buuton در هر لحظه می توان فقط يک دکمه را انتخاب کرد
+            و با انتخاب يک دکمه بقيه دکمه ها از حالت انتخاب خارج می شوند . در اين حالت بايد
+            Name کنترل هايي که می خواهيد در يک گروه باشند را يکسان تعيين کرده ولی Value آنها
+            با هم متفاوت باشند . </li>
+        <li>دکمه فرمان Submit برای ارسال اطلاعات به مقصد و دکمه فرمان Reset برای پاک کردن کليه
+            کنترل های فرم به کار می رود .</li>
+        <li>در کادر متنی که حالت Password دارد ، به جای نمايش کاراکترهای ورودی ، دايره يا ستاره
+            نمايش داده می شود که معمولا برای مخفی ماندن رمزها از ديد به کار می رود .</li>
+    </ol>
+    
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;form</span> <span style="color: #bbbbbb">action=</span><span style="color: #ed9d13">&quot;http://www.DeveloperStudio.ir/Default.aspx&quot;</span> <span style="color: #bbbbbb">method=</span><span style="color: #ed9d13">&quot;post&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>
+  1Name : <span style="color: #6ab825; font-weight: bold">&lt;input</span> <span style="color: #bbbbbb">type=</span><span style="color: #ed9d13">&quot;text&quot;</span> <span style="color: #bbbbbb">name=</span><span style="color: #ed9d13">&quot;txtname&quot;</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span> <span style="color: #6ab825; font-weight: bold">&lt;br</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span>
+   Family : <span style="color: #6ab825; font-weight: bold">&lt;input</span> <span style="color: #bbbbbb">type=</span><span style="color: #ed9d13">&quot;text&quot;</span> <span style="color: #bbbbbb">name=</span><span style="color: #ed9d13">&quot;txtfamily&quot;</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span> <span style="color: #6ab825; font-weight: bold">&lt;br</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span>
+  4Password : <span style="color: #6ab825; font-weight: bold">&lt;input</span> <span style="color: #bbbbbb">type=</span><span style="color: #ed9d13">&quot;password&quot;</span> <span style="color: #bbbbbb">name=</span><span style="color: #ed9d13">&quot;txtpass&quot;</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span> <span style="color: #6ab825; font-weight: bold">&lt;br</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span>
+  2Gender : <span style="color: #6ab825; font-weight: bold">&lt;br</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span>
+   Male <span style="color: #6ab825; font-weight: bold">&lt;input</span> <span style="color: #bbbbbb">type=</span><span style="color: #ed9d13">&quot;radio&quot;</span> <span style="color: #bbbbbb">name=</span><span style="color: #ed9d13">&quot;gender&quot;</span> <span style="color: #bbbbbb">value=</span><span style="color: #ed9d13">&quot;male&quot;</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span>
+   Female <span style="color: #6ab825; font-weight: bold">&lt;input</span> <span style="color: #bbbbbb">type=</span><span style="color: #ed9d13">&quot;radio&quot;</span> <span style="color: #bbbbbb">name=</span><span style="color: #ed9d13">&quot;gender&quot;</span> <span style="color: #bbbbbb">value=</span><span style="color: #ed9d13">&quot;female&quot;</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span> <span style="color: #6ab825; font-weight: bold">&lt;br</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span>
+  2List of Lessons : <span style="color: #6ab825; font-weight: bold">&lt;br</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span>
+   Visual Basic <span style="color: #6ab825; font-weight: bold">&lt;input</span> <span style="color: #bbbbbb">type=</span><span style="color: #ed9d13">&quot;checkbox&quot;</span> <span style="color: #bbbbbb">name=</span><span style="color: #ed9d13">&quot;VB&quot;</span> <span style="color: #bbbbbb">disabled=</span><span style="color: #ed9d13">&quot;disabled&quot;</span> <span style="color: #bbbbbb">checked=</span><span style="color: #ed9d13">&quot;checked&quot;</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span>
+   Visual C# <span style="color: #6ab825; font-weight: bold">&lt;input</span> <span style="color: #bbbbbb">type=</span><span style="color: #ed9d13">&quot;checkbox&quot;</span> <span style="color: #bbbbbb">name=</span><span style="color: #ed9d13">&quot;C#&quot;</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span>
+   ASP.NET <span style="color: #6ab825; font-weight: bold">&lt;input</span> <span style="color: #bbbbbb">type=</span><span style="color: #ed9d13">&quot;checkbox&quot;</span> <span style="color: #bbbbbb">name=</span><span style="color: #ed9d13">&quot;asp&quot;</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span>
+   SQL Server <span style="color: #6ab825; font-weight: bold">&lt;input</span> <span style="color: #bbbbbb">type=</span><span style="color: #ed9d13">&quot;checkbox&quot;</span> <span style="color: #bbbbbb">name=</span><span style="color: #ed9d13">&quot;sql&quot;</span> <span style="color: #6ab825; font-weight: bold">/&gt;&lt;br</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span>
+   <span style="color: #6ab825; font-weight: bold">&lt;input</span> <span style="color: #bbbbbb">type=</span><span style="color: #ed9d13">&quot;reset&quot;</span> <span style="color: #bbbbbb">name=</span><span style="color: #ed9d13">&quot;cmdreset&quot;</span> <span style="color: #bbbbbb">value=</span><span style="color: #ed9d13">&quot;Reset the Form&quot;</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span> <span style="color: #6ab825; font-weight: bold">&lt;br</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span>
+   <span style="color: #6ab825; font-weight: bold">&lt;input</span> <span style="color: #bbbbbb">type=</span><span style="color: #ed9d13">&quot;submit&quot;</span> <span style="color: #bbbbbb">name=</span><span style="color: #ed9d13">&quot;cmdsubmit&quot;</span> <span style="color: #bbbbbb">value=</span><span style="color: #ed9d13">&quot;Send Information&quot;</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span> <span style="color: #6ab825; font-weight: bold">&lt;br</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;/form&gt;</span> 
+</pre></div>
+
+<h2>خروجی &lt;input&gt;</h2>
+
+<form action="http://www.solodesign.ir" method="post" style="direction:ltr;">
+  1Name : <input type="text" name="txtname" /> <br />
+   Family : <input type="text" name="txtfamily" /> <br />
+  4Password : <input type="password" name="txtpass" /> <br />
+  2Gender : <br />
+   Male <input type="radio" name="gender" value="male" />
+   Female <input type="radio" name="gender" value="female" /> <br />
+  2List of Lessons : <br />
+   Visual Basic <input type="checkbox" name="VB" disabled="disabled" checked="checked" />
+   Visual C# <input type="checkbox" name="C#" />
+   ASP.NET <input type="checkbox" name="asp" />
+   SQL Server <input type="checkbox" name="sql" /><br />
+   <input type="reset" name="cmdreset" value="Reset the Form" /> <br />
+   <input type="submit" name="cmdsubmit" value="Send Information" /> <br />
+</form> 
+<h2>تگ &lt;img&gt;</h2>
+<p>از تگ < img > برای قرار دادن عکس يا تصاوير بر روی صفحه استفاده می شود . تگ < img > فقط خصوصيات را نگهداری کرده و دارای تگ پايانی نيست  ( در همان تگ ابتدايی بسته می شود ) . 
+</p>
+<p>نکات مهم تگ
+</p>
+
+<ol>
+        <li>در تگ &lt; img &gt; با خاصيت src به مکان فايل عکسی که قرار است نمايش داده شود اشاره
+            می کنيم . تصاوير HTML در مکانی غير از صفحه اصلی ذخيره شده و در هنگام نمايش صفحه
+            از مبدا ، فراخوانی می شوند . </li>
+        <li>با استفاده از خاصيت alt تگ &lt; img &gt; می توان از قبل يک متن جايگزين تعيين کرد
+            ، که چنانچه مرورگر به هر دليلي نتوانست عکس را نمايش دهد ، به جای آن متن جايگزين
+            را نشان دهد . اين متن در هنگام قرار گيری موس بر روی عکس در يک کادر زرد رنگ نيز نمايش
+            داده می شود . متن جايگزين می تواند شامل توضيحی راجع به عکس اصلی باشد .</li>
+    </ol>
+    
+<h2>مثال &lt;img&gt;</h2>
+<p>
+ در مثال زير يک عکس به صفحه پيوند زده شده است 
+</p> 
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;img</span> <span style="color: #bbbbbb">src=</span><span style="color: #ed9d13">&quot;files/logo128.png&quot;</span> <span style="color: #bbbbbb">alt=</span><span style="color: #ed9d13">&quot;solodesign PICTURE&quot;</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span> 
+</pre></div>
+
+<h2>خروجی &lt;img&gt;</h2>
+
+<img src="files/logo128.png" alt="solodesign PICTURE" /> 
+<p>
+نمایش متن جایگزین در صورت موجود نبود عکس
+</p>
+
+<img src="files/logo128" alt="solodesign PICTURE" />
+
+<h3>خواص مهم &lt;img&gt;</h3>
+
+<table class="main-tings">
+	<tr>
+        <td>نام</td>
+        <td>نوع</td>
+        <td>شرح</td>
+    </tr>
+    <tr>
+        <td>align </td>
+        <td>top<br />
+bottom<br />
+middle<br />
+left<br />
+right</td>
+        <td>نحوه ترازبندی عکس را نسبت به محتويات ديگر صفحه و متن دور آن را تعيين می کند ، که يکی از حالت های زير می تواند باشد :<br />
+1) top : عکس در بالای متن و محتويات ديگر قرار می گيرد .<br />
+2) bottom : عکس در پايين متن و محتويات ديگر قرار می گيرد .<br />
+3) middle : عکس در وسط متن و محتويات ديگر قرار می گيرد .<br />
+4) left : عکس در سمت چپ متن و محتويات ديگر قرار می گيرد .<br />
+5) right : عکس در سمت راست متن و محتويات ديگر قرار می گيرد . </td>
+    </tr>
+    <tr>
+        <td>border </td>
+        <td>pixel </td>
+        <td>تعيين کننده ضخامت خط حاشيه دور عکس است . </td>
+    </tr>
+    <tr>
+        <td>height </td>
+        <td>pixel<br />
+درصد % </td>
+        <td>ميزان ارتفاع عکس را تعيين می کند . </td>
+    </tr>
+    <tr>
+        <td>hspace </td>
+        <td>pixel </td>
+        <td>ميزان فضايی خالی در 2 طرف راست و چپ عکس را تعيين می کند . </td>
+    </tr>
+    <tr>
+        <td>ismap </td>
+        <td>URL</td>
+        <td>تعيين کننده اين است که عکس به عنوان يک نقشه تصويری سمت سرور استفاده می شود </td>
+    </tr>
+    <tr>
+        <td>longdesc </td>
+        <td>URL </td>
+        <td>مسير فايلی که اطلاعات کاملی راجع به عکس مورد نظر نگهداری می کند را مشخص می کند . </td>
+    </tr>
+    <tr>
+        <td>src </td>
+        <td>URL</td>
+        <td>مسير کامل فايل نگهدارنده عکس را تعيين می کند . </td>
+    </tr>
+    <tr>
+        <td>usemap </td>
+        <td>URL</td>
+        <td>تعيين کننده اين است که عکس به عنوان يک نقشه تصويری سمت کلاينت استفاده می شود .</td>
+    </tr>
+    <tr>
+        <td>vspace </td>
+        <td>pixel</td>
+        <td>ميزان فضاي خالی به دور عکس در بالا و پايين را مشخص می کند . </td>
+    </tr>
+    <tr>
+        <td>width </td>
+        <td>pixel</td>
+        <td> 	میزان عرض عکس را تعيين می کند . </td>
+    </tr>
+</table>
+<h2>تگ &lt;style&gt;</h2>
+<p>تاکنون در تمامی تگ های معرفی شده HTML ، ما خواص مورد نظر هر تگ را در درون خود تگ تعیین و مقدار دهی کردیم. در روش های طراحی وب قدیمی تر، ما مجبور بوديم برای هرعنصری در صفحه به صورت مجزا خاصيت ها را تعيين می کنيم . این کار چند اشکال عمده داشت : 
+</p>
+
+<ul>
+        <li>باعث تکرار شدن خواص مشابه در تگ های عنصرها می شد .</li><li>حجم کد نویسی بالا رفته
+            و سرعت طراحی کاهش می يافت .</li><li>احتمال بروز خطا و اشتباه را افزايش می داد .</li><li>
+                اعمال تغييرات به صفحات و عناصر وقت و کار زیادی را طلب می کرد .</li></ul>
+
+<p>
+اما با معرفی روش قالب دهی صفحات ( Cascading Style Sheet ) یا CSS  ، ما به وسـيله خاصيت تگ Style ،  تمام خواص و تنظيمات مورد نياز را برای هر عنصر را در تگ  Style  تعيين می کنيم . خصوصيات موجود در تگ Style تقريبا تمامی نيازهای ويرايش ، تغيير شکل و افزودن جلوه های مختلف را به عناصر شامل می شود.
+</p> 
+
+<p>
+همانطور که قبلا ذکر شد ، صفحات HTML از یک سری عناصر تشکيل شده اند،که هر کدام توسط یک تگ معرفی می شوند . 3 روش عمده برای اعمال خواص از طريق  Style  به يک عنصر وجود دارد : 
+</p> 
+
+<ol>
+        <li>تعيين خواص مورد نظر در خاصيت Style در درون تگ عنصر .</li><li>تعيين خواص عناصر در
+            تگ style در بخش head هر صفحه برای عناصر آن صفحه .</li><li>تعيين خواص از طريق یک تگ Style
+                بيرونی و پيوند ان عنصر به تگ Style . در اين حالت ابتدا باید مجموعه خواص را در یک
+                تگ Style بيرونی به یکی از روش ارائه شده در پائين صفحه ايجاد می کنيم . </li>
+    </ol>
+ <p>   
+برای یادگیری تمام خاصیت ها و کاربرد آن ها باید زبان CSS را یاد بگیرید .
+</p>
+    
+<h3>خواص مهم &lt;style&gt;</h3>
+
+<table class="main-tings">
+	<tr>
+        <td>نام</td>
+        <td>نوع</td>
+        <td>شرح</td>
+    </tr>
+    <tr>
+        <td>type </td>
+        <td>text/css </td>
+        <td>نوع محتويات درون تگ style را تعيين می کند که برای استفاده از قالب CSS آن را برابر text/css تنظيم می کنيم . </td>
+    </tr>
+    <tr>
+        <td>media </td>
+        <td>screen<br />
+tty<br />
+ty<br />
+projection<br />
+handheld<br />
+print<br />
+braille<br />
+auarl<br />
+all  </td>
+        <td>نوع رسانه نمايش دهنده صفحه اينترنتی را برای اعمال قالب های style به آنها را تعيين می کند . چنانچه فقط يک نوع رسانه خاص در اين قسمت عنوان شود ، خصوصيات style مورد نظر فقط در هنگام نمايش صفحه وب در آن رسانه اعمال خواهد شد و برای ساير رسانه ها به صورت ساده نمايش داده می شود . که می تواند يکی از موارد زير باشد :<br />
+screen : صفحه نمايش کامپيوترهای معمولی .<br />
+tty : ماشين تحرير راه دور ، تله تايپ ( برای ماشين هايی که دارای نحوه نمايش ثابت هستند ) .<br />
+tv : وسايلی همچون تلويزيون با رزوليشن پايين .<br />
+projection : برای نمايش در پروژکتورها .<br />
+handheld : برای کامپيوتر های دستی و جيبی .<br />
+barille : در اسناد مخصوص به افراد نابينا ( بريل ) .<br />
+print : برای پرينت در دستگاه های چاپگر .<br />
+auarl : برای سيستم های صوتی .<br />
+all : برای همه نوع سيستم ها . </td>
+    </tr>
+</table>
+
+ <p>   
+در زیر3 روش عمده برای تعيين خواص مورد نظر در تگ style را بيان می کنيم :
+</p>
+
+ <p><strong> 1 ) External Style Sheet : </strong>
+</p>
+
+ <p>هنگامی که قرار است مقادیر style به اجزای چندین صفحه مختلف به طور یکسان اعمال می شود ، بهترین روش استفاده از یک صفحه Style sheet خارجی و پس لینک کردن آن به صفحه مورد نظر است. این کار دو مزیت عمده دارد:
+</p>
+
+<ol>
+        <li>کدهای مربوط به style را فقط یکبار در sheet style نوشته و از آن می توان برای هزاران
+            صفحه به صورت مشترک استفاده کرد.</li><li>می توان ظاهر و مشخصات کليه صفحاتی که style به
+                انها اعمال شده است را با یک تغيير کوچک در style sheet تغيير داد .</li></ol>
+                
+ <p>   
+برای لينک کردن یک صفحه style خارجی به یک صفحه ، از تگ < link > در قسمت < head > صفحه استفاده می شود ، توجه شود که پسوند فایل های css ، style sheet است .
+</p>
+
+ <p>   
+مثال : در مثال زير يک صفحه style sheet خارجی را به صفحه HTML پيوند زده ايم . توجه شود که اين کار بايد در قسمت head صفحه انجام شود : 
+</p>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;head&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;link</span> <span style="color: #bbbbbb">rel=</span><span style="color: #ed9d13">&quot;stylesheet&quot;</span> <span style="color: #bbbbbb">type=</span><span style="color: #ed9d13">&quot;text/css&quot;</span> <span style="color: #bbbbbb">href=</span><span style="color: #ed9d13">&quot;mystyle.css&quot;</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;/head&gt;</span> 
+</pre></div>
+
+ <p>   
+نکته مهم : خصوصيات مختلف style در صفحه style sheet بر مبنای پارامترهای دسته بندی مثل کلاس ، id یا نوع عنصر تعيين می شود . سپس در صفحه های وب باید بر اساس دسته بندی فوق ، اجزای مختلف را در class های مورد نظر قرار داده یا id آنها برابر مقدار در نظر گرقته شده ، قرار داد . در ادامه مطالب اين مسئله را بررسی می کنيم .
+</p>
+
+<h3>   
+دسته بندی و تعيين عناصر در Style Sheet ها :
+</h3>
+<style>
+p.ex { direction:ltr; }
+</style>
+<ol style="list-style-type: upper-alpha">
+        <li>برای تعیين عناصر بر پايه id آنها از روش زير استفاده می شود :
+            <p class="ex">
+                #id عنصر مورد نظر
+            </p>
+            <p class="matn">
+                <b style="color: Red">مثال : </b>عنصری که id آن برابر label است .
+            </p>
+            <p class="ex">
+                <b>مثال : </b>#label</p>
+        </li>
+        <li>برای تعیين عناصر بر پايه class آنها از روش زير استفاده می شود :
+            <p class="ex">
+                . نام کلاس عنصر مورد نظر
+            </p>
+            <p class="matn">
+                <b style="color: Red">مثال : </b>عنصری که class آن برابر header است .
+            </p>
+            <p class="ex">
+                <b>مثال : </b>.header</p>
+        </li>
+        <li>برای تعیين عناصر بر پايه نوع و کلاس آنها از روش زير استفاده می شود :
+            <p class="ex">
+                نام کلاس عنصر مورد نظر . نوع عنصر
+            </p>
+            <p class="matn">
+                <b style="color: Red">مثال : </b>تمام عناصری که از نوع td و عضو کلاس header هستند
+                .
+            </p>
+            <p class="ex">
+                <b>مثال : </b>td.header</p>
+            <p class="matn">
+                <b style="color: Red">مثال : </b>تمام عناصری که از نوع p و عضو کلاس matn هستند .
+            </p>
+            <p class="ex">
+                <b>مثال : </b>p.matn</p>
+        </li>
+        <li>برای تعیين عناصر بر پايه نوع و id آنها از روش زير استفاده می شود :
+            <p class="ex">
+                عنصر مورد نظر # نوع عنصر id
+            </p>
+            <p class="matn">
+                <b style="color: Red">مثال : </b>عنصری از نوع p ، که id آن برابر header است .
+            </p>
+            <p class="ex">
+                <b>مثال : </b>p#header</p>
+        </li>
+    </ol>
+    
+<h3>   تعيين خواص مورد نظر برای هر گروه : 
+</h3>
+
+<p>
+پس از تعيين عناصر مورد نظر ، مجموعه خواص مورد نياز را در يک کروشه در مقابل نام آنها تعيين می کنيم . هر خاصيت به وسيله يک سمی کوولن ( ; ) از خاصيت ديگر جدا می شود و آخرين خاصيت نيازی به سمی کولون ندارد . به طور کلی از روش زير برای تعيين خاصيت ها استفاده می کنيم . 
+</p>
+
+<p class="ex">
+{ ... و مقدار 2 : خاصيت 2 ; مقدار 1 : خاصيت 1 } نام عنصر يا عناصر مورد نظر 
+</p>
+
+<p>مثال : در مثال زير چندين ويژگی برای عناصر از نوع جدول که عضو کلاس ex هستند ، تعيين کرده ايم :
+</p>
+
+<p class="ex">
+table.ex { border : solid 2px blue ; width : 100px ; padding : 2px } 
+</p>
+
+<p><strong> 2 ) Internal Style Sheet : </strong>
+</p>
+
+<p>اين نوع قالب دهی توسط تگ < style > در قسمت < heade > صفحه تعيين می شود . مجوعه مقادير موجود در اين style فقط به عناصر صفحه جاری اعمال می شود . کليه مقادير مورد نظر برای اجزای مختلف را بايد در تگ باز و بسته < style > فرار داد : </p>
+
+<p>مثال : در مثال زير توسط تگ < style > در بخش head برای چند عنصر صفحه ويژگی هايي تعيين شده است . به توضيحات مثال دقت کنيد : </p>
+
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #d0d0d0">&lt;</span><span style="color: #6ab825; font-weight: bold">head</span><span style="color: #d0d0d0">&gt;</span>
+  <span style="color: #d0d0d0">&lt;</span><span style="color: #6ab825; font-weight: bold">style</span> <span style="color: #6ab825; font-weight: bold">type</span><span style="color: #d0d0d0">=</span><span style="color: #ed9d13">&quot;text/css&quot;</span><span style="color: #d0d0d0">&gt;</span>
+    1 p#farsi { text-align : right ; direction : rtl; }
+    2 table.ex { border : solid 2px blue; }
+  <span style="color: #d0d0d0">&lt;/</span><span style="color: #6ab825; font-weight: bold">style</span><span style="color: #d0d0d0">&gt;</span>
+<span style="color: #d0d0d0">&lt;/</span><span style="color: #6ab825; font-weight: bold">head</span><span style="color: #d0d0d0">&gt;</span>
+</pre></div>
+
+<p>در مثال فوق دو نوع قالب دهی به 2 عناصر دسته از عناصر اعمال شده است : 
+</p>
+
+<ol>
+                    <li>در خط 1 برای عنصر پاراگراف ( p ) که id آن برابر farsi است ، چيدمان نوشته ( text-align
+                        ) از سمت راست و جهت نوشته ( direction ) از راست به چپ تعيين شده است . </li>
+                    <li>در خط 2 برای کليه عناصری از نوع table که عضو کلاس ex هستند ، در خاصيت ترکيبی border
+                        حاشيه ای به رنگ آبی ، با اندازه 2 پیکسل تعيين شده است . </li>
+                </ol>
+                
+ <p>   
+برای یادگیری تمام خاصیت ها و کاربرد آن ها باید زبان CSS را یاد بگیرید .
+</p>
+
+<p><strong> 3 ) Inline Style :  </strong>
+</p>
+
+<p>   
+در اين نوع قالب دهی ، خصوصيات مورد نظر توسط خاصيت style در درون تگ عنصر مورد نظر تعيين می شود . اين خصوصيات فقط به عنصر مورد نظر اعمال می شوند .
+</p>
+
+<p>   
+مثال : در مثال زير برای يک پاراگراف توسط خاصيت style چندين ويژگی را تعيين کرده ايم : 
+</p>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;p</span> <span style="color: #bbbbbb">style=</span><span style="color: #ed9d13">&quot;color:red; text-align:left; direction:ltr;&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>
+  This is a paragraph which is formatted with CSS .
+<span style="color: #6ab825; font-weight: bold">&lt;/p&gt;</span>
+</pre></div>
+
+<p><strong> خروجی  </strong>
+</p>
+
+<p style="color:red; text-align:left; direction:ltr;">
+  This is a paragraph which is formatted with CSS .
+</p>
+<h2>URL های HTML </h2>
+<p>يک URL مخفف عبارت ( Uniform Resource Locator ) برای آدرس دهی يک فايل يا سند در اينترنت مورد استفاده قرار می گيرد . شکل کلی يک آدرس اينترنتی به صورت زير است :</p>
+
+<p class="ex">
+Scheme://host.domain:port/path/filename
+</p> 
+
+<p class="ex">
+مثال : http://solodesign.ir/wp-content/themes/solodesign-basic/img/logo128.png
+</p> 
+
+<p>
+هر يک از قسمت های مختلف آدرس اينترنتی را در جدول زير شرح می دهيم : 
+</p> 
+
+<table class="main-tings">
+	<tr>
+        <td>قسمت</td>
+        <td>شرح قسمت</td>
+    </tr>
+    <tr>
+        <td>Scheme </td>
+        <td style="background-color: #37474F;width: 80%;">اين قسمت نوع سرويس اینترنتی را مشخص می کند ، که متداولترين آنها http است . </td>
+    </tr>
+    <tr>
+        <td>Host </td>
+        <td style="background-color: #37474F;width: 80%;">معرف ميزبان دامنه ( domain ) است ک پيش فرض آن WWW است . </td>
+    </tr>
+    <tr>
+        <td>Domain </td>
+        <td style="background-color: #37474F;width: 80%;">معرف نام دامين ( دامنه ) اينترنتی است که در اينترنت يک آدرس منحصر به فرد محسوب می شود .  </td>
+    </tr>
+    <tr>
+        <td>Port </td>
+        <td style="background-color: #37474F;width: 80%;">شماره پرت ميزبان وب سايت را معرفی می کند که معمولا اين قسمت حذف شده و نمايش داده نمی شود . پرت پيش فرض برای ميزبان 80 است .  </td>
+    </tr>
+    <tr>
+        <td>Path </td>
+        <td style="background-color: #37474F;width: 80%;">مسير داخلی فايل را بر روی حافظه سرور تعيين می کند . </td>
+    </tr>
+    <tr>
+        <td>Filename </td>
+        <td style="background-color: #37474F;width: 80%;">نام فايلی است که مرورگر در حال حاضر در حال نمايش دادن آن است . </td>
+    </tr>
+</table>
+
+<h3>انواع Scheme های URL : </h3>
+
+ <p>برخی از مهمترين Scheme های مورد استفاده در اينترنت عبارتند از : 
+</p>
+
+<ul>
+        <li>File : يک فايل بر روی کامپيوتر محلی شما . </li>
+        <li>FTP : يک فايل بر روی کامپيوتر سرور با قابیليت دانلود .</li>
+        <li>HTTP : يک فايل يا سايت بر روی سرور www .</li>
+        <li>Gopher : يک فايل بر روی يک سرور Gopher ( ردياب ) .</li>
+        <li>WAIS : سيسنمی که به کاربر امکان جستجو اطلاعات ذخيره شده در اينترنت را می دهد . مخفف
+            عبارت Wide Area Information Service .</li>
+    </ul>
+    
+<h4>ايجاد يک فايل با قابليت دانلود : </h4>
+
+<p>برای ايجاد يک فايل با قابليت دانلود ، يک لينک مانند الگوی زير ايجاد می کنيم که کاربر با کليک بر روی آن امکان ذخيره فايل را خواهد داشت : </p>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;a</span> <span style="color: #bbbbbb">href=</span><span style="color: #ed9d13">&quot;ftp://www.solodesign.ir/Downloads/Winzip.exe&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> ... <span style="color: #6ab825; font-weight: bold">&lt;/a&gt;</span> 
+</pre></div>
+
+<h2>تگ &lt;script&gt;</h2>
+<p>از تگ < script > برای قرار دادن يک اسکريپت ( برنامه های نوشته شده توسط زبان های برنامه نويسی اسکريپتی مثل Java Script , VB Script ) درون صفحات HTML استفاده می شود . مجموعه دستورات برنامه مورد نظر بين تگ باز و بسته < script > قرار بگيرند . 
+</p>
+
+<p>
+برای دريافت اطلاعات بيشتر باید زبان VB Script و Java Script را یاد بگیرید . در اين قسمت ما به بررسی قرار دادن اسکريپت ها در صفحات HTML و خصوصيات تگ Script می پردازيم و به آموزش اسکريپت نويسی کاری نداريم . 
+</p> 
+
+<p>
+همانطور که قبلا ذکر شد ، صفحات HTML از یک سری عناصر تشکيل شده اند،که هر کدام توسط یک تگ معرفی می شوند . 3 روش عمده برای اعمال خواص از طريق  Style  به يک عنصر وجود دارد : 
+</p> 
+
+<h3>محل قرار دادن تگ &lt;script&gt;</h3>
+
+<p>
+تگ های اسکريپت را می توان در درون بخش < body > صفحه HTML و يا در قسمت < head > قرار داد . تگ هايی که در قسمت < body > قرار بگيرند ، به محض اجرای صفحات اجرا شده و اثر خود را نمايش می دهند . ولی اسکريپت هايی که در بخش < head > قرار بگيرند ، تا زمانی که توسط کاربر فراخوانی نشده و يا رويداد در نظر گرفته شده برای اجرای آنها اتفاق نيفتد ، اجرا نخواهند شد .  
+</p> 
+
+<h3>مثال &lt;script&gt;</h3>
+<p>
+اسکريپت زير به محض اجرای صفحه اجرا شده و پيغام زير را نمايش می دهد : 
+</p> 
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;html&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;head&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;/head&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;body&gt;</span>
+    <span style="color: #6ab825; font-weight: bold">&lt;script </span><span style="color: #bbbbbb">type=</span><span style="color: #ed9d13">&quot;text/javascript&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>
+      <span style="color: #24909d">document</span><span style="color: #d0d0d0">.write(</span><span style="color: #ed9d13">&quot;This is an Script ... !&quot;</span><span style="color: #d0d0d0">)</span>
+    <span style="color: #6ab825; font-weight: bold">&lt;/script&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;/body&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;/html&gt;</span>
+</pre></div>
+
+<h3>خروجی &lt;script&gt;</h3>
+
+<p class="ex">This is an Script ... ! </p><br />
+<p>
+می توان يک اسکريپت را در يک فايل خارجی ( برای مثال يک فايل با پسوند js برای Java Script ) ايجاد کرده و سپس توسط يک تگ < script > و خاصيت src در بخش head يا body به آن اسکريپت پيوند ايجاد کرد : 
+</p>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;html&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;head&gt;</span>
+    <span style="color: #6ab825; font-weight: bold">&lt;script </span><span style="color: #bbbbbb">type=</span><span style="color: #ed9d13">&quot;text/javascript&quot;</span> <span style="color: #bbbbbb">src=</span><span style="color: #ed9d13">&quot;http://www.solodesign.ir/Scripts/javasample.js&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;/head&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;body&gt;</span>
+    <span style="color: #6ab825; font-weight: bold">&lt;script </span><span style="color: #bbbbbb">type=</span><span style="color: #ed9d13">&quot;text/javascript&quot;</span> <span style="color: #bbbbbb">src=</span><span style="color: #ed9d13">&quot;http://www.solodesign.ir/Scripts/javasample.js&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;/body&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;/html&gt;</span> 
+</pre></div>
+
+<p><b>نحوه مديريت مرورگرهای قديمی در برخورد با تگ های &lt;script&gt;</b>
+</p>
+
+<p>
+برخی از مرورگرهای قديمی تگ < script > را نمي شناسند و باعث می شوند تا متن دستورات اسکريپت ها را ، همانند متن ساده بر روی صفحه نمايش دهند . برای جلوگيری از اين مسئله و مخفی کردن تگ های اسکريپت از ديد مرورگرهای قديمی ، تگ < script > را در درون يک comment ( توضيح ) به صورت زير قرار می دهيم . مرورگرهای جديد به صورت هوشمند ، متن درون commnet ها را بررسی کرده و چنانجه حاوی دستورات اسکريپتی باشند ، آنها را اجرا می کنند . 
+</p>
+
+<h3>مثال &lt;script&gt;</h3>
+
+<p> Script زير را با قرار دادن بين علامت های توضيح comment ، از ديد مرورگرهای قديمی مخفی کرده ايم . چنانچه در بخش خروجی ، خروجی درستی نداريد ، ورژن مرورگر خود را عوض کنيد چون خيلی قديمی است !!! . 
+</p><br />
+
+<p>برای Java Script
+</p>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;script </span><span style="color: #bbbbbb">type=</span><span style="color: #ed9d13">&quot;text/javascript&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>
+<span style="color: #999999; font-style: italic">&lt;!--</span>
+<span style="color: #24909d">document</span><span style="color: #d0d0d0">.write(</span><span style="color: #ed9d13">&quot;This is not suitable for old browsers&quot;</span><span style="color: #d0d0d0">)</span>
+<span style="color: #999999; font-style: italic">//--&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;/script&gt;</span>
+</pre></div>
+
+<p>برای VB Script
+</p>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;script </span><span style="color: #bbbbbb">type=</span><span style="color: #ed9d13">&quot;text/vbscript&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>
+<span style="color: #999999; font-style: italic">&lt;!--</span>
+<span style="color: #24909d">document</span><span style="color: #d0d0d0">.write(</span><span style="color: #ed9d13">&quot;This is not suitable for old browsers&quot;</span><span style="color: #d0d0d0">)</span>
+<span style="color: #d0d0d0">'--&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;/script&gt;</span>
+</pre></div>
+
+<h3>خروجی &lt;script&gt;</h3>
+
+<p class="ex">This is not suitable for old browsers</p><br />
+<p>
+
+<h3>خواص مهم &lt;script&gt;</h3>
+
+<table class="main-tings">
+	<tr>
+        <td>نام</td>
+        <td>نوع</td>
+        <td>شرح</td>
+    </tr>
+    <tr>
+        <td>type </td>
+        <td>text/javascript<br />
+text/ecmascript<br />
+text/vbscript<br />
+applicattion/javascript<br />
+applicattion/ecmascript<br />
+applicattion/vbscript<br />
+text/VB<br />
+text/C#<br />
+text/J# </td>
+        <td>نوع و زبان برنامه نويسی اسکريپت را مشخص می کند که می تواند يکی از حالت های زير باشد :<br />
+texxt/javascript : از نوع متن و زبان برنامه نويسی javascript .<br />
+text/ecmascript : از نوع متن و زبان برنامه نويسی ecmascript .<br />
+text/vbscript : از نوع متن و زبان برنامه نويسی vbscript .<br />
+applicattion/javascript : از نوع برنامه کاربردی و زبان برنامه نويسی javascript .<br />
+applicattion/ecmascript : از نوع برنامه کاربردی و زبان برنامه نويسی ecmascript .<br />
+applicattion/vbscript : از نوع برنامه کاربردی و زبان برنامه نويسی vbscript .<br />
+حالت های زير فقط برای صفحات سرور سايدی ( مثل ASP و PHP ) است :<br />
+text/VB : از نوع برنامه متن و زبان برنامه نويسي Visual Basic .<br />
+text/C# : از نوع برنامه متن و زبان برنامه نويسي Visual C# .<br />
+text/J# : از نوع برنامه متن و زبان برنامه نويسی Visual J# .  </td>
+    </tr>
+    <tr>
+        <td>charset</td>
+        <td>charset</td>
+        <td>نوع رسانه نمايش دهنده صفحه اينترنتی را برای اعمال قالب های 	نحوه کد گذاري و ترجمه کاراکترها را در اسکريپت مشخص می کند . </td>
+    </tr>
+    <tr>
+        <td>defer</td>
+        <td>defer</td>
+        <td>مشخص می کند که اسکريپت هيچ محتوای جديدی را در صفحه ايجاد نخواهد کرد و مرورگر بايد صفحه را با همان فرمت و کد اصلی اجرا کند . </td>
+    </tr>
+    <tr>
+        <td>language </td>
+        <td>javascript<br />
+vbscript<br />
+ecmascript<br />
+live script </td>
+        <td>زبان برنامه نويسی اسکريپت را تعيين می کند ، که می تواند يکی از زبان های زير باشد :<br />
+javascript<br />
+vbscript<br />
+ecmascript<br />
+live script </td>
+    </tr>
+    <tr>
+        <td>src</td>
+        <td>URL</td>
+        <td>مسير کامل فايلی که دستورات اسکريپت در آن قرار دارد را مشخص می کند . اين خاصيت در هنگام استفاده از يک فايل خارجی و پيوند آن به صفحه استفاده می شود . </td>
+    </tr>
+</table>
+
+<h2>تگ &lt;noscript&gt;</h2>
+
+<p>اين تگ برای نمايش يک متن هشدار يا جايگزين ، در صورتی که اسکريپت قبل از آن اجرا نشده باشد ، به کار می رود . اين حالت در مورد مرورگرهايی که تگ < script > را می شناسند ، ولی قادر به اجرای دستورات موجود در آن نيستند به کار می رود ، که در اين صورت متن درون تگ < noscript > را نمايش خواهد داد . 
+<p>
+
+<p>چنانچه مرورگر موفق به اجرای اسکريپت شود ، از تگ < noscript > به طور کامل چشم پوشی می کند . 
+<p>
+
+<p>نکته : تگ < script > بايد بلافاصله بعد از تگ < script > به کار رود .
+<p>
+
+<h3>مثال &lt;noscript&gt;</h3>
+<p>
+در مثال زير يک اسکريپت ارائه شده که يک تگ < noscript > بلافاصله بعد ازآن قرار داده شده است . خروجی مثال زير بستگی به ورژن مرورگر شما دارد ... ! :
+</p>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;script </span><span style="color: #bbbbbb">type=</span><span style="color: #ed9d13">&quot;text/javascript&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>
+  <span style="color: #24909d">document</span><span style="color: #d0d0d0">.write(</span><span style="color: #ed9d13">&quot; Hi every body . Welcome !&quot;</span><span style="color: #d0d0d0">)</span>
+<span style="color: #6ab825; font-weight: bold">&lt;/script&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;noscript&gt;</span>
+  Your browser doesn`t support javascript
+<span style="color: #6ab825; font-weight: bold">&lt;/noscript&gt;</span>
+</pre></div>
+
+<h2>خروجی &lt;noscript&gt;</h2>
+<p class="ex">
+Hi every body . Welcome ! 
+</p>
+<h2>تگ &lt;span&gt;</h2>
+<p>از تگ < span > برای تقسيم بندی متن يک پاراگراف به قطعات مجزا استفاده می شود ، که می توان به هر قسمت ويژگی ها و style متفاوتی را اعمال کرد . متن مورد نظر برای هر قسمت در بين تگ باز و بسته < span > قرار می گيرد .
+برای مثال می خواهيد بخشی از يک پاراگراف به رنگ سبز باشد . در اين حالت بخش مورد نظر را در يک < span > قرار داده و خاصيت color آن را در قسمت style به رنگ سبز تعيين می کنيم . 
+</p>
+
+<h3>مثال &lt;span&gt;</h3>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;p&gt;</span>
+This is a paragraph that <span style="color: #6ab825; font-weight: bold">&lt;br</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;span</span> <span style="color: #bbbbbb">style=</span><span style="color: #ed9d13">&quot;color : green&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> This part is green <span style="color: #6ab825; font-weight: bold">&lt;/span&gt;</span>
+ AND
+  <span style="color: #6ab825; font-weight: bold">&lt;span</span> <span style="color: #bbbbbb">style=</span><span style="color: #ed9d13">&quot;color:blue&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> This part is blue . <span style="color: #6ab825; font-weight: bold">&lt;/span&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;/p&gt;</span>
+</pre></div>
+
+<h3>خروجی &lt;span&gt;</h3>
+
+<p class="ex">
+This is a paragraph that <br />
+  <span style="color : green"> This part is green </span>
+ AND
+  <span style="color:blue"> This part is blue . </span>
+</p>
+
+<h2>تگ &lt;div&gt;</h2>
+
+<p>اين تگ يک قسمت و ناحيه مجزا را بر روی صفحه تعيين می کند . از اين تگ معمولا برای تقسيم بندی فضای صفحه به نواحی مجزا استفاده می شود و بيشتر تگ های HTML را می توان درون تگ < div > به کار برد .</p>
+
+<p>نکته : معمولا مرورگرها يک خط در ابتدا و انتهای div با ساير متون و عناصر ديگر صفحه ايجاد می کنند و نوشته به ابتدای سطر بعدی انتقال می يابد . </p>
+
+<h3>مثال &lt;div&gt;</h3>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;p</span> <span style="color: #bbbbbb">style=</span><span style="color: #ed9d13">&quot;color: red&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> This is paragraph one <span style="color: #6ab825; font-weight: bold">&lt;p&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;div</span> <span style="color: #bbbbbb">style=</span><span style="color: #ed9d13">&quot;color:Green&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> This part is a div . It can contain almost every things ! <span style="color: #6ab825; font-weight: bold">&lt;/div&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;p</span> <span style="color: #bbbbbb">style=</span><span style="color: #ed9d13">&quot;color:blue&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> This is another paragraph <span style="color: #6ab825; font-weight: bold">&lt;/p&gt;</span>
+</pre></div>
+
+<h3>خروجی &lt;div&gt;</h3>
+
+<p class="ex" style="color: red"> This is paragraph one <p>
+<div class="ex" style="color:Green; text-align:left"> This part is a div . It can contain almost every things ! </div>
+<p class="ex" style="color:blue"> This is another paragraph </p>
+<h2>رويدادهای HTML </h2>
+<p>رويدادها مجموعه عمل هايی هستند که در صورت بروز يک اتفاق در صفحه ( مثل کليک کردن بر روی يک عنصر ، دابل کليک ، فشردن دکمه خاص و ... ) تحريک شده و باعث اجرای دستور يا دستورات تعيين شده برای آن اتفاق خاص می شوند .
+</p>
+
+<p>هر عنصر مجموعه از رويدادهای مختص به خود دارد که هر کدام از آنها را می توان در درون تگ عنصر تعيين و مقدار دهی کرد . معمولا يک رويداد ، تابع يا اسکريپتی را اجرا يا فراخوانی می کند .
+</p>
+
+<p>انواع مختلف رويدادها به شرح زير هستند : 
+</p>
+
+<h2>رويدادهای پنجره ( فايل )</h2>
+
+<p>
+نکته : اين رويدادها فقط در عنصرهای body و frameset معتبر هستند .</p>
+
+<table class="main-tings">
+	<tr>
+        <td>نام رويداد</td>
+        <td>شرح</td>
+    </tr>
+    <tr>
+        <td>onload </td>
+        <td style="background-color: #37474F;width: 80%;">رويدادی است که در هنگام لود شدن ( بار گذاری ) صفحه تحريک می شود . </td>
+    </tr>
+    <tr>
+        <td>onunload </td>
+        <td style="background-color: #37474F;width: 80%;">رويدادی است که در هنگام خارج شدن صفحه از حافظه ( بستن ) تحريک می شود . </td>
+    </tr>
+</table>
+
+<h2>رويدادهای عناصر فرم</h2>
+
+<p>
+نکته : اين رويدادها فقط در عنصرهای کنترلی فرمها کاربرد دارند .</p>
+
+<table class="main-tings">
+	<tr>
+        <td>نام رويداد</td>
+        <td>شرح</td>
+    </tr>
+    <tr>
+        <td>onchange </td>
+        <td style="background-color: #37474F;width: 80%;">در هنگام تغيير وضعيت يک کنترل تحريک می شود . برای مثال در کنترل textbox در هنگام تغيير متن درون آن تحريک می شود . </td>
+    </tr>
+    <tr>
+        <td>onsubmit </td>
+        <td style="background-color: #37474F;width: 80%;">در هنگام فشردن دکمه submit فرم و ارسال اطلاعات کنترل های فرم تحريک می شود . </td>
+    </tr>
+    <tr>
+        <td>onselect </td>
+        <td style="background-color: #37474F;width: 80%;">در هنگام انتخاب کردن عنصر مورد نظر در فرم تحريک می شود .  </td>
+    </tr>
+    <tr>
+        <td>onreset  </td>
+        <td style="background-color: #37474F;width: 80%;">در هنگام فشردن دکمه فرمان reset و پاک شدن اطلاعات کليه کنترل های فرم تحريک می شود . </td>
+    </tr>
+    <tr>
+        <td>onblur </td>
+        <td style="background-color: #37474F;width: 80%;">در هنگام از دست دادن فوکوس * کنترل تحريک می شود . </td>
+    </tr>
+    <tr>
+        <td>onfocus </td>
+        <td style="background-color: #37474F;width: 80%;">در هنگام فشردن دکمهدر هنگامي که کنترل فوکوس را به دست می آورد ، تحريک می شود . </td>
+    </tr>
+</table>
+
+<p>
+ توضيح فوکوس ( focus ) : در هر لحظه کنترلی که در يک صفحه يا فرم ، انتخاب شده است و به دور آن کادر قرار گرفته به اصطلاح فوکوس برنامه را در اختيار دارد . کنترلی که انتخاب شود ، فوکوس را به دست آورده و کنترلی که از انتخاب خارج شود ، فوکوس را از دست می دهد . </p>
+
+
+<h2>رويدادهای موس</h2>
+
+<p>
+نکته : رويدادهای موس در کنترل های base , br , frame , frameset , head , html , iframe , meta , param , script و title کاربرد ندارد . </p>
+
+<table class="main-tings">
+	<tr>
+        <td>نام رويداد</td>
+        <td>شرح</td>
+    </tr>
+    <tr>
+        <td>onclick </td>
+        <td style="background-color: #37474F;width: 80%;">اين رويداد در هنگام کليک کردن بر روی عنصر مورد نظر تحريک می شود . </td>
+    </tr>
+    <tr>
+        <td>ondblclick </td>
+        <td style="background-color: #37474F;width: 80%;">اين رويداد در هنگام دابل کليک کردن بر روی عنصر مورد نظر تحريک می شود . </td>
+    </tr>
+    <tr>
+        <td>onmousedown </td>
+        <td style="background-color: #37474F;width: 80%;">اين رويداد در هنگام فشردن دکمه موس بر روی عنصر مورد نظر تحريک می شود . </td>
+    </tr>
+    <tr>
+        <td>onmoouseover </td>
+        <td style="background-color: #37474F;width: 80%;">اين رويداد در هنگام قرار گرفتن اشاره گر موس بر روی سطح عنصر مورد نظر تحريک می شود . </td>
+    </tr>
+    <tr>
+        <td>onmouseout  </td>
+        <td style="background-color: #37474F;width: 80%;">اين رويداد در هنگام خارج شدن اشاره گر موس از روی سطح عنصر مورد نظر تحريک می شود . </td>
+    </tr>
+    <tr>
+        <td>onmouseup  </td>
+        <td style="background-color: #37474F;width: 80%;">اين رويداد در هنگام رها کردن دکمه موس بر روی عنصر مورد نظر تحريک می شود . </td>
+    </tr>
+</table>
+
+<h2>رويدادهای صفحه کليد</h2>
+
+<p>
+نکته : رويدادهای صفحه کليد در کنترل های base , br , frame , frameset , head , html , iframe , meta , param , script , style و title کاربرد ندارد .  </p>
+
+
+<table class="main-tings">
+	<tr>
+        <td>نام رويداد</td>
+        <td>شرح</td>
+    </tr>
+    <tr>
+        <td>onkeydown</td>
+        <td style="background-color: #37474F;width: 80%;">رويدادی که در هنگام فشردن يک کليد بر روی عنصر مورد نظر فعال می شود . </td>
+    </tr>
+    <tr>
+        <td>onkeypress</td>
+        <td style="background-color: #37474F;width: 80%;">رويدادی که در هنگام فشردن و رها کردن يک کليد بر روی عنصر مورد نظر فعال می شود . </td>
+    </tr>
+    <tr>
+        <td>onkeyup</td>
+        <td style="background-color: #37474F;width: 80%;">رويدادی که در هنگام رها کردن يک کليد فشرده شده بر روی عنصر مورد نظر فعال می شود . </td>
+    </tr>
+</table>
+<h2>کنترل &lt;fieldset&gt;</h2>
+
+<p>اين کنترل توسط تگ < fieldset > ايجاد شده و به دور محتويات درونی خود يک کادر ايجاد می کند . تگ ها و عناصری که بين تگ باز و بسته < fieldset > قرار بگيرند ، عناصر درونی آن را تشکيل می دهند . از اين کنترل برای دسته بندی عناصر و گروه های مختلف استفاده می شود . 
+</p>
+
+<h2>تگ &lt;legend&gt;</h2>
+
+<p>از اين تگ برای ايجاد عنوان برای کادر fieldset استفاده می شود . متنی که بين تگ باز و بسته < legend > قرار بگيرد ، تعيين کننده عنوان کادر است . در مثال زير نحوه استفاده از اين تگ نشان داده شده است 
+</p>
+
+<h3>مثال</h3>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;fieldset&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;legend&gt;</span> Select the size of your item <span style="color: #6ab825; font-weight: bold">&lt;/legend&gt;</span>
+  Hieght : <span style="color: #6ab825; font-weight: bold">&lt;input</span> <span style="color: #bbbbbb">type=</span><span style="color: #ed9d13">&quot;text&quot;</span> <span style="color: #bbbbbb">size=</span><span style="color: #ed9d13">&quot;3&quot;</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span>
+  Width : <span style="color: #6ab825; font-weight: bold">&lt;input</span> <span style="color: #bbbbbb">type=</span><span style="color: #ed9d13">&quot;text&quot;</span> <span style="color: #bbbbbb">size=</span><span style="color: #ed9d13">&quot;3&quot;</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;/fieldset&gt;</span>
+</pre></div>
+
+
+<h3>خروجی</h3>
+
+<fieldset class="ex">
+  <legend> Select the size of your item </legend>
+  Hieght : <input type="text" size="3" />
+  Width : <input type="text" size="3" />
+</fieldset>
+
+<h2>کنترل &lt;label&gt;</h2>
+
+<p>اين تگ برای ايجاد يک عنوان برای يک کنترل ديگر HTML استفاده می شود . برای ايجاد ارتباط بين تگ < label > و کنترل مورد نظر ، خاصيت for تگ label را برابر id کنترل مورد نظر قرار می دهيم .</p>
+
+<p>برای مثال ، اگر يک دکمه راديويي با id = Male داشته باشيم و بخواهيم يک label برای آن طراحی کنيم ، برای ايجاد ارتباط بين label و دکمه راديويي ، خاصيت for تگ label را برابر id دکمه راديويي يعنی Male قرار می دهيم . در اين صورت کليک کردن بر روی نوشته label همانند کليک کردن بر روی خود کنترل مورد نظر است .  </p>
+
+
+<h3>خواص مهم &lt;label&gt;</h3>
+
+<table class="main-tings">
+	<tr>
+        <td>نام</td>
+        <td>نوع</td>
+        <td>شرح</td>
+    </tr>
+    <tr>
+        <td>for </td>
+        <td>id يک کنترل ديگر </td>
+        <td>تعيين کننده id کنترلی است که label به آن تعلق دارد . </td>
+    </tr>
+ </table>
+
+<h3>مثال &lt;label&gt;</h3>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;fieldset</span> <span style="color: #bbbbbb">style=</span><span style="color: #ed9d13">&quot;width: 200px&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;legend&gt;</span> Select Male or Female <span style="color: #6ab825; font-weight: bold">&lt;/legend&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;input</span> <span style="color: #bbbbbb">type=</span><span style="color: #ed9d13">&quot;radio&quot;</span> <span style="color: #bbbbbb">id=</span><span style="color: #ed9d13">&quot;Male&quot;</span> <span style="color: #bbbbbb">name=</span><span style="color: #ed9d13">&quot;Male&quot;</span> <span style="color: #bbbbbb">value=</span><span style="color: #ed9d13">&quot;Male&quot;</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;label</span> <span style="color: #bbbbbb">for=</span><span style="color: #ed9d13">&quot;Male&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> Male <span style="color: #6ab825; font-weight: bold">&lt;/label&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;input</span> <span style="color: #bbbbbb">type=</span><span style="color: #ed9d13">&quot;radio&quot;</span> <span style="color: #bbbbbb">id=</span><span style="color: #ed9d13">&quot;Female&quot;</span> <span style="color: #bbbbbb">name=</span><span style="color: #ed9d13">&quot;Male&quot;</span> <span style="color: #bbbbbb">value=</span><span style="color: #ed9d13">&quot;Female&quot;</span> <span style="color: #6ab825; font-weight: bold">/&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;label</span> <span style="color: #bbbbbb">for=</span><span style="color: #ed9d13">&quot;Female&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> Female <span style="color: #6ab825; font-weight: bold">&lt;/label&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;/fieldset&gt;</span>
+</pre></div>
+
+<h3>خروجی &lt;label&gt;</h3>
+
+<fieldset style="width: 200px" class="ex">
+  <legend> Select Male or Female </legend>
+  <input type="radio" id="Male" name="Male" value="Male" />
+  <label for="Male"> Male </label>
+  <input type="radio" id="Female" name="Male" value="Female" />
+  <label for="Female"> Female </label>
+</fieldset>
+
+<h2>کنترل &lt;select&gt;</h2>
+
+<p>از کنترل select برای ايجاد يک ليست باز شو استفاده می شود . اين ليست می تواند دارای گزينه های مختلفی باشد که هر کدام توسط يک تگ < option > تعيين می شود : </p>
+
+<h3>خواص مهم &lt;label&gt;</h3>
+
+<table class="main-tings">
+	<tr>
+        <td>نام</td>
+        <td>نوع</td>
+        <td>شرح</td>
+    </tr>
+    <tr>
+        <td>disabled </td>
+        <td>disabled </td>
+        <td> 	در صورتی که مقدار اين خاصيت برابر disabled تنظيم شود ، ليست غير فعال خواهد بود . </td>
+    </tr>
+    <tr>
+        <td>multiple </td>
+        <td>multiple </td>
+        <td>  	در صورتی که مقدار اين خاصيت برابر multiple تنظيم شود ، می توان در هر لحظه بيش از يک مورد را از ليست انتخاب کرد . در حالت پيش فرض ، در هر لحظه حداکثر می توان يک مورد را از ليست انتخاب کرد .  </td>
+    </tr>
+    <tr>
+        <td>name </td>
+        <td>name </td>
+        <td>  	تعيين کننده يک نام منحصر به فرد برای ليست باز شو است . </td>
+    </tr>
+    <tr>
+        <td>size </td>
+        <td>number  </td>
+        <td> توسط اين خاصيت می توان تعداد آيتم های قابل مشاهده در ليست را در حال عادی ( بسته بودن ليست ) تعيين کرد . به طور پيش فرض فقط يک آيتم از ليست قابل مشاهده است .  </td>
+    </tr>
+ </table>
+ 
+ <h2>تگ &lt;option&gt;</h2>
+ 
+<p>از اين تگ برای تعيين يک مورد در داخل يک ليست استفاده می شود . متنی که بين تگ باز و بسته < option > قرار بگيرد ، تعيين کننده نام گزينه در ليست است . </p>
+
+<p>تکته : اين تگ بايستی در درون تگ < select > به کار رود در غير اين صورت معنا و کاربردی ندارد . </p>
+
+<h3>خواص مهم &lt;option&gt;</h3>
+
+<table class="main-tings">
+	<tr>
+        <td>نام</td>
+        <td>نوع</td>
+        <td>شرح</td>
+    </tr>
+    <tr>
+        <td>disabled </td>
+        <td>disabled </td>
+        <td> در صورتی که مقدار اين خاصيت برابر disabled تنظيم شود ، آن گزينه ليست غير فعال خواهد بود . </td>
+    </tr>
+    <tr>
+        <td>selected </td>
+        <td>selected </td>
+        <td>در صورتی که مقدار اين خاصيت برای گزينه ای در ليست برابر selected تنظيم شود ، آن گزينه به صورت پيش فرض در ليست انتخاب شده است و اول نمايش داده می شود . در هر ليستي در هر لحظه حداکثر يک گزينه می تواند selected باشد . </td>
+    </tr>
+    <tr>
+        <td>value </td>
+        <td>مقدار</td>
+        <td>  	مقدار و ارزش گزينه را تعيين می کند ، که در هنگام ارسال اطلاعات فرم به سرور استفاده می شود .  </td>
+    </tr>
+ </table>
+ 
+ <p>
+در مثال زير يک ليست بازشو با چندين مقدار ايجاد شده است . همچنين در موارد بعدی انواع خصوصيات تگ select را به صورت عملی بررسی کرده ايم . برای مشاهده گزينه های ديگر ليست ، بر روی آن کليک کنيد : 
+</p>
+ 
+<h3>مثال</h3>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;select&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;option</span> <span style="color: #bbbbbb">value=</span><span style="color: #ed9d13">&quot;VB&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> Visual Basic <span style="color: #6ab825; font-weight: bold">&lt;/option&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;option</span> <span style="color: #bbbbbb">value=</span><span style="color: #ed9d13">&quot;C#&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> Visual C# <span style="color: #6ab825; font-weight: bold">&lt;/option&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;option</span> <span style="color: #bbbbbb">value=</span><span style="color: #ed9d13">&quot;Asp&quot;</span> <span style="color: #bbbbbb">selected=</span><span style="color: #ed9d13">&quot;selected&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> ASP.NET <span style="color: #6ab825; font-weight: bold">&lt;/option&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;option</span> <span style="color: #bbbbbb">value=</span><span style="color: #ed9d13">&quot;Sql&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> SQL Server <span style="color: #6ab825; font-weight: bold">&lt;/option&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;/select&gt;</span>
+</pre></div>
+
+
+<h3>خروجی</h3>
+
+<select class="ex">
+  <option value="VB"> Visual Basic </option>
+  <option value="C#"> Visual C# </option>
+  <option value="Asp" selected="selected"> ASP.NET </option>
+  <option value="Sql"> SQL Server </option>
+</select>
+
+<h3>مثال</h3>
+
+ <p>در حالت زير ليست غير فعال است . 
+</p>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;select</span> <span style="color: #bbbbbb">disabled=</span><span style="color: #ed9d13">&quot;disabled&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;option</span> <span style="color: #bbbbbb">value=</span><span style="color: #ed9d13">&quot;VB&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> Visual Basic <span style="color: #6ab825; font-weight: bold">&lt;/option&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;option</span> <span style="color: #bbbbbb">value=</span><span style="color: #ed9d13">&quot;C#&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> Visual C# <span style="color: #6ab825; font-weight: bold">&lt;/option&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;option</span> <span style="color: #bbbbbb">value=</span><span style="color: #ed9d13">&quot;Asp&quot;</span> <span style="color: #bbbbbb">selected=</span><span style="color: #ed9d13">&quot;selected&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> ASP.NET <span style="color: #6ab825; font-weight: bold">&lt;/option&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;option</span> <span style="color: #bbbbbb">value=</span><span style="color: #ed9d13">&quot;Sql&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> SQL Server <span style="color: #6ab825; font-weight: bold">&lt;/option&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;/select&gt;</span>
+</pre></div>
+
+<h3>خروجی</h3>
+
+<select class="ex" disabled="disabled">
+  <option value="VB"> Visual Basic </option>
+  <option value="C#"> Visual C# </option>
+  <option value="Asp" selected="selected"> ASP.NET </option>
+  <option value="Sql"> SQL Server </option>
+</select>
+
+<h3>مثال</h3>
+
+ <p>در حالت زير می توان از ليست بيش از يک گزينه انتخاب کرد . 
+</p>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;select</span> <span style="color: #bbbbbb">multiple=</span><span style="color: #ed9d13">&quot;multiple&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;option</span> <span style="color: #bbbbbb">value=</span><span style="color: #ed9d13">&quot;VB&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> Visual Basic <span style="color: #6ab825; font-weight: bold">&lt;/option&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;option</span> <span style="color: #bbbbbb">value=</span><span style="color: #ed9d13">&quot;C#&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> Visual C# <span style="color: #6ab825; font-weight: bold">&lt;/option&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;option</span> <span style="color: #bbbbbb">value=</span><span style="color: #ed9d13">&quot;Asp&quot;</span> <span style="color: #bbbbbb">selected=</span><span style="color: #ed9d13">&quot;selected&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> ASP.NET <span style="color: #6ab825; font-weight: bold">&lt;/option&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;option</span> <span style="color: #bbbbbb">value=</span><span style="color: #ed9d13">&quot;Sql&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> SQL Server <span style="color: #6ab825; font-weight: bold">&lt;/option&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;/select&gt;</span>
+</pre></div>
+
+<h3>خروجی</h3>
+
+<select class="ex" multiple="multiple">
+  <option value="VB"> Visual Basic </option>
+  <option value="C#"> Visual C# </option>
+  <option value="Asp" selected="selected"> ASP.NET </option>
+  <option value="Sql"> SQL Server </option>
+</select>
+
+<h3>مثال</h3>
+
+ <p> در حالت زير بيش از يک گزينه از ليست در حالت عادی نمايش داده می شود . 
+</p>
+
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;select</span> <span style="color: #bbbbbb">size=</span><span style="color: #ed9d13">&quot;3&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;option</span> <span style="color: #bbbbbb">value=</span><span style="color: #ed9d13">&quot;VB&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> Visual Basic <span style="color: #6ab825; font-weight: bold">&lt;/option&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;option</span> <span style="color: #bbbbbb">value=</span><span style="color: #ed9d13">&quot;C#&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> Visual C# <span style="color: #6ab825; font-weight: bold">&lt;/option&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;option</span> <span style="color: #bbbbbb">value=</span><span style="color: #ed9d13">&quot;Asp&quot;</span> <span style="color: #bbbbbb">selected=</span><span style="color: #ed9d13">&quot;selected&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> ASP.NET <span style="color: #6ab825; font-weight: bold">&lt;/option&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;option</span> <span style="color: #bbbbbb">value=</span><span style="color: #ed9d13">&quot;Sql&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> SQL Server <span style="color: #6ab825; font-weight: bold">&lt;/option&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;/select&gt;</span>
+</pre></div>
+
+<h3>خروجی</h3>
+
+<select class="ex" size="3">
+  <option value="VB"> Visual Basic </option>
+  <option value="C#"> Visual C# </option>
+  <option value="Asp" selected="selected"> ASP.NET </option>
+  <option value="Sql"> SQL Server </option>
+</select>
+
+
+<h2>تگ &lt;optgroup&gt;</h2>
+ 
+<p>از اين تگ برای دسته بندی گزينه های يک ليست در گروه های جدا از هم استفاده می شود . در هنگام زياد بودن موارد ليست ، از اين تگ می توان برای دسته بندی موارد مشابه در گروه های جدا ، جهت سهولت در انتخاب استفاده شود . عنوانی که برای گروه توسط خاصيت label اين تگ تعيين می شود ، به صورت سر گروه و بزرگتر از موارد ديگر ، در ليست نمايش داده می شود ولی عملا قابل انتخاب نيست . </p>
+
+<p>نکته : اين تگ بايد در درون تگ select به کار رود . </p>
+
+<h3>خواص مهم &lt;optgroup&gt;</h3>
+
+<table class="main-tings">
+	<tr>
+        <td>نام</td>
+        <td>نوع</td>
+        <td>شرح</td>
+    </tr>
+    <tr>
+        <td>disabled </td>
+        <td>disabled </td>
+        <td>در صورتی که مقدار اين خاصيت برابر disabled تنظيم شود ، آن دسته گزينه ليست غير فعال خواهد بود . </td>
+    </tr>
+    <tr>
+        <td>label </td>
+        <td>text</td>
+        <td>عنوان گروه را در ليست تعيين می کند . </td>
+    </tr>
+ </table>
+ 
+ <h3>مثال &lt;optgroup&gt;</h3>
+ <p>
+ در ليست زير 2 گروه از زبان های برنامه نويسی وب معرفی شده اند </p>
+ 
+<div class="pre"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;select&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;optgroup</span> <span style="color: #bbbbbb">label=</span><span style="color: #ed9d13">&quot;Server Side Languages&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>
+     <span style="color: #6ab825; font-weight: bold">&lt;option</span> <span style="color: #bbbbbb">value=</span><span style="color: #ed9d13">&quot;VB&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> Visual Basic <span style="color: #6ab825; font-weight: bold">&lt;/option&gt;</span>
+     <span style="color: #6ab825; font-weight: bold">&lt;option</span> <span style="color: #bbbbbb">value=</span><span style="color: #ed9d13">&quot;C#&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> Visual C# <span style="color: #6ab825; font-weight: bold">&lt;/option&gt;</span>
+     <span style="color: #6ab825; font-weight: bold">&lt;option</span> <span style="color: #bbbbbb">value=</span><span style="color: #ed9d13">&quot;Asp&quot;</span> <span style="color: #bbbbbb">selected=</span><span style="color: #ed9d13">&quot;selected&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> ASP.NET <span style="color: #6ab825; font-weight: bold">&lt;/option&gt;</span>
+     <span style="color: #6ab825; font-weight: bold">&lt;option</span> <span style="color: #bbbbbb">value=</span><span style="color: #ed9d13">&quot;Sql&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> SQL Server <span style="color: #6ab825; font-weight: bold">&lt;/option&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;/optgroup&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;optgroup</span> <span style="color: #bbbbbb">label=</span><span style="color: #ed9d13">&quot;Client Side Languages&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>
+     <span style="color: #6ab825; font-weight: bold">&lt;option</span> <span style="color: #bbbbbb">value=</span><span style="color: #ed9d13">&quot;vbscript&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> VB Script <span style="color: #6ab825; font-weight: bold">&lt;/option&gt;</span>
+     <span style="color: #6ab825; font-weight: bold">&lt;option</span> <span style="color: #bbbbbb">value=</span><span style="color: #ed9d13">&quot;javascript&quot;</span> <span style="color: #bbbbbb">selected=</span><span style="color: #ed9d13">&quot;selected&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> Java Script <span style="color: #6ab825; font-weight: bold">&lt;/option&gt;</span>
+     <span style="color: #6ab825; font-weight: bold">&lt;option</span> <span style="color: #bbbbbb">value=</span><span style="color: #ed9d13">&quot;html&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span> HTML <span style="color: #6ab825; font-weight: bold">&lt;/option&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;/optgroup&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;/select&gt;</span>
+</pre></div>
+ 
+ <h3>خروجی &lt;optgroup&gt;</h3>
+ 
+<select class="ex">
+  <optgroup label="Server Side Languages">
+     <option value="VB"> Visual Basic </option>
+     <option value="C#"> Visual C# </option>
+     <option value="Asp" selected="selected"> ASP.NET </option>
+     <option value="Sql"> SQL Server </option>
+  </optgroup>
+  <optgroup label="Client Side Languages">
+     <option value="vbscript"> VB Script </option>
+     <option value="javascript" selected="selected"> Java Script </option>
+     <option value="html"> HTML </option>
+  </optgroup>
+</select>
+<h2>لیست تگ های HTML</h2>
+<p>
+این لیست شامل تمام تگ ها موجود در html می باشد که بعضی از این تگ ها منسوخ شده و دیگه استفاده نمیشوند و بعضی دیگر در html5 جدید می باشند و ممکن است مرورگر های قدیمی آن ها را ساپورت نکنند .</p>
+<table class="tags-list">
+	<tr>
+        <td>&lt;!--...--&gt;</td>
+        <td>برای توضیحات استفاده می شود .</td>
+    </tr>
+    <tr>
+        <td>&lt;!DOCTYPE&gt;</td>
+        <td>نوع و نسخه زبان برنامه نويسی مورد استفاده در صفحه وب را مشخص می کند .</td>
+    </tr>
+    <tr>
+        <td>&lt;a&gt;</td>
+        <td>برای ایجاد یک لینک استفاده می شود .</td>
+    </tr>
+    <tr>
+        <td>&lt;abbr&gt;</td>
+        <td>برای ايجاد يک مخفف برای يک عبارت بزرگتر به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;acronym&gt;</td>
+        <td>برای ايجاد يک مخفف برای يک عبارت بزرگتر به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;address&gt;</td>
+        <td>برای نوشتن يک آدرس در متن به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;area&gt;</td>
+        <td>مشخص کننده يک ناحيه در نقشه های تصويری است .</td>
+    </tr>
+    <tr>
+        <td>&lt;b&gt;</td>
+        <td>برای توپر کردن نوشته ( Bold ) به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;base&gt;</td>
+        <td>برای تعيين خواص پايه در يک صفحه به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;bdo&gt;</td>
+        <td>قلم نوشته را به صورت نوشته های محيط های کدنويسی کامپيوتر در می آورد .</td>
+    </tr>
+    <tr>
+        <td>&lt;biq&gt;</td>
+        <td>باعث بزرگتر نمايش داده شدن نوشته در يک متن می شود .</td>
+    </tr>
+    <tr>
+        <td>&lt;blockquote&gt;</td>
+        <td>برای ايجاد يک نقل قول به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;body&gt;</td>
+        <td>بدنه اصلی محتويات صفحه وب را تشکيل می دهد .</td>
+    </tr>
+    <tr>
+        <td>&lt;br&gt;</td>
+        <td>برای ايجاد يک خط جديد به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;button&gt;</td>
+        <td>برای ايجاد دکمه های وب به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;caption&gt;</td>
+        <td>برای تعيين عنوان يک جدول به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;cite&gt;</td>
+        <td>باعث نمايش کج نوشته به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;code&gt;</td>
+        <td>برای نمايش متن همانند محيط های برنامه نويسی به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;col&gt;</td>
+        <td>برای دسته بندی گروهی از ستون های يک جدول به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;colgroup&gt;</td>
+        <td>برای دسته بندی گروهی از ستون های يک جدول به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;add&gt;</td>
+        <td>برای ايجاد ليست های معنی به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;del&gt;</td>
+        <td>برای نمايش متن حذف شده درصفحه به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;div&gt;</td>
+        <td>برای تقسيم فضا در صفحات وب به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;dl&gt;</td>
+        <td>برای ايجاد ليست های معنی به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;dt&gt;</td>
+        <td>برای ايجاد ليست های معنی به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;em&gt;</td>
+        <td>برای نمايش نوشته به صورت کج به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;dt&gt;</td>
+        <td>برای ايجاد ليست های معنی به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;fieldset&gt;</td>
+        <td>برای ايجاد يک کادر به دور محتويات خود به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;form&gt;</td>
+        <td>برای ايجاد يک فرم در صفحه به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;h1&gt;تا&lt;h6&gt;</td>
+        <td>برای ايجاد انواع تيترها در نوشته به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;head&gt;</td>
+        <td>در برگيرنه اطلاعات کلی درباره سند وب است .</td>
+    </tr>
+    <tr>
+        <td>&lt;hr&gt;</td>
+        <td>برای ايجاد يک خط در عرض صفحه به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;html&gt;</td>
+        <td>محدوده اصلی کد HTML يک صفحه را تعيين می کند .</td>
+    </tr>
+    <tr>
+        <td>&lt;i&gt;</td>
+        <td>برای نمايش نوشته به صورت کج به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;img&gt;</td>
+        <td>برای قرار دادن تصوير در صفحه به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;input&gt;</td>
+        <td>برای ساختن انواع کتنرل های HTML به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;ins&gt;</td>
+        <td>برای مشخص کردن متن های جديد وارد شده در يک صفحه به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;kbd&gt;</td>
+        <td>برای نمايش متن همانند محيط های برنامه نويسی به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;i&gt;</td>
+        <td>برای نمايش نوشته به صورت کج به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;label&gt;</td>
+        <td>برای ايجاد يک عنوان ( نماد متنی ) در صفحه به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;legend&gt;</td>
+        <td>برای ايجاد عنوان يک کادر fieldset به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;li&gt;</td>
+        <td>برای تعريف يک آيتم در ليست به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;link&gt;</td>
+        <td>برای برقراری ارتباط بين صفحه با يک فايل خارجي به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;map&gt;</td>
+        <td>برای ايجاد يک نقشه تصويری به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;meta&gt;</td>
+        <td>در بر گيرنده اطلاعات کلی درباره محتويات يک صفحه جهت استفاده موتورهای جستجو است .</td>
+    </tr>
+    <tr>
+        <td>&lt;noscript&gt;</td>
+        <td>برای تعيين جايگزين يک اسکريپت در يک صفحه به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;object&gt;</td>
+        <td>برای پيوند يک شی خارجی با صفحه به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;ol&gt;</td>
+        <td>برای ايجاد ليست های ترتيبی به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;object&gt;</td>
+        <td>برای پيوند يک شی خارجی با صفحه به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;optgroup&gt;</td>
+        <td>برای دسته بندی گزينه های يک ليست به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;option&gt;</td>
+        <td>برای ايجاد يک ليست در صفحه به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;p&gt;</td>
+        <td>برای ايجاد يک پاراگراف در صفحه به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;param&gt;</td>
+        <td>برای تعيين تنظيمات زمان اجرای يک شی خارجی در صفحه به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;pre&gt;</td>
+        <td>برای نمايش متن به همان صورت اوليه به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;q&gt;</td>
+        <td>برای ايجاد يک نقل قول به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;spam&gt;</td>
+        <td>برای نمايش متن همانند محيط های برنامه نويسی به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;script&gt;</td>
+        <td>برای تعيين يک اسکريپت در صفحه به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;select&gt;</td>
+        <td>برای ايجاد يک ليست باز شو به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;small&gt;</td>
+        <td>برای نمايش متن به صورت کوچکتر به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;span&gt;</td>
+        <td>برای تقسيم متن به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;strong&gt;</td>
+        <td>برای نمايش درشتر متن به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;style&gt;</td>
+        <td>برای قالب بندی تگ های HTML و صفحات به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;sub&gt;</td>
+        <td>برای ايجاد يک زير نويس به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;table&gt;</td>
+        <td>برای ايجاد جداول به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;tbody&gt;</td>
+        <td>شامل محتويات و بدنه اصلی يک جدول می شود .</td>
+    </tr>
+    <tr>
+        <td>&lt;td&gt;</td>
+        <td>برای ايجاد يک خانه جدول به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;textarea&gt;</td>
+        <td>برای ايجاد يک کادر متن به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;tfont&gt;</td>
+        <td>برای تعيين عنوان انتهای يک جدول به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;th&gt;</td>
+        <td>برای ايجاد يک سر عنوان برای جدول به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;thead&gt;</td>
+        <td>برای ايجاد يک سر عنوان برای جدول به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;title&gt;</td>
+        <td>برای ايجاد متن tooltip درباره عناصر به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;tr&gt;</td>
+        <td>برای ايجاد يک سطر جدول به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;tt&gt;</td>
+        <td>باعث نمايش متن به صورت نوشته های تلگراف به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;u&gt;</td>
+        <td>برای خط زيردار کردن نوشته به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;ul&gt;</td>
+        <td>برای ايجاد ليست های نشانه ای به کار می رود .</td>
+    </tr>
+    <tr>
+        <td>&lt;var&gt;</td>
+        <td>برای نمايش متن همانند محيط های برنامه نويسی به کار می رود .</td>
+    </tr>
+</table>
+</body>
+</html>

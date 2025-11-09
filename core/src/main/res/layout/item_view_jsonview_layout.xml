@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        tools:ignore="ResourceName">
+
+    <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:gravity="center_vertical"
+            android:textSize="12sp"
+            android:id="@+id/command"
+            android:text=""/>
+
+    <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:gravity="center_vertical">
+
+        <ProgressBar
+                android:layout_height="50dp"
+                android:layout_width="50dp"
+                android:indeterminate="true"
+                style="?android:progressBarStyle"
+                android:id="@+id/item_prograssbar_jsonview"/>
+
+        <ImageView
+                android:layout_height="30dp"
+                android:layout_width="30dp"
+                android:visibility="visible"
+                android:src="@drawable/tmp"
+                android:scaleType="centerInside"
+                android:translationX="-40.0dp"
+                android:focusable="false"
+                android:id="@+id/icon"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:id="@+id/content">
+
+        <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:gravity="center_vertical"
+                android:textSize="12sp"
+                android:id="@+id/key"
+                android:text="key:"/>
+
+        <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:gravity="center_vertical"
+                android:textSize="12sp"
+                android:layout_marginLeft="8dp"
+                android:id="@+id/value"
+                android:text="value"/>
+
+    </LinearLayout>
+
+</LinearLayout>

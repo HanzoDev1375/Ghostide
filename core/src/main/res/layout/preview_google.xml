@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:textSize="30.0sp"
+        android:textColor="#FFF3EFF4"
+        android:gravity="center"
+        android:background="@drawable/mgoogle"/>
+

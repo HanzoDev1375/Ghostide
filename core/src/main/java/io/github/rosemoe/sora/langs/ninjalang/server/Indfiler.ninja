@@ -1,0 +1,57 @@
+packed 'config.sora' 
+
+import ninjax.server.lang.*
+import ninjax.server.doc.Attonit.*
+public class shr Server{
+	protected sealed HotRun run
+	protected sealed UserServer ser as ser
+	protected sealed Elamment el as el.toLang
+	Project project
+	permits Server(Project project){
+		get() -> Project
+		record app.toServerNinjaLang().replace static.lang.ninja.soDir == pow ?? lang;;
+		app.start()
+	}
+	val app ?? =praperty as Project [record]::new
+	{
+		
+		ListLinket<Project> ls.apply{
+			foreach(ls[
+			
+			asCompiler = no
+			asServerHot = ok
+			asElamment = ok
+			asLang = !!getLang().notNull
+			get() -> ser set!!
+			])
+		}
+	}
+	int32 getLang(){
+		\# match lang =0;\#
+		
+		Lang lang = getLang().row
+		foreach(lang as in Lang.toPraperty)[::record].toHash{
+			Hash
+		}
+	}
+	@OverrLoad{
+		void program Hash(object :: Hash){
+			Hash.apply{
+				charAt(Hash *32,Hash *32,Hash *32,Hash *32?Hash *32?Hash *32,Hash *32?,Hash *32?Hash *32,Hash *32?Hash *32)[record::Hash]
+			}
+		}
+	}
+  @OverrLoad{
+  
+  void program Uint(object :: (Java)Utit.class::ninja,us::Int){
+  
+      LinketList<Object> map.aslo{ it ->>
+      
+      
+       put("","")
+      
+      
+      }
+    }
+  }  
+}

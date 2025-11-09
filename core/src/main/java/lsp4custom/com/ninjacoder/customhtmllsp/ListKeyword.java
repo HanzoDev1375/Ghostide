@@ -1,0 +1,229 @@
+package lsp4custom.com.ninjacoder.customhtmllsp;
+
+import java.util.List;
+
+import io.github.rosemoe.sora.data.CompletionItem;
+import io.github.rosemoe.sora.widget.CodeEditor;
+import io.github.rosemoe.sora.widget.TextSummry.HTMLConstants;
+import lsp4custom.com.ninjacoder.javapaserdata.HtmlUtil;
+
+public class ListKeyword {
+
+    public String[] TAGS = {
+        "a",
+        "abbr",
+        "acronym",
+        "address",
+        "applet",
+        "article",
+        "aside",
+        "audio",
+        "b",
+        "basefont",
+        "bdi",
+        "bdo",
+        "bgsound",
+        "big",
+        "blink",
+        "blockquote",
+        "body",
+        "button",
+        "canvas",
+        "caption",
+        "center",
+        "circle",
+        "cite",
+        "clipPath",
+        "code",
+        "colgroup",
+        "command",
+        "content",
+        "data",
+        "datalist",
+        "dd",
+        "defs",
+        "del",
+        "details",
+        "dfn",
+        "dialog",
+        "dir",
+        "div",
+        "dl",
+        "dt",
+        "element",
+        "ellipse",
+        "em",
+        "fieldset",
+        "figcaption",
+        "figure",
+        "font",
+        "footer",
+        "foreignObject",
+        "form",
+        "frame",
+        "frameset",
+        "g",
+        "h1",
+        "h2",
+        "h3",
+        "h4",
+        "h5",
+        "h6",
+        "head",
+        "header",
+        "hgroup",
+        "html",
+        "i",
+        "iframe",
+        "image",
+        "ins",
+        "isindex",
+        "kbd",
+        "label",
+        "legend",
+        "li",
+        "line",
+        "linearGradient",
+        "listing",
+        "main",
+        "map",
+        "mark",
+        "marquee",
+        "mask",
+        "math",
+        "menu",
+        "menuitem",
+        "meter",
+        "multicol",
+        "nav",
+        "nextid",
+        "nobr",
+        "noembed",
+        "noframes",
+        "noscript",
+        "object",
+        "ol",
+        "optgroup",
+        "option",
+        "output",
+        "p",
+        "path",
+        "pattern",
+        "picture",
+        "plaintext",
+        "polygon",
+        "polyline",
+        "pre",
+        "progress",
+        "q",
+        "radialGradient",
+        "rb",
+        "rbc",
+        "rect",
+        "rp",
+        "rt",
+        "rtc",
+        "ruby",
+        "s",
+        "samp",
+        "script",
+        "section",
+        "select",
+        "shadow",
+        "slot",
+        "small",
+        "spacer",
+        "span",
+        "stop",
+        "strike",
+        "strong",
+        "style",
+        "nostyle",
+        "sub",
+        "summary",
+        "sup",
+        "svg",
+        "table",
+        "tbody",
+        "td",
+        "template",
+        "text",
+        "textarea",
+        "tfoot",
+        "th",
+        "thead",
+        "time",
+        "title",
+        "tr",
+        "tspan",
+        "tt",
+        "u",
+        "ul",
+        "var",
+        "video",
+        "xmp"
+    };
+    protected HTMLConstants htmlconfig;
+    protected CodeEditor editor;
+
+    public ListKeyword(CodeEditor editor) {
+        htmlconfig = new HTMLConstants();
+        this.editor = editor;
+    }
+
+    public void installHtmlAttr(List<CompletionItem> items, String prfex) {
+        var attr = new HtmlAttr();
+        attr.install(items, prfex);
+    }
+
+    public void intallCss3KeyWord(List<CompletionItem> item, String prfex) {
+        var css = new Css3Server();
+        css.install(item, prfex);
+    }
+
+    public void intallCss3Color(List<CompletionItem> item, String prfex) {
+        var css = new Css3Server();
+        css.installCssColor(item, prfex);
+    }
+
+    public void installCssAttr(List<CompletionItem> item, String prfex) {
+        if (HtmlUtil.hasStyleTag(editor.getTextAsString())) {
+            var cssattr = new Css3Attr();
+            cssattr.install(item, prfex);
+        }
+    }
+
+    public void installCssPadding(List<CompletionItem> item, String prfex) {
+        if (HtmlUtil.hasStyleTag(editor.getTextAsString())) {
+            var cssattr = new Css3Server();
+            cssattr.Padding(item, prfex);
+        }
+    }
+
+    public void randomColor(List<CompletionItem> item, String prfex) {
+        if (HtmlUtil.hasStyleTag(editor.getTextAsString())) {
+            var cssattr = new Css3Server();
+            cssattr.setColorRandom(item, prfex);
+        }
+    }
+
+    public void installFromSora(List<CompletionItem> items, String prfex) {
+        for (var keylist : TAGS) {
+            if (keylist.startsWith(prfex)) {
+                items.add(
+                        HtmlUtil.hasStyleTag(editor.getTextAsString())
+                                ? getCustomTag(keylist, htmlconfig.HTMLTAG)
+                                : new CompletionItem(keylist, keylist, "Hash Tag"));
+            }
+        }
+    }
+
+    private CompletionItem getCustomTag(String tag, String desc) {
+        final String open = "<".concat(tag).concat(">");
+        final String close = "</".concat(tag).concat(">");
+        final var item = new CompletionItem(tag, desc);
+        item.commit = open.concat(close);
+        item.cursorOffset(item.commit.length() - close.length());
+        return item;
+    }
+}

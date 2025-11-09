@@ -1,0 +1,258 @@
+[
+    {
+        "csskey": "px",
+        "cssDoc": "This is a helper Attrs css3 pxTo review and analyze your code"
+    },
+    {
+        "csskey": "em",
+        "cssDoc": "This is a helper Attrs css3 emTo review and analyze your code"
+    },
+    {
+        "csskey": "flex",
+        "cssDoc": "This is a helper Attrs css3 flexTo review and analyze your code"
+    },
+    {
+        "csskey": "vim",
+        "cssDoc": "This is a helper Attrs css3 vimTo review and analyze your code"
+    },
+    {
+        "csskey": "rem",
+        "cssDoc": "This is a helper Attrs css3 remTo review and analyze your code"
+    },
+    {
+        "csskey": "vh",
+        "cssDoc": "This is a helper Attrs css3 vhTo review and analyze your code"
+    },
+    {
+        "csskey": "vw",
+        "cssDoc": "This is a helper Attrs css3 vwTo review and analyze your code"
+    },
+    {
+        "csskey": "pt",
+        "cssDoc": "This is a helper Attrs css3 ptTo review and analyze your code"
+    },
+    {
+        "csskey": "cm",
+        "cssDoc": "This is a helper Attrs css3 cmTo review and analyze your code"
+    },
+    {
+        "csskey": "mm",
+        "cssDoc": "This is a helper Attrs css3 mmTo review and analyze your code"
+    },
+    {
+        "csskey": "in",
+        "cssDoc": "This is a helper Attrs css3 inTo review and analyze your code"
+    },
+    {
+        "csskey": "pc",
+        "cssDoc": "This is a helper Attrs css3 pcTo review and analyze your code"
+    },
+    {
+        "csskey": "ex",
+        "cssDoc": "This is a helper Attrs css3 exTo review and analyze your code"
+    },
+    {
+        "csskey": "ch",
+        "cssDoc": "This is a helper Attrs css3 chTo review and analyze your code"
+    },
+    {
+        "csskey": "deg",
+        "cssDoc": "This is a helper Attrs css3 degTo review and analyze your code"
+    },
+    {
+        "csskey": "grad",
+        "cssDoc": "This is a helper Attrs css3 gradTo review and analyze your code"
+    },
+    {
+        "csskey": "rad",
+        "cssDoc": "This is a helper Attrs css3 radTo review and analyze your code"
+    },
+    {
+        "csskey": "turn",
+        "cssDoc": "This is a helper Attrs css3 turnTo review and analyze your code"
+    },
+    {
+        "csskey": "s",
+        "cssDoc": "This is a helper Attrs css3 sTo review and analyze your code"
+    },
+    {
+        "csskey": "ms",
+        "cssDoc": "This is a helper Attrs css3 msTo review and analyze your code"
+    },
+    {
+        "csskey": "%",
+        "cssDoc": "This is a helper Attrs css3 %To review and analyze your code"
+    },
+    {
+        "csskey": "fr",
+        "cssDoc": "This is a helper Attrs css3 frTo review and analyze your code"
+    },
+    {
+        "csskey": "underline",
+        "cssDoc": "This is a helper Attrs css3 underlineTo review and analyze your code"
+    },
+    {
+        "csskey": "italic",
+        "cssDoc": "This is a helper Attrs css3 italicTo review and analyze your code"
+    },
+    {
+        "csskey": "bold",
+        "cssDoc": "This is a helper Attrs css3 boldTo review and analyze your code"
+    },
+    {
+        "csskey": "normal",
+        "cssDoc": "This is a helper Attrs css3 normalTo review and analyze your code"
+    },
+    {
+        "csskey": "#RRGGBB",
+        "cssDoc": "This is a helper Attrs css3 #RRGGBBTo review and analyze your code"
+    },
+    {
+        "csskey": "rgba(R, G, B, A)",
+        "cssDoc": "This is a helper Attrs css3 rgba(R, G, B, A)To review and analyze your code"
+    },
+    {
+        "csskey": "hsl(H, S, L)",
+        "cssDoc": "This is a helper Attrs css3 hsl(H, S, L)To review and analyze your code"
+    },
+    {
+        "csskey": "url(\"path/to/image\")",
+        "cssDoc": "This is a helper Attrs css3 url(\"path/to/image\")To review and analyze your code"
+    },
+    {
+        "csskey": "none",
+        "cssDoc": "This is a helper Attrs css3 noneTo review and analyze your code"
+    },
+    {
+        "csskey": "block",
+        "cssDoc": "This is a helper Attrs css3 blockTo review and analyze your code"
+    },
+    {
+        "csskey": "inline",
+        "cssDoc": "This is a helper Attrs css3 inlineTo review and analyze your code"
+    },
+    {
+        "csskey": "inline-block",
+        "cssDoc": "This is a helper Attrs css3 inline-blockTo review and analyze your code"
+    },
+    {
+        "csskey": "table",
+        "cssDoc": "This is a helper Attrs css3 tableTo review and analyze your code"
+    },
+    {
+        "csskey": "table-cell",
+        "cssDoc": "This is a helper Attrs css3 table-cellTo review and analyze your code"
+    },
+    {
+        "csskey": "table-row",
+        "cssDoc": "This is a helper Attrs css3 table-rowTo review and analyze your code"
+    },
+    {
+        "csskey": "absolute",
+        "cssDoc": "This is a helper Attrs css3 absoluteTo review and analyze your code"
+    },
+    {
+        "csskey": "relative",
+        "cssDoc": "This is a helper Attrs css3 relativeTo review and analyze your code"
+    },
+    {
+        "csskey": "fixed",
+        "cssDoc": "This is a helper Attrs css3 fixedTo review and analyze your code"
+    },
+    {
+        "csskey": "center",
+        "cssDoc": "This is a helper Attrs css3 centerTo review and analyze your code"
+    },
+    {
+        "csskey": "bottom",
+        "cssDoc": "This is a helper Attrs css3 bottomTo review and analyze your code"
+    },
+    {
+        "csskey": "top",
+        "cssDoc": "This is a helper Attrs css3 topTo review and analyze your code"
+    },
+    {
+        "csskey": "left",
+        "cssDoc": "This is a helper Attrs css3 leftTo review and analyze your code"
+    },
+    {
+        "csskey": "right",
+        "cssDoc": "This is a helper Attrs css3 rightTo review and analyze your code"
+    },
+    {
+        "csskey": "none",
+        "cssDoc": "This is a helper Attrs css3 noneTo review and analyze your code"
+    },
+    {
+        "csskey": "visible",
+        "cssDoc": "This is a helper Attrs css3 visibleTo review and analyze your code"
+    },
+    {
+        "csskey": "hidden",
+        "cssDoc": "This is a helper Attrs css3 hiddenTo review and analyze your code"
+    },
+    {
+        "csskey": "collapse",
+        "cssDoc": "This is a helper Attrs css3 collapseTo review and analyze your code"
+    },
+    {
+        "csskey": "visible",
+        "cssDoc": "This is a helper Attrs css3 visibleTo review and analyze your code"
+    },
+    {
+        "csskey": "uppercase",
+        "cssDoc": "This is a helper Attrs css3 uppercaseTo review and analyze your code"
+    },
+    {
+        "csskey": "lowercase",
+        "cssDoc": "This is a helper Attrs css3 lowercaseTo review and analyze your code"
+    },
+    {
+        "csskey": "capitalize",
+        "cssDoc": "This is a helper Attrs css3 capitalizeTo review and analyze your code"
+    },
+    {
+        "csskey": "wrap",
+        "cssDoc": "This is a helper Attrs css3 wrapTo review and analyze your code"
+    },
+    {
+        "csskey": "nowrap",
+        "cssDoc": "This is a helper Attrs css3 nowrapTo review and analyze your code"
+    },
+    {
+        "csskey": "shrink",
+        "cssDoc": "This is a helper Attrs css3 shrinkTo review and analyze your code"
+    },
+    {
+        "csskey": "reverse",
+        "cssDoc": "This is a helper Attrs css3 reverseTo review and analyze your code"
+    },
+    {
+        "csskey": "nowrap",
+        "cssDoc": "This is a helper Attrs css3 nowrapTo review and analyze your code"
+    },
+    {
+        "csskey": "horizontal",
+        "cssDoc": "This is a helper Attrs css3 horizontalTo review and analyze your code"
+    },
+    {
+        "csskey": "vertical",
+        "cssDoc": "This is a helper Attrs css3 verticalTo review and analyze your code"
+    },
+    {
+        "csskey": "repeat",
+        "cssDoc": "This is a helper Attrs css3 repeatTo review and analyze your code"
+    },
+    {
+        "csskey": "no-repeat",
+        "cssDoc": "This is a helper Attrs css3 no-repeatTo review and analyze your code"
+    },
+    {
+        "csskey": "repeat-x",
+        "cssDoc": "This is a helper Attrs css3 repeat-xTo review and analyze your code"
+    },
+    {
+        "csskey": "repeat-y",
+        "cssDoc": "This is a helper Attrs css3 repeat-yTo review and analyze your code"
+    }
+]

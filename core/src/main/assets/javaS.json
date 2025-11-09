@@ -1,0 +1,70 @@
+[
+    {
+        "key": "for (int i = 0; i < (int)(0); i++) {\r\n\t \r\n}",
+        "value": "for"
+    },
+    {
+        "key": "for(items :item){\n\n}",
+        "value": "forloop"
+    },
+    {
+        "key": "if (object != null) {\r\n\t//Your code \r\n}\r\nelse {\r\n\t/*your code*/\n\t\r\n}",
+        "value": "ifnotnull"
+    },
+    {
+        "key": "if (obs) {\r\n\t/*your code*/\n\t\r\n}",
+        "value": "ifstaetman"
+    },
+    {
+        "key": "switch((int)0) {\r\n\tcase ((int)1): {\r\n\t\t \r\n\t\tbreak;\r\n\t}\r\n\tcase ((int)2): {\r\n\t\t \r\n\t\tbreak;\r\n\t}\r\n\tdefault: {\r\n\t\t//default\r\n\t\tbreak;\r\n\t}\r\n}",
+        "value": "switchcase"
+    },
+    {
+        "key": "public static void Sample(){\n    \n}",
+        "value": "public_static_void"
+    },
+    {
+        "key": "public void Sample(){\n    \n}",
+        "value": "public_void"
+    },
+    {
+        "key": "public static int Sample(int user){\n    return user * 30;\n}",
+        "value": "public_static_int"
+    },
+    {
+        "key": "public  int Sample(int user){\n    return user * 30;\n}",
+        "value": "public_int"
+    },
+    {
+        "key": "import android.animation.*;\r\nimport android.app.*;\r\nimport android.app.Activity;\r\nimport android.app.DialogFragment;\r\nimport android.app.Fragment;\r\nimport android.app.FragmentManager;\r\nimport android.content.*;\r\nimport android.content.SharedPreferences;\r\nimport android.content.res.*;\r\nimport android.graphics.*;\r\nimport android.graphics.drawable.*;\r\nimport android.media.*;\r\nimport android.net.*;\r\nimport android.os.*;\r\nimport android.text.*;\r\nimport android.text.style.*;\r\nimport android.util.*;\r\nimport android.view.*;\r\nimport android.view.View.*;\r\nimport android.view.animation.*;\r\nimport android.webkit.*;\r\nimport android.widget.*;\r\nimport android.widget.CheckBox;\r\nimport android.widget.CompoundButton;\r\nimport android.widget.LinearLayout;\r\nimport java.io.*;\r\nimport java.text.*;\r\nimport java.util.*;\r\nimport java.util.regex.*;\r\nimport org.json.*;",
+        "value": "import_all"
+    },
+    {
+        "key": "public void showMessage(String _s) {\r\n\t\tToast.makeText(getApplicationContext(), _s, Toast.LENGTH_SHORT).show();\r\n\t}",
+        "value": "showMessage"
+    },
+    {
+        "key": "do{\n\t/* your code */\n}while(/* your code */true){\n\t/* your code */\n}\n",
+        "value": "dowhile"
+    },
+    {
+        "key": "public class /* typeName your class*/$YourClass {\n\t\n\tpublic static void main(String... main){\n\t\tSystem.out.println(\"Hello user\");\n\t}\n}\n",
+        "value": "classMaker"
+    },
+    {
+        "key": "System.out.println(\\\\$Code);",
+        "value": "System"
+    },
+    {
+        "key": "//TODO:",
+        "value": "todo"
+    },
+    {
+        "key": "//FixedBy :",
+        "value": "fixed"
+    },
+    {
+        "key": "/*\n*\n*\n*\n*\n*\n*/",
+        "value": "longcomment"
+    }
+]

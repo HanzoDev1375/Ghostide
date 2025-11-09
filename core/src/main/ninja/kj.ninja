@@ -1,0 +1,20 @@
+import Android from {assets,res,raw}
+class kj{
+ pub main(Json json){
+  json.run {
+    usingkj = { Android
+               .assets
+               .open(File.listFiles
+               .filter.map{ src-> 
+                src.ends('.kj')
+                }
+            }
+    map{ maps->
+      record maps.readText()
+    }
+  
+   }
+ 
+ }
+
+}

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     android:id="@+id/_coordinator">
+
+    <LinearLayout
+         android:layout_height="match_parent"
+         android:layout_width="match_parent"
+         android:orientation="vertical">
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:gravity="center_vertical"
+             android:padding="8dp"
+             android:orientation="horizontal"
+             android:id="@+id/toolbar">
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:padding="8dp"
+                 android:textSize="18sp"
+                 android:textColor="#FFDCBD"
+                 android:layout_weight="1"
+                 android:id="@+id/textview1" />
+
+            <ImageView
+                 android:layout_height="30dp"
+                 android:layout_width="30dp"
+                 android:src="@drawable/codeformat"
+                 android:scaleType="centerInside"
+                 android:padding="3dp"
+                 android:id="@+id/imageview1" />
+
+        </LinearLayout>
+
+        <FrameLayout
+             android:layout_height="match_parent"
+             android:layout_width="match_parent"
+             android:orientation="horizontal"
+             android:id="@+id/linear1">
+
+            <io.github.rosemoe.sora.widget.CodeEditor
+                 android:layout_height="match_parent"
+                 android:layout_width="match_parent"
+                 android:padding="8dp"
+                 android:orientation="vertical"
+                 android:id="@+id/editor" />
+
+            <FrameLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:gravity="right"
+                 android:orientation="vertical"
+                 android:id="@+id/linear2">
+
+                <ProgressBar
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:indeterminate="false"
+                     android:padding="8dp"
+                     style="?android:progressBarStyle"
+                     android:id="@+id/pro"
+                     android:layout_gravity="right" />
+
+            </FrameLayout>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:layout_margin="16dp"
+         app:srcCompat="@drawable/copys"
+         android:id="@+id/_fab"
+         android:layout_gravity="right|bottom" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

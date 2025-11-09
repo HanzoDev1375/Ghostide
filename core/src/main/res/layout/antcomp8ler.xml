@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     android:orientation="vertical">
+
+    <LinearLayout
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:orientation="vertical"
+         android:id="@+id/linear1">
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:gravity="center_horizontal|center_vertical"
+             android:padding="8dp"
+             android:orientation="horizontal"
+             android:id="@+id/linear2">
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:padding="8dp"
+                 android:textSize="18sp"
+                 android:fontFamily="@font/ghostfont"
+                 android:textColor="?@attr/colorSecondary"
+                 android:focusable="true"
+                 android:id="@+id/textview1"
+                 android:text="G4 Compiler"
+                 android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:padding="8dp"
+             android:orientation="vertical"
+             android:id="@+id/linear3">
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:padding="8dp"
+                 android:textSize="12sp"
+                 android:fontFamily="@font/ghostfont"
+                 android:textColor="?@attr/colorSecondary"
+                 android:focusable="true"
+                 android:id="@+id/textview2"
+                 android:text="Select output path file " />
+
+            <com.google.android.material.textfield.TextInputLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                 android:id="@+id/textinputlayout1">
+
+                <EditText
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:hint="output Path"
+                     android:padding="8dp"
+                     android:textColorHint="#FFFFFF"
+                     android:textSize="14sp"
+                     android:fontFamily="@font/ghostfont"
+                     android:textColor="?@attr/colorSecondary"
+                     android:focusable="true"
+                     android:id="@+id/edpath"
+                     android:text="/sdcard/Android/" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:padding="8dp"
+                 android:textSize="12sp"
+                 android:fontFamily="@font/ghostfont"
+                 android:textColor="?@attr/colorSecondary"
+                 android:focusable="true"
+                 android:id="@+id/textview3"
+                 android:text="try to Select package your java file" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                 android:id="@+id/textinputlayout2">
+
+                <EditText
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:hint="Select package your file"
+                     android:padding="8dp"
+                     android:textColorHint="#FFFFFF"
+                     android:textSize="14sp"
+                     android:fontFamily="@font/ghostfont"
+                     android:textColor="?@attr/colorSecondary"
+                     android:focusable="true"
+                     android:id="@+id/etpa"
+                     android:text="ir.ninjacoder.ghostide" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:gravity="right|bottom"
+                 android:orientation="vertical"
+                 android:id="@+id/linear4">
+
+                <Button
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:padding="8dp"
+                     android:textSize="12sp"
+                     android:fontFamily="@font/ghostfont"
+                     android:textColor="#000000"
+                     android:focusable="true"
+                     android:id="@+id/btnrun"
+                     android:text="compile" />
+
+            </LinearLayout>
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:padding="8dp"
+                 android:textSize="14sp"
+                 android:fontFamily="@font/ghostfont"
+                 android:textColor="?@attr/colorSecondary"
+                 android:focusable="true"
+                 android:id="@+id/tvlog" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

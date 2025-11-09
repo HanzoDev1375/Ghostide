@@ -1,0 +1,854 @@
+[
+    {
+        "csskey": "align-content",
+        "cssDoc": "This is a helper class align-contentTo review and analyze your code"
+    },
+    {
+        "csskey": "align-items",
+        "cssDoc": "This is a helper class align-itemsTo review and analyze your code"
+    },
+    {
+        "csskey": "align-self",
+        "cssDoc": "This is a helper class align-selfTo review and analyze your code"
+    },
+    {
+        "csskey": "all",
+        "cssDoc": "This is a helper class allTo review and analyze your code"
+    },
+    {
+        "csskey": "animation",
+        "cssDoc": "This is a helper class animationTo review and analyze your code"
+    },
+    {
+        "csskey": "animation-delay",
+        "cssDoc": "This is a helper class animation-delayTo review and analyze your code"
+    },
+    {
+        "csskey": "animation-direction",
+        "cssDoc": "This is a helper class animation-directionTo review and analyze your code"
+    },
+    {
+        "csskey": "animation-duration",
+        "cssDoc": "This is a helper class animation-durationTo review and analyze your code"
+    },
+    {
+        "csskey": "animation-fill-mode",
+        "cssDoc": "This is a helper class animation-fill-modeTo review and analyze your code"
+    },
+    {
+        "csskey": "animation-iteration-count",
+        "cssDoc": "This is a helper class animation-iteration-countTo review and analyze your code"
+    },
+    {
+        "csskey": "animation-name",
+        "cssDoc": "This is a helper class animation-nameTo review and analyze your code"
+    },
+    {
+        "csskey": "animation-play-state",
+        "cssDoc": "This is a helper class animation-play-stateTo review and analyze your code"
+    },
+    {
+        "csskey": "animation-timing-function",
+        "cssDoc": "This is a helper class animation-timing-functionTo review and analyze your code"
+    },
+    {
+        "csskey": "backface-visibility",
+        "cssDoc": "This is a helper class backface-visibilityTo review and analyze your code"
+    },
+    {
+        "csskey": "background",
+        "cssDoc": "This is a helper class backgroundTo review and analyze your code"
+    },
+    {
+        "csskey": "background-attachment",
+        "cssDoc": "This is a helper class background-attachmentTo review and analyze your code"
+    },
+    {
+        "csskey": "background-blur",
+        "cssDoc": "This is a helper class background-blurTo review and analyze your code"
+    },
+    {
+        "csskey": "background-clip",
+        "cssDoc": "This is a helper class background-clipTo review and analyze your code"
+    },
+    {
+        "csskey": "background-color",
+        "cssDoc": "This is a helper class background-colorTo review and analyze your code"
+    },
+    {
+        "csskey": "background-image",
+        "cssDoc": "This is a helper class background-imageTo review and analyze your code"
+    },
+    {
+        "csskey": "background-origin",
+        "cssDoc": "This is a helper class background-originTo review and analyze your code"
+    },
+    {
+        "csskey": "background-position",
+        "cssDoc": "This is a helper class background-positionTo review and analyze your code"
+    },
+    {
+        "csskey": "background-repeat",
+        "cssDoc": "This is a helper class background-repeatTo review and analyze your code"
+    },
+    {
+        "csskey": "background-size",
+        "cssDoc": "This is a helper class background-sizeTo review and analyze your code"
+    },
+    {
+        "csskey": "border",
+        "cssDoc": "This is a helper class borderTo review and analyze your code"
+    },
+    {
+        "csskey": "border-bottom",
+        "cssDoc": "This is a helper class border-bottomTo review and analyze your code"
+    },
+    {
+        "csskey": "border-bottom-color",
+        "cssDoc": "This is a helper class border-bottom-colorTo review and analyze your code"
+    },
+    {
+        "csskey": "border-bottom-left-radius",
+        "cssDoc": "This is a helper class border-bottom-left-radiusTo review and analyze your code"
+    },
+    {
+        "csskey": "border-bottom-right-radius",
+        "cssDoc": "This is a helper class border-bottom-right-radiusTo review and analyze your code"
+    },
+    {
+        "csskey": "border-bottom-style",
+        "cssDoc": "This is a helper class border-bottom-styleTo review and analyze your code"
+    },
+    {
+        "csskey": "border-bottom-width",
+        "cssDoc": "This is a helper class border-bottom-widthTo review and analyze your code"
+    },
+    {
+        "csskey": "border-collapse",
+        "cssDoc": "This is a helper class border-collapseTo review and analyze your code"
+    },
+    {
+        "csskey": "border-color",
+        "cssDoc": "This is a helper class border-colorTo review and analyze your code"
+    },
+    {
+        "csskey": "border-image",
+        "cssDoc": "This is a helper class border-imageTo review and analyze your code"
+    },
+    {
+        "csskey": "border-image-outset",
+        "cssDoc": "This is a helper class border-image-outsetTo review and analyze your code"
+    },
+    {
+        "csskey": "border-image-repeat",
+        "cssDoc": "This is a helper class border-image-repeatTo review and analyze your code"
+    },
+    {
+        "csskey": "border-image-slice",
+        "cssDoc": "This is a helper class border-image-sliceTo review and analyze your code"
+    },
+    {
+        "csskey": "border-image-source",
+        "cssDoc": "This is a helper class border-image-sourceTo review and analyze your code"
+    },
+    {
+        "csskey": "border-image-width",
+        "cssDoc": "This is a helper class border-image-widthTo review and analyze your code"
+    },
+    {
+        "csskey": "border-left",
+        "cssDoc": "This is a helper class border-leftTo review and analyze your code"
+    },
+    {
+        "csskey": "border-left-color",
+        "cssDoc": "This is a helper class border-left-colorTo review and analyze your code"
+    },
+    {
+        "csskey": "border-left-style",
+        "cssDoc": "This is a helper class border-left-styleTo review and analyze your code"
+    },
+    {
+        "csskey": "border-left-width",
+        "cssDoc": "This is a helper class border-left-widthTo review and analyze your code"
+    },
+    {
+        "csskey": "border-radius",
+        "cssDoc": "This is a helper class border-radiusTo review and analyze your code"
+    },
+    {
+        "csskey": "border-right",
+        "cssDoc": "This is a helper class border-rightTo review and analyze your code"
+    },
+    {
+        "csskey": "border-right-color",
+        "cssDoc": "This is a helper class border-right-colorTo review and analyze your code"
+    },
+    {
+        "csskey": "border-right-style",
+        "cssDoc": "This is a helper class border-right-styleTo review and analyze your code"
+    },
+    {
+        "csskey": "border-right-width",
+        "cssDoc": "This is a helper class border-right-widthTo review and analyze your code"
+    },
+    {
+        "csskey": "border-spacing",
+        "cssDoc": "This is a helper class border-spacingTo review and analyze your code"
+    },
+    {
+        "csskey": "border-style",
+        "cssDoc": "This is a helper class border-styleTo review and analyze your code"
+    },
+    {
+        "csskey": "border-top",
+        "cssDoc": "This is a helper class border-topTo review and analyze your code"
+    },
+    {
+        "csskey": "border-top-color",
+        "cssDoc": "This is a helper class border-top-colorTo review and analyze your code"
+    },
+    {
+        "csskey": "border-top-left-radius",
+        "cssDoc": "This is a helper class border-top-left-radiusTo review and analyze your code"
+    },
+    {
+        "csskey": "border-top-right-radius",
+        "cssDoc": "This is a helper class border-top-right-radiusTo review and analyze your code"
+    },
+    {
+        "csskey": "border-top-style",
+        "cssDoc": "This is a helper class border-top-styleTo review and analyze your code"
+    },
+    {
+        "csskey": "border-top-width",
+        "cssDoc": "This is a helper class border-top-widthTo review and analyze your code"
+    },
+    {
+        "csskey": "border-width",
+        "cssDoc": "This is a helper class border-widthTo review and analyze your code"
+    },
+    {
+        "csskey": "bottom",
+        "cssDoc": "This is a helper class bottomTo review and analyze your code"
+    },
+    {
+        "csskey": "box-decoration-break",
+        "cssDoc": "This is a helper class box-decoration-breakTo review and analyze your code"
+    },
+    {
+        "csskey": "box-shadow",
+        "cssDoc": "This is a helper class box-shadowTo review and analyze your code"
+    },
+    {
+        "csskey": "box-sizing",
+        "cssDoc": "This is a helper class box-sizingTo review and analyze your code"
+    },
+    {
+        "csskey": "break-after",
+        "cssDoc": "This is a helper class break-afterTo review and analyze your code"
+    },
+    {
+        "csskey": "break-before",
+        "cssDoc": "This is a helper class break-beforeTo review and analyze your code"
+    },
+    {
+        "csskey": "break-inside",
+        "cssDoc": "This is a helper class break-insideTo review and analyze your code"
+    },
+    {
+        "csskey": "caption-side",
+        "cssDoc": "This is a helper class caption-sideTo review and analyze your code"
+    },
+    {
+        "csskey": "caret-color",
+        "cssDoc": "This is a helper class caret-colorTo review and analyze your code"
+    },
+    {
+        "csskey": "clear",
+        "cssDoc": "This is a helper class clearTo review and analyze your code"
+    },
+    {
+        "csskey": "clip",
+        "cssDoc": "This is a helper class clipTo review and analyze your code"
+    },
+    {
+        "csskey": "color",
+        "cssDoc": "This is a helper class colorTo review and analyze your code"
+    },
+    {
+        "csskey": "column-count",
+        "cssDoc": "This is a helper class column-countTo review and analyze your code"
+    },
+    {
+        "csskey": "column-fill",
+        "cssDoc": "This is a helper class column-fillTo review and analyze your code"
+    },
+    {
+        "csskey": "column-gap",
+        "cssDoc": "This is a helper class column-gapTo review and analyze your code"
+    },
+    {
+        "csskey": "column-rule",
+        "cssDoc": "This is a helper class column-ruleTo review and analyze your code"
+    },
+    {
+        "csskey": "column-rule-color",
+        "cssDoc": "This is a helper class column-rule-colorTo review and analyze your code"
+    },
+    {
+        "csskey": "column-rule-style",
+        "cssDoc": "This is a helper class column-rule-styleTo review and analyze your code"
+    },
+    {
+        "csskey": "column-rule-width",
+        "cssDoc": "This is a helper class column-rule-widthTo review and analyze your code"
+    },
+    {
+        "csskey": "column-span",
+        "cssDoc": "This is a helper class column-spanTo review and analyze your code"
+    },
+    {
+        "csskey": "column-width",
+        "cssDoc": "This is a helper class column-widthTo review and analyze your code"
+    },
+    {
+        "csskey": "columns",
+        "cssDoc": "This is a helper class columnsTo review and analyze your code"
+    },
+    {
+        "csskey": "content",
+        "cssDoc": "This is a helper class contentTo review and analyze your code"
+    },
+    {
+        "csskey": "counter-increment",
+        "cssDoc": "This is a helper class counter-incrementTo review and analyze your code"
+    },
+    {
+        "csskey": "counter-reset",
+        "cssDoc": "This is a helper class counter-resetTo review and analyze your code"
+    },
+    {
+        "csskey": "cursor",
+        "cssDoc": "This is a helper class cursorTo review and analyze your code"
+    },
+    {
+        "csskey": "direction",
+        "cssDoc": "This is a helper class directionTo review and analyze your code"
+    },
+    {
+        "csskey": "display",
+        "cssDoc": "This is a helper class displayTo review and analyze your code"
+    },
+    {
+        "csskey": "empty-cells",
+        "cssDoc": "This is a helper class empty-cellsTo review and analyze your code"
+    },
+    {
+        "csskey": "filter",
+        "cssDoc": "This is a helper class filterTo review and analyze your code"
+    },
+    {
+        "csskey": "flex",
+        "cssDoc": "This is a helper class flexTo review and analyze your code"
+    },
+    {
+        "csskey": "flex-basis",
+        "cssDoc": "This is a helper class flex-basisTo review and analyze your code"
+    },
+    {
+        "csskey": "flex-direction",
+        "cssDoc": "This is a helper class flex-directionTo review and analyze your code"
+    },
+    {
+        "csskey": "flex-flow",
+        "cssDoc": "This is a helper class flex-flowTo review and analyze your code"
+    },
+    {
+        "csskey": "flex-grow",
+        "cssDoc": "This is a helper class flex-growTo review and analyze your code"
+    },
+    {
+        "csskey": "flex-shrink",
+        "cssDoc": "This is a helper class flex-shrinkTo review and analyze your code"
+    },
+    {
+        "csskey": "flex-wrap",
+        "cssDoc": "This is a helper class flex-wrapTo review and analyze your code"
+    },
+    {
+        "csskey": "float",
+        "cssDoc": "This is a helper class floatTo review and analyze your code"
+    },
+    {
+        "csskey": "font",
+        "cssDoc": "This is a helper class fontTo review and analyze your code"
+    },
+    {
+        "csskey": "font-family",
+        "cssDoc": "This is a helper class font-familyTo review and analyze your code"
+    },
+    {
+        "csskey": "font-size",
+        "cssDoc": "This is a helper class font-sizeTo review and analyze your code"
+    },
+    {
+        "csskey": "font-size-adjust",
+        "cssDoc": "This is a helper class font-size-adjustTo review and analyze your code"
+    },
+    {
+        "csskey": "font-stretch",
+        "cssDoc": "This is a helper class font-stretchTo review and analyze your code"
+    },
+    {
+        "csskey": "font-style",
+        "cssDoc": "This is a helper class font-styleTo review and analyze your code"
+    },
+    {
+        "csskey": "font-variant",
+        "cssDoc": "This is a helper class font-variantTo review and analyze your code"
+    },
+    {
+        "csskey": "font-variant-caps",
+        "cssDoc": "This is a helper class font-variant-capsTo review and analyze your code"
+    },
+    {
+        "csskey": "font-weight",
+        "cssDoc": "This is a helper class font-weightTo review and analyze your code"
+    },
+    {
+        "csskey": "gap",
+        "cssDoc": "This is a helper class gapTo review and analyze your code"
+    },
+    {
+        "csskey": "grid",
+        "cssDoc": "This is a helper class gridTo review and analyze your code"
+    },
+    {
+        "csskey": "grid-area",
+        "cssDoc": "This is a helper class grid-areaTo review and analyze your code"
+    },
+    {
+        "csskey": "grid-auto-columns",
+        "cssDoc": "This is a helper class grid-auto-columnsTo review and analyze your code"
+    },
+    {
+        "csskey": "grid-auto-flow",
+        "cssDoc": "This is a helper class grid-auto-flowTo review and analyze your code"
+    },
+    {
+        "csskey": "grid-auto-rows",
+        "cssDoc": "This is a helper class grid-auto-rowsTo review and analyze your code"
+    },
+    {
+        "csskey": "grid-column",
+        "cssDoc": "This is a helper class grid-columnTo review and analyze your code"
+    },
+    {
+        "csskey": "grid-column-end",
+        "cssDoc": "This is a helper class grid-column-endTo review and analyze your code"
+    },
+    {
+        "csskey": "grid-column-gap",
+        "cssDoc": "This is a helper class grid-column-gapTo review and analyze your code"
+    },
+    {
+        "csskey": "grid-column-start",
+        "cssDoc": "This is a helper class grid-column-startTo review and analyze your code"
+    },
+    {
+        "csskey": "grid-gap",
+        "cssDoc": "This is a helper class grid-gapTo review and analyze your code"
+    },
+    {
+        "csskey": "grid-row",
+        "cssDoc": "This is a helper class grid-rowTo review and analyze your code"
+    },
+    {
+        "csskey": "grid-row-end",
+        "cssDoc": "This is a helper class grid-row-endTo review and analyze your code"
+    },
+    {
+        "csskey": "grid-row-gap",
+        "cssDoc": "This is a helper class grid-row-gapTo review and analyze your code"
+    },
+    {
+        "csskey": "grid-row-start",
+        "cssDoc": "This is a helper class grid-row-startTo review and analyze your code"
+    },
+    {
+        "csskey": "grid-template",
+        "cssDoc": "This is a helper class grid-templateTo review and analyze your code"
+    },
+    {
+        "csskey": "grid-template-areas",
+        "cssDoc": "This is a helper class grid-template-areasTo review and analyze your code"
+    },
+    {
+        "csskey": "grid-template-columns",
+        "cssDoc": "This is a helper class grid-template-columnsTo review and analyze your code"
+    },
+    {
+        "csskey": "grid-template-rows",
+        "cssDoc": "This is a helper class grid-template-rowsTo review and analyze your code"
+    },
+    {
+        "csskey": "height",
+        "cssDoc": "This is a helper class heightTo review and analyze your code"
+    },
+    {
+        "csskey": "ime-mode",
+        "cssDoc": "This is a helper class ime-modeTo review and analyze your code"
+    },
+    {
+        "csskey": "justify-content",
+        "cssDoc": "This is a helper class justify-contentTo review and analyze your code"
+    },
+    {
+        "csskey": "left",
+        "cssDoc": "This is a helper class leftTo review and analyze your code"
+    },
+    {
+        "csskey": "letter-spacing",
+        "cssDoc": "This is a helper class letter-spacingTo review and analyze your code"
+    },
+    {
+        "csskey": "line-break",
+        "cssDoc": "This is a helper class line-breakTo review and analyze your code"
+    },
+    {
+        "csskey": "line-height",
+        "cssDoc": "This is a helper class line-heightTo review and analyze your code"
+    },
+    {
+        "csskey": "list-style",
+        "cssDoc": "This is a helper class list-styleTo review and analyze your code"
+    },
+    {
+        "csskey": "list-style-image",
+        "cssDoc": "This is a helper class list-style-imageTo review and analyze your code"
+    },
+    {
+        "csskey": "list-style-position",
+        "cssDoc": "This is a helper class list-style-positionTo review and analyze your code"
+    },
+    {
+        "csskey": "list-style-type",
+        "cssDoc": "This is a helper class list-style-typeTo review and analyze your code"
+    },
+    {
+        "csskey": "margin",
+        "cssDoc": "This is a helper class marginTo review and analyze your code"
+    },
+    {
+        "csskey": "margin-bottom",
+        "cssDoc": "This is a helper class margin-bottomTo review and analyze your code"
+    },
+    {
+        "csskey": "margin-left",
+        "cssDoc": "This is a helper class margin-leftTo review and analyze your code"
+    },
+    {
+        "csskey": "margin-right",
+        "cssDoc": "This is a helper class margin-rightTo review and analyze your code"
+    },
+    {
+        "csskey": "margin-top",
+        "cssDoc": "This is a helper class margin-topTo review and analyze your code"
+    },
+    {
+        "csskey": "marker-offset",
+        "cssDoc": "This is a helper class marker-offsetTo review and analyze your code"
+    },
+    {
+        "csskey": "max-height",
+        "cssDoc": "This is a helper class max-heightTo review and analyze your code"
+    },
+    {
+        "csskey": "max-width",
+        "cssDoc": "This is a helper class max-widthTo review and analyze your code"
+    },
+    {
+        "csskey": "min-height",
+        "cssDoc": "This is a helper class min-heightTo review and analyze your code"
+    },
+    {
+        "csskey": "min-width",
+        "cssDoc": "This is a helper class min-widthTo review and analyze your code"
+    },
+    {
+        "csskey": "mix-blend-mode",
+        "cssDoc": "This is a helper class mix-blend-modeTo review and analyze your code"
+    },
+    {
+        "csskey": "object-fit",
+        "cssDoc": "This is a helper class object-fitTo review and analyze your code"
+    },
+    {
+        "csskey": "object-position",
+        "cssDoc": "This is a helper class object-positionTo review and analyze your code"
+    },
+    {
+        "csskey": "opacity",
+        "cssDoc": "This is a helper class opacityTo review and analyze your code"
+    },
+    {
+        "csskey": "order",
+        "cssDoc": "This is a helper class orderTo review and analyze your code"
+    },
+    {
+        "csskey": "orphans",
+        "cssDoc": "This is a helper class orphansTo review and analyze your code"
+    },
+    {
+        "csskey": "outline",
+        "cssDoc": "This is a helper class outlineTo review and analyze your code"
+    },
+    {
+        "csskey": "outline-color",
+        "cssDoc": "This is a helper class outline-colorTo review and analyze your code"
+    },
+    {
+        "csskey": "outline-offset",
+        "cssDoc": "This is a helper class outline-offsetTo review and analyze your code"
+    },
+    {
+        "csskey": "outline-style",
+        "cssDoc": "This is a helper class outline-styleTo review and analyze your code"
+    },
+    {
+        "csskey": "outline-width",
+        "cssDoc": "This is a helper class outline-widthTo review and analyze your code"
+    },
+    {
+        "csskey": "overflow",
+        "cssDoc": "This is a helper class overflowTo review and analyze your code"
+    },
+    {
+        "csskey": "overflow-wrap",
+        "cssDoc": "This is a helper class overflow-wrapTo review and analyze your code"
+    },
+    {
+        "csskey": "overflow-x",
+        "cssDoc": "This is a helper class overflow-xTo review and analyze your code"
+    },
+    {
+        "csskey": "overflow-y",
+        "cssDoc": "This is a helper class overflow-yTo review and analyze your code"
+    },
+    {
+        "csskey": "padding",
+        "cssDoc": "This is a helper class paddingTo review and analyze your code"
+    },
+    {
+        "csskey": "padding-bottom",
+        "cssDoc": "This is a helper class padding-bottomTo review and analyze your code"
+    },
+    {
+        "csskey": "padding-left",
+        "cssDoc": "This is a helper class padding-leftTo review and analyze your code"
+    },
+    {
+        "csskey": "padding-right",
+        "cssDoc": "This is a helper class padding-rightTo review and analyze your code"
+    },
+    {
+        "csskey": "padding-top",
+        "cssDoc": "This is a helper class padding-topTo review and analyze your code"
+    },
+    {
+        "csskey": "page-break-after",
+        "cssDoc": "This is a helper class page-break-afterTo review and analyze your code"
+    },
+    {
+        "csskey": "page-break-before",
+        "cssDoc": "This is a helper class page-break-beforeTo review and analyze your code"
+    },
+    {
+        "csskey": "page-break-inside",
+        "cssDoc": "This is a helper class page-break-insideTo review and analyze your code"
+    },
+    {
+        "csskey": "perspective",
+        "cssDoc": "This is a helper class perspectiveTo review and analyze your code"
+    },
+    {
+        "csskey": "perspective-origin",
+        "cssDoc": "This is a helper class perspective-originTo review and analyze your code"
+    },
+    {
+        "csskey": "pointer-events",
+        "cssDoc": "This is a helper class pointer-eventsTo review and analyze your code"
+    },
+    {
+        "csskey": "position",
+        "cssDoc": "This is a helper class positionTo review and analyze your code"
+    },
+    {
+        "csskey": "quotes",
+        "cssDoc": "This is a helper class quotesTo review and analyze your code"
+    },
+    {
+        "csskey": "resize",
+        "cssDoc": "This is a helper class resizeTo review and analyze your code"
+    },
+    {
+        "csskey": "right",
+        "cssDoc": "This is a helper class rightTo review and analyze your code"
+    },
+    {
+        "csskey": "row-gap",
+        "cssDoc": "This is a helper class row-gapTo review and analyze your code"
+    },
+    {
+        "csskey": "scroll-behavior",
+        "cssDoc": "This is a helper class scroll-behaviorTo review and analyze your code"
+    },
+    {
+        "csskey": "speak",
+        "cssDoc": "This is a helper class speakTo review and analyze your code"
+    },
+    {
+        "csskey": "table-layout",
+        "cssDoc": "This is a helper class table-layoutTo review and analyze your code"
+    },
+    {
+        "csskey": "tab-size",
+        "cssDoc": "This is a helper class tab-sizeTo review and analyze your code"
+    },
+    {
+        "csskey": "text-align",
+        "cssDoc": "This is a helper class text-alignTo review and analyze your code"
+    },
+    {
+        "csskey": "text-align-last",
+        "cssDoc": "This is a helper class text-align-lastTo review and analyze your code"
+    },
+    {
+        "csskey": "text-decoration",
+        "cssDoc": "This is a helper class text-decorationTo review and analyze your code"
+    },
+    {
+        "csskey": "text-decoration-color",
+        "cssDoc": "This is a helper class text-decoration-colorTo review and analyze your code"
+    },
+    {
+        "csskey": "text-decoration-line",
+        "cssDoc": "This is a helper class text-decoration-lineTo review and analyze your code"
+    },
+    {
+        "csskey": "text-decoration-skip",
+        "cssDoc": "This is a helper class text-decoration-skipTo review and analyze your code"
+    },
+    {
+        "csskey": "text-decoration-style",
+        "cssDoc": "This is a helper class text-decoration-styleTo review and analyze your code"
+    },
+    {
+        "csskey": "text-indent",
+        "cssDoc": "This is a helper class text-indentTo review and analyze your code"
+    },
+    {
+        "csskey": "text-justify",
+        "cssDoc": "This is a helper class text-justifyTo review and analyze your code"
+    },
+    {
+        "csskey": "text-overflow",
+        "cssDoc": "This is a helper class text-overflowTo review and analyze your code"
+    },
+    {
+        "csskey": "text-shadow",
+        "cssDoc": "This is a helper class text-shadowTo review and analyze your code"
+    },
+    {
+        "csskey": "text-transform",
+        "cssDoc": "This is a helper class text-transformTo review and analyze your code"
+    },
+    {
+        "csskey": "text-underline-position",
+        "cssDoc": "This is a helper class text-underline-positionTo review and analyze your code"
+    },
+    {
+        "csskey": "top",
+        "cssDoc": "This is a helper class topTo review and analyze your code"
+    },
+    {
+        "csskey": "transform",
+        "cssDoc": "This is a helper class transformTo review and analyze your code"
+    },
+    {
+        "csskey": "transform-origin",
+        "cssDoc": "This is a helper class transform-originTo review and analyze your code"
+    },
+    {
+        "csskey": "transform-style",
+        "cssDoc": "This is a helper class transform-styleTo review and analyze your code"
+    },
+    {
+        "csskey": "transition",
+        "cssDoc": "This is a helper class transitionTo review and analyze your code"
+    },
+    {
+        "csskey": "transition-delay",
+        "cssDoc": "This is a helper class transition-delayTo review and analyze your code"
+    },
+    {
+        "csskey": "transition-duration",
+        "cssDoc": "This is a helper class transition-durationTo review and analyze your code"
+    },
+    {
+        "csskey": "transition-property",
+        "cssDoc": "This is a helper class transition-propertyTo review and analyze your code"
+    },
+    {
+        "csskey": "transition-timing-function",
+        "cssDoc": "This is a helper class transition-timing-functionTo review and analyze your code"
+    },
+    {
+        "csskey": "unicode-bidi",
+        "cssDoc": "This is a helper class unicode-bidiTo review and analyze your code"
+    },
+    {
+        "csskey": "vertical-align",
+        "cssDoc": "This is a helper class vertical-alignTo review and analyze your code"
+    },
+    {
+        "csskey": "visibility",
+        "cssDoc": "This is a helper class visibilityTo review and analyze your code"
+    },
+    {
+        "csskey": "white-space",
+        "cssDoc": "This is a helper class white-spaceTo review and analyze your code"
+    },
+    {
+        "csskey": "widows",
+        "cssDoc": "This is a helper class widowsTo review and analyze your code"
+    },
+    {
+        "csskey": "width",
+        "cssDoc": "This is a helper class widthTo review and analyze your code"
+    },
+    {
+        "csskey": "will-change",
+        "cssDoc": "This is a helper class will-changeTo review and analyze your code"
+    },
+    {
+        "csskey": "word-break",
+        "cssDoc": "This is a helper class word-breakTo review and analyze your code"
+    },
+    {
+        "csskey": "word-spacing",
+        "cssDoc": "This is a helper class word-spacingTo review and analyze your code"
+    },
+    {
+        "csskey": "word-wrap",
+        "cssDoc": "This is a helper class word-wrapTo review and analyze your code"
+    },
+    {
+        "csskey": "writing-mode",
+        "cssDoc": "This is a helper class writing-modeTo review and analyze your code"
+    },
+    {
+        "csskey": "z-index",
+        "cssDoc": "This is a helper class z-indexTo review and analyze your code"
+    }
+]

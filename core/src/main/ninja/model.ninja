@@ -1,0 +1,20 @@
+import {File,HOME}
+
+const let HOME = HOME
+class model{
+	
+	pub main(){
+		printor("Hello to ghost ide")
+		let file = File
+		file.run {
+			if(it.hasFileOrFile()){
+				HOME.ghostfile=it
+				HOME.pythonPath=it
+				HOME.jar=it
+				HOME.sass =it
+				HOME.less =it
+			}
+		}
+		
+	}
+}

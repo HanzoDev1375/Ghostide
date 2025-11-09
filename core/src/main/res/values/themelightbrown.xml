@@ -1,0 +1,58 @@
+<resources>
+    <style
+        name="Theme.ThemeEngine.LIGHTBROWN"
+        parent="Theme.Bases"
+        >
+        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.App.BottomSheetDialog</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialAlertDialog</item>
+        <item name="popupMenuBackground">@drawable/menucustom</item>
+        <item name="textAppearanceLargePopupMenu">@style/TextAppearance.App.BodyLarge</item>
+        <item name="textAppearanceSmallPopupMenu">@style/TextAppearance.App.BodyLarge</item>
+        <item name="colorPrimary">@color/lightbrown_theme_primary</item>
+        <item name="colorOnPrimary">@color/lightbrown_theme_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/lightbrown_theme_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/lightbrown_theme_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/lightbrown_theme_secondary</item>
+        <item name="colorOnSecondary">@color/lightbrown_theme_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/lightbrown_theme_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/lightbrown_theme_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/lightbrown_theme_tertiary</item>
+        <item name="colorOnTertiary">@color/lightbrown_theme_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/lightbrown_theme_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/lightbrown_theme_onTertiaryContainer</item>
+        <item name="colorError">@color/lightbrown_theme_error</item>
+        <item name="colorOnError">@color/lightbrown_theme_onError</item>
+        <item name="colorErrorContainer">@color/lightbrown_theme_errorContainer</item>
+        <item name="colorOnErrorContainer">@color/lightbrown_theme_onErrorContainer</item>
+        <item name="android:colorBackground">@color/lightbrown_theme_background</item>
+        <item name="colorOnBackground">@color/lightbrown_theme_onBackground</item>
+        <item name="colorSurface">@color/lightbrown_theme_surface</item>
+        <item name="colorOnSurface">@color/lightbrown_theme_onSurface</item>
+        <item name="colorSurfaceVariant">@color/lightbrown_theme_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/lightbrown_theme_onSurfaceVariant</item>
+        <item name="colorOutline">@color/lightbrown_theme_outline</item>
+        <item name="colorOutlineVariant">@color/lightbrown_theme_outlineVariant</item>
+        <item name="colorSurfaceInverse">@color/lightbrown_theme_inverseSurface</item>
+        <item name="colorOnSurfaceInverse">@color/lightbrown_theme_inverseOnSurface</item>
+        <item name="colorPrimaryInverse">@color/lightbrown_theme_inversePrimary</item>
+        <item name="colorPrimaryFixed">@color/lightbrown_theme_primaryFixed</item>
+        <item name="colorOnPrimaryFixed">@color/lightbrown_theme_onPrimaryFixed</item>
+        <item name="colorPrimaryFixedDim">@color/lightbrown_theme_primaryFixedDim</item>
+        <item name="colorOnPrimaryFixedVariant">@color/lightbrown_theme_onPrimaryFixedVariant</item>
+        <item name="colorSecondaryFixed">@color/lightbrown_theme_secondaryFixed</item>
+        <item name="colorOnSecondaryFixed">@color/lightbrown_theme_onSecondaryFixed</item>
+        <item name="colorSecondaryFixedDim">@color/lightbrown_theme_secondaryFixedDim</item>
+        <item name="colorOnSecondaryFixedVariant">@color/lightbrown_theme_onSecondaryFixedVariant</item>
+        <item name="colorTertiaryFixed">@color/lightbrown_theme_tertiaryFixed</item>
+        <item name="colorOnTertiaryFixed">@color/lightbrown_theme_onTertiaryFixed</item>
+        <item name="colorTertiaryFixedDim">@color/lightbrown_theme_tertiaryFixedDim</item>
+        <item name="colorOnTertiaryFixedVariant">@color/lightbrown_theme_onTertiaryFixedVariant</item>
+        <item name="colorSurfaceDim">@color/lightbrown_theme_surfaceDim</item>
+        <item name="colorSurfaceBright">@color/lightbrown_theme_surfaceBright</item>
+        <item name="colorSurfaceContainerLowest">@color/lightbrown_theme_surfaceContainerLowest</item>
+        <item name="colorSurfaceContainerLow">@color/lightbrown_theme_surfaceContainerLow</item>
+        <item name="colorSurfaceContainer">@color/lightbrown_theme_surfaceContainer</item>
+        <item name="colorSurfaceContainerHigh">@color/lightbrown_theme_surfaceContainerHigh</item>
+        <item name="colorSurfaceContainerHighest">@color/lightbrown_theme_surfaceContainerHighest</item>
+    </style>
+</resources>

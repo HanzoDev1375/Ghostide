@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    
+>
+
+
+    <androidx.preference.PreferenceCategory android:title="تنظیمات">
+
+
+        <androidx.preference.ListPreference
+            android:title="فونت کیبورد"
+            android:key="Font"
+            android:summary="انتخاب فونت کلمات کیبورد"
+            android:defaultValue="1"
+            app:entries="@array/Font"
+            app:entryValues="@array/Fontr"
+            
+        />
+        <androidx.preference.SwitchPreference
+            android:title="پیش نمایش نویسه(Preview)"
+            android:key="Preview"
+            android:defaultValue="true"
+            
+        />
+        <androidx.preference.PreferenceCategory android:title="سبک و چیدمان" />
+        <androidx.preference.SwitchPreference
+            android:title="نمایش ردیف اعداد"
+            android:key="Number"
+            android:defaultValue="true"
+            
+        />
+        <androidx.preference.PreferenceCategory android:title="حروف جایگزین" />
+        <ir.ninjacoder.ghostide.core.keyboard.SeekBarPreference
+            android:persistent="true"
+            android:title="سایز حروف دوم کیبورد(پاپ اپ بالای کلمات)"
+            android:key="TextSize2"
+            android:defaultValue="20"
+            app:minValue="1.0"
+            app:maxValue="25.0"
+            app:logScale="true"
+            app:displayFormat="%.0f "
+            
+        />
+
+        <androidx.preference.CheckBoxPreference
+            android:title="ارتفاع کیبورد"
+            android:key="Height"
+            android:defaultValue="true"
+            android:summaryOn="ارتفاع روی دستی تنظیم شد"
+            android:summaryOff="ارتفاع روی پیشفرض سیستم تنظیم شد"
+            
+        />
+
+        <ir.ninjacoder.ghostide.core.keyboard.SeekBarPreference
+            android:title="ارتفاع کیبورد در حالت عمودی"
+            android:defaultValue="110"
+            android:key="Height_1"
+            android:persistent="true"
+            app:minValue="70"
+            app:maxValue="200"
+            app:logScale="true"
+            app:displayFormat="%.0f "
+            
+        />
+        <ir.ninjacoder.ghostide.core.keyboard.SeekBarPreference
+            android:title="ارتفاع کیبورد در حالت افقی"
+            android:defaultValue="70"
+            android:key="Height_2"
+            android:persistent="true"
+            app:minValue="50"
+            app:maxValue="150"
+            app:logScale="true"
+            app:displayFormat="%.0f "
+            
+        />
+        <ir.ninjacoder.ghostide.core.keyboard.SeekBarPreference
+            android:title="فاصله بین کلمات"
+            android:defaultValue="1"
+            android:key="Vertical"
+            android:persistent="true"
+            app:minValue="1"
+            app:maxValue="51"
+            app:logScale="true"
+            app:displayFormat="%.0f "
+            
+        />
+
+        <androidx.preference.PreferenceCategory android:title="میانبر های سوییپ">
+            <androidx.preference.ListPreference
+                android:title="سوییپ بالا"
+                android:defaultValue="1"
+                android:key="swipeUp"
+                app:entries="@array/Swip"
+                app:entryValues="@array/Swipr"
+                
+            />
+            <androidx.preference.ListPreference
+                android:title="سوییپ پایین"
+                android:defaultValue="1"
+                android:key="swipeDown"
+                app:entries="@array/Swip"
+                app:entryValues="@array/Swipr"
+                
+            />
+            <androidx.preference.ListPreference
+                android:title="سوییپ چپ"
+                android:defaultValue="1"
+                android:key="swipeLeft"
+                app:entries="@array/Swip"
+                app:entryValues="@array/Swipr"
+                
+            />
+            <androidx.preference.ListPreference
+                android:title="سوییپ راست"
+                android:defaultValue="1"
+                android:key="swipeRight"
+                app:entries="@array/Swip"
+                app:entryValues="@array/Swipr"
+                
+            />
+        </androidx.preference.PreferenceCategory>
+        <androidx.preference.ListPreference
+            android:title="انتخاب ورودی پیشفرض"
+            android:key="SetKeyboard"
+            android:summary="ورودی پیشفرض هنگام باز شدن کیبورد را انتخاب کنید."
+            android:defaultValue="2"
+            app:entries="@array/SetKeyboard"
+            app:entryValues="@array/SetKeyboardr"
+            
+        />
+
+        <androidx.preference.CheckBoxPreference
+            android:title="تایپ مختلط"
+            android:key="mcapsr"
+            android:summary="با فعالسازی این گزینه هنگام تایپ انگلیسی حروف به صورت تصادفی کوچک و بزرگ تایپ میشوند."
+            android:defaultValue="false"
+            
+        />
+
+        <androidx.preference.SwitchPreference
+            android:title="صدا"
+            android:key="Sound"
+            android:defaultValue="false"
+            
+        />
+        <androidx.preference.SwitchPreference
+            android:title="ویبره"
+            android:key="Vibrator"
+            android:defaultValue="false"
+            
+        />
+        <ir.ninjacoder.ghostide.core.keyboard.SeekBarPreference
+            android:title="ویبره اولیه"
+            android:defaultValue="10"
+            app:minValue="5"
+            app:maxValue="200"
+            app:logScale="true"
+            app:displayFormat="%.0f "
+            android:key="Vibrator_1"
+            android:persistent="true"
+            
+        />
+        <ir.ninjacoder.ghostide.core.keyboard.SeekBarPreference
+            android:title="ویبره ثانویه"
+            android:defaultValue="20"
+            app:minValue="5"
+            app:maxValue="200"
+            app:logScale="true"
+            app:displayFormat="%.0f "
+            android:key="Vibrator_2"
+            android:persistent="true"
+            
+        />
+    </androidx.preference.PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

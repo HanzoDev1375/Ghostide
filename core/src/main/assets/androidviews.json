@@ -1,0 +1,362 @@
+[
+  {
+    "androidViews": "AbsListView"
+  },
+  {
+    "androidViews": "AbsSeekBar"
+  },
+  {
+    "androidViews": "AbsSpinner"
+  },
+  {
+    "androidViews": "AbsoluteLayout"
+  },
+  {
+    "androidViews": "ActionMenuView"
+  },
+  {
+    "androidViews": "Adapter"
+  },
+  {
+    "androidViews": "AdapterView"
+  },
+  {
+    "androidViews": "AdapterViewAnimator"
+  },
+  {
+    "androidViews": "AdapterViewFlipper"
+  },
+  {
+    "androidViews": "Advanceable"
+  },
+  {
+    "androidViews": "AlphabetIndexer"
+  },
+  {
+    "androidViews": "AnalogClock"
+  },
+  {
+    "androidViews": "ArrayAdapter"
+  },
+  {
+    "androidViews": "AutoCompleteTextView"
+  },
+  {
+    "androidViews": "BaseAdapter"
+  },
+  {
+    "androidViews": "BaseExpandableListAdapter"
+  },
+  {
+    "androidViews": "Button"
+  },
+  {
+    "androidViews": "CalendarView"
+  },
+  {
+    "androidViews": "CheckBox"
+  },
+  {
+    "androidViews": "Checkable"
+  },
+  {
+    "androidViews": "CheckedTextView"
+  },
+  {
+    "androidViews": "Chronometer"
+  },
+  {
+    "androidViews": "CompoundButton"
+  },
+  {
+    "androidViews": "CursorAdapter"
+  },
+  {
+    "androidViews": "CursorTreeAdapter"
+  },
+  {
+    "androidViews": "DatePicker"
+  },
+  {
+    "androidViews": "DialerFilter"
+  },
+  {
+    "androidViews": "DigitalClock"
+  },
+  {
+    "androidViews": "EdgeEffect"
+  },
+  {
+    "androidViews": "EditText"
+  },
+  {
+    "androidViews": "ExpandableListAdapter"
+  },
+  {
+    "androidViews": "ExpandableListView"
+  },
+  {
+    "androidViews": "Filter"
+  },
+  {
+    "androidViews": "FilterQueryProvider"
+  },
+  {
+    "androidViews": "Filterable"
+  },
+  {
+    "androidViews": "FrameLayout"
+  },
+  {
+    "androidViews": "Gallery"
+  },
+  {
+    "androidViews": "GridLayout"
+  },
+  {
+    "androidViews": "GridView"
+  },
+  {
+    "androidViews": "HeaderViewListAdapter"
+  },
+  {
+    "androidViews": "HeterogeneousExpandableList"
+  },
+  {
+    "androidViews": "HorizontalScrollView"
+  },
+  {
+    "androidViews": "ImageButton"
+  },
+  {
+    "androidViews": "ImageSwitcher"
+  },
+  {
+    "androidViews": "ImageView"
+  },
+  {
+    "androidViews": "LinearLayout"
+  },
+  {
+    "androidViews": "ListAdapter"
+  },
+  {
+    "androidViews": "ListPopupWindow"
+  },
+  {
+    "androidViews": "ListView"
+  },
+  {
+    "androidViews": "Magnifier"
+  },
+  {
+    "androidViews": "MediaController"
+  },
+  {
+    "androidViews": "MultiAutoCompleteTextView"
+  },
+  {
+    "androidViews": "NumberPicker"
+  },
+  {
+    "androidViews": "OverScroller"
+  },
+  {
+    "androidViews": "PopupMenu"
+  },
+  {
+    "androidViews": "PopupWindow"
+  },
+  {
+    "androidViews": "ProgressBar"
+  },
+  {
+    "androidViews": "QuickContactBadge"
+  },
+  {
+    "androidViews": "RadioButton"
+  },
+  {
+    "androidViews": "RadioGroup"
+  },
+  {
+    "androidViews": "RatingBar"
+  },
+  {
+    "androidViews": "RelativeLayout"
+  },
+  {
+    "androidViews": "RemoteViews"
+  },
+  {
+    "androidViews": "RemoteViewsService"
+  },
+  {
+    "androidViews": "ResourceCursorAdapter"
+  },
+  {
+    "androidViews": "ResourceCursorTreeAdapter"
+  },
+  {
+    "androidViews": "ScrollView"
+  },
+  {
+    "androidViews": "Scroller"
+  },
+  {
+    "androidViews": "SearchView"
+  },
+  {
+    "androidViews": "SectionIndexer"
+  },
+  {
+    "androidViews": "SeekBar"
+  },
+  {
+    "androidViews": "ShareActionProvider"
+  },
+  {
+    "androidViews": "SimpleAdapter"
+  },
+  {
+    "androidViews": "SimpleCursorAdapter"
+  },
+  {
+    "androidViews": "SimpleCursorTreeAdapter"
+  },
+  {
+    "androidViews": "SimpleExpandableListAdapter"
+  },
+  {
+    "androidViews": "SlidingDrawer"
+  },
+  {
+    "androidViews": "Space"
+  },
+  {
+    "androidViews": "Spinner"
+  },
+  {
+    "androidViews": "SpinnerAdapter"
+  },
+  {
+    "androidViews": "StackView"
+  },
+  {
+    "androidViews": "Switch"
+  },
+  {
+    "androidViews": "TabHost"
+  },
+  {
+    "androidViews": "TabWidget"
+  },
+  {
+    "androidViews": "TableLayout"
+  },
+  {
+    "androidViews": "TableRow"
+  },
+  {
+    "androidViews": "TextClock"
+  },
+  {
+    "androidViews": "TextSwitcher"
+  },
+  {
+    "androidViews": "TextView"
+  },
+  {
+    "androidViews": "ThemedSpinnerAdapter"
+  },
+  {
+    "androidViews": "TimePicker"
+  },
+  {
+    "androidViews": "Toast"
+  },
+  {
+    "androidViews": "ToggleButton"
+  },
+  {
+    "androidViews": "Toolbar"
+  },
+  {
+    "androidViews": "TwoLineListItem"
+  },
+  {
+    "androidViews": "VideoView"
+  },
+  {
+    "androidViews": "ViewAnimator"
+  },
+  {
+    "androidViews": "ViewFlipper"
+  },
+  {
+    "androidViews": "ViewSwitcher"
+  },
+  {
+    "androidViews": "WrapperListAdapter"
+  },
+  {
+    "androidViews": "ZoomButton"
+  },
+  {
+    "androidViews": "ZoomButtonsController"
+  },
+  {
+    "androidViews": "ZoomControls"
+  },
+  {
+    "androidViews": "InlineContentView"
+  },
+  {
+    "androidViews": "InlinePresentationSpec"
+  },
+  {
+    "androidViews": "EmbeddedPhotoPickerClient"
+  },
+  {
+    "androidViews": "EmbeddedPhotoPickerFeatureInfo"
+  },
+  {
+    "androidViews": "EmbeddedPhotoPickerProvider"
+  },
+  {
+    "androidViews": "EmbeddedPhotoPickerProviderFactory"
+  },
+  {
+    "androidViews": "EmbeddedPhotoPickerSession"
+  },
+  {
+    "androidViews": "BackEvent"
+  },
+  {
+    "androidViews": "InputTransferToken"
+  },
+  {
+    "androidViews": "OnBackAnimationCallback"
+  },
+  {
+    "androidViews": "OnBackInvokedCallback"
+  },
+  {
+    "androidViews": "OnBackInvokedDispatcher"
+  },
+  {
+    "androidViews": "SplashScreen"
+  },
+  {
+    "androidViews": "SplashScreenView"
+  },
+  {
+    "androidViews": "SurfaceSyncGroup"
+  },
+  {
+    "androidViews": "SystemOnBackInvokedCallbacks"
+  },
+  {
+    "androidViews": "TrustedPresentationThresholds"
+  }
+]
