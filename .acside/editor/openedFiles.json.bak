@@ -1,0 +1,20 @@
+{
+  "allFiles": [
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Ghostide/prograsssheetlib/src/main/java/ir/ninjacoder/prograsssheet/perfence/ListItemView.java",
+      "selection": {
+        "end": {
+          "column": 5,
+          "index": 2849,
+          "line": 87
+        },
+        "start": {
+          "column": 5,
+          "index": 2849,
+          "line": 87
+        }
+      }
+    }
+  ],
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/Ghostide/prograsssheetlib/src/main/java/ir/ninjacoder/prograsssheet/perfence/ListItemView.java"
+}

@@ -2,23 +2,17 @@ package ir.ninjacoder.prograsssheet.perfence;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.RippleDrawable;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
 import com.google.android.material.color.MaterialColors;
-import com.google.android.material.shape.MaterialShapeDrawable;
-import com.google.android.material.shape.ShapeAppearanceModel;
 import java.util.List;
 import static com.google.android.material.R.attr.*;
 
-/**
- * ساخته شده توسط گوست من نمونه این کلاس را زدم تا درد سر گوگل متریال رو دور بزنم رنگ بندی خودکار
- * انجام میشه اما یک سری گتر و ستر هم زدم جای های دیگه میتونید کال کنید
- */
 public class ListItemView extends LinearLayout {
 
   private int backgroundColor = colorSurfaceContainer;
@@ -40,48 +34,59 @@ public class ListItemView extends LinearLayout {
     } else if (position == list.size() - 1) {
       return bottom();
     } else {
-      return middel();
+      return middle();
     }
   }
 
   Drawable normal() {
-    return createRippleBackground(19f, 19f, 19f, 19f);
+    return createRippleBackground(18f, 18f, 18f, 18f);
   }
 
   Drawable bottom() {
-    return createRippleBackground(4f, 4f, 24f, 24f);
+    return createRippleBackground(4f, 4f, 18f, 18f);
   }
 
   Drawable top() {
-    return createRippleBackground(24f, 24f, 4f, 4f);
+    return createRippleBackground(18f, 18f, 4f, 4f);
   }
 
-  Drawable middel() {
+  Drawable middle() {
     return createRippleBackground(4f, 4f, 4f, 4f);
   }
 
   Drawable createRippleBackground(
       float topLeft, float topRight, float bottomLeft, float bottomRight) {
     try {
-      MaterialShapeDrawable backgroundDrawable =
-          new MaterialShapeDrawable(
-              ShapeAppearanceModel.builder()
-                  .setTopLeftCornerSize(topLeft)
-                  .setTopRightCornerSize(topRight)
-                  .setBottomLeftCornerSize(bottomLeft)
-                  .setBottomRightCornerSize(bottomRight)
-                  .build());
+      // ایجاد GradientDrawable به عنوان شکل زمینه
+      GradientDrawable backgroundDrawable = new GradientDrawable();
+      backgroundDrawable.setShape(GradientDrawable.RECTANGLE);
 
-      backgroundDrawable.setFillColor(
-          ColorStateList.valueOf(MaterialColors.getColor(this, backgroundColor, 0)));
+      // تنظیم corner radii
+      backgroundDrawable.setCornerRadii(
+          new float[] {
+            dpToPx(topLeft), dpToPx(topLeft),
+            dpToPx(topRight), dpToPx(topRight),
+            dpToPx(bottomRight), dpToPx(bottomRight),
+            dpToPx(bottomLeft), dpToPx(bottomLeft)
+          });
+      int backgroundColorValue =
+          MaterialColors.getColor(
+              this, backgroundColor, getContext().getColor(android.R.color.white));
+      backgroundDrawable.setColor(backgroundColorValue);
+      int rippleColorValue =
+          MaterialColors.getColor(
+              this, rippleColor, getContext().getColor(android.R.color.darker_gray));
 
-      return new RippleDrawable(
-          ColorStateList.valueOf(MaterialColors.getColor(this, rippleColor, 0)),
-          backgroundDrawable,
-          null);
+      return new RippleDrawable(ColorStateList.valueOf(rippleColorValue), backgroundDrawable, null);
+
     } catch (Exception e) {
       return getContext().getDrawable(android.R.drawable.list_selector_background);
     }
+  }
+
+  private float dpToPx(float dp) {
+    return TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP, dp, getContext().getResources().getDisplayMetrics());
   }
 
   public void setBackgroundColor(int backgroundColor) {
@@ -95,7 +100,10 @@ public class ListItemView extends LinearLayout {
   }
 
   public void refreshBackground() {
-    setBackground(getBackground());
+    Drawable currentBackground = getBackground();
+    if (currentBackground != null) {
+      setBackground(currentBackground);
+    }
     invalidate();
     requestLayout();
   }

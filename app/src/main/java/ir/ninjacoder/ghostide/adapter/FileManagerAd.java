@@ -34,6 +34,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import ir.ninjacoder.prograsssheet.listchild.Child;
 import ir.ninjacoder.prograsssheet.perfence.ListItemView;
 import ir.ninjacoder.prograsssheet.perfence.ShapeList;
 import java.io.File;
@@ -56,11 +57,14 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
   protected GridLayoutManager g;
   private SharedPreferences prf;
   private boolean isSelectionMode = false;
+  private List<Child> listChild = new ArrayList<>();
 
-  public FileManagerAd(List<HashMap<String, Object>> files, Context context, onClick click) {
+  public FileManagerAd(
+      List<HashMap<String, Object>> files, Context context, onClick click, List<Child> listChild) {
     this.context = context;
     this.files = files;
     this.click = click;
+    this.listChild = listChild;
     prf = context.getSharedPreferences("iconpath", Context.MODE_PRIVATE);
   }
 
@@ -199,8 +203,11 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
         }
         // test
         JgitHelper.initbylazy(myfile, viewHolder.folderName);
-        // test1
-
+        for (var iterbel : listChild) {
+          if (myfile.toString().endsWith(iterbel.getTypeExz())) {
+            GlideCompat.GlideNormal(viewHolder.icon, iterbel.getIconFile());
+          }
+        }
       }
     }
     if (viewType == ViewType.ROW) viewHolder.roots.setBackground(viewHolder.roots.get(files, pos));

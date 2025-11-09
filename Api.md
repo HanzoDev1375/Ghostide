@@ -1,4 +1,4 @@
-```markdown
+
 ### Ghost IDE API
 
 - We created an API for you for your plugins
@@ -98,7 +98,7 @@ How to use the plugin
 
 ساختار پلاگین:
 
-```java
+``` java
 public class MyPlugin implements PluginManagerCompat {
     
     @Override
@@ -133,9 +133,7 @@ public class MyPlugin implements PluginManagerCompat {
 }
 ```
 
-Note
+##Note
 
 · It is not possible to call resources yet
   It will be added in the future with the new Api
-
-```
