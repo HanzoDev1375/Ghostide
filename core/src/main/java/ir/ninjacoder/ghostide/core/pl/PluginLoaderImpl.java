@@ -1,9 +1,9 @@
 package ir.ninjacoder.ghostide.core.pl;
 
 import io.github.rosemoe.sora.widget.CodeEditor;
-import ir.ninjacoder.ghostide.core.activities.CodeEditorActivity;
 import ir.ninjacoder.ghostide.core.activities.FileManagerActivity;
-import ir.ninjacoder.ghostide.core.pl.PluginLoader;
+import ir.ninjacoder.ghostide.core.activities.CodeEditorActivity;
+import ir.ninjacoder.prograsssheet.listchild.Child;
 
 public class PluginLoaderImpl {
 
@@ -33,5 +33,13 @@ public class PluginLoaderImpl {
     PluginLoader loader = new PluginLoader().setFileManagerActivity(fmActivity);
     loader.loadAllPlugins(configPath);
     return this;
+  }
+
+  public void registerChildForFileManager(Child child) {
+    PluginChildRegistry.registerFileManagerChild(child);
+  }
+
+  public void registerChildForCodeEditor(Child child) {
+    PluginChildRegistry.registerCodeEditorChild(child);
   }
 }

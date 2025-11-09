@@ -96,6 +96,7 @@ import ir.ninjacoder.ghostide.core.marco.FtpDownloader;
 import ir.ninjacoder.ghostide.core.marco.HsiZip;
 import ir.ninjacoder.ghostide.core.marco.JadxDecompiler;
 import ir.ninjacoder.ghostide.core.marco.NinjaMacroFileUtil;
+import ir.ninjacoder.ghostide.core.pl.PluginChildRegistry;
 import ir.ninjacoder.ghostide.core.utils.AnimUtils;
 import ir.ninjacoder.ghostide.core.utils.DataUtil;
 import ir.ninjacoder.ghostide.core.utils.FileUtil;
@@ -126,6 +127,7 @@ import ir.ninjacoder.ghostide.core.utils.VectorHelper;
 import ir.ninjacoder.ghostide.core.widget.GhostWebMaterialDialog;
 import ir.ninjacoder.ghostide.core.widget.component.fastscrollcompat.FastScrollerBuilder;
 import ir.ninjacoder.prograsssheet.MusicSheet;
+import ir.ninjacoder.prograsssheet.listchild.Child;
 import ninja.coder.appuploader.data.SnippetManagerImpl;
 import ninjacoder.ghostide.androidtools.r8.android.R8Tools;
 import storage.sdcard.SdCardUtil;
@@ -198,6 +200,7 @@ public class FileManagerActivity extends BaseCompat
   private boolean isFileWatcherBound = false;
   private ShortcutInfoImpl sh;
   private ExecutorService executor;
+  private List<Child> listchild = new ArrayList<>();
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
@@ -236,7 +239,7 @@ public class FileManagerActivity extends BaseCompat
       bind.recyclerview2.setLayoutManager(gridLayoutManager);
     }
     gridMode = getSharedPreferences("gride", Activity.MODE_PRIVATE);
-    fileListItem = new FileManagerAd(files, FileManagerActivity.this, this);
+    fileListItem = new FileManagerAd(files, FileManagerActivity.this, this, listchild);
     shp = getSharedPreferences("shp", Activity.MODE_PRIVATE);
     soglo = getSharedPreferences("soglo", Activity.MODE_PRIVATE);
     np = getSharedPreferences("np", Activity.MODE_PRIVATE);
@@ -368,6 +371,11 @@ public class FileManagerActivity extends BaseCompat
             () -> {
               reLoadFile();
             });
+
+    List<Child> pluginChildren = PluginChildRegistry.getFileManagerChildren();
+    for (Child child : pluginChildren) {
+      addChild(child);
+    }
   }
 
   void TypeChange() {
@@ -753,7 +761,7 @@ public class FileManagerActivity extends BaseCompat
                 dialog.dismiss();
               });
           editor.addTextChangedListener(
-              new TextWatcher() {
+              new android.text.TextWatcher() {
 
                 @Override
                 public void onTextChanged(
@@ -1059,7 +1067,7 @@ public class FileManagerActivity extends BaseCompat
                     CharSequence _param1, int _param2, int _param3, int _param4) {}
 
                 @Override
-                public void afterTextChanged(Editable _param1) {}
+                public void afterTextChanged(android.text.Editable _param1) {}
               });
           positive.setOnClickListener(
               (vftrororocjj) -> {
@@ -1175,10 +1183,20 @@ public class FileManagerActivity extends BaseCompat
         });
   }
 
+  public void addChild(Child child) {
+    listchild.add(child);
+  }
+
   public void _dataOnClickItemList(int _pos) {
     newpos = _pos;
     if (staticstring.endsWith(".snippet")) {
       new SnippetManagerImpl(new File(staticstring), this);
+    }
+    for (var id : listchild) {
+      if (staticstring.endsWith(id.getTypeExz())) {
+        SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+        return;
+      }
     }
     if (staticstring.endsWith(".txt") || staticstring.endsWith(".log")) {
       SendDataFromCodeEditor(newpos, "path", files, newlistmap);
@@ -1464,7 +1482,7 @@ public class FileManagerActivity extends BaseCompat
                                         .replaceAll("\\.\\w+$", "")
                                         .concat(format));
                         new net.lingala.zip4j.ZipFile(outputFilePath)
-                            .addFile(new File(originalFilePath));
+                            .addFile(new java.io.File(originalFilePath));
                       } catch (Exception e) {
                         runOnUiThread(() -> showMessage(e.toString()));
                       }

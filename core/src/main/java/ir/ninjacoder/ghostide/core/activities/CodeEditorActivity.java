@@ -74,6 +74,7 @@ import ir.ninjacoder.ghostide.core.activities.JsonViewerActivity;
 import ir.ninjacoder.ghostide.core.activities.ShellCodeActivity;
 import ir.ninjacoder.ghostide.core.adapter.SyspiarAdapter;
 import ir.ninjacoder.ghostide.core.adapter.ToolbarListFileAdapter;
+import ir.ninjacoder.ghostide.core.pl.PluginChildRegistry;
 import ir.ninjacoder.ghostide.core.utils.AnimUtils;
 import ir.ninjacoder.ghostide.core.utils.FileUtil;
 import ir.ninjacoder.ghostide.core.utils.KeySet;
@@ -103,6 +104,7 @@ import ir.ninjacoder.ghostide.core.utils.ObjectUtils;
 import ir.ninjacoder.ghostide.core.widget.BlurImage;
 import ir.ninjacoder.ghostide.core.widget.ExrtaFab;
 import ir.ninjacoder.prograsssheet.VideoSurfaceView;
+import ir.ninjacoder.prograsssheet.listchild.Child;
 
 public class CodeEditorActivity extends BaseCompat {
 
@@ -178,6 +180,7 @@ public class CodeEditorActivity extends BaseCompat {
   private IdeEditor editor;
   private VideoSurfaceView mvideo;
   private boolean isFileChangeDialogShowing = false;
+  private List<Child> listChild = new ArrayList<>();
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
@@ -363,6 +366,15 @@ public class CodeEditorActivity extends BaseCompat {
         v -> {
           new CodeSnap(CodeEditorActivity.this, getTabPathCode(), editor);
         });
+
+    List<Child> editorPluginChildren = PluginChildRegistry.getCodeEditorChildren();
+    for (Child child : editorPluginChildren) {
+      listChild.add(child); // یا متد مربوطه
+    }
+  }
+
+  public void addChild(Child child) {
+    listChild.add(child);
   }
 
   String getTabPathCode() {
@@ -742,16 +754,16 @@ public class CodeEditorActivity extends BaseCompat {
     }
   }
 
+  // در متد setCodeEditorFileReader
   void setCodeEditorFileReader(String _path) {
-    EditorRoaderFile.RuningTask(editor, _fab, _path, proanjctor);
-
+    String extension = _path.substring(_path.lastIndexOf("."));
+    new PluginLoaderImpl().runInCodeEditor(editor, CodeEditorActivity.this, extension);
     new Handler()
         .postDelayed(
             () -> {
-              String extension = _path.substring(_path.lastIndexOf("."));
-              new PluginLoaderImpl().runInCodeEditor(editor, CodeEditorActivity.this, extension);
+              EditorRoaderFile.RuningTask(editor, _fab, _path, proanjctor, listChild);
             },
-            300);
+            200);
   }
 
   void setClosetab(int _position, ArrayList<HashMap<String, Object>> _data) {

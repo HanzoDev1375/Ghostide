@@ -55,6 +55,7 @@ import io.github.rosemoe.sora.widget.CodeEditor;
 import ir.ninjacoder.ghostide.core.IdeEditor;
 import ir.ninjacoder.ghostide.core.utils.FileCompatApi28;
 import ir.ninjacoder.ghostide.core.widget.ExrtaFab;
+import ir.ninjacoder.prograsssheet.listchild.Child;
 
 /*
  * <p> this class Work Reload is Lang files  </p>
@@ -63,7 +64,8 @@ import ir.ninjacoder.ghostide.core.widget.ExrtaFab;
 
 public class EditorRoaderFile {
 
-  public static void RuningTask(IdeEditor editor, ExrtaFab fab, String path, ProgressBar bar) {
+  public static void RuningTask(
+      IdeEditor editor, ExrtaFab fab, String path, ProgressBar bar, List<Child> listchild) {
 
     if (path.endsWith(".css")) {
       // this html lexer using as html css3 js and sass and scass
@@ -252,6 +254,14 @@ public class EditorRoaderFile {
     } else {
       ReadFileCompat(editor, path, bar);
       fab.postDelayed(fab::hide, 400);
+    }
+    for (var it : listchild) {
+      if (path.endsWith(it.getTypeExz())) {
+        ReadFileCompat(editor, path, bar);
+        if (it.getLanguageProvider() != null) it.getLanguageProvider().run();
+        fab.postDelayed(it.getShowfab() ? fab::hide : fab::show, 400);
+        return;
+      }
     }
   }
 
