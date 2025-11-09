@@ -40,6 +40,7 @@ import io.github.rosemoe.sora.langs.svg.SvgLang;
 import io.github.rosemoe.sora.langs.universal.UniversalLanguage;
 import io.github.rosemoe.sora.langs.xml.XMLLanguage;
 import io.github.rosemoe.sora.widget.CodeEditor;
+import ir.ninjacoder.prograsssheet.listchild.Child;
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
@@ -56,7 +57,8 @@ import org.benf.cfr.reader.api.SinkReturns;
 
 public class EditorRoaderFile {
 
-  public static void RuningTask(IdeEditor editor, ExrtaFab fab, String path, ProgressBar bar) {
+  public static void RuningTask(
+      IdeEditor editor, ExrtaFab fab, String path, ProgressBar bar, List<Child> listchild) {
 
     if (path.endsWith(".css")) {
       // this html lexer using as html css3 js and sass and scass
@@ -245,6 +247,14 @@ public class EditorRoaderFile {
     } else {
       ReadFileCompat(editor, path, bar);
       fab.postDelayed(fab::hide, 400);
+    }
+    for (var it : listchild) {
+      if (path.endsWith(it.getTypeExz())) {
+        ReadFileCompat(editor, path, bar);
+        if (it.getLanguageProvider() != null) it.getLanguageProvider().run();
+        fab.postDelayed(it.getShowfab() ? fab::hide : fab::show, 400);
+        return;
+      }
     }
   }
 

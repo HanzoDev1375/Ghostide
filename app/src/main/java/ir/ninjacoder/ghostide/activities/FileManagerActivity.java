@@ -31,6 +31,7 @@ import ir.ninjacoder.ghostide.model.IconShop;
 import ir.ninjacoder.ghostide.model.ListSheet;
 import ir.ninjacoder.ghostide.model.ZipFileShow;
 import ir.ninjacoder.ghostide.model.dataobject.ShortcutInfoImpl;
+import ir.ninjacoder.ghostide.pl.PluginChildRegistry;
 import ir.ninjacoder.ghostide.pl.PluginLoaderImpl;
 import ir.ninjacoder.ghostide.project.ProjectMaker;
 import ir.ninjacoder.ghostide.recyclerview.RecyclerViewHelper;
@@ -87,6 +88,7 @@ import com.ninjacoder.jgit.GitClone;
 import com.ninjacoder.jgit.GsonToClass;
 import com.ninjacoder.jgit.childer.TextFindListener;
 import ir.ninjacoder.prograsssheet.MusicSheet;
+import ir.ninjacoder.prograsssheet.listchild.Child;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
@@ -166,6 +168,7 @@ public class FileManagerActivity extends BaseCompat
   private boolean isFileWatcherBound = false;
   private ShortcutInfoImpl sh;
   private ExecutorService executor;
+  private List<Child> listchild = new ArrayList<>();
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
@@ -204,7 +207,7 @@ public class FileManagerActivity extends BaseCompat
       bind.recyclerview2.setLayoutManager(gridLayoutManager);
     }
     gridMode = getSharedPreferences("gride", Activity.MODE_PRIVATE);
-    fileListItem = new FileManagerAd(files, FileManagerActivity.this, this);
+    fileListItem = new FileManagerAd(files, FileManagerActivity.this, this, listchild);
     shp = getSharedPreferences("shp", Activity.MODE_PRIVATE);
     soglo = getSharedPreferences("soglo", Activity.MODE_PRIVATE);
     np = getSharedPreferences("np", Activity.MODE_PRIVATE);
@@ -336,6 +339,11 @@ public class FileManagerActivity extends BaseCompat
             () -> {
               reLoadFile();
             });
+
+    List<Child> pluginChildren = PluginChildRegistry.getFileManagerChildren();
+    for (Child child : pluginChildren) {
+      addChild(child);
+    }
   }
 
   void TypeChange() {
@@ -1143,10 +1151,20 @@ public class FileManagerActivity extends BaseCompat
         });
   }
 
+  public void addChild(Child child) {
+    listchild.add(child);
+  }
+
   public void _dataOnClickItemList(int _pos) {
     newpos = _pos;
     if (staticstring.endsWith(".snippet")) {
       new SnippetManagerImpl(new File(staticstring), this);
+    }
+    for (var id : listchild) {
+      if (staticstring.endsWith(id.getTypeExz())) {
+        SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+        return;
+      }
     }
     if (staticstring.endsWith(".txt") || staticstring.endsWith(".log")) {
       SendDataFromCodeEditor(newpos, "path", files, newlistmap);
