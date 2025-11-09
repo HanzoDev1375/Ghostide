@@ -86,9 +86,17 @@ public class ListItemView extends LinearLayout {
 
   public void setBackgroundColor(int backgroundColor) {
     this.backgroundColor = backgroundColor;
+    refreshBackground();
   }
 
   public void setRippleColor(int rippleColor) {
     this.rippleColor = rippleColor;
+    refreshBackground();
+  }
+
+  public void refreshBackground() {
+    setBackground(getBackground());
+    invalidate();
+    requestLayout();
   }
 }

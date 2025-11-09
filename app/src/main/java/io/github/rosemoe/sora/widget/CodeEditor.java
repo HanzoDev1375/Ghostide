@@ -360,7 +360,7 @@ public class CodeEditor extends View
   private Timer timer = new Timer();
   private DirectAccessProps mProps;
   private CommentHelper helper;
-  // private OnAutoSave save;
+
   private OnKeyboardOperation enters;
   private OnCompletionItemSelectedListener onCompletionItemSelectedListener;
   private boolean mHardwareAccAllowed;
@@ -373,7 +373,7 @@ public class CodeEditor extends View
   private List<LineIcon> lineIcons = new ArrayList<>();
   private MiniMap minimap;
   private PairedBracket currentPairedBracket;
-  private int bracketHighlightColor = 0xFFFF0000; // رنگ قرمز برای هایلایت
+  private int bracketHighlightColor = 0xFFFF0000;
   private boolean highlightBrackets = true;
   private OnlineBracketsMatcher bracketsMatcher;
   private RainbowBracketHelper hls;
@@ -424,29 +424,25 @@ public class CodeEditor extends View
   }
 
   public void drawInlay(Canvas canvas, Inlay inlay) {
-    // محاسبه موقعیت Inlay بر اساس خط و ستون
+
     float[] pos = mLayout.getCharLayoutOffset(inlay.line, inlay.column);
     float x = pos[1] + measureTextRegionOffset() - getOffsetX();
     float y = pos[0] - getOffsetY() + getRowBaseline(0);
 
-    // ذخیره وضعیت Canvas
     canvas.save();
 
-    // رسم متن Inlay با راست‌چین
     drawTextRightToLeft(
         canvas,
         mText.getLine(inlay.line),
-        0, // از ابتدای متن
-        inlay.text.length(), // طول متن Inlay
-        0, // contextStart
-        inlay.text.length(), // contextCount
-        x, // موقعیت X
-        y, // موقعیت Y (baseline)
-        inlay.line, // شماره خط
-        inlay.color // رنگ متن
-        );
+        0,
+        inlay.text.length(),
+        0,
+        inlay.text.length(),
+        x,
+        y,
+        inlay.line,
+        inlay.color);
 
-    // بازگردانی وضعیت Canvas
     canvas.restore();
   }
 
@@ -469,14 +465,12 @@ public class CodeEditor extends View
       return;
     }
 
-    // ذخیره تنظیمات فعلی
     Paint.Style oldStyle = mPaintGraph.getStyle();
     float oldTextSize = mPaintGraph.getTextSize();
     Typeface oldTypeface = mPaintGraph.getTypeface();
 
-    // تنظیمات جدید برای رسم متن
     mPaintGraph.setStyle(Paint.Style.FILL);
-    mPaintGraph.setTextSize(mPaint.getTextSize() * 0.9f); // اندازه کوچک‌تر از متن اصلی
+    mPaintGraph.setTextSize(mPaint.getTextSize() * 0.9f);
     mPaintGraph.setTypeface(getTypefaceText());
     mPaintGraph.setColor(color);
 
@@ -484,12 +478,11 @@ public class CodeEditor extends View
     var src = line.value;
     int st = index;
 
-    // محاسبه عرض کل متن برای راست‌چین کردن
     float totalWidth = mPaintGraph.measureText(src, st, end - st);
 
     for (int i = index; i < end; i++) {
       if (src[i] == '\t') {
-        // رسم بخشی از متن قبل از تب
+
         canvas.drawText(src, st, i - st, offX - totalWidth, offY, mPaintGraph);
         float segmentWidth = mPaintGraph.measureText(src, st, i - st);
         totalWidth -= segmentWidth;
@@ -498,12 +491,10 @@ public class CodeEditor extends View
       }
     }
 
-    // رسم باقی مانده متن
     if (st < end) {
       canvas.drawText(src, st, end - st, offX - totalWidth, offY, mPaintGraph);
     }
 
-    // بازگردانی تنظیمات قبلی
     mPaintGraph.setStyle(oldStyle);
     mPaintGraph.setTextSize(oldTextSize);
     mPaintGraph.setTypeface(oldTypeface);
@@ -585,7 +576,7 @@ public class CodeEditor extends View
     updateExtractedText();
     updateSelection();
     updateCursorAnchor();
-    // Restart if composing
+
     if (mConnection.mComposingLine != -1) {
       restartInput();
     }
@@ -601,7 +592,7 @@ public class CodeEditor extends View
       int line = cur.getLeftLine();
       if (mProps.deleteEmptyLineFast
           || (mProps.deleteMultiSpaces != 1 && col > 0 && mText.charAt(line, col - 1) == ' ')) {
-        // Check whether selection is in leading spaces
+
         var text = mText.getLine(cur.getLeftLine()).value;
         boolean inLeading = true;
         for (int i = col - 1; i >= 0; i--) {
@@ -613,7 +604,7 @@ public class CodeEditor extends View
         }
 
         if (inLeading) {
-          // Check empty line
+
           boolean emptyLine = true;
           int max = mText.getColumnCount(line);
           for (int i = col; i < max; i++) {
@@ -625,7 +616,7 @@ public class CodeEditor extends View
           }
           if (mProps.deleteEmptyLineFast && emptyLine) {
             if (line == 0) {
-              // Just delete whitespaces before
+
               mText.delete(line, 0, line, col);
             } else {
               mText.delete(line - 1, mText.getColumnCount(line - 1), line, max);
@@ -648,7 +639,7 @@ public class CodeEditor extends View
           }
         }
       }
-      // Do not put cursor inside combined characters
+
       int begin = TextLayoutHelper.get().getCurPosLeft(col, mText.getLine(cur.getLeftLine()));
       int end = cur.getLeftColumn();
       if (begin > end) {
@@ -897,7 +888,6 @@ public class CodeEditor extends View
     mPaintOther.setStrokeWidth(getDpUnit() * 1.9f);
     mPaintOther.setStrokeCap(Paint.Cap.ROUND);
 
-    // Issue #41 View being highlighted when focused on Android 11
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       setDefaultFocusHighlightEnabled(false);
     }
@@ -1294,7 +1284,6 @@ public class CodeEditor extends View
     }
     this.mLanguage = lang;
 
-    // Update spanner
     if (mSpanner != null) {
       mSpanner.shutdown();
       mSpanner.setCallback(null);
@@ -1309,7 +1298,6 @@ public class CodeEditor extends View
       mCompletionWindow.setProvider(lang.getAutoCompleteProvider());
     }
 
-    // Symbol pairs
     if (mLanguageSymbolPairs != null) {
       mLanguageSymbolPairs.setParent(null);
     }
@@ -1324,7 +1312,6 @@ public class CodeEditor extends View
     }
     mLanguageSymbolPairs.setParent(mOverrideSymbolPairs);
 
-    // Cursor
     if (mCursor != null) {
       mCursor.setLanguage(mLanguage);
     }
@@ -1629,7 +1616,7 @@ public class CodeEditor extends View
         mRect.top = mRect.bottom - (float) mCursorAnimator.animatorBackground.getAnimatedValue();
         mRect.left = 0;
         mRect.right = (int) (textOffset - mDividerMargin);
-        //        drawColor(canvas, currentLineBgColor, mRect);
+
         mPaint.setColor(currentLineBgColor);
         canvas.drawRoundRect(mRect, 10, 10, mPaint);
       }
@@ -1649,7 +1636,7 @@ public class CodeEditor extends View
         float y;
         if (postDrawLineNumbers.size() == 0
             || getRowTop(IntPair.getSecond(postDrawLineNumbers.get(0))) - getOffsetY() > bottom) {
-          // Free to draw at first line
+
           y =
               (getRowBottom(0) + getRowTop(0)) / 2f
                   - (mLineNumberMetrics.descent - mLineNumberMetrics.ascent) / 2f
@@ -1760,7 +1747,6 @@ public class CodeEditor extends View
       int handleType,
       SelectionHandleStyle.HandleDescriptor descriptor) {
 
-    // برای مدل BLINK، فقط از visibility استفاده کن
     if (!mCursorBlink.shouldDrawCursor()
         && handleType == SelectionHandleStyle.HANDLE_TYPE_UNDEFINED) {
       return;
@@ -1791,7 +1777,6 @@ public class CodeEditor extends View
       }
     }
 
-    // کشیدن کورسور (همانند قبل)
     if (handleType != SelectionHandleStyle.HANDLE_TYPE_UNDEFINED
         || mCursorBlink.shouldDrawCursor()) {
       mRect.top = y - getRowHeight();
@@ -1815,7 +1800,6 @@ public class CodeEditor extends View
       descriptor.setEmpty();
     }
 
-    // بازگردانی فقط اگر transformation اعمال شده
     if (model != CursorAnimationModel.BLINK) {
       canvas.restore();
 
@@ -1837,7 +1821,7 @@ public class CodeEditor extends View
     start = Math.max(0, start - 5);
     end = Math.min(end + 5, getLineCount());
     for (int i = start; i < end; i++) {
-      // Find line that is not displaying currently
+
       if (i < firstVis || i > lastVis) {
         var line = mText.getLine(i);
         if (line.widthCache != null && line.widthCache.length >= desiredSize) {
@@ -1847,12 +1831,12 @@ public class CodeEditor extends View
           return res;
         }
       }
-      // Skip the region because we can't obtain arrays from here
+
       if (i >= firstVis && i <= lastVis) {
         i = lastVis;
       }
     }
-    // Log.d(LOG_TAG, "Allocate float[], size = " + desiredSize);
+
     return new float[desiredSize];
   }
 
@@ -1861,7 +1845,7 @@ public class CodeEditor extends View
     var text = mText;
     while (startLine <= endLine && startLine < text.getLineCount()) {
       ContentLine line = text.getLine(startLine);
-      // Do not create cache for long lines
+
       if (line.length() <= 256) {
         if (line.timestamp < timestamp) {
           var gtr = GraphicTextRow.obtain();
@@ -1938,7 +1922,7 @@ public class CodeEditor extends View
     int row = 0;
     float phi = 0f;
     Span span = spans.get(spanOffset);
-    // Draw by spans
+
     long lastStyle = 0;
     while (columnCount > span.column) {
       int spanEnd = spanOffset + 1 >= spans.size() ? columnCount : spans.get(spanOffset + 1).column;
@@ -1948,7 +1932,6 @@ public class CodeEditor extends View
       float width = measureText(mBuffer, paintStart, paintEnd - paintStart, line);
       ExternalRenderer renderer = span.renderer;
 
-      // Invoke external renderer preDraw
       if (renderer != null && renderer.requirePreDraw()) {
         int saveCount = canvas.save();
         canvas.translate(paintingOffset, getRowTop(row));
@@ -1961,7 +1944,6 @@ public class CodeEditor extends View
         canvas.restoreToCount(saveCount);
       }
 
-      // Apply font style
       long styleBits = span.getStyleBits();
       if (span.getStyleBits() != lastStyle) {
         mPaint.setFakeBoldText(TextStyle.isBold(styleBits));
@@ -1991,11 +1973,10 @@ public class CodeEditor extends View
       }
 
       if (span.backgroundColorMy != 0) {
-        // تنظیم رنگ پس‌زمینه
+
         mPaintOther.setColor(span.backgroundColorMy);
         float cornerRadius = 10;
 
-        // رسم مستطیل گرد با رنگ پس‌زمینه
         canvas.drawRoundRect(
             new RectF(
                 paintingOffset,
@@ -2007,7 +1988,6 @@ public class CodeEditor extends View
             mPaintOther);
       }
 
-      // Draw text
       drawRegionText(
           canvas,
           paintingOffset,
@@ -2020,7 +2000,6 @@ public class CodeEditor extends View
           columnCount,
           mColors.getColor(span.getForegroundColorId()));
 
-      // Draw strikethrough
       if ((span.problemFlags & Span.FLAG_DEPRECATED) != 0
           || TextStyle.isStrikeThrough(span.style)) {
         mPaintOther.setColor(0xFF281D1B);
@@ -2032,11 +2011,6 @@ public class CodeEditor extends View
             mPaintOther);
       }
 
-      //      if (span.drawminiText != null) {
-      //        drawMiniGraph(canvas, paintingOffset, row, span.drawminiText);
-      //      }
-
-      // Draw underline
       if (span.underlineColor != 0) {
         mRect.bottom = getRowBottom(row) - mDpUnit * 2;
         mRect.top = getRowHeight() * 2;
@@ -2045,7 +2019,6 @@ public class CodeEditor extends View
         drawColor(canvas, span.underlineColor, mRect);
       }
 
-      // Draw issue curly underline
       if (span.problemFlags > 0
           && Integer.highestOneBit(span.problemFlags) != Span.FLAG_DEPRECATED) {
         int color = 0;
@@ -2061,16 +2034,16 @@ public class CodeEditor extends View
             break;
         }
         if (color != 0 && span.column >= 0 && spanEnd - span.column >= 0) {
-          // Start and end X offset
+
           float startOffset = measureText(mBuffer, 0, span.column, line);
           float lineWidth =
               measureText(mBuffer, Math.max(0, span.column), spanEnd - span.column, line) + phi;
           float centerY = getRowBottom(row);
-          // Clip region due not to draw outside the horizontal region
+
           canvas.save();
           canvas.clipRect(startOffset, 0, startOffset + lineWidth, canvas.getHeight());
           canvas.translate(startOffset - phi, centerY);
-          // Draw waves
+
           mPath.reset();
           mPath.moveTo(0, 0);
           int waveCount = (int) Math.ceil(lineWidth / waveLength);
@@ -2081,7 +2054,7 @@ public class CodeEditor extends View
                 waveLength * i + waveLength * 3 / 4, -amplitude, waveLength * i + waveLength, 0);
           }
           phi = waveLength - (waveCount * waveLength - lineWidth);
-          // Draw path
+
           mPaint.setStrokeWidth(getDpUnit() * 1.8f);
           mPaintOther.setStyle(Paint.Style.STROKE);
           mPaintOther.setColor(color);
@@ -2093,7 +2066,6 @@ public class CodeEditor extends View
         phi = 0f;
       }
 
-      // Invoke external renderer postDraw
       if (renderer != null && renderer.requirePostDraw()) {
         int saveCount = canvas.save();
         canvas.translate(paintingOffset, getRowTop(row));
@@ -2168,6 +2140,7 @@ public class CodeEditor extends View
     int leadingWhitespaceEnd = 0;
     int trailingWhitespaceStart = 0;
     float circleRadius = 0f;
+    float textRegionStart = measureTextRegionOffset();
     if (shouldInitializeNonPrintable()) {
       float spaceWidth = mPaint.getSpaceWidth();
       float maxD = Math.min(getRowHeight(), spaceWidth);
@@ -2183,7 +2156,6 @@ public class CodeEditor extends View
     float offset2 = getOffsetX() - measureTextRegionOffset();
     float offset3 = offset2 - mDpUnit * 15;
 
-    // Step 1 - Draw background of rows
     for (int row = firstVis; row <= getLastVisibleRow() && rowIterator.hasNext(); row++) {
       Row rowInf = rowIterator.next();
       int line = rowInf.lineIndex;
@@ -2193,7 +2165,8 @@ public class CodeEditor extends View
         prepareLine(line);
         lastPreparedLine = line;
       }
-      // Get visible region on the line
+
+      drawLineIcons(canvas, row, line, textRegionStart);
       float[] charPos =
           findFirstVisibleChar(offset3, rowInf.startColumn, rowInf.endColumn, mBuffer, line);
       int firstVisibleChar = (int) charPos[0];
@@ -2208,13 +2181,11 @@ public class CodeEditor extends View
                   mBuffer,
                   line)[0];
 
-      // Draw current line background
       if (line == currentLine && !mCursorAnimator.isRunning()) {
         drawRowBackground(canvas, currentLineBgColor, row);
         postDrawCurrentLines.add(row);
       }
 
-      // Draw matched text background
       if (!matchedPositions.isEmpty()) {
         for (int position : matchedPositions) {
           if (mSearcher.mSearchText.length() == 1) {
@@ -2298,7 +2269,6 @@ public class CodeEditor extends View
         }
       }
 
-      // Draw selected text background
       if (mCursor.isSelected() && line >= mCursor.getLeftLine() && line <= mCursor.getRightLine()) {
         int selectionStart = 0;
         int selectionEnd = columnCount;
@@ -2331,7 +2301,6 @@ public class CodeEditor extends View
     }
     rowIterator.reset();
 
-    // Draw current line background on animation
     if (mCursorAnimator.isRunning()) {
       mRect.bottom = (float) mCursorAnimator.animatorBgBottom.getAnimatedValue() - getOffsetY();
       mRect.top = mRect.bottom - (float) mCursorAnimator.animatorBackground.getAnimatedValue();
@@ -2340,7 +2309,6 @@ public class CodeEditor extends View
       drawColor(canvas, currentLineBgColor, mRect);
     }
 
-    // Step 2 - Draw text and text decorations
     long lastStyle = 0;
     for (int row = firstVis; row <= getLastVisibleRow() && rowIterator.hasNext(); row++) {
       Row rowInf = rowIterator.next();
@@ -2353,7 +2321,6 @@ public class CodeEditor extends View
         postDrawLineNumbers.add(IntPair.pack(line, row));
       }
 
-      // Prepare data
       if (lastPreparedLine != line) {
         lastPreparedLine = line;
         prepareLine(line);
@@ -2365,7 +2332,6 @@ public class CodeEditor extends View
         }
       }
 
-      // Get visible region on the line
       float[] charPos =
           findFirstVisibleChar(offset3, rowInf.startColumn, rowInf.endColumn, mBuffer, line);
       int firstVisibleChar = (int) charPos[0];
@@ -2382,14 +2348,12 @@ public class CodeEditor extends View
 
       float backupOffset = paintingOffset;
 
-      // Draw text here
       if (!mHardwareAccAllowed
           || !canvas.isHardwareAccelerated()
           || isWordwrap()
           || Build.VERSION.SDK_INT < Build.VERSION_CODES.Q
           || rowInf.endColumn - rowInf.startColumn > 256 /* Save memory */) {
-        // Draw without hardware acceleration
-        // Get spans
+
         List<Span> spans = null;
         if (line < spanMap.size() && line >= 0) {
           spans = spanMap.get(line);
@@ -2401,11 +2365,11 @@ public class CodeEditor extends View
           }
           spans = temporaryEmptySpans;
         }
-        // Seek for first span
+
         float phi = 0f;
         while (spanOffset + 1 < spans.size()) {
           if (spans.get(spanOffset + 1).column <= firstVisibleChar) {
-            // Update phi
+
             Span span = spans.get(spanOffset);
             if (span.problemFlags > 0
                 && Integer.highestOneBit(span.problemFlags) != Span.FLAG_DEPRECATED) {
@@ -2440,7 +2404,7 @@ public class CodeEditor extends View
         if (minidraw != null) {
           drawMiniGraph(canvas, paintingOffset, row, minidraw);
         }
-        // Draw by spans
+
         while (lastVisibleChar > span.column) {
           int spanEnd =
               spanOffset + 1 >= spans.size() ? columnCount : spans.get(spanOffset + 1).column;
@@ -2456,7 +2420,6 @@ public class CodeEditor extends View
           float width = measureText(mBuffer, paintStart, paintEnd - paintStart, line);
           ExternalRenderer renderer = span.renderer;
 
-          // Invoke external renderer preDraw
           if (renderer != null && renderer.requirePreDraw()) {
             int saveCount = canvas.save();
             canvas.translate(paintingOffset, getRowTop(row) - getOffsetY());
@@ -2469,7 +2432,6 @@ public class CodeEditor extends View
             canvas.restoreToCount(saveCount);
           }
 
-          // Apply font style
           long styleBits = span.getStyleBits();
           if (span.getStyleBits() != lastStyle) {
             mPaint.setFakeBoldText(TextStyle.isBold(styleBits));
@@ -2483,9 +2445,6 @@ public class CodeEditor extends View
 
             lastStyle = styleBits;
           }
-          //          if (span.drawminiText != null) {
-          //            drawMiniGraph(canvas, paintingOffset, row, span.drawminiText);
-          //          }
 
           int backgroundColorId = span.getBackgroundColorId();
           if (backgroundColorId != 0) {
@@ -2501,13 +2460,11 @@ public class CodeEditor extends View
                 line);
           }
 
-          // mPaint.setAlpha(TextStyle.getAlpha(styleBits));
           if (span.backgroundColorMy != 0) {
-            // تنظیم رنگ پس‌زمینه
+
             mPaintOther.setColor(span.backgroundColorMy);
             float cornerRadius = 10;
 
-            // رسم مستطیل گرد با رنگ پس‌زمینه
             canvas.drawRoundRect(
                 new RectF(
                     paintingOffset,
@@ -2519,7 +2476,6 @@ public class CodeEditor extends View
                 mPaintOther);
           }
 
-          // Draw text
           drawRegionText(
               canvas,
               paintingOffset,
@@ -2532,7 +2488,6 @@ public class CodeEditor extends View
               columnCount,
               mColors.getColor(span.getForegroundColorId()));
 
-          // Draw strikethrough
           if ((span.problemFlags & Span.FLAG_DEPRECATED) != 0
               || TextStyle.isStrikeThrough(styleBits)) {
             mPaintOther.setColor(mColors.getColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER));
@@ -2544,7 +2499,6 @@ public class CodeEditor extends View
                 mPaintOther);
           }
 
-          // Draw underline
           if (span.underlineColor != 0) {
             mRect.bottom = getRowBottom(row) - mDpUnit * 2;
             mRect.top = getRowHeight() * 2;
@@ -2552,7 +2506,7 @@ public class CodeEditor extends View
             mRect.right = paintingOffset + width;
             drawColor(canvas, span.underlineColor, mRect);
           }
-          // Draw issue curly underline
+
           if (span.problemFlags > 0
               && Integer.highestOneBit(span.problemFlags) != Span.FLAG_DEPRECATED) {
             int color = 0;
@@ -2568,7 +2522,7 @@ public class CodeEditor extends View
                 break;
             }
             if (color != 0 && span.column >= 0 && spanEnd - span.column >= 0) {
-              // Start and end X offset
+
               float startOffset;
               float lineWidth;
               if (isWordwrap()) {
@@ -2595,11 +2549,11 @@ public class CodeEditor extends View
                 lineWidth = measureText(mBuffer, span.column, spanEnd - span.column, line) + phi;
               }
               float centerY = getRowBottom(row) - getOffsetY();
-              // Clip region due not to draw outside the horizontal region
+
               canvas.save();
               canvas.clipRect(startOffset, 0, startOffset + lineWidth, canvas.getHeight());
               canvas.translate(startOffset - phi, centerY);
-              // Draw waves
+
               mPath.reset();
               mPath.moveTo(0, 0);
               int waveCount = (int) Math.ceil(lineWidth / waveLength);
@@ -2613,7 +2567,7 @@ public class CodeEditor extends View
                     0);
               }
               phi = waveLength - (waveCount * waveLength - lineWidth);
-              // Draw path
+
               mPaint.setStrokeWidth(getDpUnit() * 1.8f);
               mPaintOther.setStyle(Paint.Style.STROKE);
               mPaintOther.setColor(color);
@@ -2625,7 +2579,6 @@ public class CodeEditor extends View
             phi = 0f;
           }
 
-          // Invoke external renderer postDraw
           if (renderer != null && renderer.requirePostDraw()) {
             int saveCount = canvas.save();
             canvas.translate(paintingOffset, getRowTop(row) - getOffsetY());
@@ -2656,20 +2609,15 @@ public class CodeEditor extends View
         lastVisibleChar = columnCount;
       }
 
-      // Draw hard wrap
       if (lastVisibleChar == columnCount
-          && (mNonPrintableOptions & FLAG_DRAW_LINE_SEPARATOR) != 0) {
-        // drawMiniGraph(canvas, paintingOffset, row, "⏎");
-      }
+          && (mNonPrintableOptions & FLAG_DRAW_LINE_SEPARATOR) != 0) {}
 
       if ((mNonPrintableOptions & FLAG_GHOSTWEB) != 0) {
         drawMiniGraph(canvas, paintingOffset, row, charName);
       }
 
-      // Recover the offset
       paintingOffset = backupOffset;
 
-      // Draw non-printable characters
       if (circleRadius != 0f
           && (leadingWhitespaceEnd != columnCount
               || (mNonPrintableOptions & FLAG_DRAW_WHITESPACE_FOR_EMPTY_LINE) != 0)) {
@@ -2797,7 +2745,6 @@ public class CodeEditor extends View
         }
       }
 
-      // Draw composing text underline
       if (line == mConnection.mComposingLine) {
         int composingStart = mConnection.mComposingStart;
         int composingEnd = mConnection.mComposingEnd;
@@ -2814,7 +2761,6 @@ public class CodeEditor extends View
         }
       }
 
-      // Draw cursors
       if (mCursor.isSelected()) {
         if (mCursor.getLeftLine() == line
             && isInside(mCursor.getLeftColumn(), firstVisibleChar, lastVisibleChar, line)) {
@@ -2823,7 +2769,6 @@ public class CodeEditor extends View
                   + measureText(
                       mBuffer, firstVisibleChar, mCursor.getLeftColumn() - firstVisibleChar, line);
 
-          // اعمال انیمیشن بر اساس مدل
           applyCursorAnimation(
               canvas,
               centerX,
@@ -2872,7 +2817,7 @@ public class CodeEditor extends View
 
   /** Draw small characters as graph */
   protected void drawMiniGraph(Canvas canvas, float offset, int row, String graph) {
-    // Draw
+
     mPaintGraph.setColor(mColors.getColor(EditorColorScheme.KEYWORD));
     mPaintGraph.setTypeface(getTypefaceText());
     float baseline = getRowBottom(row) - getOffsetY() - mGraphMetrics.descent;
@@ -2880,18 +2825,15 @@ public class CodeEditor extends View
   }
 
   public void drawMiniGraphs(float offset, int row, String graph) {
-    // Draw
+
     mPaintGraph.setColor(mColors.getColor(EditorColorScheme.KEYWORD));
     mPaintGraph.setTypeface(getTypefaceText());
 
-    // محاسبه عرض متن
     float textWidth = mPaintGraph.measureText(graph);
 
-    // محاسبه مکان برای راست‌چین کردن متن
     float baseline = getRowBottom(row) - getOffsetY() - mGraphMetrics.descent;
-    float xPosition = offset - textWidth; // تغییر به سمت راست
+    float xPosition = offset - textWidth;
 
-    // رسم متن
     canvas.drawText(graph, xPosition, baseline, mPaintGraph);
   }
 
@@ -2985,7 +2927,7 @@ public class CodeEditor extends View
     while (leading < column && isWhitespace(buffer[leading])) {
       leading++;
     }
-    // Only them this action is needed
+
     if (leading != column
         && (mNonPrintableOptions
                 & (FLAG_DRAW_WHITESPACE_INNER | FLAG_DRAW_WHITESPACE_TRAILING | FLAG_Scrop))
@@ -3035,7 +2977,7 @@ public class CodeEditor extends View
    * @return true if cursor should be drawn in this row
    */
   private boolean isInside(int index, int start, int end, int line) {
-    // Due not to draw duplicate cursors for a single one
+
     if (index == end && mText.getLine(line).length() != end) {
       return false;
     }
@@ -3157,13 +3099,12 @@ public class CodeEditor extends View
 
       if (currentIndex >= bracketStart
           && currentIndex < bracketStart + currentPairedBracket.leftLength) {
-        // mPaint.setColor(bracketHighlightColor);
+
         mPaint.setFakeBoldText(true);
         isBracketHighlighted = true;
       } else if (currentIndex >= bracketEnd
           && currentIndex < bracketEnd + currentPairedBracket.rightLength) {
-        // mPaint.setColor(bracketHighlightColor);
-        //  mPaint.setFakeBoldText(true);
+
         isBracketHighlighted = true;
       }
     }
@@ -3187,8 +3128,7 @@ public class CodeEditor extends View
       } else {
         if (startIndex <= selectionStart) {
           if (endIndex >= selectionEnd) {
-            // Three regions
-            // startIndex - selectionStart
+
             drawText(
                 canvas,
                 mBuffer,
@@ -3201,7 +3141,7 @@ public class CodeEditor extends View
                 line);
 
             float deltaX = measureText(mBuffer, startIndex, selectionStart - startIndex, line);
-            // selectionStart - selectionEnd
+
             mPaint.setColor(mColors.getColor(EditorColorScheme.TEXT_SELECTED));
             drawText(
                 canvas,
@@ -3215,7 +3155,7 @@ public class CodeEditor extends View
                 line);
 
             deltaX += measureText(mBuffer, selectionStart, selectionEnd - selectionStart, line);
-            // selectionEnd - endIndex
+
             mPaint.setColor(color);
             drawText(
                 canvas,
@@ -3229,8 +3169,7 @@ public class CodeEditor extends View
                 line);
 
           } else {
-            // Two regions
-            // startIndex - selectionStart
+
             drawText(
                 canvas,
                 mBuffer,
@@ -3255,10 +3194,9 @@ public class CodeEditor extends View
                 line);
           }
         } else {
-          // selectionEnd > startIndex > selectionStart
+
           if (endIndex > selectionEnd) {
-            // Two regions
-            // selectionEnd - endIndex
+
             drawText(
                 canvas,
                 mBuffer,
@@ -3283,7 +3221,7 @@ public class CodeEditor extends View
                 line);
 
           } else {
-            // One region
+
             mPaint.setColor(mColors.getColor(EditorColorScheme.TEXT_SELECTED));
             drawText(
                 canvas,
@@ -3527,16 +3465,6 @@ public class CodeEditor extends View
    *
    * @param canvas Canvas to draw
    */
-  //  protected void drawScrollBarTrackVertical(Canvas canvas) {
-  //    if (mEventHandler.holdVerticalScrollBar()) {
-  //      mRect.right = getWidth();
-  //      mRect.left = getWidth() - mDpUnit * 10;
-  //      mRect.top = 30;
-  //      mRect.bottom = getHeight();
-  //      drawColor(canvas, mColors.getColor(EditorColorScheme.SCROLL_BAR_TRACK), mRect);
-  //
-  //    }
-  //  }
   protected void drawScrollBarTrackVertical(Canvas canvas) {
     if (mEventHandler.holdVerticalScrollBar()) {
       mRect.right = getWidth();
@@ -3544,9 +3472,8 @@ public class CodeEditor extends View
       mRect.top = 30;
       mRect.bottom = getHeight();
 
-      float radius = 10f; // مقدار گردی که می‌خواهید
+      float radius = 10f;
 
-      // گوشه‌ها را گرد می‌کنیم
       Path path = new Path();
       path.addRoundRect(new RectF(mRect), radius, radius, Path.Direction.CW);
 
@@ -3583,8 +3510,7 @@ public class CodeEditor extends View
     mRect.top = topY;
     mRect.bottom = topY + length;
 
-    // Round the corners
-    float cornerRadius = 10f; // Adjust the radius as needed
+    float cornerRadius = 10f;
     Path path = new Path();
     path.addRoundRect(new RectF(mRect), cornerRadius, cornerRadius, Path.Direction.CW);
     canvas.clipPath(path);
@@ -3604,8 +3530,10 @@ public class CodeEditor extends View
    * @param centerY The center y on screen for the panel
    * @param rightX The right x on screen for the panel
    */
+ 
   protected void drawLineNumber(
       Canvas canvas, int line, int row, float offsetX, float width, int color) {
+
     if (width + offsetX <= 0) {
       return;
     }
@@ -3616,67 +3544,155 @@ public class CodeEditor extends View
     }
     mPaintOther.setColor(color);
 
-    // محاسبه موقعیت عمودی
+    // موقعیت عمودی baseline متن
     float y =
         (getRowBottom(row) + getRowTop(row)) / 2f
             - (mLineNumberMetrics.descent - mLineNumberMetrics.ascent) / 2f
             - mLineNumberMetrics.ascent
             - getOffsetY();
 
-    // تبدیل شماره خط به رشته
+    // تبدیل شماره خط به رشته (الزامی)
     var buffer = TemporaryCharBuffer.obtain(20);
     line++;
     int i = stringSize(line);
     Numbers.getChars(line, i, buffer);
 
-    // محاسبه موقعیت افقی شماره خط
+    // موقعیت افقی عدد
     float lineNumberX;
     switch (mLineNumberAlign) {
       case LEFT:
-        lineNumberX = offsetX;
+        lineNumberX = offsetX + getDpUnit() * 8;
         break;
       case RIGHT:
-        lineNumberX = offsetX + width;
+        lineNumberX = offsetX + width - getDpUnit() * 8;
         break;
       case CENTER:
         lineNumberX = offsetX + (width + mDividerMargin) / 2f;
         break;
       default:
-        lineNumberX = offsetX;
+        lineNumberX = offsetX + getDpUnit() * 8;
     }
 
     // رسم شماره خط
     canvas.drawText(buffer, 0, i, lineNumberX, y, mPaintOther);
 
-    // محاسبه عرض شماره خط
-    float lineNumberWidth = mPaintOther.measureText(buffer, 0, i);
+    // عرض عدد برای قرار دادن آیکون درست کنار عدد
+    float textWidth = mPaintOther.measureText(buffer, 0, i);
 
-    // رسم آیکون‌ها
+    // 🔹 آیکون کنار عدد مثل Android Studio
     for (LineIcon lineIcon : lineIcons) {
       if (lineIcon.getLineNumber() == line) {
-        Bitmap defaultIconBitmap =
-            BitmapFactory.decodeResource(getResources(), lineIcon.getIconRes());
-        int desiredWidth = (int) getDpUnit() * 30;
-        int desiredHeight = (int) getDpUnit() * 30;
-        Bitmap scaledIconBitmap =
-            Bitmap.createScaledBitmap(defaultIconBitmap, desiredWidth, desiredHeight, true);
+        Bitmap iconBitmap = BitmapFactory.decodeResource(getResources(), lineIcon.getIconRes());
+        if (iconBitmap == null) continue;
 
-        if (scaledIconBitmap != null) {
-          // موقعیت افقی آیکون: دقیقاً بعد از شماره خط
-          float iconX = lineNumberX + lineNumberWidth + 10; // 5 پیکسل فاصله بین شماره خط
-          // و آیکون
-          float iconY = y - scaledIconBitmap.getHeight(); // موقعیت عمودی آیکون
+        int iconSize = (int) (getRowHeight() * 0.6f); // اندازه متناسب با ارتفاع خط
+        Bitmap scaledIcon = Bitmap.createScaledBitmap(iconBitmap, iconSize, iconSize, true);
 
-          Paint iconPaint = new Paint();
-          ///  iconPaint.setColorFilter(new PorterDuffColorFilter(color,
-          // PorterDuff.Mode.SRC_IN));
+        if (scaledIcon != null) {
+          // 📍 موقعیت X آیکون: دقیقاً بعد از عدد (مثل Android Studio)
+          float iconX = lineNumberX + textWidth + getDpUnit() * 4;
 
-          // رسم آیکون
-          canvas.drawBitmap(scaledIconBitmap, iconX, iconY, iconPaint);
+          // 📍 موقعیت Y آیکون: وسط خط
+          float centerY = (getRowBottom(row) + getRowTop(row)) / 2f - getOffsetY();
+          float iconTop = centerY - iconSize / 2f;
+          float iconBottom = centerY + iconSize / 2f;
+
+          RectF rect =
+              new RectF(
+                  iconX, // چپ
+                  iconTop, // بالا
+                  iconX + iconSize, // راست
+                  iconBottom // پایین
+                  );
+
+          canvas.drawBitmap(scaledIcon, null, rect, null);
         }
       }
     }
+
+    TemporaryCharBuffer.recycle(buffer);
   }
+
+  // protected void drawLineNumber(
+  // Canvas canvas, int line, int row, float offsetX, float width, int color) {
+  // if (width + offsetX <= 0) {
+  // return;
+  // }
+
+  // // تنظیمات متن
+  // if (mPaintOther.getTextAlign() != mLineNumberAlign) {
+  // mPaintOther.setTextAlign(mLineNumberAlign);
+  // }
+  // mPaintOther.setColor(color);
+
+  // // محاسبه موقعیت عمودی
+  // float y =
+  // (getRowBottom(row) + getRowTop(row)) / 2f
+  // - (mLineNumberMetrics.descent - mLineNumberMetrics.ascent) / 2f
+  // - mLineNumberMetrics.ascent
+  // - getOffsetY();
+
+  // // تبدیل شماره خط به رشته
+  // var buffer = TemporaryCharBuffer.obtain(20);
+  // line++;
+  // int i = stringSize(line);
+  // Numbers.getChars(line, i, buffer);
+
+  // // محاسبه موقعیت افقی شماره خط
+  // float lineNumberX;
+  // switch (mLineNumberAlign) {
+  // case LEFT:
+  // lineNumberX = offsetX + getDpUnit() * 8; // فاصله از لبه
+  // break;
+  // case RIGHT:
+  // lineNumberX = offsetX + width - getDpUnit() * 8; // فاصله از لبه
+  // break;
+  // case CENTER:
+  // lineNumberX = offsetX + (width + mDividerMargin) / 2f;
+  // break;
+  // default:
+  // lineNumberX = offsetX + getDpUnit() * 8;
+  // }
+
+  // // رسم شماره خط
+  // canvas.drawText(buffer, 0, i, lineNumberX, y, mPaintOther);
+
+  // // محاسبه عرض متن برای موقعیت‌یابی آیکون
+  // float textWidth = mPaintOther.measureText(buffer, 0, i);
+
+  // for (LineIcon lineIcon : lineIcons) {
+  // if (lineIcon.getLineNumber() == line) {
+  // Bitmap defaultIconBitmap =
+  // BitmapFactory.decodeResource(getResources(), lineIcon.getIconRes());
+  // int iconSize = (int) (getRowHeight() * 0.6f); // اندازه متناسب
+  // Bitmap scaledIconBitmap =
+  // Bitmap.createScaledBitmap(defaultIconBitmap, iconSize, iconSize, true);
+
+  // if (scaledIconBitmap != null) {
+  // // موقعیت X آیکون: بعد از متن با فاصله
+  // float iconX = lineNumberX + textWidth + getDpUnit() * 8;
+
+  // // موقعیت Y آیکون: وسط خط
+  // float iconY = y - iconSize / 2f + getDpUnit() * 8;
+
+  // // محدوده رسم آیکون با RectF
+  // RectF rect =
+  // new RectF(
+  // iconX, // چپ
+  // iconY, // بالا
+  // iconX + iconSize, // راست
+  // iconY + iconSize // پایین
+  // );
+
+  // canvas.drawBitmap(scaledIconBitmap, null, rect, mPaintOther);
+  // }
+  // }
+  // }
+
+  // TemporaryCharBuffer.recycle(buffer);
+  // }
+
+  protected void drawLineIcons(Canvas canvas, int row, int line, float textRegionStart) {}
 
   /**
    * Draw horizontal scroll bar
@@ -3692,7 +3708,7 @@ public class CodeEditor extends View
     mRect.bottom = getHeight();
     mRect.right = leftX + length;
     mRect.left = leftX;
-    float cornerRadius = 20f; // Adjust the radius as needed
+    float cornerRadius = 20f;
     Path path = new Path();
     path.addRoundRect(new RectF(mRect), cornerRadius, cornerRadius, Path.Direction.CW);
     canvas.clipPath(path);
@@ -3823,7 +3839,7 @@ public class CodeEditor extends View
    * @return The block we found. It is always a valid index(Unless there is no block)
    */
   private int binarySearchEndBlock(int firstVis, List<BlockLine> blocks) {
-    // end > firstVis
+
     int left = 0, right = blocks.size() - 1, mid, row;
     int max = right;
     while (left <= right) {
@@ -3881,20 +3897,13 @@ public class CodeEditor extends View
    */
   private boolean isPersianCharacter(char c) {
     return (0x0590 <= c && c <= 0x08FF)
-        || // RTL scripts
-        c == 0x200E
-        || // Bidi format character
-        c == 0x200F
-        || // Bidi format character
-        (0x202A <= c && c <= 0x202E)
-        || // Bidi format characters
-        (0x2066 <= c && c <= 0x2069)
-        || // Bidi format characters
-        (0xD800 <= c && c <= 0xDFFF)
-        || // Surrogate pairs
-        (0xFB1D <= c && c <= 0xFDFF)
-        || // Hebrew and Arabic presentation forms
-        (0xFE70 <= c && c <= 0xFEFE);
+        || c == 0x200E
+        || c == 0x200F
+        || (0x202A <= c && c <= 0x202E)
+        || (0x2066 <= c && c <= 0x2069)
+        || (0xD800 <= c && c <= 0xDFFF)
+        || (0xFB1D <= c && c <= 0xFDFF)
+        || (0xFE70 <= c && c <= 0xFEFE);
   }
 
   @SuppressLint("NewApi")
@@ -3998,16 +4007,13 @@ public class CodeEditor extends View
     float expand = mDpUnit * 3;
     float textWidth = mPaint.measureText(text);
 
-    // تعیین مرزها
     mRect.top = centerY - getRowHeight() / 2f - expand;
     mRect.bottom = centerY + getRowHeight() / 2f + expand;
     mRect.right = rightX;
     mRect.left = rightX - expand * 2 - textWidth;
 
-    // ایجاد حباب با استفاده از BubbleHelper
     BubbleHelper.buildBubblePath(mPath, mRect);
 
-    // ترسیم حباب
     drawColor(canvas, mColors.getColor(EditorColorScheme.LINE_NUMBER_PANEL), mRect);
 
     float baseline = centerY - getRowHeight() / 2f + getRowBaseline(0);
@@ -4016,7 +4022,6 @@ public class CodeEditor extends View
     mPaint.setTextAlign(Paint.Align.CENTER);
     canvas.drawText(text, centerX, baseline, mPaint);
 
-    // ترسیم Path حباب
     canvas.drawPath(mPath, mPaint);
 
     mPaint.setTextAlign(Paint.Align.LEFT);
@@ -4116,10 +4121,7 @@ public class CodeEditor extends View
 
       final var requiredSpaces = tabWidth - (spaces % tabWidth);
       if (spaceCount > 0 && tabCount > 0) {
-        // indentation contains spaces as well as tabs
-        // replace the leading indentation with appropriate indendation (according to
-        // language.useTabs())
-        // this should be done while incrementing the indentation
+
         final var finalSpaceCount =
             ((requiredSpaces == 0 ? tabWidth : requiredSpaces) + spaces) / tabWidth;
         text.replace(i, 0, i, endColumn, StringsKt.repeat(tabString, finalSpaceCount));
@@ -4127,14 +4129,10 @@ public class CodeEditor extends View
       }
 
       if (requiredSpaces == 0) {
-        // line is evenly indented
-        // increase the indentation by \t or tabWidthSpaces
+
         text.insert(i, endColumn, tabString);
       } else {
-        // line is oddly indented
-        // We know that a line can never be oddly indented when it is indented only with
-        // tabs
-        // therefore, we insert spaces to align the line
+
         text.insert(i, endColumn, StringsKt.repeat(" ", requiredSpaces));
       }
     }
@@ -4275,11 +4273,11 @@ public class CodeEditor extends View
     int width;
     if ((getWidth() < 500 * mDpUnit && mCompletionPosMode == WINDOW_POS_MODE_AUTO)
         || mCompletionPosMode == WINDOW_POS_MODE_FULL_WIDTH_ALWAYS) {
-      // center mode
+
       width = getWidth() * 7 / 8;
       panelX = getWidth() / 8f / 2f;
     } else {
-      // follow cursor mode
+
       width = (int) Math.min(300 * mDpUnit, getWidth() / 2f);
     }
     int height = mCompletionWindow.getHeight();
@@ -4434,20 +4432,20 @@ public class CodeEditor extends View
    */
   public void ensurePositionVisible(int line, int column) {
     float[] layoutOffset = mLayout.getCharLayoutOffset(line, column);
-    // x offset is the left of character
+
     float xOffset = layoutOffset[1] + measureTextRegionOffset();
-    // y offset is the bottom of row
+
     float yOffset = layoutOffset[0];
 
     float targetY = getOffsetY();
     float targetX = getOffsetX();
 
     if (yOffset - getRowHeight() < getOffsetY()) {
-      // top invisible
+
       targetY = yOffset - getRowHeight() * 1.1f;
     }
     if (yOffset > getHeight() + getOffsetY()) {
-      // bottom invisible
+
       targetY = yOffset - getHeight() + getRowHeight() * 0.1f;
     }
     float charWidth = column == 0 ? 0 : measureText(mText.getLine(line), column - 1, 1, line);
@@ -5204,7 +5202,7 @@ public class CodeEditor extends View
   /** Make sure the moving selection is visible */
   private void ensureSelectingTargetVisible() {
     if (mCursor.left().equals(mLockedSelection)) {
-      // Ensure right selection visible
+
       ensureSelectionVisible();
     } else {
       ensurePositionVisible(mCursor.getLeftLine(), mCursor.getLeftColumn());
@@ -5491,9 +5489,7 @@ public class CodeEditor extends View
       invalidate();
     }
     onSelectionChanged();
-    if (!lastState && mCursor.isSelected() && mStartedActionMode != ACTION_MODE_SEARCH_TEXT) {
-      // TODO
-    }
+    if (!lastState && mCursor.isSelected() && mStartedActionMode != ACTION_MODE_SEARCH_TEXT) {}
   }
 
   /** Move to next page */
@@ -5775,10 +5771,6 @@ public class CodeEditor extends View
     invalidate();
   }
 
-  // -------------------------------------------------------------------------------
-  // -------------------------IME Interaction---------------------------------------
-  // -------------------------------------------------------------------------------
-
   /** Hide soft input */
   public void hideSoftInput() {
     mInputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
@@ -5793,7 +5785,7 @@ public class CodeEditor extends View
             mText.getCharIndex(mConnection.mComposingLine, mConnection.mComposingStart);
         candidatesEnd = mText.getCharIndex(mConnection.mComposingLine, mConnection.mComposingEnd);
       } catch (IndexOutOfBoundsException e) {
-        // Ignored
+
       }
     }
     mInputMethodManager.updateSelection(
@@ -5803,7 +5795,7 @@ public class CodeEditor extends View
   /** Update request result for monitoring request */
   protected void updateExtractedText() {
     if (mExtracting != null) {
-      // Logs.log("Send extracted text updates");
+
       mInputMethodManager.updateExtractedText(this, mExtracting.token, extractText(mExtracting));
     }
   }
@@ -5840,7 +5832,7 @@ public class CodeEditor extends View
     updateExtractedText();
     updateSelection();
     updateCursorAnchor();
-    // Restart if composing
+
     if (mConnection.mComposingLine != -1) {
       restartInput();
     }
@@ -5880,10 +5872,6 @@ public class CodeEditor extends View
     invalidate();
   }
 
-  // -------------------------------------------------------------------------------
-  // ------------------------Internal Callbacks-------------------------------------
-  // -------------------------------------------------------------------------------
-
   /** Called by color scheme to init colors */
   protected void onColorFullUpdate() {
     if (mCompletionWindow != null) mCompletionWindow.applyColorScheme();
@@ -5913,15 +5901,12 @@ public class CodeEditor extends View
     invalidate();
   }
 
-  // -------------------------------------------------------------------------------
-  // -------------------------Override methods--------------------------------------
-  // -------------------------------------------------------------------------------
   @Override
   protected void onDraw(Canvas canvas) {
     super.onDraw(canvas);
     drawView(canvas);
     this.canvas = canvas;
-    // Update magnifier
+
     if ((mLastCursorState != mCursorBlink.visibility || !mEventHandler.getScroller().isFinished())
         && mEventHandler.mMagnifier.isShowing()) {
       mLastCursorState = mCursorBlink.visibility;
@@ -6015,8 +6000,6 @@ public class CodeEditor extends View
     outAttrs.initialSelEnd = getCursor() != null ? getCursor().getRight() : 0;
     outAttrs.initialCapsMode = mConnection.getCursorCapsMode(0);
 
-    // Prevent fullscreen when the screen height is too small
-    // Especially in landscape mode
     if (!isFullscreenAllowed()) {
       outAttrs.imeOptions = EditorInfo.IME_FLAG_NO_EXTRACT_UI | EditorInfo.IME_FLAG_NO_FULLSCREEN;
     }
@@ -6195,7 +6178,7 @@ public class CodeEditor extends View
       case KeyEvent.KEYCODE_SPACE:
         if (isEditable()) {
           getCursor().onCommitText(" ");
-          // notifyExternalCursorChange();
+
           notifyIMEExternalCursorChange();
         }
 
@@ -6258,20 +6241,20 @@ public class CodeEditor extends View
               if (getCursor().isSelected()
                   && (autoSurroundPair = replacement.getAutoSurroundPair()) != null) {
                 getText().beginBatchEdit();
-                // insert left
+
                 getText()
                     .insert(
                         getCursor().getLeftLine(),
                         getCursor().getLeftColumn(),
                         autoSurroundPair[0]);
-                // insert right
+
                 getText()
                     .insert(
                         getCursor().getRightLine(),
                         getCursor().getRightColumn(),
                         autoSurroundPair[1]);
                 getText().endBatchEdit();
-                // cancel selected
+
                 setSelection(
                     getCursor().getLeftLine(),
                     getCursor().getLeftColumn() + autoSurroundPair[0].length() - 1);
@@ -6309,14 +6292,14 @@ public class CodeEditor extends View
   @Override
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
     boolean warn = false;
-    // Fill the horizontal layout if WRAP_CONTENT mode
+
     if (MeasureSpec.getMode(widthMeasureSpec) == MeasureSpec.AT_MOST
         || MeasureSpec.getMode(widthMeasureSpec) == MeasureSpec.UNSPECIFIED) {
       widthMeasureSpec =
           MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY);
       warn = true;
     }
-    // Fill the vertical layout if WRAP_CONTENT mode
+
     if (MeasureSpec.getMode(heightMeasureSpec) == MeasureSpec.AT_MOST
         || MeasureSpec.getMode(heightMeasureSpec) == MeasureSpec.UNSPECIFIED) {
       heightMeasureSpec =
@@ -6414,7 +6397,7 @@ public class CodeEditor extends View
       CharSequence insertedContent) {
     updateTimestamp();
     post(this::updateMatchingBrackets);
-    // save.OnStart(this);
+
     if (mPowerModeEffectManager != null && insertedContent.length() > 0) {
       mPowerModeEffectManager.spawnEffectAtCursor();
     }
@@ -6422,7 +6405,6 @@ public class CodeEditor extends View
       mText.getLine(i).widthCache = null;
     }
 
-    // Update spans
     if (isSpanMapPrepared(true, endLine - startLine)) {
       if (startLine == endLine) {
         SpanMapUpdater.shiftSpansOnSingleLineInsert(
@@ -6438,11 +6420,9 @@ public class CodeEditor extends View
     }
     mLayout.afterInsert(content, startLine, startColumn, endLine, endColumn, insertedContent);
 
-    // Notify input method
     updateCursor();
     mWait = false;
 
-    // Auto completion
     if (isAutoCompletionEnabled()) {
       if ((mConnection.mComposingLine == -1 || mCompletionOnComposing)
           && endColumn != 0
@@ -6475,9 +6455,7 @@ public class CodeEditor extends View
     }
 
     BlocksUpdater.update(getTextAnalyzeResult().getBlocks(), startLine, endLine - startLine);
-    // Log.d(LOG_TAG, "Ins: " + startLine + " " + startColumn + ", " + endLine + " " + endColumn
-    // +
-    // ", content = " + insertedContent);
+
     updateCursorAnchor();
 
     invalidateInCursor();
@@ -6512,7 +6490,6 @@ public class CodeEditor extends View
       CharSequence deletedContent) {
     updateTimestamp();
 
-    // save.OnEnd(this);
     for (int i = startLine; i <= startLine + 1 && i < getLineCount(); i++) {
       mText.getLine(i).widthCache = null;
     }
@@ -6552,9 +6529,6 @@ public class CodeEditor extends View
       mCompletionWindow.hide();
     }
 
-    // Log.d(LOG_TAG, "Del: " + startLine + " " + startColumn + ", " + endLine + " " + endColumn
-    // +
-    // ", content = " + deletedContent);
     BlocksUpdater.update(getTextAnalyzeResult().getBlocks(), endLine, startLine - endLine);
 
     if (!mWait) {
@@ -6639,10 +6613,6 @@ public class CodeEditor extends View
     public void Tab();
   }
 
-  // -------------------------------------------------------------------------------
-  // -------------------------Inner classes-----------------------------------------
-  // -------------------------------------------------------------------------------
-
   /**
    * @param Tanks to Androis ide
    * @gouid Tanks for Tryon to Helping to Smart Enter
@@ -6668,7 +6638,7 @@ public class CodeEditor extends View
     }
 
     void execute(Canvas canvas) {
-      // Follow the thumb
+
       if (!descriptor.position.isEmpty()) {
         if ((mEventHandler.holdInsertHandle()
                 && handleType == SelectionHandleStyle.HANDLE_TYPE_INSERT)
