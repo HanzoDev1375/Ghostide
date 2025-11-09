@@ -1,0 +1,136 @@
+plugins {
+    id 'com.android.library'
+    id "kotlin-android"
+}
+
+android {
+    namespace 'ir.ninjacoder.ghostide.core'
+    compileSdk 36
+
+    defaultConfig {
+        minSdk 26
+        consumerProguardFiles "consumer-rules.pro"
+        vectorDrawables.useSupportLibrary true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    api fileTree(dir: "libs", include: ["*.jar", "*.aar"])
+    // https://mvnrepository.com/artifact/com.google.code.gson/gson
+    implementation("com.google.code.gson:gson:2.13.1")
+    def jadxVersion = "1.5.2"
+    implementation project(path: ":Plugin")
+    implementation project(path: ":pl-codecomment")
+    implementation project(path: ":jgit")
+    implementation project(path: ":eclipse-standalone")
+    implementation project(path: ":prddownloader")
+    implementation project(path: ":datautils")
+    implementation project(path: ":ui-designer")
+    implementation project(path: ":webview")
+    implementation project(path: ":vectormaster")
+    implementation project(path: ":android-tools")
+    implementation project(path: ":prograsssheetlib")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.2")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-properties:2.14.2")
+    implementation("com.squareup:javapoet:1.13.0")
+    implementation("com.android.tools:r8:8.3.37")
+    implementation("com.jsibbold:zoomage:1.3.1")
+    implementation("com.github.li-xiaojun:XPopup:2.10.0")
+    implementation("net.lingala.zip4j:zip4j:2.11.5")
+    implementation("com.github.skydoves:powermenu:2.2.4")
+    implementation("com.caverock:androidsvg:1.4")
+    annotationProcessor("com.github.bumptech.glide:compiler:5.0.0-rc01")
+    implementation("com.github.bumptech.glide:avif-integration:5.0.0-rc01")
+    implementation("com.github.bumptech.glide:recyclerview-integration:5.0.0-rc01")
+    implementation("com.github.bumptech.glide:glide:5.0.0-rc01")
+    implementation("com.blankj:utilcodex:1.31.1")
+    implementation("androidx.webkit:webkit:1.10.0")
+    implementation("org.eclipse.jgit:org.eclipse.jgit:7.3.0.202506031305-r")
+    api("androidx.activity:activity:1.9.0")
+    api("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    api("com.google.android.material:material:1.14.0-alpha04")
+    implementation("org.nanohttpd:nanohttpd-webserver:2.3.1")
+    implementation("org.benf:cfr:0.152")
+    implementation("xyz.doikki.android.dkplayer:dkplayer-java:3.3.7")
+    implementation("xyz.doikki.android.dkplayer:dkplayer-ui:3.3.7")
+    implementation("xyz.doikki.android.dkplayer:player-exo:3.3.7")
+    implementation("xyz.doikki.android.dkplayer:player-ijk:3.3.7")
+    implementation("xyz.doikki.android.dkplayer:videocache:3.3.7")
+    implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.16")
+    implementation("androidx.recyclerview:recyclerview:1.4.0")
+    implementation("androidx.recyclerview:recyclerview-selection:1.1.0")
+    implementation("de.hdodenhof:circleimageview:3.1.0")
+    implementation("org.antlr:antlr4:4.13.2")
+    implementation("org.apache.commons:commons-compress:1.24.0")
+    implementation("com.github.pedrovgs:renderers:4.1.0")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation("com.fasterxml.jackson.core:jackson-core:2.14.2")
+    implementation("com.squareup:seismic:1.0.3")
+    implementation("org.smali:smali:2.5.2")
+    implementation("org.smali:baksmali:2.5.2")
+    implementation("com.github.TimScriptov:apksigner:1.2.0")
+    implementation("org.jsoup:jsoup:1.21.1")
+    implementation("com.github.douglasjunior:android-simple-tooltip:1.1.0")
+    implementation("io.getstream:photoview:1.0.1")
+    implementation("androidx.palette:palette:1.0.0")
+    implementation("de.larsgrefer.sass:sass-embedded-android:4.1.0")
+    implementation("io.reactivex.rxjava3:rxjava:3.1.8")
+    api("androidx.core:core:1.6.0")
+    api("androidx.preference:preference:1.2.1")
+    implementation("com.github.javaparser:javaparser-core:3.27.0")
+    implementation 'com.github.javaparser:javaparser-symbol-solver-core:3.27.0'
+    implementation("com.github.AppIntro:AppIntro:6.3.1")
+    implementation("com.airbnb.android:lottie:6.4.1")
+    implementation("com.github.jsqlparser:jsqlparser:5.0")
+    implementation("com.helger:ph-css:7.0.4")
+    // https://mvnrepository.com/artifact/com.diogonunes/JColor
+    implementation("com.diogonunes:JColor:5.5.1")
+    // https://mvnrepository.com/artifact/com.google.guava/guava
+    implementation("io.github.skylot:jadx-core:$jadxVersion")
+    implementation("io.github.skylot:jadx-dex-input:1.5.2")
+    implementation 'androidx.security:security-crypto:1.1.0-alpha03'
+    implementation 'org.mozilla:rhino-runtime:1.7.15'
+    //run ts tsx js jsx in Android
+    implementation "de.inetsoftware:jlessc:1.12"
+    implementation("io.noties.markwon:html:4.6.2")
+    implementation("io.noties.markwon:image:4.6.2")
+    implementation("com.github.bumptech.glide:glide:5.0.0-rc01")
+    //annotationProcessor 'io.noties:prism4j-bundler:2.0.0'
+    implementation 'io.noties.markwon:ext-tasklist:4.6.2'
+    implementation 'io.noties.markwon:image-glide:4.6.2'
+    implementation 'io.noties.markwon:core:4.6.2'
+
+    implementation("io.noties.markwon:syntax-highlight:4.6.2") {
+
+        exclude group: "org.jetbrains", module: "annotations"
+        exclude group: "org.jetbrains", module: "annotations-java5"
+
+    }
+    implementation("com.caoccao.javet:swc4j:1.6.0") // Must Have
+    runtimeOnly 'androidx.graphics:graphics-shapes:1.1.0-alpha01'
+    implementation('com.github.HanzoDev1375:Android-code-snap:1.1.2') {
+        exclude group: "org.jetbrains", module: "annotations"
+        exclude group: "org.jetbrains", module: "annotations-java5"
+    }
+}

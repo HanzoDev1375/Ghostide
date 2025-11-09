@@ -7,27 +7,32 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
+
 import androidx.core.content.ContextCompat;
+
 import android.content.pm.PackageManager;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationManagerCompat;
-import ir.ninjacoder.ghostide.Welcome.SplashWord;
-import ir.ninjacoder.ghostide.activities.BaseCompat;
-import ir.ninjacoder.ghostide.activities.FileManagerActivity;
+
+import ir.ninjacoder.ghostide.core.Welcome.SplashWord;
+import ir.ninjacoder.ghostide.core.activities.BaseCompat;
+import ir.ninjacoder.ghostide.core.activities.FileManagerActivity;
+import ir.ninjacoder.ghostide.core.utils.FileUtil;
 import ir.ninjacoder.ghostide.databinding.MainBinding;
-import ir.ninjacoder.ghostide.utils.AssetsSoft;
-import ir.ninjacoder.ghostide.utils.FileUtil;
+import ir.ninjacoder.ghostide.core.utils.AssetsSoft;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.*;
+
 import com.hzy.lib7z.IExtractCallback;
 import com.hzy.lib7z.Z7Extractor;
+
 import java.io.File;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MainActivity extends BaseCompat {
 
@@ -36,7 +41,7 @@ public class MainActivity extends BaseCompat {
     private MainBinding bind;
 
     private Intent gotopage = new Intent();
-    
+
     private SharedPreferences setac, iconSpash;
 
     private static final int REQUEST_CODE_STORAGE_PERMISSION = 1000;
@@ -85,7 +90,7 @@ public class MainActivity extends BaseCompat {
         } else {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
                 isWaitingForPermissionResult = true;
-                ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE }, REQUEST_CODE_STORAGE_PERMISSION);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_STORAGE_PERMISSION);
             } else {
                 checkMediaImagesPermission();
             }
@@ -96,7 +101,7 @@ public class MainActivity extends BaseCompat {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
                 isWaitingForPermissionResult = true;
-                ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.READ_MEDIA_IMAGES }, REQUEST_CODE_MEDIA_IMAGES_PERMISSION);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, REQUEST_CODE_MEDIA_IMAGES_PERMISSION);
             } else {
                 checkNotificationPermission();
             }
@@ -109,7 +114,7 @@ public class MainActivity extends BaseCompat {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 isWaitingForPermissionResult = true;
-                ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.POST_NOTIFICATIONS }, REQUEST_CODE_NOTIFICATION_PERMISSION);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQUEST_CODE_NOTIFICATION_PERMISSION);
             } else {
                 allPermissionsGranted = true;
                 startAppProcess();
@@ -146,7 +151,7 @@ public class MainActivity extends BaseCompat {
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         isWaitingForPermissionResult = false;
-        switch(requestCode) {
+        switch (requestCode) {
             case REQUEST_CODE_STORAGE_PERMISSION:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     checkMediaImagesPermission();
@@ -281,7 +286,7 @@ public class MainActivity extends BaseCompat {
             var pythonPath = getFilesDir().getAbsolutePath() + File.separator + "env.sh";
             var phpPath = getFilesDir().getAbsolutePath() + File.separator + "lib" + File.separator + "libx265.so";
             var ghostPath = "/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost";
-            if (!FileUtil.isExistFile(pythonPath) || !FileUtil.isExistFile(phpPath) || !FileUtil.isExistFile(mypath) || !FileUtil.isExistFile(ghostPath) ||FileUtil.getFileLength(mypath) < 19163) {
+            if (!FileUtil.isExistFile(pythonPath) || !FileUtil.isExistFile(phpPath) || !FileUtil.isExistFile(mypath) || !FileUtil.isExistFile(ghostPath) || FileUtil.getFileLength(mypath) < 19163) {
                 startActivity(new Intent(getApplication(), SplashWord.class));
                 finish();
             } else {
@@ -298,7 +303,7 @@ public class MainActivity extends BaseCompat {
     void setIconSp() {
         int data = iconSpash.getInt("iconSpash", 0);
         int iconSize = R.drawable.ghosticon_spash;
-        switch(data) {
+        switch (data) {
             case 0:
                 iconSize = R.drawable.ghosticon_spash;
                 break;

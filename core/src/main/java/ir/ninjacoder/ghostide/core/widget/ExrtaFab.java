@@ -1,0 +1,45 @@
+package ir.ninjacoder.ghostide.core.widget;
+
+import android.content.Context;
+import android.util.AttributeSet;
+
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+
+import ir.ninjacoder.ghostide.core.R;
+import ir.ninjacoder.ghostide.core.utils.AnimUtils;
+
+public class ExrtaFab extends ExtendedFloatingActionButton {
+
+  public ExrtaFab(Context c) {
+    super(c);
+    init();
+  }
+
+  public ExrtaFab(Context c, AttributeSet v) {
+    super(c, v);
+    init();
+  }
+
+  public void init() {
+    setIconResource(R.drawable.ic_fab_play);
+    shrink();
+ //   setBackground(ObjectUtils.getCookieShape());
+  }
+
+  public void setColorFilter(int color) {}
+
+  public boolean isHide() {
+    return getVisibility() == GONE ? true : false;
+  }
+
+  public boolean isShow() {
+    return getVisibility() == VISIBLE ? true : false;
+  }
+
+  @Override
+  public void setOnClickListener(OnClickListener arg0) {
+    super.setOnClickListener(arg0);
+    // TODO: Implement this method
+    AnimUtils.Sacla(this);
+  }
+}

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     android:layout_marginRight="9dp"
+     android:layout_marginLeft="9dp"
+     android:id="@+id/shapeviews">
+
+    <LinearLayout
+         android:layout_height="match_parent"
+         android:layout_width="match_parent"
+         android:gravity="center"
+         android:orientation="vertical">
+
+        <ImageView
+             android:layout_height="80dp"
+             android:layout_width="80dp"
+             android:layout_marginBottom="10dp"
+             android:src="@drawable/ghosticon_spash"
+             android:adjustViewBounds="true"
+             android:layout_marginTop="10dp"
+             android:scaleType="centerInside"
+             android:id="@+id/iconSp"
+             android:layout_gravity="center_vertical|center_horizontal" />
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:textAppearance="?android:attr/textAppearanceLarge"
+             android:text="Ghost web ide"
+             android:textStyle="bold" />
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:orientation="horizontal">
+
+        </LinearLayout>
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:gravity="bottom"
+             android:textAppearance="?android:attr/textAppearanceSmall"
+             android:id="@+id/unzipFiles"
+             android:text="app by ninja coder" />
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:visibility="gone"
+             android:gravity="center"
+             android:orientation="vertical"
+             android:id="@+id/layout_vis_main">
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:layout_marginBottom="10dp"
+                 android:ellipsize="end"
+                 android:textSize="15dp"
+                 android:lines="1"
+                 android:singleLine="true"
+                 android:textColor="?@attr/colorOnSurface"
+                 android:layout_marginTop="10dp"
+                 android:id="@+id/tv_main_unzip"
+                 android:text="hello" />
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:id="@+id/prograssBar_Main_UnZip" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

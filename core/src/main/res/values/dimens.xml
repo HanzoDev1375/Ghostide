@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <dimen name="default_slider_height">36dp</dimen>
+    <dimen name="default_slider_margin">24dp</dimen>
+    <dimen name="default_slider_bar_height">4dp</dimen>
+    <dimen name="default_slider_handler_radius">10dp</dimen>
+    <dimen name="default_padding_side">24dp</dimen>
+    <dimen name="default_preview_height">40dp</dimen>
+    <dimen name="default_preview_image_height">36dp</dimen>
+    <dimen name="default_margin_top">20dp</dimen>
+    <dimen name="dkplayer_controller_height">46dp</dimen>
+    <dimen name="dkplayer_controller_icon_padding">12dp</dimen>
+    <dimen name="dkplayer_controller_text_size">16sp</dimen>
+    <dimen name="dkplayer_default_spacing">10dp</dimen>
+    <dimen name="dkplayer_controller_seekbar_size_n">14dp</dimen>
+    <dimen name="dkplayer_controller_seekbar_size_s">14dp</dimen>
+    <dimen name="dkplayer_controller_seekbar_max_size">1dp</dimen>
+    <dimen name="dkplayer_play_btn_size">50dp</dimen>
+    <dimen name="dkplayer_controller_time_text_size">14sp</dimen>
+    <dimen name="keyboard_height">250.0dip</dimen>
+    <dimen name="size">14.0sp</dimen>
+    <dimen name="divider_height">0dp</dimen>
+    <dimen name="trace_padding">4dp</dimen>
+    <dimen name="filter_layout_height">40dp</dimen>
+    <dimen name="filter_edit_text_padding">4dp</dimen>
+    <dimen name="trace_font_size">12sp</dimen>
+    <dimen name="afs_min_touch_target_size">48dp</dimen>
+
+    <dimen name="afs_popup_min_size">88dp</dimen>
+    <dimen name="afs_popup_margin_end">16dp</dimen>
+    <dimen name="afs_popup_text_size">45dp</dimen>
+
+    <dimen name="afs_md2_popup_min_width">78dp</dimen>
+    <dimen name="afs_md2_popup_min_height">64dp</dimen>
+    <dimen name="afs_md2_popup_margin_end">14dp</dimen>
+    <dimen name="afs_md2_popup_padding_start">16dp</dimen>
+    <dimen name="afs_md2_popup_padding_end">29dp</dimen>
+    <dimen name="afs_md2_popup_elevation">3dp</dimen>
+    <dimen name="afs_md2_popup_text_size">34dp</dimen>
+      <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="nav_header_vertical_spacing">8dp</dimen>
+    <dimen name="nav_header_height">186dp</dimen>
+
+</resources>

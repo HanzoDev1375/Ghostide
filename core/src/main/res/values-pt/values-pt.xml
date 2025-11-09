@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="app_name">Ghost Web IDE</string>
+    <string name="dkplayer_replay">Repetir</string>
+    <string name="dkplayer_lock_tip">Bloqueado</string>
+    <string name="dkplayer_unlocked">Desbloqueado</string>
+    <string name="dkplayer_locked">Bloqueado</string>
+    <string name="dkplayer_error_message">Erro</string>
+    <string name="dkplayer_retry">Tentar novamente</string>
+    <string name="dkplayer_continue_play">Continuar reprodução</string>
+    <string name="dkplayer_wifi_tip">Wi-Fi não disponível</string>
+    <string name="word_separators">.,;:!?\10()[]*&amp;@{}/&lt;&gt;_+=|</string>
+    <item
+        name="paste"
+        type="string">Colar</item>
+    <item
+        name="copy"
+        type="string">Copiar</item>
+    <item
+        name="selectAll"
+        type="string"
+        formatted="true">Selecionar tudo</item>
+    <item
+        name="saveToProject"
+        type="string"
+        translatable="false">Salvar no projeto</item>
+    <item
+        name="cut"
+        type="string">Cortar</item>
+    <item
+        name="last"
+        type="string">Último</item>
+    <item
+        name="next"
+        type="string">Próximo</item>
+    <item
+        name="replace"
+        type="string">Substituir</item>
+    <item
+        name="replaceAll"
+        type="string">Substituir tudo</item>
+    <item
+        name="replacement"
+        type="string">Substituição</item>
+    <item
+        name="cancel"
+        type="string">Cancelar</item>
+    <item
+        name="text_to_search"
+        type="string">Texto para pesquisa</item>
+    <item
+        name="more"
+        type="string"
+        translatable="false">Mais</item>
+    <string name="sting">Configurações do aplicativo</string>
+    <string name="java">Código Java</string>
+    <string name="googleplay">Adicione uma estrela ao meu app no Myket</string>
+    <string name="ter">Terminal</string>
+    <string name="sdcard1">Cartão SD</string>
+    <string name="sdcard2">Início</string>
+    <string name="about">Sobre o aplicativo</string>
+    <string name="htmlle">Treinamento</string>
+    <string name="keyboard">Aplicativo de teclado</string>
+    <string name="up">Detalhes da atualização do aplicativo</string>
+    <string name="themebackoup">Backup do tema no aplicativo</string>
+    <string name="logcater">Log Cater</string>
+    <string name="exitapp">Sair do aplicativo</string>
+    <string name="geticonmod">Pacote de ícones</string>
+    <string name="exitappmsg">Deseja sair do aplicativo?</string>
+    <string name="no">Não</string>
+    <string name="yes">Sim</string>
+    <string name="Settings">Configurações</string>
+    <string name="theme">Tema do aplicativo</string>
+    <string name="Themes_manager">Gerenciador de temas</string>
+    <string name="Keyboard_settings">Configurações do teclado</string>
+    <string name="Keyboard_settingsdesc">Personalize temas e outras configurações do teclado</string>
+    <string name="Keyboard_features">Recursos do teclado</string>
+    <string name="General">Geral</string>
+    <string name="Fixing_countin_numbers">Corrigir contagem de números</string>
+    <string name="Turn_off_photo_and_video_size">Desativar limite de tamanho de fotos e vídeos</string>
+    <string name="Filemanager">Gerenciador de arquivos</string>
+    <string name="Turnoffmedialengthwidth">Desativar limite de largura e altura da mídia</string>
+    <string name="Enablehoverpage">Ativar página flutuante</string>
+    <string name="Manuallycompletetext">Completar texto manualmente</string>
+    <string name="Customize_tab_icons">Personalizar ícones de abas</string>
+    <string name="Manually_edit_lines_of_code">Editar linhas de código manualmente</string>
+    <string name="Activate_default_theme">Ativar tema padrão</string>
+    <string name="Manual_tab_size">Tamanho de tabulação manual</string>
+    <string name="Customize_font">Personalizar fonte</string>
+    <string name="mEditor">Editor de código</string>
+    <string name="saveandexit">Salvar automaticamente</string>
+    <string name="gos">GWI</string>
+    <string name="dirfiles">Exibir lista de atividades do diretório</string>
+    <string name="paste_text">Colar</string>
+    <string name="copy_text">Copiar</string>
+    <string name="text_selection_more">Mais…</string>
+    <string name="posttheme">Ativar editor de tema transparente</string>
+    <string name="pvr">PM</string>
+    <string name="acset">Selecionar uma atividade antiga</string>
+    <string name="bl_size">Tamanho do desfoque</string>
+    <string name="bl_sizedesc">Se "Obter papel de parede do sistema" estiver ativado, defina o tamanho do desfoque de 1 a 25</string>
+    <string name="setting">Configurações</string>
+    <string name="javacodes">Códigos Java</string>
+    <string name="myket">Adicionar uma estrela ao Myket</string>
+    <string name="terminal">Terminal</string>
+    <string name="sd">Cartão SD</string>
+    <string name="themebackup">Backup do tema</string>
+    <string name="logcat">Logcat</string>
+    <string name="icon">Loja de ícones</string>
+    <string name="newversion">Atualização do programa</string>
+    <string name="exitapps">Sair do aplicativo</string>
+    <string name="leran">Aprender</string>
+    <string name="dev">Desenvolvedor</string>
+    <string name="color_tree">Árvore de cores do texto</string>
+    <string name="MaterialYou">Material You</string>
+    <string name="customtheme">Tema personalizado</string>
+    <string name="customthemedesc">Importe seu tema .ghost para personalizar e aproveitar</string>
+    <string name="customwindows">Modo de janelas</string>
+    <string name="customwindowsdesc">Garanta o modo de janela correto para as barras do sistema</string>
+    <string name="resource">Recurso</string>
+    <string name="resource_manager">Gerenciador de recursos</string>
+    <string name="debug">Depuração</string>
+    <string name="component_tree">Árvore de componentes</string>
+    <string name="raw_xml">XML bruto</string>
+    <string name="ok">OK</string>
+    <string name="run">Executar</string>
+    <string name="mode">Modo</string>
+    <string name="design_surface">Superfície de design</string>
+    <string name="view">Visualizar</string>
+    <string name="design">Design</string>
+    <string name="blueprint">Blueprint</string>
+    <string name="gridmode">Modo grade</string>
+    <string name="wallmode">Modo papel de parede do sistema</string>
+    <string name="apkwar">Atenção!</string>
+    <string name="apkversionError">Desculpe, compartilhar o programa não é possível no seu Android. Você pode compartilhar o arquivo .apk localizado na pasta de downloads ou apk.</string>
+    <string name="settings_char_preview">Pré-visualização de caracteres</string>
+    <string name="settings_display_row">Exibir linha de números</string>
+    <string name="settings_keyboard_height">Altura do teclado</string>
+    <string name="drawer_subtitles">O IDE completo</string>
+    <string name="cursoreditoricon">Ícone CursorEditor</string>
+    <string name="backgroundimageeditor">Imagem de fundo</string>
+    <string name="menu_sandisk_card">Cartão SanDisk</string>
+    <string name="menu_java_code">Código Java</string>
+    <string name="menu_terminal">Terminal</string>
+    <string name="menu_settings">Configurações</string>
+    <string name="menu_logcat_reader">Leitor LogCat</string>
+    <string name="menu_icon_shop">Loja de Ícones</string>
+    <string name="menu_update_app">Atualizar App</string>
+    <string name="menu_plugins_manager">Gerenciador de Plugins</string>
+    <string name="menu_backup_theme">Backup de Tema</string>
+    <string name="menu_bookmarks_beta">Favoritos (Beta)</string>
+    <string name="menu_apk_manager">Gerenciador APK</string>
+    <string name="menu_about">Sobre</string>
+    <string name="menu_store">Loja</string>
+    <string name="menu_exit">Sair</string>
+    <string name="particle">Partícula</string>
+    <string name="lightning">Relâmpago</string>
+    <string name="flame">Chama</string>
+    <string name="spark">Faísca</string>
+    <string name="rain">Chuva</string>
+    <string name="magic">Magia</string>
+    <string name="none">Nenhum</string>
+    <string name="explosion">Explosão</string>
+    <string name="bubbles">Bolhas</string>
+    <string name="neon">Neon</string>
+    <string name="glitch">Glitch</string>
+    <string name="galaxy">Galáxia</string>
+    <string name="typing">Digitando</string>
+    <string name="custom_theme_terminal">Terminal de Tema Personalizado</string>
+    <string name="select_property_theme">Selecionar tema de propriedade</string>
+    <string name="custom_python_code">Script Personalizado do Terminal</string>
+    <string name="type_python_script">Digite dir script python..</string>
+    <string name="custom_char_editor">Editor de Caracteres Personalizado</string>
+    <string name="select_char_name">Selecionar nome de caractere Como 👻</string>
+    <string name="custom_image_background">Plano de Fundo de Imagem Personalizada do Editor</string>
+    <string name="select_dir_image">Selecionar Dir Imagem</string>
+    <string name="select_icon_app">Selecionar ícone do aplicativo</string>
+    <string name="set_custom_icon_message">Você pode definir um ícone personalizado do aplicativo</string>
+    <string name="glow_effect">Efeito Brilho</string>
+</resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SeekBarPreference">
+        <attr name="minValue" format="float"/>
+        <attr name="maxValue" format="float"/>
+        <attr name="asPercent" format="boolean"/>
+        <attr name="step" format="float"/>
+        <attr name="logScale" format="boolean"/>
+        <attr name="displayFormat" format="string"/>
+    </declare-styleable>
+</resources>

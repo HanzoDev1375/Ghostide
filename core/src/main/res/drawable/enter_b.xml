@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+            android:left="2dip"
+            android:top="2dip"
+            android:right="2dip"
+            android:bottom="2dip">
+
+        <shape android:shape="rectangle">
+            <corners android:radius="5.0sp"/>
+            <solid android:color="#FF5D0707"/>
+        </shape>
+
+    </item>
+    <item
+            android:drawable="@drawable/key_enter"
+            android:gravity="center">
+    </item>
+</layer-list>

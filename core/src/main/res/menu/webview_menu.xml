@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+        xmlns:android="http://schemas.android.com/apk/res/android"
+
+>
+
+    <item
+            android:id="@+id/back"
+            android:title="back"
+
+    />
+    <item
+            android:id="@+id/forward"
+            android:title="forward"
+
+    />
+    <item
+            android:id="@+id/zooming"
+            android:title="zooming"
+            android:checkable="true"
+            android:checked="true"
+
+    />
+    <item
+            android:id="@+id/desktop_mode"
+            android:title="pcmod"
+            android:checkable="true"
+            android:checked="false"
+
+    />
+    <item
+            android:id="@+id/refresh"
+            android:title="refresh"
+
+    />
+    <item
+            android:id="@+id/reloader"
+            android:title="reload Console js"
+
+    />
+    <item
+            android:id="@+id/drakmod"
+            android:title="Dark mod"
+            android:checked="false"
+            android:checkable="true"
+
+    />
+    <item
+            android:id="@+id/injector"
+            android:title="injector"
+            android:checked="false"
+            android:checkable="true"
+
+    />
+    <item
+            android:id="@+id/consolefromsheet"
+            android:title="open Dialog sheet Console"
+    />
+    <item
+            android:id="@+id/exit"
+            android:title="exit"
+
+    />
+
+</menu>

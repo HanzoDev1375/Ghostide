@@ -1,0 +1,49 @@
+package ir.ninjacoder.ghostide.core.glidecompat.glidejavaparser;
+
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+
+import com.bumptech.glide.load.Options;
+import com.bumptech.glide.load.model.ModelLoader;
+import com.bumptech.glide.load.model.ModelLoaderFactory;
+import com.bumptech.glide.load.model.MultiModelLoaderFactory;
+import com.bumptech.glide.signature.ObjectKey;
+
+import ir.ninjacoder.ghostide.core.glidecompat.glidejavaparser.CustomImageDataFetcher;
+import ir.ninjacoder.ghostide.core.glidecompat.glidejavaparser.CustomImageRequest;
+
+public class CustomImageLoader implements ModelLoader<CustomImageRequest, Drawable> {
+  private final Context context;
+
+  public CustomImageLoader(Context context) {
+    this.context = context;
+  }
+
+  @Override
+  public LoadData<Drawable> buildLoadData(
+      CustomImageRequest request, int width, int height, Options options) {
+    return new LoadData<>(
+        new ObjectKey(request.getJavaFile()), new CustomImageDataFetcher(context, request));
+  }
+
+  @Override
+  public boolean handles(CustomImageRequest request) {
+    return true; 
+  }
+
+  public static class Factory implements ModelLoaderFactory<CustomImageRequest, Drawable> {
+    private final Context context;
+
+    public Factory(Context context) {
+      this.context = context;
+    }
+
+    @Override
+    public ModelLoader<CustomImageRequest, Drawable> build(MultiModelLoaderFactory multiFactory) {
+      return new CustomImageLoader(context);
+    }
+
+    @Override
+    public void teardown() {}
+  }
+}
