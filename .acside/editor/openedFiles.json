@@ -1,0 +1,20 @@
+{
+  "allFiles": [
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Ghostide/.github/workflows/android.yml",
+      "selection": {
+        "end": {
+          "column": 58,
+          "index": 2465,
+          "line": 90
+        },
+        "start": {
+          "column": 58,
+          "index": 2465,
+          "line": 90
+        }
+      }
+    }
+  ],
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/Ghostide/.github/workflows/android.yml"
+}

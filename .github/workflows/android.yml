@@ -31,6 +31,12 @@ jobs:
     - name: Build with Gradle for arm64
       run: ./gradlew assembleArm64Debug
 
+    - name: Build Debug AAR for core module
+      run: ./gradlew :core:bundleDebugAar
+
+    - name: Build Release AAR for core module
+      run: ./gradlew :core:bundleReleaseAar
+
     - name: Upload arm32 APK
       uses: actions/upload-artifact@v4
       with:
@@ -42,6 +48,18 @@ jobs:
       with:
         name: app-debug-arm64
         path: app/build/outputs/apk/arm64/debug/app-arm64-debug.apk
+
+    - name: Upload Debug AAR
+      uses: actions/upload-artifact@v4
+      with:
+        name: core-debug-aar
+        path: core/build/outputs/aar/core-debug.aar
+
+    - name: Upload Release AAR
+      uses: actions/upload-artifact@v4
+      with:
+        name: core-release-aar
+        path: core/build/outputs/aar/core-release.aar
 
     - name: Build with Gradle for arm32 release
       run: ./gradlew assembleArm32Release
@@ -61,12 +79,13 @@ jobs:
         name: app-release-arm64
         path: app/build/outputs/apk/arm64/release/app-arm64-release.apk
 
-    - name: Release APKs on GitHub
+    - name: Release APKs and AAR on GitHub
       if: github.event_name == 'release'
       uses: softprops/action-gh-release@v1
       with:
         files: |
           app/build/outputs/apk/arm32/release/app-arm32-release.apk
           app/build/outputs/apk/arm64/release/app-arm64-release.apk
+          core/build/outputs/aar/core-release.aar
       env:
         GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
