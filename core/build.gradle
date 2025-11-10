@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id "kotlin-android"
+    id 'maven-publish'
 }
 
 android {
@@ -132,5 +133,44 @@ dependencies {
     implementation('com.github.HanzoDev1375:Android-code-snap:1.1.2') {
         exclude group: "org.jetbrains", module: "annotations"
         exclude group: "org.jetbrains", module: "annotations-java5"
+    }
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            aar(MavenPublication) {
+                artifact(bundleReleaseAar)
+
+                groupId = 'com.github.HanzoDev1375'
+                artifactId = 'GhostIdeCore'
+                version = '1.1.1'
+
+                pom {
+                    withXml {
+                        def dependenciesNode = asNode().appendNode('dependencies')
+                        configurations.implementation.allDependencies.each { dep ->
+                            if (dep instanceof ProjectDependency) {
+                                def dependencyNode = dependenciesNode.appendNode('dependency')
+                                dependencyNode.appendNode('groupId', project.group)
+                                dependencyNode.appendNode('artifactId', dep.dependencyProject.name)
+                                dependencyNode.appendNode('version', project.version)
+                                dependencyNode.appendNode('scope', 'compile')
+                            }
+                        }
+                       
+                        configurations.implementation.allDependencies.each { dep ->
+                            if (dep.group && dep.name && dep.version && !(dep instanceof ProjectDependency)) {
+                                def dependencyNode = dependenciesNode.appendNode('dependency')
+                                dependencyNode.appendNode('groupId', dep.group)
+                                dependencyNode.appendNode('artifactId', dep.name)
+                                dependencyNode.appendNode('version', dep.version)
+                                dependencyNode.appendNode('scope', 'compile')
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
