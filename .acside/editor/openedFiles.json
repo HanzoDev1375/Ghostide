@@ -1,20 +1,20 @@
 {
   "allFiles": [
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/Ghostide/core/build.gradle",
+      "file": "/storage/emulated/0/AndroidIDEProjects/Ghostide/gradle.properties",
       "selection": {
         "end": {
-          "column": 35,
-          "index": 6437,
-          "line": 145
+          "column": 0,
+          "index": 495,
+          "line": 13
         },
         "start": {
-          "column": 35,
-          "index": 6437,
-          "line": 145
+          "column": 0,
+          "index": 0,
+          "line": 0
         }
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/Ghostide/core/build.gradle"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/Ghostide/gradle.properties"
 }
