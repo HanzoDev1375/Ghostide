@@ -2,6 +2,7 @@ plugins {
     id 'com.android.library'
     id "kotlin-android"
     id 'maven-publish'
+    id 'com.kezong.fat-aar'
 }
 
 android {
@@ -36,21 +37,32 @@ android {
 }
 
 dependencies {
-    api fileTree(dir: "libs", include: ["*.jar", "*.aar"])
+    implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
     implementation("com.google.code.gson:gson:2.13.1")
     def jadxVersion = "1.5.2"
-    api project(path: ":Plugin")
-    api project(path: ":pl-codecomment")
-    api project(path: ":jgit")
-    api project(path: ":eclipse-standalone")
-    api project(path: ":prddownloader")
-    api project(path: ":datautils")
-    api project(path: ":ui-designer")
-    api project(path: ":webview")
-    api project(path: ":vectormaster")
-    api project(path: ":android-tools")
-    api project(path: ":prograsssheetlib")
+    implementation project(path: ":Plugin")
+    implementation project(path: ":pl-codecomment")
+    implementation project(path: ":jgit")
+    implementation project(path: ":eclipse-standalone")
+    implementation project(path: ":prddownloader")
+    implementation project(path: ":datautils")
+    implementation project(path: ":ui-designer")
+    implementation project(path: ":webview")
+    implementation project(path: ":vectormaster")
+    implementation project(path: ":android-tools")
+    implementation project(path: ":prograsssheetlib")
+    embedded project(path: ":Plugin")
+    embedded project(path: ":pl-codecomment")
+    embedded project(path: ":jgit")
+    embedded project(path: ":eclipse-standalone")
+    embedded project(path: ":prddownloader")
+    embedded project(path: ":datautils")
+    embedded project(path: ":ui-designer")
+    embedded project(path: ":webview")
+    embedded project(path: ":vectormaster")
+    embedded project(path: ":android-tools")
+    embedded project(path: ":prograsssheetlib")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.2")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-properties:2.14.2")
     implementation("com.squareup:javapoet:1.13.0")
@@ -67,10 +79,10 @@ dependencies {
     implementation("com.blankj:utilcodex:1.31.1")
     implementation("androidx.webkit:webkit:1.10.0")
     implementation("org.eclipse.jgit:org.eclipse.jgit:7.3.0.202506031305-r")
-    api("androidx.activity:activity:1.9.0")
-    api("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.activity:activity:1.9.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    api("com.google.android.material:material:1.14.0-alpha04")
+    implementation("com.google.android.material:material:1.14.0-alpha04")
     implementation("org.nanohttpd:nanohttpd-webserver:2.3.1")
     implementation("org.benf:cfr:0.152")
     implementation("xyz.doikki.android.dkplayer:dkplayer-java:3.3.7")
@@ -97,8 +109,8 @@ dependencies {
     implementation("androidx.palette:palette:1.0.0")
     implementation("de.larsgrefer.sass:sass-embedded-android:4.1.0")
     implementation("io.reactivex.rxjava3:rxjava:3.1.8")
-    api("androidx.core:core:1.6.0")
-    api("androidx.preference:preference:1.2.1")
+    implementation("androidx.core:core:1.6.0")
+    implementation("androidx.preference:preference:1.2.1")
     implementation("com.github.javaparser:javaparser-core:3.27.0")
     implementation 'com.github.javaparser:javaparser-symbol-solver-core:3.27.0'
     implementation("com.github.AppIntro:AppIntro:6.3.1")
