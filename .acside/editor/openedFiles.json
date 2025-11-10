@@ -1,0 +1,20 @@
+{
+  "allFiles": [
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Ghostide/core/build.gradle",
+      "selection": {
+        "end": {
+          "column": 35,
+          "index": 6437,
+          "line": 145
+        },
+        "start": {
+          "column": 35,
+          "index": 6437,
+          "line": 145
+        }
+      }
+    }
+  ],
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/Ghostide/core/build.gradle"
+}
