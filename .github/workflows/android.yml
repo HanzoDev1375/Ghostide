@@ -25,47 +25,47 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    - name: Build with Gradle for arm32
-      run: ./gradlew assembleArm32Debug
-
-    - name: Build with Gradle for arm64
-      run: ./gradlew assembleArm64Debug
-
     - name: Build Debug AAR for core module
       run: ./gradlew :core:bundleDebugAar
 
     - name: Build Release AAR for core module
       run: ./gradlew :core:bundleReleaseAar
 
-    - name: Upload arm32 APK
-      uses: actions/upload-artifact@v4
-      with:
-        name: app-debug-arm32
-        path: app/build/outputs/apk/arm32/debug/app-arm32-debug.apk
-        
-    - name: Upload arm64 APK
-      uses: actions/upload-artifact@v4
-      with:
-        name: app-debug-arm64
-        path: app/build/outputs/apk/arm64/debug/app-arm64-debug.apk
+    - name: Build Debug AAR for prograsssheetlib module
+      run: ./gradlew :prograsssheetlib:bundleDebugAar
 
-    - name: Upload Debug AAR
-      uses: actions/upload-artifact@v4
-      with:
-        name: core-debug-aar
-        path: core/build/outputs/aar/core-debug.aar
-
-    - name: Upload Release AAR
-      uses: actions/upload-artifact@v4
-      with:
-        name: core-release-aar
-        path: core/build/outputs/aar/core-release.aar
+    - name: Build Release AAR for prograsssheetlib module
+      run: ./gradlew :prograsssheetlib:bundleReleaseAar
 
     - name: Build with Gradle for arm32 release
       run: ./gradlew assembleArm32Release
 
     - name: Build with Gradle for arm64 release
       run: ./gradlew assembleArm64Release
+
+    - name: Upload Debug AAR for core
+      uses: actions/upload-artifact@v4
+      with:
+        name: core-debug-aar
+        path: core/build/outputs/aar/core-debug.aar
+
+    - name: Upload Release AAR for core
+      uses: actions/upload-artifact@v4
+      with:
+        name: core-release-aar
+        path: core/build/outputs/aar/core-release.aar
+
+    - name: Upload Debug AAR for prograsssheetlib
+      uses: actions/upload-artifact@v4
+      with:
+        name: prograsssheetlib-debug-aar
+        path: prograsssheetlib/build/outputs/aar/prograsssheetlib-debug.aar
+
+    - name: Upload Release AAR for prograsssheetlib
+      uses: actions/upload-artifact@v4
+      with:
+        name: prograsssheetlib-release-aar
+        path: prograsssheetlib/build/outputs/aar/prograsssheetlib-release.aar
 
     - name: Upload arm32 Release APK
       uses: actions/upload-artifact@v4
@@ -79,7 +79,7 @@ jobs:
         name: app-release-arm64
         path: app/build/outputs/apk/arm64/release/app-arm64-release.apk
 
-    - name: Release APKs and AAR on GitHub
+    - name: Release APKs and AARs on GitHub
       if: github.event_name == 'release'
       uses: softprops/action-gh-release@v1
       with:
@@ -87,5 +87,6 @@ jobs:
           app/build/outputs/apk/arm32/release/app-arm32-release.apk
           app/build/outputs/apk/arm64/release/app-arm64-release.apk
           core/build/outputs/aar/core-release.aar
+          prograsssheetlib/build/outputs/aar/prograsssheetlib-release.aar
       env:
         GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
