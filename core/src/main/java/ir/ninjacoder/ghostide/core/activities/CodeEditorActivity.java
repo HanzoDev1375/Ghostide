@@ -181,6 +181,7 @@ public class CodeEditorActivity extends BaseCompat {
   private VideoSurfaceView mvideo;
   private boolean isFileChangeDialogShowing = false;
   private List<Child> listChild = new ArrayList<>();
+  private String currentFileType = "";
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
@@ -610,6 +611,18 @@ public class CodeEditorActivity extends BaseCompat {
     }
   }
 
+  private void updateFileTypeForCurrentTab() {
+    int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
+    if (selectedTabPosition >= 0 && selectedTabPosition < tabs_listmap.size()) {
+      String filePath = tabs_listmap.get(selectedTabPosition).get("path").toString();
+      String extension = filePath.substring(filePath.lastIndexOf("."));
+      this.currentFileType = extension;
+
+      // ریلود پلاگین‌ها برای تب جدید
+      new PluginLoaderImpl().runInCodeEditor(editor, CodeEditorActivity.this, extension);
+    }
+  }
+
   void setManagerpanel(final View _view) {
     pvr =
         new PowerMenu.Builder(CodeEditorActivity.this)
@@ -754,9 +767,10 @@ public class CodeEditorActivity extends BaseCompat {
     }
   }
 
-  // در متد setCodeEditorFileReader
   void setCodeEditorFileReader(String _path) {
     String extension = _path.substring(_path.lastIndexOf("."));
+    this.currentFileType = extension;
+    
     new PluginLoaderImpl().runInCodeEditor(editor, CodeEditorActivity.this, extension);
     new Handler()
         .postDelayed(
@@ -932,6 +946,7 @@ public class CodeEditorActivity extends BaseCompat {
                   if (!fileExists) {
                     showFileNotFoundDialog(pos, filePath);
                   } else {
+                    updateFileTypeForCurrentTab();
                     setCodeEditorFileReader(filePath);
                   }
                 }
