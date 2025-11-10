@@ -143,29 +143,18 @@ afterEvaluate {
                 artifact(bundleReleaseAar)
 
                 groupId = 'com.github.HanzoDev1375'
-                artifactId = 'GhostIdeCore'
-                version = '1.1.1'
+                artifactId = 'Ghost ide'
+                version = '1.1.2'
 
                 pom {
                     withXml {
                         def dependenciesNode = asNode().appendNode('dependencies')
                         configurations.implementation.allDependencies.each { dep ->
-                            if (dep instanceof ProjectDependency) {
-                                def dependencyNode = dependenciesNode.appendNode('dependency')
-                                dependencyNode.appendNode('groupId', project.group)
-                                dependencyNode.appendNode('artifactId', dep.dependencyProject.name)
-                                dependencyNode.appendNode('version', project.version)
-                                dependencyNode.appendNode('scope', 'compile')
-                            }
-                        }
-                       
-                        configurations.implementation.allDependencies.each { dep ->
-                            if (dep.group && dep.name && dep.version && !(dep instanceof ProjectDependency)) {
+                            if (dep.group && dep.name && dep.version) {
                                 def dependencyNode = dependenciesNode.appendNode('dependency')
                                 dependencyNode.appendNode('groupId', dep.group)
                                 dependencyNode.appendNode('artifactId', dep.name)
                                 dependencyNode.appendNode('version', dep.version)
-                                dependencyNode.appendNode('scope', 'compile')
                             }
                         }
                     }
