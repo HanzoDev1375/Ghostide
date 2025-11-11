@@ -1,0 +1,35 @@
+{
+  "allFiles": [
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Ghostide/app/.gitignore",
+      "selection": {
+        "end": {
+          "column": 6,
+          "index": 6,
+          "line": 0
+        },
+        "start": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Ghostide/buildarrs/.gitignore",
+      "selection": {
+        "end": {
+          "column": 6,
+          "index": 6,
+          "line": 0
+        },
+        "start": {
+          "column": 6,
+          "index": 6,
+          "line": 0
+        }
+      }
+    }
+  ],
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/Ghostide/buildarrs/.gitignore"
+}
