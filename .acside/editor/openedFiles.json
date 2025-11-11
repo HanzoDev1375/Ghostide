@@ -1,35 +1,20 @@
 {
   "allFiles": [
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/Ghostide/app/.gitignore",
+      "file": "/storage/emulated/0/AndroidIDEProjects/Ghostide/.github/workflows/android.yml",
       "selection": {
         "end": {
-          "column": 6,
-          "index": 6,
-          "line": 0
+          "column": 58,
+          "index": 3034,
+          "line": 99
         },
         "start": {
-          "column": 0,
-          "index": 0,
-          "line": 0
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/Ghostide/buildarrs/.gitignore",
-      "selection": {
-        "end": {
-          "column": 6,
-          "index": 6,
-          "line": 0
-        },
-        "start": {
-          "column": 6,
-          "index": 6,
-          "line": 0
+          "column": 58,
+          "index": 3034,
+          "line": 99
         }
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/Ghostide/buildarrs/.gitignore"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/Ghostide/.github/workflows/android.yml"
 }
