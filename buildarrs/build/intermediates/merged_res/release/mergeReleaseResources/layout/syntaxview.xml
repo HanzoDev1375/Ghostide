@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     android:fillViewport="true">
+
+    <LinearLayout
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:orientation="horizontal"
+         android:id="@+id/main_layout">
+
+        <ir.ninjacoder.codesnap.widget.CodeEditText
+             android:layout_height="match_parent"
+             android:layout_width="0dp"
+             android:textColorLink="#fff"
+             android:textSize="20sp"
+             android:textColor="#a9b7c6"
+             android:background="#2b2b2b"
+             android:gravity="top|left"
+             android:textColorHighlight="#fff"
+             android:textColorHint="#fff"
+             android:shadowColor="#fff"
+             android:saveEnabled="false"
+             android:layout_weight="0.1"
+             android:id="@+id/code"
+             android:paddingTop="15dp" />
+
+        <TextView
+             android:visibility="gone"
+             android:layout_height="match_parent"
+             android:layout_width="match_parent"
+             android:id="@+id/mark" />
+
+    </LinearLayout>
+
+</LinearLayout>

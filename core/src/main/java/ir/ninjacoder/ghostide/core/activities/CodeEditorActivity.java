@@ -91,7 +91,7 @@ import ir.ninjacoder.ghostide.core.marco.KotlinCompilerImpl;
 import ir.ninjacoder.ghostide.core.marco.WallpaperParallaxEffect;
 import ir.ninjacoder.ghostide.core.model.EditorViewModel;
 import ir.ninjacoder.ghostide.core.navigator.EditorRoaderFile;
-import ir.ninjacoder.ghostide.core.pl.PluginLoaderImpl;
+import ir.ninjacoder.ghostide.core.pl.*;
 import ir.ninjacoder.ghostide.core.project.JavaCompilerBeta;
 import ir.ninjacoder.ghostide.core.project.ProjectManager;
 import ir.ninjacoder.ghostide.core.tasks.FileChangeReceiver;
@@ -181,6 +181,7 @@ public class CodeEditorActivity extends BaseCompat {
   private VideoSurfaceView mvideo;
   private boolean isFileChangeDialogShowing = false;
   private List<Child> listChild = new ArrayList<>();
+  private PluginLoader pluginLoader;
   private String currentFileType = "";
 
   @Override
@@ -233,6 +234,7 @@ public class CodeEditorActivity extends BaseCompat {
     re = getSharedPreferences("re", Activity.MODE_PRIVATE);
     war = getSharedPreferences("war", Activity.MODE_PRIVATE);
     setfont = getSharedPreferences("setfont", Activity.MODE_PRIVATE);
+    pluginLoader = new PluginLoader();
 
     ru = getSharedPreferences("ru", Activity.MODE_PRIVATE);
     tabimageview = getSharedPreferences("tabimageview", Activity.MODE_PRIVATE);
@@ -611,18 +613,6 @@ public class CodeEditorActivity extends BaseCompat {
     }
   }
 
-  private void updateFileTypeForCurrentTab() {
-    int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
-    if (selectedTabPosition >= 0 && selectedTabPosition < tabs_listmap.size()) {
-      String filePath = tabs_listmap.get(selectedTabPosition).get("path").toString();
-      String extension = filePath.substring(filePath.lastIndexOf("."));
-      this.currentFileType = extension;
-
-      // ریلود پلاگین‌ها برای تب جدید
-      new PluginLoaderImpl().runInCodeEditor(editor, CodeEditorActivity.this, extension);
-    }
-  }
-
   void setManagerpanel(final View _view) {
     pvr =
         new PowerMenu.Builder(CodeEditorActivity.this)
@@ -770,14 +760,32 @@ public class CodeEditorActivity extends BaseCompat {
   void setCodeEditorFileReader(String _path) {
     String extension = _path.substring(_path.lastIndexOf("."));
     this.currentFileType = extension;
-    
-    new PluginLoaderImpl().runInCodeEditor(editor, CodeEditorActivity.this, extension);
+    pluginLoader
+        .setEditor(editor)
+        .setCodeEditorActivity(this)
+        .setFileType(currentFileType)
+        .reloadAllPlugins("/storage/emulated/0/GhostWebIDE/plugins/config.json");
+
     new Handler()
         .postDelayed(
             () -> {
               EditorRoaderFile.RuningTask(editor, _fab, _path, proanjctor, listChild);
             },
             200);
+  }
+
+  private void updateFileTypeForCurrentTab() {
+    int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
+    if (selectedTabPosition >= 0 && selectedTabPosition < tabs_listmap.size()) {
+      String filePath = tabs_listmap.get(selectedTabPosition).get("path").toString();
+      String extension = filePath.substring(filePath.lastIndexOf("."));
+      this.currentFileType = extension;
+      pluginLoader
+          .setEditor(editor)
+          .setCodeEditorActivity(this)
+          .setFileType(currentFileType)
+          .reloadAllPlugins("/storage/emulated/0/GhostWebIDE/plugins/config.json");
+    }
   }
 
   void setClosetab(int _position, ArrayList<HashMap<String, Object>> _data) {

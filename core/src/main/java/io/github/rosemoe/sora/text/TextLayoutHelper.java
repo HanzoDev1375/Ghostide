@@ -30,56 +30,101 @@ import android.text.Selection;
 import android.text.TextPaint;
 
 /**
- * Helper class for indirectly calling Paint#getTextRunCursor(), which is
- * responsible for cursor controlling.
+ * Helper class for indirectly calling Paint#getTextRunCursor(), which is responsible for cursor
+ * controlling.
  *
  * @author Rosemoe
  */
 public class TextLayoutHelper {
 
-    private static final ThreadLocal<TextLayoutHelper> sLocal;
+  private static final ThreadLocal<TextLayoutHelper> sLocal;
 
-    static {
-        sLocal = new ThreadLocal<>();
+  static {
+    sLocal = new ThreadLocal<>();
+  }
+
+  private final Editable text = Editable.Factory.getInstance().newEditable("");
+  private final DynamicLayout layout;
+
+  private TextLayoutHelper() {
+    layout =
+        new DynamicLayout(
+            text,
+            new TextPaint(),
+            Integer.MAX_VALUE / 2,
+            Layout.Alignment.ALIGN_NORMAL,
+            0,
+            0,
+            true);
+  }
+
+  public static TextLayoutHelper get() {
+    var v = sLocal.get();
+    if (v == null) {
+      v = new TextLayoutHelper();
+      sLocal.set(v);
     }
+    return v;
+  }
 
-    private final Editable text = Editable.Factory.getInstance().newEditable("");
-    private final DynamicLayout layout;
-    private TextLayoutHelper() {
-        layout = new DynamicLayout(text, new TextPaint(), Integer.MAX_VALUE / 2, Layout.Alignment.ALIGN_NORMAL, 0, 0, true);
+  public int getCurPosLeft(int offset, CharSequence s) {
+    // برای متن فارسی
+    if (isRtlText(s)) {
+      if (offset > 0) {
+        int codePoint = Character.codePointBefore(s, offset);
+        return offset - Character.charCount(codePoint);
+      }
+      return offset;
+    } else {
+      // منطق عادی برای انگلیسی
+      int left = Math.max(0, offset - 20);
+      int index = offset - left;
+      text.append(s, left, Math.min(s.length(), offset + 20));
+      Selection.setSelection(text, index);
+      Selection.moveLeft(text, layout);
+      index = Selection.getSelectionStart(text);
+      text.clear();
+      Selection.removeSelection(text);
+      return left + index;
     }
+  }
 
-    public static TextLayoutHelper get() {
-        var v = sLocal.get();
-        if (v == null) {
-            v = new TextLayoutHelper();
-            sLocal.set(v);
-        }
-        return v;
+  public int getCurPosRight(int offset, CharSequence s) {
+    // برای متن فارسی
+    if (isRtlText(s)) {
+      if (offset < s.length()) {
+        int codePoint = Character.codePointAt(s, offset);
+        return offset + Character.charCount(codePoint);
+      }
+      return offset;
+    } else {
+      // منطق عادی برای انگلیسی
+      int left = Math.max(0, offset - 20);
+      int index = offset - left;
+      text.append(s, left, Math.min(s.length(), offset + 20));
+      Selection.setSelection(text, index);
+      Selection.moveRight(text, layout);
+      index = Selection.getSelectionStart(text);
+      text.clear();
+      Selection.removeSelection(text);
+      return left + index;
     }
+  }
 
-    public int getCurPosLeft(int offset, CharSequence s) {
-        int left = Math.max(0, offset - 20);
-        int index = offset - left;
-        text.append(s, left, Math.min(s.length(), offset + 20));
-        Selection.setSelection(text, index);
-        Selection.moveLeft(text, layout);
-        index = Selection.getSelectionStart(text);
-        text.clear();
-        Selection.removeSelection(text);
-        return left + index;
+  private boolean isRtlText(CharSequence text) {
+    if (text == null || text.length() == 0) return false;
+
+    for (int i = 0; i < Math.min(text.length(), 10); i++) {
+      char c = text.charAt(i);
+      // محدوده کاراکترهای فارسی و عربی
+      if ((c >= '\u0600' && c <= '\u06FF')
+          || (c >= '\u0750' && c <= '\u077F')
+          || (c >= '\u08A0' && c <= '\u08FF')
+          || (c >= '\uFB50' && c <= '\uFDFF')
+          || (c >= '\uFE70' && c <= '\uFEFF')) {
+        return true;
+      }
     }
-
-    public int getCurPosRight(int offset, CharSequence s) {
-        int left = Math.max(0, offset - 20);
-        int index = offset - left;
-        text.append(s, left, Math.min(s.length(), offset + 20));
-        Selection.setSelection(text, index);
-        Selection.moveRight(text, layout);
-        index = Selection.getSelectionStart(text);
-        text.clear();
-        Selection.removeSelection(text);
-        return left + index;
-    }
-
+    return false;
+  }
 }

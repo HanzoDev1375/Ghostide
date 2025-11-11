@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/designerMenuRun"
+        android:icon="?icon_run"
+        android:title="@string/ui_design_run"
+        app:showAsAction="always|withText" />
+    <item
+        android:id="@+id/designerMenuShowBorders"
+        android:icon="?icon_view"
+        android:title="@string/ui_design_view"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/designerMenuHideBorders"
+        android:icon="?icon_edit"
+        android:title="@string/editui_design_edit"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/designerMenuUndo"
+        android:icon="?icon_undo"
+        android:title="@string/ui_design_undo"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/designerMenuRedo"
+        android:icon="?icon_redo"
+        android:title="@string/ui_design_redo"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/designerMenuPaste"
+        android:title="@string/ui_design_paste_xml"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/designerMenuCopy"
+        android:title="@string/ui_design_copy_xml"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/designerMenuShare"
+        android:title="@string/ui_design_share_xml"
+        app:showAsAction="never" />
+</menu>

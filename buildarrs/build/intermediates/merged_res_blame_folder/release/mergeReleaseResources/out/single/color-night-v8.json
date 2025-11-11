@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/color-night-v8/material_timepicker_button_stroke.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/color-night-v8/material_timepicker_button_stroke.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/color-night-v8/material_timepicker_modebutton_tint.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/color-night-v8/material_timepicker_modebutton_tint.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/color-night-v8/material_timepicker_clockface.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/color-night-v8/material_timepicker_clockface.xml"
+    }
+]

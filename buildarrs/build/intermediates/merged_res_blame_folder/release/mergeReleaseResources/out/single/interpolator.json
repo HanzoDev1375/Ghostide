@@ -1,0 +1,74 @@
+[
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/interpolator/mtrl_fast_out_slow_in.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/interpolator/mtrl_fast_out_slow_in.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/interpolator/btn_checkbox_unchecked_mtrl_animation_interpolator_1.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-appcompat-1.7.1-21:/interpolator/btn_checkbox_unchecked_mtrl_animation_interpolator_1.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/interpolator/m3_sys_motion_easing_standard.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/interpolator/m3_sys_motion_easing_standard.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/interpolator/m3_sys_motion_easing_standard_accelerate.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/interpolator/m3_sys_motion_easing_standard_accelerate.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/interpolator/m3_sys_motion_easing_emphasized.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/interpolator/m3_sys_motion_easing_emphasized.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/interpolator/btn_checkbox_unchecked_mtrl_animation_interpolator_0.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-appcompat-1.7.1-21:/interpolator/btn_checkbox_unchecked_mtrl_animation_interpolator_0.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/interpolator/btn_radio_to_off_mtrl_animation_interpolator_0.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-appcompat-1.7.1-21:/interpolator/btn_radio_to_off_mtrl_animation_interpolator_0.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/interpolator/btn_checkbox_checked_mtrl_animation_interpolator_1.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-appcompat-1.7.1-21:/interpolator/btn_checkbox_checked_mtrl_animation_interpolator_1.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/interpolator/btn_radio_to_on_mtrl_animation_interpolator_0.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-appcompat-1.7.1-21:/interpolator/btn_radio_to_on_mtrl_animation_interpolator_0.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/interpolator/mtrl_linear_out_slow_in.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/interpolator/mtrl_linear_out_slow_in.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/interpolator/m3_sys_motion_easing_linear.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/interpolator/m3_sys_motion_easing_linear.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/interpolator/m3_sys_motion_easing_standard_decelerate.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/interpolator/m3_sys_motion_easing_standard_decelerate.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/interpolator/m3_sys_motion_easing_emphasized_decelerate.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/interpolator/m3_sys_motion_easing_emphasized_decelerate.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/interpolator/m3_sys_motion_easing_emphasized_accelerate.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/interpolator/m3_sys_motion_easing_emphasized_accelerate.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/interpolator/mtrl_linear.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/interpolator/mtrl_linear.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/interpolator/fast_out_slow_in.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-appcompat-1.7.1-21:/interpolator/fast_out_slow_in.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/interpolator/mtrl_fast_out_linear_in.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/interpolator/mtrl_fast_out_linear_in.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/interpolator/btn_checkbox_checked_mtrl_animation_interpolator_0.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-appcompat-1.7.1-21:/interpolator/btn_checkbox_checked_mtrl_animation_interpolator_0.xml"
+    }
+]

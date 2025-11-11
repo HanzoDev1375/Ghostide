@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_height="220dp"
+     android:layout_width="match_parent"
+     android:layout_margin="6dp"
+     app:cardElevation="0dp"
+     app:cardBackgroundColor="@android:color/transparent"
+     app:cardCornerRadius="24dp"
+     app:cardPreventCornerOverlap="true">
+
+    <FrameLayout
+         android:layout_height="match_parent"
+         android:layout_width="match_parent"
+         android:foregroundGravity="fill"
+         android:layout_margin="4dp"
+         android:foreground="?attr/selectableItemBackground">
+
+        <ImageView
+             android:layout_height="match_parent"
+             android:layout_width="match_parent"
+             android:src="@drawable/ic_arrow_back_black_24"
+             android:scaleType="centerCrop"
+             android:contentDescription="wallpaper_desc"
+             android:adjustViewBounds="true"
+             android:background="@android:color/transparent"
+             android:id="@+id/previewicon" />
+
+        <LinearLayout
+             android:layout_height="80dp"
+             android:layout_width="match_parent"
+             android:gravity="center"
+             android:background="#5D000000"
+             android:orientation="vertical"
+             android:layout_gravity="bottom">
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:textSize="18sp"
+                 android:id="@+id/nametheme"
+                 android:textStyle="bold" />
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:textSize="15sp"
+                 android:layout_marginTop="6dp"
+                 android:id="@+id/sizetheme" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</androidx.cardview.widget.CardView>

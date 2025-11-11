@@ -1,0 +1,162 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical">
+ 
+    <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_width="wrap_content" />
+
+    <LinearLayout
+        android:gravity="center_horizontal|center_vertical"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_height="300dp"
+            android:layout_marginTop="8dp"
+            android:layout_width="300dp"
+            app:cardForegroundColor="@android:color/transparent"
+            app:strokeColor="@android:color/transparent">
+
+            <ImageView
+                android:id="@+id/musicicon"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:scaleType="fitXY" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:focusable="false"
+            android:id="@+id/titlemusic"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:padding="8dp"
+            android:text="Title"
+            android:textSize="18sp" />
+
+        <TextView
+            android:focusable="false"
+            android:id="@+id/submusic"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_width="wrap_content"
+            android:padding="8dp"
+            android:text="TextView"
+            android:textSize="14sp" />
+
+        <!-- SeekBar با عرض کامل -->
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:paddingHorizontal="24dp">
+
+            <SeekBar
+                android:id="@+id/musicseekbar"
+                android:layout_height="48dp"
+                android:layout_width="match_parent"
+                android:maxHeight="48dp"
+                android:minHeight="48dp"
+                style="@style/MediaPlayer.ProgressBar" />
+
+            <!-- تایمرها با فاصله مناسب -->
+            <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tvtr"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="0:00"
+                    android:textSize="14sp"
+                    android:gravity="start" />
+
+                <TextView
+                    android:id="@+id/tvname"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="0:00"
+                    android:textSize="14sp"
+                    android:gravity="end" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:padding="24dp">
+
+            <LinearLayout
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:layout_height="50dp"
+                android:layout_marginEnd="40dp"
+                android:layout_width="50dp">
+
+                <ImageView
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:id="@+id/pre"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:scaleType="centerInside"
+                    android:tint="?attr/colorPrimary"
+                    app:srcCompat="@drawable/musicprevious" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:background="@drawable/bg_pause_anim"
+                android:id="@+id/cardmusic"
+                android:layout_height="75dp"
+                android:layout_marginEnd="24dp"
+                android:layout_width="75dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/play"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:scaleType="centerInside"
+                    android:tint="?attr/colorOnPrimary"
+                    app:backgroundTint="?attr/colorSecondaryContainer"
+                    app:icon="@drawable/musicplay"
+                    app:iconGravity="textStart"
+                    app:iconPadding="0dp"
+                    app:iconSize="42dp"
+                    app:iconTint="?attr/colorOnSecondaryContainer" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:layout_height="50dp"
+                android:layout_marginStart="20dp"
+                android:layout_width="50dp">
+
+                <ImageView
+                    android:id="@+id/next"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:scaleType="centerInside"
+                    android:tint="?attr/colorPrimary"
+                    app:srcCompat="@drawable/musicnext" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

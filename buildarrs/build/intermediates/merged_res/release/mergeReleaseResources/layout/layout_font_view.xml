@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_height="220dp"
+     android:layout_width="match_parent"
+     android:layout_margin="6dp">
+
+    <FrameLayout
+         android:layout_height="match_parent"
+         android:layout_width="match_parent"
+         android:foregroundGravity="fill"
+         android:layout_margin="4dp"
+         android:foreground="?attr/selectableItemBackground">
+
+        <TextView
+             android:layout_height="match_parent"
+             android:layout_width="match_parent"
+             android:adjustViewBounds="true"
+             android:gravity="center_horizontal|center_vertical"
+             android:padding="16dp"
+             android:textSize="18sp"
+             android:focusable="false"
+             android:id="@+id/text_content"
+             android:text="Ghost | گوست" />
+
+        <View
+             android:layout_height="80dp"
+             android:layout_width="match_parent"
+             android:layout_gravity="bottom" />
+
+    </FrameLayout>
+
+</FrameLayout>

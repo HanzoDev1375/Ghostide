@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/layout-v26/mtrl_calendar_month.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/layout-v26/mtrl_calendar_month.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/layout-v26/abc_screen_toolbar.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-appcompat-1.7.1-21:/layout-v26/abc_screen_toolbar.xml"
+    }
+]

@@ -1,0 +1,34 @@
+{
+    "logs": [
+        {
+            "outputFile": "ir.ninjacoder.ghostide.core.buildarrs-mergeReleaseResources-69:/values-v18/values-v18.xml",
+            "map": [
+                {
+                    "source": "/data/user/0/com.tom.rv2ide/files/home/.gradle/caches/8.11.1/transforms/567e09fe39d16b4866e71c682c3e4e6e/transformed/appcompat-1.7.1/res/values-v18/values-v18.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "48",
+                        "endOffsets": "99"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/values-v18/values-v18.xml",
+            "map": [
+                {
+                    "source": "/data/user/0/com.tom.rv2ide/files/home/.gradle/caches/8.11.1/transforms/567e09fe39d16b4866e71c682c3e4e6e/transformed/appcompat-1.7.1/res/values-v18/values-v18.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "48",
+                        "endOffsets": "99"
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,242 @@
+[
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/abc_shrink_fade_out_from_bottom.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-appcompat-1.7.1-21:/anim/abc_shrink_fade_out_from_bottom.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/design_snackbar_out.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/anim/design_snackbar_out.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/abc_slide_in_top.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-appcompat-1.7.1-21:/anim/abc_slide_in_top.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/btn_checkbox_to_unchecked_icon_null_animation.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-appcompat-1.7.1-21:/anim/btn_checkbox_to_unchecked_icon_null_animation.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/linear_indeterminate_line1_tail_interpolator.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/anim/linear_indeterminate_line1_tail_interpolator.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/m3_motion_fade_exit.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/anim/m3_motion_fade_exit.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/menu_elastic_center.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-jetified-powermenu-2.2.4-8:/anim/menu_elastic_center.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/menu_show_down_tl.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-jetified-powermenu-2.2.4-8:/anim/menu_show_down_tl.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/abc_grow_fade_in_from_bottom.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-appcompat-1.7.1-21:/anim/abc_grow_fade_in_from_bottom.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/menu_show_down_tr.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-jetified-powermenu-2.2.4-8:/anim/menu_show_down_tr.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/m3_motion_fade_enter.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/anim/m3_motion_fade_enter.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/menu_show_up_br.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-jetified-powermenu-2.2.4-8:/anim/menu_show_up_br.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/menu_elastic_tl.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-jetified-powermenu-2.2.4-8:/anim/menu_elastic_tl.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/menu_elastic_tr.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-jetified-powermenu-2.2.4-8:/anim/menu_elastic_tr.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/menu_show_up_center.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-jetified-powermenu-2.2.4-8:/anim/menu_show_up_center.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/design_bottom_sheet_slide_out.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/anim/design_bottom_sheet_slide_out.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/btn_radio_to_on_mtrl_dot_group_animation.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-appcompat-1.7.1-21:/anim/btn_radio_to_on_mtrl_dot_group_animation.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/design_snackbar_in.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/anim/design_snackbar_in.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/btn_checkbox_to_checked_box_outer_merged_animation.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-appcompat-1.7.1-21:/anim/btn_checkbox_to_checked_box_outer_merged_animation.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/abc_fade_in.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-appcompat-1.7.1-21:/anim/abc_fade_in.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/btn_checkbox_to_checked_icon_null_animation.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-appcompat-1.7.1-21:/anim/btn_checkbox_to_checked_icon_null_animation.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/m3_side_sheet_exit_to_left.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/anim/m3_side_sheet_exit_to_left.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/abc_slide_out_top.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-appcompat-1.7.1-21:/anim/abc_slide_out_top.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/abc_slide_out_bottom.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-appcompat-1.7.1-21:/anim/abc_slide_out_bottom.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/abc_slide_in_bottom.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-appcompat-1.7.1-21:/anim/abc_slide_in_bottom.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/linear_indeterminate_line2_head_interpolator.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/anim/linear_indeterminate_line2_head_interpolator.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/btn_radio_to_off_mtrl_ring_outer_path_animation.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-appcompat-1.7.1-21:/anim/btn_radio_to_off_mtrl_ring_outer_path_animation.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/menu_show_up_tl.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-jetified-powermenu-2.2.4-8:/anim/menu_show_up_tl.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/menu_fade_in.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-jetified-powermenu-2.2.4-8:/anim/menu_fade_in.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/btn_radio_to_off_mtrl_dot_group_animation.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-appcompat-1.7.1-21:/anim/btn_radio_to_off_mtrl_dot_group_animation.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/btn_checkbox_to_checked_box_inner_merged_animation.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-appcompat-1.7.1-21:/anim/btn_checkbox_to_checked_box_inner_merged_animation.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/abc_popup_exit.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-appcompat-1.7.1-21:/anim/abc_popup_exit.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/menu_show_down_bl.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-jetified-powermenu-2.2.4-8:/anim/menu_show_down_bl.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/m3_bottom_sheet_slide_in.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/anim/m3_bottom_sheet_slide_in.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/menu_show_up_tr.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-jetified-powermenu-2.2.4-8:/anim/menu_show_up_tr.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/btn_checkbox_to_unchecked_check_path_merged_animation.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-appcompat-1.7.1-21:/anim/btn_checkbox_to_unchecked_check_path_merged_animation.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/menu_elastic_bl.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-jetified-powermenu-2.2.4-8:/anim/menu_elastic_bl.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/m3_side_sheet_exit_to_right.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/anim/m3_side_sheet_exit_to_right.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/menu_elastic_br.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-jetified-powermenu-2.2.4-8:/anim/menu_elastic_br.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/menu_show_down_center.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-jetified-powermenu-2.2.4-8:/anim/menu_show_down_center.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/abc_tooltip_enter.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-appcompat-1.7.1-21:/anim/abc_tooltip_enter.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/btn_radio_to_off_mtrl_ring_outer_animation.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-appcompat-1.7.1-21:/anim/btn_radio_to_off_mtrl_ring_outer_animation.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/abc_tooltip_exit.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-appcompat-1.7.1-21:/anim/abc_tooltip_exit.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/mtrl_card_lowers_interpolator.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/anim/mtrl_card_lowers_interpolator.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/m3_side_sheet_enter_from_left.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/anim/m3_side_sheet_enter_from_left.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/m3_side_sheet_enter_from_right.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/anim/m3_side_sheet_enter_from_right.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/design_bottom_sheet_slide_in.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/anim/design_bottom_sheet_slide_in.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/menu_show_up_bl.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-jetified-powermenu-2.2.4-8:/anim/menu_show_up_bl.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/btn_checkbox_to_unchecked_box_inner_merged_animation.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-appcompat-1.7.1-21:/anim/btn_checkbox_to_unchecked_box_inner_merged_animation.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/linear_indeterminate_line1_head_interpolator.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/anim/linear_indeterminate_line1_head_interpolator.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/mtrl_bottom_sheet_slide_out.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/anim/mtrl_bottom_sheet_slide_out.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/m3_bottom_sheet_slide_out.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/anim/m3_bottom_sheet_slide_out.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/linear_indeterminate_line2_tail_interpolator.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/anim/linear_indeterminate_line2_tail_interpolator.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/mtrl_bottom_sheet_slide_in.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/anim/mtrl_bottom_sheet_slide_in.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/menu_fade_out.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-jetified-powermenu-2.2.4-8:/anim/menu_fade_out.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/btn_radio_to_on_mtrl_ring_outer_animation.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-appcompat-1.7.1-21:/anim/btn_radio_to_on_mtrl_ring_outer_animation.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/btn_radio_to_on_mtrl_ring_outer_path_animation.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-appcompat-1.7.1-21:/anim/btn_radio_to_on_mtrl_ring_outer_path_animation.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/abc_fade_out.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-appcompat-1.7.1-21:/anim/abc_fade_out.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/menu_show_down_br.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-jetified-powermenu-2.2.4-8:/anim/menu_show_down_br.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/anim/abc_popup_enter.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-appcompat-1.7.1-21:/anim/abc_popup_enter.xml"
+    }
+]

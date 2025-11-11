@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/layout-land/mtrl_picker_header_dialog.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/layout-land/mtrl_picker_header_dialog.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/layout-land/material_clock_period_toggle_land.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/layout-land/material_clock_period_toggle_land.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/layout-land/material_timepicker.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-material-1.14.0-alpha06-39:/layout-land/material_timepicker.xml"
+    },
+    {
+        "merged": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/layout-land/appintro_fragment_intro.xml",
+        "source": "ir.ninjacoder.ghostide.core.buildarrs-jetified-AppIntro-6.3.1-15:/layout-land/appintro_fragment_intro.xml"
+    }
+]

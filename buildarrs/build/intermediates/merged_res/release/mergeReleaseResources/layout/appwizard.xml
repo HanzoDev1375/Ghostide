@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/appwizardContentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom|center|right"
+        android:padding="30.0dip">
+
+        <LinearLayout
+            android:id="@+id/appwizardEditButtonLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15.0dip"
+            android:layout_marginRight="15.0dip"
+            android:background="@drawable/appwizard_edit"
+            android:orientation="horizontal"
+            android:padding="5.0dip">
+
+            <ImageView
+                android:id="@+id/appwizardEditButton"
+                android:layout_width="50.0dip"
+                android:layout_height="50.0dip"
+                android:background="?android:selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_architecture" />
+
+            <ImageView
+                android:id="@+id/appwizardUndoButton"
+                android:layout_width="50.0dip"
+                android:layout_height="50.0dip"
+                android:background="?android:selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_undo" />
+
+            <ImageView
+                android:id="@+id/appwizardRedoButton"
+                android:layout_width="50.0dip"
+                android:layout_height="50.0dip"
+                android:background="?android:selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_redo" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/appwizard_edit"
+            android:padding="5.0dip">
+
+            <ImageView
+                android:id="@+id/appwizardModeButton"
+                android:layout_width="50.0dip"
+                android:layout_height="50.0dip"
+                android:background="?android:selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_edit" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

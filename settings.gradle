@@ -36,3 +36,4 @@ include(":prddownloader")
 include(":prograsssheetlib")
 include(":fuzzysearch")
 include ':core'
+include ':buildarrs'

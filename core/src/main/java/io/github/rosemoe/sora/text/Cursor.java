@@ -324,18 +324,25 @@ public class Cursor {
   private boolean isRtlText(String text) {
     if (text == null || text.length() == 0) return false;
 
-    for (int i = 0; i < Math.min(text.length(), 10); i++) {
+    int rtlCount = 0;
+    int totalCount = 0;
+
+    for (int i = 0; i < Math.min(text.length(), 20); i++) {
       char c = text.charAt(i);
-      // محدوده کاراکترهای فارسی، عربی و سایر زبان‌های RTL
-      if ((c >= '\u0600' && c <= '\u06FF')
-          || (c >= '\u0750' && c <= '\u077F')
-          || (c >= '\u08A0' && c <= '\u08FF')
-          || (c >= '\uFB50' && c <= '\uFDFF')
-          || (c >= '\uFE70' && c <= '\uFEFF')) {
-        return true;
+      if (Character.isLetter(c)) {
+        totalCount++;
+        // محدوده کاراکترهای فارسی، عربی و سایر زبان‌های RTL
+        if ((c >= '\u0600' && c <= '\u06FF')
+            || (c >= '\u0750' && c <= '\u077F')
+            || (c >= '\u08A0' && c <= '\u08FF')
+            || (c >= '\uFB50' && c <= '\uFDFF')
+            || (c >= '\uFE70' && c <= '\uFEFF')) {
+          rtlCount++;
+        }
       }
     }
-    return false;
+
+    return totalCount > 0 && rtlCount > totalCount * 0.6;
   }
 
   private boolean isRtlContext(String text, int cursorPosition) {

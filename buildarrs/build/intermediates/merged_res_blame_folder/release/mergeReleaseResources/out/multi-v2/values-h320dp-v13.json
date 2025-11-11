@@ -1,0 +1,34 @@
+{
+    "logs": [
+        {
+            "outputFile": "ir.ninjacoder.ghostide.core.buildarrs-release-71:/values-h320dp-v13/values-h320dp-v13.xml",
+            "map": [
+                {
+                    "source": "/data/user/0/com.tom.rv2ide/files/home/.gradle/caches/8.11.1/transforms/a77563c19de4b95a6918328583824ce3/transformed/material-1.14.0-alpha06/res/values-h320dp-v13/values-h320dp-v13.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "66",
+                        "endOffsets": "117"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "ir.ninjacoder.ghostide.core.buildarrs-mergeReleaseResources-69:/values-h320dp-v13/values-h320dp-v13.xml",
+            "map": [
+                {
+                    "source": "/data/user/0/com.tom.rv2ide/files/home/.gradle/caches/8.11.1/transforms/a77563c19de4b95a6918328583824ce3/transformed/material-1.14.0-alpha06/res/values-h320dp-v13/values-h320dp-v13.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "66",
+                        "endOffsets": "117"
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     android:padding="3dp"
+     android:orientation="vertical">
+
+    <com.google.android.material.textfield.TextInputLayout
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:layout_marginEnd="5dp"
+         android:layout_marginStart="5dp"
+         android:id="@+id/searchbar">
+
+        <com.google.android.material.textfield.TextInputEditText
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:layout_marginEnd="5dp"
+         android:layout_marginRight="5dp"
+         android:id="@+id/rvsearchmain" />
+
+    <LinearLayout
+         android:layout_height="match_parent"
+         android:layout_width="match_parent"
+         android:layout_marginEnd="5dp"
+         android:gravity="center"
+         android:visibility="gone"
+         android:orientation="vertical"
+         android:layout_marginRight="5dp"
+         android:id="@+id/emptyviewtree">
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:textSize="19sp"
+             android:text="This List Empty "
+             android:textStyle="bold" />
+
+    </LinearLayout>
+
+</LinearLayout>

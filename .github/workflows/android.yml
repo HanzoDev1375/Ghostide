@@ -25,8 +25,8 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    - name: Build Debug AAR for core module
-      run: ./gradlew :core:bundleDebugAar
+    - name: Build AllAar
+      run: ./gradlew :buildarrs:buildFinalAar
 
     - name: Build Release AAR for core module
       run: ./gradlew :core:bundleReleaseAar

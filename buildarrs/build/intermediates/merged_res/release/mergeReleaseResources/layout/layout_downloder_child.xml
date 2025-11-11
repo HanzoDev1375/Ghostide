@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:layout_height="wrap_content"
+     android:layout_width="match_parent">
+
+    <LinearLayout
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:gravity="center_vertical"
+         android:padding="8dp"
+         android:orientation="horizontal"
+         android:id="@+id/view">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+             android:layout_height="25dp"
+             android:layout_width="25dp"
+             android:layout_marginBottom="4dp"
+             android:indeterminate="true"
+             android:layout_marginTop="4dp"
+             android:focusable="false"
+             android:id="@+id/progrssdownload" />
+
+        <ImageView
+             android:layout_height="25dp"
+             android:layout_width="25dp"
+             android:scaleType="centerInside"
+             android:src="@drawable/ic_settings_backup_restore_white"
+             android:layout_marginLeft="10dp"
+             android:layout_marginRight="5dp"
+             android:id="@+id/iconfake" />
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:textSize="18sp"
+             android:layout_marginRight="3dp"
+             android:focusable="false"
+             android:id="@+id/tvname"
+             android:text="new version app 1.6.5"
+             android:textStyle="bold" />
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:textSize="15sp"
+             android:typeface="serif"
+             android:focusable="false"
+             android:id="@+id/tvsize"
+             android:text="128mb" />
+
+    </LinearLayout>
+
+    <LinearLayout
+         android:layout_height="match_parent"
+         android:layout_width="match_parent"
+         android:visibility="gone"
+         android:gravity="center"
+         android:orientation="vertical"
+         android:id="@+id/installApk">
+
+        <ImageView
+             android:layout_height="30dp"
+             android:layout_width="30dp"
+             android:src="@drawable/round_install_mobile_24" />
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:textSize="15sp"
+             android:layout_marginTop="3dp"
+             android:typeface="serif"
+             android:focusable="false"
+             android:text="Install" />
+
+    </LinearLayout>
+
+</LinearLayout>

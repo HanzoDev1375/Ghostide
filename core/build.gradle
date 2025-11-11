@@ -2,7 +2,6 @@ plugins {
     id 'com.android.library'
     id "kotlin-android"
     id 'maven-publish'
-    id 'com.kezong.fat-aar'
 }
 
 android {
@@ -37,7 +36,7 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
+    api fileTree(dir: "libs", include: ["*.jar", "*.aar"])
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
     implementation("com.google.code.gson:gson:2.13.1")
     def jadxVersion = "1.5.2"
@@ -52,17 +51,6 @@ dependencies {
     implementation project(path: ":vectormaster")
     implementation project(path: ":android-tools")
     implementation project(path: ":prograsssheetlib")
-    embedded project(path: ":Plugin")
-    embedded project(path: ":pl-codecomment")
-    embedded project(path: ":jgit")
-    embedded project(path: ":eclipse-standalone")
-    embedded project(path: ":prddownloader")
-    embedded project(path: ":datautils")
-    embedded project(path: ":ui-designer")
-    embedded project(path: ":webview")
-    embedded project(path: ":vectormaster")
-    embedded project(path: ":android-tools")
-    embedded project(path: ":prograsssheetlib")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.2")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-properties:2.14.2")
     implementation("com.squareup:javapoet:1.13.0")
@@ -79,10 +67,10 @@ dependencies {
     implementation("com.blankj:utilcodex:1.31.1")
     implementation("androidx.webkit:webkit:1.10.0")
     implementation("org.eclipse.jgit:org.eclipse.jgit:7.3.0.202506031305-r")
-    implementation("androidx.activity:activity:1.9.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
+    api("androidx.activity:activity:1.9.0")
+    api("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("com.google.android.material:material:1.14.0-alpha04")
+    api("com.google.android.material:material:1.14.0-alpha04")
     implementation("org.nanohttpd:nanohttpd-webserver:2.3.1")
     implementation("org.benf:cfr:0.152")
     implementation("xyz.doikki.android.dkplayer:dkplayer-java:3.3.7")
@@ -109,8 +97,8 @@ dependencies {
     implementation("androidx.palette:palette:1.0.0")
     implementation("de.larsgrefer.sass:sass-embedded-android:4.1.0")
     implementation("io.reactivex.rxjava3:rxjava:3.1.8")
-    implementation("androidx.core:core:1.6.0")
-    implementation("androidx.preference:preference:1.2.1")
+    api("androidx.core:core:1.6.0")
+    api("androidx.preference:preference:1.2.1")
     implementation("com.github.javaparser:javaparser-core:3.27.0")
     implementation 'com.github.javaparser:javaparser-symbol-solver-core:3.27.0'
     implementation("com.github.AppIntro:AppIntro:6.3.1")
