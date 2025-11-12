@@ -1277,32 +1277,52 @@ public class CodeEditor extends View
     if (lang == null) {
       lang = new EmptyLanguage();
     }
+
+    Log.d("CodeEditor", "Setting new language analyzer: " + lang.getClass().getSimpleName());
+
+    // 1. متوقف کردن آنالایزر قبلی
+    if (mSpanner != null) {
+      mSpanner.shutdown(); // این خیلی مهمه!
+      mSpanner.setCallback(null);
+      mSpanner = null;
+    }
+
     this.mLanguage = lang;
 
-    if (mSpanner != null) {
-      mSpanner.shutdown();
-      mSpanner.setCallback(null);
-    }
     mSpanner = new TextAnalyzer(lang.getAnalyzer());
     mSpanner.setCallback(this);
+
     if (mText != null) {
-      mSpanner.analyze(mText);
+      for (int i = 0; i < mText.getLineCount(); i++) {
+        ContentLine line = mText.getLine(i);
+        if (line != null) {
+          line.widthCache = null;
+          line.timestamp = 0;
+        }
+      }
+      if (mSpanner.getResult() != null) {
+        mSpanner.getResult().getSpanMap().clear();
+        mSpanner.getResult().getBlocks().clear();
+      }
+
+      // 5. آنالایز فورس با آنالایزر جدید
+      post(
+          () -> {
+            if (mSpanner != null && mText != null) {
+              mSpanner.analyze(mText, true); // فورس آنالایز
+              invalidate();
+            }
+          });
     }
     if (mCompletionWindow != null) {
       mCompletionWindow.hide();
       mCompletionWindow.setProvider(lang.getAutoCompleteProvider());
     }
-
     if (mLanguageSymbolPairs != null) {
       mLanguageSymbolPairs.setParent(null);
     }
     mLanguageSymbolPairs = mLanguage.getSymbolPairs();
     if (mLanguageSymbolPairs == null) {
-      Log.w(
-          LOG_TAG,
-          "Language("
-              + mLanguage.toString()
-              + ") returned null for symbol pairs. It is a mistake.");
       mLanguageSymbolPairs = new SymbolPairMatch();
     }
     mLanguageSymbolPairs.setParent(mOverrideSymbolPairs);
@@ -1310,6 +1330,9 @@ public class CodeEditor extends View
     if (mCursor != null) {
       mCursor.setLanguage(mLanguage);
     }
+
+    invalidateHwRenderer();
+    updateTimestamp();
     invalidate();
   }
 
@@ -3525,7 +3548,6 @@ public class CodeEditor extends View
    * @param centerY The center y on screen for the panel
    * @param rightX The right x on screen for the panel
    */
- 
   protected void drawLineNumber(
       Canvas canvas, int line, int row, float offsetX, float width, int color) {
 
