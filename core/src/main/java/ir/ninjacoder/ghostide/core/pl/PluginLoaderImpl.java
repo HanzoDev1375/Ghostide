@@ -7,7 +7,7 @@ import ir.ninjacoder.prograsssheet.listchild.Child;
 
 public class PluginLoaderImpl {
 
-  private static final String DEFAULT_CONFIG_PATH =
+  public static final String DEFAULT_CONFIG_PATH =
       "/storage/emulated/0/GhostWebIDE/plugins/config.json";
 
   // برای FileManagerActivity (بدون CodeEditor)
