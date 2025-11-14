@@ -107,6 +107,8 @@ public class IdeEditor extends CodeEditor implements IEditor {
     if (saveTextSize != null) {
       setTextSizePx(getSize);
     }
+    //تنظیمات جت برینز برای ایکون های لاین نامبر و سایز لاین نامبر
+    setDividerWidth(45);
     setPowerModeEnabled(true);
     PowerModeEffectManager.EffectType ef = EffectTypeManager.getCurrentTheme(getContext());
 

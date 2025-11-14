@@ -23,6 +23,8 @@
  */
 package io.github.rosemoe.sora.widget;
 
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import static io.github.rosemoe.sora.text.TextUtils.isEmoji;
 import static io.github.rosemoe.sora.util.Numbers.stringSize;
 
@@ -375,6 +377,11 @@ public class CodeEditor extends View
 
   public void addLineIcon(int lineNumber, int iconRes) {
     LineIcon lineIcon = new LineIcon(iconRes, lineNumber);
+    lineIcons.add(lineIcon);
+  }
+
+  public void addLineIcons(int lineNumber, int colorFilter, String iconPath, boolean hasIconPath) {
+    LineIcon lineIcon = new LineIcon(lineNumber, colorFilter, iconPath, hasIconPath);
     lineIcons.add(lineIcon);
   }
 
@@ -3568,146 +3575,84 @@ public class CodeEditor extends View
             - mLineNumberMetrics.ascent
             - getOffsetY();
 
-    // تبدیل شماره خط به رشته (الزامی)
+    // تبدیل شماره خط به رشته
     var buffer = TemporaryCharBuffer.obtain(20);
     line++;
     int i = stringSize(line);
     Numbers.getChars(line, i, buffer);
 
     // موقعیت افقی عدد
-    float lineNumberX;
     switch (mLineNumberAlign) {
       case LEFT:
-        lineNumberX = offsetX + getDpUnit() * 8;
+        canvas.drawText(buffer, 0, i, offsetX, y, mPaintOther);
         break;
       case RIGHT:
-        lineNumberX = offsetX + width - getDpUnit() * 8;
+        canvas.drawText(buffer, 0, i, offsetX + width, y, mPaintOther);
         break;
       case CENTER:
-        lineNumberX = offsetX + (width + mDividerMargin) / 2f;
-        break;
-      default:
-        lineNumberX = offsetX + getDpUnit() * 8;
+        canvas.drawText(buffer, 0, i, offsetX + (width + mDividerMargin) / 2f, y, mPaintOther);
     }
 
-    // رسم شماره خط
-    canvas.drawText(buffer, 0, i, lineNumberX, y, mPaintOther);
+    // رسم آیکون‌ها با روش جدید و حفظ تمام قابلیت‌ها
+    for (LineIcon icon : lineIcons) {
+      if (icon.lineNumber == line) {
+        // استفاده از روش جدید مشابه کد سازنده
+        final float iconSizeFactor = 0.4f;
+        int size = (int) (getRowHeight() * iconSizeFactor);
+        int offsetToLeftTop = (int) (getRowHeight() * (1 - iconSizeFactor) / 2f);
 
-    // عرض عدد برای قرار دادن آیکون درست کنار عدد
-    float textWidth = mPaintOther.measureText(buffer, 0, i);
+        float left = offsetX + width + getDpUnit() * 1.7f;
+        float top = getRowTop(row) - getOffsetY() + offsetToLeftTop;
 
-    // 🔹 آیکون کنار عدد مثل Android Studio
-    for (LineIcon lineIcon : lineIcons) {
-      if (lineIcon.getLineNumber() == line) {
-        Bitmap iconBitmap = BitmapFactory.decodeResource(getResources(), lineIcon.getIconRes());
-        if (iconBitmap == null) continue;
+        Rect rect = new Rect((int) left, (int) top, (int) left + size, (int) top + size);
 
-        int iconSize = (int) (getRowHeight() * 0.6f); // اندازه متناسب با ارتفاع خط
-        Bitmap scaledIcon = Bitmap.createScaledBitmap(iconBitmap, iconSize, iconSize, true);
+        Bitmap bmp = null;
 
-        if (scaledIcon != null) {
-          // 📍 موقعیت X آیکون: دقیقاً بعد از عدد (مثل Android Studio)
-          float iconX = lineNumberX + textWidth + getDpUnit() * 4;
+        // بارگذاری bitmap از مسیر فایل یا resource
+        if (icon.hasIconFilePath && icon.iconFilePath != null) {
+          bmp = BitmapFactory.decodeFile(icon.iconFilePath);
+        } else if (icon.iconRes != -1) {
+          bmp = BitmapFactory.decodeResource(getResources(), icon.iconRes);
+        }
 
-          // 📍 موقعیت Y آیکون: وسط خط
-          float centerY = (getRowBottom(row) + getRowTop(row)) / 2f - getOffsetY();
-          float iconTop = centerY - iconSize / 2f;
-          float iconBottom = centerY + iconSize / 2f;
+        if (bmp != null) {
+          // ایجاد bitmap با اندازه مناسب
+          Bitmap scaledBmp = Bitmap.createScaledBitmap(bmp, size, size, true);
 
-          RectF rect =
-              new RectF(
-                  iconX, // چپ
-                  iconTop, // بالا
-                  iconX + iconSize, // راست
-                  iconBottom // پایین
-                  );
+          // اعمال color filter اگر تنظیم شده باشد
+          if (icon.colorFilter != 0) {
+            Bitmap filteredBitmap = scaledBmp.copy(Bitmap.Config.ARGB_8888, true);
+            Canvas filterCanvas = new Canvas(filteredBitmap);
+            Paint filterPaint = new Paint();
+            filterPaint.setColorFilter(
+                new PorterDuffColorFilter(icon.colorFilter, PorterDuff.Mode.SRC_IN));
+            filterCanvas.drawBitmap(scaledBmp, 0, 0, filterPaint);
 
-          canvas.drawBitmap(scaledIcon, null, rect, null);
+            Paint iconPaint = new Paint();
+            iconPaint.setFilterBitmap(true);
+            iconPaint.setDither(true);
+            canvas.drawBitmap(filteredBitmap, null, rect, iconPaint);
+
+            filteredBitmap.recycle();
+          } else {
+            // رسم بدون فیلتر
+            Paint iconPaint = new Paint();
+            iconPaint.setFilterBitmap(true);
+            iconPaint.setDither(true);
+            canvas.drawBitmap(scaledBmp, null, rect, iconPaint);
+          }
+
+          // مدیریت حافظه
+          scaledBmp.recycle();
+          if (bmp != scaledBmp) {
+            bmp.recycle();
+          }
         }
       }
     }
 
     TemporaryCharBuffer.recycle(buffer);
   }
-
-  // protected void drawLineNumber(
-  // Canvas canvas, int line, int row, float offsetX, float width, int color) {
-  // if (width + offsetX <= 0) {
-  // return;
-  // }
-
-  // // تنظیمات متن
-  // if (mPaintOther.getTextAlign() != mLineNumberAlign) {
-  // mPaintOther.setTextAlign(mLineNumberAlign);
-  // }
-  // mPaintOther.setColor(color);
-
-  // // محاسبه موقعیت عمودی
-  // float y =
-  // (getRowBottom(row) + getRowTop(row)) / 2f
-  // - (mLineNumberMetrics.descent - mLineNumberMetrics.ascent) / 2f
-  // - mLineNumberMetrics.ascent
-  // - getOffsetY();
-
-  // // تبدیل شماره خط به رشته
-  // var buffer = TemporaryCharBuffer.obtain(20);
-  // line++;
-  // int i = stringSize(line);
-  // Numbers.getChars(line, i, buffer);
-
-  // // محاسبه موقعیت افقی شماره خط
-  // float lineNumberX;
-  // switch (mLineNumberAlign) {
-  // case LEFT:
-  // lineNumberX = offsetX + getDpUnit() * 8; // فاصله از لبه
-  // break;
-  // case RIGHT:
-  // lineNumberX = offsetX + width - getDpUnit() * 8; // فاصله از لبه
-  // break;
-  // case CENTER:
-  // lineNumberX = offsetX + (width + mDividerMargin) / 2f;
-  // break;
-  // default:
-  // lineNumberX = offsetX + getDpUnit() * 8;
-  // }
-
-  // // رسم شماره خط
-  // canvas.drawText(buffer, 0, i, lineNumberX, y, mPaintOther);
-
-  // // محاسبه عرض متن برای موقعیت‌یابی آیکون
-  // float textWidth = mPaintOther.measureText(buffer, 0, i);
-
-  // for (LineIcon lineIcon : lineIcons) {
-  // if (lineIcon.getLineNumber() == line) {
-  // Bitmap defaultIconBitmap =
-  // BitmapFactory.decodeResource(getResources(), lineIcon.getIconRes());
-  // int iconSize = (int) (getRowHeight() * 0.6f); // اندازه متناسب
-  // Bitmap scaledIconBitmap =
-  // Bitmap.createScaledBitmap(defaultIconBitmap, iconSize, iconSize, true);
-
-  // if (scaledIconBitmap != null) {
-  // // موقعیت X آیکون: بعد از متن با فاصله
-  // float iconX = lineNumberX + textWidth + getDpUnit() * 8;
-
-  // // موقعیت Y آیکون: وسط خط
-  // float iconY = y - iconSize / 2f + getDpUnit() * 8;
-
-  // // محدوده رسم آیکون با RectF
-  // RectF rect =
-  // new RectF(
-  // iconX, // چپ
-  // iconY, // بالا
-  // iconX + iconSize, // راست
-  // iconY + iconSize // پایین
-  // );
-
-  // canvas.drawBitmap(scaledIconBitmap, null, rect, mPaintOther);
-  // }
-  // }
-  // }
-
-  // TemporaryCharBuffer.recycle(buffer);
-  // }
 
   protected void drawLineIcons(Canvas canvas, int row, int line, float textRegionStart) {}
 
