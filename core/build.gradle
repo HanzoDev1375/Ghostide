@@ -51,6 +51,7 @@ dependencies {
     implementation project(path: ":vectormaster")
     implementation project(path: ":android-tools")
     implementation project(path: ":prograsssheetlib")
+						
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.2")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-properties:2.14.2")
     implementation("com.squareup:javapoet:1.13.0")
@@ -98,6 +99,7 @@ dependencies {
     implementation("de.larsgrefer.sass:sass-embedded-android:4.1.0")
     implementation("io.reactivex.rxjava3:rxjava:3.1.8")
     api("androidx.core:core:1.6.0")
+						
     api("androidx.preference:preference:1.2.1")
     implementation("com.github.javaparser:javaparser-core:3.27.0")
     implementation 'com.github.javaparser:javaparser-symbol-solver-core:3.27.0'
@@ -112,7 +114,9 @@ dependencies {
     implementation("io.github.skylot:jadx-dex-input:1.5.2")
     implementation 'androidx.security:security-crypto:1.1.0-alpha03'
     implementation 'org.mozilla:rhino-runtime:1.7.15'
+	
     //run ts tsx js jsx in Android
+
     implementation "de.inetsoftware:jlessc:1.12"
     implementation("io.noties.markwon:html:4.6.2")
     implementation("io.noties.markwon:image:4.6.2")

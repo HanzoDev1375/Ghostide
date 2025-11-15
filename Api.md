@@ -8,8 +8,8 @@ With this plugin, which will add new features in the future, you can add a serie
 package ir.ninjacoder.ghostide.pl;
 
 import io.github.rosemoe.sora.widget.CodeEditor;
-import ir.ninjacoder.ghostide.activities.FileManagerActivity;
-import ir.ninjacoder.ghostide.activities.CodeEditorActivity;
+import ir.ninjacoder.ghostide.core.activities.FileManagerActivity;
+import ir.ninjacoder.ghostide.core.activities.CodeEditorActivity;
 
 public interface PluginManagerCompat {
 
@@ -151,9 +151,9 @@ import android.widget.Toast;
 import io.github.rosemoe.sora.langs.dart.DartLang;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import ir.ninjacoder.ghostide.IdeEditor;
-import ir.ninjacoder.ghostide.activities.CodeEditorActivity;
-import ir.ninjacoder.ghostide.activities.FileManagerActivity;
-import ir.ninjacoder.ghostide.pl.PluginManagerCompat;
+import ir.ninjacoder.ghostide.core.activities.CodeEditorActivity;
+import ir.ninjacoder.ghostide.core.activities.FileManagerActivity;
+import ir.ninjacoder.ghostide.core.pl.PluginManagerCompat;
 import ir.ninjacoder.prograsssheet.listchild.Child;
 
 import java.lang.reflect.Method;
@@ -221,3 +221,67 @@ public class MyCustomLanguagePlugin implements PluginManagerCompat {
 }
 ```
 
+# How to create Custom Lang in Editor?
+
+- Take a few steps to create a custom language
+- Implement your language first, then your parser, then your text completion.
+- Then understand the structure of the [Child](https://github.com/HanzoDev1375/Ghostide/blob/main/prograsssheetlib/src/main/java/ir/ninjacoder/prograsssheet/listchild/Child.java) class.
+- A sample code for creating a custom language in the plugin
+
+```java
+
+package ir.ninjacoder.plloader.deomlang;
+
+import ir.ninjacoder.ghostide.core.activities.FileManagerActivity;
+import ir.ninjacoder.ghostide.core.activities.CodeEditorActivity;
+import io.github.rosemoe.sora.widget.CodeEditor;
+import ir.ninjacoder.ghostide.core.pl.PluginManagerCompat;
+import ir.ninjacoder.prograsssheet.listchild.Child;
+
+public class LangKtsPl implements PluginManagerCompat {
+  CodeEditor editor;
+
+  @Override
+  public void getEditor(CodeEditor editor) {
+    this.editor = editor;
+  }
+
+  @Override
+  public String setName() {
+    return getClass().getSimpleName();
+  }
+
+  @Override
+  public boolean hasuseing() {
+    return true;
+  }
+
+  @Override
+  public void getFileManagerAc(FileManagerActivity ac) {
+    Child child =
+        new Child(
+            langModel() /* type your lang */ , "/storage/emulated/0/GhostWebIDE/plugins/ktslang/ic_material_kotlin.png"); //icon your lang
+    ac.addChild(child);
+  }
+
+  @Override
+  public void getCodeEditorAc(CodeEditorActivity ac) {
+    Child child =
+        new Child(
+            true, /* show fab*/
+            () -> {
+              editor.setEditorLanguage(new LangKts(editor)); //select editor lang custom on click fab soon
+            },
+            1902); //id
+    ac.addChild(child);
+  }
+
+  @Override
+  public String langModel() {
+    return ".kts"; //format type lang
+  }
+}
+
+
+
+```

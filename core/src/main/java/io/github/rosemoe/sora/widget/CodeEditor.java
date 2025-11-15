@@ -374,6 +374,9 @@ public class CodeEditor extends View
   private boolean highlightBrackets = true;
   private OnlineBracketsMatcher bracketsMatcher;
   private RainbowBracketHelper hls;
+  private String mHint = "";
+  private int mHintColor = 0xFF808080;
+  private boolean mShowHint = false;
 
   public void addLineIcon(int lineNumber, int iconRes) {
     LineIcon lineIcon = new LineIcon(iconRes, lineNumber);
@@ -423,6 +426,84 @@ public class CodeEditor extends View
 
   public void setMinidraw(String minidraw) {
     this.minidraw = minidraw;
+  }
+
+  /**
+   * Set hint text for editor
+   *
+   * @param hint The hint text to display when editor is empty
+   */
+  public void setHint(String hint) {
+    this.mHint = hint != null ? hint : "";
+    updateHintVisibility();
+    invalidate();
+  }
+
+  /**
+   * Get current hint text
+   *
+   * @return The hint text
+   */
+  public String getHint() {
+    return mHint;
+  }
+
+  /**
+   * Set hint text color
+   *
+   * @param color Color for hint text
+   */
+  public void setHintColor(int color) {
+    this.mHintColor = color;
+    if (mShowHint) {
+      invalidate();
+    }
+  }
+
+  /**
+   * Set hint text color from color resource
+   *
+   * @param colorRes Color resource id
+   */
+  public void setHintColorResource( int colorRes) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      setHintColor(getContext().getColor(colorRes));
+    } else {
+      setHintColor(getContext().getResources().getColor(colorRes));
+    }
+  }
+
+  /** Update hint visibility based on editor content */
+  private void updateHintVisibility() {
+    boolean wasShowing = mShowHint;
+    mShowHint = mHint != null && !mHint.isEmpty() && getText().length() == 0 && !hasFocus();
+
+    if (wasShowing != mShowHint) {
+      invalidate();
+    }
+  }
+
+  /** Draw hint text on canvas */
+  protected void drawHint(Canvas canvas) {
+    if (mHint == null || mHint.isEmpty() || getText().length() > 0) {
+      return;
+    }
+    float originalTextSize = mPaint.getTextSize();
+    int originalColor = mPaint.getColor();
+    Typeface originalTypeface = mPaint.getTypeface();
+
+    mPaint.setColor(mHintColor);
+    mPaint.setAlpha(128);
+    mPaint.setTypeface(getTypefaceText());
+
+    float textRegionOffset = measureTextRegionOffset();
+    float x = textRegionOffset - getOffsetX() + getDpUnit() * 8;
+    float y = getRowBaseline(0) - getOffsetY() + getRowHeight();
+    canvas.drawText(mHint, 0, mHint.length(), x, y, mPaint);
+    mPaint.setTextSize(originalTextSize);
+    mPaint.setColor(originalColor);
+    mPaint.setTypeface(originalTypeface);
+    mPaint.setAlpha(255);
   }
 
   public void drawInlay(Canvas canvas, Inlay inlay) {
@@ -1558,6 +1639,12 @@ public class CodeEditor extends View
     dispatchEvent(new TextSizeChangeEvent(this, oldTextSize, size));
   }
 
+  @Override
+  protected void onFocusChanged(boolean gainFocus, int direction, Rect previouslyFocusedRect) {
+    super.onFocusChanged(gainFocus, direction, previouslyFocusedRect);
+    updateHintVisibility();
+  }
+
   /**
    * Paint the view on given Canvas
    *
@@ -1580,6 +1667,8 @@ public class CodeEditor extends View
     if (mPowerModeEffectManager != null) {
       mPowerModeEffectManager.drawEffects(canvas);
     }
+    if (mShowHint) drawHint(canvas);
+
     for (Inlay inlay : inlays) {
       drawInlay(canvas, inlay);
     }
@@ -5574,6 +5663,11 @@ public class CodeEditor extends View
     createLayout();
     invalidateHwRenderer();
     invalidate();
+    post(
+        () -> {
+          updateHintVisibility();
+          invalidate();
+        });
   }
 
   /**
@@ -6359,7 +6453,7 @@ public class CodeEditor extends View
       CharSequence insertedContent) {
     updateTimestamp();
     post(this::updateMatchingBrackets);
-
+    updateHintVisibility();
     if (mPowerModeEffectManager != null && insertedContent.length() > 0) {
       mPowerModeEffectManager.spawnEffectAtCursor();
     }
@@ -6470,7 +6564,7 @@ public class CodeEditor extends View
       mRenderer.afterDelete(content, startLine, startColumn, endLine, endColumn, deletedContent);
     }
     mLayout.afterDelete(content, startLine, startColumn, endLine, endColumn, deletedContent);
-
+    updateHintVisibility();
     updateCursor();
 
     if (isAutoCompletionEnabled()) {

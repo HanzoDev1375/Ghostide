@@ -78,7 +78,7 @@ public class GradleDependencyManager {
                   synchronized (availableUpdates) {
                     availableUpdates.add(new DependencyUpdate(dep, latestVersion));
                     if (availableUpdates.size() == 1) {
-                      // اولین به‌روزرسانی پیدا شده، تایمر را شروع کن
+                      // اولین بهیوزرسانی پیدا شده، تایمر را شروع کن
                       new Handler(Looper.getMainLooper())
                           .postDelayed(this::showBulkUpdateDialog, 500);
                     }
