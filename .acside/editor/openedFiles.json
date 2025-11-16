@@ -1,0 +1,50 @@
+{
+  "allFiles": [
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Ghostide/prograsssheetlib/src/main/java/ir/ninjacoder/prograsssheet/listchild/ChildItemClick.java",
+      "selection": {
+        "end": {
+          "column": 0,
+          "index": 187,
+          "line": 7
+        },
+        "start": {
+          "column": 0,
+          "index": 187,
+          "line": 7
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Ghostide/prograsssheetlib/src/main/java/ir/ninjacoder/prograsssheet/listchild/ChildIconEditorManager.java",
+      "selection": {
+        "end": {
+          "column": 27,
+          "index": 319,
+          "line": 11
+        },
+        "start": {
+          "column": 16,
+          "index": 308,
+          "line": 11
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Ghostide/prograsssheetlib/src/main/java/ir/ninjacoder/prograsssheet/listchild/ChildAdapter.java",
+      "selection": {
+        "end": {
+          "column": 0,
+          "index": 1390,
+          "line": 45
+        },
+        "start": {
+          "column": 0,
+          "index": 1390,
+          "line": 45
+        }
+      }
+    }
+  ],
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/Ghostide/prograsssheetlib/src/main/java/ir/ninjacoder/prograsssheet/listchild/ChildAdapter.java"
+}
