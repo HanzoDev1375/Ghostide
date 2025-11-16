@@ -54,7 +54,7 @@ import com.ninjacoder.jgit.childer.LayoutBinder;
 import com.ninjacoder.jgit.childer.TextFind;
 import com.ninjacoder.jgit.childer.TextFindListener;
 import com.ninjacoder.jgit.search.SearchCallBack;
-
+import ir.ninjacoder.ghostide.core.widget.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -131,7 +131,7 @@ import ir.ninjacoder.prograsssheet.listchild.Child;
 import ninja.coder.appuploader.data.SnippetManagerImpl;
 import ninjacoder.ghostide.androidtools.r8.android.R8Tools;
 import storage.sdcard.SdCardUtil;
-
+import ir.ninjacoder.ghostide.core.layoutmanager.NavigationViewCompnet;
 public class FileManagerActivity extends BaseCompat
     implements FileManagerAd.onClick, FileWatcher.OnFileChangeListener {
 
@@ -385,7 +385,13 @@ public class FileManagerActivity extends BaseCompat
       setViewType(ViewType.ROW);
     }
   }
-
+  
+  public ExrtaFab getFab(){
+   return bind.fabAdd;
+  }
+  public NavigationViewCompnet getNav(){
+  return bind.navs;
+  }
   @Override
   public void onClick(View view, int pos) {
     staticstring = files.get((int) pos).get("path").toString();
@@ -435,7 +441,12 @@ public class FileManagerActivity extends BaseCompat
         break;
     }
   }
-
+  public String getSavePathByStringPrfns(){
+    return save_path.getString("path", "");  
+  }
+  public String getFolder(){
+    return Folder;
+  }
   void savePath() {
     if (save_path.contains("path")) {
       if (FileUtil.isExistFile(save_path.getString("path", ""))) {
@@ -694,7 +705,7 @@ public class FileManagerActivity extends BaseCompat
         });
   }
 
-  void reLoadFile() {
+ public void reLoadFile() { //reload file
     reLoadFile(true);
   }
 
