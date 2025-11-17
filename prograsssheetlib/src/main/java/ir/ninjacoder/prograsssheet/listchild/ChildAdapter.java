@@ -52,7 +52,9 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.Holder> {
   }
 
   @Override
-  public void onBindViewHolder(Holder holder, int pos) {}
+  public void onBindViewHolder(Holder holder, int pos) {
+    holder.bind(model.get(pos));
+  }
 
   @Override
   public int getItemCount() {

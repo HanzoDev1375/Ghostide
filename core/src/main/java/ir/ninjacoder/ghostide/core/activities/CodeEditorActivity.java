@@ -53,6 +53,8 @@ import com.skydoves.powermenu.OnMenuItemClickListener;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
 
+import ir.ninjacoder.prograsssheet.listchild.ChildAdapter;
+import ir.ninjacoder.prograsssheet.listchild.ChildIconEditorManager;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -109,24 +111,24 @@ import ir.ninjacoder.prograsssheet.listchild.Child;
 public class CodeEditorActivity extends BaseCompat {
 
   public final int REQ_CD_SETPASZAMINE = 101;
-  
+
   protected ExrtaFab _fab;
   private WallpaperParallaxEffect effect;
   private CoordinatorLayout Coordinator;
   private HashMap<String, Object> imap = new HashMap<>();
   private ThemeUtils themeForJson2;
- 
+
   private double ic = 1;
   private ArrayList<HashMap<String, Object>> tabs_listmap = new ArrayList<>();
   private ArrayList<HashMap<String, Object>> staticSymbiolPiare = new ArrayList<>();
   private final ArrayList<String> string = new ArrayList<>();
- 
+
   private LinearLayout multytab;
   private FrameLayout FrameLayout01;
   private LinearLayout newLayoutSymbolBar;
   private LinearLayout CustomToolbar;
   private ProgressBar progressbar1;
-  private RecyclerView dir;
+  private RecyclerView dir, rvmenueditor;
   private TextView titleauthor;
   private ImageView image, redo, undo, menupopnew, iconAuthor, codesnapimg;
   private LinearLayout FrameLayout02;
@@ -135,27 +137,27 @@ public class CodeEditorActivity extends BaseCompat {
   private LinearLayout barSymoble;
   private ImageView imageview1, imageloadereditor, avatargithubuser;
   private RecyclerView syspiar;
-  
+
   private final Intent htmlrus = new Intent();
   private SharedPreferences word, line, shp, qo, savecursor;
   private AlertDialog.Builder myDialog;
   private final Intent res = new Intent();
- 
+
   private AlertDialog.Builder di;
   private final Intent jsonview = new Intent();
   private final Intent getmd = new Intent();
   private Vibrator vb;
   private SharedPreferences getvb;
-  
+
   private SharedPreferences re;
   private SharedPreferences war;
   private SharedPreferences setfont;
   private SharedPreferences ru;
- 
+
   private SharedPreferences tabimageview;
- 
+
   private PowerMenu pvr;
-  
+
   private final Intent setPaszamine = new Intent(Intent.ACTION_GET_CONTENT);
   private SharedPreferences pss;
   private SharedPreferences sve;
@@ -164,15 +166,15 @@ public class CodeEditorActivity extends BaseCompat {
   private SharedPreferences mthemepost;
   private ImageView ghostIcon;
   private SharedPreferences shSizePx;
-  
+  private List<ChildIconEditorManager> aars = new ArrayList<>();
   private SharedPreferences t;
   private SharedPreferences thememanagersoft;
   private SharedPreferences sf;
   private GhostWebEditorSearch ghost_searchs;
-  
+
   private EditorViewModel modelEditor;
   private String path;
-  
+
   private IdeEditor editor;
   private VideoSurfaceView mvideo;
   private boolean isFileChangeDialogShowing = false;
@@ -214,6 +216,7 @@ public class CodeEditorActivity extends BaseCompat {
     barSymoble = findViewById(R.id.barSymoble);
     imageview1 = findViewById(R.id.imageview1);
     ghost_searchs = findViewById(R.id.editor_ser);
+    rvmenueditor = findViewById(R.id.rvmenueditor);
     ghost_searchs.hide();
     editor = findViewById(R.id.editor);
     syspiar = findViewById(R.id.syspiar);
@@ -251,6 +254,8 @@ public class CodeEditorActivity extends BaseCompat {
     ghostIcon = findViewById(R.id.icon_backgroundghost);
     var mRootView = getWindow().getDecorView();
     syspiar.setVisibility(View.GONE);
+    rvmenueditor.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+    rvmenueditor.setAdapter(new ChildAdapter(aars));
     var userview = new SecurePrefs(this);
     Glide.with(this)
         .load(userview.getAvatarUrl())
@@ -269,7 +274,6 @@ public class CodeEditorActivity extends BaseCompat {
                 int screenHeight = mRootView.getRootView().getHeight();
                 int keypadHeight = screenHeight - r.bottom;
 
-             
                 if (keypadHeight > screenHeight * 0.15) {
                   float minScale = 1.0f;
                   ghostIcon.animate().scaleX(minScale).scaleY(minScale).setDuration(1000).start();
@@ -435,7 +439,6 @@ public class CodeEditorActivity extends BaseCompat {
     editor.subscribeEvent(
         ContentChangeEvent.class,
         (event, subscribe) -> {
-          
           var iscode = new FactoryCodeError(editor, iconAuthor, tablayouteditor);
           int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
           if (selectedTabPosition >= 0 && selectedTabPosition < tabs_listmap.size()) {
@@ -615,7 +618,7 @@ public class CodeEditorActivity extends BaseCompat {
             .addItem(new PowerMenuItem("Code nave", false, R.drawable.setsavefileall))
             .setIsMaterial(true)
             .build();
-    
+
     pvr.setIconPadding(8);
     pvr.setIconSize(30);
     pvr.setAutoDismiss(true);
@@ -779,9 +782,15 @@ public class CodeEditorActivity extends BaseCompat {
           .reloadAllPlugins("/storage/emulated/0/GhostWebIDE/plugins/config.json");
     }
   }
- public String getcurrentFileType(){
-   return currentFileType;
- }
+
+  public List<ChildIconEditorManager> getChildIconEditorManager() {
+    return aars;
+  }
+
+  public String getcurrentFileType() {
+    return currentFileType;
+  }
+
   void setClosetab(int _position, ArrayList<HashMap<String, Object>> _data) {
     if (FileUtil.isExistFile(_data.get(_position).get("path").toString())) {
       _data.remove((_position));
