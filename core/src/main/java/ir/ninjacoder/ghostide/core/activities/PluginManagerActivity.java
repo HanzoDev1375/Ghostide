@@ -32,6 +32,7 @@ public class PluginManagerActivity extends BaseCompat {
     gson = new GsonBuilder().setPrettyPrinting().create(); // برای فرمت کردن
     loadPluginData();
     setupSearch();
+    setSupportActionBar(bind.toolbar);
     bind.fabmod.setIconResource(R.drawable.ic_add);
     bind.fabmod.setOnClickListener(
         it -> {

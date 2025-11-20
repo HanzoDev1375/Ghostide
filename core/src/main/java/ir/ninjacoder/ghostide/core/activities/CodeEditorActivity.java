@@ -376,7 +376,19 @@ public class CodeEditorActivity extends BaseCompat {
     listChild.add(child);
   }
 
+  public void addChildManagerEditor(ChildIconEditorManager model) {
+    aars.add(model);
+  }
+
   String getTabPathCode() {
+    int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
+    if (selectedTabPosition >= 0 && selectedTabPosition < tabs_listmap.size()) {
+      return tabs_listmap.get(selectedTabPosition).get("path").toString();
+    }
+    return "";
+  }
+
+  public String getPathBytab() {
     int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
     if (selectedTabPosition >= 0 && selectedTabPosition < tabs_listmap.size()) {
       return tabs_listmap.get(selectedTabPosition).get("path").toString();
@@ -518,6 +530,7 @@ public class CodeEditorActivity extends BaseCompat {
         titleauthor, KeySet.syombolbartextcolor, Color.parseColor("#FFFFA0FB"), this, imap);
     themeForJson2.addImageColor(undo, this, KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
     themeForJson2.addImageColor(redo, this, KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
+    themeForJson2.addImageColor(codesnapimg,this,KeySet.imagecolor,imap,Color.parseColor("#ff94e7ff"));
     themeForJson2.addImageColor(
         image, this, KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
 
@@ -711,6 +724,20 @@ public class CodeEditorActivity extends BaseCompat {
             }
           }
         });
+  }
+
+  public void forceRefreshRecycler() {
+    try {
+      if (rvmenueditor != null) {
+        rvmenueditor.post(
+            () -> {
+              rvmenueditor.getAdapter().notifyDataSetChanged();
+              rvmenueditor.invalidate();
+              rvmenueditor.requestLayout();
+            });
+      }
+    } catch (Exception e) {
+    }
   }
 
   void saveFileByIo() {
@@ -957,6 +984,7 @@ public class CodeEditorActivity extends BaseCompat {
                   if (!fileExists) {
                     showFileNotFoundDialog(pos, filePath);
                   } else {
+                    forceRefreshRecycler();
                     updateFileTypeForCurrentTab();
                     setCodeEditorFileReader(filePath);
                   }

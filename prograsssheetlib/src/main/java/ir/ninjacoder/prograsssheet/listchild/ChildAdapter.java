@@ -2,8 +2,10 @@ package ir.ninjacoder.prograsssheet.listchild;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import ir.ninjacoder.prograsssheet.R;
 import android.widget.ImageView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
@@ -13,23 +15,17 @@ import java.util.List;
 public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.Holder> {
 
   List<ChildIconEditorManager> model = new ArrayList<>();
-  protected ImageView icon;
 
   public ChildAdapter(List<ChildIconEditorManager> model) {
     this.model = model;
   }
 
   class Holder extends RecyclerView.ViewHolder {
+    ImageView icon;
 
     public Holder(View v) {
       super(v);
-      icon = new ImageView(v.getContext());
-      icon.setPadding(9, 9, 9, 9);
-      icon.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-      var param =
-          new ViewGroup.LayoutParams(
-              ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-      icon.setLayoutParams(param);
+      icon = v.findViewById(R.id.icon);
     }
 
     void bind(ChildIconEditorManager ic) {
@@ -47,8 +43,10 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.Holder> {
   }
 
   @Override
-  public Holder onCreateViewHolder(ViewGroup arg0, int arg1) {
-    return new Holder(icon);
+  public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
+    View view =
+        LayoutInflater.from(parent.getContext()).inflate(R.layout.item_child, parent, false);
+    return new Holder(view);
   }
 
   @Override

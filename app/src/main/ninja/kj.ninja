@@ -1,4 +1,5 @@
 import Android from {assets,res,raw}
+import Psi from {.*}
 class kj{
  pub main(Json json){
   json.run {
@@ -14,6 +15,26 @@ class kj{
     }
   
    }
+ 
+ }
+ class jj{
+ pub methodHelper(PsiJava jj){
+  record jj.getOnMethodChangeCallBack{
+    it.asStaticClass = true
+  
+  }
+ 
+ }
+ pub main(PsiJava j){
+ let i = j.javafile 
+ let listjavafile = i.getJavaFileInPath()
+ listjavafile.asloPath{ is->
+  is.visit.onClass=j.getClass.name="Main"
+  is.visit.onMethod=j.getClass.nameClass("Main").getMethodName("main",StringArray::run)
+  is.visit.onPara::this(j.getNameParam.is.visitOnMethod())
+ }
+ 
+ }
  
  }
 
