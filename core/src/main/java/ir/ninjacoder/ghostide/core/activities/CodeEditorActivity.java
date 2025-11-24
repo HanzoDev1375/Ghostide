@@ -395,6 +395,9 @@ public class CodeEditorActivity extends BaseCompat {
     }
     return "";
   }
+  public TabLayout getEditorTabLayout(){
+    return tablayouteditor;
+  }
 
   private void initializeLogic() {
     proanjctor.setVisibility(View.GONE);

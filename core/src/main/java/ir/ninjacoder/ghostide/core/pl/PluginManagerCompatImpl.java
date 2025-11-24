@@ -1,6 +1,7 @@
 package ir.ninjacoder.ghostide.core.pl;
 
 import io.github.rosemoe.sora.widget.CodeEditor;
+import ir.ninjacoder.ghostide.core.activities.BaseCompat;
 import ir.ninjacoder.ghostide.core.activities.CodeEditorActivity;
 import ir.ninjacoder.ghostide.core.activities.FileManagerActivity;
 
@@ -27,7 +28,9 @@ public class PluginManagerCompatImpl implements PluginManagerCompat {
 
   @Override
   public String langModel() {
-
     return null;
   }
+
+  @Override
+  public void getBaseCompat(BaseCompat activity) {}
 }

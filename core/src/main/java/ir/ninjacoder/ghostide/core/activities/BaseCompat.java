@@ -43,6 +43,7 @@ import com.google.android.material.shape.CornerFamily;
 import com.google.android.material.shape.MaterialShapeDrawable;
 import com.google.android.material.shape.ShapeAppearanceModel;
 
+import ir.ninjacoder.ghostide.core.pl.PluginLoaderImpl;
 import java.io.File;
 
 import ir.ninjacoder.ghostide.core.GhostIdeAppLoader;
@@ -95,11 +96,7 @@ public class BaseCompat extends AppCompatActivity {
       Log.e("THEME", err.getLocalizedMessage());
     }
     setBackGroundIsMobile();
-    // bad work to Android 14& 15
-    // EdgeToEdgeUtils.applyEdgeToEdge(
-    // this,
-    // EdgeToEdgeUtils.DEFAULT_STATUS_BAR_STYLE,
-    // EdgeToEdgeUtils.DEFAULT_NAVIGATION_BAR_STYLE);
+    new PluginLoaderImpl().loadBaseCompat(this);
   }
 
   private BaseCompat initErrorDialogpackageAPP() {

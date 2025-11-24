@@ -84,6 +84,7 @@ lint/tmp/
  
 # AndroidIDE
 .androidide
+.acside
 /.idea/AndroidProjectSystem.xml
 /.idea/copilot.data.migration.agent.xml
 /.idea/copilot.data.migration.ask.xml
