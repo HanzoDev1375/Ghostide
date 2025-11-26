@@ -1132,7 +1132,7 @@ public class CodeEditorActivity extends BaseCompat {
   }
 
   void setDistreeView() {
-    List<String> pospath = spiltIntoBreadcrumbItems(shp.getString("pos_path", ""));
+    List<String> pospath = spiltIntoBreadcrumbItems(getPathBytab());
 
     var adps =
         new ToolbarListFileAdapter(
