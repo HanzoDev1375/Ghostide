@@ -25,6 +25,7 @@ package io.github.rosemoe.sora.widget;
 
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import com.ninjacoder.jgit.particle.custom.CustomEffect;
 import static io.github.rosemoe.sora.text.TextUtils.isEmoji;
 import static io.github.rosemoe.sora.util.Numbers.stringSize;
 
@@ -465,7 +466,7 @@ public class CodeEditor extends View
    *
    * @param colorRes Color resource id
    */
-  public void setHintColorResource( int colorRes) {
+  public void setHintColorResource(int colorRes) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
       setHintColor(getContext().getColor(colorRes));
     } else {
@@ -662,6 +663,38 @@ public class CodeEditor extends View
 
     if (mConnection.mComposingLine != -1) {
       restartInput();
+    }
+  }
+
+  /** ثبت یک افکت سفارشی جدید */
+  public boolean registerCustomEffect(CustomEffect effect) {
+    if (mPowerModeEffectManager != null) {
+      return mPowerModeEffectManager.registerCustomEffect(effect);
+    }
+    return false;
+  }
+
+  /** حذف یک افکت سفارشی */
+  public boolean unregisterCustomEffect(String effectName) {
+    if (mPowerModeEffectManager != null) {
+      return mPowerModeEffectManager.unregisterCustomEffect(effectName);
+    }
+    return false;
+  }
+
+  /** دریافت لیست افکت‌های سفارشی */
+  public List<CustomEffect> getCustomEffects() {
+    if (mPowerModeEffectManager != null) {
+      return mPowerModeEffectManager.getCustomEffects();
+    }
+    return new ArrayList<>();
+  }
+
+  /** فعال کردن یک افکت سفارشی در موقعیت مشخص */
+  public void spawnCustomEffect(String effectName, float x, float y) {
+    if (mPowerModeEffectManager != null) {
+      mPowerModeEffectManager.spawnCustomEffect(effectName, x, y);
+      invalidate();
     }
   }
 

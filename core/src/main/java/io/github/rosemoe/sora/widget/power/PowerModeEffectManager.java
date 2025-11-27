@@ -25,7 +25,7 @@ import com.ninjacoder.jgit.particle.SparkleParticle;
 import com.ninjacoder.jgit.particle.SpiralParticle;
 import com.ninjacoder.jgit.particle.StarParticle;
 import com.ninjacoder.jgit.particle.SvgParticle;
-
+import com.ninjacoder.jgit.particle.custom.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -55,7 +55,8 @@ public class PowerModeEffectManager {
     GALAXY(getString(R.string.galaxy)),
     TYPING(getString(R.string.typing)),
     LIGHTNING_SVG("Lightning SVG"),
-    GHOST("ghost");
+    GHOST("ghost"),
+    CUSTOM("Custom");
 
     private String displayName;
 
@@ -109,6 +110,7 @@ public class PowerModeEffectManager {
   private Bitmap sparkleBitmap;
   private Bitmap starBitmap;
   private SVG ghostSvg;
+  private CustomEffectManager customEffectManager;
 
   public PowerModeEffectManager(CodeEditor editor) {
     this.editor = editor;
@@ -122,6 +124,7 @@ public class PowerModeEffectManager {
     rainbowColors = new int[] {Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE, Color.MAGENTA};
     sparkleBitmap = createSparkleBitmap(20);
     starBitmap = createStarBitmap(15);
+    customEffectManager = new CustomEffectManager();
     String svgcode =
         """
     <!-- Created with Ghost ide -->
@@ -155,7 +158,6 @@ public class PowerModeEffectManager {
     }
   }
 
-  // custom svg
   private void spawnGhostEffectCustom(float x, float y, String svgcode, boolean hascolor) {
     if (ghostSvg == null) return;
 
@@ -183,7 +185,6 @@ public class PowerModeEffectManager {
       int life = (int) (40 + random.nextInt(30) * effectIntensity);
       float rotationSpeed = (random.nextFloat() - 0.5f) * 8 * effectIntensity;
 
-      // انتخاب رنگ رندوم از آرایه
       int ghostColor = ghostColors[random.nextInt(ghostColors.length)];
       try {
         SVG msvg = SVG.getFromString(svgcode);
@@ -208,17 +209,15 @@ public class PowerModeEffectManager {
 
   private void spawnGhostEffect(float x, float y) {
     if (ghostSvg == null) return;
-
-    // آرایه‌ای از رنگ‌های زیبا
     int[] ghostColors = {
-      Color.argb(220, 255, 100, 100), // قرمز
-      Color.argb(220, 100, 255, 100), // سبز
-      Color.argb(220, 100, 100, 255), // آبی
-      Color.argb(220, 255, 255, 100), // زرد
-      Color.argb(220, 255, 100, 255), // بنفش
-      Color.argb(220, 100, 255, 255), // فیروزه‌ای
-      Color.argb(220, 255, 150, 50), // نارنجی
-      Color.argb(220, 200, 100, 255) // ارغوانی
+      Color.argb(220, 255, 100, 100),
+      Color.argb(220, 100, 255, 100),
+      Color.argb(220, 100, 100, 255),
+      Color.argb(220, 255, 255, 100),
+      Color.argb(220, 255, 100, 255),
+      Color.argb(220, 100, 255, 255),
+      Color.argb(220, 255, 150, 50),
+      Color.argb(220, 200, 100, 255)
     };
 
     int count = (int) (10 * effectIntensity);
@@ -234,7 +233,6 @@ public class PowerModeEffectManager {
       int life = (int) (40 + random.nextInt(30) * effectIntensity);
       float rotationSpeed = (random.nextFloat() - 0.5f) * 8 * effectIntensity;
 
-      // انتخاب رنگ رندوم از آرایه
       int ghostColor = ghostColors[random.nextInt(ghostColors.length)];
 
       particles.add(
@@ -246,32 +244,27 @@ public class PowerModeEffectManager {
   private void spawnLightningSvgEffect(float x, float y) {
     if (ghostSvg == null) return;
 
-    // رنگ‌های رعد و برق
     int[] lightningColors = {
-      Color.argb(220, 70, 130, 255), // آبی
-      Color.argb(220, 100, 160, 255), // آبی روشن
-      Color.argb(220, 140, 190, 255) // آبی خیلی روشن
+      Color.argb(220, 70, 130, 255), Color.argb(220, 100, 160, 255), Color.argb(220, 140, 190, 255)
     };
 
     int[] glowColors = {
-      Color.argb(150, 50, 100, 255), // درخشش آبی
-      Color.argb(150, 80, 150, 255), // درخشش آبی روشن
-      Color.argb(150, 120, 200, 255) // درخشش آبی خیلی روشن
+      Color.argb(150, 50, 100, 255), Color.argb(150, 80, 150, 255), Color.argb(150, 120, 200, 255)
     };
 
     int count = (int) (8 * effectIntensity);
 
     for (int i = 0; i < count; i++) {
-      // جهت‌های مختلف: بالا، پایین، چپ، راست
+
       float direction = random.nextFloat() * (float) Math.PI * 2;
       boolean isUpDown = random.nextBoolean();
 
       float speed;
       if (isUpDown) {
-        // بالا یا پایین
+
         speed = random.nextFloat() * 12 * effectIntensity + 6;
       } else {
-        // چپ یا راست
+
         speed = random.nextFloat() * 8 * effectIntensity + 4;
       }
 
@@ -353,6 +346,10 @@ public class PowerModeEffectManager {
       case LIGHTNING_SVG:
         spawnLightningSvgEffect(x, y);
         break;
+      case CUSTOM:
+        if (customEffectManager != null)
+          customEffectManager.spawnEffect("Fireworks", x, y, effectIntensity);
+        break;
       case NONE:
         clearEffects();
         break;
@@ -365,7 +362,7 @@ public class PowerModeEffectManager {
     long currentTime = System.currentTimeMillis();
     float deltaTime = (currentTime - lastUpdateTime) / 1000.0f;
     lastUpdateTime = currentTime;
-
+    customEffectManager.drawEffects(canvas);
     Iterator<Particle> iterator = particles.iterator();
     while (iterator.hasNext()) {
       Particle p = iterator.next();
@@ -812,5 +809,21 @@ public class PowerModeEffectManager {
 
     canvas.drawPath(path, paint);
     return bitmap;
+  }
+
+  public boolean registerCustomEffect(CustomEffect effect) {
+    return customEffectManager.registerEffect(effect);
+  }
+
+  public boolean unregisterCustomEffect(String effectName) {
+    return customEffectManager.unregisterEffect(effectName);
+  }
+
+  public List<CustomEffect> getCustomEffects() {
+    return customEffectManager.getAllEffects();
+  }
+
+  public void spawnCustomEffect(String effectName, float x, float y) {
+    customEffectManager.spawnEffect(effectName, x, y, effectIntensity);
   }
 }
