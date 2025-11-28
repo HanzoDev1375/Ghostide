@@ -72,7 +72,7 @@ public class SassForAndroid {
         Swc4jTranspileOptions options =
             new Swc4jTranspileOptions()
                 .setSpecifier(specifier)
-                .setTransformJsx(true)
+               // .setTransformJsx(true)
                 .setSourceMap(Swc4jSourceMapOption.None)
                 .setMediaType(Swc4jMediaType.Jsx)
                 .setCaptureAst(true);
@@ -86,7 +86,7 @@ public class SassForAndroid {
         Swc4jTranspileOptions options =
             new Swc4jTranspileOptions()
                 .setSpecifier(specifier)
-                .setTransformJsx(true)
+                //.setTransformJsx(true)
                 .setSourceMap(Swc4jSourceMapOption.None)
                 .setMediaType(Swc4jMediaType.Tsx)
                 .setCaptureAst(true);
@@ -99,7 +99,7 @@ public class SassForAndroid {
         Swc4jTranspileOptions options =
             new Swc4jTranspileOptions()
                 .setSpecifier(specifier)
-                .setTransformJsx(true)
+                //.setTransformJsx(true)
                 .setSourceMap(Swc4jSourceMapOption.None)
                 .setMediaType(Swc4jMediaType.TypeScript)
                 .setCaptureAst(true);
@@ -112,7 +112,7 @@ public class SassForAndroid {
         Swc4jTranspileOptions options =
             new Swc4jTranspileOptions()
                 .setSpecifier(specifier)
-                .setTransformJsx(true)
+               // .setTransformJsx(true)
                 .setSourceMap(Swc4jSourceMapOption.None)
                 .setMediaType(Swc4jMediaType.JavaScript)
                 .setCaptureAst(true);

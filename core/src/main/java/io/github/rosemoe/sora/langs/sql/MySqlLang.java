@@ -15,7 +15,7 @@ public class MySqlLang implements EditorLanguage {
       String[] options =
           new String[] {
             "-f", "ANSI",
-            "-t", "4",
+            "-t", "2",
             "--keywordSpelling", "UPPER",
             "--functionSpelling", "CAMEL",
             "--objectSpelling", "LOWER",
