@@ -94,18 +94,18 @@ dependencies {
     implementation("com.github.TimScriptov:apksigner:1.2.0")
     implementation("org.jsoup:jsoup:1.21.1")
     implementation("com.github.douglasjunior:android-simple-tooltip:1.1.0")
-    implementation("io.getstream:photoview:1.0.1")
+    implementation("io.getstream:photoview:1.0.3")
     implementation("androidx.palette:palette:1.0.0")
-    implementation("de.larsgrefer.sass:sass-embedded-android:4.1.0")
-    implementation("io.reactivex.rxjava3:rxjava:3.1.8")
+    implementation("de.larsgrefer.sass:sass-embedded-android:4.2.0")
+    implementation("io.reactivex.rxjava3:rxjava:3.1.10")
     api("androidx.core:core:1.6.0")
 						
     api("androidx.preference:preference:1.2.1")
     implementation("com.github.javaparser:javaparser-core:3.27.0")
     implementation 'com.github.javaparser:javaparser-symbol-solver-core:3.27.0'
     implementation("com.github.AppIntro:AppIntro:6.3.1")
-    implementation("com.airbnb.android:lottie:6.4.1")
-    implementation("com.github.jsqlparser:jsqlparser:5.0")
+    implementation("com.airbnb.android:lottie:6.7.1")
+    implementation("com.github.jsqlparser:jsqlparser:5.3")
     implementation("com.helger:ph-css:7.0.4")
     // https://mvnrepository.com/artifact/com.diogonunes/JColor
     implementation("com.diogonunes:JColor:5.5.1")
@@ -132,7 +132,7 @@ dependencies {
         exclude group: "org.jetbrains", module: "annotations-java5"
 
     }
-    implementation("com.caoccao.javet:swc4j:1.6.0") // Must Have
+    implementation("com.caoccao.javet:swc4j:2.0.0") // Must Have
     runtimeOnly 'androidx.graphics:graphics-shapes:1.1.0-alpha01'
     implementation('com.github.HanzoDev1375:Android-code-snap:1.1.2') {
         exclude group: "org.jetbrains", module: "annotations"

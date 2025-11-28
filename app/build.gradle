@@ -84,6 +84,6 @@ android {
 
 dependencies {
     implementation project(path: ":core")
-    arm32Implementation("com.caoccao.javet:swc4j-android-arm:1.6.0")
-    arm64Implementation("com.caoccao.javet:swc4j-android-arm64:1.6.0")
+    arm32Implementation("com.caoccao.javet:swc4j-android-arm:2.0.0")
+    arm64Implementation("com.caoccao.javet:swc4j-android-arm64:2.0.0")
 }
