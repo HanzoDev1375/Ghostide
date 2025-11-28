@@ -10,11 +10,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import androidx.annotation.AttrRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import ir.ninjacoder.ghostide.core.widget.component.CompleteView;
 import ir.ninjacoder.ghostide.core.widget.component.ErrorView;
 import ir.ninjacoder.ghostide.core.widget.component.GestureView;
@@ -32,7 +30,6 @@ import xyz.doikki.videoplayer.util.PlayerUtils;
  * 你自己的控制器
  * Created by @Enc_Thor & @Enc_Paradox_Sketchware.
  */
-
 public class StandardVideoController extends GestureVideoController implements View.OnClickListener {
 
     protected ImageView mLockButton;
@@ -128,11 +125,9 @@ public class StandardVideoController extends GestureVideoController implements V
     @Override
     protected void onPlayerStateChanged(int playerState) {
         super.onPlayerStateChanged(playerState);
-        switch (playerState) {
+        switch(playerState) {
             case VideoView.PLAYER_NORMAL:
-                setLayoutParams(new FrameLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
+                setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 mLockButton.setVisibility(GONE);
                 break;
             case VideoView.PLAYER_FULL_SCREEN:
@@ -143,7 +138,6 @@ public class StandardVideoController extends GestureVideoController implements V
                 }
                 break;
         }
-
         if (mActivity != null && hasCutout()) {
             int orientation = mActivity.getRequestedOrientation();
             int dp24 = PlayerUtils.dp2px(getContext(), 24);
@@ -159,13 +153,12 @@ public class StandardVideoController extends GestureVideoController implements V
                 layoutParams.setMargins(dp24, 0, dp24, 0);
             }
         }
-
     }
 
     @Override
     protected void onPlayStateChanged(int playState) {
         super.onPlayStateChanged(playState);
-        switch (playState) {
+        switch(playState) {
             //调用release方法会回到此状态
             case VideoView.STATE_IDLE:
                 mLockButton.setSelected(false);

@@ -62,17 +62,13 @@ public class IdeEditor extends CodeEditor implements IEditor {
 
   private static String A = "Made by ninja coder";
   protected CallBackErrorManager call;
-  private String accumulatedText = "";
+ 
   private boolean isDisableSoftKbdIfHardKbdAvailable;
   private boolean isDisableSoftKbdOnHardKbd;
   private boolean isSoftKbdEnabled;
   private CommentList listitem;
-  private ToolTipHelper toolTipHelper;
-  private SharedPreferences saveTextSize;
 
-  private boolean hasType = true;
-  private SymbolInputView mSymbolInputView;
-  boolean changetext = false;
+  private SharedPreferences saveTextSize;
 
   public IdeEditor(Context context) {
     super(context);
@@ -135,9 +131,7 @@ public class IdeEditor extends CodeEditor implements IEditor {
     if (getEditorLanguage() instanceof JavaLanguage) {
       FieldUsageChecker.showWarningIfCursorOnField(this);
     }
-    if (getEditorLanguage() instanceof HTMLLanguage) {
-      showColor(event);
-    }
+   
 
     if (getEditorLanguage() instanceof PythonLang) {
       if (pythonAnalysisThread != null && pythonAnalysisThread.isAlive()) {
@@ -196,104 +190,7 @@ public class IdeEditor extends CodeEditor implements IEditor {
     }
   }
 
-  void showColor(SelectionChangeEvent ev) {
-    ArrayList<ColorHelper> colorList = new ArrayList<>();
-    var lexer = new HTMLLexer(CharStreams.fromString(getTextAsString()));
-    Token token;
-    while ((token = lexer.nextToken()) != null) {
-      if (token.getType() == HTMLLexer.EOF) {
-        break;
-      }
-      switch (token.getType()) {
-        case HTMLLexer.CHATREF:
-          int myline = token.getLine() - 1;
-          int mycol = token.getCharPositionInLine();
-          String colorHex = token.getText();
-          colorHex = expandShortHex(colorHex);
-          colorList.add(new ColorHelper(myline, mycol, colorHex));
-          break;
-      }
-    }
-    int cursorLine = getCursor().getLeftLine();
-    int cursorColumn = getCursor().getLeftColumn();
-
-    for (ColorHelper helper : colorList) {
-      if (helper.getLine() == cursorLine) {
-        String lineText = getText().getLineString(cursorLine);
-        String colorHex = helper.getColorHex();
-
-        int fieldStart = helper.getCol();
-        int fieldEnd = fieldStart + colorHex.length();
-        if (cursorColumn >= fieldStart && cursorColumn <= fieldEnd) {
-          bindCustomView(helper, ev);
-          return;
-        }
-      }
-    }
-  }
-
-  private String expandShortHex(String shortHex) {
-    if (shortHex.length() == 4 && shortHex.startsWith("#")) {
-      // #abc -> #aabbcc
-      return "#"
-          + shortHex.charAt(1)
-          + shortHex.charAt(1)
-          + shortHex.charAt(2)
-          + shortHex.charAt(2)
-          + shortHex.charAt(3)
-          + shortHex.charAt(3);
-    }
-    return shortHex;
-  }
-
-  boolean hasCodeType = true;
-
-  void bindCustomView(ColorHelper color, SelectionChangeEvent ev) {
-
-    subscribeEvent(
-        ContentChangeEvent.class,
-        (event, sun) -> {
-          if (event.getAction() == ContentChangeEvent.ACTION_SET_NEW_TEXT
-              || event.getAction() == ContentChangeEvent.ACTION_DELETE
-              || event.getAction() == ContentChangeEvent.ACTION_INSERT) {
-            hasCodeType = true;
-          } else hasCodeType = false;
-        });
-    var bind = LayoutTooltipColorBinding.inflate(LayoutInflater.from(getContext()));
-    bind.colors.setOnColorChangedListener(
-        (it22, str) -> {
-          Log.e("Code", str);
-          // Handle color change
-        });
-    bind.colors.setInitialColor(color.getColorHex());
-    bind.colors.setCurrentColor(color.getColorHex());
-
-    if (hasCodeType) FieldUsageChecker.showPowerMeniAtCutsorByCustomView(this, bind.getRoot());
-  }
-
-  class ColorHelper {
-    final int line;
-    final int col;
-    final String colorHex;
-
-    public ColorHelper(int line, int col, String colorHex) {
-      this.line = line;
-      this.col = col;
-      this.colorHex = colorHex;
-    }
-
-    public int getLine() {
-      return this.line;
-    }
-
-    public int getCol() {
-      return this.col;
-    }
-
-    public String getColorHex() {
-      return this.colorHex;
-    }
-  }
+  
 
   void handleDoubleClick(DoubleClickEvent db) {
     try {

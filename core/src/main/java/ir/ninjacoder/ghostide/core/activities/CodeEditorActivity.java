@@ -387,7 +387,9 @@ public class CodeEditorActivity extends BaseCompat {
     }
     return "";
   }
-
+  public IdeEditor getEditor(){
+			return editor;
+	}
   public String getPathBytab() {
     int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
     if (selectedTabPosition >= 0 && selectedTabPosition < tabs_listmap.size()) {

@@ -347,8 +347,14 @@ public class PowerModeEffectManager {
         spawnLightningSvgEffect(x, y);
         break;
       case CUSTOM:
-        if (customEffectManager != null)
-          customEffectManager.spawnEffect("Fireworks", x, y, effectIntensity);
+        if (customEffectManager != null) {
+          List<CustomEffect> effects = customEffectManager.getAllEffects  ();
+          if (!effects.isEmpty()) {
+            for (CustomEffect effect : effects) {
+              customEffectManager.spawnEffect(effect.getName(), x, y, effectIntensity);
+            }
+          }
+        }
         break;
       case NONE:
         clearEffects();

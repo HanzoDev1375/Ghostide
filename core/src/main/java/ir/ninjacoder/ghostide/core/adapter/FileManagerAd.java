@@ -52,11 +52,8 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
   protected Context context;
   protected onClick click;
   protected ViewType viewType = ViewType.ROW;
-  protected HashMap<String, Object> name = new HashMap<>();
   private List<HashMap<String, Object>> files = new ArrayList<>();
-  protected GridLayoutManager g;
   private SharedPreferences prf;
-  private boolean isSelectionMode = false;
   private List<Child> listChild = new ArrayList<>();
 
   public FileManagerAd(
