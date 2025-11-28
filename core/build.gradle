@@ -105,11 +105,7 @@ dependencies {
     implementation 'com.github.javaparser:javaparser-symbol-solver-core:3.27.0'
     implementation("com.github.AppIntro:AppIntro:6.3.1")
     implementation("com.airbnb.android:lottie:6.7.1")
-    implementation("com.github.jsqlparser:jsqlparser:5.3")
     implementation("com.helger:ph-css:7.0.4")
-    // https://mvnrepository.com/artifact/com.diogonunes/JColor
-    implementation("com.diogonunes:JColor:5.5.1")
-    // https://mvnrepository.com/artifact/com.google.guava/guava
     implementation("io.github.skylot:jadx-core:$jadxVersion")
     implementation("io.github.skylot:jadx-dex-input:1.5.2")
     implementation 'androidx.security:security-crypto:1.1.0-alpha03'

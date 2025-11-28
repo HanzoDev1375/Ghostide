@@ -10,22 +10,7 @@ public class MySqlLang implements EditorLanguage {
 
   @Override
   public CharSequence format(CharSequence text) {
-    try {
-
-      String[] options =
-          new String[] {
-            "-f", "ANSI",
-            "-t", "2",
-            "--keywordSpelling", "UPPER",
-            "--functionSpelling", "CAMEL",
-            "--objectSpelling", "LOWER",
-            "--separation", "BEFORE",
-            "--squareBracketQuotation", "AUTO"
-          };
-      return JSQLFormatter.format(text.toString(),options);
-    } catch (Exception err) {
-
-    }
+    
     return text;
   }
 
