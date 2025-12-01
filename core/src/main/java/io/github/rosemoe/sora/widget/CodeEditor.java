@@ -3520,11 +3520,12 @@ public class CodeEditor extends View
           }
 
           drawColor(canvas, mColors.getColor(blockColor), mRect);
-
+          Paint paint = new Paint();
           if (curr == cursorIdx) {
-            int color = 0x33FFFF00;
-            Paint paint = new Paint();
+            int color = mColors.getColor(EditorColorScheme.BLOCK_LINE_CURRENT);
             paint.setColor(color);
+            paint.setFakeBoldText(true);
+            float radius = 8f;
             ContentLine startLine = mText.getLine(block.startLine);
             float startLeft =
                 measureText(startLine, 0, block.startColumn, block.startLine) + offsetX;
@@ -3534,7 +3535,7 @@ public class CodeEditor extends View
             mRect.bottom = getRowBottom(block.startLine) - getOffsetY();
             mRect.left = startLeft;
             mRect.right = startRight;
-            canvas.drawRect(mRect, paint);
+            canvas.drawRoundRect(mRect, radius, radius, paint);
             ContentLine endLine = mText.getLine(block.endLine);
             float endLeft = measureText(endLine, 0, block.endColumn, block.endLine) + offsetX;
             float endRight = measureText(endLine, 0, block.endColumn + 1, block.endLine) + offsetX;
@@ -3542,10 +3543,13 @@ public class CodeEditor extends View
             mRect.bottom = getRowBottom(block.endLine) - getOffsetY();
             mRect.left = endLeft;
             mRect.right = endRight;
-            canvas.drawRect(mRect, paint);
+            canvas.drawRoundRect(mRect, radius, radius, paint);
+          } else {
+            paint.setFakeBoldText(false);
           }
 
         } catch (IndexOutOfBoundsException e) {
+          System.out.println(e.toString());
         }
         mark = true;
       } else if (mark) {

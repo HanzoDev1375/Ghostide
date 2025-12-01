@@ -3368,6 +3368,11 @@ BOOL_LITERAL
 STRING
    : '"' ~ [<"]* '"'
    | '\'' ~ [<']* '\''
+   | '`' ~ [<`]* '`'
+   ;
+
+JSREGEX
+   : '/' .*? '/'
    ;
 
 NULL_LITERAL
@@ -3618,10 +3623,9 @@ fragment LetterOrDigit
    ;
 
 fragment Letter
-   : [a-zA-Z$_\-] 
-   | ~ [\u0000-\u007F\uD800-\uDBFF] 
-   | [\uD800-\uDBFF] [\uDC00-\uDFFF] 
-   
+   : [a-zA-Z$_\-]
+   | ~ [\u0000-\u007F\uD800-\uDBFF]
+   | [\uD800-\uDBFF] [\uDC00-\uDFFF]
    ;
 /*  
 * <h1> hello </h1>
