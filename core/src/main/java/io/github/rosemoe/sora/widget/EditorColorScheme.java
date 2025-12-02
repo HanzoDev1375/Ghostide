@@ -91,6 +91,7 @@ public class EditorColorScheme {
   public static final int LINE_NUMBER_PANEL = 16;
   public static final int BLOCK_LINE_CURRENT = 15;
   public static final int BLOCK_LINE = 14;
+  public static final int BLOCK_LINE_SELECTOR = 8028;
   public static final int SCROLL_BAR_TRACK = 13;
   public static final int SCROLL_BAR_THUMB_PRESSED = 12;
   public static final int SCROLL_BAR_THUMB = 11;
@@ -521,6 +522,9 @@ public class EditorColorScheme {
         break;
       case PROBLEM_WARNING:
         color = 0xfffff100;
+        break;
+      case BLOCK_LINE_SELECTOR:
+        color = 0x643A93FF;
         break;
       case PROBLEM_TYPO:
         color = 0xffffffff;

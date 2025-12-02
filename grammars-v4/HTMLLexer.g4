@@ -3106,8 +3106,6 @@ CSSKEYWORD
    | 'writing-mode'
    | 'z-index'
    | 'solid'
-   | '@import url(' //from css url 
-   
    ;
 
 ABSTRACT
@@ -3360,15 +3358,19 @@ HEX_FLOAT_LITERAL
    : '0' [xX] (HexDigits '.'? | HexDigits? '.' HexDigits) [pP] [+-]? Digits [fFdD]?
    ;
 
+JSBACKTIK
+   : '`'
+   ;
+
 BOOL_LITERAL
    : 'true'
    | 'false'
    ;
 
 STRING
-   : '"' ~ [<"]* '"'
-   | '\'' ~ [<']* '\''
-   | '`' ~ [<`]* '`'
+   : '"' .*? '"'
+   | '\'' .*? '\''
+   | '`' .*? '`'
    ;
 
 JSREGEX

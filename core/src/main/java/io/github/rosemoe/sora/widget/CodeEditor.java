@@ -508,24 +508,78 @@ public class CodeEditor extends View
   }
 
   public void drawInlay(Canvas canvas, Inlay inlay) {
+    if (inlay == null || inlay.text == null || inlay.text.isEmpty()) {
+      return;
+    }
 
     float[] pos = mLayout.getCharLayoutOffset(inlay.line, inlay.column);
-    float x = pos[1] + measureTextRegionOffset() - getOffsetX();
-    float y = pos[0] - getOffsetY() + getRowBaseline(0);
+    if (pos == null) return;
+
+    float charWidth = 0;
+    if (inlay.column > 0) {
+      ContentLine lineContent = mText.getLine(inlay.line);
+      if (lineContent != null && lineContent.length() > 0) {
+        int prevCol = Math.min(inlay.column - 1, lineContent.length() - 1);
+        charWidth = measureText(lineContent, prevCol, 1, inlay.line);
+      }
+    }
+
+    float baseX = pos[1] + measureTextRegionOffset() - getOffsetX() + charWidth + getDpUnit() * 4;
+    float baseY = pos[0] - getOffsetY() + getRowBaseline(0);
 
     canvas.save();
 
-    drawTextRightToLeft(
-        canvas,
-        mText.getLine(inlay.line),
-        0,
-        inlay.text.length(),
-        0,
-        inlay.text.length(),
-        x,
-        y,
-        inlay.line,
-        inlay.color);
+    Paint.Style oldStyle = mPaintGraph.getStyle();
+    float oldTextSize = mPaintGraph.getTextSize();
+    Typeface oldTypeface = mPaintGraph.getTypeface();
+    int oldColor = mPaintGraph.getColor();
+    Paint.Align oldAlign = mPaintGraph.getTextAlign();
+
+    mPaintGraph.setTextSize(mPaint.getTextSize() * 0.9f);
+    mPaintGraph.setTypeface(getTypefaceText());
+
+    float textWidth = mPaintGraph.measureText(inlay.text);
+    float textHeight = mPaintGraph.getTextSize();
+
+    float paddingHorizontal = getDpUnit() * 6;
+    float paddingVertical = getDpUnit() * 2;
+
+    float bgWidth = textWidth + (paddingHorizontal * 2);
+    float bgHeight = textHeight + (paddingVertical * 2);
+
+    float bgLeft = baseX - bgWidth - getDpUnit() * 2;
+    float bgTop = baseY - textHeight - paddingVertical + mPaintGraph.getFontMetrics().top;
+    float bgRight = bgLeft + bgWidth;
+    float bgBottom = bgTop + bgHeight;
+
+    int backgroundColor = 0xFF808080;
+
+    mPaintGraph.setStyle(Paint.Style.FILL);
+    mPaintGraph.setColor(backgroundColor);
+    float cornerRadius = getDpUnit() * 4;
+    canvas.drawRoundRect(bgLeft, bgTop, bgRight, bgBottom, cornerRadius, cornerRadius, mPaintGraph);
+
+    mPaintGraph.setStyle(Paint.Style.STROKE);
+    mPaintGraph.setStrokeWidth(getDpUnit() * 0.5f);
+    mPaintGraph.setColor(0x40000000);
+    canvas.drawRoundRect(bgLeft, bgTop, bgRight, bgBottom, cornerRadius, cornerRadius, mPaintGraph);
+
+    float textX = bgLeft + paddingHorizontal + (textWidth / 2);
+    float textY = baseY;
+
+    mPaintGraph.setStyle(Paint.Style.FILL);
+    mPaintGraph.setTextSize(mPaint.getTextSize() * 0.9f);
+    mPaintGraph.setTypeface(getTypefaceText());
+    mPaintGraph.setColor(0xFFFFFFFF);
+    mPaintGraph.setTextAlign(Paint.Align.CENTER);
+
+    canvas.drawText(inlay.text, textX, textY, mPaintGraph);
+
+    mPaintGraph.setStyle(oldStyle);
+    mPaintGraph.setTextSize(oldTextSize);
+    mPaintGraph.setTypeface(oldTypeface);
+    mPaintGraph.setColor(oldColor);
+    mPaintGraph.setTextAlign(oldAlign);
 
     canvas.restore();
   }
@@ -552,36 +606,25 @@ public class CodeEditor extends View
     Paint.Style oldStyle = mPaintGraph.getStyle();
     float oldTextSize = mPaintGraph.getTextSize();
     Typeface oldTypeface = mPaintGraph.getTypeface();
+    int oldColor = mPaintGraph.getColor();
+    Paint.Align oldAlign = mPaintGraph.getTextAlign();
 
     mPaintGraph.setStyle(Paint.Style.FILL);
     mPaintGraph.setTextSize(mPaint.getTextSize() * 0.9f);
     mPaintGraph.setTypeface(getTypefaceText());
     mPaintGraph.setColor(color);
+    mPaintGraph.setTextAlign(Paint.Align.RIGHT);
 
-    int end = index + count;
-    var src = line.value;
-    int st = index;
+    float totalWidth = mPaintGraph.measureText(line.value, index, count);
 
-    float totalWidth = mPaintGraph.measureText(src, st, end - st);
-
-    for (int i = index; i < end; i++) {
-      if (src[i] == '\t') {
-
-        canvas.drawText(src, st, i - st, offX - totalWidth, offY, mPaintGraph);
-        float segmentWidth = mPaintGraph.measureText(src, st, i - st);
-        totalWidth -= segmentWidth;
-        offX -= segmentWidth;
-        st = i + 1;
-      }
-    }
-
-    if (st < end) {
-      canvas.drawText(src, st, end - st, offX - totalWidth, offY, mPaintGraph);
-    }
+    mPaintGraph.setTextAlign(Paint.Align.RIGHT);
+    canvas.drawText(line.value, index, count, offX, offY, mPaintGraph);
 
     mPaintGraph.setStyle(oldStyle);
     mPaintGraph.setTextSize(oldTextSize);
     mPaintGraph.setTypeface(oldTypeface);
+    mPaintGraph.setColor(oldColor);
+    mPaintGraph.setTextAlign(oldAlign);
   }
 
   public CodeEditor(Context context) {
@@ -1401,9 +1444,8 @@ public class CodeEditor extends View
 
     Log.d("CodeEditor", "Setting new language analyzer: " + lang.getClass().getSimpleName());
 
-    // 1. متوقف کردن آنالایزر قبلی
     if (mSpanner != null) {
-      mSpanner.shutdown(); // این خیلی مهمه!
+      mSpanner.shutdown();
       mSpanner.setCallback(null);
       mSpanner = null;
     }
@@ -1426,11 +1468,10 @@ public class CodeEditor extends View
         mSpanner.getResult().getBlocks().clear();
       }
 
-      // 5. آنالایز فورس با آنالایزر جدید
       post(
           () -> {
             if (mSpanner != null && mText != null) {
-              mSpanner.analyze(mText, true); // فورس آنالایز
+              mSpanner.analyze(mText, true);
               invalidate();
             }
           });
@@ -3522,7 +3563,7 @@ public class CodeEditor extends View
           drawColor(canvas, mColors.getColor(blockColor), mRect);
           Paint paint = new Paint();
           if (curr == cursorIdx) {
-            int color = mColors.getColor(EditorColorScheme.BLOCK_LINE_CURRENT);
+            int color = mColors.getColor(EditorColorScheme.BLOCK_LINE_SELECTOR);
             paint.setColor(color);
             paint.setFakeBoldText(true);
             float radius = 8f;
@@ -3688,26 +3729,22 @@ public class CodeEditor extends View
       return;
     }
 
-    // تنظیمات متن
     if (mPaintOther.getTextAlign() != mLineNumberAlign) {
       mPaintOther.setTextAlign(mLineNumberAlign);
     }
     mPaintOther.setColor(color);
 
-    // موقعیت عمودی baseline متن
     float y =
         (getRowBottom(row) + getRowTop(row)) / 2f
             - (mLineNumberMetrics.descent - mLineNumberMetrics.ascent) / 2f
             - mLineNumberMetrics.ascent
             - getOffsetY();
 
-    // تبدیل شماره خط به رشته
     var buffer = TemporaryCharBuffer.obtain(20);
     line++;
     int i = stringSize(line);
     Numbers.getChars(line, i, buffer);
 
-    // موقعیت افقی عدد
     switch (mLineNumberAlign) {
       case LEFT:
         canvas.drawText(buffer, 0, i, offsetX, y, mPaintOther);
@@ -3719,10 +3756,9 @@ public class CodeEditor extends View
         canvas.drawText(buffer, 0, i, offsetX + (width + mDividerMargin) / 2f, y, mPaintOther);
     }
 
-    // رسم آیکون‌ها با روش جدید و حفظ تمام قابلیت‌ها
     for (LineIcon icon : lineIcons) {
       if (icon.lineNumber == line) {
-        // استفاده از روش جدید مشابه کد سازنده
+
         final float iconSizeFactor = 0.4f;
         int size = (int) (getRowHeight() * iconSizeFactor);
         int offsetToLeftTop = (int) (getRowHeight() * (1 - iconSizeFactor) / 2f);
@@ -3734,7 +3770,6 @@ public class CodeEditor extends View
 
         Bitmap bmp = null;
 
-        // بارگذاری bitmap از مسیر فایل یا resource
         if (icon.hasIconFilePath && icon.iconFilePath != null) {
           bmp = BitmapFactory.decodeFile(icon.iconFilePath);
         } else if (icon.iconRes != -1) {
@@ -3742,10 +3777,9 @@ public class CodeEditor extends View
         }
 
         if (bmp != null) {
-          // ایجاد bitmap با اندازه مناسب
+
           Bitmap scaledBmp = Bitmap.createScaledBitmap(bmp, size, size, true);
 
-          // اعمال color filter اگر تنظیم شده باشد
           if (icon.colorFilter != 0) {
             Bitmap filteredBitmap = scaledBmp.copy(Bitmap.Config.ARGB_8888, true);
             Canvas filterCanvas = new Canvas(filteredBitmap);
@@ -3761,14 +3795,13 @@ public class CodeEditor extends View
 
             filteredBitmap.recycle();
           } else {
-            // رسم بدون فیلتر
+
             Paint iconPaint = new Paint();
             iconPaint.setFilterBitmap(true);
             iconPaint.setDither(true);
             canvas.drawBitmap(scaledBmp, null, rect, iconPaint);
           }
 
-          // مدیریت حافظه
           scaledBmp.recycle();
           if (bmp != scaledBmp) {
             bmp.recycle();
