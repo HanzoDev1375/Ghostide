@@ -526,7 +526,12 @@ public class CodeEditor extends View
             currentCharWidth = measureText(lineContent, inlay.column, 1, inlay.line);
         }
         float inlayStartX = charX + currentCharWidth;
-        float baselineY = charY + getRowBaseline(0);
+
+        float verticalPadding = getDpUnit() * 1;
+        Paint.FontMetrics fm = mPaintGraph.getFontMetrics();
+        float textHeight = fm.descent - fm.ascent;
+        float baselineY = charY - (textHeight / 2) - verticalPadding * 2;
+
         Paint.Style oldStyle = mPaintGraph.getStyle();
         float oldTextSize = mPaintGraph.getTextSize();
         Typeface oldTypeface = mPaintGraph.getTypeface();
@@ -535,10 +540,8 @@ public class CodeEditor extends View
         mPaintGraph.setTextSize(mPaint.getTextSize() * 0.85f);
         mPaintGraph.setTypeface(getTypefaceText());
         float textWidth = mPaintGraph.measureText(inlay.text);
-        Paint.FontMetrics fm = mPaintGraph.getFontMetrics();
-        float textHeight = fm.descent - fm.ascent;
+
         float horizontalPadding = getDpUnit() * 4;
-        float verticalPadding = getDpUnit() * 1;
         float marginFromChar = getDpUnit() * 2;
         float bgWidth = textWidth + horizontalPadding * 2;
         float bgHeight = textHeight + verticalPadding * 2;
