@@ -197,7 +197,8 @@ public class ThemeUtils {
     editor.getColorScheme().setColor(EditorColorScheme.WHOLE_BACKGROUND, Color.TRANSPARENT);
     // برای اخطار ها و متتودهای منسوخ شده
     // رنگ غیرقابل ادیت کردن است و به راحتی در کد ادیتور نشون میده
-    editor.getColorScheme().setColor(EditorColorScheme.wars,Color.parseColor("#56F6CA50"));
+    editor.getColorScheme().setColor(EditorColorScheme.wars,Color.parseColor("#79F9CB80"));
+    editor.getColorScheme().setColor(EditorColorScheme.BLOCK_LINE_SELECTOR,Color.parseColor("#443A93FF"));
     return this;
   }
 
