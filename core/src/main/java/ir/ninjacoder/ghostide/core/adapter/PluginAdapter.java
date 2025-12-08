@@ -13,8 +13,8 @@ import java.util.List;
 
 public class PluginAdapter extends RecyclerView.Adapter<PluginAdapter.ViewHolder> {
 
-  private List<PlModel> model = new ArrayList<>();
-  private List<PlModel> originalModel = new ArrayList<>();
+  private List<PlModel> originalModel; // لیست اصلی
+  private List<PlModel> filteredModel; // لیست فیلتر شده
   private OnPluginStateChangeListener listener;
   private String currentQuery = "";
 
@@ -23,34 +23,33 @@ public class PluginAdapter extends RecyclerView.Adapter<PluginAdapter.ViewHolder
   }
 
   public PluginAdapter(List<PlModel> model, OnPluginStateChangeListener listener) {
-    this.model = model;
-    this.originalModel = new ArrayList<>(model);
+    this.originalModel = model; // ارجاع مستقیم به لیست اصلی
+    this.filteredModel = new ArrayList<>(model);
     this.listener = listener;
   }
 
   public void updateList(List<PlModel> newList) {
-    this.model = newList;
+    this.originalModel = newList;
+    this.filteredModel = new ArrayList<>(newList);
     notifyDataSetChanged();
   }
 
   public void filter(String query) {
     currentQuery = query;
-    List<PlModel> filteredList = new ArrayList<>();
+    filteredModel.clear();
 
     if (query.isEmpty()) {
-      filteredList.addAll(originalModel);
+      filteredModel.addAll(originalModel);
     } else {
       String lowerCaseQuery = query.toLowerCase();
       for (PlModel plugin : originalModel) {
         if (plugin.getName().toLowerCase().contains(lowerCaseQuery)
             || plugin.getDev().toLowerCase().contains(lowerCaseQuery)
             || plugin.getType().toLowerCase().contains(lowerCaseQuery)) {
-          filteredList.add(plugin);
+          filteredModel.add(plugin);
         }
       }
     }
-
-    this.model = filteredList;
     notifyDataSetChanged();
   }
 
@@ -60,53 +59,82 @@ public class PluginAdapter extends RecyclerView.Adapter<PluginAdapter.ViewHolder
     public ViewHolder(LayoutPluginAdapterBinding v) {
       super(v.getRoot());
       this.binding = v;
+
+      // تنظیم listener برای سویچ
+      binding
+          .getRoot()
+          .setSwitchChangedListener(
+              (view, isChecked) -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                  PlModel item = filteredModel.get(position);
+                  item.setIsusing(isChecked);
+
+                  // به روزرسانی آیتم متناظر در لیست اصلی
+                  int originalIndex = originalModel.indexOf(item);
+                  if (originalIndex != -1) {
+                    originalModel.get(originalIndex).setIsusing(isChecked);
+                  }
+
+                  if (listener != null) {
+                    listener.onPluginStateChanged();
+                  }
+                }
+              });
     }
 
     public void bind(PlModel item) {
-
+      binding.getRoot().setSwitchChangedListener(null);
       ObjectUtils.setHighlightSearchText(
           binding.getRoot().getTitle(), item.getName(), currentQuery);
 
       binding.getRoot().setDescription(item.getDev());
       binding.getRoot().setValue(item.getIsusing());
-      if (model.size() == 1) {
-        binding.getRoot().setBackgroundMod(ModBackground.NONE);
-      } else if (getAdapterPosition() == 0) {
-        binding.getRoot().setBackgroundMod(ModBackground.TOP);
-      } else if (getAdapterPosition() == model.size() - 1) {
-        binding.getRoot().setBackgroundMod(ModBackground.BOTTOM);
-      } else {
-        binding.getRoot().setBackgroundMod(ModBackground.MIDDLE);
-      }
-
       binding
           .getRoot()
           .setSwitchChangedListener(
               (view, isChecked) -> {
-                item.setIsusing(isChecked);
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                  PlModel currentItem = filteredModel.get(position);
+                  currentItem.setIsusing(isChecked);
+                  int originalIndex = originalModel.indexOf(currentItem);
+                  if (originalIndex != -1) {
+                    originalModel.get(originalIndex).setIsusing(isChecked);
+                  }
 
-                if (listener != null) {
-                  listener.onPluginStateChanged();
+                  if (listener != null) {
+                    listener.onPluginStateChanged();
+                  }
                 }
               });
+
+      if (filteredModel.size() == 1) {
+        binding.getRoot().setBackgroundMod(ModBackground.NONE);
+      } else if (getAdapterPosition() == 0) {
+        binding.getRoot().setBackgroundMod(ModBackground.TOP);
+      } else if (getAdapterPosition() == filteredModel.size() - 1) {
+        binding.getRoot().setBackgroundMod(ModBackground.BOTTOM);
+      } else {
+        binding.getRoot().setBackgroundMod(ModBackground.MIDDLE);
+      }
     }
   }
 
   @Override
   public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     LayoutPluginAdapterBinding binding =
-        LayoutPluginAdapterBinding.inflate(
-            LayoutInflater.from(parent.getContext()), parent, false);
+        LayoutPluginAdapterBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
     return new ViewHolder(binding);
   }
 
   @Override
   public int getItemCount() {
-    return model.size();
+    return filteredModel.size();
   }
 
   @Override
   public void onBindViewHolder(PluginAdapter.ViewHolder holder, int position) {
-    holder.bind(model.get(position));
+    holder.bind(filteredModel.get(position));
   }
 }

@@ -2,15 +2,12 @@ package ir.ninjacoder.ghostide.core.pl;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
-
 import ir.ninjacoder.ghostide.core.activities.BaseCompat;
 import java.io.File;
 import java.io.FileInputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
-
 import dalvik.system.InMemoryDexClassLoader;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import ir.ninjacoder.ghostide.core.activities.CodeEditorActivity;
@@ -86,7 +83,7 @@ public class PluginLoader {
 
     if (plugins.isEmpty()) {
       Log.d("PluginLoader", "هیچ پلاگین فعالی در کانفیگ یافت نشد");
-      Toast.makeText(context, "هیچ پلاگین فعالی یافت نشد", Toast.LENGTH_SHORT).show();
+      
       return;
     }
 
@@ -100,12 +97,6 @@ public class PluginLoader {
         loadedCount++;
       }
     }
-
-    Toast.makeText(
-            context,
-            loadedCount + " پلاگین از " + plugins.size() + " با موفقیت لود شد",
-            Toast.LENGTH_SHORT)
-        .show();
   }
 
   private boolean loadSinglePlugin(PluginConfig.PluginInfo pluginInfo) {

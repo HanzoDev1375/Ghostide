@@ -46,7 +46,7 @@ public class PluginManagerActivity extends BaseCompat {
 
     adapter =
         new PluginAdapter(
-            new ArrayList<>(originalList),
+            originalList,
             new PluginAdapter.OnPluginStateChangeListener() {
               @Override
               public void onPluginStateChanged() {
