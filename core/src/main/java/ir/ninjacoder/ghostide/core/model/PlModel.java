@@ -19,12 +19,16 @@ public class PlModel {
   @SerializedName("type")
   private String type;
 
-  public PlModel(String name, String dir, String dev, Boolean isusing, String type) {
+  @SerializedName("icon")
+  private String icon;
+
+  public PlModel(String name, String dir, String dev, Boolean isusing, String type, String icon) {
     this.name = name;
     this.dir = dir;
     this.dev = dev;
     this.isusing = isusing;
     this.type = type;
+    this.icon = icon;
   }
 
   public String getName() {
@@ -45,6 +49,10 @@ public class PlModel {
 
   public String getType() {
     return this.type;
+  }
+
+  public String getIcon() {
+    return this.icon;
   }
 
   @Override

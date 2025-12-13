@@ -200,6 +200,7 @@ public class FileManagerActivity extends BaseCompat
   private boolean isFileWatcherBound = false;
   private ShortcutInfoImpl sh;
   private ExecutorService executor;
+  private View mview;
   private List<Child> listchild = new ArrayList<>();
 
   @Override
@@ -292,7 +293,7 @@ public class FileManagerActivity extends BaseCompat
     BackPressed();
     TypeChange();
     ThemeChaker();
-    View mview = findViewById(R.id.view_filedir);
+    mview = findViewById(R.id.view_filedir);
     bind.opendraw.setOnClickListener(
         c -> {
           bind.Drawer.open();

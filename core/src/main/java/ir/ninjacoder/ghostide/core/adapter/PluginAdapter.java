@@ -90,6 +90,7 @@ public class PluginAdapter extends RecyclerView.Adapter<PluginAdapter.ViewHolder
 
       binding.getRoot().setDescription(item.getDev());
       binding.getRoot().setValue(item.getIsusing());
+      binding.getRoot().setIconPath(item.getIcon());
       binding
           .getRoot()
           .setSwitchChangedListener(

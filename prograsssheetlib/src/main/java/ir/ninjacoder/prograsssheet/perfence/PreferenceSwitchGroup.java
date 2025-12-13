@@ -11,8 +11,8 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-
 import android.widget.TextView;
+import com.bumptech.glide.Glide;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import ir.ninjacoder.prograsssheet.R;
 import ir.ninjacoder.prograsssheet.databinding.LayoutSwitchPerfenceBinding;
@@ -92,6 +92,12 @@ public class PreferenceSwitchGroup extends RelativeLayout implements View.OnClic
   public void setIcon(Bitmap icon) {
     binding.preferenceIcon.setImageBitmap(icon);
     showicon(true);
+  }
+
+  public void setIconPath(String path) {
+    showicon(true);
+    if (!path.isEmpty())
+      Glide.with(binding.preferenceIcon.getContext()).load(path).into(binding.preferenceIcon);
   }
 
   public void setValue(boolean value) {
