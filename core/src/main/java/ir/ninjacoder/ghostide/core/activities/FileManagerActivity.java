@@ -34,14 +34,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
-
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
@@ -62,26 +60,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 import ir.ninjacoder.ghostide.PluginManager.IntentHelper;
 import ir.ninjacoder.ghostide.core.R;
 import ir.ninjacoder.ghostide.core.RequestNetwork;
 import ir.ninjacoder.ghostide.core.RequestNetworkController;
 import ir.ninjacoder.ghostide.core.Store.StoreAcitvity;
-import ir.ninjacoder.ghostide.core.activities.AboutActivity;
-import ir.ninjacoder.ghostide.core.activities.ApkViewActivity;
-import ir.ninjacoder.ghostide.core.activities.BaseCompat;
-import ir.ninjacoder.ghostide.core.activities.CodeEditorActivity;
-import ir.ninjacoder.ghostide.core.activities.FileBookmarkActivity;
-import ir.ninjacoder.ghostide.core.activities.FontViewActivity;
-import ir.ninjacoder.ghostide.core.activities.JavaManagerLayoutActivity;
-import ir.ninjacoder.ghostide.core.activities.LogCatViewActivity;
-import ir.ninjacoder.ghostide.core.activities.PdfViewNewActivity;
-import ir.ninjacoder.ghostide.core.activities.PluginManagerActivity;
-import ir.ninjacoder.ghostide.core.activities.SetHomeWallpActivity;
-import ir.ninjacoder.ghostide.core.activities.SettingAppActivity;
-import ir.ninjacoder.ghostide.core.activities.ThemePreviewActivity;
-import ir.ninjacoder.ghostide.core.activities.VideoViewsActivity;
 import ir.ninjacoder.ghostide.core.adapter.FileManagerAd;
 import ir.ninjacoder.ghostide.core.adapter.ViewType;
 import ir.ninjacoder.ghostide.core.compressor.TarGzExtractor;
@@ -132,6 +115,7 @@ import ninja.coder.appuploader.data.SnippetManagerImpl;
 import ninjacoder.ghostide.androidtools.r8.android.R8Tools;
 import storage.sdcard.SdCardUtil;
 import ir.ninjacoder.ghostide.core.layoutmanager.NavigationViewCompnet;
+
 public class FileManagerActivity extends BaseCompat
     implements FileManagerAd.onClick, FileWatcher.OnFileChangeListener {
 
@@ -379,6 +363,10 @@ public class FileManagerActivity extends BaseCompat
     }
   }
 
+  public FileManagerAd getFileManagerAd() {
+    return fileListItem;
+  }
+
   void TypeChange() {
     if (gridMode.contains("gride")) {
       setViewType(ViewType.GRID);
@@ -386,13 +374,15 @@ public class FileManagerActivity extends BaseCompat
       setViewType(ViewType.ROW);
     }
   }
-  
-  public ExrtaFab getFab(){
-   return bind.fabAdd;
+
+  public ExrtaFab getFab() {
+    return bind.fabAdd;
   }
-  public NavigationViewCompnet getNav(){
-  return bind.navs;
+
+  public NavigationViewCompnet getNav() {
+    return bind.navs;
   }
+
   @Override
   public void onClick(View view, int pos) {
     staticstring = files.get((int) pos).get("path").toString();
@@ -442,12 +432,15 @@ public class FileManagerActivity extends BaseCompat
         break;
     }
   }
-  public String getSavePathByStringPrfns(){
-    return save_path.getString("path", "");  
+
+  public String getSavePathByStringPrfns() {
+    return save_path.getString("path", "");
   }
-  public String getFolder(){
+
+  public String getFolder() {
     return Folder;
   }
+
   void savePath() {
     if (save_path.contains("path")) {
       if (FileUtil.isExistFile(save_path.getString("path", ""))) {
@@ -706,7 +699,7 @@ public class FileManagerActivity extends BaseCompat
         });
   }
 
- public void reLoadFile() { //reload file
+  public void reLoadFile() { // reload file
     reLoadFile(true);
   }
 
@@ -1397,11 +1390,7 @@ public class FileManagerActivity extends BaseCompat
     if (staticstring.endsWith(".project")) {
       InstallTakesProject(newpos, staticstring);
     }
-    if (staticstring.endsWith(".png")) {
-      getabout.setClass(getApplicationContext(), SetHomeWallpActivity.class);
-      getabout.putExtra("img", staticstring);
-      loadAnim(getabout);
-    }
+
     var bindjpegWall = new BindJpegWall();
     bindjpegWall.bind(staticstring, this);
     _fontpost(files, "path", newpos);
@@ -1927,8 +1916,14 @@ public class FileManagerActivity extends BaseCompat
     }
   }
 
-  public void DialogItemSheet() {
-    var sh = new ListSheet();
+  private ListSheet sh;
+
+  public ListSheet getDialogItemSheet() {
+    return sh;
+  }
+
+  void DialogItemSheet() {
+    sh = new ListSheet();
 
     sh.setSheetDialog(this);
     sh.addItem(getString(R.string.make_folder), R.drawable.create_new_folder_24px);

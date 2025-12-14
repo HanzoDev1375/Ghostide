@@ -1,70 +1,77 @@
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_height="match_parent"
-  android:layout_width="match_parent">
-
-  <com.google.android.material.appbar.AppBarLayout
-    android:layout_height="wrap_content"
-    android:layout_width="match_parent"
-    android:fitsSystemWindows="true">
-
-    <com.google.android.material.appbar.CollapsingToolbarLayout
-      android:id="@+id/collapsingtoolbar"
-      android:layout_height="wrap_content"
-      android:layout_width="match_parent"
-      app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
-      <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_width="match_parent"
-        android:background="?attr/colorPrimary"
-        app:layout_collapseMode="pin" />
-
-    </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-  </com.google.android.material.appbar.AppBarLayout>
-
-  <LinearLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    android:orientation="vertical"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    android:layout_width="match_parent">
 
-    <com.google.android.material.textfield.TextInputLayout
-      android:id="@+id/inputpluginsearch"
-      android:layout_height="wrap_content"
-      android:layout_width="match_parent"
-      android:layout_marginStart="16dp"
-      android:layout_marginEnd="16dp"
-      android:layout_marginTop="16dp"
-      android:layout_marginBottom="8dp">
-
-      <com.google.android.material.textfield.TextInputEditText
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:hint="Search Plugin ..." />
+        app:liftOnScroll="false"
+        android:fitsSystemWindows="true">
 
-    </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsingtoolbar"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            app:expandedTitleTextAppearance="?textAppearanceHeadlineLarge"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:expandedTitleMarginStart="24dp"
+            app:titleCollapseMode="scale"
+            app:expandedTitleTextColor="?attr/colorOnSurface"
+            app:contentScrim="#03FFFFFF"
+        >
 
-    <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/rvplugin"
-      android:layout_height="0dp"
-      android:layout_weight="1"
-      android:layout_width="match_parent"
-      android:clipToPadding="false"
-      android:paddingTop="8dp" />
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_width="match_parent"
+                app:layout_collapseMode="pin" />
 
-  </LinearLayout>
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-  <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-    android:id="@+id/fabmod"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_margin="16dp"
-    android:text="Add Plugin"
-    app:layout_anchor="@id/rvplugin"
-    app:layout_anchorGravity="bottom|end" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputpluginsearch"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:hint="Search Plugin ..." />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvplugin"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:clipToPadding="false"
+            android:paddingTop="8dp" />
+
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fabmod"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="Add Plugin"
+        app:layout_anchor="@id/rvplugin"
+        app:layout_anchorGravity="bottom|end" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

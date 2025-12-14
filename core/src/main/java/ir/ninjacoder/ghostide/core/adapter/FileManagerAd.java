@@ -54,6 +54,7 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
   protected ViewType viewType = ViewType.ROW;
   private List<HashMap<String, Object>> files = new ArrayList<>();
   private SharedPreferences prf;
+  private VH viewHolder;
   private List<Child> listChild = new ArrayList<>();
 
   public FileManagerAd(
@@ -92,7 +93,8 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
         view =
             LayoutInflater.from(parnt.getContext()).inflate(R.layout.folder_remster, parnt, false);
     }
-    return new VH(view);
+    viewHolder = new VH(view);
+    return viewHolder;
   }
 
   @Override
@@ -321,6 +323,22 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
             return true;
           });
     }
+
+    public TextView getFolderName() {
+      return this.folderName;
+    }
+
+    public TextView getTvTools() {
+      return this.tvTools;
+    }
+
+    public ListItemView getRoots() {
+      return this.roots;
+    }
+
+    public ImageView getIcon() {
+      return this.icon;
+    }
   }
 
   @Override
@@ -331,5 +349,9 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
   public void setViewType(ViewType viewType) {
     this.viewType = viewType;
     notifyDataSetChanged();
+  }
+
+  public VH getViewHolder() {
+    return this.viewHolder;
   }
 }
