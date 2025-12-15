@@ -2014,7 +2014,7 @@ public class FileManagerActivity extends BaseCompat
                 di1.setNegativeButton("dismiss", (p3, d3) -> {});
                 di1.setView(dialogview);
                 di1.show();
-                sh.getDismiss(true);
+                sh1.getDismiss(true);
                 break;
               }
             case 6:
