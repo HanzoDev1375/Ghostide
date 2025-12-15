@@ -272,7 +272,6 @@ public class FileManagerActivity extends BaseCompat
         DataUtil.showMessage(this, "خطا: مسیر فایل نامعتبر است!");
       }
     }
-    // WindowsMath(bind.Drawer, _coordinator);
     bind.viewChild.setVisibility(View.GONE);
     BackPressed();
     TypeChange();
@@ -495,8 +494,6 @@ public class FileManagerActivity extends BaseCompat
     } catch (PackageManager.NameNotFoundException e) {
       showMessage(e.toString());
     }
-    // new FastScrollerBuilder(bind.recyclerview2).useMd2Style().build();
-
     unzip = new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
     prodel = new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
     proveg = new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
@@ -624,7 +621,6 @@ public class FileManagerActivity extends BaseCompat
   @Override
   protected void onDestroy() {
     super.onDestroy();
-    // TODO: Implement this method
     unbindFileWatcherService();
     stopService(new Intent(this, FileWatcherService.class));
     if (executor != null) {
@@ -724,7 +720,7 @@ public class FileManagerActivity extends BaseCompat
             positive.setEnabled(true);
           }
           top.setCounterEnabled(true);
-          editor.setHint("Type Name Folder");
+          editor.setHint("Name Folder");
           top.setCounterMaxLength(200);
           top.setEndIconTintMode(PorterDuff.Mode.MULTIPLY);
           top.setEndIconDrawable(R.drawable.close);
@@ -733,7 +729,7 @@ public class FileManagerActivity extends BaseCompat
                 editor.setText("");
               });
           positive.setOnClickListener(
-              (vftrororocjj) -> {
+              (__) -> {
                 DataUtil.hideKeyboard(getApplicationContext());
                 if (editor.getText().toString().isEmpty()) {
                   top.setError("return type Error \n");
@@ -746,7 +742,6 @@ public class FileManagerActivity extends BaseCompat
 
                           @Override
                           public void onSuccess(String content) {
-                            // محتوای فایل با موفقیت خوانده شد
                             Toast.makeText(getApplicationContext(), content, 2).show();
                             if (bind.recyclerview2 != null) {
                               reLoadFile();
@@ -756,7 +751,6 @@ public class FileManagerActivity extends BaseCompat
 
                           @Override
                           public void onError(String e) {
-                            // خطایی در هنگام خواندن فایل رخ داده است
                             Toast.makeText(getApplicationContext(), e, 2).show();
                           }
                         });
@@ -790,7 +784,7 @@ public class FileManagerActivity extends BaseCompat
     dialog.show();
   }
 
-  public void FileMaker() {
+  private void FileMaker() {
     var folders = new FileMaker(this);
     folders.setFolderName(Folder);
     folders.setCallBack(
@@ -897,17 +891,17 @@ public class FileManagerActivity extends BaseCompat
     di.build();
   }
 
-  void _fontpost(
-      final ArrayList<HashMap<String, Object>> _map, final String _path, final double _pos) {
-    if (_map.get((int) _pos).get(_path).toString().endsWith(".ttf")
-        || _map.get((int) _pos).get(_path).toString().endsWith(".otf")) {
+  void setFontView(
+       ArrayList<HashMap<String, Object>> map, String _path, int _pos) {
+       String paths = map.get(_pos).get(_path).toString();
+    if (paths.endsWith(".ttf") || paths.endsWith(".otf")) {
       finalintentpostfont.setClass(getApplicationContext(), FontViewActivity.class);
-      finalintentpostfont.putExtra("font", _map.get((int) _pos).get(_path).toString());
+      finalintentpostfont.putExtra("font",paths);
       loadAnim(finalintentpostfont);
     }
   }
 
-  void _themeinstall(
+  void setThemeInstallByPath(
       final ArrayList<HashMap<String, Object>> _list, final double _pos, final String _str) {
     if (_list.get((int) _pos).get(_str).toString().endsWith(".aa")
         || _list.get((int) _pos).get(_str).toString().endsWith(".AA")) {
@@ -946,7 +940,7 @@ public class FileManagerActivity extends BaseCompat
     Toast.makeText(getApplicationContext(), a, 2).show();
   }
 
-  public void _dicomplier() {
+  private void setJarDecompiler() {
     androidx.appcompat.app.AlertDialog dialog =
         new GhostWebMaterialDialog(FileManagerActivity.this)
             .setView(R.layout.classjardicompiler)
@@ -970,7 +964,7 @@ public class FileManagerActivity extends BaseCompat
           output.setText(GetTab);
           Button positive = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
           positive.setOnClickListener(
-              (vftrororocjj) -> {
+              (__) -> {
                 if (output.getText().toString().isEmpty()) {
                 } else {
                   new AsyncTask<String, String, String>() {
@@ -1075,7 +1069,7 @@ public class FileManagerActivity extends BaseCompat
                 public void afterTextChanged(android.text.Editable _param1) {}
               });
           positive.setOnClickListener(
-              (vftrororocjj) -> {
+              (__) -> {
                 {
                   File dYx4Y = new File(files.get((int) _pos).get("path").toString());
                   File e5Cyk = new File(Folder.concat("/".concat(editor.getText().toString())));
@@ -1338,7 +1332,7 @@ public class FileManagerActivity extends BaseCompat
       di.setNeutralButton(
           "Dicompile",
           (p, d) -> {
-            _dicomplier();
+            setJarDecompiler();
           });
       di.setNegativeButton(
           "jar to dex",
@@ -1376,13 +1370,13 @@ public class FileManagerActivity extends BaseCompat
       loadAnim(getabout);
     }
     if (staticstring.endsWith(".tar.gz")) {
-      _targz(staticstring, Folder);
+      setTarExs(staticstring, Folder);
     }
     if (staticstring.endsWith(".tar.xz")) {
-      _tarzx(staticstring, Folder);
+      setTarExz(staticstring, Folder);
     }
     if (staticstring.endsWith(".7z")) {
-      _sevenUnZip(staticstring, Folder);
+      setSevenUnzipByPath(staticstring, Folder);
     }
     if (staticstring.endsWith(".zip")) {
       InstallTakesZip(newpos, staticstring);
@@ -1393,8 +1387,8 @@ public class FileManagerActivity extends BaseCompat
 
     var bindjpegWall = new BindJpegWall();
     bindjpegWall.bind(staticstring, this);
-    _fontpost(files, "path", newpos);
-    _themeinstall(files, newpos, "path");
+    setFontView(files, "path", newpos);
+    setThemeInstallByPath(files, newpos, "path");
   }
 
   void loadThemeGhost() {
@@ -1529,14 +1523,12 @@ public class FileManagerActivity extends BaseCompat
 
   public void apkShowDataRoom() {
     String pathToFile = staticstring;
-    PackageManager packageManager = getPackageManager();
-    PackageInfo packageInfo = packageManager.getPackageArchiveInfo(pathToFile, 0);
-    // ساختن متن برای نمایش در دیالوگ
-    StringBuilder sb = new StringBuilder();
+    var packageManager = getPackageManager();
+    var packageInfo = packageManager.getPackageArchiveInfo(pathToFile, 0);
+    var sb = new StringBuilder();
     sb.append("Package Name: ").append(packageInfo.packageName).append("\n");
     sb.append("Version Name: ").append(packageInfo.versionName).append("\n");
     sb.append("Version Code: ").append(packageInfo.versionCode).append("\n");
-    // دریافت نام API با استفاده از minSdkVersion
     int minSdkVersion = packageInfo.applicationInfo.minSdkVersion;
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
       sb.append("Min SDK Version: ")
@@ -1613,7 +1605,7 @@ public class FileManagerActivity extends BaseCompat
         });
   }
 
-  public void _targz(final String _in, final String _ou) {
+  public void setTarExs(final String _in, final String _ou) {
     var extra =
         new TarGzExtractor(
             this,
@@ -1624,7 +1616,7 @@ public class FileManagerActivity extends BaseCompat
     extra.extract(new File(_in), new File(_ou));
   }
 
-  public void _tarzx(final String _in, final String _ou) {
+  public void setTarExz(final String _in, final String _ou) {
     var zippos =
         new ZxExtractor(
             this,
@@ -1634,13 +1626,12 @@ public class FileManagerActivity extends BaseCompat
     zippos.extract(new File(_in), new File(_ou));
   }
 
-  public void _sevenUnZip(final String _in, final String _ou) {
+  public void setSevenUnzipByPath(String inputFile, String outFilePath) {
     // Z7Extractor.extractFile()
     try {
       AlertDialog dialog =
           new MaterialAlertDialogBuilder(this)
               .setTitle("Loading...")
-              .setMessage("")
               .setPositiveButton("Done", null)
               .setCancelable(false)
               .create();
@@ -1651,8 +1642,8 @@ public class FileManagerActivity extends BaseCompat
                 @Override
                 public void run() {
                   Z7Extractor.extractFile(
-                      _in,
-                      _ou,
+                      inputFile,
+                      outFilePath,
                       new com.hzy.lib7z.IExtractCallback() {
 
                         @Override
@@ -1698,7 +1689,7 @@ public class FileManagerActivity extends BaseCompat
     }
   }
 
-  public void _ftpinstall() {
+  public void setFTPDownloader() {
     androidx.appcompat.app.AlertDialog dialog =
         new GhostWebMaterialDialog(FileManagerActivity.this)
             .setView(R.layout.layout_ftp_filedir_download)
@@ -1719,7 +1710,7 @@ public class FileManagerActivity extends BaseCompat
           LinearLayout mlinear1 = dialog.findViewById(R.id.mlinear1);
           bar.setVisibility(View.GONE);
           positive.setOnClickListener(
-              (vftrororocjj) -> {
+              (__) -> {
                 mlinear1.setVisibility(View.GONE);
                 if (ftpserver.getText().toString().isEmpty()
                     || ftpusername.getText().toString().isEmpty()
@@ -1916,41 +1907,41 @@ public class FileManagerActivity extends BaseCompat
     }
   }
 
-  private ListSheet sh;
+  private ListSheet sh1;
 
   public ListSheet getDialogItemSheet() {
-    return sh;
+    return sh1;
   }
 
   void DialogItemSheet() {
-    sh = new ListSheet();
+    sh1 = new ListSheet();
 
-    sh.setSheetDialog(this);
-    sh.addItem(getString(R.string.make_folder), R.drawable.create_new_folder_24px);
-    sh.addItem(getString(R.string.make_file), R.drawable.file);
-    sh.addItem(getString(R.string.make_project), R.drawable.extension_24px);
-    sh.addItem("FTP", R.drawable.iconmode);
-    sh.addItem(getString(R.string.search_file), R.drawable.document_search_24px);
-    sh.addItem(getString(R.string.folder_tree), R.drawable.folder_tree_24px);
-    sh.addItem(getString(R.string.file_tree), R.drawable.file_tree_24px);
-    sh.addItem(getString(R.string.git_clone), R.drawable.git);
-    sh.addItem(getString(R.string.android_module), R.drawable.mdapk);
-    sh.addItem(getString(R.string.git_tools), R.drawable.git);
-    sh.addItem(getString(R.string.gson_to_class), R.drawable.file_json_24px);
-    sh.addItem(getString(R.string.pastjavacode), R.drawable.ic_material_java);
-    sh.setOnItemClickLabe(
+    sh1.setSheetDialog(this);
+    sh1.addItem(getString(R.string.make_folder), R.drawable.create_new_folder_24px);
+    sh1.addItem(getString(R.string.make_file), R.drawable.file);
+    sh1.addItem(getString(R.string.make_project), R.drawable.extension_24px);
+    sh1.addItem("FTP", R.drawable.iconmode);
+    sh1.addItem(getString(R.string.search_file), R.drawable.document_search_24px);
+    sh1.addItem(getString(R.string.folder_tree), R.drawable.folder_tree_24px);
+    sh1.addItem(getString(R.string.file_tree), R.drawable.file_tree_24px);
+    sh1.addItem(getString(R.string.git_clone), R.drawable.git);
+    sh1.addItem(getString(R.string.android_module), R.drawable.mdapk);
+    sh1.addItem(getString(R.string.git_tools), R.drawable.git);
+    sh1.addItem(getString(R.string.gson_to_class), R.drawable.file_json_24px);
+    sh1.addItem(getString(R.string.pastjavacode), R.drawable.ic_material_java);
+    sh1.setOnItemClickLabe(
         (pos333) -> {
           switch (pos333) {
             case 0:
               {
                 FolderMaker();
-                sh.getDismiss(true);
+                sh1.getDismiss(true);
                 break;
               }
             case 1:
               {
                 FileMaker();
-                sh.getDismiss(true);
+                sh1.getDismiss(true);
                 break;
               }
             case 2:
@@ -1961,13 +1952,13 @@ public class FileManagerActivity extends BaseCompat
                     () -> {
                       reLoadFile();
                     });
-                sh.getDismiss(true);
+                sh1.getDismiss(true);
                 break;
               }
             case 3:
               {
-                _ftpinstall();
-                sh.getDismiss(true);
+                setFTPDownloader();
+                sh1.getDismiss(true);
                 break;
               }
             case 4:
@@ -1986,7 +1977,7 @@ public class FileManagerActivity extends BaseCompat
                         },
                         this,
                         Folder);
-                sh.getDismiss(true);
+                sh1.getDismiss(true);
                 break;
               }
             case 5:
@@ -2060,13 +2051,13 @@ public class FileManagerActivity extends BaseCompat
                 di.setNegativeButton("dismiss", (p3, d3) -> {});
                 di.setView(dialogview1);
                 di.show();
-                sh.getDismiss(true);
+                sh1.getDismiss(true);
                 break;
               }
             case 7:
               {
                 setDialogGitDownload();
-                sh.getDismiss(true);
+                sh1.getDismiss(true);
                 break;
               }
             case 8:
@@ -2077,13 +2068,13 @@ public class FileManagerActivity extends BaseCompat
                     () -> {
                       reLoadFile();
                     });
-                sh.getDismiss(true);
+                sh1.getDismiss(true);
                 break;
               }
             case 9:
               {
                 GitListSheet task = new GitListSheet(new File(Folder), FileManagerActivity.this);
-                sh.getDismiss(true);
+                sh1.getDismiss(true);
                 break;
               }
             case 10:
@@ -2096,7 +2087,7 @@ public class FileManagerActivity extends BaseCompat
                           reLoadFile();
                         });
                 jsonToJava.run();
-                sh.getDismiss(true);
+                sh1.getDismiss(true);
                 break;
               }
             case 11:
@@ -2109,7 +2100,7 @@ public class FileManagerActivity extends BaseCompat
                           reLoadFile();
                         },
                         null);
-                sh.getDismiss(true);
+                sh1.getDismiss(true);
                 nodeChild.setMode(ClassNodePaserImpl.ModeUser.DIALOG);
                 break;
               }
