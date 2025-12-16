@@ -61,8 +61,6 @@ public class RecyclerViewSearchLayoutSheet {
     return this;
   }
 
-  
-
   class Sheet extends CustomSheet {
     public Sheet(Context c) {
       super(c);

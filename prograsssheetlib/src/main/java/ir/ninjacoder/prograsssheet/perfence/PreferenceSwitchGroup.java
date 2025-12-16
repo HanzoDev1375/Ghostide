@@ -97,7 +97,13 @@ public class PreferenceSwitchGroup extends RelativeLayout implements View.OnClic
   public void setIconPath(String path) {
     showicon(true);
     if (!path.isEmpty())
-      Glide.with(binding.preferenceIcon.getContext()).load(path).into(binding.preferenceIcon);
+      if (path.endsWith(".gif")) {
+        Glide.with(binding.preferenceIcon.getContext())
+            .asGif()
+            .load(path)
+            .into(binding.preferenceIcon);
+      } else
+        Glide.with(binding.preferenceIcon.getContext()).load(path).into(binding.preferenceIcon);
   }
 
   public void setValue(boolean value) {

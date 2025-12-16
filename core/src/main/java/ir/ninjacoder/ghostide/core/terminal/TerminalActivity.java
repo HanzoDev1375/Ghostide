@@ -2,11 +2,11 @@ package ir.ninjacoder.ghostide.core.terminal;
 
 import android.os.Bundle;
 import android.view.View;
-
+import android.widget.FrameLayout;
+import com.google.android.material.tabs.TabLayout;
 import ir.ninjacoder.ghostide.core.R;
 import ir.ninjacoder.ghostide.core.activities.BaseCompat;
 import ir.ninjacoder.ghostide.core.databinding.TerminalactivityBinding;
-import ir.ninjacoder.ghostide.core.terminal.TerminalTabSeasonImpl;
 
 public class TerminalActivity extends BaseCompat {
   private TerminalactivityBinding bin;
@@ -42,5 +42,17 @@ public class TerminalActivity extends BaseCompat {
         tabSystem.fragments.get(0).setArguments(args);
       }
     }
+  }
+
+  public TabLayout getTabLayoutTerminal() {
+    return bin.tabLayout;
+  }
+
+  public FrameLayout getFrameContent() {
+    return bin.terminalContainer;
+  }
+
+  public View getRoot() {
+    return bin.getRoot();
   }
 }

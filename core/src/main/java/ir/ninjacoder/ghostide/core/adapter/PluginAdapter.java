@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 import ir.ninjacoder.ghostide.core.databinding.LayoutPluginAdapterBinding;
 import ir.ninjacoder.ghostide.core.model.PlModel;
+import ir.ninjacoder.ghostide.core.utils.AnimUtils;
 import ir.ninjacoder.ghostide.core.utils.ObjectUtils;
 import ir.ninjacoder.prograsssheet.enums.ModBackground;
 import java.util.ArrayList;
@@ -87,7 +88,7 @@ public class PluginAdapter extends RecyclerView.Adapter<PluginAdapter.ViewHolder
       binding.getRoot().setSwitchChangedListener(null);
       ObjectUtils.setHighlightSearchText(
           binding.getRoot().getTitle(), item.getName(), currentQuery);
-
+      AnimUtils.Sacla(binding.getRoot());
       binding.getRoot().setDescription(item.getDev());
       binding.getRoot().setValue(item.getIsusing());
       binding.getRoot().setIconPath(item.getIcon());

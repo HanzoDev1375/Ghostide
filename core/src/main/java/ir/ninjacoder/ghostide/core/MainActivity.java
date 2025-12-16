@@ -22,6 +22,7 @@ import androidx.core.content.ContextCompat;
 import com.hzy.lib7z.IExtractCallback;
 import com.hzy.lib7z.Z7Extractor;
 
+import ir.ninjacoder.ghostide.core.utils.AnimUtils;
 import java.io.File;
 
 import ir.ninjacoder.ghostide.core.Welcome.SplashWord;
@@ -59,6 +60,7 @@ public class MainActivity extends BaseCompat {
         super.onCreate(_savedInstanceState);
         setContentView(bind.getRoot());
         initialize(_savedInstanceState);
+        AnimUtils.Sacla(bind.iconSp);
     }
 
     private void initialize(Bundle _savedInstanceState) {

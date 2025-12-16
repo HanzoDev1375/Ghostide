@@ -43,25 +43,22 @@ public class ListItemView extends LinearLayout {
   }
 
   Drawable bottom() {
-    return createRippleBackground(4f, 4f, 18f, 18f);
+    return createRippleBackground(6f, 6f, 18f, 18f);
   }
 
   Drawable top() {
-    return createRippleBackground(18f, 18f, 4f, 4f);
+    return createRippleBackground(18f, 18f, 6f, 6f);
   }
 
   Drawable middle() {
-    return createRippleBackground(4f, 4f, 4f, 4f);
+    return createRippleBackground(6f, 6f, 6f, 6f);
   }
 
   Drawable createRippleBackground(
       float topLeft, float topRight, float bottomLeft, float bottomRight) {
     try {
-      // ایجاد GradientDrawable به عنوان شکل زمینه
       GradientDrawable backgroundDrawable = new GradientDrawable();
       backgroundDrawable.setShape(GradientDrawable.RECTANGLE);
-
-      // تنظیم corner radii
       backgroundDrawable.setCornerRadii(
           new float[] {
             dpToPx(topLeft), dpToPx(topLeft),

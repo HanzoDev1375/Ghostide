@@ -225,6 +225,7 @@ public class EditorRoaderFile {
             public String doInBackground() {
               return decompileClass(new File(path));
             }
+            
           });
 
     } else if (path.endsWith(".yml")) {
@@ -259,7 +260,9 @@ public class EditorRoaderFile {
       if (path.endsWith(it.getTypeExz())) {
         ReadFileCompat(editor, path, bar);
         if (it.getLanguageProvider() != null) it.getLanguageProvider().run();
-        fab.postDelayed(it.getShowfab() ? fab::hide : fab::show, 400);
+        if (it.getShowfab() == true) {
+          fab.show();
+        } else fab.hide();
         return;
       }
     }

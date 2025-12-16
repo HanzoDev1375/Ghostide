@@ -10,8 +10,8 @@ import com.google.android.material.shape.ShapeAppearanceModel;
 import static com.google.android.material.R.attr.*;
 
 class Shape {
-  public static Drawable normal(View v){
-    MaterialShapeDrawable shapeDrawable =
+  public static Drawable normal(View v) {
+    var shapeDrawable =
         new MaterialShapeDrawable(
             ShapeAppearanceModel.builder()
                 .setTopLeftCornerSize(19f)
@@ -23,12 +23,13 @@ class Shape {
         ColorStateList.valueOf(MaterialColors.getColor(v, colorSurfaceContainer)));
     return createRippleDrawable(v, shapeDrawable);
   }
+
   public static Drawable bottom(View v) {
-    MaterialShapeDrawable shapeDrawable =
+    var shapeDrawable =
         new MaterialShapeDrawable(
             ShapeAppearanceModel.builder()
-                .setTopLeftCornerSize(4f)
-                .setTopRightCornerSize(4f)
+                .setTopLeftCornerSize(6f)
+                .setTopRightCornerSize(6f)
                 .setBottomLeftCornerSize(24f)
                 .setBottomRightCornerSize(24f)
                 .build());
@@ -38,26 +39,26 @@ class Shape {
   }
 
   public static Drawable top(View v) {
-    MaterialShapeDrawable tops =
+    var tops =
         new MaterialShapeDrawable(
             ShapeAppearanceModel.builder()
                 .setTopLeftCornerSize(24f)
                 .setTopRightCornerSize(24f)
-                .setBottomLeftCornerSize(4f)
-                .setBottomRightCornerSize(4f)
+                .setBottomLeftCornerSize(6f)
+                .setBottomRightCornerSize(6f)
                 .build());
     tops.setFillColor(ColorStateList.valueOf(MaterialColors.getColor(v, colorSurfaceContainer)));
     return createRippleDrawable(v, tops);
   }
 
   public static Drawable middel(View v) {
-    MaterialShapeDrawable md =
-        new MaterialShapeDrawable(ShapeAppearanceModel.builder().setAllCornerSizes(4f).build());
+    var md =
+        new MaterialShapeDrawable(ShapeAppearanceModel.builder().setAllCornerSizes(6f).build());
     md.setFillColor(ColorStateList.valueOf(MaterialColors.getColor(v, colorSurfaceContainer)));
     return createRippleDrawable(v, md);
   }
 
-  private static Drawable createRippleDrawable(View v, MaterialShapeDrawable backgroundDrawable) {
+  static Drawable createRippleDrawable(View v, MaterialShapeDrawable backgroundDrawable) {
     int rippleColor = MaterialColors.getColor(v, colorOnSurface);
     return new RippleDrawable(ColorStateList.valueOf(rippleColor), backgroundDrawable, null);
   }

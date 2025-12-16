@@ -12,8 +12,8 @@ android {
         applicationId "ir.ninjacoder.ghostide"
         minSdk 26
         targetSdk 35
-        versionCode 36
-        versionName "2.0.5"
+        versionCode 38
+        versionName "2.0.6"
         vectorDrawables {
             useSupportLibrary true
         }
@@ -67,13 +67,13 @@ android {
         arm32 {
             dimension "abi"
             ndk {
-                abiFilters "armeabi-v7a", "x86"
+                abiFilters "armeabi-v7a"
             }
         }
         arm64 {
             dimension "abi"
             ndk {
-                abiFilters "armeabi-v8a", "x86_64", "arm64-v8a"
+                abiFilters "armeabi-v8a","arm64-v8a"
             }
         }
 
