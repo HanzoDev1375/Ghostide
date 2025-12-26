@@ -1,77 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_height="match_parent"
+	android:layout_width="match_parent">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        app:liftOnScroll="false"
-        android:fitsSystemWindows="true">
+	<com.google.android.material.appbar.AppBarLayout
+		android:layout_height="wrap_content"
+		android:layout_width="match_parent"
+		app:liftOnScroll="false"
+		android:fitsSystemWindows="true">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/collapsingtoolbar"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            app:expandedTitleTextAppearance="?textAppearanceHeadlineLarge"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-            app:expandedTitleMarginStart="24dp"
-            app:titleCollapseMode="scale"
-            app:expandedTitleTextColor="?attr/colorOnSurface"
-            app:contentScrim="#03FFFFFF"
-        >
+		<com.google.android.material.appbar.CollapsingToolbarLayout
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+			app:expandedTitleTextAppearance="?textAppearanceHeadlineLarge"
+			app:contentScrim="#03FFFFFF"
+			app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+			app:expandedTitleMarginStart="24dp"
+			app:titleCollapseMode="scale"
+			app:expandedTitleTextColor="?attr/colorOnSurface"
+			android:id="@+id/collapsingtoolbar">
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_width="match_parent"
-                app:layout_collapseMode="pin" />
+			<com.google.android.material.appbar.MaterialToolbar
+				android:layout_height="?attr/actionBarSize"
+				android:layout_width="match_parent"
+				app:layout_collapseMode="pin"
+				android:id="@+id/toolbar">
 
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
+			</com.google.android.material.appbar.MaterialToolbar>
 
-    </com.google.android.material.appbar.AppBarLayout>
+		</com.google.android.material.appbar.CollapsingToolbarLayout>
 
-    <LinearLayout
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+	</com.google.android.material.appbar.AppBarLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/inputpluginsearch"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp">
+	<LinearLayout
+		android:layout_height="match_parent"
+		android:layout_width="match_parent"
+		app:layout_behavior="@string/appbar_scrolling_view_behavior"
+		android:orientation="vertical">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:hint="Search Plugin ..." />
+		<com.google.android.material.textfield.TextInputLayout
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+			android:layout_marginBottom="8dp"
+			android:layout_marginEnd="16dp"
+			android:layout_marginTop="16dp"
+			android:layout_marginStart="16dp"
+			android:id="@+id/inputpluginsearch">
 
-        </com.google.android.material.textfield.TextInputLayout>
+			<com.google.android.material.textfield.TextInputEditText
+				android:layout_height="wrap_content"
+				android:layout_width="match_parent"
+				android:hint="Search Plugin ..."/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvplugin"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:clipToPadding="false"
-            android:paddingTop="8dp" />
+		</com.google.android.material.textfield.TextInputLayout>
 
-    </LinearLayout>
+		<androidx.recyclerview.widget.RecyclerView
+			android:layout_height="match_parent"
+			android:layout_width="match_parent"
+			android:clipToPadding="false"
+			android:id="@+id/rvplugin"
+			android:paddingTop="8dp"/>
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/fabmod"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:text="Add Plugin"
-        app:layout_anchor="@id/rvplugin"
-        app:layout_anchorGravity="bottom|end" />
+		<LinearLayout
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+			android:orientation="vertical"
+			android:gravity="center_vertical|center_horizontal"
+			android:id="@+id/empty">
+
+			<TextView
+				android:layout_height="wrap_content"
+				android:layout_width="match_parent"
+				android:text="Config.json Not Found"
+				android:layout_gravity="center"
+				android:gravity="center"
+				android:layout_marginTop="3dp"
+				android:textStyle="bold"/>
+
+			<ImageView
+				android:layout_width="100dp"
+				android:layout_height="100dp"
+				android:id="@+id/emptyicon"
+				android:layout_marginTop="7dp"
+				android:layout_marginBottom="3dp"/>
+
+		</LinearLayout>
+
+	</LinearLayout>
+
+	<com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:layout_margin="16dp"
+		app:layout_anchorGravity="bottom|end"
+		app:layout_anchor="@id/rvplugin"
+		android:id="@+id/fabmod"
+		android:text="Add Plugin"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+

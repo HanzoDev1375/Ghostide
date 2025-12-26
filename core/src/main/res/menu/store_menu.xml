@@ -1,27 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/nav_wallpaper"
-        android:icon="@drawable/mobile_screensaver_24px"
-        android:title="Wallpaper" />
+  <item
+    android:id="@+id/nav_wallpaper"
+    android:icon="@drawable/mobile_screensaver_24px"
+    android:title="Wallpaper" />
 
-    <item
-        android:id="@+id/nav_fonts"
-        android:icon="@drawable/mfont"
-        android:title="Fonts" />
+  <item
+    android:id="@+id/nav_fonts"
+    android:icon="@drawable/mfont"
+    android:title="Fonts" />
 
-    <item
-        android:id="@+id/nav_themes"
-        android:icon="@drawable/puzzle_new"
-        android:title="Themes" />
-    <item
-        android:id="@+id/nav_svg"
-        android:icon="@drawable/texture_24px"
-        android:title="svg store"
-    />
-    <item
-        android:id="@+id/nav_htmlstore"
-        android:icon="@drawable/ic_shop"
-        android:title="Web shop"
-    />
+  <item
+    android:id="@+id/nav_themes"
+    android:icon="@drawable/puzzle_new"
+    android:title="Themes" />
+  <item
+    android:id="@+id/nav_svg"
+    android:icon="@drawable/texture_24px"
+    android:title="svg store" />
+  <item
+    android:id="@+id/nav_htmlstore"
+    android:icon="@drawable/ic_shop"
+    android:title="Web shop" />
 </menu>

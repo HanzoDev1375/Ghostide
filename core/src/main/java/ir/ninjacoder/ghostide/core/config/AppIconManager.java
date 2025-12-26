@@ -146,7 +146,7 @@ public class AppIconManager {
     for (String componentName : componentNames) {
       if (!componentName.equals(componentNameToEnable)) {
         manager.setComponentEnabledSetting(
-            new ComponentName(appcompat, "ir.ninjacoder.ghostide.core." + componentName),
+            new ComponentName(appcompat, "ir.ninjacoder.ghostide." + componentName),
             PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
             PackageManager.DONT_KILL_APP);
       }
@@ -156,7 +156,7 @@ public class AppIconManager {
   private void enableComponent(String componentName) {
     PackageManager manager = appcompat.getPackageManager();
     manager.setComponentEnabledSetting(
-        new ComponentName(appcompat, "ir.ninjacoder.ghostide.core." + componentName),
+        new ComponentName(appcompat, "ir.ninjacoder.ghostide." + componentName),
         PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
         PackageManager.DONT_KILL_APP);
   }

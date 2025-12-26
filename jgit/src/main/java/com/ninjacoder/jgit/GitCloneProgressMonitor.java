@@ -7,17 +7,14 @@ import android.widget.TextView;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import org.eclipse.jgit.lib.ProgressMonitor;
 
-
-/**
- * private class dont call other
- */
-
+/** private class dont call other */
 class GitCloneProgressMonitor implements ProgressMonitor {
   private final LinearProgressIndicator progress;
   private final TextView message;
   private boolean cancelled = false;
-  
+
   private final Handler handler = new Handler(Looper.getMainLooper());
+
   public GitCloneProgressMonitor(LinearProgressIndicator progress, TextView message) {
     this.progress = progress;
     this.message = message;

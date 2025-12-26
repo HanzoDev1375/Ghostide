@@ -29,6 +29,7 @@ public class CompletionItem {
   public String label;
   public String desc;
   public String jdir;
+  private boolean deprecated;
 
   /** Cursor offset in {@link CompletionItem#commit} */
   public int cursorOffset;
@@ -44,7 +45,7 @@ public class CompletionItem {
 
   @SerializedName("description")
   public String description;
-  
+
   public String jdoc;
 
   public String getPrefix() {
@@ -135,5 +136,13 @@ public class CompletionItem {
   @Override
   public int hashCode() {
     return Objects.hash(label, desc);
+  }
+
+  public boolean getDeprecated() {
+    return this.deprecated;
+  }
+
+  public void setDeprecated(boolean deprecated) {
+    this.deprecated = deprecated;
   }
 }

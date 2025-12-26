@@ -4,19 +4,49 @@
      xmlns:app="http://schemas.android.com/apk/res-auto"
      android:layout_height="wrap_content"
      android:layout_width="match_parent"
-     android:padding="9dp"
+     android:padding="5dp"
      android:orientation="vertical">
 
-    <TextView
+    <LinearLayout
          android:layout_height="wrap_content"
          android:layout_width="match_parent"
-         android:layout_marginBottom="10dp"
-         android:textSize="16sp"
-         android:id="@+id/message" />
+         android:gravity="center"
+         android:orientation="vertical">
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:textSize="18sp"
+             android:text="Cloning Repository..." />
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:textSize="14sp"
+             android:layout_marginTop="7dp"
+             android:text="test..."
+             android:id="@+id/message" />
+
+    </LinearLayout>
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
          android:layout_height="match_parent"
-         android:layout_width="match_parent"
+         android:layout_width="wrap_content"
+         android:layout_marginTop="5dp"
          android:id="@+id/progress" />
+
+    <LinearLayout
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:gravity="left"
+         android:orientation="horizontal">
+
+        <Button
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:layout_marginRight="5dp"
+             android:id="@+id/btndissmiss" />
+
+    </LinearLayout>
 
 </LinearLayout>
