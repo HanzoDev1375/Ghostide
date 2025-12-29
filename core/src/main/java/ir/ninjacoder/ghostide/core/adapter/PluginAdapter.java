@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 import ir.ninjacoder.ghostide.core.databinding.LayoutPluginAdapterBinding;
+import ir.ninjacoder.ghostide.core.interfaces.OnPluginStateChangeListener;
 import ir.ninjacoder.ghostide.core.model.PlModel;
 import ir.ninjacoder.ghostide.core.utils.AnimUtils;
 import ir.ninjacoder.ghostide.core.utils.ObjectUtils;
@@ -18,10 +19,6 @@ public class PluginAdapter extends RecyclerView.Adapter<PluginAdapter.ViewHolder
   private List<PlModel> filteredModel; // لیست فیلتر شده
   private OnPluginStateChangeListener listener;
   private String currentQuery = "";
-
-  public interface OnPluginStateChangeListener {
-    void onPluginStateChanged();
-  }
 
   public PluginAdapter(List<PlModel> model, OnPluginStateChangeListener listener) {
     this.originalModel = model; // ارجاع مستقیم به لیست اصلی
@@ -54,13 +51,33 @@ public class PluginAdapter extends RecyclerView.Adapter<PluginAdapter.ViewHolder
     notifyDataSetChanged();
   }
 
+  public void removeItem(int position) {
+    if (position == RecyclerView.NO_POSITION) return;
+    PlModel item = filteredModel.get(position);
+    originalModel.remove(item);
+    filteredModel.remove(position);
+    notifyItemRemoved(position);
+    if (listener != null) {
+      listener.onPluginDeleted();
+    }
+  }
+
   class ViewHolder extends RecyclerView.ViewHolder {
     private final LayoutPluginAdapterBinding binding;
 
     public ViewHolder(LayoutPluginAdapterBinding v) {
       super(v.getRoot());
       this.binding = v;
-
+      binding
+          .getRoot()
+          .setOnLongClickListener(
+              v -> {
+                int pos = getAdapterPosition();
+                if (pos != RecyclerView.NO_POSITION) {
+                  showDeleteDialog(pos);
+                }
+                return true;
+              });
       // تنظیم listener برای سویچ
       binding
           .getRoot()
@@ -82,6 +99,15 @@ public class PluginAdapter extends RecyclerView.Adapter<PluginAdapter.ViewHolder
                   }
                 }
               });
+    }
+
+    private void showDeleteDialog(int position) {
+      new MaterialAlertDialogBuilder(binding.getRoot().getContext())
+          .setTitle("Delete Plugin")
+          .setMessage("Are you sure you want to delete this plugin?")
+          .setPositiveButton("Delete", (d, w) -> removeItem(position))
+          .setNegativeButton("Cancel", null)
+          .show();
     }
 
     public void bind(PlModel item) {

@@ -113,7 +113,6 @@ dependencies {
 	
 
     //run ts tsx js jsx in Android
-
     implementation "de.inetsoftware:jlessc:1.12"
     implementation("io.noties.markwon:html:4.6.2")
     implementation("io.noties.markwon:image:4.6.2")
@@ -132,7 +131,7 @@ dependencies {
     implementation("com.caoccao.javet:swc4j:2.0.0") // Must Have
     implementation("com.caoccao.javet:javet-node-android:5.0.1") // Android Node (arm64 and x86_64)
     runtimeOnly 'androidx.graphics:graphics-shapes:1.1.0-alpha01'
-    implementation('com.github.HanzoDev1375:Android-code-snap:1.1.2') {
+    implementation('com.github.HanzoDev1375:Android-code-snap:1.1.3') {
         exclude group: "org.jetbrains", module: "annotations"
         exclude group: "org.jetbrains", module: "annotations-java5"
     }

@@ -120,9 +120,19 @@ public class PluginManagerActivity extends BaseCompat {
         new PluginAdapter(
             originalList,
             new PluginAdapter.OnPluginStateChangeListener() {
+
               @Override
               public void onPluginStateChanged() {
                 savePluginData();
+              }
+
+              @Override
+              public void onPluginDeleted() {
+                savePluginData();
+
+                if (originalList.isEmpty()) {
+                  showEmptyState();
+                }
               }
             });
 
