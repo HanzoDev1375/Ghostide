@@ -55,12 +55,15 @@
         style="stop-color:rgb(0,255,140); stop-opacity:1.000"
         offset="100.000%" />
     </linearGradient>
-    <style
-      type="text/css">@font-face {
-		 
-			font-family: &apos;aclonica&apos;; 
-			src: url(&apos;./aclonica.ttf&apos;);
-		}</style>
+    <style type="text/css">
+        @font-face {
+            font-family: 'aclonica';
+            src: url('https://raw.githubusercontent.com/HanzoDev1375/Ghostide/main/aclonica.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+</style>
   </defs>
   <path
     fill="url(#fillGrad0)"
