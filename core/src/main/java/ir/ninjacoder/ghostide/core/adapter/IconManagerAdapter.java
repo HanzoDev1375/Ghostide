@@ -179,7 +179,7 @@ public class IconManagerAdapter extends RecyclerView.Adapter<IconManagerAdapter.
         title.setText(name.replace(".svg", ""));
       }
       GlideCompat.LoadSvg(icons.getRootFile().getAbsolutePath(), icon);
-     // ObjectUtils.setColorFilter(icon);
+      // ObjectUtils.setColorFilter(icon);
       ObjectUtils.setTextColor(title);
     }
   }

@@ -34,6 +34,7 @@ import com.google.android.material.shape.MaterialShapes;
 import com.quickersilver.themeengine.ThemeChooserDialogBuilder;
 import com.quickersilver.themeengine.ThemeEngine;
 import com.quickersilver.themeengine.ThemeMode;
+import ir.ninjacoder.ghostide.core.model.AppIconManagerImpl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -587,15 +588,9 @@ public class SettingAppActivity extends BaseCompat {
             iconSpash.edit().putInt("iconSpash", iconput).apply();
           }
         });
-    map.clear();
-    for (int c = 0; c < 16; c++) {
-      {
-        HashMap<String, Object> item = new HashMap<>();
-        item.put("key", "");
-        map.add(item);
-      }
-    }
-    list.setAdapter(new ListAppIconAd(map));
+    var modelimpl = new AppIconManagerImpl();
+    modelimpl.bind();
+    list.setAdapter(new ListAppIconAd(modelimpl.getModel()));
     ((BaseAdapter) list.getAdapter()).notifyDataSetChanged();
     dialog.show();
   }
