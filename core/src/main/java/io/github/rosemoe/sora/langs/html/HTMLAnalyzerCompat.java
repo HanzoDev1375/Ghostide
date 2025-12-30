@@ -310,7 +310,6 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
           case HTMLLexer.BITOR:
           case HTMLLexer.CARET:
           case HTMLLexer.MOD:
-          case HTMLLexer.HASH:
           case HTMLLexer.ADD_ASSIGN:
           case HTMLLexer.SUB_ASSIGN:
           case HTMLLexer.MUL_ASSIGN:
@@ -433,10 +432,6 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
               }
               if (previous == HTMLLexer.CASE || previous == HTMLLexer.FINAL) {
                 colorid = EditorColorScheme.jsattr;
-              }
-              // hash #
-              if (previous == HTMLLexer.HASH) {
-                colorid = EditorColorScheme.htmlsymbol;
               }
               // show '<'
               if (previous == HTMLLexer.LT) {

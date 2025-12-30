@@ -22,12 +22,10 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.color.MaterialColors;
@@ -36,7 +34,6 @@ import com.google.android.material.shape.MaterialShapes;
 import com.quickersilver.themeengine.ThemeChooserDialogBuilder;
 import com.quickersilver.themeengine.ThemeEngine;
 import com.quickersilver.themeengine.ThemeMode;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -215,7 +212,7 @@ public class SettingAppActivity extends BaseCompat {
         v -> {
           showthemeeruda();
         });
-    blurmod.setOnClickListener(c -> _blursize());
+    blurmod.setOnClickListener(c -> setBlursize());
     windowsize.setOnClickListener(
         v -> {
           var di = new GhostWebMaterialDialog(SettingAppActivity.this);
@@ -493,7 +490,7 @@ public class SettingAppActivity extends BaseCompat {
     rvsetting.setAdapter(new Recyclerview2Adapter(fb));
   }
 
-  public void _blursize() {
+  void setBlursize() {
     var di = new MaterialAlertDialogBuilder(this);
     var bind = LayoutEditorSizeBlurBinding.inflate(getLayoutInflater());
     bind.slider.setTrackIconActiveStart(
@@ -513,8 +510,8 @@ public class SettingAppActivity extends BaseCompat {
     di.show();
   }
 
-  public void showMessage(String _s) {
-    Toast.makeText(getApplicationContext(), _s, Toast.LENGTH_SHORT).show();
+  void showMessage(String s) {
+    Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
   }
 
   private void initIconColors() {
@@ -574,12 +571,24 @@ public class SettingAppActivity extends BaseCompat {
               case 11:
                 iconput = 11;
                 break;
+              case 12:
+                iconput = 12;
+                break;
+              case 13:
+                iconput = 13;
+                break;
+              case 14:
+                iconput = 14;
+                break;
+              case 15:
+                iconput = 15;
+                break;
             }
             iconSpash.edit().putInt("iconSpash", iconput).apply();
           }
         });
     map.clear();
-    for (int c = 0; c < 12; c++) {
+    for (int c = 0; c < 16; c++) {
       {
         HashMap<String, Object> item = new HashMap<>();
         item.put("key", "");

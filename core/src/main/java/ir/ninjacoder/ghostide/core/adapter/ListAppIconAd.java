@@ -86,19 +86,37 @@ public class ListAppIconAd extends BaseAdapter implements Adapter {
       bin.textview1.setText("Ghost");
       bin.imageview1.setImageResource(R.drawable.ghosticons);
     }
-    if(position == 9){
+    if (position == 9) {
       bin.textview1.setText("Material Green");
       bin.imageview1.setImageResource(R.drawable.greendraw);
     }
-    if(position == 10){
+    if (position == 10) {
       bin.textview1.setText("Material Paper");
       bin.imageview1.setImageResource(R.drawable.paperdraw);
     }
-    if(position == 11){
+    if (position == 11) {
       bin.textview1.setText("Material Red");
       bin.imageview1.setImageResource(R.drawable.reddraw);
     }
-    
+    if (position == 12) {
+      bin.textview1.setText("Fourseasons");
+      bin.imageview1.setImageResource(R.drawable.fourseasons);
+    }
+    if (position == 13) {
+      bin.textview1.setText("Ghosticonice");
+      bin.imageview1.setImageResource(R.drawable.ghosticonice);
+      
+    }
+    if (position == 14) {
+      bin.textview1.setText("Ghosticonglass");
+      bin.imageview1.setImageResource(R.drawable.ghosticonglass);
+    }
+    if (position == 15) {
+      
+      bin.textview1.setText("Ghosticonfire");
+      bin.imageview1.setImageResource(R.drawable.ghosticonfire);
+    }
+
     return bin.getRoot();
   }
 }

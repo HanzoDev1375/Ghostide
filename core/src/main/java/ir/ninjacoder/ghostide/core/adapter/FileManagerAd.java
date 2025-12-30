@@ -249,7 +249,8 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     files.remove(pos);
     notifyItemRemoved(pos);
   }
-
+  
+  
   public void makeFile(String path) {
     var filemaker = new FileMaker(context);
     filemaker.setFolderName(path);

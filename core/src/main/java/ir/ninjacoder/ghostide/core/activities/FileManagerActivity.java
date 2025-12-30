@@ -699,7 +699,7 @@ public class FileManagerActivity extends BaseCompat
     reLoadFile(true);
   }
 
-  public void FolderMaker() {
+  void FolderMaker() {
     var dialog =
         new GhostWebMaterialDialog(FileManagerActivity.this)
             .setView(R.layout.makefolder)
@@ -744,8 +744,9 @@ public class FileManagerActivity extends BaseCompat
                           public void onSuccess(String content) {
                             Toast.makeText(getApplicationContext(), content, 2).show();
                             if (bind.recyclerview2 != null) {
+
+                              fileListItem.addItem(files.size());
                               reLoadFile();
-                              bind.recyclerview2.getAdapter().notifyItemChanged(files.size());
                             }
                           }
 
@@ -792,6 +793,7 @@ public class FileManagerActivity extends BaseCompat
 
           @Override
           public void onDoneMakeFile(String toast) {
+            fileListItem.addItem(files.size());
             reLoadFile();
           }
 
@@ -891,12 +893,11 @@ public class FileManagerActivity extends BaseCompat
     di.build();
   }
 
-  void setFontView(
-       ArrayList<HashMap<String, Object>> map, String _path, int _pos) {
-       String paths = map.get(_pos).get(_path).toString();
+  void setFontView(ArrayList<HashMap<String, Object>> map, String _path, int _pos) {
+    String paths = map.get(_pos).get(_path).toString();
     if (paths.endsWith(".ttf") || paths.endsWith(".otf")) {
       finalintentpostfont.setClass(getApplicationContext(), FontViewActivity.class);
-      finalintentpostfont.putExtra("font",paths);
+      finalintentpostfont.putExtra("font", paths);
       loadAnim(finalintentpostfont);
     }
   }

@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import ir.ninjacoder.ghostide.core.databinding.LayoutPluginAdapterBinding;
 import ir.ninjacoder.ghostide.core.interfaces.OnPluginStateChangeListener;
 import ir.ninjacoder.ghostide.core.model.PlModel;
@@ -71,7 +72,7 @@ public class PluginAdapter extends RecyclerView.Adapter<PluginAdapter.ViewHolder
       binding
           .getRoot()
           .setOnLongClickListener(
-              v -> {
+              vd -> {
                 int pos = getAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION) {
                   showDeleteDialog(pos);

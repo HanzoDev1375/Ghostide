@@ -1,6 +1,7 @@
 package ir.ninjacoder.ghostide.core.config;
 
 import android.content.ComponentName;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.widget.Toast;
 
@@ -54,6 +55,18 @@ public class AppIconManager {
       case 11:
         mtred();
         break;
+      case 12:
+        fourseasons();
+        break;
+      case 13:
+        ice();
+        break;
+      case 14:
+        glass();
+        break;
+      case 15:
+        fire();
+        break;
     }
   }
 
@@ -62,6 +75,22 @@ public class AppIconManager {
   void red() {
     sub("MainActivityred");
     DataUtil.showMessage(appcompat, "ENABLED ICON - RED");
+  }
+
+  void fourseasons() {
+    sub("MainActivityfourseasons");
+  }
+
+  void ice() {
+    sub("MainActivityghosticonice");
+  }
+
+  void glass() {
+    sub("MainActivityghosticonglass");
+  }
+
+  void fire() {
+    sub("MainActivityghosticonfire");
   }
 
   void yellow() {
@@ -122,10 +151,8 @@ public class AppIconManager {
   void sub(String name) {
     disableAllComponentsExcept(name);
     enableComponent(name);
+    restartApp();
   }
-
-  // Helper methods
-
   private void disableAllComponentsExcept(String componentNameToEnable) {
     PackageManager manager = appcompat.getPackageManager();
     String[] componentNames = {
@@ -140,7 +167,11 @@ public class AppIconManager {
       "MainActivityghost",
       "MainActivitygreenmt",
       "MainActivitypapmt",
-      "MainActivityrednmt"
+      "MainActivityrednmt",
+      "MainActivityghosticonfire",
+      "MainActivityghosticonglass",
+      "MainActivityghosticonice",
+      "MainActivityfourseasons"
     };
 
     for (String componentName : componentNames) {
@@ -159,6 +190,17 @@ public class AppIconManager {
         new ComponentName(appcompat, "ir.ninjacoder.ghostide." + componentName),
         PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
         PackageManager.DONT_KILL_APP);
+  }
+
+  private void restartApp() {
+    var pm = appcompat.getPackageManager();
+    var intent = pm.getLaunchIntentForPackage(appcompat.getPackageName());
+    if (intent != null) {
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+      appcompat.startActivity(intent);
+      appcompat.finish();
+      Runtime.getRuntime().exit(0);
+    }
   }
 
   // Inner class for displaying toast messages

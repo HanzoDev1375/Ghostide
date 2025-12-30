@@ -1,5 +1,19 @@
 import Android from {assets,res,raw}
 import Psi from {.*}
+import PsiKt from {Psi.Kt}
+
+class ktAz{
+ pub main(Kt kt){
+   val ktins = Kt.ins.subKtFile(object -> KtItemIns(comple)){
+     over pub onLoader(Kt i){
+       Log.e(i)
+     
+     }
+   }
+ 
+ }
+
+}
 class kj{
  pub main(Json json){
   json.run {

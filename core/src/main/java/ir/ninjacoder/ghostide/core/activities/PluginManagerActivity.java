@@ -15,6 +15,7 @@ import ir.ninjacoder.ghostide.core.R;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import ir.ninjacoder.ghostide.core.adapter.PluginAdapter;
+import ir.ninjacoder.ghostide.core.interfaces.OnPluginStateChangeListener;
 import ir.ninjacoder.ghostide.core.model.PlModel;
 import ir.ninjacoder.ghostide.core.pl.PluginLoaderImpl;
 import ir.ninjacoder.ghostide.core.pl.PluginManifest;
@@ -114,12 +115,10 @@ public class PluginManagerActivity extends BaseCompat {
     bind.rvplugin.setVisibility(View.VISIBLE);
     bind.inputpluginsearch.setVisibility(View.VISIBLE);
     bind.fabmod.show();
-
-    // ایجاد adapter با لیست تمیز شده
     adapter =
         new PluginAdapter(
             originalList,
-            new PluginAdapter.OnPluginStateChangeListener() {
+            new OnPluginStateChangeListener() {
 
               @Override
               public void onPluginStateChanged() {
@@ -158,8 +157,6 @@ public class PluginManagerActivity extends BaseCompat {
     currentSheet.checkUsing.setChecked(true);
 
     String basePluginPath = "/storage/emulated/0/GhostWebIDE/plugins/";
-    currentSheet.editDir.setHint("manifestName");
-
     currentSheet.sheetno.setOnClickListener(v -> builder.dismiss());
     currentSheet.sheetok.setOnClickListener(
         v -> {
