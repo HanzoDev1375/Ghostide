@@ -203,4 +203,8 @@ public class GitHubProfileView {
   public String getName() {
     return securePrefs.getName();
   }
+
+  public boolean hasLogin() {
+    return securePrefs.getToken() != null;
+  }
 }

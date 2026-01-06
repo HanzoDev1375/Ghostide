@@ -37,7 +37,6 @@ dependencies {
 
     implementation project(":vectormaster")
     implementation project(":webview")
-    implementation project(path: ":core")
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("com.google.android.material:material:1.13.0-alpha11")
     implementation("org.jetbrains:annotations:24.0.1")

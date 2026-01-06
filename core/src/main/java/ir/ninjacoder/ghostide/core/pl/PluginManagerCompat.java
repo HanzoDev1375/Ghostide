@@ -20,4 +20,8 @@ public interface PluginManagerCompat {
   void getBaseCompat(BaseCompat activity);
 
   String langModel();
+
+  default String versionCode() {
+    return "1.0";
+  }
 }

@@ -52,6 +52,7 @@ import com.ninjacoder.jgit.childer.LayoutBinder;
 import com.ninjacoder.jgit.childer.TextFind;
 import com.ninjacoder.jgit.childer.TextFindListener;
 import com.ninjacoder.jgit.search.SearchCallBack;
+import ir.ninjacoder.ghostide.core.git.GithubProfileImpl;
 import ir.ninjacoder.ghostide.core.widget.*;
 import java.io.File;
 import java.util.ArrayList;
@@ -277,6 +278,7 @@ public class FileManagerActivity extends BaseCompat
     TypeChange();
     ThemeChaker();
     mview = findViewById(R.id.view_filedir);
+    GithubProfileImpl.bindByActivity(bind.githubusernametv,bind.githubavataric);
     bind.opendraw.setOnClickListener(
         c -> {
           bind.Drawer.open();

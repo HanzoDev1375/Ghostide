@@ -80,11 +80,11 @@ public class NavigationViewCompnet extends NavigationView {
                     (r, __) -> {
                       it.logout();
                       icon.setImageResource(R.drawable.app_icon);
-                      title.setText("");
-                      subtitle.setText("");
-                      followers.setText("");
-                      following.setText("");
-                      bio.setText("");
+                      title.setText("Ghost ide App");
+                      subtitle.setText("User not login in github");
+                      followers.setText("0");
+                      following.setText("0");
+                      bio.setText("not login");
                     })
                 .show();
 
@@ -109,7 +109,7 @@ public class NavigationViewCompnet extends NavigationView {
         });
   }
 
-  public MaterialShapeDrawable getBackground() {
+  MaterialShapeDrawable getBackground() {
     MaterialShapeDrawable shapeDrawable =
         new MaterialShapeDrawable(
             ShapeAppearanceModel.builder()

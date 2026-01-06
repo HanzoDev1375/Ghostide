@@ -45,7 +45,7 @@ import ir.ninjacoder.ghostide.core.marco.FileShareManager;
 import ir.ninjacoder.ghostide.core.utils.ObjectUtils;
 import ir.ninjacoder.prograsssheet.CustomSheet;
 
-public class WallpaperFragment extends Fragment {
+public class WallpaperFragment extends BaseFragment {
   private OneRvBinding bi;
   private List<Map<String, String>> listAllImage = new ArrayList<>();
   private RequestNetwork setDataForGithub;

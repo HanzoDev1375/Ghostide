@@ -2,37 +2,17 @@ package io.github.rosemoe.sora.langs.java;
 
 import android.graphics.Color;
 import android.util.Log;
-
 import androidx.core.graphics.ColorUtils;
-
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.expr.ObjectCreationExpr;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
 import org.antlr.v4.runtime.Token;
-
 import java.io.IOException;
 import java.io.StringReader;
 import java.lang.ref.WeakReference;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Stack;
 import java.util.regex.Pattern;
-
 import io.github.rosemoe.sora.data.BlockLine;
 import io.github.rosemoe.sora.data.RainbowBracketHelper;
 import io.github.rosemoe.sora.data.Span;
@@ -42,18 +22,14 @@ import io.github.rosemoe.sora.langs.xml.analyzer.Utils;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.text.TextAnalyzer;
 import io.github.rosemoe.sora.text.TextStyle;
-import io.github.rosemoe.sora.util.TrieTree;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
 import io.github.rosemoe.sora.widget.ListCss3Color;
-import ir.ninjacoder.ghostide.core.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.core.IdeEditor;
-import ir.ninjacoder.ghostide.core.config.JavaPaserUtils;
 import ninjacoder.ghostide.androidtools.r8.android.CodeLine;
 import ninjacoder.ghostide.androidtools.r8.android.JavaAnalyzer;
 
 public class JavaCodeAnalyzer implements CodeAnalyzer {
   private final WeakReference<IdeEditor> mEditorReference;
-  private static final Object OBJECT = new Object();
   private Map<String, Boolean> mapStyle;
   private RainbowBracketHelper ha;
 
@@ -92,23 +68,11 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
       auto.setKeywords(JavaLanguage.keywords);
       Identifiers info = new Identifiers();
       info.begin();
-      int[] mcolors = {
-        EditorColorScheme.ATTRIBUTE_NAME,
-        EditorColorScheme.ATTRIBUTE_VALUE,
-        EditorColorScheme.OPERATOR,
-        EditorColorScheme.Ninja,
-        EditorColorScheme.KEYWORD
-      };
-
       Stack<BlockLine> stack = new Stack<>();
-      TrieTree<Object> tree = new TrieTree<>();
       int type, currSwitch = 1, maxSwitch = 0;
       int previous = 0;
       int lastLine = 1;
       int line, column;
-
-      tree.put("String", OBJECT);
-      tree.put("Object", OBJECT);
       while (delegate.shouldAnalyze()) {
         token = lexer.nextToken();
         if (token == null) break;
@@ -222,7 +186,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                     }
                   }
 
-                  Span middle = Span.obtain(column + text1.length() - 1, EditorColorScheme.LITERAL);
+                  Span middle = Span.obtain(column + text1.length() - 1, EditorColorScheme.black);
                   middle.setBackgroundColorMy(Color.TRANSPARENT);
                   colors.add(line, middle);
 
@@ -237,7 +201,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                   ignore.printStackTrace();
                 }
               }
-              result.addIfNeeded(line, column, forString());
+              result.addIfNeeded(line, column, EditorColorScheme.javastring);
               break;
             }
 
@@ -376,7 +340,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               } else if (previous == JavaLexer.THROW) {
                 colorNormal = EditorColorScheme.jsoprator;
               } else if (previous == JavaLexer.CASE) {
-                colorNormal = EditorColorScheme.javakeywordoprator;
+                colorNormal = EditorColorScheme.jsoprator;
               } else if (lexer._input.LA(1) == '.') {
                 colorNormal = EditorColorScheme.pystring;
               } else if (lexer._input.LA(1) == '[' || lexer._input.LA(1) == ']') {
@@ -389,7 +353,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 Pattern pattern = Pattern.compile("^[A-Z][a-zA-Z0-9_]*$");
                 var matcher = pattern.matcher(token.getText());
                 if (matcher.matches()) {
-                  colorNormal = EditorColorScheme.LITERAL;
+                  colorNormal = EditorColorScheme.javatype;
                 }
               }
 
@@ -426,153 +390,12 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           });
       result.determine(lastLine);
       result.setExtra(info);
-      try {
-        if (GhostIdeAppLoader.getAnalyzercod().getBoolean("Analyzercod", false) == true) {
-
-          ParserConfiguration config = new ParserConfiguration();
-          config.setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
-          StaticJavaParser.setConfiguration(config);
-          var cu = StaticJavaParser.parse(content.toString());
-          Set<String> declaredVariables = new HashSet<>();
-          Set<String> usedVariables = new HashSet<>();
-          Set<String> unusedImport = new HashSet<>();
-          Set<String> mtcall = new HashSet<>();
-          Set<String> mtusing = new HashSet<>();
-          Map<String, Integer> mlines = new HashMap<>();
-          Map<String, Integer> mcoloum = new HashMap<>();
-          Map<String, Integer> inline = new HashMap<>();
-          Map<String, Integer> incol = new HashMap<>();
-
-          cu.accept(
-              new VoidVisitorAdapter<Void>() {
-                @Override
-                public void visit(FieldDeclaration fieldDeclaration, Void arg) {
-                  for (VariableDeclarator variable : fieldDeclaration.getVariables()) {
-                    String variableName = variable.getNameAsString();
-                    int line = variable.getBegin().get().line;
-                    int column = variable.getBegin().get().column;
-                    declaredVariables.add(variableName);
-                    inline.put(variableName, line);
-                    incol.put(variableName, column);
-                  }
-
-                  super.visit(fieldDeclaration, arg);
-                }
-
-                @Override
-                public void visit(VariableDeclarationExpr variableDeclarationExpr, Void arg) {
-                  for (VariableDeclarator variable : variableDeclarationExpr.getVariables()) {
-                    String variableName = variable.getNameAsString();
-                    int line = variable.getBegin().get().line;
-                    int column = variable.getBegin().get().column;
-                    declaredVariables.add(variableName);
-                    inline.put(variableName, line);
-                    incol.put(variableName, column);
-                    // tesing
-                    if (JavaPaserUtils.getRegexAnnotation(variableDeclarationExpr.getAnnotations()))
-                      Utils.setWaringSpan(result, line, column, EditorColorScheme.green);
-                  }
-
-                  super.visit(variableDeclarationExpr, arg);
-                }
-
-                @Override
-                public void visit(NameExpr nameExpr, Void arg) {
-                  usedVariables.add(nameExpr.getNameAsString());
-                  super.visit(nameExpr, arg);
-                }
-
-                @Override
-                public void visit(ImportDeclaration dec, Void arg) {
-                  String importName = dec.getNameAsString();
-                  int line2 = dec.getBegin().get().line;
-                  int column2 = dec.getBegin().get().column;
-                  inline.put(importName, line2);
-                  incol.put(importName, column2);
-                  unusedImport.add(dec.getName().asString());
-                  super.visit(dec, arg);
-                }
-
-                @Override
-                public void visit(ObjectCreationExpr objectCreationExpr, Void arg) {
-                  String className = objectCreationExpr.getType().getNameAsString();
-                  usedVariables.add(className);
-                  super.visit(objectCreationExpr, arg);
-                }
-
-                @Override
-                public void visit(MethodDeclaration arg0, Void arg1) {
-                  var variableName = arg0.getNameAsString();
-                  int li = arg0.getName().getBegin().get().line;
-                  int cl = arg0.getName().getBegin().get().column;
-                  mtusing.add(arg0.getNameAsString());
-                  inline.put(variableName, li);
-                  incol.put(variableName, cl);
-                  if (JavaPaserUtils.getDeprecated(arg0.getAnnotations()))
-                    Utils.setWaringSpan(result, li, cl + 1);
-                  super.visit(arg0, arg1);
-                }
-
-                @Override
-                public void visit(ConstructorDeclaration arg0, Void arg1) {
-                  int lines = arg0.getName().getBegin().get().line;
-                  int colz = arg0.getName().getBegin().get().column;
-                  if (JavaPaserUtils.getDeprecated(arg0.getAnnotations()))
-                    Utils.setWaringSpan(result, lines, colz + 1);
-                  if (JavaPaserUtils.getCustomAnnotationExpr(arg0.getAnnotations(), "NonNull"))
-                    Utils.setWaringSpan(result, lines, colz + 1, EditorColorScheme.HTML_TAG);
-
-                  super.visit(arg0, arg1);
-                }
-
-                @Override
-                public void visit(BlockStmt arg0, Void arg1) {
-                  if (arg0.getStatements().isEmpty()) {
-                    var lines1 = arg0.getBegin().get().line;
-                    var columns1 = arg0.getBegin().get().column;
-                    Utils.setWaringSpan(
-                        result, lines1, columns1 + 1, EditorColorScheme.javakeyword);
-                  }
-                  super.visit(arg0, arg1);
-                }
-              },
-              null);
-
-          unusedImport.removeIf(importName -> usedVariables.contains(getSimpleName(importName)));
-          declaredVariables.removeAll(usedVariables);
-
-          for (var it : unusedImport) {
-            var myline = inline.get(it);
-            var mycol = incol.get(it);
-            Utils.setSpanEFO(
-                result,
-                myline.intValue(),
-                mycol.intValue() + it.length(),
-                EditorColorScheme.COMMENT,
-                false,
-                true);
-          }
-          FieldUsageChecker.run(editor.getTextAsString(), result);
-        }
-      } catch (Exception err) {
-
-      }
+      
+      
     } catch (IOException e) {
       e.printStackTrace();
       Log.e("TAG", e.getMessage());
     }
-  }
-
-  private String getSimpleName(String importName) {
-    return importName.substring(importName.lastIndexOf('.') + 1);
-  }
-
-  long withoutCompletion(int id) {
-    return TextStyle.makeStyle(id, 0, true, false, false);
-  }
-
-  long forString() {
-    return TextStyle.makeStyle(EditorColorScheme.javastring, 0, true, true, false);
   }
 
   private void get(int color, int line, int col, TextAnalyzeResult result) {

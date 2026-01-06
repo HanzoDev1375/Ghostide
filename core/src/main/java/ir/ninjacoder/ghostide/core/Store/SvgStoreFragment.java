@@ -36,7 +36,7 @@ import ir.ninjacoder.ghostide.core.model.ListSheet;
 import ir.ninjacoder.ghostide.core.utils.DataUtil;
 import ir.ninjacoder.ghostide.core.utils.FileUtil;
 
-public class SvgStoreFragment extends Fragment {
+public class SvgStoreFragment extends BaseFragment {
   private RecyclerView view;
   private RequestNetwork network;
   private RequestNetwork.RequestListener call;

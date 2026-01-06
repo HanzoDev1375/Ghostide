@@ -39,7 +39,7 @@ import ir.ninjacoder.ghostide.core.RequestNetworkController;
 import ir.ninjacoder.ghostide.core.utils.DataUtil;
 import ir.ninjacoder.ghostide.core.utils.FileUtil;
 
-public class WebShopFragment extends Fragment {
+public class WebShopFragment extends BaseFragment {
 
   private RecyclerView view;
   private RequestNetwork network;

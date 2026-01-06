@@ -11,7 +11,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.MainThread;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,10 +33,9 @@ import java.util.Map;
 
 import ir.ninjacoder.ghostide.core.RequestNetwork;
 import ir.ninjacoder.ghostide.core.RequestNetworkController;
-import ir.ninjacoder.ghostide.core.Store.FontManager;
 import ir.ninjacoder.ghostide.core.utils.ObjectUtils;
 
-public class FontFragment extends Fragment {
+public class FontFragment extends BaseFragment {
 
   private OneRvBinding bin;
   private RequestNetwork network;

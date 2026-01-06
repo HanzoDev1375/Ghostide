@@ -2,14 +2,17 @@ package com.mcal.uidesigner;
 
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
+import android.view.Gravity;
 import androidx.appcompat.widget.Toolbar;
+import com.google.android.material.color.MaterialColors;
 import com.mcal.uidesigner.common.ColorMaterial;
 import static com.mcal.uidesigner.utils.FileHelper.chooseLayoutOrCreateNew;
 import static com.mcal.uidesigner.utils.FileHelper.createNewLayoutFile;
 import static com.mcal.uidesigner.utils.FileHelper.getRealFileNameFromUri;
 import static com.mcal.uidesigner.utils.FileHelper.suggestNewLayoutName;
+import com.mcal.uidesigner.utils.MaterialColorStatic;
 import static com.mcal.uidesigner.utils.StorageHelper.getDefaultResDirPath;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
@@ -173,6 +176,8 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.designer);
     toolbar = findViewById(R.id.toolbar);
+    getWindow().setNavigationBarColor(MaterialColorStatic.getBackgroundColor(this));
+    getWindow().setStatusBarColor(MaterialColorStatic.getBackgroundColor(this));
     setSupportActionBar(toolbar);
     setTitle("Ghost ide Layout editor");
     AndroidHelper.makeToolbarFocusable(this);
@@ -269,11 +274,11 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
     this.contentView = new LinearLayout(this);
     ((ViewGroup) findViewById(R.id.designerContent)).addView(this.contentView);
     this.contentView.setClipChildren(false);
-    this.contentView.setGravity(17);
+    this.contentView.setGravity(Gravity.CENTER);
     this.containerView = new LinearLayout(this);
-    this.contentView.addView(this.containerView);
+    this.contentView.addView(containerView);
     this.containerView.setClipChildren(false);
-    this.containerView.setGravity(17);
+    this.containerView.setGravity(Gravity.CENTER);
     ((ListView) findViewById(R.id.designerViewList))
         .setOnItemClickListener(
             (parent, view, position, id) -> {
