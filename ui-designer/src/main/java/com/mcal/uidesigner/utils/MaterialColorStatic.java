@@ -6,6 +6,6 @@ import com.google.android.material.color.MaterialColors;
 
 public class MaterialColorStatic {
   public static int getBackgroundColor(Context c) {
-    return MaterialColors.getColor(R.attr.colorSurface,0);
+    return MaterialColors.getColor(c,R.attr.colorSurface,0);
   }
 }
