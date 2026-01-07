@@ -4,7 +4,7 @@ import java.time.LocalTime;
 
 public class GhostDate {
 
-  static String getGreeting() {
+ public static String getGreeting() {
     LocalTime now = LocalTime.now();
     int hour = now.getHour();
 
@@ -17,9 +17,5 @@ public class GhostDate {
     } else {
       return "Good Night";
     }
-  }
-
-  public static String getGreetingWithName(String name) {
-    return getGreeting() + " " + name;
   }
 }

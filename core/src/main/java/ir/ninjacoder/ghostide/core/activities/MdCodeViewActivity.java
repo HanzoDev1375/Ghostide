@@ -7,18 +7,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import ir.ninjacoder.codesnap.markdownpreview.MarkDownTextHelper;
 import ir.ninjacoder.ghostide.core.R;
+import ir.ninjacoder.ghostide.core.databinding.MdcodeviewBinding;
 import ir.ninjacoder.ghostide.core.utils.FileUtil;
 
-public class MdCodeViewActivity extends AppCompatActivity {
-
+public class MdCodeViewActivity extends BaseCompat {
+  private MdcodeviewBinding bind;
   @Override
-  protected void onCreate(Bundle _savedInstanceState) {
-    super.onCreate(_savedInstanceState);
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    bind = MdcodeviewBinding.inflate(getLayoutInflater());
+    setSupportActionBar(bind.mdtoolbar);
     setContentView(R.layout.mdcodeview);
-
-    TextView markdownview = findViewById(R.id.mdview);
-    
     MarkDownTextHelper.handleMarkDown(
-        markdownview, FileUtil.readFile(getIntent().getStringExtra("v")));
+        bind.mdview, FileUtil.readFile(getIntent().getStringExtra("v")));
   }
 }

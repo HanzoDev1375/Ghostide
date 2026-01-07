@@ -36,23 +36,11 @@ public class NavigationViewCompnet extends NavigationView {
   }
 
   public NavigationViewCompnet init() {
-
-    /* setItemTextColor(ColorStateList.valueOf(MaterialColors.getColor(this, ObjectUtils.TvColor)));
-    setItemIconTintList(
-            ColorStateList.valueOf(MaterialColors.getColor(this, ObjectUtils.ColorFilter)));
-    setItemMaxLines(1);
-    setItemIconSize(50);*/
-    setBackground(getBackground());
-
     setVerticalScrollBarEnabled(false);
     setHorizontalScrollBarEnabled(false);
-    /*getHeaderView(0)
-    .findViewById(R.id.mcardClick)
-    .setOnClickListener(
-            v -> {
-                Toast.makeText(getContext(), R.string.app_name, 3).show();
-            });*/
     disableNavScroll(this);
+    setBackground(getBackground());
+    
     ImageView icon = getHeaderView(0).findViewById(R.id.iconHeader);
     TextView title = getHeaderView(0).findViewById(R.id.headertitle);
     TextView subtitle = getHeaderView(0).findViewById(R.id.hedersubtitle);
@@ -61,16 +49,16 @@ public class NavigationViewCompnet extends NavigationView {
     TextView bio = getHeaderView(0).findViewById(R.id.biogithub);
     try {
       var it = new GitHubProfileView(getContext());
-      followers.setText(it.hasFollowers() ? "follwers " + it.getFollowers() : "");
-      following.setText(it.hasFollowing() ? "following " + it.getFollowing() : "");
-      bio.setText(it.hasBio() ? it.getBio() : "");
+      followers.setText(it.hasFollowers() ? "follwers " + it.getFollowers() : "0");
+      following.setText(it.hasFollowing() ? "following " + it.getFollowing() : "0");
+      bio.setText(it.hasBio() ? it.getBio() : "user not login...");
       Glide.with(icon.getContext())
           .load(it.hasAvatarUrl() ? it.getAvatarUrl() : R.drawable.app_icon)
           .circleCrop()
           .error(R.drawable.app_icon)
           .into(icon);
-      title.setText(it.hasName() ? it.getName() : "");
-      subtitle.setText(it.hasUsername() ? it.getUsername() : "");
+      title.setText(it.hasName() ? it.getName() : "Ghost ide app");
+      subtitle.setText(it.hasUsername() ? it.getUsername() : "User not login ");
       icon.setOnLongClickListener(
           v33 -> {
             new MaterialAlertDialogBuilder(getContext())
@@ -97,19 +85,8 @@ public class NavigationViewCompnet extends NavigationView {
     return this;
   }
 
-  public void setClick(OnClick clicks) {
-    setNavigationItemSelectedListener(
-        new OnNavigationItemSelectedListener() {
-          @Override
-          public boolean onNavigationItemSelected(MenuItem menuItem) {
-            clicks.Click(menuItem);
-
-            return false;
-          }
-        });
-  }
-
-  MaterialShapeDrawable getBackground() {
+  /* برای پلاگین باید باشه*/
+  public MaterialShapeDrawable getBackground() {
     MaterialShapeDrawable shapeDrawable =
         new MaterialShapeDrawable(
             ShapeAppearanceModel.builder()
@@ -121,6 +98,18 @@ public class NavigationViewCompnet extends NavigationView {
         ColorStateList.valueOf(MaterialColors.getColor(getContext(), ObjectUtils.Back, 0)));
 
     return shapeDrawable;
+  }
+
+  public void setClick(OnClick clicks) {
+    setNavigationItemSelectedListener(
+        new OnNavigationItemSelectedListener() {
+          @Override
+          public boolean onNavigationItemSelected(MenuItem menuItem) {
+            clicks.Click(menuItem);
+
+            return false;
+          }
+        });
   }
 
   private void disableNavScroll(NavigationView navView) {
