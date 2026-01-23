@@ -3,6 +3,7 @@ package io.github.rosemoe.sora.langs.java;
 import android.graphics.Color;
 import android.util.Log;
 import androidx.core.graphics.ColorUtils;
+import ir.ninjacoder.ghostide.core.GhostIdeAppLoader;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
 import org.antlr.v4.runtime.Token;
@@ -305,7 +306,6 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                         currentLine + i, lineStartColumn + j, EditorColorScheme.javastring);
                   }
                 }
-                
               }
               break;
             }
@@ -379,19 +379,18 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
         first = false;
       }
       info.finish();
-
-      JavaCodeA code = new JavaCodeA();
-      // code.analyze(content, result, delegate);
-      List<CodeLine> code123 = JavaAnalyzer.analyze(content.toString());
-      code123.forEach(
-          item -> {
-            if (item.haserror) Utils.setErrorSpan(result, item.line, item.column);
-            if (item.haswar) Utils.setWaringSpan(result, item.line, item.column);
-          });
+      
+      if (isCodeAnalyze()) {
+        List<CodeLine> code123 = JavaAnalyzer.analyze(content.toString());
+        code123.forEach(
+            item -> {
+              if (item.haserror) Utils.setErrorSpan(result, item.line, item.column);
+              if (item.haswar) Utils.setWaringSpan(result, item.line, item.column);
+            });
+      }
       result.determine(lastLine);
       result.setExtra(info);
-      
-      
+
     } catch (IOException e) {
       e.printStackTrace();
       Log.e("TAG", e.getMessage());

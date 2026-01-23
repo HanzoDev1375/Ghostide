@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-       android:shape="oval">
-    <solid android:color="@color/dkplayer_theme_color"/>
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="?@attr/colorPrimary" />
     <size
-            android:height="@dimen/dkplayer_controller_seekbar_size_n"
-            android:width="@dimen/dkplayer_controller_seekbar_size_n"/>
+        android:height="@dimen/dkplayer_controller_seekbar_size_n"
+        android:width="@dimen/dkplayer_controller_seekbar_size_n" />
 </shape>

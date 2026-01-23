@@ -252,6 +252,15 @@ public class GlideCompat {
         .into(img);
   }
 
+  public static void LoadPgbIcon(String file, ImageView icon) {
+      Glide.with(icon.getContext())
+          .load(new ZipEntryModel(file, "icon.png"))
+          .transform(new RoundedCornersTransformation(RenderSize()))
+          .error(R.drawable.pgbicon)
+          .into(icon);
+    
+  }
+
   public static void LoadIconVsCode(String file, ImageView img) {
     var mypath = "resources/icons/icon.png";
     Glide.with(img.getContext())

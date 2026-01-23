@@ -19,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
@@ -35,7 +34,6 @@ import java.util.ArrayList;
 
 import ir.ninjacoder.ghostide.core.R;
 import ir.ninjacoder.ghostide.core.StandardVideoController;
-import ir.ninjacoder.ghostide.core.activities.BaseCompat;
 import ir.ninjacoder.ghostide.core.widget.component.CompleteView;
 import ir.ninjacoder.ghostide.core.widget.component.ErrorView;
 import ir.ninjacoder.ghostide.core.widget.component.GestureView;
@@ -110,14 +108,10 @@ public class VideoViewsActivity extends BaseCompat {
         new LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     viewvideo.setLayoutParams(lpviewvideo);
-    mVideoView.setPadding(0,0,0,0);
+    mVideoView.setPadding(0, 0, 0, 0);
     mVideoView.setClipToPadding(false);
     viewvideo.addView(mVideoView);
     mWidthPixels = getResources().getDisplayMetrics().widthPixels;
-    //  mVideoView.setLayoutParams(
-    //   new LinearLayout.LayoutParams(mWidthPixels, mWidthPixels * 9 / 16 + 1));
-    
-    //mVideoView.startFullScreen();
     mVideoView.setUrl(path);
     mController = new StandardVideoController(this);
     mController.addControlComponent(new CompleteView(this));
@@ -202,7 +196,7 @@ public class VideoViewsActivity extends BaseCompat {
 
   void updatePictureInPictureActions(
       @DrawableRes int iconId, String title, int controlType, int requestCode) {
-    final ArrayList<RemoteAction> actions = new ArrayList<>();
+     ArrayList<RemoteAction> actions = new ArrayList<>();
 
     // This is the PendingIntent that is invoked when a user clicks on the action item.
     // You need to use distinct request codes for play and pause, or the PendingIntent won't
@@ -271,7 +265,8 @@ public class VideoViewsActivity extends BaseCompat {
               }
             }
           };
-      registerReceiver(mReceiver, new IntentFilter(ACTION_MEDIA_CONTROL));
+
+      registerReceiver(mReceiver, new IntentFilter(ACTION_MEDIA_CONTROL), RECEIVER_NOT_EXPORTED);
     } else {
       // We are out of PiP mode. We can stop receiving events from it.
       unregisterReceiver(mReceiver);
@@ -294,10 +289,6 @@ public class VideoViewsActivity extends BaseCompat {
   public void onDestroy() {
     super.onDestroy();
     mVideoView.release();
-  }
-
-  public void showMessage(String _s) {
-    Toast.makeText(VideoViewsActivity.this, _s, Toast.LENGTH_SHORT).show();
   }
 
   public class CustomDrawerPopupView extends DrawerPopupView {
@@ -348,21 +339,6 @@ public class VideoViewsActivity extends BaseCompat {
                 public void onClick(View v) {
                   mVideoView.setSpeed(0.75f);
                   speed = "0.75";
-                  txt1.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt2.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt3.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt4.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt5.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
                 }
               });
 
@@ -373,21 +349,6 @@ public class VideoViewsActivity extends BaseCompat {
                 public void onClick(View v) {
                   mVideoView.setSpeed(1.0f);
                   speed = "1.0";
-                  txt2.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt1.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt3.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt4.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt5.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
                 }
               });
 
@@ -398,21 +359,6 @@ public class VideoViewsActivity extends BaseCompat {
                 public void onClick(View v) {
                   mVideoView.setSpeed(1.25f);
                   speed = "1.25";
-                  txt3.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt2.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt1.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt4.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt5.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
                 }
               });
 
@@ -423,21 +369,6 @@ public class VideoViewsActivity extends BaseCompat {
                 public void onClick(View v) {
                   mVideoView.setSpeed(1.5f);
                   speed = "1.5";
-                  txt4.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt2.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt3.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt1.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt5.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
                 }
               });
 
@@ -448,21 +379,6 @@ public class VideoViewsActivity extends BaseCompat {
                 public void onClick(View v) {
                   mVideoView.setSpeed(2.0f);
                   speed = "2.0";
-                  txt5.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt2.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt3.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt4.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt1.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
                 }
               });
     }
@@ -516,21 +432,6 @@ public class VideoViewsActivity extends BaseCompat {
                 public void onClick(View v) {
                   mVideoView.setScreenScaleType(VideoView.SCREEN_SCALE_DEFAULT);
                   proportion = "default";
-                  txt1.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt2.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt3.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt4.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt5.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
                 }
               });
 
@@ -541,21 +442,6 @@ public class VideoViewsActivity extends BaseCompat {
                 public void onClick(View v) {
                   mVideoView.setScreenScaleType(VideoView.SCREEN_SCALE_16_9);
                   proportion = "16:9";
-                  txt2.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt1.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt3.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt4.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt5.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
                 }
               });
 
@@ -566,21 +452,6 @@ public class VideoViewsActivity extends BaseCompat {
                 public void onClick(View v) {
                   mVideoView.setScreenScaleType(VideoView.SCREEN_SCALE_ORIGINAL);
                   proportion = "Original size";
-                  txt3.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt2.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt1.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt4.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt5.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
                 }
               });
 
@@ -591,21 +462,6 @@ public class VideoViewsActivity extends BaseCompat {
                 public void onClick(View v) {
                   mVideoView.setScreenScaleType(VideoView.SCREEN_SCALE_MATCH_PARENT);
                   proportion = "filling";
-                  txt4.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt2.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt3.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt1.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt5.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
                 }
               });
 
@@ -616,21 +472,6 @@ public class VideoViewsActivity extends BaseCompat {
                 public void onClick(View v) {
                   mVideoView.setScreenScaleType(VideoView.SCREEN_SCALE_CENTER_CROP);
                   proportion = "center crop";
-                  txt5.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt2.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt3.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt4.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
-                  txt1.setTextColor(
-                      MaterialColors.getColor(
-                          VideoViewsActivity.this, ObjectUtils.colorOnSurface, 0));
                 }
               });
     }

@@ -365,7 +365,7 @@ public class FileUtil {
     return "com.android.providers.media.documents".equals(uri.getAuthority());
   }
 
-  private static void saveBitmap(Bitmap bitmap, String destPath) {
+  public static void saveBitmap(Bitmap bitmap, String destPath) {
     FileUtil.createNewFile(destPath);
     try (FileOutputStream out = new FileOutputStream(new File(destPath))) {
       bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);

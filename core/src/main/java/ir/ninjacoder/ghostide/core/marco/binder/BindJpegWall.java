@@ -35,7 +35,7 @@ public class BindJpegWall {
                   {
                     var i = new Intent();
                     i.setClass(context, SetHomeWallpActivity.class);
-                    i.putExtra("img", staticString);
+                    i.putExtra("path", staticString);
                     context.loadAnim(i);
                     sheet.dissmiss();
                     break;

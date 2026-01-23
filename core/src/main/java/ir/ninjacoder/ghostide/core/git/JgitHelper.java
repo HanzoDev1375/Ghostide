@@ -1,5 +1,6 @@
 package ir.ninjacoder.ghostide.core.git;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
@@ -9,8 +10,10 @@ import androidx.annotation.MainThread;
 
 import com.google.android.material.color.MaterialColors;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.Status;
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
@@ -29,11 +32,11 @@ public class JgitHelper {
   private boolean initialized = false;
   private File gitDir;
   private String filePath;
+  private Git git;
   private Repository repository;
 
   public JgitHelper(File file) {
     this.filePath = file.getAbsolutePath();
-
     try {
       this.gitDir = findGitDir(file);
       if (this.gitDir == null || !isValidGitRepository(gitDir)) {
@@ -49,14 +52,50 @@ public class JgitHelper {
         return;
       }
 
-      try (Git git = new Git(repository)) {
+      try {
+        git = new Git(repository);
         this.status = git.status().call();
         this.initialized = true;
         Log.d(TAG, "Initialized successfully for: " + filePath);
+
+      } catch (Exception e) {
+        Log.e(TAG, "Error initializing repository", e);
+        closeRepository();
       }
-    } catch (Exception e) {
-      Log.e(TAG, "Error initializing repository", e);
-      closeRepository();
+    } catch (Exception err) {
+      Log.e(getClass().getName(), err.getMessage());
+    }
+  }
+
+  public void showAddFileDialog(Context context) {
+    if (!isInitialized() || git == null) return;
+
+    try {
+      Status currentStatus = git.status().call(); // ← اینجا به‌روز می‌کنیم
+      Set<String> untracked = currentStatus.getUntracked();
+      if (untracked.isEmpty()) return;
+
+      String relativePath = untracked.iterator().next();
+      String fileName = new File(relativePath).getName();
+
+      new MaterialAlertDialogBuilder(context)
+          .setTitle("Git")
+          .setMessage("Add file: " + fileName)
+          .setPositiveButton(
+              "Add & Commit",
+              (d, w) -> {
+                try {
+                  git.add().addFilepattern(relativePath).call();
+                  git.commit().setMessage("Add file: " + fileName).call();
+                } catch (GitAPIException e) {
+                  e.printStackTrace();
+                }
+              })
+          .setNegativeButton("Cancel", null)
+          .show();
+
+    } catch (GitAPIException e) {
+      e.printStackTrace();
     }
   }
 

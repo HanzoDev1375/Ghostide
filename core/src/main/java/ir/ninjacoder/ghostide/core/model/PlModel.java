@@ -30,6 +30,9 @@ public class PlModel {
     this.type = type;
     this.icon = icon;
   }
+  public PlModel(){
+    
+  }
 
   public String getName() {
     return this.name;
@@ -73,4 +76,5 @@ public class PlModel {
   public void setIsusing(Boolean isusing) {
     this.isusing = isusing;
   }
+  
 }

@@ -12,7 +12,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
@@ -52,7 +51,12 @@ import com.ninjacoder.jgit.childer.LayoutBinder;
 import com.ninjacoder.jgit.childer.TextFind;
 import com.ninjacoder.jgit.childer.TextFindListener;
 import com.ninjacoder.jgit.search.SearchCallBack;
+import ir.ninjacoder.ghostide.core.appupdate.UpadteAppView;
+import ir.ninjacoder.ghostide.core.editor.PluginCompressorPgb;
+import ir.ninjacoder.ghostide.core.editor.PluginExtractor;
+import ir.ninjacoder.ghostide.core.editor.PluginextractorFace;
 import ir.ninjacoder.ghostide.core.git.GithubProfileImpl;
+import ir.ninjacoder.ghostide.core.git.JgitHelperImpl;
 import ir.ninjacoder.ghostide.core.widget.*;
 import java.io.File;
 import java.util.ArrayList;
@@ -63,8 +67,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import ir.ninjacoder.ghostide.PluginManager.IntentHelper;
 import ir.ninjacoder.ghostide.core.R;
-import ir.ninjacoder.ghostide.core.RequestNetwork;
-import ir.ninjacoder.ghostide.core.RequestNetworkController;
 import ir.ninjacoder.ghostide.core.Store.StoreAcitvity;
 import ir.ninjacoder.ghostide.core.adapter.FileManagerAd;
 import ir.ninjacoder.ghostide.core.adapter.ViewType;
@@ -134,7 +136,6 @@ public class FileManagerActivity extends BaseCompat
   private ProjectMaker projectMaker;
   private double positionTabs = 0;
   protected SharedPreferences gridMode;
-
   private boolean staticStorage = false;
   private String version = "";
   private double post = 0;
@@ -167,8 +168,7 @@ public class FileManagerActivity extends BaseCompat
   private SharedPreferences zipCuntishen;
   private Intent govirwFilm = new Intent();
   private SharedPreferences war;
-  private RequestNetwork CheckNewVersion;
-  private RequestNetwork.RequestListener UpdateCheck;
+  
   private Intent finalintentpostfont = new Intent();
   private Intent intentgetLogCat = new Intent();
   private SharedPreferences tmp;
@@ -226,6 +226,7 @@ public class FileManagerActivity extends BaseCompat
     }
     gridMode = getSharedPreferences("gride", Activity.MODE_PRIVATE);
     fileListItem = new FileManagerAd(files, FileManagerActivity.this, this, listchild);
+    bind.recyclerview2.setAdapter(fileListItem);
     shp = getSharedPreferences("shp", Activity.MODE_PRIVATE);
     soglo = getSharedPreferences("soglo", Activity.MODE_PRIVATE);
     np = getSharedPreferences("np", Activity.MODE_PRIVATE);
@@ -234,7 +235,6 @@ public class FileManagerActivity extends BaseCompat
     delfile = getSharedPreferences("delfile", Activity.MODE_PRIVATE);
     zipCuntishen = getSharedPreferences("zipCuntishen", Activity.MODE_PRIVATE);
     war = getSharedPreferences("war", Activity.MODE_PRIVATE);
-    CheckNewVersion = new RequestNetwork(this);
     tmp = getSharedPreferences("tmp", Activity.MODE_PRIVATE);
     base = getSharedPreferences("base", Activity.MODE_PRIVATE);
     save_path = getSharedPreferences("save_path", Activity.MODE_PRIVATE);
@@ -243,6 +243,7 @@ public class FileManagerActivity extends BaseCompat
     book = getSharedPreferences("hsipsot4444", Activity.MODE_PRIVATE);
     sh = new ShortcutInfoImpl(FileManagerActivity.this, Folder);
     new PluginLoaderImpl().runInFileManager(this);
+    appUpdate();
     if (Build.VERSION.SDK_INT >= 21)
       getWindow().setNavigationBarColor(MaterialColors.getColor(this, ObjectUtils.Back, 0));
     if (Build.VERSION.SDK_INT >= 21)
@@ -253,6 +254,7 @@ public class FileManagerActivity extends BaseCompat
         .getDecorView()
         .setBackgroundColor(
             MaterialColors.getColor(this, ObjectUtils.colorSurfaceContainerHigh, 0));
+
     bind.searchbar.setCallBack(
         new SearchCallBack() {
 
@@ -278,7 +280,7 @@ public class FileManagerActivity extends BaseCompat
     TypeChange();
     ThemeChaker();
     mview = findViewById(R.id.view_filedir);
-    GithubProfileImpl.bindByActivity(bind.githubusernametv,bind.githubavataric);
+    GithubProfileImpl.bindByActivity(bind.githubusernametv, bind.githubavataric);
     bind.opendraw.setOnClickListener(
         c -> {
           bind.Drawer.open();
@@ -301,55 +303,7 @@ public class FileManagerActivity extends BaseCompat
               }
             });
 
-    UpdateCheck =
-        new RequestNetwork.RequestListener() {
-
-          @Override
-          public void onResponse(String _param1, String response, HashMap<String, Object> _param3) {
-
-            try {
-              upfile =
-                  new Gson()
-                      .fromJson(
-                          response,
-                          new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
-            } catch (Exception e) {
-            }
-            if (!upfile.get((int) 0).get("Version").toString().equals(version)) {
-              /// AddDialog
-              var di = new GhostWebMaterialDialog(FileManagerActivity.this);
-              di.setTitle(upfile.get((int) 0).get("Title").toString());
-              di.setMessage(upfile.get((int) 0).get("Massges").toString());
-              di.setCancelable(false);
-              di.setNeutralButton(
-                  "Update",
-                  (p, d) -> {
-                    bind.downloder.setTitle(upfile.get(0).get("Title").toString());
-                    bind.downloder.setSizeTitle(
-                        ObjectUtils.hasCpuArm64()
-                            ? upfile.get(0).get("sizearm64").toString()
-                            : upfile.get(0).get("sizearm32").toString());
-                    bind.downloder.setVisibility(View.VISIBLE);
-                    bind.fabAdd.setVisibility(View.GONE);
-                    bind.downloder.setOnClick(
-                        v -> {
-                          bind.downloder.setDownload(
-                              ObjectUtils.hasCpuArm64()
-                                  ? upfile.get(0).get("linkarm64").toString()
-                                  : upfile.get(0).get("linkarm32").toString(),
-                              upfile.get(0).get("appname").toString());
-                        });
-                  });
-              di.setPositiveButton("Ask Later", null);
-              di.show();
-            } else {
-              /// Empty
-            }
-          }
-
-          @Override
-          public void onErrorResponse(String _param1, String _param2) {}
-        };
+    
     projectMaker =
         new ProjectMaker(
             Folder,
@@ -466,9 +420,8 @@ public class FileManagerActivity extends BaseCompat
       fileListItem.setViewType(viewType);
       if (viewType == ViewType.GRID) {
         gridLayoutManager.setSpanCount(2);
-        bind.recyclerview2.setAdapter(fileListItem);
       } else {
-        bind.recyclerview2.setAdapter(fileListItem);
+
         gridLayoutManager.setSpanCount(1);
         fast = new FastScrollerBuilder(bind.recyclerview2);
         fast.useMd2Style();
@@ -482,20 +435,6 @@ public class FileManagerActivity extends BaseCompat
         .setSoftInputMode(
             WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
                 | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-    CheckNewVersion.startRequestNetwork(
-        RequestNetworkController.GET,
-        "https://raw.githubusercontent.com/HanzoDev1375/HanzoDev1375/main/log.json",
-        "",
-        UpdateCheck);
-    try {
-      var pInfo =
-          getApplicationContext()
-              .getPackageManager()
-              .getPackageInfo(getApplicationContext().getPackageName(), 0);
-      version = pInfo.versionName;
-    } catch (PackageManager.NameNotFoundException e) {
-      showMessage(e.toString());
-    }
     unzip = new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
     prodel = new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
     proveg = new ProgressDialog(FileManagerActivity.this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
@@ -691,8 +630,8 @@ public class FileManagerActivity extends BaseCompat
               () -> {
                 bind.recyclerview2.setVisibility(View.VISIBLE);
                 bind.filedirBar.setVisibility(View.GONE);
-                bind.recyclerview2.setAdapter(fileListItem);
-                ListSheet.bind(bind.recyclerview2, Folder);
+                fileListItem.notifyDataSetChanged();
+                // ListSheet.bind(bind.recyclerview2, Folder);
               });
         });
   }
@@ -746,8 +685,6 @@ public class FileManagerActivity extends BaseCompat
                           public void onSuccess(String content) {
                             Toast.makeText(getApplicationContext(), content, 2).show();
                             if (bind.recyclerview2 != null) {
-
-                              fileListItem.addItem(files.size());
                               reLoadFile();
                             }
                           }
@@ -792,15 +729,54 @@ public class FileManagerActivity extends BaseCompat
     folders.setFolderName(Folder);
     folders.setCallBack(
         new FileCallBack() {
-
           @Override
-          public void onDoneMakeFile(String toast) {
-            fileListItem.addItem(files.size());
-            reLoadFile();
+          public void onDoneMakeFile(String filePath) {
+            DataUtil.showMessage(FileManagerActivity.this, "فایل ایجاد شد!");
+            JgitHelperImpl.run(Folder, FileManagerActivity.this);
+
+            runOnUiThread(
+                () -> {
+                  // 1. فایل جدید را به لیست اضافه کن
+                  HashMap<String, Object> newItem = new HashMap<>();
+                  newItem.put("path", filePath);
+
+                  // 2. لیست را بر اساس نوع فایل مرتب کن (مثل reLoadFile)
+                  Collections.sort(
+                      files,
+                      (o1, o2) -> {
+                        String path1 = o1.get("path").toString();
+                        String path2 = o2.get("path").toString();
+                        boolean isDir1 = FileUtil.isDirectory(path1);
+                        boolean isDir2 = FileUtil.isDirectory(path2);
+
+                        if (isDir1 && !isDir2) return -1;
+                        if (!isDir1 && isDir2) return 1;
+                        return path1.compareToIgnoreCase(path2);
+                      });
+
+                  // 3. موقعیت جدید را پیدا کن
+                  int newPosition = -1;
+                  for (int i = 0; i < files.size(); i++) {
+                    if (files.get(i).get("path").toString().equals(filePath)) {
+                      newPosition = i;
+                      break;
+                    }
+                  }
+
+                  if (newPosition != -1) {
+
+                    fileListItem.markNewFile(filePath);
+                    files.add(newItem);
+                    fileListItem.notifyItemInserted(newPosition);
+                    bind.recyclerview2.smoothScrollToPosition(newPosition);
+                  }
+                });
           }
 
           @Override
-          public void onError(String error) {}
+          public void onError(String error) {
+            DataUtil.showMessage(FileManagerActivity.this, "خطا: " + error);
+          }
         });
   }
 
@@ -1027,7 +1003,7 @@ public class FileManagerActivity extends BaseCompat
     dialog.show();
   }
 
-  public void setRenameFile(double _pos) {
+  void setRenameFile(double _pos) {
     AlertDialog dialog =
         new GhostWebMaterialDialog(FileManagerActivity.this)
             .setView(R.layout.ranme)
@@ -1054,10 +1030,9 @@ public class FileManagerActivity extends BaseCompat
               new TextWatcher() {
 
                 @Override
-                public void onTextChanged(
-                    CharSequence _param1, int _param2, int _param3, int _param4) {
+                public void onTextChanged(CharSequence s, int _param2, int _param3, int _param4) {
 
-                  if (editor.getText().toString().isEmpty()) {
+                  if (s.toString().isEmpty()) {
                     positive.setEnabled(false);
                   } else {
                     positive.setEnabled(true);
@@ -1074,9 +1049,9 @@ public class FileManagerActivity extends BaseCompat
           positive.setOnClickListener(
               (__) -> {
                 {
-                  File dYx4Y = new File(files.get((int) _pos).get("path").toString());
-                  File e5Cyk = new File(Folder.concat("/".concat(editor.getText().toString())));
-                  dYx4Y.renameTo(e5Cyk);
+                  File name1 = new File(files.get((int) _pos).get("path").toString());
+                  File name2 = new File(Folder.concat("/".concat(editor.getText().toString())));
+                  name1.renameTo(name2);
                 }
                 dialog.dismiss();
                 reLoadFile();
@@ -1085,7 +1060,7 @@ public class FileManagerActivity extends BaseCompat
     dialog.show();
   }
 
-  public void removedFiles(int _pos) {
+  void removedFiles(int _pos) {
     var di = new DialogUtil(FileManagerActivity.this);
     di.setTitle("Romved File");
     di.setMessage("romved ".concat(files.get(_pos).get("path").toString().concat(" your mobile?")));
@@ -1199,6 +1174,22 @@ public class FileManagerActivity extends BaseCompat
         SendDataFromCodeEditor(newpos, "path", files, newlistmap);
         return;
       }
+    }
+    if (staticstring.endsWith(".pgb")) {
+      var x =
+          new PluginExtractor(
+              new PluginextractorFace() {
+
+                @Override
+                public void onPluginExtractorDone() {
+                  reLoadFile();
+                }
+
+                @Override
+                public void onPluginExtractorError() {}
+              },
+              staticstring,
+              this);
     }
     if (staticstring.endsWith(".txt") || staticstring.endsWith(".log")) {
       SendDataFromCodeEditor(newpos, "path", files, newlistmap);
@@ -1692,7 +1683,7 @@ public class FileManagerActivity extends BaseCompat
     }
   }
 
-  public void setFTPDownloader() {
+  void setFTPDownloader() {
     androidx.appcompat.app.AlertDialog dialog =
         new GhostWebMaterialDialog(FileManagerActivity.this)
             .setView(R.layout.layout_ftp_filedir_download)
@@ -1835,13 +1826,7 @@ public class FileManagerActivity extends BaseCompat
               }
             case 7:
               {
-                if (DataUtil.isConnected(getApplicationContext())) {
-                  CheckNewVersion.startRequestNetwork(
-                      RequestNetworkController.GET,
-                      "https://raw.githubusercontent.com/HanzoDev1375/HanzoDev1375/main/log.json",
-                      "v",
-                      UpdateCheck);
-                }
+                appUpdate();
                 break;
               }
             case 8:
@@ -1891,7 +1876,7 @@ public class FileManagerActivity extends BaseCompat
         });
   }
 
-  public void setBackupTheme() {
+  void setBackupTheme() {
     if (FileUtil.isFile("/storage/emulated/0/GhostWebIDE/theme/theme.AA")) {
     } else {
       try {
@@ -1908,6 +1893,13 @@ public class FileManagerActivity extends BaseCompat
       } catch (net.lingala.zip4j.exception.ZipException e) {
       }
     }
+  }
+  
+  void appUpdate(){
+    var updateversion = new UpadteAppView(this,bind.downloder,bind.fabAdd,()->{
+      reLoadFile();
+    });
+    updateversion.init();
   }
 
   private ListSheet sh1;
@@ -1932,6 +1924,7 @@ public class FileManagerActivity extends BaseCompat
     sh1.addItem(getString(R.string.git_tools), R.drawable.git);
     sh1.addItem(getString(R.string.gson_to_class), R.drawable.file_json_24px);
     sh1.addItem(getString(R.string.pastjavacode), R.drawable.ic_material_java);
+
     sh1.setOnItemClickLabe(
         (pos333) -> {
           switch (pos333) {
@@ -2123,6 +2116,7 @@ public class FileManagerActivity extends BaseCompat
     sheet.addItem("AddBookMark", R.drawable.ic_bookmark_white);
     sheet.addItem("RenameJavaCode?", R.drawable.ic_material_java);
     sheet.addItem("Shortcut", R.drawable.share);
+    sheet.addItem(getString(R.string.pastjavacode), R.drawable.extension_24px);
     sheet.setOnItemClickLabe(
         (pos_) -> {
           switch (pos_) {
@@ -2164,9 +2158,7 @@ public class FileManagerActivity extends BaseCompat
               }
             case 5:
               {
-                if (book.getString("hsipsot4444", "").equals("")) {
-                  book.edit().putString("hsipsot4444", "[]").apply();
-                } else {
+                if (!book.getString("hsipsot4444", "").equals("")) {
                   a =
                       new Gson()
                           .fromJson(
@@ -2177,6 +2169,8 @@ public class FileManagerActivity extends BaseCompat
                   a.add(mapz32);
                   book.edit().putString("hsipsot4444", new Gson().toJson(a)).apply();
                   showMessage("Added!");
+                } else {
+                  book.edit().putString("hsipsot4444", "[]").apply();
                 }
                 sheet.getDismiss(true);
                 break;
@@ -2201,6 +2195,26 @@ public class FileManagerActivity extends BaseCompat
                     () -> {
                       // reLoadFile();
                     });
+                sheet.getDismiss(true);
+                break;
+              }
+
+            case 8:
+              {
+                var plugin =
+                    new PluginCompressorPgb(
+                        new PluginextractorFace() {
+
+                          @Override
+                          public void onPluginExtractorDone() {
+                            reLoadFile();
+                          }
+
+                          @Override
+                          public void onPluginExtractorError() {}
+                        },
+                        FileManagerActivity.this,
+                        files.get(_position).get("path").toString());
                 sheet.getDismiss(true);
                 break;
               }

@@ -1,40 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     android:id="@+id/_coordinator">
+
     <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-    >
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent">
+
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/mdtoolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-        />
+             android:layout_height="?attr/actionBarSize"
+             android:layout_width="match_parent"
+             android:id="@+id/mdtoolbar">
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
     </com.google.android.material.appbar.AppBarLayout>
+
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="3dp">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/mdview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                />
-            </LinearLayout>
-        </ScrollView>
+         android:layout_height="match_parent"
+         android:layout_width="match_parent"
+         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+         android:orientation="vertical">
+
+        <TextView
+             android:layout_height="match_parent"
+             android:layout_width="match_parent"
+             android:padding="8dp"
+             android:id="@+id/mdview"
+             android:text="test md mod:" />
+
     </LinearLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

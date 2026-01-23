@@ -24,13 +24,7 @@ public class RainbowBracketHelper {
     EditorColorScheme.breaklevel5,
     EditorColorScheme.breaklevel6,
     EditorColorScheme.breaklevel7,
-    EditorColorScheme.breaklevel8,
-    EditorColorScheme.tscolormatch1,
-    EditorColorScheme.tscolormatch2,
-    EditorColorScheme.tscolormatch3,
-    EditorColorScheme.tscolormatch4,
-    EditorColorScheme.tscolormatch5,
-    EditorColorScheme.tscolormatch6
+    EditorColorScheme.breaklevel8
   };
 
   private final Stack<Integer> bracketStack = new Stack<>();
@@ -148,7 +142,7 @@ public class RainbowBracketHelper {
   }
 
   public boolean isRgbEn() {
-    return GhostIdeAppLoader.getAnalyzercod().getBoolean("Analyzercod", false);
+    return GhostIdeAppLoader.getPrefManager().getBoolean("breaks", false);
   }
 
   private boolean getNotScan() {
@@ -162,7 +156,7 @@ public class RainbowBracketHelper {
 
   public int getColorForLevel(int level) {
     if (!isRgbEn()) {
-      return EditorColorScheme.BLOCK_LINE;
+      return EditorColorScheme.htmlblockhash;
     }
     return RAINBOW_COLORS[level % RAINBOW_COLORS.length];
   }

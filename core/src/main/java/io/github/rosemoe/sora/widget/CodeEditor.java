@@ -384,7 +384,13 @@ public class CodeEditor extends View
     lineIcons.add(lineIcon);
   }
 
+  @Deprecated
   public void addLineIcons(int lineNumber, int colorFilter, String iconPath, boolean hasIconPath) {
+    LineIcon lineIcon = new LineIcon(lineNumber, colorFilter, iconPath, hasIconPath);
+    lineIcons.add(lineIcon);
+  }
+
+  public void addLineIcons(int lineNumber, int colorFilter, Bitmap iconPath, boolean hasIconPath) {
     LineIcon lineIcon = new LineIcon(lineNumber, colorFilter, iconPath, hasIconPath);
     lineIcons.add(lineIcon);
   }
@@ -3739,10 +3745,8 @@ public class CodeEditor extends View
 
         Bitmap bmp = null;
 
-        if (icon.hasIconFilePath && icon.iconFilePath != null) {
-          bmp = BitmapFactory.decodeFile(icon.iconFilePath);
-        } else if (icon.iconRes != -1) {
-          bmp = BitmapFactory.decodeResource(getResources(), icon.iconRes);
+        if (icon.hasIconFilePath && icon.getBitmap() != null) {
+          bmp = icon.getBitmap();
         }
 
         if (bmp != null) {

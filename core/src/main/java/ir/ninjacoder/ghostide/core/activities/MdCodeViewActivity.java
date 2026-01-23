@@ -16,8 +16,8 @@ public class MdCodeViewActivity extends BaseCompat {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     bind = MdcodeviewBinding.inflate(getLayoutInflater());
+    setContentView(bind.getRoot());
     setSupportActionBar(bind.mdtoolbar);
-    setContentView(R.layout.mdcodeview);
     MarkDownTextHelper.handleMarkDown(
         bind.mdview, FileUtil.readFile(getIntent().getStringExtra("v")));
   }

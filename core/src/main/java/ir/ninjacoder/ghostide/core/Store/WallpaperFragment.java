@@ -257,15 +257,15 @@ public class WallpaperFragment extends BaseFragment {
     }
   }
 
-  // متد برای استخراج نام تصویر از URL
+ 
   private String extractImageNameFromUrl(String url) {
     try {
       String fileName = url.substring(url.lastIndexOf('/') + 1);
-      // حذف پارامترهای URL اگر وجود دارند
+     
       if (fileName.contains("?")) {
         fileName = fileName.substring(0, fileName.indexOf('?'));
       }
-      // حذف پسوند فایل
+      
       if (fileName.contains(".")) {
         fileName = fileName.substring(0, fileName.lastIndexOf('.'));
       }

@@ -23,20 +23,22 @@
  */
 package io.github.rosemoe.sora.interfaces;
 
-
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.text.TextAnalyzer;
+import ir.ninjacoder.ghostide.core.GhostIdeAppLoader;
 
 /**
  * Interface for analyzing highlight
  *
- * @author Rose
+ * @author Rose && Ghost
  */
 public interface CodeAnalyzer {
 
-  
-
   default void analyzeInBackground(CharSequence contents) {}
+
+  default boolean isCodeAnalyze() {
+    return GhostIdeAppLoader.getAnalyzercod().getBoolean("Analyzercod", false) == true;
+  }
 
   void analyze(
       CharSequence content, TextAnalyzeResult result, TextAnalyzer.AnalyzeThread.Delegate delegate);

@@ -1,6 +1,5 @@
 package ir.ninjacoder.ghostide.core.activities;
 
-import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -60,20 +59,14 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.TimerTask;
 
 import io.github.rosemoe.sora.event.ContentChangeEvent;
 import io.github.rosemoe.sora.widget.CodeEditor;
-import io.github.rosemoe.sora.widget.EditorAutoCompleteWindow;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
 import ir.ninjacoder.ghostide.core.G4Compiler;
 import ir.ninjacoder.ghostide.core.IdeEditor;
 import ir.ninjacoder.ghostide.core.JavaCcComplierImpl;
 import ir.ninjacoder.ghostide.core.R;
-import ir.ninjacoder.ghostide.core.activities.BaseCompat;
-import ir.ninjacoder.ghostide.core.activities.HtmlRunerActivity;
-import ir.ninjacoder.ghostide.core.activities.JsonViewerActivity;
-import ir.ninjacoder.ghostide.core.activities.ShellCodeActivity;
 import ir.ninjacoder.ghostide.core.adapter.SyspiarAdapter;
 import ir.ninjacoder.ghostide.core.adapter.ToolbarListFileAdapter;
 import ir.ninjacoder.ghostide.core.pl.PluginChildRegistry;

@@ -1,43 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:padding="9dp"
-        android:orientation="vertical">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:padding="9dp"
+    android:orientation="vertical">
 
     <com.google.android.material.textfield.TextInputLayout
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:layout_marginBottom="2dp"
-            android:id="@+id/input_ma">
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="2dp"
+        android:id="@+id/input_ma">
 
         <com.google.android.material.textfield.TextInputEditText
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:tooltipText="rr"/>
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:tooltipText="rr" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:layout_marginBottom="2dp"
-            android:layout_marginTop="2dp"
-            android:id="@+id/input_pack">
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="2dp"
+        android:id="@+id/input_pack">
 
         <com.google.android.material.textfield.TextInputEditText
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:tooltipText="rr"/>
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:tooltipText="rr" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <Spinner
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:spinnerMode="dropdown"
-            android:id="@+id/sp1_main">
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:spinnerMode="dropdown"
+        android:id="@+id/sp1_main">
 
     </Spinner>
 

@@ -1,67 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:orientation="vertical">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
+        android:layout_height="@dimen/dkplayer_controller_height"
+        android:layout_width="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:id="@+id/title_container">
+
+        <ImageView
             android:layout_height="@dimen/dkplayer_controller_height"
-            android:layout_width="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:id="@+id/title_container">
-
-        <ImageView
-                android:layout_height="@dimen/dkplayer_controller_height"
-                android:layout_width="@dimen/dkplayer_controller_height"
-                android:src="@drawable/dkplayer_ic_action_arrow_back"
-                android:padding="@dimen/dkplayer_controller_icon_padding"
-                android:id="@+id/back"
-                android:layout_gravity="center"/>
+            android:layout_width="@dimen/dkplayer_controller_height"
+            android:src="@drawable/dkplayer_ic_action_arrow_back"
+            android:padding="@dimen/dkplayer_controller_icon_padding"
+            android:id="@+id/back"
+            android:layout_gravity="center" />
 
         <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:paddingRight="6dp"
-                android:ellipsize="marquee"
-                android:marqueeRepeatLimit="marquee_forever"
-                android:textSize="@dimen/dkplayer_controller_text_size"
-                android:paddingLeft="6dp"
-                android:singleLine="true"
-                android:textColor="@android:color/white"
-                tools:text="这是一个标题"
-                android:layout_weight="1"
-                android:id="@+id/title"/>
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:paddingRight="6dp"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:textSize="@dimen/dkplayer_controller_text_size"
+            android:paddingLeft="6dp"
+            android:singleLine="true"
+            android:layout_weight="1"
+            android:id="@+id/title" />
 
         <ImageView
-                android:layout_height="40dp"
-                android:layout_width="40dp"
-                android:layout_marginBottom="20dp"
-                android:src="@drawable/dkplayer_ic_action_pip"
-                android:background="@drawable/dkplayer_shape_back_bg"
-                android:padding="@dimen/dkplayer_default_spacing"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="20dp"
-                android:id="@+id/pip"
-                android:layout_gravity="center"/>
+            android:layout_height="40dp"
+            android:layout_width="40dp"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/dkplayer_ic_action_pip"
+            android:background="@drawable/dkplayer_shape_back_bg"
+            android:padding="@dimen/dkplayer_default_spacing"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:id="@+id/pip"
+            android:layout_gravity="center" />
 
         <ImageView
-                android:layout_height="20dp"
-                android:layout_width="26dp"
-                android:src="@drawable/dkplayer_battery_level"
-                android:id="@+id/iv_battery"/>
+            android:layout_height="20dp"
+            android:layout_width="26dp"
+            android:src="@drawable/dkplayer_battery_level"
+            android:id="@+id/iv_battery" />
 
         <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_marginEnd="14dp"
-                android:layout_marginRight="14dp"
-                android:textColor="@android:color/white"
-                tools:text="12:00"
-                android:id="@+id/sys_time"/>
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginEnd="14dp"
+            android:layout_marginRight="14dp"
+            tools:text="12:00"
+            android:id="@+id/sys_time" />
 
     </LinearLayout>
 
