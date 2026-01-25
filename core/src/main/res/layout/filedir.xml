@@ -1,112 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.drawerlayout.widget.DrawerLayout
-     xmlns:android="http://schemas.android.com/apk/res/android"
-     xmlns:app="http://schemas.android.com/apk/res-auto"
-     xmlns:tools="http://schemas.android.com/tools"
-     android:layout_height="match_parent"
-     android:layout_width="match_parent"
-     tools:openDrawer="start"
-     android:id="@+id/_drawer">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    tools:openDrawer="start"
+    android:id="@+id/_drawer">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-         android:layout_height="match_parent"
-         android:layout_width="match_parent"
-         android:background="@android:color/transparent"
-         android:id="@+id/_coordinator">
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:background="@android:color/transparent"
+        android:id="@+id/_coordinator">
 
         <com.google.android.material.appbar.AppBarLayout
-             android:layout_height="wrap_content"
-             android:layout_width="match_parent"
-             app:liftOnScrollColor="@android:color/transparent"
-             android:background="@android:color/transparent"
-             app:liftOnScroll="false"
-             android:id="@+id/_app_bar">
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            app:liftOnScrollColor="@android:color/transparent"
+            android:background="@android:color/transparent"
+            app:liftOnScroll="false"
+            android:id="@+id/_app_bar">
 
             <LinearLayout
-                 android:layout_height="56dp"
-                 android:layout_width="match_parent"
-                 android:gravity="center"
-                 android:orientation="horizontal">
+                android:layout_height="56dp"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
 
                 <ImageView
-                     android:layout_height="35dp"
-                     android:layout_width="35dp"
-                     android:scaleType="centerInside"
-                     android:src="@drawable/ic_more_vert_white"
-                     android:layout_marginRight="6dp"
-                     android:layout_marginLeft="10dp"
-                     android:id="@+id/opendraw" />
+                    android:layout_height="35dp"
+                    android:layout_width="35dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_more_vert_white"
+                    android:layout_marginRight="6dp"
+                    android:layout_marginLeft="10dp"
+                    android:id="@+id/opendraw" />
 
                 <TextView
-                     android:layout_height="wrap_content"
-                     android:layout_width="wrap_content"
-                     android:gravity="center_vertical|left"
-                     android:textAppearance="?attr/textAppearanceHeadlineMedium"
-                     android:textSize="17sp"
-                     android:layout_weight="1.0"
-                     android:id="@+id/githubusernametv"
-                     android:text="@string/app_name" />
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:gravity="center_vertical|left"
+                    android:textAppearance="?attr/textAppearanceHeadlineMedium"
+                    android:textSize="17sp"
+                    android:layout_weight="1.0"
+                    android:id="@+id/githubusernametv"
+                    android:text="@string/app_name" />
 
                 <ImageView
-                     android:layout_height="35dp"
-                     android:layout_width="35dp"
-                     android:scaleType="centerInside"
-                     android:src="@drawable/app_icon"
-                     android:layout_marginLeft="10dp"
-                     android:layout_marginRight="7dp"
-                     android:id="@+id/githubavataric" />
+                    android:layout_height="35dp"
+                    android:layout_width="35dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/app_icon"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="7dp"
+                    android:id="@+id/githubavataric" />
 
             </LinearLayout>
 
             <com.ninjacoder.jgit.search.SearchBar
-                 android:layout_height="56dp"
-                 android:layout_width="match_parent"
-                 android:visibility="gone"
-                 android:id="@+id/searchbar" />
+                android:layout_height="56dp"
+                android:layout_width="match_parent"
+                android:id="@+id/searchbar" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
         <LinearLayout
-             android:layout_height="match_parent"
-             android:layout_width="match_parent"
-             app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <LinearLayout
-                 android:layout_height="match_parent"
-                 android:layout_width="match_parent"
-                 android:orientation="vertical"
-                 android:id="@+id/view_filedir">
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:id="@+id/view_filedir">
 
                 <androidx.recyclerview.widget.RecyclerView
-                     android:layout_height="0dp"
-                     android:layout_width="match_parent"
-                     android:padding="8dp"
-                     android:layout_weight="1"
-                     android:id="@+id/recyclerview2" />
+                    android:layout_height="0dp"
+                    android:layout_width="match_parent"
+                    android:padding="8dp"
+                    android:layout_weight="1"
+                    android:id="@+id/recyclerview2" />
 
                 <com.google.android.material.progressindicator.CircularProgressIndicator
-                     android:layout_height="wrap_content"
-                     android:layout_width="wrap_content"
-                     android:visibility="gone"
-                     android:indeterminate="true"
-                     app:trackThickness="5dp"
-                     android:layout_gravity="center"
-                     android:id="@+id/filedir_bar" />
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:visibility="gone"
+                    android:indeterminate="true"
+                    app:trackThickness="5dp"
+                    android:layout_gravity="center"
+                    android:id="@+id/filedir_bar" />
 
                 <LinearLayout
-                     android:layout_height="match_parent"
-                     android:layout_width="match_parent"
-                     android:visibility="gone"
-                     android:gravity="center_horizontal"
-                     android:orientation="vertical"
-                     android:textSize="20dp"
-                     android:id="@+id/emptyview">
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:visibility="gone"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:textSize="20dp"
+                    android:id="@+id/emptyview">
 
                     <TextView
-                         android:layout_height="wrap_content"
-                         android:layout_width="wrap_content"
-                         android:textSize="20dp"
-                         android:text="Empty List" />
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:textSize="20dp"
+                        android:text="Empty List" />
 
                 </LinearLayout>
 
@@ -115,66 +114,66 @@
         </LinearLayout>
 
         <ir.ninjacoder.ghostide.core.widget.ExrtaFab
-             android:layout_height="80dp"
-             android:layout_width="80dp"
-             android:clickable="true"
-             android:layout_margin="17dp"
-             android:focusable="true"
-             app:fabSize="normal"
-             android:layout_gravity="right|bottom"
-             android:id="@+id/fabAdd" />
+            android:layout_height="80dp"
+            android:layout_width="80dp"
+            android:clickable="true"
+            android:layout_margin="17dp"
+            android:focusable="true"
+            app:fabSize="normal"
+            android:layout_gravity="right|bottom"
+            android:id="@+id/fabAdd" />
 
         <LinearLayout
-             android:layout_height="wrap_content"
-             android:layout_width="match_parent"
-             android:layout_marginBottom="72dp"
-             android:visibility="gone"
-             android:padding="8dp"
-             android:orientation="horizontal"
-             android:id="@+id/viewChild"
-             android:layout_gravity="right|bottom">
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="72dp"
+            android:visibility="gone"
+            android:padding="8dp"
+            android:orientation="horizontal"
+            android:id="@+id/viewChild"
+            android:layout_gravity="right|bottom">
 
             <LinearLayout
-                 android:layout_height="match_parent"
-                 android:layout_width="wrap_content"
-                 android:gravity="center_horizontal|center_vertical"
-                 android:background="?attr/selectableItemBackground"
-                 android:padding="8dp"
-                 android:orientation="vertical"
-                 android:id="@+id/mdel">
+                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:gravity="center_horizontal|center_vertical"
+                android:background="?attr/selectableItemBackground"
+                android:padding="8dp"
+                android:orientation="vertical"
+                android:id="@+id/mdel">
 
                 <ImageView
-                     android:layout_height="25dp"
-                     android:layout_width="25dp"
-                     android:src="@drawable/delete"
-                     android:scaleType="centerInside" />
+                    android:layout_height="25dp"
+                    android:layout_width="25dp"
+                    android:src="@drawable/delete"
+                    android:scaleType="centerInside" />
 
                 <TextView
-                     android:layout_height="wrap_content"
-                     android:layout_width="wrap_content"
-                     android:padding="8dp"
-                     android:textSize="12sp"
-                     android:text="remved" />
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:padding="8dp"
+                    android:textSize="12sp"
+                    android:text="remved" />
 
             </LinearLayout>
 
         </LinearLayout>
 
         <ninja.coder.appuploader.main.ViewDownloder
-             android:layout_height="wrap_content"
-             android:layout_width="match_parent"
-             android:visibility="gone"
-             android:layout_gravity="right|bottom"
-             android:id="@+id/downloder" />
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_gravity="right|bottom"
+            android:id="@+id/downloder" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <ir.ninjacoder.ghostide.core.layoutmanager.NavigationViewCompnet
-         android:layout_height="match_parent"
-         android:layout_width="300dp"
-         android:scrollbars="none"
-         app:headerLayout="@layout/header"
-         android:id="@+id/navs"
-         android:layout_gravity="start" />
+        android:layout_height="match_parent"
+        android:layout_width="300dp"
+        android:scrollbars="none"
+        app:headerLayout="@layout/header"
+        android:id="@+id/navs"
+        android:layout_gravity="start" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

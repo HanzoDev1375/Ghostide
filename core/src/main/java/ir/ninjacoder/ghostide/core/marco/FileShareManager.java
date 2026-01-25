@@ -1,13 +1,13 @@
 package ir.ninjacoder.ghostide.core.marco;
 
+import android.content.ClipData;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-
+import android.os.Build;
 import androidx.core.content.FileProvider;
-
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-
 import java.io.File;
 
 public class FileShareManager {
@@ -28,14 +28,32 @@ public class FileShareManager {
       showErrorDialog("Unsupported file type!");
       return;
     }
+
     Intent intent = new Intent(Intent.ACTION_SEND);
     Uri uri = FileProvider.getUriForFile(context, "ir.ninjacoder.ghostide.core.provider", file);
+    intent.setType(mimeType);
     intent.putExtra(Intent.EXTRA_STREAM, uri);
-    intent.setType("*/*");
+
     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+      intent.setClipData(ClipData.newRawUri("", uri));
+      intent.addFlags(
+          Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+    }
+
     Intent chooserIntent = Intent.createChooser(intent, "Share file using");
     chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-    context.startActivity(chooserIntent);
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      chooserIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+    }
+
+    try {
+      context.startActivity(chooserIntent);
+    } catch (ActivityNotFoundException e) {
+      showErrorDialog("No app available to share this file!");
+    }
   }
 
   private String getMimeType(File file) {

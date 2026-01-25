@@ -24,13 +24,17 @@ import ir.ninjacoder.ghostide.core.model.JavaCodeViewModel;
 import java.util.ArrayList;
 import ir.ninjacoder.ghostide.core.databinding.LayoutjavamanagerBinding;
 import ir.ninjacoder.ghostide.core.utils.DataUtil;
+import ir.ninjacoder.ghostide.core.utils.ObjectUtils; 
 import java.util.List;
+import java.util.Locale;
 
 public class JavaManagerLayoutActivity extends BaseCompat {
 
   private String path = "";
   private List<JavaCodeViewModel> javacode1 = new ArrayList<>();
+  private List<JavaCodeViewModel> originalList = new ArrayList<>(); 
   private JavamanagerlayoutBinding bind;
+  private String currentSearchText = "";
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -45,43 +49,46 @@ public class JavaManagerLayoutActivity extends BaseCompat {
     setSupportActionBar(bind.Toolbar);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     getSupportActionBar().setHomeButtonEnabled(true);
-    bind.Toolbar.setNavigationOnClickListener(
-        v -> {
-          onBackPressed();
-        });
+    bind.Toolbar.setNavigationOnClickListener(v -> onBackPressed());
+
     bind.edittext1.addTextChangedListener(
         new TextWatcher() {
-          private int d;
-
           @Override
-          public void onTextChanged(CharSequence _param1, int _param2, int _param3, int _param4) {
-            String charSeq = _param1.toString();
-            javacode1 =
-                new Gson().fromJson(path, new TypeToken<List<JavaCodeViewModel>>() {}.getType());
-            var length = javacode1.size();
-
-            d = javacode1.size() - 1;
-            for (int i = 0; i < length; i++) {
-              String serching = javacode1.get(d).getTitle();
-              if (serching.toLowerCase().contains(charSeq.toLowerCase())) {
-
-              } else {
-                javacode1.remove(d);
-              }
-              d--;
-            }
-
-            bind.listview1.setAdapter(new Listview1Adapter(javacode1));
-            ((BaseAdapter) bind.listview1.getAdapter()).notifyDataSetChanged();
+          public void onTextChanged(CharSequence s, int start, int before, int count) {
+            currentSearchText = s.toString();
+            filterList(s.toString());
           }
 
           @Override
-          public void beforeTextChanged(
-              CharSequence _param1, int _param2, int _param3, int _param4) {}
+          public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
           @Override
-          public void afterTextChanged(Editable _param1) {}
+          public void afterTextChanged(Editable s) {}
         });
+  }
+
+  private void filterList(String query) {
+    List<JavaCodeViewModel> filteredList = new ArrayList<>();
+
+    if (query.isEmpty()) {
+      filteredList.addAll(originalList);
+    } else {
+      String queryLower = query.toLowerCase(Locale.getDefault());
+      for (JavaCodeViewModel item : originalList) {
+        if (item.getTitle().toLowerCase(Locale.getDefault()).contains(queryLower)) {
+          filteredList.add(item);
+        }
+      }
+    }
+
+    javacode1.clear();
+    javacode1.addAll(filteredList);
+
+    if (bind.listview1.getAdapter() != null) {
+      ((BaseAdapter) bind.listview1.getAdapter()).notifyDataSetChanged();
+    } else {
+      bind.listview1.setAdapter(new Listview1Adapter(javacode1));
+    }
   }
 
   private void initializeLogic() {
@@ -89,14 +96,16 @@ public class JavaManagerLayoutActivity extends BaseCompat {
       var inputstream1 = getAssets().open("codes.json");
       path = DataUtil.copyFromInputStream(inputstream1);
       javacode1 = new Gson().fromJson(path, new TypeToken<List<JavaCodeViewModel>>() {}.getType());
+      originalList = new ArrayList<>(javacode1); 
     } catch (Exception e) {
-
+      e.printStackTrace();
     }
+
     bind.listview1.setAdapter(new Listview1Adapter(javacode1));
-    ((BaseAdapter) bind.listview1.getAdapter()).notifyDataSetChanged();
     bind.listview1.setHorizontalScrollBarEnabled(false);
     bind.listview1.setVerticalScrollBarEnabled(false);
     bind.listview1.setOverScrollMode(ListView.OVER_SCROLL_NEVER);
+
     getWindow()
         .setSoftInputMode(
             WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
@@ -117,7 +126,6 @@ public class JavaManagerLayoutActivity extends BaseCompat {
   }
 
   class Listview1Adapter extends BaseAdapter {
-
     private List<JavaCodeViewModel> _data;
     private LayoutjavamanagerBinding binds;
 
@@ -142,21 +150,35 @@ public class JavaManagerLayoutActivity extends BaseCompat {
 
     @Override
     public View getView(int position, View _v, ViewGroup _container) {
+      if (_v == null) {
+        binds = LayoutjavamanagerBinding.inflate(LayoutInflater.from(_container.getContext()));
+        _v = binds.getRoot();
+        _v.setTag(binds);
+      } else {
+        binds = (LayoutjavamanagerBinding) _v.getTag();
+      }
 
-      binds = LayoutjavamanagerBinding.inflate(LayoutInflater.from(_container.getContext()));
       var modeljavacode = _data.get(position);
       var cardview1 = binds.cardview1;
       var imageview1 = binds.imageview1;
       var getTitle = binds.getTitle;
       var getid = binds.getid;
+
+      // استفاده از متد هایلایت کردن متن
+      if (!currentSearchText.isEmpty()) {
+        ObjectUtils.setHighlightSearchText(getTitle, modeljavacode.getTitle(), currentSearchText);
+      } else {
+        getTitle.setText(modeljavacode.getTitle());
+      }
+
       var md = Markwon.create(getid.getContext());
-      getTitle.setText(modeljavacode.getTitle());
       if (!modeljavacode.getId().isEmpty() && !modeljavacode.getAbout().isEmpty()) {
         var text = "**" + modeljavacode.getId() + "** " + "`" + modeljavacode.getAbout() + "`";
         md.setMarkdown(getid, text);
       } else {
         md.setMarkdown(getid, "**Id=0**");
       }
+
       cardview1.setCardBackgroundColor(Color.TRANSPARENT);
       cardview1.setRadius(15f);
       cardview1.setCardElevation(0);
@@ -164,7 +186,7 @@ public class JavaManagerLayoutActivity extends BaseCompat {
       cardview1.setPreventCornerOverlap(true);
       _clickAnimation(cardview1);
 
-      return binds.getRoot();
+      return _v;
     }
 
     void bindJavaManager(JavaCodeViewModel model) {
@@ -174,9 +196,11 @@ public class JavaManagerLayoutActivity extends BaseCompat {
       codeSnap.setShowHighlighterBracket(true);
       codeSnap.setText(model.getCode());
       codeSnap.setIsShowCopyIcon(true);
+
       int NavColor = sheet.getWindow().getNavigationBarColor();
       sheet.getWindow().setNavigationBarColor(ColorUtils.setAlphaComponent(NavColor, 20));
       sheet.setContentView(codeSnap);
+
       if (sheet != null) {
         sheet.show();
       }

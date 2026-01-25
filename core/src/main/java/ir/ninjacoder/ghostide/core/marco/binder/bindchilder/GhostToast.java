@@ -2,6 +2,7 @@ package ir.ninjacoder.ghostide.core.marco.binder.bindchilder;
 
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -18,27 +19,42 @@ import ir.ninjacoder.ghostide.core.utils.ObjectUtils;
 
 public class GhostToast {
 
-  public static void showToast(@NonNull Context context, String message) {
+  public static void showToast(@NonNull Context context, @NonNull CharSequence message) {
+
     CustomToastBinding bind = CustomToastBinding.inflate(LayoutInflater.from(context));
+
     Glide.with(context).load(R.drawable.app_icon).circleCrop().into(bind.toastIcon);
+
     bind.toastMessage.setText(message);
+
     Toast toast = new Toast(context);
     toast.setDuration(Toast.LENGTH_SHORT);
     toast.setView(bind.getRoot());
     toast.show();
+
     GradientDrawable d = new GradientDrawable();
     d.setColor(MaterialColors.getColor(context, ObjectUtils.Back, 0));
     d.setStroke(1, MaterialColors.getColor(context, ObjectUtils.ColorNormal, 0));
     d.setCornerRadius(55);
-    if (bind != null) {
-      bind.getRoot().setBackground(d);
-    }
+
+    bind.getRoot().setBackground(d);
+
     RotateAnimation rotateAnimation =
         new RotateAnimation(
             0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+
     rotateAnimation.setDuration(1000);
     rotateAnimation.setRepeatCount(Animation.INFINITE);
     rotateAnimation.setInterpolator(context, android.R.interpolator.linear);
+
     bind.toastIcon.startAnimation(rotateAnimation);
+  }
+
+  public static void showToast(@NonNull Context context, @NonNull String message) {
+    showToast(context, (CharSequence) message);
+  }
+
+  public static void showToast(@NonNull Context context, @NonNull Spanned message) {
+    showToast(context, (CharSequence) message);
   }
 }

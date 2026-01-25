@@ -1,131 +1,145 @@
 package ir.ninjacoder.ghostide.core.adapter;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.color.MaterialColors;
 import ir.ninjacoder.ghostide.core.marco.binder.bindchilder.RecyclerviewViewHolderBinder;
+import ir.ninjacoder.ghostide.core.utils.ObjectUtils;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
+
 import ir.ninjacoder.ghostide.core.R;
-import ir.ninjacoder.ghostide.core.folder.FileHelper;
-import ir.ninjacoder.ghostide.core.utils.AnimUtils;
 import ir.ninjacoder.ghostide.core.utils.FileUtil;
-import ir.ninjacoder.ghostide.core.utils.MFileClass;
-import ir.ninjacoder.ghostide.core.widget.component.fastscrollcompat.PopupTextProvider;
 import ir.ninjacoder.prograsssheet.listchild.Child;
 import ir.ninjacoder.prograsssheet.perfence.ListItemView;
+import ir.ninjacoder.ghostide.core.widget.component.fastscrollcompat.PopupTextProvider;
 
-// fileListItem
 public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
-    implements PopupTextProvider {
-  protected Context context;
-  protected onClick click;
-  private String newlyCreatedPath = null;
-  protected ViewType viewType = ViewType.ROW;
-  private List<HashMap<String, Object>> files = new ArrayList<>();
-  private SharedPreferences prf;
-  private VH viewHolder;
-  private List<Child> listChild = new ArrayList<>();
+    implements PopupTextProvider, Filterable {
 
-  public FileManagerAd(
-      List<HashMap<String, Object>> files, Context context, onClick click, List<Child> listChild) {
+  private Context context;
+  private onClick click;
+  private ViewType viewType = ViewType.ROW;
+  private List<Child> listChild = new ArrayList<>();
+  private List<HashMap<String, Object>> allFiles = new ArrayList<>();
+  private List<HashMap<String, Object>> filteredFiles = new ArrayList<>();
+  private String currentFilter = "";
+
+  public FileManagerAd(Context context, onClick click, List<Child> listChild) {
     this.context = context;
-    this.files = files;
     this.click = click;
     this.listChild = listChild;
-    prf = context.getSharedPreferences("iconpath", Context.MODE_PRIVATE);
+    this.filteredFiles = new ArrayList<>();
   }
 
+  @NonNull
   @Override
-  public int getItemCount() {
-    return files.size();
-  }
-
-  @Override
-  public VH onCreateViewHolder(ViewGroup parnt, int viewt) {
-    View view = null;
-    switch (viewType) {
-      case ROW:
-        {
-          view =
-              LayoutInflater.from(parnt.getContext())
-                  .inflate(R.layout.folder_remster, parnt, false);
-          break;
-        }
-      case GRID:
-        {
-          view =
-              LayoutInflater.from(parnt.getContext())
-                  .inflate(R.layout.folder_layout_grid, parnt, false);
-          break;
-        }
-      default:
-        view =
-            LayoutInflater.from(parnt.getContext()).inflate(R.layout.folder_remster, parnt, false);
+  public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    View view;
+    if (this.viewType == ViewType.ROW) {
+      view =
+          LayoutInflater.from(parent.getContext()).inflate(R.layout.folder_remster, parent, false);
+    } else {
+      view =
+          LayoutInflater.from(parent.getContext())
+              .inflate(R.layout.folder_layout_grid, parent, false);
     }
-    viewHolder = new VH(view);
-    return viewHolder;
+    return new VH(view);
   }
 
   @Override
-  public void onBindViewHolder(VH viewHolder, int pos) {}
+  public void onBindViewHolder(@NonNull VH holder, int position) {
+    bind(holder, position);
+  }
 
   @Override
-  public void onBindViewHolder(VH viewHolder, int pos, List<Object> payloads) {
-    View view = viewHolder.itemView;
-    setSettingTextView(viewHolder.folderName);
-    var myfile = new File(files.get(pos).get("path").toString());
-    Log.e("FileManagerAd", files.get(pos).get("path").toString());
-
-    String currentPath;
-    try {
-      currentPath = myfile.getCanonicalPath();
-    } catch (Exception e) {
-      currentPath = myfile.getAbsolutePath();
+  public void onBindViewHolder(@NonNull VH holder, int position, @NonNull List<Object> payloads) {
+    if (payloads != null && !payloads.isEmpty() && payloads.contains("IS_NEW_CHANGED")) {
+      HashMap<String, Object> item = getItem(position);
+    } else {
+      bind(holder, position);
     }
-    if (!payloads.isEmpty() && payloads.contains("NEW_FILE")) {
-      viewHolder.folderName.setTextColor(Color.parseColor("#4CAF50"));
+  }
+
+  private void bind(VH holder, int position) {
+    if (position < 0 || position >= filteredFiles.size()) {
+      Log.e("FileManagerAd", "Invalid position in bind: " + position);
       return;
     }
-    RecyclerviewViewHolderBinder.bindHolder(
-        files, pos, viewHolder.folderName, viewHolder.tvTools, viewHolder.icon, viewType);
-    if (viewType == ViewType.ROW) viewHolder.roots.setBackground(viewHolder.roots.get(files, pos));
-    viewHolder.itemView.setClickable(true);
+
+    HashMap<String, Object> item = filteredFiles.get(position);
+    if (item == null) {
+      return;
+    }
+
+    setSettingTextView(holder.folderName);
+
+    File file = new File(item.get("path").toString());
+    boolean isSearch = !TextUtils.isEmpty(currentFilter);
+    holder.folderName.setText(file.getName());
+    int allFilesPosition = getOriginalPosition(position);
+    boolean isNew = item.containsKey("isNew") && (boolean) item.get("isNew");
+
+    if (allFilesPosition >= 0 && allFilesPosition < allFiles.size()) {
+      try {
+        RecyclerviewViewHolderBinder.bindHolder(
+            allFiles,
+            allFilesPosition,
+            holder.folderName,
+            holder.tvTools,
+            holder.icon,
+            viewType,
+            isSearch,
+            isNew);
+      } catch (Exception e) {
+        Log.e("FileManagerAd", "Error in binder: " + e.getMessage());
+      }
+    }
+
+    holder.itemView.setClickable(true);
+    if (isSearch) {
+      ObjectUtils.setHighlightSearchText(holder.folderName, file.getName(), currentFilter);
+    }
+    if (isNew) {
+      holder.folderName.setTextColor(Color.parseColor("#4CAF50"));
+    }
   }
 
-  @NonNull
-  public HashMap<String, Object> getItem(int position) {
-    return files.get(position);
+  public void markNewFile(String path) {
+    for (int i = 0; i < allFiles.size(); i++) {
+      HashMap<String, Object> item = allFiles.get(i);
+      if (item.get("path").toString().equals(path)) {
+        item.put("isNew", true);
+        allFiles.set(i, item);
+        break;
+      }
+    }
+    for (int i = 0; i < filteredFiles.size(); i++) {
+      if (filteredFiles.get(i).get("path").toString().equals(path)) {
+        filteredFiles.get(i).put("isNew", true);
+        notifyItemChanged(i, "IS_NEW_CHANGED");
+        break;
+      }
+    }
   }
 
-  @Override
-  public long getItemId(int position) {
-    HashMap<String, Object> mmap = getItem(position);
-    return Objects.hash(mmap);
-  }
-
-  @Override
-  @NonNull
-  public CharSequence getPopupText(int position) {
-    HashMap<String, Object> map = getItem(position);
-    File file = new File(map.get("path").toString());
-    return file.getName().substring(0, 1).toUpperCase();
-  }
-
-  void setSettingTextView(TextView tv) {
+  private void setSettingTextView(TextView tv) {
     if (tv != null) {
       tv.setEllipsize(TextUtils.TruncateAt.MARQUEE);
       tv.setMarqueeRepeatLimit(-1);
@@ -134,84 +148,19 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     }
   }
 
-  public void addItem(int Position) {
-    notifyItemInserted(Position);
-  }
-
-  public void markNewFile(String path) {
-    try {
-      this.newlyCreatedPath = new File(path).getCanonicalPath();
-
-      for (int i = 0; i < files.size(); i++) {
-        File f = new File(files.get(i).get("path").toString());
-        if (f.getCanonicalPath().equals(newlyCreatedPath)) {
-          notifyItemChanged(i, "NEW_FILE");
-          break;
-        }
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  public void removedItem(int pos) {
-    files.remove(pos);
-    notifyItemRemoved(pos);
-  }
-
-  public interface onClick {
-    public void onClick(View view, int pos);
-
-    public void onLongClick(View view, int pos);
-  }
-
-  public class VH extends RecyclerView.ViewHolder {
-    protected TextView folderName, tvTools;
-    protected ListItemView roots;
-    protected ImageView icon;
-    View getPos;
-
-    public VH(View view) {
-      super(view);
-      getPos = view;
-      folderName = view.findViewById(R.id.folderName);
-      tvTools = view.findViewById(R.id.tvTools);
-      roots = view.findViewById(R.id.roots);
-      icon = view.findViewById(R.id.icon);
-
-      roots.setOnClickListener(
-          c -> {
-            click.onClick(c, getBindingAdapterPosition());
-            AnimUtils.ClickAnimation(itemView);
-          });
-
-      roots.setOnLongClickListener(
-          v -> {
-            click.onLongClick(v, getBindingAdapterPosition());
-            return true;
-          });
-    }
-
-    public TextView getFolderName() {
-      return this.folderName;
-    }
-
-    public TextView getTvTools() {
-      return this.tvTools;
-    }
-
-    public ListItemView getRoots() {
-      return this.roots;
-    }
-
-    public ImageView getIcon() {
-      return this.icon;
-    }
-  }
-
+  @NonNull
   @Override
-  public int getItemViewType(int pos) {
-    return viewType.getValue();
+  public CharSequence getPopupText(int position) {
+    if (position < 0 || position >= filteredFiles.size()) {
+      return "";
+    }
+    HashMap<String, Object> item = filteredFiles.get(position);
+    File file = new File(item.get("path").toString());
+    String fileName = file.getName();
+    if (fileName.length() > 0) {
+      return fileName.substring(0, 1).toUpperCase();
+    }
+    return "";
   }
 
   public void setViewType(ViewType viewType) {
@@ -219,7 +168,273 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     notifyDataSetChanged();
   }
 
-  public VH getViewHolder() {
-    return this.viewHolder;
+  public void submitList(List<HashMap<String, Object>> list) {
+    if (list == null) {
+      allFiles = new ArrayList<>();
+    } else {
+      allFiles = new ArrayList<>(list);
+      sortList(allFiles);
+    }
+
+    if (!currentFilter.isEmpty()) {
+      // فیلتر را دوباره اعمال کن
+      filter(currentFilter);
+    } else {
+      filteredFiles = new ArrayList<>(allFiles);
+      notifyDataSetChanged();
+    }
+  }
+
+  public interface onClick {
+    void onClick(View view, int pos);
+
+    void onLongClick(View view, int pos);
+  }
+
+  public class VH extends RecyclerView.ViewHolder {
+    protected TextView folderName, tvTools;
+    protected ListItemView roots;
+    protected ImageView icon;
+
+    public VH(View view) {
+      super(view);
+      folderName = view.findViewById(R.id.folderName);
+      tvTools = view.findViewById(R.id.tvTools);
+      roots = view.findViewById(R.id.roots);
+      icon = view.findViewById(R.id.icon);
+
+      roots.setOnClickListener(
+          c -> {
+            int pos = getBindingAdapterPosition();
+            if (pos != RecyclerView.NO_POSITION && pos < filteredFiles.size()) {
+              click.onClick(c, pos);
+            }
+          });
+
+      roots.setOnLongClickListener(
+          v -> {
+            int pos = getBindingAdapterPosition();
+            if (pos != RecyclerView.NO_POSITION && pos < filteredFiles.size()) {
+              click.onLongClick(v, pos);
+            }
+            return true;
+          });
+    }
+  }
+
+  @Override
+  public int getItemViewType(int position) {
+    return viewType.getValue();
+  }
+
+  @Override
+  public int getItemCount() {
+    return filteredFiles.size();
+  }
+
+  public HashMap<String, Object> getItem(int position) {
+    if (position >= 0 && position < filteredFiles.size()) {
+      return filteredFiles.get(position);
+    }
+    return null;
+  }
+
+  public void addNewFile(HashMap<String, Object> newItem) {
+    allFiles.add(newItem);
+    sortList(allFiles);
+
+    if (!currentFilter.isEmpty()) {
+      filter(currentFilter);
+    } else {
+      filteredFiles = new ArrayList<>(allFiles);
+      notifyDataSetChanged();
+      markNewFile(newItem.get("path").toString());
+    }
+  }
+
+  private void sortList(List<HashMap<String, Object>> list) {
+    Collections.sort(
+        list,
+        (o1, o2) -> {
+          String path1 = o1.get("path").toString();
+          String path2 = o2.get("path").toString();
+          boolean isDir1 = FileUtil.isDirectory(path1);
+          boolean isDir2 = FileUtil.isDirectory(path2);
+
+          if (isDir1 && !isDir2) return -1;
+          if (!isDir1 && isDir2) return 1;
+          return path1.compareToIgnoreCase(path2);
+        });
+  }
+
+  public List<HashMap<String, Object>> getCurrentList() {
+    if (isFiltered()) {
+      return new ArrayList<>(filteredFiles);
+    } else {
+      return new ArrayList<>(allFiles);
+    }
+  }
+
+  public List<HashMap<String, Object>> getFilteredList() {
+    return new ArrayList<>(filteredFiles);
+  }
+
+  public List<HashMap<String, Object>> getAllFilesList() {
+    return new ArrayList<>(allFiles);
+  }
+
+  /** تبدیل موقعیت از لیست فیلتر شده به موقعیت اصلی */
+  public int getOriginalPosition(int filteredPosition) {
+    if (!isFiltered()) {
+      // اگر فیلتر فعال نیست، موقعیت یکسان است
+      return filteredPosition;
+    }
+
+    if (filteredPosition < 0 || filteredPosition >= filteredFiles.size()) {
+      return -1;
+    }
+
+    HashMap<String, Object> filteredItem = filteredFiles.get(filteredPosition);
+    String filteredPath = filteredItem.get("path").toString();
+
+    for (int i = 0; i < allFiles.size(); i++) {
+      if (allFiles.get(i).get("path").toString().equals(filteredPath)) {
+        return i;
+      }
+    }
+
+    return -1;
+  }
+
+  public void updateItem(int position, HashMap<String, Object> newItem) {
+    if (position >= 0 && position < allFiles.size()) {
+      allFiles.set(position, newItem);
+
+      // آپدیت در filteredFiles اگر وجود دارد
+      for (int i = 0; i < filteredFiles.size(); i++) {
+        if (filteredFiles.get(i).get("path").equals(newItem.get("path"))) {
+          filteredFiles.set(i, newItem);
+          notifyItemChanged(i);
+          break;
+        }
+      }
+    }
+  }
+
+  public void removeItem(int position) {
+    if (position >= 0 && position < allFiles.size()) {
+      HashMap<String, Object> removedItem = allFiles.get(position);
+      String removedPath = removedItem.get("path").toString();
+      allFiles.remove(position);
+
+      // حذف از filteredFiles اگر وجود دارد
+      removeFromFilteredByPath(removedPath);
+    }
+  }
+
+  public void removeItemByPath(String path) {
+    // حذف از allFiles
+    for (int i = 0; i < allFiles.size(); i++) {
+      if (allFiles.get(i).get("path").toString().equals(path)) {
+        allFiles.remove(i);
+        break;
+      }
+    }
+
+    // حذف از filteredFiles
+    removeFromFilteredByPath(path);
+  }
+
+  private void removeFromFilteredByPath(String path) {
+    for (int i = 0; i < filteredFiles.size(); i++) {
+      if (filteredFiles.get(i).get("path").toString().equals(path)) {
+        filteredFiles.remove(i);
+        notifyItemRemoved(i);
+        // بعد از حذف، باید notify کنیم چون موقعیت‌ها تغییر کردند
+        if (i < filteredFiles.size()) {
+          notifyItemRangeChanged(i, filteredFiles.size() - i);
+        }
+        break;
+      }
+    }
+  }
+
+  public void addFiles(List<HashMap<String, Object>> files) {
+    allFiles.addAll(files);
+    sortList(allFiles);
+
+    if (!currentFilter.isEmpty()) {
+      filter(currentFilter);
+    } else {
+      filteredFiles = new ArrayList<>(allFiles);
+      notifyDataSetChanged();
+    }
+  }
+
+  // ==================== فیلتر/جستجو ====================
+
+  @Override
+  public Filter getFilter() {
+    return new Filter() {
+      @Override
+      protected FilterResults performFiltering(CharSequence constraint) {
+        FilterResults results = new FilterResults();
+        List<HashMap<String, Object>> filteredList = new ArrayList<>();
+
+        if (constraint == null || constraint.length() == 0) {
+          filteredList.addAll(allFiles);
+        } else {
+          String filterPattern = constraint.toString().toLowerCase().trim();
+
+          for (HashMap<String, Object> item : allFiles) {
+            String path = item.get("path").toString();
+            File file = new File(path);
+            String fileName = file.getName().toLowerCase();
+
+            if (fileName.contains(filterPattern)) {
+              filteredList.add(item);
+            }
+          }
+        }
+
+        results.values = filteredList;
+        results.count = filteredList.size();
+        return results;
+      }
+
+      @Override
+      protected void publishResults(CharSequence constraint, FilterResults results) {
+        if (results.values != null) {
+          filteredFiles = (List<HashMap<String, Object>>) results.values;
+        } else {
+          filteredFiles = new ArrayList<>();
+        }
+        currentFilter = constraint != null ? constraint.toString() : "";
+        notifyDataSetChanged();
+      }
+    };
+  }
+
+  public void filter(String text) {
+    currentFilter = text != null ? text.trim() : "";
+    getFilter().filter(currentFilter);
+  }
+
+  public void clearFilter() {
+    filter("");
+  }
+
+  public boolean isFiltered() {
+    return !currentFilter.isEmpty();
+  }
+
+  public void clearNewMarks() {
+    for (HashMap<String, Object> item : allFiles) {
+      item.remove("isNew");
+    }
+    for (HashMap<String, Object> item : filteredFiles) {
+      item.remove("isNew");
+    }
+    notifyDataSetChanged();
   }
 }

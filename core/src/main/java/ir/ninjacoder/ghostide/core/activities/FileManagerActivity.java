@@ -16,7 +16,7 @@ import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
-import android.os.AsyncTask;
+import android.os.*;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -47,6 +47,7 @@ import com.google.gson.reflect.TypeToken;
 import com.hzy.lib7z.Z7Extractor;
 import com.ninjacoder.jgit.GitClone;
 import com.ninjacoder.jgit.GsonToClass;
+import com.ninjacoder.jgit.apk.ApkUtilData;
 import com.ninjacoder.jgit.childer.LayoutBinder;
 import com.ninjacoder.jgit.childer.TextFind;
 import com.ninjacoder.jgit.childer.TextFindListener;
@@ -144,7 +145,7 @@ public class FileManagerActivity extends BaseCompat
   private List<String> list = new ArrayList<>();
   private List<String> folderList = new ArrayList<>();
   private List<String> fileList = new ArrayList<>();
-  private ArrayList<HashMap<String, Object>> files = new ArrayList<>();
+  private List<HashMap<String, Object>> files = new ArrayList<>();
   private ArrayList<HashMap<String, Object>> newlistmap = new ArrayList<>();
   private ArrayList<String> pv = new ArrayList<>();
   private ArrayList<HashMap<String, Object>> upfile = new ArrayList<>();
@@ -168,7 +169,7 @@ public class FileManagerActivity extends BaseCompat
   private SharedPreferences zipCuntishen;
   private Intent govirwFilm = new Intent();
   private SharedPreferences war;
-  
+
   private Intent finalintentpostfont = new Intent();
   private Intent intentgetLogCat = new Intent();
   private SharedPreferences tmp;
@@ -225,8 +226,9 @@ public class FileManagerActivity extends BaseCompat
       bind.recyclerview2.setLayoutManager(gridLayoutManager);
     }
     gridMode = getSharedPreferences("gride", Activity.MODE_PRIVATE);
-    fileListItem = new FileManagerAd(files, FileManagerActivity.this, this, listchild);
+    fileListItem = new FileManagerAd(FileManagerActivity.this, this, listchild);
     bind.recyclerview2.setAdapter(fileListItem);
+    fileListItem.submitList(new ArrayList<>(files));
     shp = getSharedPreferences("shp", Activity.MODE_PRIVATE);
     soglo = getSharedPreferences("soglo", Activity.MODE_PRIVATE);
     np = getSharedPreferences("np", Activity.MODE_PRIVATE);
@@ -257,14 +259,19 @@ public class FileManagerActivity extends BaseCompat
 
     bind.searchbar.setCallBack(
         new SearchCallBack() {
-
           @Override
           public void onTextChange(String text) {
-            // soon
+            if (fileListItem != null) {
+              fileListItem.filter(text);
+            }
           }
 
           @Override
-          public void onafterTextChanged(Editable edit, String code) {}
+          public void onafterTextChanged(Editable edit, String code) {
+            if (edit.toString().isEmpty()) {
+              fileListItem.clearFilter();
+            }
+          }
         });
     if (getIntent().hasExtra("filePath")) {
       String filePath = getIntent().getStringExtra("filePath");
@@ -293,17 +300,21 @@ public class FileManagerActivity extends BaseCompat
 
               @Override
               public void CallBackLeft(int pos) {
-                MakeZipFileFromThread((int) pos);
-                bind.recyclerview2.getAdapter().notifyDataSetChanged();
+                var mmap = files.get(pos);
+
+                fileListItem.updateItem(pos, mmap);
+                MakeZipFileFromThread(pos);
               }
 
               @Override
               public void CallBackRight(int pos) {
+                var mmap = files.get(pos);
+
+                fileListItem.updateItem(pos, mmap);
                 removedFiles(pos);
               }
             });
 
-    
     projectMaker =
         new ProjectMaker(
             Folder,
@@ -336,15 +347,6 @@ public class FileManagerActivity extends BaseCompat
 
   public NavigationViewCompnet getNav() {
     return bind.navs;
-  }
-
-  @Override
-  public void onClick(View view, int pos) {
-    staticstring = files.get((int) pos).get("path").toString();
-    if (FileUtil.isDirectory(staticstring)) {
-      Folder = staticstring;
-      reLoadFile();
-    } else _dataOnClickItemList(pos);
   }
 
   private void bindFileWatcherService(File file) {
@@ -548,6 +550,7 @@ public class FileManagerActivity extends BaseCompat
                     reLoadFile();
                   }
                 }
+                fileListItem.clearFilter();
               }
             });
   }
@@ -584,6 +587,7 @@ public class FileManagerActivity extends BaseCompat
             FileUtil.listDir(Folder, list);
             Collections.sort(list, String.CASE_INSENSITIVE_ORDER);
             GetTab = Folder;
+
             if (isSortFile) {
               Collections.sort(
                   list,
@@ -602,36 +606,48 @@ public class FileManagerActivity extends BaseCompat
                 fileList.add(item);
               }
             }
+
             List<HashMap<String, Object>> folderItems = new ArrayList<>();
             for (String item : folderList) {
               HashMap<String, Object> _item = new HashMap<>();
               _item.put("path", item);
               folderItems.add(_item);
             }
-            files.addAll(folderItems);
 
+            List<HashMap<String, Object>> fileItems = new ArrayList<>();
             for (String item : fileList) {
               HashMap<String, Object> _item = new HashMap<>();
               _item.put("path", item);
-              files.add(_item);
+              fileItems.add(_item);
             }
+
+            // ایجاد لیست نهایی
+            files.clear();
+            files.addAll(folderItems);
+            files.addAll(fileItems);
 
           } catch (Exception e) {
             runOnUiThread(
-                () -> DataUtil.showMessage(getApplicationContext(), "Error to " + e.toString()));
+                () -> DataUtil.showMessage(getApplicationContext(), "Error: " + e.toString()));
           }
+
           runOnUiThread(
               () -> {
                 if (files.isEmpty()) {
                   bind.emptyview.setVisibility(View.VISIBLE);
-                } else bind.emptyview.setVisibility(View.GONE);
-              });
-          runOnUiThread(
-              () -> {
+                } else {
+                  bind.emptyview.setVisibility(View.GONE);
+                }
+
                 bind.recyclerview2.setVisibility(View.VISIBLE);
                 bind.filedirBar.setVisibility(View.GONE);
-                fileListItem.notifyDataSetChanged();
-                // ListSheet.bind(bind.recyclerview2, Folder);
+                if (fileListItem != null) {
+                  fileListItem.submitList(files);
+                  String currentText = bind.searchbar.getText().toString();
+                  if (currentText != null && !currentText.isEmpty()) {
+                    fileListItem.filter(currentText);
+                  }
+                }
               });
         });
   }
@@ -724,6 +740,202 @@ public class FileManagerActivity extends BaseCompat
     dialog.show();
   }
 
+  private int findFilePositionByPath(String filePath) {
+    for (int i = 0; i < files.size(); i++) {
+      if (files.get(i).get("path").toString().equals(filePath)) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  private int getOriginalPositionFromFiltered(int filteredPosition) {
+    return fileListItem.getOriginalPosition(filteredPosition);
+  }
+
+  private void removeFileFromLists(String filePath) {
+    for (int i = 0; i < files.size(); i++) {
+      if (files.get(i).get("path").toString().equals(filePath)) {
+        files.remove(i);
+        break;
+      }
+    }
+    fileListItem.removeItemByPath(filePath);
+  }
+
+  private void updateFileInLists(String oldPath, String newPath) {
+    for (int i = 0; i < files.size(); i++) {
+      HashMap<String, Object> item = files.get(i);
+      if (item.get("path").toString().equals(oldPath)) {
+        item.put("path", newPath);
+        files.set(i, item);
+        fileListItem.updateItem(i, item);
+        break;
+      }
+    }
+  }
+
+  private void addNewFileToList(String filePath) {
+    HashMap<String, Object> newItem = new HashMap<>();
+    newItem.put("path", filePath);
+    newItem.put("isNew", true);
+    files.add(newItem);
+    Collections.sort(
+        files,
+        (o1, o2) -> {
+          String path1 = o1.get("path").toString();
+          String path2 = o2.get("path").toString();
+          boolean isDir1 = FileUtil.isDirectory(path1);
+          boolean isDir2 = FileUtil.isDirectory(path2);
+
+          if (isDir1 && !isDir2) return -1;
+          if (!isDir1 && isDir2) return 1;
+          return path1.compareToIgnoreCase(path2);
+        });
+
+    fileListItem.addNewFile(newItem);
+  }
+
+  @Override
+  public void onClick(View view, int pos) {
+
+    HashMap<String, Object> item = fileListItem.getItem(pos);
+    if (item == null || !item.containsKey("path")) {
+      Log.e("FileManager", "Invalid item at position: " + pos);
+      return;
+    }
+    bind.searchbar.clear();
+    staticstring = item.get("path").toString();
+
+    if (FileUtil.isDirectory(staticstring)) {
+      Folder = staticstring;
+      reLoadFile();
+    } else {
+
+      int originalPos = fileListItem.getOriginalPosition(pos);
+      _dataOnClickItemList(originalPos != -1 ? originalPos : pos);
+    }
+  }
+
+  @Override
+  public void onLongClick(View view, int pos) {
+
+    int originalPos = fileListItem.getOriginalPosition(pos);
+    if (originalPos != -1) {
+      setItemSheetOld(originalPos, view);
+    }
+  }
+
+  void removedFiles(int _pos) {
+    if (_pos < 0 || _pos >= files.size()) {
+      Log.e("FileManager", "Invalid position in removedFiles: " + _pos);
+      return;
+    }
+
+    String filePath = files.get(_pos).get("path").toString();
+    String fileName = new File(filePath).getName();
+
+    var di = new DialogUtil(FileManagerActivity.this);
+    di.setTitle("حذف فایل");
+    di.setMessage("آیا مطمئن هستید که میخواهید '" + fileName + "' را حذف کنید؟");
+    di.setNeutralButton("لغو", null);
+    di.setPositiveButton(
+        "حذف",
+        (p1, d2) -> {
+          new AsyncTask<String, String, String>() {
+            @Override
+            protected void onPreExecute() {
+              prodel.setTitle("در حال حذف ...");
+              prodel.setMessage("در حال حذف " + fileName);
+              prodel.setCancelable(false);
+              prodel.setCanceledOnTouchOutside(false);
+              prodel.show();
+            }
+
+            @Override
+            protected String doInBackground(String... params) {
+              String path = params[0];
+              FileUtil.deleteFile(path);
+              return path;
+            }
+
+            @Override
+            protected void onPostExecute(String deletedPath) {
+              prodel.dismiss();
+              // حذف از لیست‌ها
+              removeFileFromLists(deletedPath);
+              Toast.makeText(getApplicationContext(), "فایل حذف شد", Toast.LENGTH_SHORT).show();
+            }
+          }.execute(filePath);
+        });
+    di.build();
+  }
+
+  void setRenameFile(int _pos) {
+    int position = _pos;
+    if (position < 0 || position >= files.size()) {
+      Log.e("FileManager", "Invalid position in setRenameFile: " + position);
+      return;
+    }
+
+    String currentPath = files.get(position).get("path").toString();
+    String currentName = new File(currentPath).getName();
+
+    AlertDialog dialog =
+        new GhostWebMaterialDialog(FileManagerActivity.this)
+            .setView(R.layout.ranme)
+            .setTitle("تغییر نام")
+            .setMessage("نام جدید را وارد کنید")
+            .setCancelable(false)
+            .setPositiveButton("تأیید", null)
+            .setNegativeButton("لغو", null)
+            .create();
+
+    dialog.setOnShowListener(
+        (var) -> {
+          EditText editor = dialog.findViewById(R.id.editor);
+          Button positive = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+
+          editor.setText(currentName);
+
+          positive.setOnClickListener(
+              (__) -> {
+                String newName = editor.getText().toString().trim();
+                if (newName.isEmpty()) {
+                  editor.setError("نام نمی‌تواند خالی باشد");
+                  return;
+                }
+
+                if (newName.equals(currentName)) {
+                  dialog.dismiss();
+                  return;
+                }
+
+                File oldFile = new File(currentPath);
+                File newFile = new File(oldFile.getParent(), newName);
+
+                if (newFile.exists()) {
+                  editor.setError("فایلی با این نام از قبل وجود دارد");
+                  return;
+                }
+
+                if (oldFile.renameTo(newFile)) {
+                  // آپدیت لیست‌ها
+                  updateFileInLists(currentPath, newFile.getAbsolutePath());
+
+                  Toast.makeText(
+                          getApplicationContext(), "نام با موفقیت تغییر کرد", Toast.LENGTH_SHORT)
+                      .show();
+                } else {
+                  Toast.makeText(getApplicationContext(), "خطا در تغییر نام", Toast.LENGTH_SHORT)
+                      .show();
+                }
+                dialog.dismiss();
+              });
+        });
+    dialog.show();
+  }
+
   private void FileMaker() {
     var folders = new FileMaker(this);
     folders.setFolderName(Folder);
@@ -736,38 +948,9 @@ public class FileManagerActivity extends BaseCompat
 
             runOnUiThread(
                 () -> {
-                  // 1. فایل جدید را به لیست اضافه کن
-                  HashMap<String, Object> newItem = new HashMap<>();
-                  newItem.put("path", filePath);
-
-                  // 2. لیست را بر اساس نوع فایل مرتب کن (مثل reLoadFile)
-                  Collections.sort(
-                      files,
-                      (o1, o2) -> {
-                        String path1 = o1.get("path").toString();
-                        String path2 = o2.get("path").toString();
-                        boolean isDir1 = FileUtil.isDirectory(path1);
-                        boolean isDir2 = FileUtil.isDirectory(path2);
-
-                        if (isDir1 && !isDir2) return -1;
-                        if (!isDir1 && isDir2) return 1;
-                        return path1.compareToIgnoreCase(path2);
-                      });
-
-                  // 3. موقعیت جدید را پیدا کن
-                  int newPosition = -1;
-                  for (int i = 0; i < files.size(); i++) {
-                    if (files.get(i).get("path").toString().equals(filePath)) {
-                      newPosition = i;
-                      break;
-                    }
-                  }
-
+                  addNewFileToList(filePath);
+                  int newPosition = findFilePositionByPath(filePath);
                   if (newPosition != -1) {
-
-                    fileListItem.markNewFile(filePath);
-                    files.add(newItem);
-                    fileListItem.notifyItemInserted(newPosition);
                     bind.recyclerview2.smoothScrollToPosition(newPosition);
                   }
                 });
@@ -780,7 +963,7 @@ public class FileManagerActivity extends BaseCompat
         });
   }
 
-  public void RefreshTabs() {
+  void RefreshTabs() {
     if (shp.contains("path")) {
       if (!shp.getString("path", "").equals("")) {
         newlistmap =
@@ -871,7 +1054,7 @@ public class FileManagerActivity extends BaseCompat
     di.build();
   }
 
-  void setFontView(ArrayList<HashMap<String, Object>> map, String _path, int _pos) {
+  void setFontView(List<HashMap<String, Object>> map, String _path, int _pos) {
     String paths = map.get(_pos).get(_path).toString();
     if (paths.endsWith(".ttf") || paths.endsWith(".otf")) {
       finalintentpostfont.setClass(getApplicationContext(), FontViewActivity.class);
@@ -880,10 +1063,9 @@ public class FileManagerActivity extends BaseCompat
     }
   }
 
-  void setThemeInstallByPath(
-      final ArrayList<HashMap<String, Object>> _list, final double _pos, final String _str) {
-    if (_list.get((int) _pos).get(_str).toString().endsWith(".aa")
-        || _list.get((int) _pos).get(_str).toString().endsWith(".AA")) {
+  void setThemeInstallByPath(List<HashMap<String, Object>> _list, int pos, String str) {
+    if (_list.get(pos).get(str).toString().endsWith(".aa")
+        || _list.get(pos).get(str).toString().endsWith(".AA")) {
       if (FileUtil.isFile("/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost")) {
         var di = new MaterialAlertDialogBuilder(FileManagerActivity.this);
         di.setTitle(R.string.themewarning);
@@ -892,19 +1074,19 @@ public class FileManagerActivity extends BaseCompat
             android.R.string.ok,
             (p, d) -> {
               try {
-                new net.lingala.zip4j.ZipFile(_list.get((int) _pos).get(_str).toString())
+                new net.lingala.zip4j.ZipFile(_list.get(pos).get(str).toString())
                     .extractAll("/storage/emulated/0/GhostWebIDE/theme/");
               } catch (net.lingala.zip4j.exception.ZipException e) {
                 showMessage(e.toString());
               }
               reLoadFile();
-              DataUtil.showMessage(getApplicationContext(), "انجام شد");
+              DataUtil.showMessage(getApplicationContext(), "done!");
             });
-        di.setPositiveButton(android.R.string.cancel, (p1, d2) -> {});
+        di.setPositiveButton(android.R.string.cancel, null);
         di.show();
       } else {
         try {
-          new net.lingala.zip4j.ZipFile(_list.get((int) _pos).get(_str).toString())
+          new net.lingala.zip4j.ZipFile(_list.get(pos).get(str).toString())
               .extractAll("/storage/emulated/0/GhostWebIDE/theme/");
         } catch (net.lingala.zip4j.exception.ZipException e) {
           showMessage(e.toString());
@@ -1001,100 +1183,6 @@ public class FileManagerActivity extends BaseCompat
               });
         });
     dialog.show();
-  }
-
-  void setRenameFile(double _pos) {
-    AlertDialog dialog =
-        new GhostWebMaterialDialog(FileManagerActivity.this)
-            .setView(R.layout.ranme)
-            .setTitle("Rename")
-            .setMessage("type new name ")
-            .setCancelable(false)
-            .setPositiveButton("Ok", null)
-            .setNegativeButton(android.R.string.cancel, null)
-            .create();
-    dialog.setOnShowListener(
-        (var) -> {
-          EditText editor = dialog.findViewById(R.id.editor);
-          editor.setTextSize(16);
-          editor.setTextColor(MaterialColors.getColor(editor, ObjectUtils.colorOnSurface, 0));
-          Button positive = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-          editor.setText(
-              Uri.parse(files.get((int) _pos).get("path").toString()).getLastPathSegment());
-          if (editor.getText().toString().isEmpty()) {
-            positive.setEnabled(false);
-          } else {
-            positive.setEnabled(true);
-          }
-          editor.addTextChangedListener(
-              new TextWatcher() {
-
-                @Override
-                public void onTextChanged(CharSequence s, int _param2, int _param3, int _param4) {
-
-                  if (s.toString().isEmpty()) {
-                    positive.setEnabled(false);
-                  } else {
-                    positive.setEnabled(true);
-                  }
-                }
-
-                @Override
-                public void beforeTextChanged(
-                    CharSequence _param1, int _param2, int _param3, int _param4) {}
-
-                @Override
-                public void afterTextChanged(android.text.Editable _param1) {}
-              });
-          positive.setOnClickListener(
-              (__) -> {
-                {
-                  File name1 = new File(files.get((int) _pos).get("path").toString());
-                  File name2 = new File(Folder.concat("/".concat(editor.getText().toString())));
-                  name1.renameTo(name2);
-                }
-                dialog.dismiss();
-                reLoadFile();
-              });
-        });
-    dialog.show();
-  }
-
-  void removedFiles(int _pos) {
-    var di = new DialogUtil(FileManagerActivity.this);
-    di.setTitle("Romved File");
-    di.setMessage("romved ".concat(files.get(_pos).get("path").toString().concat(" your mobile?")));
-    di.setNeutralButton("no", null);
-    di.setPositiveButton(
-        "ok",
-        (p1, d2) -> {
-          new AsyncTask<String, String, String>() {
-
-            @Override
-            protected void onPreExecute() {
-              prodel.setTitle("Romving ...");
-              prodel.setMessage(
-                  "removing ".concat(files.get(_pos).get("path").toString().concat(" now")));
-              prodel.setCancelable(false);
-              prodel.setCanceledOnTouchOutside(false);
-              prodel.show();
-            }
-
-            @Override
-            protected String doInBackground(String... params) {
-
-              FileUtil.deleteFile(files.get(_pos).get("path").toString());
-              return "";
-            }
-
-            @Override
-            protected void onPostExecute(String _result) {
-              prodel.dismiss();
-              reLoadFile();
-            }
-          }.execute("");
-        });
-    di.build();
   }
 
   void loadsvg(int newpos) {
@@ -1519,29 +1607,14 @@ public class FileManagerActivity extends BaseCompat
     String pathToFile = staticstring;
     var packageManager = getPackageManager();
     var packageInfo = packageManager.getPackageArchiveInfo(pathToFile, 0);
-    var sb = new StringBuilder();
-    sb.append("Package Name: ").append(packageInfo.packageName).append("\n");
-    sb.append("Version Name: ").append(packageInfo.versionName).append("\n");
-    sb.append("Version Code: ").append(packageInfo.versionCode).append("\n");
-    int minSdkVersion = packageInfo.applicationInfo.minSdkVersion;
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-      sb.append("Min SDK Version: ")
-          .append(minSdkVersion)
-          .append(" (")
-          .append(Build.VERSION_CODES.class.getFields()[minSdkVersion].getName())
-          .append(")\n");
-    } else {
-      sb.append("Min SDK Version: ").append(minSdkVersion).append("\n");
-    }
-    // دریافت آیکون برنامه و نام برنامه
     var applicationInfo = packageInfo.applicationInfo;
     var icon = applicationInfo.loadIcon(packageManager);
     var appName = applicationInfo.loadLabel(packageManager).toString();
-    // ساخت دیالوگ با MaterialAlertDialogBuilder و نمایش آیکون و نام برنامه در آن
+    var apkdata = new ApkUtilData(this);
     var builder = new MaterialAlertDialogBuilder(this);
     builder.setTitle(appName);
     builder.setIcon(icon);
-    builder.setMessage(sb.toString());
+    builder.setMessage(apkdata.getFormattedAppInfo(staticstring));
     builder.setPositiveButton(
         "ApkSigner",
         (dd, fff) -> {
@@ -1894,11 +1967,16 @@ public class FileManagerActivity extends BaseCompat
       }
     }
   }
-  
-  void appUpdate(){
-    var updateversion = new UpadteAppView(this,bind.downloder,bind.fabAdd,()->{
-      reLoadFile();
-    });
+
+  void appUpdate() {
+    var updateversion =
+        new UpadteAppView(
+            this,
+            bind.downloder,
+            bind.fabAdd,
+            () -> {
+              reLoadFile();
+            });
     updateversion.init();
   }
 
@@ -2104,7 +2182,7 @@ public class FileManagerActivity extends BaseCompat
         });
   }
 
-  void setItemSheetOld(int _position, final View _view) {
+  void setItemSheetOld(int _position, View _view) {
 
     var sheet = new ListSheet();
     sheet.setSheetDialog(this);
@@ -2229,11 +2307,6 @@ public class FileManagerActivity extends BaseCompat
         () -> {
           reLoadFile();
         });
-  }
-
-  @Override
-  public void onLongClick(View view, int pos) {
-    setItemSheetOld(pos, view);
   }
 
   @Override

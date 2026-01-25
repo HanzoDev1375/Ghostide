@@ -8,6 +8,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.text.Spanned;
 import android.util.SparseBooleanArray;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -192,13 +193,22 @@ public class DataUtil {
   public static void showKeyboard(Context context) {}
 
   public static void showMessage(Context context, String s) {
-    GhostToast.showToast(context,s);
+    GhostToast.showToast(context, s);
   }
-  
- public static void showMessage(String s) {
+
+  public static void showMessage(Context context, CharSequence s) {
+    GhostToast.showToast(context, s);
+  }
+
+  public static void showMessage(Context context, Spanned s) {
+    GhostToast.showToast(context, s);
+  }
+
+  @Deprecated
+  public static void showMessage(String s) {
     Toast.makeText(GhostIdeAppLoader.getContext(), s, Toast.LENGTH_SHORT).show();
   }
-  
+
   public static int getLocationX(View view) {
     int location[] = new int[2];
     view.getLocationInWindow(location);

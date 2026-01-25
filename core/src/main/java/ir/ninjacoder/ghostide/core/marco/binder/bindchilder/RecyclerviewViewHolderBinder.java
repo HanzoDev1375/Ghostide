@@ -30,13 +30,16 @@ public class RecyclerviewViewHolderBinder {
       TextView folderName,
       TextView tvTools,
       ImageView icon,
-      ViewType viewType) {
-        
-    File myfile = new File(files.get(pos).get("path").toString());
-    folderName.setTextColor(
-        MaterialColors.getColor(folderName, ObjectUtils.colorOnSurface, Color.WHITE));
+      ViewType viewType,
+      boolean isSearch,
+      boolean isNewFile) {
 
-    tvTools.setTextColor(MaterialColors.getColor(tvTools, ObjectUtils.colorOnSurface, 0));
+    File myfile = new File(files.get(pos).get("path").toString());
+    // if (isSearch && !isNewFile)
+      // folderName.setTextColor(
+          // MaterialColors.getColor(folderName, ObjectUtils.colorOnSurface, Color.WHITE));
+
+    // tvTools.setTextColor(MaterialColors.getColor(tvTools, ObjectUtils.colorOnSurface, 0));
     if (FileUtil.isDirectory(myfile.toString())) {
       if (viewType == ViewType.ROW) {
         icon.setPadding(8, 8, 8, 8);

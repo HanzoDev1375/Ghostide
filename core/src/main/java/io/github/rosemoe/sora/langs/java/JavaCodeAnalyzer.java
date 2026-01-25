@@ -150,7 +150,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           case JavaLexer.BOOL_LITERAL:
           case JavaLexer.CHAR_LITERAL:
           case JavaLexer.NULL_LITERAL:
-            result.addIfNeeded(line, column, EditorColorScheme.javastring);
+            result.addIfNeeded(line, column, EditorColorScheme.LITERAL);
             break;
           case JavaLexer.STRING_LITERAL:
             {
@@ -158,13 +158,13 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 var colors = result;
                 try {
                   int color = Color.parseColor(text1.substring(1, text1.length() - 1));
-                  colors.addIfNeeded(line, column, EditorColorScheme.LITERAL);
+                  colors.addIfNeeded(line, column, EditorColorScheme.javastring);
                   if (ColorUtils.calculateLuminance(color) > 0.5) {
                     Span span =
                         Span.obtain(
                             column + 1,
                             TextStyle.makeStyle(
-                                EditorColorScheme.black, 0, false, false, false, false, true));
+                                EditorColorScheme.black, 0, true, false, false, false, true));
                     if (span != null) {
                       span.setBackgroundColorMy(color);
                       colors.add(line, span);
@@ -174,9 +174,9 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                         Span.obtain(
                             column + 1,
                             TextStyle.makeStyle(
-                                EditorColorScheme.TEXT_NORMAL,
+                                EditorColorScheme.white,
                                 0,
-                                false,
+                                true,
                                 false,
                                 false,
                                 false,
@@ -187,14 +187,14 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                     }
                   }
 
-                  Span middle = Span.obtain(column + text1.length() - 1, EditorColorScheme.black);
+                  Span middle = Span.obtain(column + text1.length() - 1, EditorColorScheme.javastring);
                   middle.setBackgroundColorMy(Color.TRANSPARENT);
                   colors.add(line, middle);
 
                   Span end =
                       Span.obtain(
                           column + text1.length(),
-                          TextStyle.makeStyle(EditorColorScheme.TEXT_NORMAL));
+                          TextStyle.makeStyle(EditorColorScheme.white));
                   end.setBackgroundColorMy(Color.TRANSPARENT);
                   colors.add(line, end);
                   break;

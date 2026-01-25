@@ -23,6 +23,7 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.transition.Transition;
 import android.transition.TransitionManager;
@@ -68,6 +69,7 @@ import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.ninjacoder.jgit.childer.FuzzySearchHelper;
 
+import ir.ninjacoder.ghostide.core.marco.ColorCompat;
 import org.antlr.v4.runtime.Lexer;
 
 import java.io.File;
@@ -886,7 +888,12 @@ public class ObjectUtils {
     int endPos = startPos + searchText.length();
     if (startPos != -1) {
       spannableString.setSpan(
-          new ForegroundColorSpan(Color.CYAN),
+          new ForegroundColorSpan(Color.BLACK),
+          startPos,
+          endPos,
+          SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+      spannableString.setSpan(
+          new BackgroundColorSpan(Color.parseColor("#FFFFE0B2")),
           startPos,
           endPos,
           SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
