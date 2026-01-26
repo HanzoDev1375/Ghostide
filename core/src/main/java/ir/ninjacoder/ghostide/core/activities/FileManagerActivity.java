@@ -59,6 +59,7 @@ import ir.ninjacoder.ghostide.core.editor.PluginextractorFace;
 import ir.ninjacoder.ghostide.core.git.GithubProfileImpl;
 import ir.ninjacoder.ghostide.core.git.JgitHelperImpl;
 import ir.ninjacoder.ghostide.core.widget.*;
+import ir.ninjacoder.prograsssheet.search.GlobalSearchBottomSheet;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -550,6 +551,7 @@ public class FileManagerActivity extends BaseCompat
                     reLoadFile();
                   }
                 }
+                bind.searchbar.setText("");
                 fileListItem.clearFilter();
               }
             });
@@ -799,19 +801,22 @@ public class FileManagerActivity extends BaseCompat
   @Override
   public void onClick(View view, int pos) {
 
+    fileListItem.clearHighlights();
+
     HashMap<String, Object> item = fileListItem.getItem(pos);
     if (item == null || !item.containsKey("path")) {
       Log.e("FileManager", "Invalid item at position: " + pos);
       return;
     }
-    bind.searchbar.clear();
+
+    bind.searchbar.setText("");
+    fileListItem.clearFilter();
     staticstring = item.get("path").toString();
 
     if (FileUtil.isDirectory(staticstring)) {
       Folder = staticstring;
       reLoadFile();
     } else {
-
       int originalPos = fileListItem.getOriginalPosition(pos);
       _dataOnClickItemList(originalPos != -1 ? originalPos : pos);
     }
@@ -2002,7 +2007,7 @@ public class FileManagerActivity extends BaseCompat
     sh1.addItem(getString(R.string.git_tools), R.drawable.git);
     sh1.addItem(getString(R.string.gson_to_class), R.drawable.file_json_24px);
     sh1.addItem(getString(R.string.pastjavacode), R.drawable.ic_material_java);
-
+    sh1.addItem("Global Search", R.drawable.mdapk);
     sh1.setOnItemClickLabe(
         (pos333) -> {
           switch (pos333) {
@@ -2176,6 +2181,50 @@ public class FileManagerActivity extends BaseCompat
                         null);
                 sh1.getDismiss(true);
                 nodeChild.setMode(ClassNodePaserImpl.ModeUser.DIALOG);
+                break;
+              }
+            case 12:
+              {
+                GlobalSearchBottomSheet bottomSheet = new GlobalSearchBottomSheet();
+                bottomSheet.setPathInput(Folder);
+                bottomSheet.setOnItemClickListener(
+                    filePath -> {
+                      File file = new File(filePath);
+                      if (file.isDirectory()) {
+                        Folder = filePath;
+                        reLoadFile();
+                      } else {
+                        staticstring = filePath;
+                        fileListItem.highlightFile(filePath);
+                        for (int i = 0; i < files.size(); i++) {
+                          if (files.get(i).get("path").toString().equals(filePath)) {
+                            bind.recyclerview2.smoothScrollToPosition(i);
+                            _dataOnClickItemList(i);
+                            return;
+                          }
+                        }
+                        String parent = file.getParent();
+                        if (parent != null && !parent.equals(Folder)) {
+                          Folder = parent;
+                          reLoadFile();
+                          new Handler()
+                              .postDelayed(
+                                  () -> {
+                                    for (int i = 0; i < files.size(); i++) {
+                                      if (files.get(i).get("path").toString().equals(filePath)) {
+                                        fileListItem.highlightFile(filePath);
+                                        bind.recyclerview2.smoothScrollToPosition(i);
+                                        _dataOnClickItemList(i);
+                                        break;
+                                      }
+                                    }
+                                  },
+                                  500);
+                        }
+                      }
+                    });
+                bottomSheet.show(getSupportFragmentManager(), "global_search");
+                sh1.getDismiss(true);
                 break;
               }
           }

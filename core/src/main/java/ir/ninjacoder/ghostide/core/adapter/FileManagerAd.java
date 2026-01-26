@@ -11,11 +11,8 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.color.MaterialColors;
 import ir.ninjacoder.ghostide.core.marco.binder.bindchilder.RecyclerviewViewHolderBinder;
 import ir.ninjacoder.ghostide.core.utils.ObjectUtils;
 import java.io.File;
@@ -23,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-
 import ir.ninjacoder.ghostide.core.R;
 import ir.ninjacoder.ghostide.core.utils.FileUtil;
 import ir.ninjacoder.prograsssheet.listchild.Child;
@@ -82,7 +78,6 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
       Log.e("FileManagerAd", "Invalid position in bind: " + position);
       return;
     }
-
     HashMap<String, Object> item = filteredFiles.get(position);
     if (item == null) {
       return;
@@ -95,7 +90,8 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     holder.folderName.setText(file.getName());
     int allFilesPosition = getOriginalPosition(position);
     boolean isNew = item.containsKey("isNew") && (boolean) item.get("isNew");
-
+    boolean isHighlighted =
+        item.containsKey("isHighlighted") && (boolean) item.get("isHighlighted");
     if (allFilesPosition >= 0 && allFilesPosition < allFiles.size()) {
       try {
         RecyclerviewViewHolderBinder.bindHolder(
@@ -113,12 +109,44 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     }
 
     holder.itemView.setClickable(true);
-    if (isSearch) {
+    if (isHighlighted) {
+      holder.folderName.setTextColor(Color.parseColor("#2196F3"));
+    } else if (isSearch) {
       ObjectUtils.setHighlightSearchText(holder.folderName, file.getName(), currentFilter);
-    }
-    if (isNew) {
+    } else if (isNew) {
       holder.folderName.setTextColor(Color.parseColor("#4CAF50"));
     }
+  }
+
+  public void highlightFile(String path) {
+    clearHighlights();
+
+    for (int i = 0; i < allFiles.size(); i++) {
+      HashMap<String, Object> item = allFiles.get(i);
+      if (item.get("path").toString().equals(path)) {
+        item.put("isHighlighted", true);
+        allFiles.set(i, item);
+        break;
+      }
+    }
+
+    for (int i = 0; i < filteredFiles.size(); i++) {
+      if (filteredFiles.get(i).get("path").toString().equals(path)) {
+        filteredFiles.get(i).put("isHighlighted", true);
+        notifyItemChanged(i);
+        break;
+      }
+    }
+  }
+
+  public void clearHighlights() {
+    for (HashMap<String, Object> item : allFiles) {
+      item.remove("isHighlighted");
+    }
+    for (HashMap<String, Object> item : filteredFiles) {
+      item.remove("isHighlighted");
+    }
+    notifyDataSetChanged();
   }
 
   public void markNewFile(String path) {
@@ -177,7 +205,6 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     }
 
     if (!currentFilter.isEmpty()) {
-      // فیلتر را دوباره اعمال کن
       filter(currentFilter);
     } else {
       filteredFiles = new ArrayList<>(allFiles);
@@ -283,10 +310,9 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     return new ArrayList<>(allFiles);
   }
 
-  /** تبدیل موقعیت از لیست فیلتر شده به موقعیت اصلی */
   public int getOriginalPosition(int filteredPosition) {
     if (!isFiltered()) {
-      // اگر فیلتر فعال نیست، موقعیت یکسان است
+
       return filteredPosition;
     }
 
@@ -309,8 +335,6 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
   public void updateItem(int position, HashMap<String, Object> newItem) {
     if (position >= 0 && position < allFiles.size()) {
       allFiles.set(position, newItem);
-
-      // آپدیت در filteredFiles اگر وجود دارد
       for (int i = 0; i < filteredFiles.size(); i++) {
         if (filteredFiles.get(i).get("path").equals(newItem.get("path"))) {
           filteredFiles.set(i, newItem);
@@ -326,22 +350,17 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
       HashMap<String, Object> removedItem = allFiles.get(position);
       String removedPath = removedItem.get("path").toString();
       allFiles.remove(position);
-
-      // حذف از filteredFiles اگر وجود دارد
       removeFromFilteredByPath(removedPath);
     }
   }
 
   public void removeItemByPath(String path) {
-    // حذف از allFiles
     for (int i = 0; i < allFiles.size(); i++) {
       if (allFiles.get(i).get("path").toString().equals(path)) {
         allFiles.remove(i);
         break;
       }
     }
-
-    // حذف از filteredFiles
     removeFromFilteredByPath(path);
   }
 
@@ -350,7 +369,6 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
       if (filteredFiles.get(i).get("path").toString().equals(path)) {
         filteredFiles.remove(i);
         notifyItemRemoved(i);
-        // بعد از حذف، باید notify کنیم چون موقعیت‌ها تغییر کردند
         if (i < filteredFiles.size()) {
           notifyItemRangeChanged(i, filteredFiles.size() - i);
         }
@@ -370,8 +388,6 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
       notifyDataSetChanged();
     }
   }
-
-  // ==================== فیلتر/جستجو ====================
 
   @Override
   public Filter getFilter() {
