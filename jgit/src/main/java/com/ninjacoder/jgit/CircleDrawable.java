@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.content.res.Resources;
+import androidx.core.graphics.ColorUtils;
 
 public class CircleDrawable extends Drawable {
   private Paint mPaint;
@@ -22,7 +23,7 @@ public class CircleDrawable extends Drawable {
     mPaint.setColor(kind);
 
     mTextPaint = new Paint();
-    mTextPaint.setColor(Color.BLACK); // معادل -0x1
+    mTextPaint.setColor(ColorUtils.calculateLuminance(kind) > 0.5 ? Color.WHITE : Color.BLACK);
     mTextPaint.setAntiAlias(true);
     mTextPaint.setTextSize(Resources.getSystem().getDisplayMetrics().density * 14);
     mTextPaint.setTextAlign(Paint.Align.CENTER);

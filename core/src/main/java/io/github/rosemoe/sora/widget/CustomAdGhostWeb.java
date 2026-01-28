@@ -3,10 +3,12 @@ package io.github.rosemoe.sora.widget;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,6 +83,11 @@ public class CustomAdGhostWeb extends EditorCompletionAdapter {
             index,
             index + userFilter.length(),
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        label.setSpan(
+            new StyleSpan(Typeface.BOLD_ITALIC),
+            index,
+            index + userFilter.length(),
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
       }
     }
     item_label.setText(label);
@@ -104,20 +111,16 @@ public class CustomAdGhostWeb extends EditorCompletionAdapter {
     } else {
       item_desc.setText(item.desc);
     }
-
+    int backgroundColor = getThemeColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER);
     var editor = getEditor();
+    item.setBackground(backgroundColor);
     if (isImage(item.label)) {
       Glide.with(item_icon.getContext())
           .load(item.jdir)
           .circleCrop()
-          .error(
-              new CircleDrawable(
-                  getThemeColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER), true, item.label))
+          .error(new CircleDrawable(item.getBackground(), true, item.label))
           .into(item_icon);
-    } else
-      item_icon.setBackground(
-          new CircleDrawable(
-              getThemeColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER), true, item.label));
+    } else item_icon.setBackground(new CircleDrawable(item.getBackground(), true, item.label));
 
     return bind.getRoot();
   }

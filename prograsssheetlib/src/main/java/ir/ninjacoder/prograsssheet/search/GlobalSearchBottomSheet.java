@@ -84,6 +84,13 @@ public class GlobalSearchBottomSheet extends BottomSheetDialogFragment {
 
     bind.progressBar.setWaveAmplitude(3);
     bind.progressBar.setWavelength(99);
+    var statecolor = bind.searchInput.getTextColors().getDefaultColor();
+    if (bind.regexCheck.isChecked()) {
+      statecolor = Color.parseColor("#FFFFA749");
+    } else if (bind.caseCheck.isChecked()) {
+      statecolor = Color.parseColor("#FFAAFF49");
+    }
+    bind.searchInput.setTextColor(statecolor);
   }
 
   public void setIcon(int icon) {
@@ -180,7 +187,7 @@ public class GlobalSearchBottomSheet extends BottomSheetDialogFragment {
                         bind.resultsText.setText(
                             getMarkDown(
                                 adapter.getItemCount()
-                                    + "\n\n_Results: _"
+                                    + "_Results:_"
                                     + "## "
                                     + adapter.getItemCount()));
                       });
@@ -414,7 +421,7 @@ public class GlobalSearchBottomSheet extends BottomSheetDialogFragment {
             endPos,
             SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
         spannableString.setSpan(
-            new BackgroundColorSpan(Color.parseColor("#FFFFE0B2")),
+            new RoundedBackgroundColorSpan(Color.parseColor("#FFFFE0B2"), 10, 20),
             startPos,
             endPos,
             SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);

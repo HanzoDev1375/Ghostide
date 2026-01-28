@@ -14,9 +14,8 @@ import java.util.Objects;
 /**
  * The class used to save auto complete result items
  *
- * @author Rose
+ * @author Gbost
  */
-@SuppressWarnings("CanBeFinal")
 public class CompletionItem {
 
   public static final Comparator<CompletionItem> COMPARATOR_BY_NAME =
@@ -30,6 +29,7 @@ public class CompletionItem {
   public String desc;
   public String jdir;
   private boolean deprecated;
+  private int background;
 
   /** Cursor offset in {@link CompletionItem#commit} */
   public int cursorOffset;
@@ -144,5 +144,13 @@ public class CompletionItem {
 
   public void setDeprecated(boolean deprecated) {
     this.deprecated = deprecated;
+  }
+
+  public int getBackground() {
+    return this.background;
+  }
+
+  public void setBackground(int background) {
+    this.background = background;
   }
 }
