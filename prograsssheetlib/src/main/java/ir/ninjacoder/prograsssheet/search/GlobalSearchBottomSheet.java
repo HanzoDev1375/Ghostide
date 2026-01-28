@@ -1,6 +1,13 @@
 package ir.ninjacoder.prograsssheet.search;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,36 +17,35 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.snackbar.Snackbar;
+import io.noties.markwon.Markwon;
+import io.noties.markwon.html.HtmlPlugin;
 import ir.ninjacoder.prograsssheet.R;
+import ir.ninjacoder.prograsssheet.databinding.ItemBottomsheetSearchBinding;
 import ir.ninjacoder.prograsssheet.search.interfaces.SearchListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GlobalSearchBottomSheet extends BottomSheetDialogFragment {
+  private ItemBottomsheetSearchBinding bind;
 
   public interface OnItemClickListener {
     void onItemClick(String filePath);
   }
 
-  private EditText searchInput;
-  private Button searchButton;
-  private Button stopButton;
-  private ProgressBar progressBar;
-  private TextView progressText;
-  private TextView resultsText;
-  private RecyclerView recyclerView;
-  private CheckBox regexCheck;
-  private CheckBox caseCheck;
-  private CheckBox fileCheck;
-  private CheckBox folderCheck;
-  private CheckBox hiddenCheck;
   private SearchAdapter adapter;
   private GlobalSearchManager manager;
   private OnItemClickListener itemClickListener;
   private String pathInput;
+  private int pendingIcon = -1;
+  private String currentQuery = "";
 
   @Nullable
   @Override
@@ -47,72 +53,69 @@ public class GlobalSearchBottomSheet extends BottomSheetDialogFragment {
       @NonNull LayoutInflater inflater,
       @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
-    return inflater.inflate(R.layout.item_bottomsheet_search, container, false);
+    bind =
+        ItemBottomsheetSearchBinding.inflate(LayoutInflater.from(getContext()), container, false);
+    return bind.getRoot();
   }
 
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
-    searchInput = view.findViewById(R.id.search_input);
-    searchButton = view.findViewById(R.id.search_button);
-    stopButton = view.findViewById(R.id.stop_button);
-    progressBar = view.findViewById(R.id.progress_bar);
-    progressText = view.findViewById(R.id.progress_text);
-    resultsText = view.findViewById(R.id.results_text);
-    recyclerView = view.findViewById(R.id.results_list);
-
-    regexCheck = view.findViewById(R.id.regex_check);
-    caseCheck = view.findViewById(R.id.case_check);
-    fileCheck = view.findViewById(R.id.file_check);
-    folderCheck = view.findViewById(R.id.folder_check);
-    hiddenCheck = view.findViewById(R.id.hidden_check);
-
     adapter = new SearchAdapter();
-    recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-    recyclerView.setAdapter(adapter);
+    bind.resultsList.setLayoutManager(new LinearLayoutManager(getContext()));
+    bind.resultsList.setAdapter(adapter);
 
-    // تنظیمات پیش‌فرض
-    fileCheck.setChecked(true);
-    folderCheck.setChecked(true);
-    hiddenCheck.setChecked(false);
-
-    // اگر pathInput تنظیم شده باشد، آن را در searchInput نمایش بده
-    if (pathInput != null && !pathInput.isEmpty()) {
-      searchInput.setText(pathInput);
+    if (pendingIcon != -1) {
+      adapter.setIcon(pendingIcon);
+      pendingIcon = -1;
     }
 
-    searchButton.setOnClickListener(v -> startSearch());
-    stopButton.setOnClickListener(v -> stopSearch());
+    bind.fileCheck.setChecked(true);
+    bind.folderCheck.setChecked(true);
+    bind.hiddenCheck.setChecked(false);
+    bind.searchButton.setOnClickListener(v -> startSearch());
+    bind.stopButton.setOnClickListener(v -> stopSearch());
 
-    regexCheck.setOnCheckedChangeListener(
+    bind.regexCheck.setOnCheckedChangeListener(
         (buttonView, isChecked) -> {
-          caseCheck.setEnabled(!isChecked);
+          bind.caseCheck.setEnabled(!isChecked);
         });
+
+    bind.progressBar.setWaveAmplitude(3);
+    bind.progressBar.setWavelength(99);
   }
 
   public void setIcon(int icon) {
-    adapter.setIcon(icon);
+    if (adapter != null) {
+      adapter.setIcon(icon);
+    } else {
+      this.pendingIcon = icon;
+    }
   }
 
   public int getIcon() {
-    return adapter.getIcon();
+    if (adapter != null) {
+      return adapter.getIcon();
+    }
+    return pendingIcon != -1 ? pendingIcon : android.R.drawable.ic_menu_search;
   }
 
   private void startSearch() {
-    String query = searchInput.getText().toString().trim();
+    String query = bind.searchInput.getText().toString().trim();
     if (query.isEmpty()) {
-      Toast.makeText(getContext(), "لطفاً عبارت جستجو را وارد کنید", Toast.LENGTH_SHORT).show();
+      showMarkdownMessage("_Please enter data_");
       return;
     }
-
+    currentQuery = query;
+    adapter.setSearchQuery(query);
+    adapter.setSearchMode(bind.regexCheck.isChecked(), bind.caseCheck.isChecked());
     adapter.clear();
     setSearching(true);
-    resultsText.setText("در حال جستجو...");
+    bind.resultsText.setText(getMarkDown("_Start Search..._"));
 
     manager = new GlobalSearchManager();
 
-    // تعیین مسیر ریشه جستجو
     File searchRoot;
     File initialFile = new File(pathInput);
 
@@ -122,31 +125,30 @@ public class GlobalSearchBottomSheet extends BottomSheetDialogFragment {
       } else {
         searchRoot = initialFile.getParentFile();
         if (searchRoot == null) {
-          Toast.makeText(getContext(), "مسیر نامعتبر است", Toast.LENGTH_SHORT).show();
+          showMarkdownMessage("_The entered path is not valid_");
           setSearching(false);
           return;
         }
       }
     } else {
-      Toast.makeText(getContext(), "مسیر وجود ندارد", Toast.LENGTH_SHORT).show();
+      showMarkdownMessage("_Directory not found_");
       setSearching(false);
       return;
     }
 
     Log.d("GlobalSearch", "Starting search in: " + searchRoot.getAbsolutePath());
     Log.d("GlobalSearch", "Query: " + query);
-    Log.d("GlobalSearch", "Search files: " + fileCheck.isChecked());
-    Log.d("GlobalSearch", "Search folders: " + folderCheck.isChecked());
+    Log.d("GlobalSearch", "Search files: " + bind.fileCheck.isChecked());
+    Log.d("GlobalSearch", "Search folders: " + bind.folderCheck.isChecked());
 
-    // اجرای جستجو
     manager.search(
         searchRoot.getAbsolutePath(),
         query,
-        regexCheck.isChecked(),
-        caseCheck.isChecked(),
-        fileCheck.isChecked(),
-        folderCheck.isChecked(),
-        hiddenCheck.isChecked(),
+        bind.regexCheck.isChecked(),
+        bind.caseCheck.isChecked(),
+        bind.fileCheck.isChecked(),
+        bind.folderCheck.isChecked(),
+        bind.hiddenCheck.isChecked(),
         new SearchListener() {
           @Override
           public void onSearchStarted() {
@@ -159,9 +161,9 @@ public class GlobalSearchBottomSheet extends BottomSheetDialogFragment {
               getActivity()
                   .runOnUiThread(
                       () -> {
-                        progressBar.setMax(total);
-                        progressBar.setProgress(current);
-                        progressText.setText(current + "/" + total);
+                        bind.progressBar.setMax(total);
+                        bind.progressBar.setProgressCompat(current, false);
+                        bind.progressText.setText(current + "/" + total);
                       });
             }
           }
@@ -175,7 +177,12 @@ public class GlobalSearchBottomSheet extends BottomSheetDialogFragment {
                         String filePath = (String) file.get("path");
                         Log.d("GlobalSearch", "Found: " + filePath);
                         adapter.add(file);
-                        resultsText.setText("نتایج: " + adapter.getItemCount());
+                        bind.resultsText.setText(
+                            getMarkDown(
+                                adapter.getItemCount()
+                                    + "\n\n_Results: _"
+                                    + "## "
+                                    + adapter.getItemCount()));
                       });
             }
           }
@@ -192,11 +199,10 @@ public class GlobalSearchBottomSheet extends BottomSheetDialogFragment {
                             "Search completed. Found " + results.size() + " results");
 
                         if (results.isEmpty()) {
-                          Toast.makeText(getContext(), "نتیجه‌ای یافت نشد", Toast.LENGTH_SHORT)
-                              .show();
-                          resultsText.setText("نتیجه‌ای یافت نشد");
+                          showMarkdownMessage("_No data found_");
                         } else {
-                          resultsText.setText("تعداد نتایج: " + results.size());
+                          bind.resultsText.setText(
+                              getMarkDown("_Result count:_ " + results.size()));
                         }
                       });
             }
@@ -210,8 +216,8 @@ public class GlobalSearchBottomSheet extends BottomSheetDialogFragment {
                       () -> {
                         setSearching(false);
                         Log.e("GlobalSearch", "Error: " + error);
-                        Toast.makeText(getContext(), "خطا: " + error, Toast.LENGTH_LONG).show();
-                        resultsText.setText("خطا در جستجو");
+                        showMarkdownMessage(error + "_Error in search:_ " + error);
+                        bind.resultsText.setText(getMarkDown("_Error searching..._"));
                       });
             }
           }
@@ -222,28 +228,37 @@ public class GlobalSearchBottomSheet extends BottomSheetDialogFragment {
     if (manager != null) {
       manager.stop();
       setSearching(false);
-      resultsText.setText("جستجو متوقف شد");
-      Toast.makeText(getContext(), "جستجو متوقف شد", Toast.LENGTH_SHORT).show();
+      bind.resultsText.setText(getMarkDown("_Search stopped!_"));
+      showMarkdownMessage("_Search stopped_");
     }
   }
 
   private void setSearching(boolean searching) {
-    searchButton.setEnabled(!searching);
-    stopButton.setEnabled(searching);
-    stopButton.setVisibility(searching ? View.VISIBLE : View.GONE);
-    progressBar.setVisibility(searching ? View.VISIBLE : View.GONE);
-    progressText.setVisibility(searching ? View.VISIBLE : View.GONE);
+    bind.searchButton.setEnabled(!searching);
+    bind.stopButton.setEnabled(searching);
+    bind.stopButton.setVisibility(searching ? View.VISIBLE : View.GONE);
+    bind.progressBar.setVisibility(searching ? View.VISIBLE : View.GONE);
+    bind.progressText.setVisibility(searching ? View.VISIBLE : View.GONE);
 
-    searchInput.setEnabled(!searching);
-    regexCheck.setEnabled(!searching);
-    caseCheck.setEnabled(!searching && !regexCheck.isChecked());
-    fileCheck.setEnabled(!searching);
-    folderCheck.setEnabled(!searching);
-    hiddenCheck.setEnabled(!searching);
+    bind.searchInput.setEnabled(!searching);
+    bind.regexCheck.setEnabled(!searching);
+    bind.caseCheck.setEnabled(!searching && !bind.regexCheck.isChecked());
+    bind.fileCheck.setEnabled(!searching);
+    bind.folderCheck.setEnabled(!searching);
+    bind.hiddenCheck.setEnabled(!searching);
   }
 
   public void setOnItemClickListener(OnItemClickListener listener) {
     this.itemClickListener = listener;
+  }
+
+  private void showMarkdownMessage(String markdownText) {
+    Snackbar.make(bind.getRoot(), getMarkDown(markdownText), Snackbar.LENGTH_SHORT).show();
+  }
+
+  private CharSequence getMarkDown(String code) {
+    var md = Markwon.builder(getContext()).usePlugin(HtmlPlugin.create()).build();
+    return md.toMarkdown(code);
   }
 
   @Override
@@ -254,23 +269,21 @@ public class GlobalSearchBottomSheet extends BottomSheetDialogFragment {
     }
   }
 
-  // Getter و Setter برای pathInput
   public String getPathInput() {
     return this.pathInput;
   }
 
   public void setPathInput(String pathInput) {
     this.pathInput = pathInput;
-    // اگر view ایجاد شده، searchInput را هم آپدیت کن
-    if (searchInput != null && pathInput != null) {
-      searchInput.setText(pathInput);
-    }
   }
 
   private class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
 
     private List<HashMap<String, Object>> items = new ArrayList<>();
     private int icon = android.R.drawable.ic_menu_search;
+    private String searchQuery = "";
+    private boolean isRegexMode = false;
+    private boolean isCaseSensitive = false;
 
     class ViewHolder extends RecyclerView.ViewHolder {
       ImageView icon;
@@ -299,13 +312,28 @@ public class GlobalSearchBottomSheet extends BottomSheetDialogFragment {
       HashMap<String, Object> item = items.get(position);
       String path = (String) item.get("path");
       String name = (String) item.get("name");
-      boolean isDirectory = (boolean) item.getOrDefault("isDirectory", false);
 
-      holder.icon.setImageResource(icon);
+      if (icon != 0) holder.icon.setImageResource(icon);
 
-      holder.name.setText(name);
+      if (path.endsWith(".gif")) {
+        Glide.with(holder.icon.getContext())
+            .asGif()
+            .load(path)
+            .placeholder(icon)
+            .centerCrop()
+            .error(new ColorDrawable(Color.parseColor("#720110")))
+            .into(holder.icon);
+      } else if (getPath(path)) {
+        Glide.with(holder.icon.getContext())
+            .load(path)
+            .placeholder(icon)
+            .circleCrop()
+            .error(new ColorDrawable(Color.parseColor("#720110")))
+            .into(holder.icon);
+      }
+
       holder.path.setText(path);
-
+      setHighlightSearchText(holder.name, name, searchQuery);
       holder.itemView.setOnClickListener(
           v -> {
             if (itemClickListener != null) {
@@ -336,6 +364,84 @@ public class GlobalSearchBottomSheet extends BottomSheetDialogFragment {
 
     public void setIcon(int icon) {
       this.icon = icon;
+    }
+
+    public void setSearchQuery(String query) {
+      this.searchQuery = query;
+    }
+
+    public void setSearchMode(boolean regexMode, boolean caseSensitive) {
+      this.isRegexMode = regexMode;
+      this.isCaseSensitive = caseSensitive;
+    }
+
+    void setHighlightSearchText(TextView textView, String fullText, String searchText) {
+      if (searchText.isEmpty()) {
+        textView.setText(fullText);
+        return;
+      }
+
+      var spannableString = new SpannableString(fullText);
+      int startPos = -1;
+      int endPos = -1;
+
+      if (isRegexMode) {
+        try {
+          int flags = isCaseSensitive ? 0 : Pattern.CASE_INSENSITIVE;
+          Pattern pattern = Pattern.compile(searchText, flags);
+          Matcher matcher = pattern.matcher(fullText);
+          if (matcher.find()) {
+            startPos = matcher.start();
+            endPos = matcher.end();
+          }
+        } catch (Exception e) {
+          textView.setText(fullText);
+          return;
+        }
+      } else {
+        if (isCaseSensitive) {
+          startPos = fullText.indexOf(searchText);
+        } else {
+          startPos = fullText.toLowerCase().indexOf(searchText.toLowerCase());
+        }
+        endPos = startPos + searchText.length();
+      }
+
+      if (startPos != -1 && startPos < fullText.length()) {
+        spannableString.setSpan(
+            new ForegroundColorSpan(Color.BLACK),
+            startPos,
+            endPos,
+            SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(
+            new BackgroundColorSpan(Color.parseColor("#FFFFE0B2")),
+            startPos,
+            endPos,
+            SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(
+            new StyleSpan(Typeface.BOLD_ITALIC),
+            startPos,
+            endPos,
+            SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+      }
+      textView.setText(spannableString);
+    }
+
+    boolean getPath(String path) {
+      List<String> extensions =
+          Arrays.asList(
+              ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff", ".tif", ".webp", ".svg", ".ico",
+              ".heic", ".heif", ".raw", ".cr2", ".nef", ".arw", ".psd", ".ai", ".eps", ".mp4",
+              ".avi", ".mov", ".wmv", ".flv", ".mkv", ".webm", ".m4v", ".mpg", ".mpeg", ".3gp",
+              ".mts", ".m2ts", ".vob", ".ogv", ".divx", ".f4v", ".h264", ".264", ".hevc", ".265",
+              ".rm", ".rmvb", ".asf", ".mxf");
+
+      for (var ext : extensions) {
+        if (path.endsWith(ext)) {
+          return true;
+        }
+      }
+      return false;
     }
   }
 }

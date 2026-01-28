@@ -53,11 +53,13 @@ import com.ninjacoder.jgit.childer.TextFind;
 import com.ninjacoder.jgit.childer.TextFindListener;
 import com.ninjacoder.jgit.search.SearchCallBack;
 import ir.ninjacoder.ghostide.core.appupdate.UpadteAppView;
+import ir.ninjacoder.ghostide.core.config.IconRes;
 import ir.ninjacoder.ghostide.core.editor.PluginCompressorPgb;
 import ir.ninjacoder.ghostide.core.editor.PluginExtractor;
 import ir.ninjacoder.ghostide.core.editor.PluginextractorFace;
 import ir.ninjacoder.ghostide.core.git.GithubProfileImpl;
 import ir.ninjacoder.ghostide.core.git.JgitHelperImpl;
+import ir.ninjacoder.ghostide.core.marco.search.SearchBarImpl;
 import ir.ninjacoder.ghostide.core.widget.*;
 import ir.ninjacoder.prograsssheet.search.GlobalSearchBottomSheet;
 import java.io.File;
@@ -170,7 +172,7 @@ public class FileManagerActivity extends BaseCompat
   private SharedPreferences zipCuntishen;
   private Intent govirwFilm = new Intent();
   private SharedPreferences war;
-
+  private SearchBarImpl searchbarimpl;
   private Intent finalintentpostfont = new Intent();
   private Intent intentgetLogCat = new Intent();
   private SharedPreferences tmp;
@@ -284,6 +286,11 @@ public class FileManagerActivity extends BaseCompat
       }
     }
     bind.viewChild.setVisibility(View.GONE);
+    searchbarimpl = new SearchBarImpl(bind.searchbar, bind.searchfiledir);
+    bind.searchfiledir.setOnClickListener(
+        v -> {
+          searchbarimpl.bindSearch();
+        });
     BackPressed();
     TypeChange();
     ThemeChaker();
@@ -1996,18 +2003,18 @@ public class FileManagerActivity extends BaseCompat
 
     sh1.setSheetDialog(this);
     sh1.addItem(getString(R.string.make_folder), R.drawable.create_new_folder_24px);
-    sh1.addItem(getString(R.string.make_file), R.drawable.file);
+    sh1.addItem(getString(R.string.make_file), R.drawable.ic_file_24px);
     sh1.addItem(getString(R.string.make_project), R.drawable.extension_24px);
-    sh1.addItem("FTP", R.drawable.iconmode);
+    sh1.addItem(getString(R.string.ftpdownloader), R.drawable.ic_ftp_24px);
     sh1.addItem(getString(R.string.search_file), R.drawable.document_search_24px);
     sh1.addItem(getString(R.string.folder_tree), R.drawable.folder_tree_24px);
     sh1.addItem(getString(R.string.file_tree), R.drawable.file_tree_24px);
     sh1.addItem(getString(R.string.git_clone), R.drawable.git);
-    sh1.addItem(getString(R.string.android_module), R.drawable.mdapk);
+    sh1.addItem(getString(R.string.android_module), R.drawable.sdk_24px);
     sh1.addItem(getString(R.string.git_tools), R.drawable.git);
     sh1.addItem(getString(R.string.gson_to_class), R.drawable.file_json_24px);
     sh1.addItem(getString(R.string.pastjavacode), R.drawable.ic_material_java);
-    sh1.addItem("Global Search", R.drawable.mdapk);
+    sh1.addItem(getString(R.string.globalsearch), R.drawable.document_search_24px);
     sh1.setOnItemClickLabe(
         (pos333) -> {
           switch (pos333) {
@@ -2187,6 +2194,7 @@ public class FileManagerActivity extends BaseCompat
               {
                 GlobalSearchBottomSheet bottomSheet = new GlobalSearchBottomSheet();
                 bottomSheet.setPathInput(Folder);
+                bottomSheet.setIcon(IconRes.get(Folder));
                 bottomSheet.setOnItemClickListener(
                     filePath -> {
                       File file = new File(filePath);

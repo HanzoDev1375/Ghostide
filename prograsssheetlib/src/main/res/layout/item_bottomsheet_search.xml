@@ -82,6 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Search"
+            style="?attr/materialButtonTonalStyle"
             android:layout_marginEnd="8dp" />
 
         <Button
@@ -94,9 +95,8 @@
 
     </LinearLayout>
 
-    <ProgressBar
+    <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/progress_bar"
-        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"

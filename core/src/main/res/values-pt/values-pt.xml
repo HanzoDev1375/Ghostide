@@ -177,4 +177,6 @@
     <string name="select_icon_app">Selecionar ícone do aplicativo</string>
     <string name="set_custom_icon_message">Você pode definir um ícone personalizado do aplicativo</string>
     <string name="glow_effect">Efeito Brilho</string>
+    <string name="globalsearch">Busca Global</string>
+    <string name="ftpdownloader">Downloader FTP</string>
 </resources>

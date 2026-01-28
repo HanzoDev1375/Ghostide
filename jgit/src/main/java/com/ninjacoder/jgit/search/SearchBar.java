@@ -55,6 +55,7 @@ public class SearchBar extends FrameLayout implements TextWatcher {
     setHint(getMarkdowntext("**Search File...**"));
     binding.etSearch.addTextChangedListener(this);
     binding.btnClear.setVisibility(View.INVISIBLE);
+    clear();
   }
 
   public void setHint(@NonNull CharSequence hint) {

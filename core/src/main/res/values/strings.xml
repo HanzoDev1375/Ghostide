@@ -140,4 +140,6 @@
     <string name="name">Name</string>
     <string name="overload_created_successfully">Overloaded method created successfully</string>
     <string name="overload_creation_error">Error creating overload: %s</string>
+    <string name="globalsearch">Global Serach</string>
+    <string name="ftpdownloader">Ftp Downloader</string>
 </resources>

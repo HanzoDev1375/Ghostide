@@ -147,4 +147,7 @@
     <string name="select_icon_app">Ilova ikonkasini tanlang</string>
     <string name="set_custom_icon_message">Ilovadan maxsus ikona o\'rnatishingiz mumkin</string>
     <string name="glow_effect">Yorqinlik Effekti</string>
+    <string name="globalsearch">Global Qidiruv</string>
+    <string name="ftpdownloader">FTP Загрузчик</string>
+    
 </resources>
