@@ -6,6 +6,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.database.Cursor;
+import android.provider.MediaStore;
+import android.provider.OpenableColumns;
+import java.io.FileOutputStream;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
@@ -250,6 +254,7 @@ public class CodeEditorActivity extends BaseCompat {
     rvmenueditor.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
     rvmenueditor.setAdapter(new ChildAdapter(aars));
     var userview = new SecurePrefs(this);
+    handleIncomingIntent(getIntent());
     Glide.with(this)
         .load(userview.getAvatarUrl())
         .circleCrop()
@@ -361,7 +366,161 @@ public class CodeEditorActivity extends BaseCompat {
 
     List<Child> editorPluginChildren = PluginChildRegistry.getCodeEditorChildren();
     for (Child child : editorPluginChildren) {
-      listChild.add(child); // یا متد مربوطه
+      listChild.add(child);
+    }
+  }
+
+  @Override
+  protected void onNewIntent(Intent intent) {
+    super.onNewIntent(intent);
+    handleIncomingIntent(intent);
+  }
+
+  private void handleIncomingIntent(Intent intent) {
+    if (intent == null || intent.getAction() == null) {
+      return;
+    }
+
+    if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+      Uri uri = intent.getData();
+      if (uri != null) {
+        openFileFromUri(uri);
+      }
+    }
+  }
+
+  private void openFileFromUri(Uri uri) {
+    new Handler()
+        .post(
+            () -> {
+              try {
+                String filePath = getRealPathFromUri(uri);
+
+                if (filePath == null || !FileUtil.isExistFile(filePath)) {
+                  Toast.makeText(this, "Error opening file", Toast.LENGTH_LONG).show();
+                  return;
+                }
+
+                SharedPreferences.Editor editorPrefs = shp.edit();
+                editorPrefs.putString("pos_path", filePath).apply();
+
+                int existingTabIndex = -1;
+
+                // Check if tab already exists
+                for (int i = 0; i < tabs_listmap.size(); i++) {
+                  if (filePath.equals(tabs_listmap.get(i).get("path"))) {
+                    existingTabIndex = i;
+                    break;
+                  }
+                }
+
+                if (existingTabIndex != -1) {
+                  // Just select the tab — loading handled by TabListener
+                  editorPrefs.putString("positionTabs", String.valueOf(existingTabIndex)).apply();
+
+                  TabLayout.Tab tab = tablayouteditor.getTabAt(existingTabIndex);
+                  if (tab != null) {
+                    tablayouteditor.post(() -> tab.select());
+                  }
+                  return;
+                }
+
+                // Create new tab
+                HashMap<String, Object> newTab = new HashMap<>();
+                newTab.put("path", filePath);
+                newTab.put("exists", true);
+                tabs_listmap.add(newTab);
+
+                editorPrefs.putString("path", new Gson().toJson(tabs_listmap)).apply();
+                editorPrefs
+                    .putString("positionTabs", String.valueOf(tabs_listmap.size() - 1))
+                    .apply();
+
+                String fileName = new File(filePath).getName();
+                TabLayout.Tab newTabView = tablayouteditor.newTab().setText(fileName);
+                tablayouteditor.addTab(newTabView);
+
+                // Selecting the tab will trigger file loading
+                tablayouteditor.post(() -> newTabView.select());
+
+              } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+              }
+            });
+  }
+
+  private String getRealPathFromUri(Uri uri) {
+    String filePath = null;
+
+    try {
+      if ("file".equals(uri.getScheme())) {
+
+        filePath = uri.getPath();
+      } else if ("content".equals(uri.getScheme())) {
+
+        Cursor cursor =
+            getContentResolver()
+                .query(uri, new String[] {MediaStore.MediaColumns.DATA}, null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+          int columnIndex = cursor.getColumnIndex(MediaStore.MediaColumns.DATA);
+          if (columnIndex != -1) {
+            filePath = cursor.getString(columnIndex);
+          }
+          cursor.close();
+        }
+
+        if (filePath == null) {
+          filePath = copyFileFromContentUri(uri);
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return filePath;
+  }
+
+  private String copyFileFromContentUri(Uri uri) {
+    try {
+      InputStream inputStream = getContentResolver().openInputStream(uri);
+      if (inputStream == null) return null;
+      String fileName = "opened_file";
+      Cursor cursor =
+          getContentResolver()
+              .query(uri, new String[] {OpenableColumns.DISPLAY_NAME}, null, null, null);
+
+      if (cursor != null && cursor.moveToFirst()) {
+        int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+        if (nameIndex != -1) {
+          fileName = cursor.getString(nameIndex);
+        }
+        cursor.close();
+      }
+
+      File tempDir = new File("/storage/emulated/0/GhostWebIDE/temp/");
+      if (!tempDir.exists()) {
+        tempDir.mkdirs();
+      }
+
+      File outputFile = new File(tempDir, fileName);
+
+      FileOutputStream outputStream = new FileOutputStream(outputFile);
+      byte[] buffer = new byte[4096];
+      int bytesRead;
+      while ((bytesRead = inputStream.read(buffer)) != -1) {
+        outputStream.write(buffer, 0, bytesRead);
+      }
+
+      outputStream.close();
+      inputStream.close();
+
+      return outputFile.getAbsolutePath();
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
     }
   }
 
@@ -380,9 +539,11 @@ public class CodeEditorActivity extends BaseCompat {
     }
     return "";
   }
-  public IdeEditor getEditor(){
-			return editor;
-	}
+
+  public IdeEditor getEditor() {
+    return editor;
+  }
+
   public String getPathBytab() {
     int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
     if (selectedTabPosition >= 0 && selectedTabPosition < tabs_listmap.size()) {
@@ -390,7 +551,8 @@ public class CodeEditorActivity extends BaseCompat {
     }
     return "";
   }
-  public TabLayout getEditorTabLayout(){
+
+  public TabLayout getEditorTabLayout() {
     return tablayouteditor;
   }
 
@@ -528,7 +690,8 @@ public class CodeEditorActivity extends BaseCompat {
         titleauthor, KeySet.syombolbartextcolor, Color.parseColor("#FFFFA0FB"), this, imap);
     themeForJson2.addImageColor(undo, this, KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
     themeForJson2.addImageColor(redo, this, KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
-    themeForJson2.addImageColor(codesnapimg,this,KeySet.imagecolor,imap,Color.parseColor("#ff94e7ff"));
+    themeForJson2.addImageColor(
+        codesnapimg, this, KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
     themeForJson2.addImageColor(
         image, this, KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
 
@@ -899,7 +1062,6 @@ public class CodeEditorActivity extends BaseCompat {
                             CodeEditorActivity.this,
                             filePath,
                             () -> {
-                              // کد برای بارگذاری مجدد فایل
                               setCodeEditorFileReader(filePath);
                             });
                       });

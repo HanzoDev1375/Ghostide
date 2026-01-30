@@ -12,7 +12,41 @@
         <data android:scheme="file" />
       </intent-filter>
     </activity>
-    <activity android:name=".activities.CodeEditorActivity" />
+    <activity
+      android:name=".activities.CodeEditorActivity"
+      android:launchMode="singleTop"
+      android:exported="true">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:mimeType="text/*" />
+      </intent-filter>
+
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <data android:scheme="file" />
+        <data android:host="*" />
+        <data android:pathPattern=".*\\.java" />
+        <data android:pathPattern=".*\\.kt" />
+        <data android:pathPattern=".*\\.xml" />
+        <data android:pathPattern=".*\\.js" />
+        <data android:pathPattern=".*\\.html" />
+        <data android:pathPattern=".*\\.css" />
+        <data android:pathPattern=".*\\.txt" />
+        <data android:pathPattern=".*\\.json" />
+        <data android:pathPattern=".*\\.md" />
+        <data android:pathPattern=".*\\.py" />
+        <data android:pathPattern=".*\\.php" />
+        <data android:pathPattern=".*\\.g4" />
+      </intent-filter>
+    </activity>
     <activity android:name=".activities.HtmlRunerActivity" />
     <activity android:name=".activities.JsRunerActivity" />
     <activity android:name=".activities.SettingAppActivity" />

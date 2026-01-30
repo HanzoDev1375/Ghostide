@@ -116,6 +116,7 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     } else if (isNew) {
       holder.folderName.setTextColor(Color.parseColor("#4CAF50"));
     }
+    if (viewType == ViewType.ROW) holder.roots.setBackground(holder.roots.get(filteredFiles, position));
   }
 
   public void highlightFile(String path) {

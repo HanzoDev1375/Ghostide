@@ -1,13 +1,14 @@
 package ir.ninjacoder.prograsssheet.search;
 
+import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.text.style.BackgroundColorSpan;
-import android.text.style.StyleSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.ImageSpan;
+import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.chip.ChipDrawable;
+import com.google.android.material.color.MaterialColors;
 import com.google.android.material.snackbar.Snackbar;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.html.HtmlPlugin;
@@ -80,15 +83,26 @@ public class GlobalSearchBottomSheet extends BottomSheetDialogFragment {
     bind.regexCheck.setOnCheckedChangeListener(
         (buttonView, isChecked) -> {
           bind.caseCheck.setEnabled(!isChecked);
+          updateTextColor();
+        });
+    bind.caseCheck.setOnCheckedChangeListener(
+        (buttonView, isChecked) -> {
+          bind.regexCheck.setEnabled(!isChecked);
+          updateTextColor();
         });
 
     bind.progressBar.setWaveAmplitude(3);
     bind.progressBar.setWavelength(99);
-    var statecolor = bind.searchInput.getTextColors().getDefaultColor();
+  }
+
+  void updateTextColor() {
+    var statecolor = MaterialColors.getColor(bind.searchInput, getColorOnSurface());
     if (bind.regexCheck.isChecked()) {
       statecolor = Color.parseColor("#FFFFA749");
     } else if (bind.caseCheck.isChecked()) {
       statecolor = Color.parseColor("#FFAAFF49");
+    } else {
+      statecolor = MaterialColors.getColor(bind.searchInput, getColorOnSurface());
     }
     bind.searchInput.setTextColor(statecolor);
   }
@@ -388,6 +402,8 @@ public class GlobalSearchBottomSheet extends BottomSheetDialogFragment {
         return;
       }
 
+      textView.setTextColor(MaterialColors.getColor(textView, getColorOnSurface()));
+
       var spannableString = new SpannableString(fullText);
       int startPos = -1;
       int endPos = -1;
@@ -421,16 +437,17 @@ public class GlobalSearchBottomSheet extends BottomSheetDialogFragment {
             endPos,
             SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
         spannableString.setSpan(
-            new RoundedBackgroundColorSpan(Color.parseColor("#FFFFE0B2"), 10, 20),
+            new BackgroundColorSpan(Color.parseColor("#FFFFE0B2")),
             startPos,
             endPos,
             SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
         spannableString.setSpan(
-            new StyleSpan(Typeface.BOLD_ITALIC),
+            new RelativeSizeSpan(0.95f),
             startPos,
             endPos,
             SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
       }
+
       textView.setText(spannableString);
     }
 
@@ -450,5 +467,9 @@ public class GlobalSearchBottomSheet extends BottomSheetDialogFragment {
       }
       return false;
     }
+  }
+
+  int getColorOnSurface() {
+    return com.google.android.material.R.attr.colorOnSurface;
   }
 }

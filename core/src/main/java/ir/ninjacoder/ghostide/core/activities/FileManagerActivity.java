@@ -28,6 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -289,6 +290,7 @@ public class FileManagerActivity extends BaseCompat
     searchbarimpl = new SearchBarImpl(bind.searchbar, bind.searchfiledir);
     bind.searchfiledir.setOnClickListener(
         v -> {
+          
           searchbarimpl.bindSearch();
         });
     BackPressed();
@@ -874,7 +876,7 @@ public class FileManagerActivity extends BaseCompat
             @Override
             protected void onPostExecute(String deletedPath) {
               prodel.dismiss();
-              // حذف از لیست‌ها
+             
               removeFileFromLists(deletedPath);
               Toast.makeText(getApplicationContext(), "فایل حذف شد", Toast.LENGTH_SHORT).show();
             }
@@ -914,7 +916,7 @@ public class FileManagerActivity extends BaseCompat
               (__) -> {
                 String newName = editor.getText().toString().trim();
                 if (newName.isEmpty()) {
-                  editor.setError("نام نمی‌تواند خالی باشد");
+                  editor.setError("نام نمیتواند خالی باشد");
                   return;
                 }
 
@@ -932,7 +934,7 @@ public class FileManagerActivity extends BaseCompat
                 }
 
                 if (oldFile.renameTo(newFile)) {
-                  // آپدیت لیست‌ها
+                
                   updateFileInLists(currentPath, newFile.getAbsolutePath());
 
                   Toast.makeText(
