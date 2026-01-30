@@ -290,7 +290,6 @@ public class FileManagerActivity extends BaseCompat
     searchbarimpl = new SearchBarImpl(bind.searchbar, bind.searchfiledir);
     bind.searchfiledir.setOnClickListener(
         v -> {
-          
           searchbarimpl.bindSearch();
         });
     BackPressed();
@@ -809,7 +808,6 @@ public class FileManagerActivity extends BaseCompat
 
   @Override
   public void onClick(View view, int pos) {
-
     fileListItem.clearHighlights();
 
     HashMap<String, Object> item = fileListItem.getItem(pos);
@@ -818,9 +816,13 @@ public class FileManagerActivity extends BaseCompat
       return;
     }
 
-    bind.searchbar.setText("");
-    fileListItem.clearFilter();
-    staticstring = item.get("path").toString();
+    String filePath = item.get("path").toString();
+    if (filePath == null || filePath.isEmpty()) {
+      Log.e("FileManager", "Empty file path at position: " + pos);
+      return;
+    }
+
+    staticstring = filePath;
 
     if (FileUtil.isDirectory(staticstring)) {
       Folder = staticstring;
@@ -829,6 +831,8 @@ public class FileManagerActivity extends BaseCompat
       int originalPos = fileListItem.getOriginalPosition(pos);
       _dataOnClickItemList(originalPos != -1 ? originalPos : pos);
     }
+    bind.searchbar.setText("");
+    fileListItem.clearFilter();
   }
 
   @Override
@@ -876,7 +880,7 @@ public class FileManagerActivity extends BaseCompat
             @Override
             protected void onPostExecute(String deletedPath) {
               prodel.dismiss();
-             
+
               removeFileFromLists(deletedPath);
               Toast.makeText(getApplicationContext(), "فایل حذف شد", Toast.LENGTH_SHORT).show();
             }
@@ -934,7 +938,7 @@ public class FileManagerActivity extends BaseCompat
                 }
 
                 if (oldFile.renameTo(newFile)) {
-                
+
                   updateFileInLists(currentPath, newFile.getAbsolutePath());
 
                   Toast.makeText(

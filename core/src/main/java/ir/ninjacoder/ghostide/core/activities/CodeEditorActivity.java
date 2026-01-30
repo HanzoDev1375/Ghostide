@@ -9,6 +9,7 @@ import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
+import android.util.Log;
 import java.io.FileOutputStream;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -403,10 +404,7 @@ public class CodeEditorActivity extends BaseCompat {
 
                 SharedPreferences.Editor editorPrefs = shp.edit();
                 editorPrefs.putString("pos_path", filePath).apply();
-
                 int existingTabIndex = -1;
-
-                // Check if tab already exists
                 for (int i = 0; i < tabs_listmap.size(); i++) {
                   if (filePath.equals(tabs_listmap.get(i).get("path"))) {
                     existingTabIndex = i;
@@ -415,9 +413,7 @@ public class CodeEditorActivity extends BaseCompat {
                 }
 
                 if (existingTabIndex != -1) {
-                  // Just select the tab — loading handled by TabListener
                   editorPrefs.putString("positionTabs", String.valueOf(existingTabIndex)).apply();
-
                   TabLayout.Tab tab = tablayouteditor.getTabAt(existingTabIndex);
                   if (tab != null) {
                     tablayouteditor.post(() -> tab.select());
@@ -941,8 +937,20 @@ public class CodeEditorActivity extends BaseCompat {
   }
 
   void setCodeEditorFileReader(String _path) {
-    String extension = _path.substring(_path.lastIndexOf("."));
-    this.currentFileType = extension;
+    if (_path == null || _path.isEmpty()) {
+      Log.e("Editor", "path is null or empty");
+      return;
+    }
+
+    // تعیین پسوند فایل با بررسی ایمن
+    int dotIndex = _path.lastIndexOf('.');
+    if (dotIndex > 0 && dotIndex < _path.length() - 1) {
+      this.currentFileType = _path.substring(dotIndex);
+    } else {
+      this.currentFileType = "";
+      Log.w("Editor", "File has no extension: " + _path);
+    }
+
     pluginLoader
         .setEditor(editor)
         .setCodeEditorActivity(this)
@@ -961,8 +969,22 @@ public class CodeEditorActivity extends BaseCompat {
     int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
     if (selectedTabPosition >= 0 && selectedTabPosition < tabs_listmap.size()) {
       String filePath = tabs_listmap.get(selectedTabPosition).get("path").toString();
-      String extension = filePath.substring(filePath.lastIndexOf("."));
-      this.currentFileType = extension;
+
+      if (filePath == null || filePath.isEmpty()) {
+        this.currentFileType = "";
+        Log.w("Editor", "File path is null or empty");
+        return;
+      }
+
+      int dotIndex = filePath.lastIndexOf('.');
+      if (dotIndex > 0 && dotIndex < filePath.length() - 1) {
+        this.currentFileType = filePath.substring(dotIndex);
+      } else {
+
+        this.currentFileType = "";
+        Log.w("Editor", "File has no extension: " + filePath);
+      }
+
       pluginLoader
           .setEditor(editor)
           .setCodeEditorActivity(this)
