@@ -1,33 +1,38 @@
 package ir.ninjacoder.prograsssheet;
 
+import android.animation.ObjectAnimator;
+import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.RotateDrawable;
+import android.view.animation.LinearInterpolator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.AnimatedVectorDrawable;
+import android.graphics.drawable.GradientDrawable;
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
-import ir.ninjacoder.prograsssheet.R;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.graphics.ColorUtils;
-import androidx.palette.graphics.Palette;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import ir.ninjacoder.prograsssheet.databinding.LayoutMusicPlayersBinding;
 import ir.ninjacoder.prograsssheet.interfaces.MediaPlayerListener;
+import ir.ninjacoder.prograsssheet.util.ColorPaletteUtils;
 import ir.ninjacoder.prograsssheet.util.SquigglyProgress;
 import java.io.File;
+import java.util.Map;
 import java.util.Random;
 
 public class MusicSheet implements SeekBar.OnSeekBarChangeListener {
@@ -38,8 +43,19 @@ public class MusicSheet implements SeekBar.OnSeekBarChangeListener {
   private double forwardTime = 0;
   private double backwardTime = 0;
   private Sheet dialog;
+  private Integer surfaceColor,
+      onSurfaceColor,
+      primaryColor,
+      onPrimaryColor,
+      outlineColor,
+      tertiary,
+      onTertiary,
+      onSurfaceContainer;
+
   protected SquigglyProgress bars;
   private LayoutMusicPlayersBinding bind;
+  private float shapeRotation = 0f;
+  private ObjectAnimator rotateAnimation;
   private boolean isSeekBarTracking = false;
 
   public MusicSheet(Context context, String musicpatch) {
@@ -52,20 +68,13 @@ public class MusicSheet implements SeekBar.OnSeekBarChangeListener {
     bind.titlemusic.setText(md.getNameArtist());
     bind.submusic.setText(md.getNameAlbom());
     bars = new SquigglyProgress();
-    var seekBarProgressWavelength =
-        context.getResources().getDimensionPixelSize(R.dimen.media_seekbar_progress_wavelength);
-    var seekBarProgressAmplitude =
-        context.getResources().getDimensionPixelSize(R.dimen.media_seekbar_progress_amplitude);
-    var seekBarProgressPhase =
-        context.getResources().getDimensionPixelSize(R.dimen.media_seekbar_progress_phase);
-    var seekBarProgressStrokeWidth =
-        context.getResources().getDimensionPixelSize(R.dimen.media_seekbar_progress_stroke_width);
-    bars.waveLength = seekBarProgressWavelength;
-    bars.lineAmplitude = seekBarProgressAmplitude;
-    bars.phaseSpeed = seekBarProgressPhase;
-    bars.strokeWidth = seekBarProgressStrokeWidth;
-    bars.transitionEnabled = true;
-    bars.animate = false;
+
+    bars.setWaveLength(100);
+    bars.setLineAmplitude(8);
+    bars.setPhaseSpeed(25);
+    bars.setStrokeWidth(convertToPx(context, 4));
+    bars.setTransitionEnabled(true);
+    bars.setAnimate(true);
     setMatchParentDialog(true);
     showandP(true);
     bind.musicseekbar.setProgressDrawable(bars);
@@ -165,7 +174,6 @@ public class MusicSheet implements SeekBar.OnSeekBarChangeListener {
     isSeekBarTracking = false;
   }
 
-  // Rest of your methods remain the same...
   void showandP(boolean isPlaying) {
     bind.play.setBackground(
         AppCompatResources.getDrawable(
@@ -188,7 +196,7 @@ public class MusicSheet implements SeekBar.OnSeekBarChangeListener {
 
           @Override
           public void onStart() {
-            showandP(true);
+            showandP(true);           
           }
 
           @Override
@@ -204,7 +212,9 @@ public class MusicSheet implements SeekBar.OnSeekBarChangeListener {
   }
 
   public MusicSheet dismiss() {
-    if (md.isPlaying()) md.pause();
+    if (md.isPlaying()) {
+      md.pause();
+    }
     dialog.dismiss();
     return this;
   }
@@ -213,6 +223,7 @@ public class MusicSheet implements SeekBar.OnSeekBarChangeListener {
     if (dialog.isShowing()) {
       md.start();
       bars.setAnimate(true);
+      
     }
   }
 
@@ -233,6 +244,7 @@ public class MusicSheet implements SeekBar.OnSeekBarChangeListener {
       md.pause();
       md.release();
       md = null;
+      
     }
   }
 
@@ -249,7 +261,7 @@ public class MusicSheet implements SeekBar.OnSeekBarChangeListener {
                 public void onResourceReady(
                     @NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition) {
                   bind.musicicon.setImageBitmap(bitmap);
-                  generatePalette(bitmap);
+                  generatePaletteFromUtils(bitmap);
                 }
 
                 @Override
@@ -260,56 +272,64 @@ public class MusicSheet implements SeekBar.OnSeekBarChangeListener {
     }
   }
 
-  private void generatePalette(Bitmap bitmap) {
-    Palette.from(bitmap)
-        .generate(
-            palette -> {
-              // دریافت رنگ‌ها از پالت
-              int dominantColor = palette.getDarkMutedColor(Color.WHITE);
-              int vibrantColor = palette.getDarkVibrantColor(Color.WHITE);
-              int mutedColor = palette.getDarkMutedColor(Color.BLACK);
+  private void generatePaletteFromUtils(Bitmap bitmap) {
 
-              // محاسبه رنگ‌های تیره‌تر
-              int darkenedMutedColor = darkenColor(mutedColor, 5.0f);
-              int darkenedDominantColor = darkenColor(dominantColor, 0.4f);
+    ColorPaletteUtils.generateFromBitmap(
+        bitmap,
+        new ColorPaletteUtils.ResultCallback() {
+          @Override
+          public void onResult(Map<String, Integer> lightColors, Map<String, Integer> darkColors) {
 
-              // اعمال به پس‌زمینه
-              bind.getRoot().setBackgroundColor(darkenedDominantColor);
-              bind.play.setIconTint(ColorStateList.valueOf(mutedColor));
-              bind.next.setColorFilter(darkenedMutedColor);
-              bind.pre.setColorFilter(darkenedMutedColor);
-              bind.play.setBackgroundTintList(ColorStateList.valueOf(darkenedMutedColor));
-              // SeekBar customization
-              ColorStateList thumbColor = ColorStateList.valueOf(darkenedMutedColor);
-              bind.musicseekbar.setThumbTintList(thumbColor);
-              bind.musicseekbar.setProgressTintList(thumbColor);
+            Map<String, Integer> darkPalette = darkColors;
 
-              // متن‌ها
-              bind.submusic.setTextColor(darkenedMutedColor);
-              bind.tvname.setTextColor(darkenedMutedColor);
-              bind.tvtr.setTextColor(darkenedMutedColor);
-              bind.titlemusic.setTextColor(darkenedMutedColor);
-              bars.setTintList(ColorStateList.valueOf(darkenedMutedColor));
-
-              // نوار نویگیشن دیالوگ
-              if (dialog != null && dialog.getWindow() != null) {
-                dialog.getWindow().setStatusBarColor(darkenedDominantColor);
-                dialog.getWindow().setNavigationBarColor(darkenedDominantColor);
-                dialog.setTitle("Hello");
-              }
-            });
+            if (darkPalette != null && !darkPalette.isEmpty()) {
+              applyColorsFromPalette(darkPalette);
+            }
+          }
+        });
   }
 
-  private int darkenColor(int color, float factor) {
-    int a = Color.alpha(color);
-    int r = (int) (Color.red(color) * factor);
-    int g = (int) (Color.green(color) * factor);
-    int b = (int) (Color.blue(color) * factor);
+  private void applyColorsFromPalette(Map<String, Integer> palette) {
 
-    r = Math.max(0, Math.min(r, 255));
-    g = Math.max(0, Math.min(g, 255));
-    b = Math.max(0, Math.min(b, 255));
-    return Color.argb(a, r, g, b);
+    surfaceColor = palette.get("surface");
+    onSurfaceContainer = palette.get("onSurfaceContainer");
+    onSurfaceColor = palette.get("onSurface");
+    primaryColor = palette.get("primary");
+    onPrimaryColor = palette.get("onPrimary");
+    outlineColor = palette.get("outline");
+    tertiary = palette.get("tertiary");
+    onTertiary = palette.get("onTertiary");
+    if (onSurfaceContainer == null) onSurfaceContainer = Color.parseColor("#ff4820");
+    if (tertiary == null) tertiary = Color.YELLOW;
+    if (onTertiary == null) onTertiary = Color.parseColor("#293810");
+    if (surfaceColor == null) surfaceColor = Color.parseColor("#121212");
+    if (onSurfaceColor == null) onSurfaceColor = Color.WHITE;
+    if (primaryColor == null) primaryColor = Color.parseColor("#BB86FC");
+    if (onPrimaryColor == null) onPrimaryColor = Color.TRANSPARENT;
+    if (outlineColor == null) outlineColor = Color.parseColor("#333333");
+    new Handler(Looper.getMainLooper())
+        .post(
+            () -> {
+              bind.getRoot().setBackgroundColor(surfaceColor);
+              bind.play.setIconTint(ColorStateList.valueOf(primaryColor));
+              bind.play.setBackgroundTintList(ColorStateList.valueOf(onPrimaryColor));
+              bind.next.setColorFilter(tertiary);
+              bind.pre.setColorFilter(tertiary);
+              bind.pre.setBackground(get(onTertiary));
+              bind.next.setBackground(get(onTertiary));
+              var thumbColor = ColorStateList.valueOf(primaryColor);
+              bind.musicseekbar.setThumbTintList(thumbColor);
+              bind.musicseekbar.setProgressTintList(thumbColor);
+              bars.setTintList(ColorStateList.valueOf(primaryColor));
+              bind.submusic.setTextColor(onSurfaceContainer);
+              bind.tvname.setTextColor(onSurfaceContainer);
+              bind.tvtr.setTextColor(onSurfaceContainer);
+              bind.titlemusic.setTextColor(onSurfaceContainer);
+              if (dialog != null && dialog.getWindow() != null) {
+                dialog.getWindow().setStatusBarColor(surfaceColor);
+                dialog.getWindow().setNavigationBarColor(surfaceColor);
+              }
+            });
   }
 
   void autoColor(int colors, ImageView views) {
@@ -348,5 +368,18 @@ public class MusicSheet implements SeekBar.OnSeekBarChangeListener {
     Random rand = new Random();
     int index = rand.nextInt(musicListIcon.length);
     return musicListIcon[index];
+  }
+
+  int convertToPx(Context context, float dp) {
+    float density = context.getResources().getDisplayMetrics().density;
+    return (int) (dp * density + 0.5f);
+  }
+
+  @NonNull
+  GradientDrawable get(int color) {
+    var shape = new GradientDrawable();
+    shape.setColor(color);
+    shape.setCornerRadius(99);
+    return shape;
   }
 }

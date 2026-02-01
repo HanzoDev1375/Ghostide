@@ -1,15 +1,24 @@
 package ir.ninjacoder.ghostide.core.marco.wallpapers;
 
-import androidx.annotation.MainThread;
-import androidx.fragment.app.Fragment;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.ImageView;
+
+import androidx.annotation.MainThread;
+
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.jsibbold.zoomage.ZoomageView;
+
 import ir.ninjacoder.ghostide.core.R;
 import ir.ninjacoder.ghostide.core.Store.BaseFragment;
 import ir.ninjacoder.ghostide.core.glidecompat.GlideCompat;
@@ -24,8 +33,19 @@ public class WallpaperFragments extends BaseFragment {
   private int position;
 
   private ZoomageView imageView;
-  private FrameLayout container;
   private OnItemClickListener click;
+
+  // وضعیت تصویر
+  private int scaleIndex = 0;
+  private float currentRotation = 0f;
+
+  private final ImageView.ScaleType[] scaleTypes =
+      new ImageView.ScaleType[] {
+        ImageView.ScaleType.FIT_CENTER,
+        ImageView.ScaleType.CENTER_CROP,
+        ImageView.ScaleType.CENTER_INSIDE,
+        ImageView.ScaleType.FIT_XY
+      };
 
   public static WallpaperFragments newInstance(String path, int pos) {
     Bundle b = new Bundle();
@@ -46,7 +66,6 @@ public class WallpaperFragments extends BaseFragment {
   public void onViewCreated(View v, Bundle state) {
     super.onViewCreated(v, state);
 
-    container = v.findViewById(R.id.container);
     imageView = v.findViewById(R.id.image);
 
     imagePath = getArguments().getString(ARG_PATH);
@@ -59,66 +78,77 @@ public class WallpaperFragments extends BaseFragment {
   private void setupImage() {
     if (imagePath == null) return;
 
-    if (imagePath.endsWith(".gif")) {
-      Glide.with(imageView.getContext())
-          .asGif()
-          .load(imagePath)
-          .placeholder(GlideCompat.CircelPrograssBar())
-          .error(R.drawable.ic_image)
-          .into(imageView);
-    } else {
-      Glide.with(imageView.getContext())
-          .load(imagePath)
-          .placeholder(GlideCompat.CircelPrograssBar())
-          .error(R.drawable.ic_image)
-          .into(imageView);
-    }
+    Glide.with(imageView.getContext())
+        .load(imagePath)
+        .placeholder(GlideCompat.CircelPrograssBar())
+        .error(R.drawable.ic_image)
+        .into(
+            new SimpleTarget<Drawable>() {
+              @Override
+              public void onResourceReady(Drawable resource, Transition<? super Drawable> t) {
+                crossfadeDrawable(imageView,resource,1000);
+              }
+            });
+
+    resetImageState();
   }
 
-  /** این متد کلیک را تشخیص می‌دهد بدون اینکه ZoomageView از کار بیفتد */
-  private void setupClickWithoutBreakingZoom() {
+  private void crossfadeDrawable(ImageView iv, Drawable next, int duration) {
+    var td = new TransitionDrawable(new Drawable[] {new ColorDrawable(Color.TRANSPARENT), next});
+    td.setCrossFadeEnabled(true);
+    iv.setImageDrawable(td);
+    td.startTransition(duration);
+  }
 
-    imageView.setClickable(false); // خیلی مهم
+  private void resetImageState() {
+    scaleIndex = 0;
+    currentRotation = 0f;
+    imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+    imageView.setRotation(0f);
+  }
+
+  private void setupClickWithoutBreakingZoom() {
+    imageView.setClickable(false);
+
+    GestureDetector gestureDetector =
+        new GestureDetector(
+            getContext(),
+            new GestureDetector.SimpleOnGestureListener() {
+              @Override
+              public boolean onSingleTapConfirmed(MotionEvent e) {
+                if (click != null) click.onClick(imageView, position);
+                return true;
+              }
+            });
 
     imageView.setOnTouchListener(
-        new View.OnTouchListener() {
-
-          private long downTime = 0;
-          private float downX = 0, downY = 0;
-          private static final int CLICK_TIME = 200; // حداکثر زمان برای کلیک
-          private static final int CLICK_DISTANCE = 25; // حداکثر حرکت برای کلیک
-
-          @Override
-          public boolean onTouch(View v, MotionEvent event) {
-
-            switch (event.getActionMasked()) {
-              case MotionEvent.ACTION_DOWN:
-                downTime = System.currentTimeMillis();
-                downX = event.getX();
-                downY = event.getY();
-                break;
-
-              case MotionEvent.ACTION_UP:
-                long upTime = System.currentTimeMillis();
-                float dx = Math.abs(event.getX() - downX);
-                float dy = Math.abs(event.getY() - downY);
-
-                boolean isClick =
-                    (upTime - downTime) < CLICK_TIME && dx < CLICK_DISTANCE && dy < CLICK_DISTANCE;
-
-                if (isClick && click != null) {
-                  click.onClick(imageView, position);
-                }
-                break;
-            }
-
-            // FALSE = بگذار ZoomageView خودش زوم و درگ را هندل کند
-            return false;
-          }
+        (v, event) -> {
+          v.getParent().requestDisallowInterceptTouchEvent(true);
+          gestureDetector.onTouchEvent(event);
+          return false;
         });
   }
 
   public void setClick(OnItemClickListener click) {
     this.click = click;
+  }
+
+  // ===== متدهایی که Adapter صدا می‌زند =====
+
+  public void changeScaleType() {
+    if (imageView == null) return;
+    scaleIndex = (scaleIndex + 1) % scaleTypes.length;
+    imageView.setScaleType(scaleTypes[scaleIndex]);
+  }
+
+  public void rotateImage() {
+    if (imageView == null) return;
+    currentRotation = (currentRotation + 90f) % 360f;
+    imageView.animate().rotation(currentRotation).setDuration(200).start();
+  }
+
+  public void resetFromOutside() {
+    if (imageView == null) return;
+    resetImageState();
   }
 }

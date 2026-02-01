@@ -192,6 +192,7 @@ public class FileManagerActivity extends BaseCompat
   private ExecutorService executor;
   private View mview;
   private List<Child> listchild = new ArrayList<>();
+  private boolean fileWatcherBindingRequested = false;
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
@@ -359,45 +360,48 @@ public class FileManagerActivity extends BaseCompat
   }
 
   private void bindFileWatcherService(File file) {
-    unbindFileWatcherService();
+    if (fileEventRelay != null && fileEventRelay.isConnected()) {
+      fileEventRelay.setFileToWatch(file);
+      return;
+    }
+
+    if (fileEventRelay != null) {
+      unbindFileWatcherService();
+    }
 
     fileEventRelay = new FileWatcherServiceConnection(this);
     fileEventRelay.setFileToWatch(file);
     Intent intent = new Intent(this, FileWatcherService.class);
-    startService(intent);
 
-    if (bindService(intent, fileEventRelay, Context.BIND_IMPORTANT)) {
-      isFileWatcherBound = true;
-    } else {
-      Log.e(
-          "TAG",
-          "Error: The requested service doesn't "
-              + "exist, or this client isn't allowed access to it.");
+    try {
+      startForegroundService(intent);
+      fileWatcherBindingRequested = true;
+
+      if (bindService(intent, fileEventRelay, Context.BIND_IMPORTANT)) {
+        Log.d("TAG", "Binding to FileWatcherService requested");
+      } else {
+        fileWatcherBindingRequested = false;
+        Log.e("TAG", "Failed to bind to FileWatcherService");
+      }
+    } catch (SecurityException e) {
+      fileWatcherBindingRequested = false;
+      Log.e("TAG", "Security exception binding to service", e);
     }
   }
 
   private void unbindFileWatcherService() {
-    if (isFileWatcherBound && fileEventRelay != null) {
-      unbindService(fileEventRelay);
-      isFileWatcherBound = false;
+    if (fileEventRelay != null) {
+      if (fileEventRelay.isConnected() || !fileWatcherBindingRequested) {
+        fileEventRelay.removeListenerFromService();
+        unbindService(fileEventRelay);
+      }
       fileEventRelay = null;
     }
+    fileWatcherBindingRequested = false;
   }
 
   @Override
-  public void onFileChanged(int event, String path) {
-    switch (event) {
-      case FileWatcher.CREATE:
-      case FileWatcher.DELETE:
-        reLoadFile();
-        break;
-
-      case FileWatcher.MODIFY:
-      case FileWatcher.MOVED_FROM:
-        reLoadFile();
-        break;
-    }
-  }
+  public void onFileChanged(int event, String path) {}
 
   public String getSavePathByStringPrfns() {
     return save_path.getString("path", "");
@@ -640,23 +644,17 @@ public class FileManagerActivity extends BaseCompat
             runOnUiThread(
                 () -> DataUtil.showMessage(getApplicationContext(), "Error: " + e.toString()));
           }
-
           runOnUiThread(
               () -> {
+                bind.recyclerview2.setVisibility(View.VISIBLE);
+                bind.filedirBar.setVisibility(View.GONE);
+                fileListItem.clearFilter();
+                fileListItem.submitList(new ArrayList<>(files));
+
                 if (files.isEmpty()) {
                   bind.emptyview.setVisibility(View.VISIBLE);
                 } else {
                   bind.emptyview.setVisibility(View.GONE);
-                }
-
-                bind.recyclerview2.setVisibility(View.VISIBLE);
-                bind.filedirBar.setVisibility(View.GONE);
-                if (fileListItem != null) {
-                  fileListItem.submitList(files);
-                  String currentText = bind.searchbar.getText().toString();
-                  if (currentText != null && !currentText.isEmpty()) {
-                    fileListItem.filter(currentText);
-                  }
                 }
               });
         });
@@ -664,6 +662,19 @@ public class FileManagerActivity extends BaseCompat
 
   public void reLoadFile() { // reload file
     reLoadFile(true);
+  }
+
+  public void updateList() {
+    if (fileListItem != null && bind != null && bind.recyclerview2 != null) {
+      runOnUiThread(
+          () -> {
+            fileListItem.submitList(new ArrayList<>(files));
+            String currentText = bind.searchbar.getText().toString();
+            if (currentText != null && !currentText.isEmpty()) {
+              fileListItem.filter(currentText);
+            }
+          });
+    }
   }
 
   void FolderMaker() {
@@ -808,31 +819,25 @@ public class FileManagerActivity extends BaseCompat
 
   @Override
   public void onClick(View view, int pos) {
-    fileListItem.clearHighlights();
 
     HashMap<String, Object> item = fileListItem.getItem(pos);
-    if (item == null || !item.containsKey("path")) {
-      Log.e("FileManager", "Invalid item at position: " + pos);
-      return;
-    }
+    if (item == null || !item.containsKey("path")) return;
 
-    String filePath = item.get("path").toString();
-    if (filePath == null || filePath.isEmpty()) {
-      Log.e("FileManager", "Empty file path at position: " + pos);
-      return;
-    }
+    String path = item.get("path").toString();
+    staticstring = path;
 
-    staticstring = filePath;
-
-    if (FileUtil.isDirectory(staticstring)) {
-      Folder = staticstring;
-      reLoadFile();
-    } else {
-      int originalPos = fileListItem.getOriginalPosition(pos);
-      _dataOnClickItemList(originalPos != -1 ? originalPos : pos);
-    }
-    bind.searchbar.setText("");
     fileListItem.clearFilter();
+    bind.searchbar.setText("");
+
+    if (FileUtil.isDirectory(path)) {
+      Folder = path;
+      reLoadFile();
+      return;
+    }
+    int realPos = findFilePositionByPath(path);
+    if (realPos != -1) {
+      _dataOnClickItemList(realPos);
+    }
   }
 
   @Override
@@ -940,6 +945,9 @@ public class FileManagerActivity extends BaseCompat
                 if (oldFile.renameTo(newFile)) {
 
                   updateFileInLists(currentPath, newFile.getAbsolutePath());
+                  if (fileListItem != null) {
+                    fileListItem.highlightRename(newFile.getAbsolutePath());
+                  }
 
                   Toast.makeText(
                           getApplicationContext(), "نام با موفقیت تغییر کرد", Toast.LENGTH_SHORT)
@@ -1060,12 +1068,12 @@ public class FileManagerActivity extends BaseCompat
     di.setTitle(tit);
     di.setMessage(msg);
     di.setNeutralButton(
-        "unzio",
+        "view",
         (p, d) -> {
           ZipFileShow.showAsDialog(FileManagerActivity.this, _path);
         });
     di.setPositiveButton(
-        "view",
+        "unzip",
         (p1, d2) -> {
           UnZipDataFromDir(_path, Folder);
         });

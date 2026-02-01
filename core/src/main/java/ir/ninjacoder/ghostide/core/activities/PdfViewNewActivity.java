@@ -3,6 +3,7 @@ package ir.ninjacoder.ghostide.core.activities;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -49,7 +50,7 @@ public class PdfViewNewActivity extends BaseCompat {
     super.onCreate(_savedInstanceState);
     setContentView(R.layout.pdfviewnew);
     initialize(_savedInstanceState);
-
+    transParantStatus();
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
             == PackageManager.PERMISSION_DENIED
         || ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -91,7 +92,7 @@ public class PdfViewNewActivity extends BaseCompat {
       _uri_cm =
           FileProvider.getUriForFile(
               getApplicationContext(),
-              getApplicationContext().getPackageName() + ".provider",
+              getApplicationContext().getPackageName() + ".core.provider",
               _file_cm);
     } else {
       _uri_cm = Uri.fromFile(_file_cm);
@@ -188,6 +189,7 @@ public class PdfViewNewActivity extends BaseCompat {
                         "%s %s / %s", pdfFileName.replaceAll(".pdf", ""), page + 1, totalpages));
                 if (page > 1) {
                   mfab.show();
+                  
                 } else {
                   mfab.hide();
                 }
@@ -263,5 +265,11 @@ public class PdfViewNewActivity extends BaseCompat {
       }
     }
     return super.onOptionsItemSelected(item);
+  }
+
+  void transParantStatus(){
+    getWindow().setStatusBarColor(Color.TRANSPARENT);
+    getWindow().setNavigationBarColor(Color.TRANSPARENT);
+    
   }
 }

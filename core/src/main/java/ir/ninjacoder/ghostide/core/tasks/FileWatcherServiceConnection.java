@@ -6,23 +6,20 @@ import android.os.IBinder;
 
 import java.io.File;
 
-import ir.ninjacoder.ghostide.core.tasks.FileWatcher;
-
 /**
  * Manages the connection between a client and the {@link FileWatcherService}.
  *
  * <p>This class implements {@link ServiceConnection} to handle binding to the file watcher service,
- * register a file change listener, and start monitoring a specified directory. When disconnected,
- * it properly unregisters the listener and stops monitoring.
- *
- * @author EUP tnks for EUP
+ * register a file change listener, and launchWithLocalHost monitoring a specified directory. When
+ * disconnected, it properly unregisters the listener and stops monitoring.
  */
 public class FileWatcherServiceConnection implements ServiceConnection {
 
+  private final FileWatcher.OnFileChangeListener listener;
+
   private File fileToWatch;
   private boolean isConnected;
-  private FileWatcherService boundService;
-  private final FileWatcher.OnFileChangeListener listener;
+  private FileWatcherService.LocalBinder binder;
 
   /**
    * Constructs a new FileWatcherServiceConnection with a specified file change listener.
@@ -34,30 +31,23 @@ public class FileWatcherServiceConnection implements ServiceConnection {
   }
 
   @Override
-  public void onServiceConnected(ComponentName name, IBinder service) {
-    boundService = ((FileWatcherService.LocalBinder) service).getService();
-    boundService.getBinder().addListener(listener);
+  public void onServiceConnected(ComponentName name, IBinder iBinder) {
+    binder = ((FileWatcherService.LocalBinder) iBinder);
+    binder.addListener(listener);
     if (fileToWatch != null) {
-      boundService.getBinder().startMonitoring(fileToWatch);
+      binder.startMonitoring(fileToWatch);
     }
     isConnected = true;
   }
 
   @Override
   public void onServiceDisconnected(ComponentName name) {
-    if (boundService != null) {
-      boundService.getBinder().removeListener(listener);
-      boundService.getBinder().stopMonitoring();
-      boundService = null;
+    if (binder != null) {
+      binder.removeListener(listener);
+      binder.stopMonitoring();
+      binder = null;
     }
     isConnected = false;
-  }
-
-  public void setFileToWatch(File file) {
-    this.fileToWatch = file;
-    if (isConnected && boundService != null) {
-      boundService.getBinder().startMonitoring(file); // already connected (post-bound)
-    }
   }
 
   public File getMonitoredFile() {
@@ -68,12 +58,17 @@ public class FileWatcherServiceConnection implements ServiceConnection {
     return this.isConnected;
   }
 
-  /**
-   * Gets the bound instance of {@link FileWatcherService}.
-   *
-   * @return The bound service instance, or {@code null} if not connected.
-   */
-  public FileWatcherService getBoundService() {
-    return this.boundService;
+  public void setFileToWatch(File file) {
+    this.fileToWatch = file;
+    if (isConnected && binder != null) {
+      binder.startMonitoring(file); // already connected (post-bound)
+    }
+  }
+
+  public void removeListenerFromService() {
+    if (binder != null && listener != null) {
+      binder.removeListener(listener);
+      binder.stopMonitoring();
+    }
   }
 }

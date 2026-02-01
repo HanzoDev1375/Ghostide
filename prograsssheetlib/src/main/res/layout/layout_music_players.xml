@@ -1,162 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    android:orientation="vertical">
- 
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     android:orientation="vertical">
+
     <com.google.android.material.bottomsheet.BottomSheetDragHandleView
-        android:layout_gravity="center_horizontal"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:layout_width="wrap_content" />
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:layout_marginTop="3dp"
+         android:layout_gravity="center_horizontal" />
 
     <LinearLayout
-        android:gravity="center_horizontal|center_vertical"
-        android:layout_gravity="center_horizontal"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:orientation="vertical">
+         android:layout_height="match_parent"
+         android:layout_width="match_parent"
+         android:gravity="center_horizontal|center_vertical"
+         android:orientation="vertical"
+         android:layout_gravity="center_horizontal">
 
         <com.google.android.material.card.MaterialCardView
-            android:layout_height="300dp"
-            android:layout_marginTop="8dp"
-            android:layout_width="300dp"
-            app:cardForegroundColor="@android:color/transparent"
-            app:strokeColor="@android:color/transparent">
+             android:layout_height="300dp"
+             android:layout_width="300dp"
+             app:strokeColor="@android:color/transparent"
+             android:layout_marginTop="8dp"
+             app:cardForegroundColor="@android:color/transparent">
 
             <ImageView
-                android:id="@+id/musicicon"
-                android:layout_gravity="center_horizontal|center_vertical"
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:scaleType="fitXY" />
+                 android:layout_height="match_parent"
+                 android:layout_width="match_parent"
+                 android:scaleType="fitXY"
+                 android:id="@+id/musicicon"
+                 android:layout_gravity="center_horizontal|center_vertical" />
+
         </com.google.android.material.card.MaterialCardView>
 
         <TextView
-            android:focusable="false"
-            android:id="@+id/titlemusic"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_width="wrap_content"
-            android:padding="8dp"
-            android:text="Title"
-            android:textSize="18sp" />
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:layout_marginBottom="5dp"
+             android:padding="8dp"
+             android:textSize="20sp"
+             android:layout_marginTop="5dp"
+             android:focusable="false"
+             android:id="@+id/titlemusic"
+             android:layout_gravity="center_horizontal|center_vertical"
+             android:text="Title" />
 
         <TextView
-            android:focusable="false"
-            android:id="@+id/submusic"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:layout_width="wrap_content"
-            android:padding="8dp"
-            android:text="TextView"
-            android:textSize="14sp" />
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:layout_marginBottom="16dp"
+             android:padding="8dp"
+             android:textSize="14sp"
+             android:focusable="false"
+             android:id="@+id/submusic"
+             android:layout_gravity="center_horizontal|center_vertical"
+             android:text="TextView" />
 
-        <!-- SeekBar با عرض کامل -->
         <LinearLayout
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:paddingHorizontal="24dp">
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:orientation="vertical"
+             android:paddingHorizontal="24dp">
 
             <SeekBar
-                android:id="@+id/musicseekbar"
-                android:layout_height="48dp"
-                android:layout_width="match_parent"
-                android:maxHeight="48dp"
-                android:minHeight="48dp"
-                style="@style/MediaPlayer.ProgressBar" />
+                 android:layout_height="48dp"
+                 android:layout_width="match_parent"
+                 android:maxHeight="48dp"
+                 android:minHeight="48dp"
+                 style="@style/MediaPlayer.ProgressBar"
+                 android:id="@+id/musicseekbar" />
 
-            <!-- تایمرها با فاصله مناسب -->
             <LinearLayout
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:gravity="center_vertical"
+                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tvtr"
-                    android:layout_height="wrap_content"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:text="0:00"
-                    android:textSize="14sp"
-                    android:gravity="start" />
+                     android:layout_height="wrap_content"
+                     android:layout_width="0dp"
+                     android:gravity="start"
+                     android:padding="3dp"
+                     android:textSize="14sp"
+                     android:layout_marginStart="6dp"
+                     android:layout_weight="1"
+                     android:id="@+id/tvtr"
+                     android:text="0:00" />
 
                 <TextView
-                    android:id="@+id/tvname"
-                    android:layout_height="wrap_content"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:text="0:00"
-                    android:textSize="14sp"
-                    android:gravity="end" />
+                     android:layout_height="wrap_content"
+                     android:layout_width="0dp"
+                     android:layout_marginEnd="6dp"
+                     android:gravity="end"
+                     android:padding="3dp"
+                     android:textSize="14sp"
+                     android:layout_weight="1"
+                     android:id="@+id/tvname"
+                     android:text="0:00" />
+
             </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
-            android:gravity="center"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:orientation="horizontal"
-            android:padding="24dp">
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:gravity="center"
+             android:padding="24dp"
+             android:orientation="horizontal">
 
             <LinearLayout
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:layout_height="50dp"
-                android:layout_marginEnd="40dp"
-                android:layout_width="50dp">
+                 android:layout_height="50dp"
+                 android:layout_width="50dp"
+                 android:layout_marginEnd="15dp"
+                 android:background="?attr/selectableItemBackgroundBorderless">
 
                 <ImageView
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:id="@+id/pre"
-                    android:layout_height="match_parent"
-                    android:layout_width="match_parent"
-                    android:scaleType="centerInside"
-                    android:tint="?attr/colorPrimary"
-                    app:srcCompat="@drawable/musicprevious" />
+                     android:layout_height="match_parent"
+                     android:layout_width="match_parent"
+                     android:scaleType="centerInside"
+                     android:background="?attr/selectableItemBackgroundBorderless"
+                     android:padding="15dp"
+                     android:tint="?attr/colorPrimary"
+                     app:srcCompat="@drawable/musicprevious"
+                     android:id="@+id/pre" />
+
             </LinearLayout>
 
             <LinearLayout
-                android:background="@drawable/bg_pause_anim"
-                android:id="@+id/cardmusic"
-                android:layout_height="75dp"
-                android:layout_marginEnd="24dp"
-                android:layout_width="75dp">
+                 android:layout_height="90dp"
+                 android:layout_width="90dp"
+                 android:layout_marginEnd="24dp"
+                 android:background="@drawable/bg_pause_anim"
+                 android:id="@+id/cardmusic">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/play"
-                    android:layout_height="match_parent"
-                    android:layout_width="match_parent"
-                    android:scaleType="centerInside"
-                    android:tint="?attr/colorOnPrimary"
-                    app:backgroundTint="?attr/colorSecondaryContainer"
-                    app:icon="@drawable/musicplay"
-                    app:iconGravity="textStart"
-                    app:iconPadding="0dp"
-                    app:iconSize="42dp"
-                    app:iconTint="?attr/colorOnSecondaryContainer" />
+                     android:layout_height="match_parent"
+                     android:layout_width="match_parent"
+                     app:icon="@drawable/musicplay"
+                     android:scaleType="centerInside"
+                     app:iconSize="42dp"
+                     app:backgroundTint="?attr/colorSecondaryContainer"
+                     app:iconTint="?attr/colorOnSecondaryContainer"
+                     android:tint="?attr/colorOnPrimary"
+                     app:iconPadding="0dp"
+                     android:id="@+id/play"
+                     app:iconGravity="textStart" />
+
             </LinearLayout>
 
             <LinearLayout
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:layout_height="50dp"
-                android:layout_marginStart="20dp"
-                android:layout_width="50dp">
+                 android:layout_height="50dp"
+                 android:layout_width="50dp"
+                 android:background="?attr/selectableItemBackgroundBorderless">
 
                 <ImageView
-                    android:id="@+id/next"
-                    android:layout_height="match_parent"
-                    android:layout_width="match_parent"
-                    android:scaleType="centerInside"
-                    android:tint="?attr/colorPrimary"
-                    app:srcCompat="@drawable/musicnext" />
+                     android:layout_height="match_parent"
+                     android:layout_width="match_parent"
+                     android:scaleType="centerInside"
+                     android:padding="15dp"
+                     android:tint="?attr/colorPrimary"
+                     app:srcCompat="@drawable/musicnext"
+                     android:id="@+id/next" />
+
             </LinearLayout>
+
         </LinearLayout>
+
     </LinearLayout>
+
 </LinearLayout>

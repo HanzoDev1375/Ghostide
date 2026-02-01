@@ -155,7 +155,7 @@ public class Music {
       return "خطا در بارگذاری";
     }
   }
-  
+
   public String getNameAlbom() {
     MediaMetadataRetriever meta = new MediaMetadataRetriever();
     try {

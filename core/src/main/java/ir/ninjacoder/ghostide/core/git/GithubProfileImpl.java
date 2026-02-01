@@ -18,11 +18,11 @@ public class GithubProfileImpl {
       md.setMarkdown(
           text,
           githubprofile.hasLogin()
-              ? "**" + GhostDate.getGreeting() + "**" + "<ins>" + githubprofile.getName() + "</ins>"
+              ? "**" + GhostDate.getGreeting() + "**" + " <ins>" + githubprofile.getName() + "</ins>"
               : "**"
                   + GhostDate.getGreeting()
                   + "** "
-                  + "<ins>"
+                  + " <ins>"
                   + text.getContext().getString(R.string.app_name)
                   + "</ins>");
       icon.postDelayed(

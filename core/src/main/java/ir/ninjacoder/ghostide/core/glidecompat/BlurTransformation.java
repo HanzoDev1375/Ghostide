@@ -14,14 +14,15 @@ import java.security.MessageDigest;
 
 import ir.ninjacoder.ghostide.core.glidecompat.RSBlur;
 
-public class BlurTransformation extends ir.ninjacoder.ghostide.core.glidecompat.BitmapTransformation{
+public class BlurTransformation
+    extends ir.ninjacoder.ghostide.core.glidecompat.BitmapTransformation {
 
   private static final int VERSION = 1;
   private static final String ID =
-    "ir.ninjacoder.ghostide.core.glidecompat.BlurTransformation." + VERSION;
+      "ir.ninjacoder.ghostide.core.glidecompat.BlurTransformation." + VERSION;
 
   private static final int MAX_RADIUS = 25;
-  private static final int DEFAULT_DOWN_SAMPLING = 1;
+  private static final int DEFAULT_DOWN_SAMPLING = 4;
 
   private final int radius;
   private final int sampling;
@@ -40,31 +41,22 @@ public class BlurTransformation extends ir.ninjacoder.ghostide.core.glidecompat.
   }
 
   @Override
-  protected Bitmap transform(@NonNull Context context, @NonNull BitmapPool pool,
-                             @NonNull Bitmap toTransform, int outWidth, int outHeight) {
-
-    int width = toTransform.getWidth();
-    int height = toTransform.getHeight();
-    int scaledWidth = width / sampling;
-    int scaledHeight = height / sampling;
-
-    Bitmap bitmap = pool.get(scaledWidth, scaledHeight, Bitmap.Config.ARGB_8888);
-
-    setCanvasBitmapDensity(toTransform, bitmap);
-
-    Canvas canvas = new Canvas(bitmap);
-    canvas.scale(1 / (float) sampling, 1 / (float) sampling);
-    Paint paint = new Paint();
-    paint.setFlags(Paint.FILTER_BITMAP_FLAG);
-    canvas.drawBitmap(toTransform, 0, 0, paint);
-
+  protected Bitmap transform(
+      @NonNull Context context,
+      @NonNull BitmapPool pool,
+      @NonNull Bitmap toTransform,
+      int outWidth,
+      int outHeight) {
+    int scaledWidth = toTransform.getWidth() / sampling;
+    int scaledHeight = toTransform.getHeight() / sampling;
+    Bitmap scaledBitmap = Bitmap.createScaledBitmap(toTransform, scaledWidth, scaledHeight, false);
     try {
-      bitmap = RSBlur.blur(context, bitmap, radius);
+      scaledBitmap = RSBlur.blur(context, scaledBitmap, radius);
     } catch (RSRuntimeException e) {
-      bitmap = FastBlur.blur(bitmap, radius, true);
+      scaledBitmap = FastBlur.blur(scaledBitmap, radius, true);
     }
 
-    return bitmap;
+    return scaledBitmap;
   }
 
   @Override
@@ -74,9 +66,9 @@ public class BlurTransformation extends ir.ninjacoder.ghostide.core.glidecompat.
 
   @Override
   public boolean equals(Object o) {
-    return o instanceof BlurTransformation &&
-      ((BlurTransformation) o).radius == radius &&
-      ((BlurTransformation) o).sampling == sampling;
+    return o instanceof BlurTransformation
+        && ((BlurTransformation) o).radius == radius
+        && ((BlurTransformation) o).sampling == sampling;
   }
 
   @Override
