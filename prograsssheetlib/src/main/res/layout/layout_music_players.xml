@@ -7,166 +7,127 @@
      android:layout_width="match_parent"
      android:orientation="vertical">
 
-    <com.google.android.material.bottomsheet.BottomSheetDragHandleView
-         android:layout_height="wrap_content"
-         android:layout_width="wrap_content"
-         android:layout_marginTop="3dp"
-         android:layout_gravity="center_horizontal" />
-
     <LinearLayout
          android:layout_height="match_parent"
          android:layout_width="match_parent"
-         android:gravity="center_horizontal|center_vertical"
-         android:orientation="vertical"
-         android:layout_gravity="center_horizontal">
+         android:gravity="center_horizontal"
+         android:padding="3dp"
+         android:orientation="vertical">
 
-        <com.google.android.material.card.MaterialCardView
+        <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent" />
+
+        <ImageView
              android:layout_height="300dp"
              android:layout_width="300dp"
-             app:strokeColor="@android:color/transparent"
-             android:layout_marginTop="8dp"
-             app:cardForegroundColor="@android:color/transparent">
-
-            <ImageView
-                 android:layout_height="match_parent"
-                 android:layout_width="match_parent"
-                 android:scaleType="fitXY"
-                 android:id="@+id/musicicon"
-                 android:layout_gravity="center_horizontal|center_vertical" />
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <TextView
-             android:layout_height="wrap_content"
-             android:layout_width="wrap_content"
              android:layout_marginBottom="5dp"
-             android:padding="8dp"
-             android:textSize="20sp"
+             android:scaleType="fitXY"
+             android:src="@drawable/music2"
+             android:layout_marginLeft="5dp"
+             android:layout_marginRight="5dp"
              android:layout_marginTop="5dp"
-             android:focusable="false"
-             android:id="@+id/titlemusic"
-             android:layout_gravity="center_horizontal|center_vertical"
-             android:text="Title" />
-
-        <TextView
-             android:layout_height="wrap_content"
-             android:layout_width="wrap_content"
-             android:layout_marginBottom="16dp"
-             android:padding="8dp"
-             android:textSize="14sp"
-             android:focusable="false"
-             android:id="@+id/submusic"
-             android:layout_gravity="center_horizontal|center_vertical"
-             android:text="TextView" />
+             android:id="@+id/musicicon" />
 
         <LinearLayout
              android:layout_height="wrap_content"
              android:layout_width="match_parent"
-             android:orientation="vertical"
-             android:paddingHorizontal="24dp">
+             android:gravity="center_horizontal"
+             android:orientation="vertical">
 
-            <SeekBar
-                 android:layout_height="48dp"
-                 android:layout_width="match_parent"
-                 android:maxHeight="48dp"
-                 android:minHeight="48dp"
-                 style="@style/MediaPlayer.ProgressBar"
-                 android:id="@+id/musicseekbar" />
-
-            <LinearLayout
+            <TextView
                  android:layout_height="wrap_content"
-                 android:layout_width="match_parent"
-                 android:gravity="center_vertical"
-                 android:orientation="horizontal">
+                 android:layout_width="wrap_content"
+                 android:padding="8dp"
+                 android:textSize="20sp"
+                 android:focusable="false"
+                 android:id="@+id/titlemusic"
+                 android:text="TextView" />
 
-                <TextView
-                     android:layout_height="wrap_content"
-                     android:layout_width="0dp"
-                     android:gravity="start"
-                     android:padding="3dp"
-                     android:textSize="14sp"
-                     android:layout_marginStart="6dp"
-                     android:layout_weight="1"
-                     android:id="@+id/tvtr"
-                     android:text="0:00" />
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:padding="8dp"
+                 android:textSize="16sp"
+                 android:focusable="false"
+                 android:id="@+id/submusic"
+                 android:text="TextView" />
 
-                <TextView
-                     android:layout_height="wrap_content"
-                     android:layout_width="0dp"
-                     android:layout_marginEnd="6dp"
-                     android:gravity="end"
-                     android:padding="3dp"
-                     android:textSize="14sp"
-                     android:layout_weight="1"
-                     android:id="@+id/tvname"
-                     android:text="0:00" />
+        </LinearLayout>
 
-            </LinearLayout>
+        <SeekBar
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:padding="8dp"
+             android:layout_marginLeft="10dp"
+             android:layout_marginRight="10dp"
+             style="@style/MediaPlayer.ProgressBar"
+             android:focusable="false"
+             android:id="@+id/seekbar1" />
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:gravity="center_vertical"
+             android:padding="8dp"
+             android:orientation="horizontal">
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:gravity="start"
+                 android:padding="8dp"
+                 android:textSize="12sp"
+                 android:layout_marginLeft="4dp"
+                 android:focusable="false"
+                 android:layout_weight="1"
+                 android:id="@+id/tvtr"
+                 android:text="0:0" />
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:gravity="end"
+                 android:padding="8dp"
+                 android:textSize="12sp"
+                 android:layout_marginRight="4dp"
+                 android:focusable="false"
+                 android:layout_weight="1"
+                 android:id="@+id/tvname"
+                 android:text="0:0" />
 
         </LinearLayout>
 
         <LinearLayout
              android:layout_height="wrap_content"
              android:layout_width="match_parent"
-             android:gravity="center"
-             android:padding="24dp"
+             android:gravity="center_horizontal|center_vertical"
              android:orientation="horizontal">
 
-            <LinearLayout
-                 android:layout_height="50dp"
-                 android:layout_width="50dp"
-                 android:layout_marginEnd="15dp"
-                 android:background="?attr/selectableItemBackgroundBorderless">
+            <ir.ninjacoder.prograsssheet.util.ButtonAnim
+                 android:layout_height="40dp"
+                 android:layout_width="40dp"
+                 android:scaleType="centerInside"
+                 android:src="@drawable/musicprevious"
+                 android:padding="8dp"
+                 android:layout_marginRight="5dp"
+                 android:id="@+id/pre" />
 
-                <ImageView
-                     android:layout_height="match_parent"
-                     android:layout_width="match_parent"
-                     android:scaleType="centerInside"
-                     android:background="?attr/selectableItemBackgroundBorderless"
-                     android:padding="15dp"
-                     android:tint="?attr/colorPrimary"
-                     app:srcCompat="@drawable/musicprevious"
-                     android:id="@+id/pre" />
+            <ir.ninjacoder.prograsssheet.util.PlayerToggle
+                 android:layout_height="120dp"
+                 android:layout_width="120dp"
+                 android:layout_margin="8dp"
+                 android:padding="8dp"
+                 android:id="@+id/play" />
 
-            </LinearLayout>
-
-            <LinearLayout
-                 android:layout_height="90dp"
-                 android:layout_width="90dp"
-                 android:layout_marginEnd="24dp"
-                 android:background="@drawable/bg_pause_anim"
-                 android:id="@+id/cardmusic">
-
-                <com.google.android.material.button.MaterialButton
-                     android:layout_height="match_parent"
-                     android:layout_width="match_parent"
-                     app:icon="@drawable/musicplay"
-                     android:scaleType="centerInside"
-                     app:iconSize="42dp"
-                     app:backgroundTint="?attr/colorSecondaryContainer"
-                     app:iconTint="?attr/colorOnSecondaryContainer"
-                     android:tint="?attr/colorOnPrimary"
-                     app:iconPadding="0dp"
-                     android:id="@+id/play"
-                     app:iconGravity="textStart" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                 android:layout_height="50dp"
-                 android:layout_width="50dp"
-                 android:background="?attr/selectableItemBackgroundBorderless">
-
-                <ImageView
-                     android:layout_height="match_parent"
-                     android:layout_width="match_parent"
-                     android:scaleType="centerInside"
-                     android:padding="15dp"
-                     android:tint="?attr/colorPrimary"
-                     app:srcCompat="@drawable/musicnext"
-                     android:id="@+id/next" />
-
-            </LinearLayout>
+            <ir.ninjacoder.prograsssheet.util.ButtonAnim
+                 android:layout_height="40dp"
+                 android:layout_width="40dp"
+                 android:scaleType="centerInside"
+                 android:src="@drawable/musicnext"
+                 android:padding="8dp"
+                 android:layout_marginLeft="5dp"
+                 android:id="@+id/next" />
 
         </LinearLayout>
 

@@ -135,6 +135,9 @@ dependencies {
         exclude group: "org.jetbrains", module: "annotations"
         exclude group: "org.jetbrains", module: "annotations-java5"
     }
+    //fab blur mod and toolbar...
+    implementation 'com.qmdeve.blurview:core:1.1.3'
+
 }
 
 afterEvaluate {

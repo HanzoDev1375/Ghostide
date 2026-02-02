@@ -143,7 +143,9 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
       holder.cardblur.setFocusable(true);
       String filePath = item.get("path").toString();
       if (shouldApplyBlur(filePath)) {
-        holder.cardblur.setBlurFromImageView(holder.icon, filePath);
+        if (holder.getAdapterPosition() == position)
+          holder.cardblur.setBlurFromImageView(holder.icon, filePath);
+        else holder.cardblur.cancelBlur();
       } else {
         holder.cardblur.setBackground(null);
       }
@@ -299,6 +301,7 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
             int pos = getBindingAdapterPosition();
             if (pos == RecyclerView.NO_POSITION) return;
             click.onClick(c, pos);
+            cardblur.cancelBlur();
           });
 
       roots.setOnLongClickListener(

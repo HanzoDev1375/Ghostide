@@ -27,7 +27,7 @@ public class CursorIconAd extends RecyclerView.Adapter<CursorIconAd.Holder> {
   private SharedPreferences prf;
   private OnItemClickVistor visit;
   private List<Map<String, String>> listModel = new ArrayList<>();
-  ;
+
   String jsonPath = "/storage/emulated/0/GhostWebIDE/cursor/cursor.json";
 
   public CursorIconAd(Context context, OnItemClickVistor visit) {

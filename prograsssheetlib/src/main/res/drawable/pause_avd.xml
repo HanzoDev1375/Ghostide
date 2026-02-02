@@ -1,0 +1,49 @@
+<animated-vector
+  xmlns:aapt="http://schemas.android.com/aapt"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+  <aapt:attr
+    name="android:drawable">
+    <vector
+      android:height="128dp"
+      android:viewportHeight="128"
+      android:viewportWidth="128"
+      android:width="128dp">
+      <group
+        android:name="main"
+        android:pivotX="64"
+        android:pivotY="64"
+        android:scaleX="1"
+        android:scaleY="1">
+        <group
+          android:name="top">
+          <path
+            android:fillColor="@android:color/black"
+            android:name="top_path"
+            android:pathData="M 32 40 L 32 56  L 96 56 L 96 40 Z"
+            android:strokeLineCap="butt"
+            android:strokeLineJoin="miter"
+            android:strokeMiterLimit="10" />
+        </group>
+        <group
+          android:name="bottom">
+          <path
+            android:fillColor="@android:color/black"
+            android:name="bottom_path"
+            android:pathData="M 32 88 L 32 72 L 96 72 L 96 88 Z"
+            android:strokeLineCap="butt"
+            android:strokeLineJoin="miter"
+            android:strokeMiterLimit="10" />
+        </group>
+      </group>
+    </vector>
+  </aapt:attr>
+  <target
+    android:animation="@anim/rotate_minus_90"
+    android:name="main" />
+  <target
+    android:animation="@anim/upper_pause_to_play_animation"
+    android:name="top_path" />
+  <target
+    android:animation="@anim/bottom_pause_to_play_animation"
+    android:name="bottom_path" />
+</animated-vector>

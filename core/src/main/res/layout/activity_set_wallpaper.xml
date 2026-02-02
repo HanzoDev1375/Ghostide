@@ -1,64 +1,63 @@
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_height="match_parent"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_height="match_parent"
+  android:layout_width="match_parent">
+  <com.google.android.material.appbar.AppBarLayout
+    android:fitsSystemWindows="true"
+    android:id="@+id/appBar"
+    android:layout_height="wrap_content"
     android:layout_width="match_parent">
-    <com.google.android.material.appbar.AppBarLayout
-        android:fitsSystemWindows="true"
-        android:id="@+id/appBar"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent">
-        <com.google.android.material.appbar.MaterialToolbar
-            android:background="?attr/colorSurface"
-            android:id="@+id/toolbar"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_width="match_parent"
-            app:layout_scrollFlags="scroll|enterAlways" />
-    </com.google.android.material.appbar.AppBarLayout>
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPager"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-    <LinearLayout
-        android:gravity="end"
-        android:id="@+id/fab_container"
-        android:layout_gravity="bottom|end"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_width="wrap_content"
-        android:orientation="horizontal">
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:contentDescription="تنظیم پس زمینه"
-            android:id="@+id/fab_set_wallpaper"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
-            app:elevation="0dp"
-            android:layout_width="wrap_content"
-            app:srcCompat="@drawable/wallpaper_24px" />
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:contentDescription="اشتراک گذاری"
-            android:id="@+id/fab_share"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
-            app:elevation="0dp"
-            android:layout_width="wrap_content"
-            app:srcCompat="@drawable/share_24px" />
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:contentDescription="تنظیم سایز"
-            android:id="@+id/fab_adjust"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
-            app:elevation="0dp"
-            android:layout_width="wrap_content"
-            app:srcCompat="@drawable/crop_24px" />
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:contentDescription="چرخش"
-            android:id="@+id/fab_metadata"
-            android:layout_height="wrap_content"
-            app:elevation="0dp"
-            android:layout_width="wrap_content"
-            app:srcCompat="@drawable/rotate_left_24px" />
-    </LinearLayout>
+    <com.google.android.material.appbar.MaterialToolbar
+      android:background="?attr/colorSurface"
+      android:id="@+id/toolbar"
+      android:layout_height="?attr/actionBarSize"
+      android:layout_width="match_parent"
+      app:layout_scrollFlags="scroll|enterAlways" />
+  </com.google.android.material.appbar.AppBarLayout>
+  <androidx.viewpager2.widget.ViewPager2
+    android:id="@+id/viewPager"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+  <LinearLayout
+    android:gravity="end"
+    android:id="@+id/fab_container"
+    android:layout_gravity="bottom|end"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_width="wrap_content"
+    android:orientation="horizontal">
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+      android:contentDescription="تنظیم پس زمینه"
+      android:id="@+id/fab_set_wallpaper"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="12dp"
+      app:elevation="0dp"
+      android:layout_width="wrap_content"
+      app:srcCompat="@drawable/wallpaper_24px" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+      android:contentDescription="اشتراک گذاری"
+      android:id="@+id/fab_share"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="12dp"
+      app:elevation="0dp"
+      android:layout_width="wrap_content"
+      app:srcCompat="@drawable/share_24px" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+      android:contentDescription="تنظیم سایز"
+      android:id="@+id/fab_adjust"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="12dp"
+      app:elevation="0dp"
+      android:layout_width="wrap_content"
+      app:srcCompat="@drawable/crop_24px" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+      android:contentDescription="چرخش"
+      android:id="@+id/fab_metadata"
+      android:layout_height="wrap_content"
+      app:elevation="0dp"
+      android:layout_width="wrap_content"
+      app:srcCompat="@drawable/rotate_left_24px" />
+  </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

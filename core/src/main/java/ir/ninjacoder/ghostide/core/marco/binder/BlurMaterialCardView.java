@@ -27,6 +27,7 @@ import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -89,7 +90,7 @@ public class BlurMaterialCardView extends MaterialCardView {
 
     Glide.with(getContext())
         .asBitmap()
-        .load(new java.io.File(imagePath)) // ✅ مهم
+        .load(new File(imagePath))
         .override(getWidth(), getHeight())
         .skipMemoryCache(true)
         .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -109,6 +110,7 @@ public class BlurMaterialCardView extends MaterialCardView {
                           post(
                               () -> {
                                 if (clipped != null) {
+                                  
                                   setBackground(new BitmapDrawable(getResources(), clipped));
                                 }
                               });
@@ -261,5 +263,9 @@ public class BlurMaterialCardView extends MaterialCardView {
     synchronized (blurLock) {
       isBlurring = false;
     }
+  }
+
+  public boolean isBlur() {
+    return this.isBlurring;
   }
 }
