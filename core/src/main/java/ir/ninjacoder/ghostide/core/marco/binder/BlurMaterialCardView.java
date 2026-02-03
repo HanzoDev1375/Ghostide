@@ -1,5 +1,6 @@
 package ir.ninjacoder.ghostide.core.marco.binder;
 
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -11,10 +12,8 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 import android.graphics.drawable.BitmapDrawable;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.google.android.material.card.MaterialCardView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;

@@ -1,5 +1,6 @@
 package ir.ninjacoder.ghostide.core.widget.component;
 
+import ir.ninjacoder.prograsssheet.util.SquigglyProgress;
 import static xyz.doikki.videoplayer.util.PlayerUtils.stringForTime;
 
 import android.app.Activity;
@@ -46,10 +47,29 @@ public class VodControlView extends FrameLayout
   private ImageView proportion;
   private boolean mIsDragging;
   private SharedPreferences prf;
-
+  protected SquigglyProgress bars;
   private boolean mIsShowBottomProgress = true;
 
-  {
+  public VodControlView(@NonNull Context context) {
+    super(context);
+    init(context);
+  }
+
+  public VodControlView(@NonNull Context context, @Nullable AttributeSet attrs) {
+    super(context, attrs);
+    init(context);
+  }
+
+  public VodControlView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    super(context, attrs, defStyleAttr);
+    init(context);
+  }
+
+  protected int getLayoutId() {
+    return R.layout.dkplayer_layout_vod_control_view;
+  }
+
+  void init(Context context) {
     setVisibility(GONE);
     LayoutInflater.from(getContext()).inflate(getLayoutId(), this, true);
     mFullScreen = findViewById(R.id.fullscreen);
@@ -70,31 +90,21 @@ public class VodControlView extends FrameLayout
     ObjectUtils.setColorFilter(mFullScreen);
     ObjectUtils.setTextColor(mTotalTime);
     ObjectUtils.setTextColor(mCurrTime);
-
     ObjectUtils.setColorFilter(proportion);
     ObjectUtils.setColorFilter(mPlayButton);
+    bars = new SquigglyProgress();
+    bars.setWaveLength(100);
+    bars.setLineAmplitude(8);
+    bars.setPhaseSpeed(25);
+    if (bars != null) bars.setStrokeWidth(convertToPx(context, 4));
+    bars.setTransitionEnabled(true);
+    bars.setAnimate(true);
+    mVideoProgress.setProgressDrawable(bars);
 
-    // 5.1以下系统SeekBar高度需要设置成WRAP_CONTENT
     if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
       mVideoProgress.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
     }
     prf = getContext().getSharedPreferences("prf", Context.MODE_PRIVATE);
-  }
-
-  public VodControlView(@NonNull Context context) {
-    super(context);
-  }
-
-  public VodControlView(@NonNull Context context, @Nullable AttributeSet attrs) {
-    super(context, attrs);
-  }
-
-  public VodControlView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-    super(context, attrs, defStyleAttr);
-  }
-
-  protected int getLayoutId() {
-    return R.layout.dkplayer_layout_vod_control_view;
   }
 
   public void MatchToOnBack() {
@@ -160,6 +170,7 @@ public class VodControlView extends FrameLayout
         break;
       case VideoView.STATE_PLAYING:
         mPlayButton.setSelected(true);
+        bars.setAnimate(true);
         if (mIsShowBottomProgress) {
           if (mControlWrapper.isShowing()) {
             mBottomProgress.setVisibility(GONE);
@@ -172,14 +183,15 @@ public class VodControlView extends FrameLayout
           mBottomContainer.setVisibility(GONE);
         }
         setVisibility(VISIBLE);
-        // 开始刷新进度
         mControlWrapper.startProgress();
         break;
       case VideoView.STATE_PAUSED:
+        bars.setAnimate(false);
         mPlayButton.setSelected(false);
         break;
       case VideoView.STATE_BUFFERING:
       case VideoView.STATE_BUFFERED:
+        bars.setAnimate(mControlWrapper.isPlaying());
         mPlayButton.setSelected(mControlWrapper.isPlaying());
         break;
     }
@@ -307,5 +319,10 @@ public class VodControlView extends FrameLayout
 
   public interface OnClick {
     public void click();
+  }
+
+  int convertToPx(Context context, float dp) {
+    float density = context.getResources().getDisplayMetrics().density;
+    return (int) (dp * density + 0.5f);
   }
 }

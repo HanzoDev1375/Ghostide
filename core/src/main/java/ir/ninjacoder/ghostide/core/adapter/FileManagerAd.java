@@ -144,10 +144,10 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
       String filePath = item.get("path").toString();
       if (shouldApplyBlur(filePath)) {
         if (holder.getAdapterPosition() == position)
-          holder.cardblur.setBlurFromImageView(holder.icon, filePath);
-        else holder.cardblur.cancelBlur();
+          holder.cardblur.setBlurFromImageView(holder.icon, filePath); 
       } else {
         holder.cardblur.setBackground(null);
+        holder.cardblur.cancelBlur();
       }
     }
   }

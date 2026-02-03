@@ -37,17 +37,14 @@
             android:layout_width="0dp"
             android:layout_marginEnd="10dp"
             android:max="1000"
-            android:thumb="@drawable/dkplayer_seekbar_thumb"
             android:paddingStart="0dp"
             android:layout_marginStart="10dp"
             android:layout_gravity="center_vertical"
             android:maxHeight="2dp"
             android:paddingEnd="0dp"
-            android:thumbOffset="0dp"
-            android:background="@null"
+            style="@style/MediaPlayer.ProgressBar"
             android:minHeight="2dp"
             android:layout_weight="1"
-            android:progressDrawable="@drawable/dkplayer_layer_progress_bar"
             android:id="@+id/seekBar"
         />
 
