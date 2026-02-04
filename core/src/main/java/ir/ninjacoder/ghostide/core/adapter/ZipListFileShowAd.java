@@ -1,85 +1,722 @@
 package ir.ninjacoder.ghostide.core.adapter;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.os.AsyncTask;
+import android.text.InputType;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import androidx.recyclerview.widget.RecyclerView;
-
-import java.io.File;
-import java.util.List;
-
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import ir.ninjacoder.ghostide.core.R;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.recyclerview.widget.RecyclerView;
 import ir.ninjacoder.ghostide.core.folder.FileIconHelper;
+import net.lingala.zip4j.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
+import net.lingala.zip4j.model.FileHeader;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-public class ZipListFileShowAd extends RecyclerView.Adapter<ZipListFileShowAd.VH> {
+public class ZipListFileShowAd extends RecyclerView.Adapter<ZipListFileShowAd.Holder> {
 
-  protected List<String> listModel;
+    private List<FileHeader> allFiles;
+    private List<FileHeader> showFiles;
+    private String currentPath = "";
+    private Context context;
+    private String zipFilePath;
+    private OnFileActionListener actionListener;
+    private boolean multiSelectMode = false;
+    private String unzipDir;
+    private Set<Integer> selectedItems = new HashSet<>();
 
-  public ZipListFileShowAd(List<String> listModel) {
-    this.listModel = listModel;
-  }
+    public interface OnFileActionListener {
+        void onFileActionPerformed();
 
-  @Override
-  public int getItemCount() {
-    return listModel.size();
-  }
+        void onSelectionModeChanged(boolean isMultiSelectMode, int selectedCount);
 
-  @Override
-  public void onBindViewHolder(VH viewHolder, int pos) {
-    View view = viewHolder.itemView;
-    RecyclerView.LayoutParams layoutParams =
-        new RecyclerView.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-    view.setLayoutParams(layoutParams);
-    var fileHeader = listModel.get(pos);
-    
-    File file = new File(fileHeader);
-    String displayName = file.getName();
-    FileIconHelper helper = new FileIconHelper(fileHeader);
-    helper.setDynamicFolderEnabled(true);
-    helper.setEnvironmentEnabled(true);
-
-    if (file.isDirectory()) {
-      viewHolder.tvTools.setVisibility(View.GONE);
-      viewHolder.icon.setImageResource(R.drawable.folder);
-    } else {
-      viewHolder.icon.setImageResource(helper.getFileIcon());
-      
-      viewHolder.icon.setImageResource(R.drawable.file);
+        void onFileExtracted(String fileName);
     }
 
-    viewHolder.folderName.setText(displayName);
+    public interface OnListStateListener {
+        void onListEmpty();
 
-    
-  }
-
-  @Override
-  public VH onCreateViewHolder(ViewGroup parnt, int pos) {
-    View view =
-        LayoutInflater.from(parnt.getContext()).inflate(R.layout.folder_remster, parnt, false);
-    RecyclerView.LayoutParams _lp =
-        new RecyclerView.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-    view.setLayoutParams(_lp);
-    return new VH(view);
-  }
-
-  
-  public class VH extends RecyclerView.ViewHolder {
-    protected TextView folderName, tvTools;
-    protected LinearLayout roots;
-    protected ImageView icon;
-
-    public VH(View view) {
-      super(view);
-      folderName = view.findViewById(R.id.folderName);
-      tvTools = view.findViewById(R.id.tvTools);
-      roots = view.findViewById(R.id.roots);
-      icon = view.findViewById(R.id.icon);
+        void onGoBackRequested(boolean canGoBack);
     }
-  }
+
+    private OnListStateListener listStateListener;
+
+    public void setOnListStateListener(OnListStateListener listener) {
+        this.listStateListener = listener;
+    }
+
+    public void setOnFileActionListener(OnFileActionListener listener) {
+        this.actionListener = listener;
+    }
+
+    public ZipListFileShowAd(
+            Context context, List<FileHeader> allFiles, String zipFilePath, String unzipDir) {
+        this.context = context;
+        this.allFiles = allFiles;
+        this.zipFilePath = zipFilePath;
+        this.unzipDir = unzipDir;
+        this.showFiles = filterAndSortFiles(currentPath);
+    }
+
+    @Override
+    public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_file, parent, false);
+        return new Holder(v);
+    }
+
+    @Override
+    public void onBindViewHolder(Holder h, int pos) {
+        FileHeader fh = showFiles.get(pos);
+        boolean isDir = isDirectory(fh);
+        String displayName = getDisplayName(fh);
+
+        h.name.setText(displayName);
+        h.size.setText(isDir ? "Folder" : formatSize(fh.getUncompressedSize()));
+        //  h.icon.setImageResource(isDir ? R.drawable.ic_folder : R.drawable.ic_file);
+        var icon = new FileIconHelper(displayName);
+        icon.setDynamicFolderEnabled(true);
+        icon.setEnvironmentEnabled(true);
+        icon.bindIcon(h.icon);
+        if (multiSelectMode && selectedItems.contains(pos)) {
+            h.itemView.setBackgroundColor(
+                    context.getResources().getColor(android.R.color.holo_blue_light));
+        } else {
+            h.itemView.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
+        }
+
+        h.itemView.setOnClickListener(
+                v -> {
+                    if (multiSelectMode) {
+                        toggleSelection(pos, h);
+                    } else {
+                        if (isDir) {
+                            currentPath = fh.getFileName();
+                            showFiles = filterAndSortFiles(currentPath);
+                            notifyDataSetChanged();
+                            if (actionListener != null) {
+                                actionListener.onFileActionPerformed();
+                            }
+                        }
+                    }
+                });
+
+        h.itemView.setOnLongClickListener(
+                v -> {
+                    if (!multiSelectMode) {
+                        showPopupMenu(v, fh, pos);
+                    } else {
+                        toggleSelection(pos, h);
+                    }
+                    return true;
+                });
+    }
+
+    private void showPopupMenu(View view, FileHeader fileHeader, int position) {
+        PopupMenu popup = new PopupMenu(context, view);
+        popup.inflate(R.menu.file_popup_menu);
+
+        popup.setOnMenuItemClickListener(
+                item -> {
+                    int itemId = item.getItemId();
+
+                    if (itemId == R.id.action_extract) {
+                        extractFile(fileHeader);
+                        return true;
+                    } else if (itemId == R.id.action_rename) {
+                        showRenameDialog(fileHeader, position);
+                        return true;
+                    } else if (itemId == R.id.action_delete) {
+                        showDeleteDialog(fileHeader, position);
+                        return true;
+                    } else if (itemId == R.id.action_select_multiple) {
+                        enableMultiSelectMode();
+                        toggleSelection(position, null);
+                        return true;
+                    }
+                    return false;
+                });
+
+        popup.show();
+    }
+
+    private void extractFile(FileHeader fileHeader) {
+        var builder = new MaterialAlertDialogBuilder(context);
+        builder.setTitle("Extract");
+        builder.setMessage("Extract to internal storage?");
+
+        builder.setPositiveButton(
+                "Extract",
+                (dialog, which) -> {
+                    new ExtractTask().execute(fileHeader);
+                });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+        builder.show();
+    }
+
+    private class ExtractTask extends AsyncTask<FileHeader, Void, Boolean> {
+        private ProgressDialog progressDialog;
+        private String fileName;
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = new ProgressDialog(context);
+            progressDialog.setMessage("Extracting...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        protected Boolean doInBackground(FileHeader... fileHeaders) {
+            try {
+                FileHeader fileHeader = fileHeaders[0];
+                fileName = getDisplayName(fileHeader);
+
+                ZipFile zipFile = new ZipFile(zipFilePath);
+                File destination = new File(unzipDir + File.separator);
+
+                if (!destination.exists()) {
+                    destination.mkdirs();
+                }
+
+                zipFile.extractFile(fileHeader.getFileName(), destination.getPath());
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            progressDialog.dismiss();
+            if (success) {
+                Toast.makeText(context, "Extracted: " + fileName, Toast.LENGTH_SHORT).show();
+                if (actionListener != null) {
+                    actionListener.onFileExtracted(fileName);
+                }
+            } else {
+                Toast.makeText(context, "Extraction failed", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void showRenameDialog(FileHeader fileHeader, int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Rename");
+
+        final EditText input = new EditText(context);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        input.setText(getDisplayName(fileHeader));
+        input.selectAll();
+
+        builder.setView(input);
+
+        builder.setPositiveButton(
+                "Rename",
+                (dialog, which) -> {
+                    String newName = input.getText().toString().trim();
+                    String currentName = getDisplayName(fileHeader);
+
+                    if (!newName.isEmpty() && !newName.equals(currentName)) {
+                        new RenameTask().execute(fileHeader, newName);
+                    }
+                });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+        builder.show();
+    }
+
+    private class RenameTask extends AsyncTask<Object, Void, Boolean> {
+        private ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = new ProgressDialog(context);
+            progressDialog.setMessage("Renaming...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        protected Boolean doInBackground(Object... params) {
+            try {
+                FileHeader oldFileHeader = (FileHeader) params[0];
+                String newName = (String) params[1];
+
+                ZipFile zipFile = new ZipFile(zipFilePath);
+                String oldFileName = oldFileHeader.getFileName();
+                boolean isDirectory = isDirectory(oldFileHeader);
+
+                String newFileName;
+                if (currentPath.isEmpty()) {
+                    newFileName = newName + (isDirectory ? "/" : "");
+                } else {
+                    newFileName = currentPath + newName + (isDirectory ? "/" : "");
+                }
+
+                if (isNameExists(newFileName)) {
+                    return false;
+                }
+
+                zipFile.renameFile(oldFileName, newFileName);
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            progressDialog.dismiss();
+            if (success) {
+                Toast.makeText(context, "Renamed successfully", Toast.LENGTH_SHORT).show();
+                refreshFileList();
+                if (actionListener != null) {
+                    actionListener.onFileActionPerformed();
+                }
+            } else {
+                Toast.makeText(context, "Name already exists", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void showDeleteDialog(FileHeader fileHeader, int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Delete");
+        builder.setMessage("Are you sure?");
+
+        builder.setPositiveButton(
+                "Delete",
+                (dialog, which) -> {
+                    new DeleteTask().execute(fileHeader);
+                });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+        builder.show();
+    }
+
+    private class DeleteTask extends AsyncTask<FileHeader, Void, Boolean> {
+        private ProgressDialog progressDialog;
+        private String fileName;
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = new ProgressDialog(context);
+            progressDialog.setMessage("Deleting...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        protected Boolean doInBackground(FileHeader... fileHeaders) {
+            try {
+                FileHeader fileHeader = fileHeaders[0];
+                fileName = getDisplayName(fileHeader);
+
+                ZipFile zipFile = new ZipFile(zipFilePath);
+                zipFile.removeFile(fileHeader.getFileName());
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            progressDialog.dismiss();
+            if (success) {
+                Toast.makeText(context, "Deleted: " + fileName, Toast.LENGTH_SHORT).show();
+                refreshFileList();
+                if (actionListener != null) {
+                    actionListener.onFileActionPerformed();
+                }
+                if (showFiles.isEmpty() && listStateListener != null) {
+                    listStateListener.onListEmpty();
+                }
+            } else {
+                Toast.makeText(context, "Delete failed", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void enableMultiSelectMode() {
+        multiSelectMode = true;
+        selectedItems.clear();
+        notifyDataSetChanged();
+
+        if (actionListener != null) {
+            actionListener.onSelectionModeChanged(true, 0);
+        }
+    }
+
+    public void disableMultiSelectMode() {
+        multiSelectMode = false;
+        selectedItems.clear();
+        notifyDataSetChanged();
+
+        if (actionListener != null) {
+            actionListener.onSelectionModeChanged(false, 0);
+        }
+    }
+
+    public boolean isMultiSelectMode() {
+        return multiSelectMode;
+    }
+
+    public int getSelectedCount() {
+        return selectedItems.size();
+    }
+
+    private void toggleSelection(int position, Holder holder) {
+        if (selectedItems.contains(position)) {
+            selectedItems.remove(position);
+        } else {
+            selectedItems.add(position);
+        }
+
+        if (holder != null) {
+            notifyItemChanged(position);
+        }
+
+        if (actionListener != null) {
+            actionListener.onSelectionModeChanged(multiSelectMode, selectedItems.size());
+        }
+
+        if (selectedItems.isEmpty()) {
+            disableMultiSelectMode();
+        }
+    }
+
+    public void extractSelectedItems() {
+        if (selectedItems.isEmpty()) return;
+
+        List<FileHeader> selected = new ArrayList<>();
+        for (int position : selectedItems) {
+            selected.add(showFiles.get(position));
+        }
+
+        new ExtractMultipleTask().execute(selected);
+    }
+
+    private class ExtractMultipleTask extends AsyncTask<List<FileHeader>, Void, Boolean> {
+        private ProgressDialog progressDialog;
+        private int count;
+
+        @Override
+        protected void onPreExecute() {
+            count = selectedItems.size();
+            progressDialog = new ProgressDialog(context);
+            progressDialog.setMessage("Extracting " + count + " items...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        protected Boolean doInBackground(List<FileHeader>... lists) {
+            try {
+                List<FileHeader> fileHeaders = lists[0];
+                ZipFile zipFile = new ZipFile(zipFilePath);
+
+                File destination = new File(context.getExternalFilesDir(null), "Extracted/");
+                if (!destination.exists()) {
+                    destination.mkdirs();
+                }
+
+                for (FileHeader fileHeader : fileHeaders) {
+                    zipFile.extractFile(fileHeader.getFileName(), destination.getPath());
+                }
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            progressDialog.dismiss();
+            if (success) {
+                Toast.makeText(context, "Extracted " + count + " items", Toast.LENGTH_SHORT).show();
+                disableMultiSelectMode();
+            } else {
+                Toast.makeText(context, "Extraction failed", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    public void deleteSelectedItems() {
+        if (selectedItems.isEmpty()) return;
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Delete Multiple");
+        builder.setMessage("Delete " + selectedItems.size() + " items?");
+
+        builder.setPositiveButton(
+                "Delete",
+                (dialog, which) -> {
+                    List<FileHeader> selected = new ArrayList<>();
+                    for (int position : selectedItems) {
+                        selected.add(showFiles.get(position));
+                    }
+                    new DeleteMultipleTask().execute(selected);
+                });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+        builder.show();
+    }
+
+    private class DeleteMultipleTask extends AsyncTask<List<FileHeader>, Void, Boolean> {
+        private ProgressDialog progressDialog;
+        private int count;
+
+        @Override
+        protected void onPreExecute() {
+            count = selectedItems.size();
+            progressDialog = new ProgressDialog(context);
+            progressDialog.setMessage("Deleting " + count + " items...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        protected Boolean doInBackground(List<FileHeader>... lists) {
+            try {
+                List<FileHeader> fileHeaders = lists[0];
+                ZipFile zipFile = new ZipFile(zipFilePath);
+
+                for (FileHeader fileHeader : fileHeaders) {
+                    zipFile.removeFile(fileHeader.getFileName());
+                }
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            progressDialog.dismiss();
+            if (success) {
+                Toast.makeText(context, "Deleted " + count + " items", Toast.LENGTH_SHORT).show();
+                refreshFileList();
+                disableMultiSelectMode();
+                if (showFiles.isEmpty() && listStateListener != null) {
+                    listStateListener.onListEmpty();
+                }
+            } else {
+                Toast.makeText(context, "Delete failed", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    public void renameSelectedItem() {
+        if (selectedItems.size() != 1) {
+            Toast.makeText(context, "Select only one item", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        int position = selectedItems.iterator().next();
+        FileHeader fileHeader = showFiles.get(position);
+        showRenameDialog(fileHeader, position);
+    }
+
+    private boolean isNameExists(String fileName) {
+        for (FileHeader fh : allFiles) {
+            if (fh.getFileName().equals(fileName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void refreshFileList() {
+        try {
+            ZipFile zipFile = new ZipFile(zipFilePath);
+            allFiles = zipFile.getFileHeaders();
+            showFiles = filterAndSortFiles(currentPath);
+            notifyDataSetChanged();
+            if (showFiles.isEmpty() && listStateListener != null) {
+                listStateListener.onListEmpty();
+            }
+        } catch (ZipException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return showFiles.size();
+    }
+
+    public void updateAll(List<FileHeader> list) {
+        allFiles = list;
+        currentPath = "";
+        showFiles = filterAndSortFiles(currentPath);
+        notifyDataSetChanged();
+    }
+
+    private List<FileHeader> filterAndSortFiles(String path) {
+        List<FileHeader> filtered = filterFiles(path);
+        sortFiles(filtered);
+        return filtered;
+    }
+
+    private List<FileHeader> filterFiles(String path) {
+        List<FileHeader> result = new ArrayList<>();
+        Set<String> added = new HashSet<>();
+
+        for (FileHeader fh : allFiles) {
+            String fileName = fh.getFileName();
+
+            if (!fileName.startsWith(path)) continue;
+
+            String remaining = fileName.substring(path.length());
+            if (remaining.isEmpty()) continue;
+
+            int slash = remaining.indexOf('/');
+            String displayName = slash == -1 ? remaining : remaining.substring(0, slash + 1);
+
+            String key = path + displayName;
+            if (!added.contains(key)) {
+                FileHeader displayHeader = null;
+
+                if (fileName.equals(key)) {
+                    displayHeader = fh;
+                } else {
+                    for (FileHeader original : allFiles) {
+                        if (original.getFileName().startsWith(key)) {
+                            displayHeader = new FileHeader();
+                            displayHeader.setFileName(key);
+                            displayHeader.setDirectory(displayName.endsWith("/"));
+                            if (original.getUncompressedSize() > 0) {
+                                displayHeader.setUncompressedSize(original.getUncompressedSize());
+                            }
+                            break;
+                        }
+                    }
+                }
+
+                if (displayHeader != null) {
+                    result.add(displayHeader);
+                    added.add(key);
+                }
+            }
+        }
+        return result;
+    }
+
+    private void sortFiles(List<FileHeader> files) {
+        files.sort(
+                (f1, f2) -> {
+                    boolean isDir1 = isDirectory(f1);
+                    boolean isDir2 = isDirectory(f2);
+
+                    if (isDir1 == isDir2) {
+                        String name1 = getDisplayName(f1).toLowerCase();
+                        String name2 = getDisplayName(f2).toLowerCase();
+                        return name1.compareTo(name2);
+                    }
+                    return isDir1 ? -1 : 1;
+                });
+    }
+
+    private boolean isDirectory(FileHeader fh) {
+        return fh.isDirectory() || fh.getFileName().endsWith("/");
+    }
+
+    private String getDisplayName(FileHeader fh) {
+        String fullName = fh.getFileName();
+        String relative = fullName.substring(currentPath.length());
+
+        if (relative.endsWith("/")) {
+            relative = relative.substring(0, relative.length() - 1);
+        }
+
+        int slash = relative.indexOf('/');
+        if (slash != -1) {
+            relative = relative.substring(0, slash);
+        }
+
+        return relative.isEmpty() ? fullName : relative;
+    }
+
+    public boolean goBack() {
+        if (currentPath.isEmpty()) return false;
+
+        String temp = currentPath;
+        if (temp.endsWith("/")) {
+            temp = temp.substring(0, temp.length() - 1);
+        }
+
+        int lastSlash = temp.lastIndexOf('/');
+        currentPath = lastSlash == -1 ? "" : temp.substring(0, lastSlash + 1);
+
+        showFiles = filterAndSortFiles(currentPath);
+        notifyDataSetChanged();
+        if (showFiles.isEmpty() && listStateListener != null) {
+            listStateListener.onListEmpty();
+        }
+
+        if (listStateListener != null) {
+            listStateListener.onGoBackRequested(true);
+        }
+        return true;
+    }
+
+    private String formatSize(long size) {
+        if (size < 1024) return size + " B";
+        if (size < 1024 * 1024) return (size / 1024) + " KB";
+        return (size / (1024 * 1024)) + " MB";
+    }
+
+    public String getCurrentPath() {
+        return currentPath;
+    }
+
+    public int getTotalItems() {
+        return showFiles.size();
+    }
+
+    public int getFolderCount() {
+        int count = 0;
+        for (FileHeader fh : showFiles) {
+            if (isDirectory(fh)) count++;
+        }
+        return count;
+    }
+
+    public int getFileCount() {
+        return showFiles.size() - getFolderCount();
+    }
+
+    static class Holder extends RecyclerView.ViewHolder {
+        TextView name, size;
+        ImageView icon;
+
+        Holder(View v) {
+            super(v);
+            name = v.findViewById(R.id.tvFileName);
+            size = v.findViewById(R.id.tvFileSize);
+            icon = v.findViewById(R.id.ivIcon);
+        }
+    }
 }

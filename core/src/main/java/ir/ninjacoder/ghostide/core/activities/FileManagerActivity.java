@@ -1070,7 +1070,8 @@ public class FileManagerActivity extends BaseCompat
     di.setNeutralButton(
         "view",
         (p, d) -> {
-          ZipFileShow.showAsDialog(FileManagerActivity.this, _path);
+          ZipFileShow.showAsDialog(
+              FileManagerActivity.this, files.get(_pos).get("path").toString(), _path + "/");
         });
     di.setPositiveButton(
         "unzip",
