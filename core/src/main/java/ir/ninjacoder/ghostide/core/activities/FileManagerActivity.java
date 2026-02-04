@@ -61,6 +61,8 @@ import ir.ninjacoder.ghostide.core.editor.PluginextractorFace;
 import ir.ninjacoder.ghostide.core.git.GithubProfileImpl;
 import ir.ninjacoder.ghostide.core.git.JgitHelperImpl;
 import ir.ninjacoder.ghostide.core.marco.search.SearchBarImpl;
+import ir.ninjacoder.ghostide.core.model.filemanager.FileManagerModel;
+import ir.ninjacoder.ghostide.core.model.filemanager.FileState;
 import ir.ninjacoder.ghostide.core.widget.*;
 import ir.ninjacoder.prograsssheet.search.GlobalSearchBottomSheet;
 import java.io.File;
@@ -149,7 +151,8 @@ public class FileManagerActivity extends BaseCompat
   private List<String> list = new ArrayList<>();
   private List<String> folderList = new ArrayList<>();
   private List<String> fileList = new ArrayList<>();
-  private List<HashMap<String, Object>> files = new ArrayList<>();
+  private List<FileManagerModel> fileModels = new ArrayList<>();
+  private List<FileManagerModel> filteredFileModels = new ArrayList<>();
   private ArrayList<HashMap<String, Object>> newlistmap = new ArrayList<>();
   private ArrayList<String> pv = new ArrayList<>();
   private ArrayList<HashMap<String, Object>> upfile = new ArrayList<>();
@@ -232,8 +235,10 @@ public class FileManagerActivity extends BaseCompat
     }
     gridMode = getSharedPreferences("gride", Activity.MODE_PRIVATE);
     fileListItem = new FileManagerAd(FileManagerActivity.this, this, listchild);
+    fileModels = new ArrayList<>();
+    filteredFileModels = new ArrayList<>();
     bind.recyclerview2.setAdapter(fileListItem);
-    fileListItem.submitList(new ArrayList<>(files));
+    fileListItem.submitList(new ArrayList<>(fileModels));
     shp = getSharedPreferences("shp", Activity.MODE_PRIVATE);
     soglo = getSharedPreferences("soglo", Activity.MODE_PRIVATE);
     np = getSharedPreferences("np", Activity.MODE_PRIVATE);
@@ -310,18 +315,20 @@ public class FileManagerActivity extends BaseCompat
 
               @Override
               public void CallBackLeft(int pos) {
-                var mmap = files.get(pos);
-
-                fileListItem.updateItem(pos, mmap);
-                MakeZipFileFromThread(pos);
+                if (pos >= 0 && pos < fileModels.size()) {
+                  FileManagerModel mmap = fileModels.get(pos);
+                  fileListItem.updateItem(pos, mmap);
+                  MakeZipFileFromThread(pos);
+                }
               }
 
               @Override
               public void CallBackRight(int pos) {
-                var mmap = files.get(pos);
-
-                fileListItem.updateItem(pos, mmap);
-                removedFiles(pos);
+                if (pos >= 0 && pos < fileModels.size()) {
+                  FileManagerModel mmap = fileModels.get(pos);
+                  fileListItem.updateItem(pos, mmap);
+                  removedFiles(pos);
+                }
               }
             });
 
@@ -595,7 +602,7 @@ public class FileManagerActivity extends BaseCompat
           try {
             save_path.edit().putString("path", Folder).apply();
             list.clear();
-            files.clear();
+            fileModels.clear();
             folderList.clear();
             fileList.clear();
             FileUtil.listDir(Folder, list);
@@ -621,24 +628,22 @@ public class FileManagerActivity extends BaseCompat
               }
             }
 
-            List<HashMap<String, Object>> folderItems = new ArrayList<>();
+            List<FileManagerModel> folderItems = new ArrayList<>();
             for (String item : folderList) {
-              HashMap<String, Object> _item = new HashMap<>();
-              _item.put("path", item);
+              FileManagerModel _item = new FileManagerModel(item, FileState.NORMAL);
               folderItems.add(_item);
             }
 
-            List<HashMap<String, Object>> fileItems = new ArrayList<>();
+            List<FileManagerModel> fileItems = new ArrayList<>();
             for (String item : fileList) {
-              HashMap<String, Object> _item = new HashMap<>();
-              _item.put("path", item);
+              FileManagerModel _item = new FileManagerModel(item, FileState.NORMAL);
               fileItems.add(_item);
             }
 
             // ایجاد لیست نهایی
-            files.clear();
-            files.addAll(folderItems);
-            files.addAll(fileItems);
+            fileModels.clear();
+            fileModels.addAll(folderItems);
+            fileModels.addAll(fileItems);
 
           } catch (Exception e) {
             runOnUiThread(
@@ -649,9 +654,9 @@ public class FileManagerActivity extends BaseCompat
                 bind.recyclerview2.setVisibility(View.VISIBLE);
                 bind.filedirBar.setVisibility(View.GONE);
                 fileListItem.clearFilter();
-                fileListItem.submitList(new ArrayList<>(files));
+                fileListItem.submitList(new ArrayList<>(fileModels));
 
-                if (files.isEmpty()) {
+                if (fileModels.isEmpty()) {
                   bind.emptyview.setVisibility(View.VISIBLE);
                 } else {
                   bind.emptyview.setVisibility(View.GONE);
@@ -668,7 +673,7 @@ public class FileManagerActivity extends BaseCompat
     if (fileListItem != null && bind != null && bind.recyclerview2 != null) {
       runOnUiThread(
           () -> {
-            fileListItem.submitList(new ArrayList<>(files));
+            fileListItem.submitList(new ArrayList<>(fileModels));
             String currentText = bind.searchbar.getText().toString();
             if (currentText != null && !currentText.isEmpty()) {
               fileListItem.filter(currentText);
@@ -762,22 +767,18 @@ public class FileManagerActivity extends BaseCompat
   }
 
   private int findFilePositionByPath(String filePath) {
-    for (int i = 0; i < files.size(); i++) {
-      if (files.get(i).get("path").toString().equals(filePath)) {
+    for (int i = 0; i < fileModels.size(); i++) {
+      if (fileModels.get(i).getFilePath().equals(filePath)) {
         return i;
       }
     }
     return -1;
   }
 
-  private int getOriginalPositionFromFiltered(int filteredPosition) {
-    return fileListItem.getOriginalPosition(filteredPosition);
-  }
-
   private void removeFileFromLists(String filePath) {
-    for (int i = 0; i < files.size(); i++) {
-      if (files.get(i).get("path").toString().equals(filePath)) {
-        files.remove(i);
+    for (int i = 0; i < fileModels.size(); i++) {
+      if (fileModels.get(i).getFilePath().equals(filePath)) {
+        fileModels.remove(i);
         break;
       }
     }
@@ -785,11 +786,11 @@ public class FileManagerActivity extends BaseCompat
   }
 
   private void updateFileInLists(String oldPath, String newPath) {
-    for (int i = 0; i < files.size(); i++) {
-      HashMap<String, Object> item = files.get(i);
-      if (item.get("path").toString().equals(oldPath)) {
-        item.put("path", newPath);
-        files.set(i, item);
+    for (int i = 0; i < fileModels.size(); i++) {
+      FileManagerModel item = fileModels.get(i);
+      if (item.getFilePath().equals(oldPath)) {
+        item.setFilePath(newPath);
+        fileModels.set(i, item);
         fileListItem.updateItem(i, item);
         break;
       }
@@ -797,15 +798,13 @@ public class FileManagerActivity extends BaseCompat
   }
 
   private void addNewFileToList(String filePath) {
-    HashMap<String, Object> newItem = new HashMap<>();
-    newItem.put("path", filePath);
-    newItem.put("isNew", true);
-    files.add(newItem);
+    FileManagerModel newItem = new FileManagerModel(filePath, FileState.ADD);
+    fileModels.add(newItem);
     Collections.sort(
-        files,
+        fileModels,
         (o1, o2) -> {
-          String path1 = o1.get("path").toString();
-          String path2 = o2.get("path").toString();
+          String path1 = o1.getFilePath();
+          String path2 = o2.getFilePath();
           boolean isDir1 = FileUtil.isDirectory(path1);
           boolean isDir2 = FileUtil.isDirectory(path2);
 
@@ -820,10 +819,10 @@ public class FileManagerActivity extends BaseCompat
   @Override
   public void onClick(View view, int pos) {
 
-    HashMap<String, Object> item = fileListItem.getItem(pos);
-    if (item == null || !item.containsKey("path")) return;
+    FileManagerModel item = fileListItem.getItem(pos);
+    if (item == null) return;
 
-    String path = item.get("path").toString();
+    String path = item.getFilePath();
     staticstring = path;
 
     fileListItem.clearFilter();
@@ -850,12 +849,12 @@ public class FileManagerActivity extends BaseCompat
   }
 
   void removedFiles(int _pos) {
-    if (_pos < 0 || _pos >= files.size()) {
+    if (_pos < 0 || _pos >= fileModels.size()) {
       Log.e("FileManager", "Invalid position in removedFiles: " + _pos);
       return;
     }
 
-    String filePath = files.get(_pos).get("path").toString();
+    String filePath = fileModels.get(_pos).getFilePath();
     String fileName = new File(filePath).getName();
 
     var di = new DialogUtil(FileManagerActivity.this);
@@ -896,12 +895,12 @@ public class FileManagerActivity extends BaseCompat
 
   void setRenameFile(int _pos) {
     int position = _pos;
-    if (position < 0 || position >= files.size()) {
+    if (position < 0 || position >= fileModels.size()) {
       Log.e("FileManager", "Invalid position in setRenameFile: " + position);
       return;
     }
 
-    String currentPath = files.get(position).get("path").toString();
+    String currentPath = fileModels.get(position).getFilePath();
     String currentName = new File(currentPath).getName();
 
     AlertDialog dialog =
@@ -1004,16 +1003,19 @@ public class FileManagerActivity extends BaseCompat
   public void SendDataFromCodeEditor(
       int _position,
       String _key,
-      List<HashMap<String, Object>> _listmap1,
+      List<FileManagerModel> _listmodel1,
       List<HashMap<String, Object>> _listmap2) {
-    tab = _listmap1.get((int) _position).get(_key).toString();
-    shp.edit().putString("pos_path", _listmap1.get((int) _position).get(_key).toString()).apply();
+
+    FileManagerModel model = _listmodel1.get(_position);
+    tab = model.getFilePath();
+    shp.edit().putString("pos_path", model.getFilePath()).apply();
+
     if (_listmap2.isEmpty()) {
       positionTabs = 0;
       activitiy.setClass(getApplicationContext(), CodeEditorActivity.class);
       {
         HashMap<String, Object> _item = new HashMap<>();
-        _item.put(_key, _listmap1.get((int) _position).get(_key).toString());
+        _item.put(_key, model.getFilePath());
         _listmap2.add(_item);
       }
       shp.edit().putString(_key, new Gson().toJson(_listmap2)).commit();
@@ -1032,19 +1034,16 @@ public class FileManagerActivity extends BaseCompat
             activitiy.setClass(getApplicationContext(), CodeEditorActivity.class);
             {
               HashMap<String, Object> _item = new HashMap<>();
-              _item.put(_key, _listmap1.get((int) _position).get(_key).toString());
+              _item.put(_key, model.getFilePath());
               _listmap2.add(_item);
             }
             shp.edit().putString(_key, new Gson().toJson(_listmap2)).commit();
             shp.edit()
                 .putString("positionTabs", String.valueOf((long) (_listmap2.size() - 1)))
                 .commit();
-            activitiy.putExtra("htmlcode", _listmap1.get((int) _position).get(_key).toString());
-            activitiy.putExtra(
-                "htmlfile",
-                Uri.parse(_listmap1.get((int) _position).get(_key).toString())
-                    .getLastPathSegment());
-            File file = new File(_listmap1.get((int) _position).get(_key).toString());
+            activitiy.putExtra("htmlcode", model.getFilePath());
+            activitiy.putExtra("htmlfile", Uri.parse(model.getFilePath()).getLastPathSegment());
+            File file = new File(model.getFilePath());
             activitiy.putExtra("root", file.getParent());
             loadAnim(activitiy);
             break;
@@ -1071,7 +1070,7 @@ public class FileManagerActivity extends BaseCompat
         "view",
         (p, d) -> {
           ZipFileShow.showAsDialog(
-              FileManagerActivity.this, files.get(_pos).get("path").toString(), _path + "/");
+              FileManagerActivity.this, fileModels.get(_pos).getFilePath(), _path + "/");
         });
     di.setPositiveButton(
         "unzip",
@@ -1081,8 +1080,8 @@ public class FileManagerActivity extends BaseCompat
     di.build();
   }
 
-  void setFontView(List<HashMap<String, Object>> map, String _path, int _pos) {
-    String paths = map.get(_pos).get(_path).toString();
+  void setFontView(List<FileManagerModel> list, int _pos) {
+    String paths = list.get(_pos).getFilePath();
     if (paths.endsWith(".ttf") || paths.endsWith(".otf")) {
       finalintentpostfont.setClass(getApplicationContext(), FontViewActivity.class);
       finalintentpostfont.putExtra("font", paths);
@@ -1090,9 +1089,9 @@ public class FileManagerActivity extends BaseCompat
     }
   }
 
-  void setThemeInstallByPath(List<HashMap<String, Object>> _list, int pos, String str) {
-    if (_list.get(pos).get(str).toString().endsWith(".aa")
-        || _list.get(pos).get(str).toString().endsWith(".AA")) {
+  void setThemeInstallByPath(int pos) {
+    String path = fileModels.get(pos).getFilePath();
+    if (path.endsWith(".aa") || path.endsWith(".AA")) {
       if (FileUtil.isFile("/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost")) {
         var di = new MaterialAlertDialogBuilder(FileManagerActivity.this);
         di.setTitle(R.string.themewarning);
@@ -1101,7 +1100,7 @@ public class FileManagerActivity extends BaseCompat
             android.R.string.ok,
             (p, d) -> {
               try {
-                new net.lingala.zip4j.ZipFile(_list.get(pos).get(str).toString())
+                new net.lingala.zip4j.ZipFile(path)
                     .extractAll("/storage/emulated/0/GhostWebIDE/theme/");
               } catch (net.lingala.zip4j.exception.ZipException e) {
                 showMessage(e.toString());
@@ -1113,8 +1112,7 @@ public class FileManagerActivity extends BaseCompat
         di.show();
       } else {
         try {
-          new net.lingala.zip4j.ZipFile(_list.get(pos).get(str).toString())
-              .extractAll("/storage/emulated/0/GhostWebIDE/theme/");
+          new net.lingala.zip4j.ZipFile(path).extractAll("/storage/emulated/0/GhostWebIDE/theme/");
         } catch (net.lingala.zip4j.exception.ZipException e) {
           showMessage(e.toString());
         }
@@ -1223,7 +1221,7 @@ public class FileManagerActivity extends BaseCompat
           switch (pos333) {
             case 0:
               {
-                SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+                SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
                 sh.getDismiss(true);
                 break;
               }
@@ -1236,8 +1234,8 @@ public class FileManagerActivity extends BaseCompat
             case 2:
               {
                 projectMaker.setSvgToPngConvert(
-                    files.get((int) newpos).get("path").toString(),
-                    files.get((int) newpos).get("path").toString().replace(".svg", ".png"));
+                    fileModels.get((int) newpos).getFilePath(),
+                    fileModels.get((int) newpos).getFilePath().replace(".svg", ".png"));
                 sh.getDismiss(true);
                 break;
               }
@@ -1255,7 +1253,7 @@ public class FileManagerActivity extends BaseCompat
           switch (pos333) {
             case 0:
               {
-                SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+                SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
                 sh.getDismiss(true);
                 break;
               }
@@ -1263,7 +1261,7 @@ public class FileManagerActivity extends BaseCompat
               {
                 new XmlToSvg(
                     this,
-                    files.get((int) newpos).get("path").toString(),
+                    fileModels.get((int) newpos).getFilePath(),
                     () -> {
                       reLoadFile();
                     },
@@ -1286,7 +1284,7 @@ public class FileManagerActivity extends BaseCompat
     }
     for (var id : listchild) {
       if (staticstring.endsWith(id.getTypeExz())) {
-        SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+        SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
         return;
       }
     }
@@ -1307,89 +1305,89 @@ public class FileManagerActivity extends BaseCompat
               this);
     }
     if (staticstring.endsWith(".txt") || staticstring.endsWith(".log")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".go")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".css")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".php")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".js")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".less")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".jsx") || staticstring.endsWith(".tsx")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".html")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".dart")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".kt")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".swift")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".rb")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".rbw")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".c")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".scss")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".sass")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".cs")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".java")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".rs")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".json")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".cpp")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".frag")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
 
     if (staticstring.endsWith(".dex")) {
       loadjadx();
     }
     if (staticstring.endsWith(".py")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".zig")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".lua")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".yml")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".class")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".ghost")) {
       loadThemeGhost();
@@ -1398,36 +1396,36 @@ public class FileManagerActivity extends BaseCompat
       loadVector(newpos);
     }
     if (staticstring.endsWith(".ninja")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".md")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".sh")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".smali")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".groovy")
         || staticstring.endsWith(".gradle")
         || staticstring.endsWith(".gradle.kts")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".g4")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".ts")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".properties")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".sql")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".jj")) {
-      SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
     }
     if (staticstring.endsWith(".svg")) {
       loadsvg(newpos);
@@ -1496,8 +1494,8 @@ public class FileManagerActivity extends BaseCompat
 
     var bindjpegWall = new BindJpegWall();
     bindjpegWall.bind(staticstring, this);
-    setFontView(files, "path", newpos);
-    setThemeInstallByPath(files, newpos, "path");
+    setFontView(fileModels, newpos);
+    setThemeInstallByPath(newpos);
   }
 
   void loadThemeGhost() {
@@ -1520,7 +1518,7 @@ public class FileManagerActivity extends BaseCompat
               }
             case 1:
               {
-                SendDataFromCodeEditor(newpos, "path", files, newlistmap);
+                SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
                 sheet.getDismiss(true);
                 break;
               }
@@ -1561,9 +1559,9 @@ public class FileManagerActivity extends BaseCompat
           Thread thread =
               new Thread(
                   () -> {
-                    if (FileUtil.isDirectory(files.get(_number).get("path").toString())) {
+                    if (FileUtil.isDirectory(fileModels.get(_number).getFilePath())) {
                       try {
-                        String originalFilePath = files.get(_number).get("path").toString();
+                        String originalFilePath = fileModels.get(_number).getFilePath();
                         String outputFilePath =
                             Folder.concat("/")
                                 .concat(
@@ -1577,7 +1575,7 @@ public class FileManagerActivity extends BaseCompat
                       }
                     } else {
                       try {
-                        String originalFilePath = files.get(_number).get("path").toString();
+                        String originalFilePath = fileModels.get(_number).getFilePath();
                         String outputFilePath =
                             Folder.concat("/")
                                 .concat(
@@ -2219,8 +2217,8 @@ public class FileManagerActivity extends BaseCompat
                       } else {
                         staticstring = filePath;
                         fileListItem.highlightFile(filePath);
-                        for (int i = 0; i < files.size(); i++) {
-                          if (files.get(i).get("path").toString().equals(filePath)) {
+                        for (int i = 0; i < fileModels.size(); i++) {
+                          if (fileModels.get(i).getFilePath().equals(filePath)) {
                             bind.recyclerview2.smoothScrollToPosition(i);
                             _dataOnClickItemList(i);
                             return;
@@ -2233,8 +2231,8 @@ public class FileManagerActivity extends BaseCompat
                           new Handler()
                               .postDelayed(
                                   () -> {
-                                    for (int i = 0; i < files.size(); i++) {
-                                      if (files.get(i).get("path").toString().equals(filePath)) {
+                                    for (int i = 0; i < fileModels.size(); i++) {
+                                      if (fileModels.get(i).getFilePath().equals(filePath)) {
                                         fileListItem.highlightFile(filePath);
                                         bind.recyclerview2.smoothScrollToPosition(i);
                                         _dataOnClickItemList(i);
@@ -2279,7 +2277,7 @@ public class FileManagerActivity extends BaseCompat
             case 1:
               {
                 var fileShareManager = new FileShareManager(FileManagerActivity.this);
-                File file = new File(files.get((int) _position).get("path").toString());
+                File file = new File(fileModels.get((int) _position).getFilePath());
                 try {
                   fileShareManager.shareFile(file);
                 } catch (Exception e) {
@@ -2315,7 +2313,7 @@ public class FileManagerActivity extends BaseCompat
                               book.getString("hsipsot4444", ""),
                               new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
                   mapz32 = new HashMap<>();
-                  mapz32.put("list", files.get((int) _position).get("path").toString());
+                  mapz32.put("list", fileModels.get((int) _position).getFilePath());
                   a.add(mapz32);
                   book.edit().putString("hsipsot4444", new Gson().toJson(a)).apply();
                   showMessage("Added!");
@@ -2329,7 +2327,7 @@ public class FileManagerActivity extends BaseCompat
               {
                 ColorView.renameJavaFileImpl(
                     FileManagerActivity.this,
-                    files.get(_position).get("path").toString(),
+                    fileModels.get(_position).getFilePath(),
                     Folder,
                     () -> {
                       reLoadFile();
@@ -2341,7 +2339,7 @@ public class FileManagerActivity extends BaseCompat
               {
                 sh.createFileShortcut(
                     0,
-                    files.get(_position).get("path").toString(),
+                    fileModels.get(_position).getFilePath(),
                     () -> {
                       // reLoadFile();
                     });
@@ -2364,7 +2362,7 @@ public class FileManagerActivity extends BaseCompat
                           public void onPluginExtractorError() {}
                         },
                         FileManagerActivity.this,
-                        files.get(_position).get("path").toString());
+                        fileModels.get(_position).getFilePath());
                 sheet.getDismiss(true);
                 break;
               }

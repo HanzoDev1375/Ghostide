@@ -20,13 +20,14 @@ import ir.ninjacoder.ghostide.core.utils.ObjectUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import ir.ninjacoder.ghostide.core.R;
 import ir.ninjacoder.ghostide.core.utils.FileUtil;
 import ir.ninjacoder.prograsssheet.listchild.Child;
 import ir.ninjacoder.prograsssheet.perfence.ListItemView;
 import ir.ninjacoder.ghostide.core.widget.component.fastscrollcompat.PopupTextProvider;
+import ir.ninjacoder.ghostide.core.model.filemanager.FileManagerModel;
+import ir.ninjacoder.ghostide.core.model.filemanager.FileState;
 
 public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     implements PopupTextProvider, Filterable {
@@ -35,8 +36,8 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
   private onClick click;
   private ViewType viewType = ViewType.ROW;
   private List<Child> listChild = new ArrayList<>();
-  private List<HashMap<String, Object>> allFiles = new ArrayList<>();
-  private List<HashMap<String, Object>> filteredFiles = new ArrayList<>();
+  private List<FileManagerModel> allFiles = new ArrayList<>();
+  private List<FileManagerModel> filteredFiles = new ArrayList<>();
   private String currentFilter = "";
 
   public FileManagerAd(Context context, onClick click, List<Child> listChild) {
@@ -69,7 +70,7 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
   @Override
   public void onBindViewHolder(@NonNull VH holder, int position, @NonNull List<Object> payloads) {
     if (payloads != null && !payloads.isEmpty() && payloads.contains("IS_NEW_CHANGED")) {
-      HashMap<String, Object> item = getItem(position);
+      FileManagerModel item = getItem(position);
     } else {
       bind(holder, position);
     }
@@ -80,32 +81,28 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
       Log.e("FileManagerAd", "Invalid position in bind: " + position);
       return;
     }
-    HashMap<String, Object> item = filteredFiles.get(position);
+
+    FileManagerModel item = filteredFiles.get(position);
     if (item == null) {
       return;
     }
 
     setSettingTextView(holder.folderName);
 
-    File file = new File(item.get("path").toString());
+    File file = new File(item.getFilePath());
     boolean isSearch = !TextUtils.isEmpty(currentFilter);
     holder.folderName.setText(file.getName());
+
     int allFilesPosition = getOriginalPosition(position);
-    boolean isNew = item.containsKey("isNew") && (boolean) item.get("isNew");
-    boolean isRename = item.containsKey("isRename") && (boolean) item.get("isRename");
-    boolean isHighlighted =
-        item.containsKey("isHighlighted") && (boolean) item.get("isHighlighted");
+
     if (allFilesPosition >= 0 && allFilesPosition < allFiles.size()) {
       try {
         RecyclerviewViewHolderBinder.bindHolder(
-            allFiles,
-            allFilesPosition,
+            allFiles.get(allFilesPosition),
             holder.folderName,
             holder.tvTools,
             holder.icon,
-            viewType,
-            isSearch,
-            isNew);
+            viewType);
 
       } catch (Exception e) {
         Log.e("FileManagerAd", "Error in binder: " + e.getMessage());
@@ -113,18 +110,43 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     }
 
     holder.itemView.setClickable(true);
-    if (isHighlighted) {
-      holder.folderName.setTextColor(Color.parseColor("#2196F3"));
-    } else if (isSearch) {
-      ObjectUtils.setHighlightSearchText(holder.folderName, file.getName(), currentFilter);
-    } else if (isNew) {
-      holder.folderName.setTextColor(Color.parseColor("#4CAF50"));
-    } else if (isRename) {
-      holder.folderName.setTextColor(Color.parseColor("#5cbff1"));
+    if (item.getFilestate() != null) {
+      switch (item.getFilestate()) {
+        case RENAME:
+          holder.folderName.setTextColor(FileState.RENAME.getColor());
+          break;
+        case ADD:
+          holder.folderName.setTextColor(FileState.ADD.getColor());
+          break;
+        case SELECTBELITEM:
+          holder.folderName.setTextColor(FileState.SELECTBELITEM.getColor());
+          break;
+        case SEARCH:
+          if (isSearch) {
+            ObjectUtils.setHighlightSearchText(holder.folderName, file.getName(), currentFilter);
+          } else {
+            holder.folderName.setTextColor(FileState.SEARCH.getColor());
+          }
+          break;
+        case NORMAL:
+        default:
+          if (isSearch) {
+            ObjectUtils.setHighlightSearchText(holder.folderName, file.getName(), currentFilter);
+          } else {
+            holder.folderName.setTextColor(
+                MaterialColors.getColor(holder.folderName, ObjectUtils.colorOnSurface));
+          }
+          break;
+      }
     } else {
-      holder.folderName.setTextColor(
-          MaterialColors.getColor(holder.folderName, ObjectUtils.colorOnSurface));
+      if (isSearch) {
+        ObjectUtils.setHighlightSearchText(holder.folderName, file.getName(), currentFilter);
+      } else {
+        holder.folderName.setTextColor(
+            MaterialColors.getColor(holder.folderName, ObjectUtils.colorOnSurface));
+      }
     }
+
     if (viewType == ViewType.ROW) {
       holder.cardblur.setCardBackgroundColor(Color.TRANSPARENT);
       holder.cardblur.setRadius(0);
@@ -141,10 +163,10 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     } else if (viewType == ViewType.GRID) {
       holder.cardblur.setClickable(true);
       holder.cardblur.setFocusable(true);
-      String filePath = item.get("path").toString();
+      String filePath = item.getFilePath();
       if (shouldApplyBlur(filePath)) {
         if (holder.getAdapterPosition() == position)
-          holder.cardblur.setBlurFromImageView(holder.icon, filePath); 
+          holder.cardblur.setBlurFromImageView(holder.icon, filePath);
       } else {
         holder.cardblur.setBackground(null);
         holder.cardblur.cancelBlur();
@@ -156,17 +178,17 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     clearHighlights();
 
     for (int i = 0; i < allFiles.size(); i++) {
-      HashMap<String, Object> item = allFiles.get(i);
-      if (item.get("path").toString().equals(path)) {
-        item.put("isHighlighted", true);
+      FileManagerModel item = allFiles.get(i);
+      if (item.getFilePath().equals(path)) {
+        item.setFilestate(FileState.SELECTBELITEM);
         allFiles.set(i, item);
         break;
       }
     }
 
     for (int i = 0; i < filteredFiles.size(); i++) {
-      if (filteredFiles.get(i).get("path").toString().equals(path)) {
-        filteredFiles.get(i).put("isHighlighted", true);
+      if (filteredFiles.get(i).getFilePath().equals(path)) {
+        filteredFiles.get(i).setFilestate(FileState.SELECTBELITEM);
         notifyItemChanged(i);
         break;
       }
@@ -174,11 +196,11 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
   }
 
   public void clearHighlights() {
-    for (HashMap<String, Object> item : allFiles) {
-      item.remove("isHighlighted");
+    for (FileManagerModel item : allFiles) {
+      item.setFilestate(FileState.NORMAL);
     }
-    for (HashMap<String, Object> item : filteredFiles) {
-      item.remove("isHighlighted");
+    for (FileManagerModel item : filteredFiles) {
+      item.setFilestate(FileState.NORMAL);
     }
     notifyDataSetChanged();
   }
@@ -187,17 +209,17 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     clearHighlightRename();
 
     for (int i = 0; i < allFiles.size(); i++) {
-      HashMap<String, Object> item = allFiles.get(i);
-      if (item.get("path").toString().equals(path)) {
-        item.put("isRename", true);
+      FileManagerModel item = allFiles.get(i);
+      if (item.getFilePath().equals(path)) {
+        item.setFilestate(FileState.RENAME);
         allFiles.set(i, item);
         break;
       }
     }
 
     for (int i = 0; i < filteredFiles.size(); i++) {
-      if (filteredFiles.get(i).get("path").toString().equals(path)) {
-        filteredFiles.get(i).put("isRename", true);
+      if (filteredFiles.get(i).getFilePath().equals(path)) {
+        filteredFiles.get(i).setFilestate(FileState.RENAME);
         notifyItemChanged(i);
         break;
       }
@@ -205,27 +227,27 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
   }
 
   public void clearHighlightRename() {
-    for (HashMap<String, Object> item : allFiles) {
-      item.remove("isRename");
+    for (FileManagerModel item : allFiles) {
+      item.setFilestate(FileState.NORMAL);
     }
-    for (HashMap<String, Object> item : filteredFiles) {
-      item.remove("isRename");
+    for (FileManagerModel item : filteredFiles) {
+      item.setFilestate(FileState.NORMAL);
     }
     notifyDataSetChanged();
   }
 
   public void markNewFile(String path) {
     for (int i = 0; i < allFiles.size(); i++) {
-      HashMap<String, Object> item = allFiles.get(i);
-      if (item.get("path").toString().equals(path)) {
-        item.put("isNew", true);
+      FileManagerModel item = allFiles.get(i);
+      if (item.getFilePath().equals(path)) {
+        item.setFilestate(FileState.ADD);
         allFiles.set(i, item);
         break;
       }
     }
     for (int i = 0; i < filteredFiles.size(); i++) {
-      if (filteredFiles.get(i).get("path").toString().equals(path)) {
-        filteredFiles.get(i).put("isNew", true);
+      if (filteredFiles.get(i).getFilePath().equals(path)) {
+        filteredFiles.get(i).setFilestate(FileState.ADD);
         notifyItemChanged(i, "IS_NEW_CHANGED");
         break;
       }
@@ -247,8 +269,8 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     if (position < 0 || position >= filteredFiles.size()) {
       return "";
     }
-    HashMap<String, Object> item = filteredFiles.get(position);
-    File file = new File(item.get("path").toString());
+    FileManagerModel item = filteredFiles.get(position);
+    File file = new File(item.getFilePath());
     String fileName = file.getName();
     if (fileName.length() > 0) {
       return fileName.substring(0, 1).toUpperCase();
@@ -261,8 +283,7 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     notifyDataSetChanged();
   }
 
-  public void submitList(List<HashMap<String, Object>> list) {
-
+  public void submitList(List<FileManagerModel> list) {
     currentFilter = "";
 
     if (list == null) {
@@ -325,14 +346,15 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     return filteredFiles.size();
   }
 
-  public HashMap<String, Object> getItem(int position) {
+  public FileManagerModel getItem(int position) {
     if (position >= 0 && position < filteredFiles.size()) {
       return filteredFiles.get(position);
     }
     return null;
   }
 
-  public void addNewFile(HashMap<String, Object> newItem) {
+  public void addNewFile(FileManagerModel newItem) {
+    newItem.setFilestate(FileState.ADD);
     allFiles.add(newItem);
     sortList(allFiles);
 
@@ -341,16 +363,15 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     } else {
       filteredFiles = new ArrayList<>(allFiles);
       notifyDataSetChanged();
-      markNewFile(newItem.get("path").toString());
     }
   }
 
-  private void sortList(List<HashMap<String, Object>> list) {
+  private void sortList(List<FileManagerModel> list) {
     Collections.sort(
         list,
         (o1, o2) -> {
-          String path1 = o1.get("path").toString();
-          String path2 = o2.get("path").toString();
+          String path1 = o1.getFilePath();
+          String path2 = o2.getFilePath();
           boolean isDir1 = FileUtil.isDirectory(path1);
           boolean isDir2 = FileUtil.isDirectory(path2);
 
@@ -360,7 +381,7 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
         });
   }
 
-  public List<HashMap<String, Object>> getCurrentList() {
+  public List<FileManagerModel> getCurrentList() {
     if (isFiltered()) {
       return new ArrayList<>(filteredFiles);
     } else {
@@ -368,17 +389,16 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     }
   }
 
-  public List<HashMap<String, Object>> getFilteredList() {
+  public List<FileManagerModel> getFilteredList() {
     return new ArrayList<>(filteredFiles);
   }
 
-  public List<HashMap<String, Object>> getAllFilesList() {
+  public List<FileManagerModel> getAllFilesList() {
     return new ArrayList<>(allFiles);
   }
 
   public int getOriginalPosition(int filteredPosition) {
     if (!isFiltered()) {
-
       return filteredPosition;
     }
 
@@ -386,11 +406,11 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
       return -1;
     }
 
-    HashMap<String, Object> filteredItem = filteredFiles.get(filteredPosition);
-    String filteredPath = filteredItem.get("path").toString();
+    FileManagerModel filteredItem = filteredFiles.get(filteredPosition);
+    String filteredPath = filteredItem.getFilePath();
 
     for (int i = 0; i < allFiles.size(); i++) {
-      if (allFiles.get(i).get("path").toString().equals(filteredPath)) {
+      if (allFiles.get(i).getFilePath().equals(filteredPath)) {
         return i;
       }
     }
@@ -398,11 +418,11 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     return -1;
   }
 
-  public void updateItem(int position, HashMap<String, Object> newItem) {
+  public void updateItem(int position, FileManagerModel newItem) {
     if (position >= 0 && position < allFiles.size()) {
       allFiles.set(position, newItem);
       for (int i = 0; i < filteredFiles.size(); i++) {
-        if (filteredFiles.get(i).get("path").equals(newItem.get("path"))) {
+        if (filteredFiles.get(i).getFilePath().equals(newItem.getFilePath())) {
           filteredFiles.set(i, newItem);
           notifyItemChanged(i);
           break;
@@ -413,8 +433,8 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
 
   public void removeItem(int position) {
     if (position >= 0 && position < allFiles.size()) {
-      HashMap<String, Object> removedItem = allFiles.get(position);
-      String removedPath = removedItem.get("path").toString();
+      FileManagerModel removedItem = allFiles.get(position);
+      String removedPath = removedItem.getFilePath();
       allFiles.remove(position);
       removeFromFilteredByPath(removedPath);
     }
@@ -433,7 +453,7 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
 
   public void removeItemByPath(String path) {
     for (int i = 0; i < allFiles.size(); i++) {
-      if (allFiles.get(i).get("path").toString().equals(path)) {
+      if (allFiles.get(i).getFilePath().equals(path)) {
         allFiles.remove(i);
         break;
       }
@@ -443,7 +463,7 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
 
   private void removeFromFilteredByPath(String path) {
     for (int i = 0; i < filteredFiles.size(); i++) {
-      if (filteredFiles.get(i).get("path").toString().equals(path)) {
+      if (filteredFiles.get(i).getFilePath().equals(path)) {
         filteredFiles.remove(i);
         notifyItemRemoved(i);
         if (i < filteredFiles.size()) {
@@ -454,7 +474,10 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     }
   }
 
-  public void addFiles(List<HashMap<String, Object>> files) {
+  public void addFiles(List<FileManagerModel> files) {
+    for (FileManagerModel file : files) {
+      file.setFilestate(FileState.ADD);
+    }
     allFiles.addAll(files);
     sortList(allFiles);
 
@@ -472,20 +495,22 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
       @Override
       protected FilterResults performFiltering(CharSequence constraint) {
         FilterResults results = new FilterResults();
-        List<HashMap<String, Object>> filteredList = new ArrayList<>();
+        List<FileManagerModel> filteredList = new ArrayList<>();
 
         if (constraint == null || constraint.length() == 0) {
           filteredList.addAll(allFiles);
         } else {
           String filterPattern = constraint.toString().toLowerCase().trim();
 
-          for (HashMap<String, Object> item : allFiles) {
-            String path = item.get("path").toString();
-            File file = new File(path);
+          for (FileManagerModel item : allFiles) {
+            File file = new File(item.getFilePath());
             String fileName = file.getName().toLowerCase();
 
             if (fileName.contains(filterPattern)) {
-              filteredList.add(item);
+              // هنگام جستجو، وضعیت فایل را به SEARCH تغییر دهید
+              FileManagerModel filteredItem =
+                  new FileManagerModel(item.getFilePath(), FileState.SEARCH);
+              filteredList.add(filteredItem);
             }
           }
         }
@@ -498,7 +523,7 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
       @Override
       protected void publishResults(CharSequence constraint, FilterResults results) {
         if (results.values != null) {
-          filteredFiles = (List<HashMap<String, Object>>) results.values;
+          filteredFiles = (List<FileManagerModel>) results.values;
         } else {
           filteredFiles = new ArrayList<>();
         }
@@ -522,18 +547,18 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
   }
 
   public void clearNewMarks() {
-    for (HashMap<String, Object> item : allFiles) {
-      item.remove("isNew");
+    for (FileManagerModel item : allFiles) {
+      item.setFilestate(FileState.NORMAL);
     }
-    for (HashMap<String, Object> item : filteredFiles) {
-      item.remove("isNew");
+    for (FileManagerModel item : filteredFiles) {
+      item.setFilestate(FileState.NORMAL);
     }
     notifyDataSetChanged();
   }
 
-  public HashMap<String, Object> getItemByPath(String path) {
-    for (HashMap<String, Object> item : allFiles) {
-      if (item.get("path").toString().equals(path)) {
+  public FileManagerModel getItemByPath(String path) {
+    for (FileManagerModel item : allFiles) {
+      if (item.getFilePath().equals(path)) {
         return item;
       }
     }

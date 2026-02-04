@@ -3,6 +3,7 @@ package ir.ninjacoder.ghostide.core.marco.binder.bindchilder;
 import android.widget.ImageView;
 import android.widget.TextView;
 import ir.ninjacoder.ghostide.core.adapter.ViewType;
+import ir.ninjacoder.ghostide.core.model.filemanager.FileManagerModel;
 import ir.ninjacoder.ghostide.core.utils.MFileClass;
 import ir.ninjacoder.ghostide.core.utils.ObjectUtils;
 import android.graphics.Color;
@@ -25,21 +26,13 @@ public class RecyclerviewViewHolderBinder {
   private static List<Child> listChild = new ArrayList<>();
 
   public static void bindHolder(
-      List<HashMap<String, Object>> files,
-      int pos,
+      FileManagerModel files,
       TextView folderName,
       TextView tvTools,
       ImageView icon,
-      ViewType viewType,
-      boolean isSearch,
-      boolean isNewFile) {
+      ViewType viewType) {
 
-    File myfile = new File(files.get(pos).get("path").toString());
-    // if (isSearch && !isNewFile)
-      // folderName.setTextColor(
-          // MaterialColors.getColor(folderName, ObjectUtils.colorOnSurface, Color.WHITE));
-
-    // tvTools.setTextColor(MaterialColors.getColor(tvTools, ObjectUtils.colorOnSurface, 0));
+    File myfile = new File(files.getFilePath());
     if (FileUtil.isDirectory(myfile.toString())) {
       if (viewType == ViewType.ROW) {
         icon.setPadding(8, 8, 8, 8);
@@ -88,9 +81,9 @@ public class RecyclerviewViewHolderBinder {
       fileIconHelper.setEnvironmentEnabled(true);
       fileIconHelper.bindIcon(icon);
 
-      if (FileUtil.isDirectory(files.get(pos).get("path").toString())) {
+      if (FileUtil.isDirectory(files.getFilePath())) {
         tvTools.setText("");
-      } else if (FileUtil.isExistFile(files.get(pos).get("path").toString())) {
+      } else if (FileUtil.isExistFile(files.getFilePath())) {
         icon.setPadding(0, 0, 0, 0);
         getTime(myfile.toString(), tvTools);
         icon.setBackgroundColor(0);
