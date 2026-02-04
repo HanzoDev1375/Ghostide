@@ -1,42 +1,27 @@
 package ir.ninjacoder.ghostide.core.model.filemanager;
 
 public class FileManagerModel {
-  private String path;
-  private boolean isNewItem;
-  private boolean isRenameItem;
+  private String filePath;
+  private FileState filestate = FileState.NORMAL;
 
-  public String getPath() {
-    return this.path;
+  public FileManagerModel(String filePath, FileState filestate) {
+    this.filePath = filePath;
+    this.filestate = filestate;
   }
 
-  public void setPath(String path) {
-    this.path = path;
+  public String getFilePath() {
+    return this.filePath;
   }
 
-  public boolean isNewItem() {
-    return this.isNewItem;
+  public void setFilePath(String filePath) {
+    this.filePath = filePath;
   }
 
-  public void setNewItem(boolean isNewItem) {
-    this.isNewItem = isNewItem;
+  public FileState getFilestate() {
+    return this.filestate;
   }
 
-  public boolean isRenameItem() {
-    return this.isRenameItem;
-  }
-
-  public void setRenameItem(boolean isRenameItem) {
-    this.isRenameItem = isRenameItem;
-  }
-
-  @Override
-  public String toString() {
-    return "FileManagerModel[path="
-        + path
-        + ", isNewItem="
-        + isNewItem
-        + ", isRenameItem="
-        + isRenameItem
-        + "]";
+  public void setFilestate(FileState filestate) {
+    this.filestate = filestate;
   }
 }
