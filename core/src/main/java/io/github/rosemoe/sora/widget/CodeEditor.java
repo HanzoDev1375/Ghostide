@@ -74,7 +74,7 @@ import android.widget.OverScroller;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
-
+import io.github.rosemoe.sora.diagnostics.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.Px;
@@ -378,6 +378,8 @@ public class CodeEditor extends View
   private String mHint = "";
   private int mHintColor = 0xFF808080;
   private boolean mShowHint = false;
+  // test
+  private List<Diagnostic> diagnostics = new ArrayList<>();
 
   public void addLineIcon(int lineNumber, int iconRes) {
     LineIcon lineIcon = new LineIcon(iconRes, lineNumber);
@@ -412,6 +414,56 @@ public class CodeEditor extends View
 
   public String getMinidraw() {
     return this.minidraw;
+  }
+
+  /** Add a new diagnostic to the editor */
+  public void addDiagnostic(Diagnostic diagnostic) {
+    diagnostics.add(diagnostic);
+    invalidate(); // Redraw to show the diagnostic
+  }
+
+  /** Remove a diagnostic from the editor */
+  public void removeDiagnostic(Diagnostic diagnostic) {
+    diagnostics.remove(diagnostic);
+    invalidate();
+  }
+
+  /** Clear all diagnostics */
+  public void clearDiagnostics() {
+    diagnostics.clear();
+    invalidate();
+  }
+
+  /** Get all diagnostics */
+  public List<Diagnostic> getDiagnostics() {
+    return new ArrayList<>(diagnostics);
+  }
+
+  /** Get diagnostics for a specific line */
+  public List<Diagnostic> getDiagnosticsForLine(int line) {
+    List<Diagnostic> lineDiagnostics = new ArrayList<>();
+    for (var diagnostic : diagnostics) {
+      try {
+
+        int startIndex = diagnostic.getStart();
+        int endIndex = diagnostic.getEnd();
+        int textLength = getText().length();
+
+        if (startIndex >= 0 && startIndex < textLength && endIndex >= 0 && endIndex <= textLength) {
+
+          CharPosition start = getText().getIndexer().getCharPosition(startIndex);
+          CharPosition end = getText().getIndexer().getCharPosition(endIndex);
+
+          if (start.line <= line && end.line >= line) {
+            lineDiagnostics.add(diagnostic);
+          }
+        }
+      } catch (Exception e) {
+        // Skip invalid diagnostics
+        continue;
+      }
+    }
+    return lineDiagnostics;
   }
 
   private final List<Inlay> inlays = new ArrayList<>();
@@ -2461,6 +2513,12 @@ public class CodeEditor extends View
               line);
         }
       }
+
+      List<Diagnostic> lineDiagnostics = getDiagnosticsForLine(line);
+      for (Diagnostic diagnostic : lineDiagnostics) {
+        drawDiagnostic(
+            canvas, diagnostic, line, paintingOffset, row, firstVisibleChar, lastVisibleChar);
+      }
     }
     rowIterator.reset();
 
@@ -2536,8 +2594,8 @@ public class CodeEditor extends View
             Span span = spans.get(spanOffset);
             if (span.problemFlags > 0
                 && Integer.highestOneBit(span.problemFlags) != Span.FLAG_DEPRECATED) {
-              float lineWidth;
               int spanEnd = Math.min(rowInf.endColumn, spans.get(spanOffset + 1).column);
+              float lineWidth;
               if (isWordwrap()) {
                 lineWidth =
                     measureText(
@@ -2976,6 +3034,110 @@ public class CodeEditor extends View
     mPaint.setTextSkewX(0);
     mPaintOther.setStrokeWidth(circleRadius * 2);
     mDrawPoints.commitPoints(canvas, mPaintOther);
+  }
+
+  /** Draw a diagnostic on the canvas */
+  protected void drawDiagnostic(
+      Canvas canvas,
+      Diagnostic diagnostic,
+      int line,
+      float paintingOffset,
+      int row,
+      int firstVisibleChar,
+      int lastVisibleChar) {
+
+    try {
+      if (diagnostic == null) {
+        return;
+      }
+
+      // Get positions safely
+      CharPosition startPos;
+      CharPosition endPos;
+
+      try {
+        startPos = getText().getIndexer().getCharPosition(diagnostic.getStart());
+        endPos = getText().getIndexer().getCharPosition(diagnostic.getEnd());
+      } catch (IndexOutOfBoundsException e) {
+        return;
+      }
+
+      // Only draw if the diagnostic is in current line
+      if (startPos.line != line || endPos.line != line) {
+        return;
+      }
+
+      int startCol = startPos.column;
+      int endCol = endPos.column;
+      if (endCol < firstVisibleChar || startCol > lastVisibleChar) {
+        return;
+      }
+
+      int drawStart = Math.max(startCol, firstVisibleChar);
+      int drawEnd = Math.min(endCol, lastVisibleChar);
+
+      if (drawStart >= drawEnd) {
+        return;
+      }
+
+      // Calculate positions
+      float startX =
+          paintingOffset
+              + measureText(mBuffer, firstVisibleChar, drawStart - firstVisibleChar, line);
+      float width = measureText(mBuffer, drawStart, drawEnd - drawStart, line);
+
+      // Draw diagnostic based on its state
+      DiagnosticsState state = diagnostic.getState();
+      int color = state.getColor();
+
+      // Save current paint state
+      Paint.Style oldStyle = mPaintOther.getStyle();
+      float oldStrokeWidth = mPaintOther.getStrokeWidth();
+      int oldColor = mPaintOther.getColor();
+
+      // Draw wavy line for diagnostic
+      float y = getRowBottom(row) - getOffsetY();
+      drawWavyLine(canvas, startX, y, width, color);
+
+      // Restore paint state
+      mPaintOther.setStyle(oldStyle);
+      mPaintOther.setStrokeWidth(oldStrokeWidth);
+      mPaintOther.setColor(oldColor);
+    } catch (Exception e) {
+      // Ignore drawing errors
+    }
+  }
+
+  /** Draw a wavy line for error diagnostics */
+  /** Draw a wavy line for error diagnostics */
+  private void drawWavyLine(Canvas canvas, float startX, float y, float width, int color) {
+    float waveLength = getDpUnit() * 18; // مشابه waveLength در کد اصلی
+    float amplitude = getDpUnit() * 4; // مشابه amplitude در کد اصلی
+
+    mPath.reset();
+    mPath.moveTo(0, 0);
+
+    int waveCount = (int) Math.ceil(width / waveLength);
+    for (int i = 0; i < waveCount; i++) {
+      mPath.quadTo(waveLength * i + waveLength / 4, amplitude, waveLength * i + waveLength / 2, 0);
+      mPath.quadTo(waveLength * i + waveLength * 3 / 4, -amplitude, waveLength * i + waveLength, 0);
+    }
+
+    // Save canvas state
+    canvas.save();
+    canvas.translate(startX, y);
+    canvas.clipRect(0, -amplitude, width, amplitude);
+    mPaintOther.setStyle(Paint.Style.STROKE);
+    mPaintOther.setStrokeWidth(getDpUnit() * 1.8f); // مشابه stroke width در کد اصلی
+    mPaintOther.setColor(color);
+    mPaintOther.setAntiAlias(true);
+    canvas.drawPath(mPath, mPaintOther);
+
+    // Restore canvas
+    canvas.restore();
+
+    // Reset paint
+    mPaintOther.setStyle(Paint.Style.FILL);
   }
 
   /** Draw small characters as graph */

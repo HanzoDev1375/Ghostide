@@ -11,8 +11,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.LayoutInflater;
 
+import android.view.MotionEvent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -21,6 +21,10 @@ import com.google.android.material.shape.CornerFamily;
 import com.google.android.material.shape.MaterialShapeDrawable;
 import com.google.android.material.shape.ShapeAppearanceModel;
 
+import io.github.rosemoe.sora.diagnostics.Diagnostic;
+import io.github.rosemoe.sora.diagnostics.DiagnosticsState;
+import io.github.rosemoe.sora.event.ClickEvent;
+import ir.ninjacoder.ghostide.core.utils.DataUtil;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.Token;
 
@@ -36,12 +40,7 @@ import io.github.rosemoe.sora.event.LongPressEvent;
 import io.github.rosemoe.sora.event.SelectionChangeEvent;
 import io.github.rosemoe.sora.event.TextSizeChangeEvent;
 import io.github.rosemoe.sora.interfaces.EditorLanguage;
-import io.github.rosemoe.sora.langs.html.HTMLLanguage;
-import io.github.rosemoe.sora.langs.html.HTMLLexer;
 import io.github.rosemoe.sora.langs.java.FieldUsageChecker;
-import io.github.rosemoe.sora.langs.java.JavaLanguage;
-import io.github.rosemoe.sora.langs.python.PythonLang;
-import io.github.rosemoe.sora.langs.python.formatter.PythonCodeAnalyzerAst;
 import io.github.rosemoe.sora.langs.xml.XMLLanguage;
 import io.github.rosemoe.sora.langs.xml.XMLLexer;
 import io.github.rosemoe.sora.text.FormatThread;
@@ -49,20 +48,17 @@ import io.github.rosemoe.sora.util.KeyboardUtils;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
 import io.github.rosemoe.sora.widget.power.PowerModeEffectManager;
-import io.github.rosemoe.sora.widget.tooltip.ToolTipHelper;
 import ir.ninjacoder.ghostide.core.config.LOG;
-import ir.ninjacoder.ghostide.core.databinding.LayoutTooltipColorBinding;
 import ir.ninjacoder.ghostide.core.enums.EffectTypeManager;
 import ir.ninjacoder.ghostide.core.interfaces.CallBackErrorManager;
 import ir.ninjacoder.ghostide.core.marco.CommentList;
 import ir.ninjacoder.ghostide.core.marco.editorface.IEditor;
-import ir.ninjacoder.ghostide.core.widget.SymbolInputView;
 
 public class IdeEditor extends CodeEditor implements IEditor {
 
   private static String A = "Made by ninja coder";
   protected CallBackErrorManager call;
- 
+
   private boolean isDisableSoftKbdIfHardKbdAvailable;
   private boolean isDisableSoftKbdOnHardKbd;
   private boolean isSoftKbdEnabled;
@@ -97,7 +93,7 @@ public class IdeEditor extends CodeEditor implements IEditor {
     subscribeEvent(TextSizeChangeEvent.class, ((event, unsubscribe) -> textSize(event)));
     subscribeEvent(LongPressEvent.class, (ev, un) -> setLongEvent(ev));
     subscribeEvent(DoubleClickEvent.class, (ev, un) -> handleDoubleClick(ev));
-    subscribeEvent(SelectionChangeEvent.class, (ev, un) -> onSelectionChanged(ev));
+    subscribeEvent(ClickEvent.class, (ev, un) -> onClickEvent(ev));
     saveTextSize = getContext().getSharedPreferences("saveItem", Context.MODE_PRIVATE);
     var getSize = saveTextSize.getFloat("newTextSize", 16);
     if (saveTextSize != null) {
@@ -111,6 +107,14 @@ public class IdeEditor extends CodeEditor implements IEditor {
 
     setBracketHighlightEnabled(true);
     setBracketHighlightColor(0xFFFF0000);
+    // test
+    try {
+      Diagnostic dic = new Diagnostic(2, 5, "", DiagnosticsState.ERROR);
+      addDiagnostic(dic);
+      addDiagnostic(new Diagnostic(6, 9, "", DiagnosticsState.DEPRECATED));
+    } catch (Exception err) {
+      Log.e("EditorError", err.getMessage());
+    }
 
     return this;
   }
@@ -121,50 +125,16 @@ public class IdeEditor extends CodeEditor implements IEditor {
     edit.apply();
   }
 
-  void setLongEvent(LongPressEvent ev) {
-    //
+  void onClickEvent(ClickEvent click) {
+    if (click.getCausingEvent().getActionMasked() == MotionEvent.ACTION_HOVER_ENTER) {
+      DataUtil.showMessage(getContext(), "this hover");
+    } else if (click.getCausingEvent().getActionMasked() == MotionEvent.ACTION_UP) {
+      DataUtil.showMessage(getContext(), "this Up");
+    }
   }
 
-  private Thread pythonAnalysisThread = null;
-
-  void onSelectionChanged(SelectionChangeEvent event) {
-    if (getEditorLanguage() instanceof JavaLanguage) {
-      FieldUsageChecker.showWarningIfCursorOnField(this);
-    }
-   
-
-    if (getEditorLanguage() instanceof PythonLang) {
-      if (pythonAnalysisThread != null && pythonAnalysisThread.isAlive()) {
-        pythonAnalysisThread.interrupt();
-      }
-
-      pythonAnalysisThread =
-          new Thread(
-              () -> {
-                try {
-                  var ast = new PythonCodeAnalyzerAst(IdeEditor.this);
-                  ast.analyze(getContext(), getTextAsString());
-
-                  final var methods = new ArrayList<>(ast.getMethods());
-                  final var variables = new ArrayList<>(ast.getVariables());
-
-                  if (!Thread.currentThread().isInterrupted()) {
-                    new Handler(Looper.getMainLooper())
-                        .post(
-                            () -> {
-                              methods.forEach(it -> showTypeToolTipe(it.line, it.name));
-                              variables.forEach(it -> showTypeToolTipe(it.line, it.name));
-                            });
-                  }
-                } catch (Exception e) {
-                  if (!Thread.currentThread().isInterrupted()) {
-                    Log.e("PythonAST", "Error in AST analysis: " + e.getMessage());
-                  }
-                }
-              });
-
-      pythonAnalysisThread.start();
-    }
+  void setLongEvent(LongPressEvent ev) {
+    //
   }
 
   void showmsg(String code) {
@@ -189,8 +159,6 @@ public class IdeEditor extends CodeEditor implements IEditor {
       }
     }
   }
-
-  
 
   void handleDoubleClick(DoubleClickEvent db) {
     try {

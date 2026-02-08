@@ -1,77 +1,122 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:gravity="bottom"
-  android:layout_height="259dp"
-  android:layout_width="match_parent"
-  android:orientation="vertical"
-  android:paddingBottom="10dp"
-  android:paddingLeft="5dp"
-  android:paddingRight="3dp"
-  android:paddingTop="4dp">
-  <ImageView
-    android:id="@+id/iconHeader"
-    android:layout_gravity="center_horizontal"
-    android:layout_height="64dp"
-    android:layout_marginBottom="6dp"
-    android:layout_width="64dp"
-    android:scaleType="centerInside" />
-  <TextView
-    android:id="@+id/headertitle"
-    android:layout_gravity="center_horizontal"
-    android:layout_height="wrap_content"
-    android:layout_width="wrap_content"
-    android:paddingTop="@dimen/nav_header_vertical_spacing"
-    android:text="@string/drawer_title"
-    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-    android:textSize="12sp" />
-  <TextView
-    android:id="@+id/hedersubtitle"
-    android:layout_gravity="center_horizontal"
-    android:layout_height="wrap_content"
-    android:layout_width="wrap_content"
-    android:text="@string/drawer_subtitles"
-    android:textSize="12sp" />
-  <TextView
-    android:id="@+id/biogithub"
-    android:layout_gravity="center_horizontal"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="5dp"
-    android:layout_marginEnd="5dp"
-    android:layout_marginStart="6dp"
-    android:layout_marginTop="5dp"
-    android:layout_width="match_parent"
-    android:text="@string/drawer_subtitles"
-    android:textSize="12sp" />
-  <LinearLayout
-    android:gravity="center_vertical|end"
-    android:layout_height="56dp"
-    android:layout_width="match_parent"
-    android:orientation="horizontal">
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_height="259dp"
+     android:layout_width="match_parent"
+     android:gravity="bottom"
+     android:paddingRight="3dp"
+     android:orientation="vertical"
+     android:paddingBottom="10dp"
+     android:paddingLeft="5dp"
+     android:paddingTop="4dp">
+
     <ImageView
-      android:id="@+id/starview"
-      android:layout_height="40dp"
-      android:layout_marginEnd="4dp"
-      android:layout_marginLeft="8dp"
-      android:layout_marginStart="4dp"
-      android:layout_width="40dp"
-      android:scaleType="centerInside"
-      app:srcCompat="@drawable/ic_star_24px" />
-    <ImageView
-      android:id="@+id/issue"
-      android:layout_height="40dp"
-      android:layout_marginEnd="4dp"
-      android:layout_marginStart="4dp"
-      android:layout_width="40dp"
-      android:scaleType="centerInside"
-      app:srcCompat="@drawable/repository_24px" />
-    <ImageView
-      android:id="@+id/logout"
-      android:layout_height="40dp"
-      android:layout_marginEnd="4dp"
-      android:layout_marginStart="4dp"
-      android:layout_width="40dp"
-      android:scaleType="centerInside"
-      app:srcCompat="@drawable/drawer_item1" />
-  </LinearLayout>
+         android:layout_height="64dp"
+         android:layout_width="64dp"
+         android:layout_marginBottom="6dp"
+         android:scaleType="centerInside"
+         android:id="@+id/iconHeader"
+         android:layout_gravity="center_horizontal" />
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+         android:textSize="12sp"
+         android:id="@+id/headertitle"
+         android:layout_gravity="center_horizontal"
+         android:paddingTop="@dimen/nav_header_vertical_spacing"
+         android:text="@string/drawer_title" />
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:textSize="12sp"
+         android:id="@+id/hedersubtitle"
+         android:layout_gravity="center_horizontal"
+         android:text="@string/drawer_subtitles" />
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:layout_marginBottom="5dp"
+         android:layout_marginEnd="5dp"
+         android:textSize="12sp"
+         android:layout_marginTop="5dp"
+         android:layout_marginStart="6dp"
+         android:id="@+id/biogithub"
+         android:layout_gravity="center_horizontal"
+         android:text="@string/drawer_subtitles" />
+
+    <LinearLayout
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:gravity="center"
+         android:orientation="horizontal">
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:layout_marginBottom="5dp"
+             android:layout_marginEnd="5dp"
+             android:textSize="12sp"
+             android:layout_marginTop="5dp"
+             android:layout_marginStart="6dp"
+             android:layout_weight="1"
+             android:id="@+id/leftTextView"
+             android:layout_gravity="center_horizontal" />
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:layout_marginBottom="5dp"
+             android:layout_marginEnd="5dp"
+             android:textSize="12sp"
+             android:layout_marginTop="5dp"
+             android:layout_marginStart="6dp"
+             android:layout_weight="1"
+             android:id="@+id/rightTextView"
+             android:layout_gravity="center_horizontal" />
+
+    </LinearLayout>
+
+    <LinearLayout
+         android:layout_height="56dp"
+         android:layout_width="match_parent"
+         android:gravity="center_vertical|end"
+         android:orientation="horizontal">
+
+        <ImageView
+             android:layout_height="40dp"
+             android:layout_width="40dp"
+             android:layout_marginEnd="4dp"
+             android:scaleType="centerInside"
+             android:layout_marginLeft="8dp"
+             android:layout_marginStart="4dp"
+             app:srcCompat="@drawable/ic_star_24px"
+             android:id="@+id/starview" />
+
+        <ImageView
+             android:layout_height="40dp"
+             android:layout_width="40dp"
+             android:layout_marginEnd="4dp"
+             android:scaleType="centerInside"
+             android:layout_marginStart="4dp"
+             app:srcCompat="@drawable/repository_24px"
+             android:id="@+id/issue" />
+
+        <ImageView
+             android:layout_height="40dp"
+             android:layout_width="40dp"
+             android:layout_marginEnd="4dp"
+             android:scaleType="centerInside"
+             android:padding="3dp"
+             android:layout_marginStart="4dp"
+             app:srcCompat="@drawable/drawer_item1"
+             android:id="@+id/logout" />
+
+    </LinearLayout>
+
 </LinearLayout>
