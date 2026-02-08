@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     android:background="?attr/colorSurface"
+     android:orientation="vertical">
+
+    <LinearLayout
+         android:layout_height="match_parent"
+         android:layout_width="match_parent"
+         android:gravity="center_horizontal|center_vertical"
+         android:orientation="vertical">
+
+        <ImageView
+             android:layout_height="250dp"
+             android:layout_width="250dp"
+             android:src="@drawable/emptyfolder"
+             android:scaleType="centerInside"
+             android:id="@+id/icon_emptystate" />
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:padding="8dp"
+             android:textSize="20sp"
+             android:textColor="?attr/colorOnSurface"
+             android:layout_marginTop="5dp"
+             android:focusable="false"
+             android:id="@+id/text_emptystate"
+             android:text="Empty Your List"
+             android:textStyle="bold" />
+
+        <Button
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:layout_marginBottom="3dp"
+             android:padding="8dp"
+             android:textSize="12sp"
+             android:visibility="invisible"
+             android:layout_marginTop="5dp"
+             android:id="@+id/buttonemptystate"
+             android:text="reload" />
+
+    </LinearLayout>
+
+</LinearLayout>

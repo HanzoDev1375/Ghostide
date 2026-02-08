@@ -33,5 +33,80 @@
         <item name="android:clickable">true</item>
         <item name="android:splitTrack">false</item>
     </style>
+    <declare-styleable name="ListItemViews">
+        <attr
+            name="strokesize"
+            format="dimension" />
+        <attr
+            name="strokemod"
+            format="boolean" />
+        <attr
+            name="strokecolor"
+            format="color" />
+
+    </declare-styleable>
+    <declare-styleable name="EmptyState">
+
+        <attr
+            name="emptyStateIcon"
+            format="reference" />
+        <attr
+            name="emptyStateIconColor"
+            format="color" />
+        <attr
+            name="emptyStateIconRoundSize"
+            format="dimension" />
+        <attr
+            name="emptyStateText"
+            format="string" />
+        <attr
+            name="iconsize"
+            fromat="dimension" />
+        <attr
+            name="emptyStateTextColor"
+            format="color" />
+
+        <attr
+            name="emptyStateShowButton"
+            format="boolean" />
+        <attr
+            name="emptyStateButtonText"
+            format="string" />
+        <attr
+            name="show"
+            format="boolean" />
+        <attr
+            name="hide"
+            format="boolean" />
+
+        <attr
+            name="IconScaleType"
+            format="enum">
+            <enum
+                name="center"
+                value="0" />
+            <enum
+                name="centerCrop"
+                value="1" />
+            <enum
+                name="centerInside"
+                value="2" />
+            <enum
+                name="fitCenter"
+                value="3" />
+            <enum
+                name="fitStart"
+                value="4" />
+            <enum
+                name="fitEnd"
+                value="5" />
+            <enum
+                name="fitXY"
+                value="6" />
+            <enum
+                name="matrix"
+                value="7" />
+        </attr>
+    </declare-styleable>
 
 </resources>

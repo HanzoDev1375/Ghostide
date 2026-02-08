@@ -23,16 +23,17 @@ import java.util.HashMap;
 import java.util.List;
 
 public class RecyclerviewViewHolderBinder {
-  private static List<Child> listChild = new ArrayList<>();
-
+  
   public static void bindHolder(
-      FileManagerModel files,
+     List<FileManagerModel> files,
       TextView folderName,
       TextView tvTools,
       ImageView icon,
-      ViewType viewType) {
+      ViewType viewType,
+      int pos,
+      List<Child> listChild) {
 
-    File myfile = new File(files.getFilePath());
+    File myfile = new File(files.get(pos).getFilePath());
     if (FileUtil.isDirectory(myfile.toString())) {
       if (viewType == ViewType.ROW) {
         icon.setPadding(8, 8, 8, 8);
@@ -81,9 +82,9 @@ public class RecyclerviewViewHolderBinder {
       fileIconHelper.setEnvironmentEnabled(true);
       fileIconHelper.bindIcon(icon);
 
-      if (FileUtil.isDirectory(files.getFilePath())) {
+      if (FileUtil.isDirectory(myfile.toString())) {
         tvTools.setText("");
-      } else if (FileUtil.isExistFile(files.getFilePath())) {
+      } else if (FileUtil.isExistFile(myfile.toString())) {
         icon.setPadding(0, 0, 0, 0);
         getTime(myfile.toString(), tvTools);
         icon.setBackgroundColor(0);

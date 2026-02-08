@@ -491,7 +491,7 @@ public class FileManagerActivity extends BaseCompat
         v -> {
           DialogItemSheet();
         });
-
+    bind.navs.bindView(bind.Drawer);
     bind.navs
         .getMenu()
         .add(0, 1, 0, getString(R.string.menu_sandisk_card))
@@ -655,11 +655,10 @@ public class FileManagerActivity extends BaseCompat
                 bind.filedirBar.setVisibility(View.GONE);
                 fileListItem.clearFilter();
                 fileListItem.submitList(new ArrayList<>(fileModels));
-
                 if (fileModels.isEmpty()) {
-                  bind.emptyview.setVisibility(View.VISIBLE);
+                  bind.emptyview.show();
                 } else {
-                  bind.emptyview.setVisibility(View.GONE);
+                  bind.emptyview.hide();
                 }
               });
         });
@@ -1570,6 +1569,8 @@ public class FileManagerActivity extends BaseCompat
                                         .concat(format));
                         new net.lingala.zip4j.ZipFile(outputFilePath)
                             .addFolder(new File(originalFilePath));
+                        ///
+                        // fileListItem.highlightFile(fileModels.get(_number).getFilePath(),FileState.ARCHIVES);
                       } catch (Exception e) {
                         runOnUiThread(() -> showMessage(e.toString()));
                       }

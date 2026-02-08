@@ -1,5 +1,6 @@
 package ir.ninjacoder.ghostide.core.fragments;
 
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import androidx.annotation.CallSuper;
 import androidx.annotation.MainThread;
@@ -9,9 +10,11 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.color.MaterialColors;
 import ir.ninjacoder.ghostide.core.adapter.ZipListFileShowAd;
 import ir.ninjacoder.ghostide.core.databinding.LayoutZipfragmentBinding;
 import ir.ninjacoder.ghostide.core.utils.DataUtil;
+import ir.ninjacoder.ghostide.core.utils.ObjectUtils;
 import java.util.List;
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
@@ -53,11 +56,12 @@ public class ZipFileFragment extends BottomSheetDialogFragment {
       adapter.updateAll(zipFile.getFileHeaders());
       bind.rvZip.setAdapter(adapter);
 
-      if (fileHeaders == null || fileHeaders.isEmpty()) {
-        DataUtil.showMessage(requireContext(), "Zip file is empty");
-        dismiss();
-        return;
-      }
+        if (fileHeaders.isEmpty()) {
+            bind.emptystates.show();
+            bind.emptystates.setText("List Has Empty");
+        } else {
+            bind.emptystates.hide();
+        }
     } catch (ZipException e) {
       e.printStackTrace();
       DataUtil.showMessage(requireContext(), "Error opening zip file");
@@ -102,6 +106,8 @@ public class ZipFileFragment extends BottomSheetDialogFragment {
             dismiss();
           }
         });
+    bind.rvZip.setBackgroundTintList(
+        ColorStateList.valueOf(MaterialColors.getColor(bind.rvZip, ObjectUtils.colorSurface)));
   }
 
   @Override

@@ -105,7 +105,9 @@ public class ZipListFileShowAd extends RecyclerView.Adapter<ZipListFileShowAd.Ho
     h.root.setOnLongClickListener(null);
     h.root.setOnClickListener(v -> handleItemClick(pos, h, fh, isDir));
     h.root.setOnLongClickListener(v -> handleItemLongClick(pos, h, fh));
-    h.root.setBackground(h.root.get(showFiles, pos));
+    h.root.setBackground(h.root.get(allFiles, pos));
+    h.root.setStrokeColorMod(true);
+    h.root.setStorkeSize(1);
   }
 
   private void updateSelectionBackground(Holder h, int pos) {

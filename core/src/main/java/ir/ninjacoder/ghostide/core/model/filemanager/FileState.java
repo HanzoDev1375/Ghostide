@@ -4,10 +4,11 @@ import android.graphics.Color;
 
 public enum FileState {
   NORMAL(0),
-  RENAME(1, Color.parseColor("#5cbff1")),
+  RENAME(1, Color.parseColor("#FF00FF8C")),
   ADD(2, Color.parseColor("#4CAF50")),
-  SELECTBELITEM(3, Color.parseColor("#ff8ff1")),
-  SEARCH(4, Color.parseColor("#ffff11"));
+  SELECTBELITEM(3, Color.parseColor("#FFFF5900")),
+  SEARCH(4, Color.parseColor("#FFBF00")),
+  ARCHIVES(5,Color.parseColor("#FFE60B"));
   int id;
   int color;
 

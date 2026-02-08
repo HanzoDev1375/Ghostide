@@ -98,11 +98,13 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     if (allFilesPosition >= 0 && allFilesPosition < allFiles.size()) {
       try {
         RecyclerviewViewHolderBinder.bindHolder(
-            allFiles.get(allFilesPosition),
+            allFiles,
             holder.folderName,
             holder.tvTools,
             holder.icon,
-            viewType);
+            viewType,
+            allFilesPosition,
+            listChild);
 
       } catch (Exception e) {
         Log.e("FileManagerAd", "Error in binder: " + e.getMessage());
@@ -120,6 +122,9 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
           break;
         case SELECTBELITEM:
           holder.folderName.setTextColor(FileState.SELECTBELITEM.getColor());
+          break;
+        case ARCHIVES:
+          holder.folderName.setTextColor(FileState.ARCHIVES.getColor());
           break;
         case SEARCH:
           if (isSearch) {
@@ -174,13 +179,13 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     }
   }
 
-  public void highlightFile(String path) {
+  public void highlightFile(String path, FileState state) {
     clearHighlights();
 
     for (int i = 0; i < allFiles.size(); i++) {
       FileManagerModel item = allFiles.get(i);
       if (item.getFilePath().equals(path)) {
-        item.setFilestate(FileState.SELECTBELITEM);
+        item.setFilestate(state);
         allFiles.set(i, item);
         break;
       }
@@ -188,11 +193,15 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
 
     for (int i = 0; i < filteredFiles.size(); i++) {
       if (filteredFiles.get(i).getFilePath().equals(path)) {
-        filteredFiles.get(i).setFilestate(FileState.SELECTBELITEM);
+        filteredFiles.get(i).setFilestate(state);
         notifyItemChanged(i);
         break;
       }
     }
+  }
+
+  public void highlightFile(String path) {
+    highlightFile(path, FileState.SELECTBELITEM);
   }
 
   public void clearHighlights() {

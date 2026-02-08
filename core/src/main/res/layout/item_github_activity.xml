@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ir.ninjacoder.prograsssheet.perfence.ListItemView
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:layout_height="wrap_content"
+     android:layout_width="match_parent"
+     android:layout_marginBottom="4dp"
+     android:layout_marginVertical="4dp"
+     app:strokesize="2dp"
+     android:id="@+id/root"
+     android:layout_marginHorizontal="8dp"
+     app:strokecolor="?attr/colorPrimaryFixed"
+     app:strokemod="true">
+
+    <LinearLayout
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:padding="12dp"
+         android:orientation="horizontal">
+
+        <ImageView
+             android:layout_height="40dp"
+             android:layout_width="40dp"
+             android:layout_marginEnd="12dp"
+             android:id="@+id/user_avatar" />
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="0dp"
+             android:orientation="vertical"
+             android:layout_weight="1">
+
+            <LinearLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:gravity="center_vertical"
+                 android:orientation="horizontal">
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:textSize="14sp"
+                     android:id="@+id/username"
+                     android:textStyle="bold" />
+
+                <ImageView
+                     android:layout_height="16dp"
+                     android:layout_width="16dp"
+                     android:layout_marginHorizontal="6dp"
+                     android:id="@+id/activity_icon" />
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:textSize="13sp"
+                     android:id="@+id/activity_text" />
+
+            </LinearLayout>
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:ellipsize="end"
+                 android:textSize="13sp"
+                 android:layout_marginTop="4dp"
+                 android:maxLines="1"
+                 android:id="@+id/repo_name" />
+
+            <LinearLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:gravity="center_vertical"
+                 android:orientation="horizontal"
+                 android:layout_marginTop="8dp">
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:textSize="12sp"
+                     android:id="@+id/event_date" />
+
+                <View
+                     android:layout_height="12dp"
+                     android:layout_width="1dp"
+                     android:background="#ff424243"
+                     android:layout_marginHorizontal="6dp" />
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:textSize="12sp"
+                     android:id="@+id/event_time" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ir.ninjacoder.prograsssheet.perfence.ListItemView>

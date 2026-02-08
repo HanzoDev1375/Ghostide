@@ -10,7 +10,6 @@
     <LinearLayout
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_marginBottom="4dp"
         android:orientation="vertical">
         <ir.ninjacoder.prograsssheet.perfence.ListItemView
             android:layout_height="wrap_content"

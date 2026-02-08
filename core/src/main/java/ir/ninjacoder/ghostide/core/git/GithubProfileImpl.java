@@ -7,6 +7,7 @@ import io.noties.markwon.html.HtmlPlugin;
 import ir.ninjacoder.ghostide.core.R;
 import io.noties.markwon.Markwon;
 import ir.ninjacoder.ghostide.core.glidecompat.RoundedCornersTransformation;
+import ir.ninjacoder.prograsssheet.util.GithubProfileBitMap;
 
 public class GithubProfileImpl {
   public static void bindByActivity(TextView text, ImageView icon) {
@@ -18,28 +19,21 @@ public class GithubProfileImpl {
       md.setMarkdown(
           text,
           githubprofile.hasLogin()
-              ? "**" + GhostDate.getGreeting() + "**" + " <ins>" + githubprofile.getName() + "</ins>"
+              ? "**"
+                  + GhostDate.getGreeting()
+                  + "**"
+                  + " <ins>"
+                  + githubprofile.getName()
+                  + "</ins>"
               : "**"
                   + GhostDate.getGreeting()
                   + "** "
                   + " <ins>"
                   + text.getContext().getString(R.string.app_name)
                   + "</ins>");
-      icon.postDelayed(
-          () -> {
-            try {
-              Glide.with(icon.getContext())
-                  .load(
-                      githubprofile.hasLogin() ? githubprofile.getAvatarUrl() : R.drawable.app_icon)
-                  .error(R.drawable.app_icon)
-                  .centerInside()
-                  .transform(new RoundedCornersTransformation(19))
-                  .into(icon);
-            } catch (Exception err) {
-              icon.setImageResource(R.drawable.app_icon);
-            }
-          },
-          3000);
+      var e = new GithubProfileBitMap();
+      e.bindIcon(
+          icon, githubprofile.hasLogin() ? githubprofile.getAvatarUrl() : R.drawable.app_icon);
     }
   }
 }

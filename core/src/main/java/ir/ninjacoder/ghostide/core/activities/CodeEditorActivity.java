@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.util.Log;
+import ir.ninjacoder.ghostide.core.git.GithubProfileImpl;
 import java.io.FileOutputStream;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -40,7 +41,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
@@ -256,11 +256,8 @@ public class CodeEditorActivity extends BaseCompat {
     rvmenueditor.setAdapter(new ChildAdapter(aars));
     var userview = new SecurePrefs(this);
     handleIncomingIntent(getIntent());
-    Glide.with(this)
-        .load(userview.getAvatarUrl())
-        .circleCrop()
-        .error(R.drawable.app_icon)
-        .into(avatargithubuser);
+    GithubProfileImpl.bindByActivity(titleauthor,avatargithubuser);
+        
     ghostIcon.animate().scaleX(1.0f).scaleY(1.0f).setDuration(1000).start();
     mRootView
         .getViewTreeObserver()
