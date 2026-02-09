@@ -61,6 +61,8 @@ public class Span {
    * <p>Indicates this span is in TYPO region
    */
   public static final int FLAG_TYPO = 1 << 1;
+  
+  public static final int FLAG_UNUSED = 1 << 4;
 
   /**
    * Flag for {@link Span#problemFlags}.

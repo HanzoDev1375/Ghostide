@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:id="@+id/diagnostic_card"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  app:cardCornerRadius="12dp"
+  app:cardElevation="6dp"
+  app:cardUseCompatPadding="true">
+
+  <LinearLayout
+    android:id="@+id/diagnostic_container"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:gravity="center_vertical">
+
+  
+    <TextView
+      android:id="@+id/tv_diagnostic_message"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textSize="14sp"
+      android:maxWidth="260dp"
+      android:layout_weight="1"
+      />
+
+    <Space
+      android:layout_width="8dp"
+      android:layout_height="1dp" />
+    <ImageView
+      android:id="@+id/btn_copy"
+      android:layout_width="20dp"
+      android:layout_height="20dp"
+      android:contentDescription="Copy"
+      android:padding="2dp"
+      android:clickable="true"
+      android:focusable="true" />
+
+  </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

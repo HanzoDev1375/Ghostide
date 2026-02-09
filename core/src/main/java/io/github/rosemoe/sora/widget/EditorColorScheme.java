@@ -62,6 +62,7 @@ public class EditorColorScheme {
   public static final int PROBLEM_TYPO = 37;
   public static final int PROBLEM_WARNING = 36;
   public static final int PROBLEM_ERROR = 35;
+  public static final int PROBLEM_UNUSED = 47;
   // -----------------Highlight colors-----------
   public static final int ATTRIBUTE_VALUE = 34;
   public static final int ATTRIBUTE_NAME = 33;
@@ -499,6 +500,9 @@ public class EditorColorScheme {
         break;
       case BLOCK_LINE_CURRENT:
         color = 0xff999999;
+        break;
+      case PROBLEM_UNUSED: 
+        color = 0xFF9399B2; 
         break;
       case IDENTIFIER_VAR:
       case IDENTIFIER_NAME:

@@ -14,13 +14,6 @@ import org.jetbrains.kotlin.cli.jvm.K2JVMCompiler;
 import org.jetbrains.kotlin.cli.common.arguments.K2JVMCompilerArguments;
 import org.jetbrains.kotlin.config.Services;
 import org.jetbrains.kotlin.cli.common.ExitCode;
-import org.jetbrains.kotlin.diagnostics.Diagnostic;
-import org.jetbrains.kotlin.diagnostics.DiagnosticFactory;
-import org.jetbrains.kotlin.diagnostics.rendering.DefaultErrorMessages;
-import org.jetbrains.kotlin.cli.common.messages.CompilerMessageLocation;
-import org.jetbrains.kotlin.cli.common.messages.MessageUtil;
-import org.jetbrains.kotlin.psi.KtFile;
-import org.jetbrains.kotlin.diagnostics.Severity;
 
 public class KotlinCodeAnalyzerCompat {
   private final String kotlinCode;

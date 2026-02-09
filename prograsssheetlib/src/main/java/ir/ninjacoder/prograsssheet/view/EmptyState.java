@@ -42,6 +42,7 @@ public class EmptyState extends LinearLayout {
     if (bin != null) {
       addView(bin.getRoot());
     }
+    hide();
     setLayoutParams(
         new LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
@@ -133,38 +134,11 @@ public class EmptyState extends LinearLayout {
   }
 
   public void show() {
-    postDelayed(
-        () -> {
-          if (getVisibility() != VISIBLE) {
-            animate()
-                .alpha(1f)
-                .setDuration(150)
-                .withStartAction(
-                    () -> {
-                      setAlpha(0f);
-                      setVisibility(VISIBLE);
-                    })
-                .start();
-          }
-        },
-        600);
+    setVisibility(VISIBLE);
   }
 
   public void hide() {
-    postDelayed(
-        () -> {
-          if (getVisibility() == VISIBLE) {
-            animate()
-                .alpha(0f)
-                .setDuration(150)
-                .withEndAction(
-                    () -> {
-                      setVisibility(GONE);
-                    })
-                .start();
-          }
-        },
-        500);
+    setVisibility(GONE);
   }
 
   public void setIconSize(int size) {

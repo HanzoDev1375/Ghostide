@@ -25,7 +25,12 @@ package io.github.rosemoe.sora.widget;
 
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.view.accessibility.AccessibilityNodeInfo;
 import com.ninjacoder.jgit.particle.custom.CustomEffect;
+import io.github.rosemoe.sora.diagnostics.Diagnostic;
+import io.github.rosemoe.sora.event.ClickEvent;
+import io.github.rosemoe.sora.widget.diagnostics.DiagnosticPopupWindow;
+import io.github.rosemoe.sora.event.DiagnosticsEvent;
 import static io.github.rosemoe.sora.text.TextUtils.isEmoji;
 import static io.github.rosemoe.sora.util.Numbers.stringSize;
 
@@ -35,11 +40,11 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Path;
 import android.graphics.Rect;
+import android.graphics.Color;
 import android.graphics.RectF;
 import android.graphics.RenderNode;
 import android.graphics.Typeface;
@@ -62,7 +67,6 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewParent;
-import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.inputmethod.CursorAnchorInfo;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.ExtractedText;
@@ -149,6 +153,7 @@ import io.github.rosemoe.sora.widget.style.SelectionHandleStyle;
 import io.github.rosemoe.sora.widget.style.builtin.HandleStyleSideDrop;
 import ir.ninjacoder.ghostide.core.R;
 import kotlin.text.StringsKt;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * CodeEditor is an editor that can highlight text regions by doing basic syntax analyzing This
@@ -379,7 +384,8 @@ public class CodeEditor extends View
   private int mHintColor = 0xFF808080;
   private boolean mShowHint = false;
   // test
-  private List<Diagnostic> diagnostics = new ArrayList<>();
+  private List<Diagnostic> diagnostics = new CopyOnWriteArrayList<>();
+  private DiagnosticPopupWindow mDiagnosticWindow;
 
   public void addLineIcon(int lineNumber, int iconRes) {
     LineIcon lineIcon = new LineIcon(iconRes, lineNumber);
@@ -416,27 +422,43 @@ public class CodeEditor extends View
     return this.minidraw;
   }
 
-  /** Add a new diagnostic to the editor */
+  /** Add a new diagnostic to the editor and dispatch event */
   public void addDiagnostic(Diagnostic diagnostic) {
+    List<Diagnostic> oldDiagnostics = new ArrayList<>(diagnostics);
     diagnostics.add(diagnostic);
     invalidate(); // Redraw to show the diagnostic
+    dispatchDiagnosticsEvent(oldDiagnostics, diagnostics);
   }
 
-  /** Remove a diagnostic from the editor */
+  /** Remove a diagnostic from the editor and dispatch event */
   public void removeDiagnostic(Diagnostic diagnostic) {
+    List<Diagnostic> oldDiagnostics = new ArrayList<>(diagnostics);
     diagnostics.remove(diagnostic);
     invalidate();
+    dispatchDiagnosticsEvent(oldDiagnostics, diagnostics);
   }
 
-  /** Clear all diagnostics */
+  /** Clear all diagnostics and dispatch event */
   public void clearDiagnostics() {
+    List<Diagnostic> oldDiagnostics = new ArrayList<>(diagnostics);
     diagnostics.clear();
     invalidate();
+    dispatchDiagnosticsEvent(oldDiagnostics, diagnostics);
   }
 
-  /** Get all diagnostics */
-  public List<Diagnostic> getDiagnostics() {
-    return new ArrayList<>(diagnostics);
+  /** Set all diagnostics at once and dispatch event */
+  public void setDiagnostics(List<Diagnostic> newDiagnostics) {
+    List<Diagnostic> oldDiagnostics = new ArrayList<>(diagnostics);
+    diagnostics.clear();
+    diagnostics.addAll(newDiagnostics);
+    invalidate();
+    dispatchDiagnosticsEvent(oldDiagnostics, diagnostics);
+  }
+
+  /** Helper method to dispatch diagnostics event */
+  private void dispatchDiagnosticsEvent(
+      List<Diagnostic> oldDiagnostics, List<Diagnostic> newDiagnostics) {
+    dispatchEvent(new DiagnosticsEvent(this, oldDiagnostics, newDiagnostics));
   }
 
   /** Get diagnostics for a specific line */
@@ -444,13 +466,11 @@ public class CodeEditor extends View
     List<Diagnostic> lineDiagnostics = new ArrayList<>();
     for (var diagnostic : diagnostics) {
       try {
-
         int startIndex = diagnostic.getStart();
         int endIndex = diagnostic.getEnd();
         int textLength = getText().length();
 
         if (startIndex >= 0 && startIndex < textLength && endIndex >= 0 && endIndex <= textLength) {
-
           CharPosition start = getText().getIndexer().getCharPosition(startIndex);
           CharPosition end = getText().getIndexer().getCharPosition(endIndex);
 
@@ -948,6 +968,100 @@ public class CodeEditor extends View
         .toString();
   }
 
+  private void handleClickEvent(ClickEvent event) {
+
+    CharPosition pos = event.getPosition();
+    MotionEvent motionEvent = event.getCausingEvent();
+    float screenX = motionEvent.getX();
+    float screenY = motionEvent.getY();
+    Log.d(
+        LOG_TAG,
+        "Click at line: "
+            + pos.line
+            + ", column: "
+            + pos.column
+            + ", screenX: "
+            + screenX
+            + ", screenY: "
+            + screenY);
+    Diagnostic diagnostic = findDiagnosticAt(pos.line, pos.column);
+
+    if (diagnostic != null) {
+      Log.d(
+          LOG_TAG,
+          "Found diagnostic: "
+              + diagnostic.getText()
+              + " at ["
+              + diagnostic.getStart()
+              + "-"
+              + diagnostic.getEnd()
+              + "]");
+    } else {
+      Log.d(LOG_TAG, "No diagnostic found at this position");
+    }
+
+    if (diagnostic != null) {
+
+      if (mDiagnosticWindow.getCurrentDiagnostic() != null
+          && mDiagnosticWindow.getCurrentDiagnostic().getStart() == diagnostic.getStart()
+          && mDiagnosticWindow.getCurrentDiagnostic().getEnd() == diagnostic.getEnd()) {
+
+        mDiagnosticWindow.dismiss();
+      } else {
+
+        mDiagnosticWindow.showAtPosition(diagnostic, screenX, screenY);
+      }
+    } else {
+      mDiagnosticWindow.dismiss();
+    }
+  }
+
+  private Diagnostic findDiagnosticAt(int line, int column) {
+    try {
+      int charIndex = getText().getCharIndex(line, column);
+      for (Diagnostic diagnostic : diagnostics) {
+        int start = diagnostic.getStart();
+        int end = diagnostic.getEnd();
+        if (charIndex >= start && charIndex < end) {
+          return diagnostic;
+        }
+      }
+    } catch (Exception e) {
+      Log.e(LOG_TAG, "Error finding diagnostic at line " + line + ", column " + column, e);
+    }
+    return null;
+  }
+
+  public void showCurrentDiagnostic() {
+    int line = getCursor().getLeftLine();
+    int column = getCursor().getLeftColumn();
+
+    // محاسبه موقعیت روی صفحه
+    float charX = getCharOffsetX(line, column);
+    float charY = getCharOffsetY(line, column);
+    float screenX = charX + getOffsetX();
+    float screenY = charY + getOffsetY();
+
+    Diagnostic diagnostic = findDiagnosticAt(line, column);
+    if (diagnostic != null) {
+      mDiagnosticWindow.showAtPosition(diagnostic, screenX, screenY);
+    }
+  }
+
+  public void showDiagnosticForLine(int line) {
+    List<Diagnostic> lineDiagnostics = getDiagnosticsForLine(line);
+    if (!lineDiagnostics.isEmpty()) {
+      Diagnostic firstDiag = lineDiagnostics.get(0);
+      CharPosition startPos = getText().getIndexer().getCharPosition(firstDiag.getStart());
+      float charX = getCharOffsetX(startPos.line, startPos.column);
+      float charY = getCharOffsetY(startPos.line, startPos.column);
+      float screenX = charX + getOffsetX();
+      float screenY = charY + getOffsetY();
+
+      mDiagnosticWindow.showAtPosition(firstDiag, screenX, screenY);
+    }
+  }
+
   /** Prepare editor Initialize variants */
   private void initialize() {
     Log.i(LOG_TAG, COPYRIGHT);
@@ -956,6 +1070,7 @@ public class CodeEditor extends View
     mProps = new DirectAccessProps();
     hls = new RainbowBracketHelper("");
     bracketsMatcher = new OnlineBracketsMatcher(new char[] {'(', ')', '{', '}', '[', ']'}, 1000);
+
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       var configuration = ViewConfiguration.get(getContext());
       mVerticalScrollFactor = configuration.getScaledVerticalScrollFactor();
@@ -999,6 +1114,7 @@ public class CodeEditor extends View
     mPaintGraph = new Paint();
     mMatrix = new Matrix();
     mPath = new Path();
+
     mHandleStyle = new HandleStyleSideDrop(getContext());
     mSearcher = new EditorSearcher(this);
     mCursorAnimator = new CursorAnimator(this);
@@ -1080,6 +1196,12 @@ public class CodeEditor extends View
     if (getContext() instanceof ContextThemeWrapper) {
       setEdgeEffectColor(ThemeUtils.getColorPrimary((ContextThemeWrapper) getContext()));
     }
+    mDiagnosticWindow = new DiagnosticPopupWindow(this);
+    subscribeEvent(
+        ClickEvent.class,
+        (event, unsubscribe) -> {
+          handleClickEvent(event);
+        });
   }
 
   /** Set cursor animation model */
@@ -1468,7 +1590,7 @@ public class CodeEditor extends View
     if (lang == null) {
       lang = new EmptyLanguage();
     }
-
+    clearDiagnostics();
     Log.d("CodeEditor", "Setting new language analyzer: " + lang.getClass().getSimpleName());
 
     if (mSpanner != null) {
@@ -2247,6 +2369,9 @@ public class CodeEditor extends View
           case Span.FLAG_TYPO:
             color = mColors.getColor(EditorColorScheme.PROBLEM_TYPO);
             break;
+          case Span.FLAG_UNUSED:
+            color = mColors.getColor(EditorColorScheme.PROBLEM_UNUSED);
+            break;
         }
         if (color != 0 && span.column >= 0 && spanEnd - span.column >= 0) {
 
@@ -2515,9 +2640,28 @@ public class CodeEditor extends View
       }
 
       List<Diagnostic> lineDiagnostics = getDiagnosticsForLine(line);
+
+      // 1. رسم خط موج‌دار برای همه diagnostics
       for (Diagnostic diagnostic : lineDiagnostics) {
         drawDiagnostic(
             canvas, diagnostic, line, paintingOffset, row, firstVisibleChar, lastVisibleChar);
+      }
+
+      for (Diagnostic diagnostic : lineDiagnostics) {
+        if (diagnostic.getState() == DiagnosticsState.UNUSED) {
+          try {
+            CharPosition startPos = getText().getIndexer().getCharPosition(diagnostic.getStart());
+            CharPosition endPos = getText().getIndexer().getCharPosition(diagnostic.getEnd());
+
+            if (startPos.line != line || endPos.line != line) continue;
+
+            int startCol = startPos.column;
+            int endCol = endPos.column;
+
+            if (endCol < firstVisibleChar || startCol > lastVisibleChar) continue;
+          } catch (Exception ignored) {
+          }
+        }
       }
     }
     rowIterator.reset();
@@ -2697,6 +2841,36 @@ public class CodeEditor extends View
                 mPaintOther);
           }
 
+          boolean isUnusedRegion = false;
+          for (Diagnostic diagnostic : diagnostics) {
+            if (diagnostic.getState() == DiagnosticsState.UNUSED) {
+              try {
+                CharPosition startPos =
+                    getText().getIndexer().getCharPosition(diagnostic.getStart());
+                CharPosition endPos = getText().getIndexer().getCharPosition(diagnostic.getEnd());
+
+                if (startPos.line == line && endPos.line == line) {
+                  if (paintStart >= startPos.column && paintEnd <= endPos.column) {
+                    isUnusedRegion = true;
+                    break;
+                  }
+                }
+              } catch (Exception e) {
+                continue;
+              }
+            }
+          }
+
+          if (isUnusedRegion) {
+            mPaint.setTextSkewX(-0.25f);
+            mPaint.setFakeBoldText(true);
+            mPaint.setUnderlineText(true);
+          } else {
+            mPaint.setTextSkewX(0);
+            mPaint.setFakeBoldText(false);
+            mPaint.setUnderlineText(false);
+          }
+
           drawRegionText(
               canvas,
               paintingOffset,
@@ -2740,6 +2914,9 @@ public class CodeEditor extends View
                 break;
               case Span.FLAG_TYPO:
                 color = mColors.getColor(EditorColorScheme.PROBLEM_TYPO);
+                break;
+              case Span.FLAG_UNUSED:
+                color = mColors.getColor(EditorColorScheme.PROBLEM_UNUSED);
                 break;
             }
             if (color != 0 && span.column >= 0 && spanEnd - span.column >= 0) {
@@ -3036,7 +3213,6 @@ public class CodeEditor extends View
     mDrawPoints.commitPoints(canvas, mPaintOther);
   }
 
-  /** Draw a diagnostic on the canvas */
   protected void drawDiagnostic(
       Canvas canvas,
       Diagnostic diagnostic,
@@ -3047,72 +3223,56 @@ public class CodeEditor extends View
       int lastVisibleChar) {
 
     try {
-      if (diagnostic == null) {
-        return;
+      if (diagnostic == null) return;
+
+      switch (diagnostic.getState()) {
+        case ERROR:
+        case WARNING:
+        case TYPO:
+        case DEPRECATED:
+          {
+            CharPosition startPos = getText().getIndexer().getCharPosition(diagnostic.getStart());
+            CharPosition endPos = getText().getIndexer().getCharPosition(diagnostic.getEnd());
+
+            if (startPos.line != line || endPos.line != line) return;
+
+            int startCol = startPos.column;
+            int endCol = endPos.column;
+
+            if (endCol < firstVisibleChar || startCol > lastVisibleChar) return;
+
+            int drawStart = Math.max(startCol, firstVisibleChar);
+            int drawEnd = Math.min(endCol, lastVisibleChar);
+
+            if (drawStart >= drawEnd) return;
+
+            DiagnosticsState state = diagnostic.getState();
+            float startX =
+                paintingOffset
+                    + measureText(mBuffer, firstVisibleChar, drawStart - firstVisibleChar, line);
+            float width = measureText(mBuffer, drawStart, drawEnd - drawStart, line);
+
+            Paint.Style oldStyle = mPaintOther.getStyle();
+            float oldStrokeWidth = mPaintOther.getStrokeWidth();
+            int oldColor = mPaintOther.getColor();
+
+            float y = getRowBottom(row) - getOffsetY();
+            drawWavyLine(canvas, startX, y, width, state.getColor());
+
+            mPaintOther.setStyle(oldStyle);
+            mPaintOther.setStrokeWidth(oldStrokeWidth);
+            mPaintOther.setColor(oldColor);
+            break;
+          }
       }
-
-      // Get positions safely
-      CharPosition startPos;
-      CharPosition endPos;
-
-      try {
-        startPos = getText().getIndexer().getCharPosition(diagnostic.getStart());
-        endPos = getText().getIndexer().getCharPosition(diagnostic.getEnd());
-      } catch (IndexOutOfBoundsException e) {
-        return;
-      }
-
-      // Only draw if the diagnostic is in current line
-      if (startPos.line != line || endPos.line != line) {
-        return;
-      }
-
-      int startCol = startPos.column;
-      int endCol = endPos.column;
-      if (endCol < firstVisibleChar || startCol > lastVisibleChar) {
-        return;
-      }
-
-      int drawStart = Math.max(startCol, firstVisibleChar);
-      int drawEnd = Math.min(endCol, lastVisibleChar);
-
-      if (drawStart >= drawEnd) {
-        return;
-      }
-
-      // Calculate positions
-      float startX =
-          paintingOffset
-              + measureText(mBuffer, firstVisibleChar, drawStart - firstVisibleChar, line);
-      float width = measureText(mBuffer, drawStart, drawEnd - drawStart, line);
-
-      // Draw diagnostic based on its state
-      DiagnosticsState state = diagnostic.getState();
-      int color = state.getColor();
-
-      // Save current paint state
-      Paint.Style oldStyle = mPaintOther.getStyle();
-      float oldStrokeWidth = mPaintOther.getStrokeWidth();
-      int oldColor = mPaintOther.getColor();
-
-      // Draw wavy line for diagnostic
-      float y = getRowBottom(row) - getOffsetY();
-      drawWavyLine(canvas, startX, y, width, color);
-
-      // Restore paint state
-      mPaintOther.setStyle(oldStyle);
-      mPaintOther.setStrokeWidth(oldStrokeWidth);
-      mPaintOther.setColor(oldColor);
-    } catch (Exception e) {
-      // Ignore drawing errors
+    } catch (Exception ignored) {
     }
   }
 
   /** Draw a wavy line for error diagnostics */
-  /** Draw a wavy line for error diagnostics */
   private void drawWavyLine(Canvas canvas, float startX, float y, float width, int color) {
-    float waveLength = getDpUnit() * 18; // مشابه waveLength در کد اصلی
-    float amplitude = getDpUnit() * 4; // مشابه amplitude در کد اصلی
+    float waveLength = getDpUnit() * 18;
+    float amplitude = getDpUnit() * 4;
 
     mPath.reset();
     mPath.moveTo(0, 0);
@@ -3128,7 +3288,7 @@ public class CodeEditor extends View
     canvas.translate(startX, y);
     canvas.clipRect(0, -amplitude, width, amplitude);
     mPaintOther.setStyle(Paint.Style.STROKE);
-    mPaintOther.setStrokeWidth(getDpUnit() * 1.8f); // مشابه stroke width در کد اصلی
+    mPaintOther.setStrokeWidth(getDpUnit() * 1.8f);
     mPaintOther.setColor(color);
     mPaintOther.setAntiAlias(true);
     canvas.drawPath(mPath, mPaintOther);
@@ -3405,17 +3565,38 @@ public class CodeEditor extends View
       int contextEnd,
       int columnCount,
       int color) {
+
+    int originalColor = color;
+
+    for (Diagnostic diagnostic : diagnostics) {
+      if (diagnostic.getState() == DiagnosticsState.UNUSED) {
+        try {
+          CharPosition startPos = getText().getIndexer().getCharPosition(diagnostic.getStart());
+          CharPosition endPos = getText().getIndexer().getCharPosition(diagnostic.getEnd());
+
+          if (startPos.line == line && endPos.line == line) {
+            if (startIndex < endPos.column && endIndex > startPos.column) {
+              originalColor = diagnostic.getState().getColor();
+              break;
+            }
+          }
+        } catch (Exception e) {
+          continue;
+        }
+      }
+    }
+
     boolean hasSelectionOnLine =
         mCursor.isSelected() && line >= mCursor.getLeftLine() && line <= mCursor.getRightLine();
     int selectionStart = 0;
     int selectionEnd = columnCount;
-    int contextCount = contextEnd - contextStart;
     if (line == mCursor.getLeftLine()) {
       selectionStart = mCursor.getLeftColumn();
     }
     if (line == mCursor.getRightLine()) {
       selectionEnd = mCursor.getRightColumn();
     }
+
     boolean isBracketHighlighted = false;
     if (currentPairedBracket != null) {
       int currentIndex = getText().getCharIndex(line, startIndex);
@@ -3424,21 +3605,23 @@ public class CodeEditor extends View
 
       if (currentIndex >= bracketStart
           && currentIndex < bracketStart + currentPairedBracket.leftLength) {
-
         mPaint.setFakeBoldText(true);
         isBracketHighlighted = true;
       } else if (currentIndex >= bracketEnd
           && currentIndex < bracketEnd + currentPairedBracket.rightLength) {
-
         isBracketHighlighted = true;
       }
     }
+
     if (isBracketHighlighted) {
       mPaint.setFakeBoldText(false);
     }
-    mPaint.setColor(color);
+    int contextCount = contextEnd - contextStart;
+    mPaint.setColor(originalColor);
+
     if (hasSelectionOnLine && mColors.getColor(EditorColorScheme.TEXT_SELECTED) != 0) {
       if (endIndex <= selectionStart || startIndex >= selectionEnd) {
+
         drawText(
             canvas,
             mBuffer,
@@ -3449,11 +3632,9 @@ public class CodeEditor extends View
             offsetX,
             baseline,
             line);
-
       } else {
         if (startIndex <= selectionStart) {
           if (endIndex >= selectionEnd) {
-
             drawText(
                 canvas,
                 mBuffer,
@@ -3481,7 +3662,7 @@ public class CodeEditor extends View
 
             deltaX += measureText(mBuffer, selectionStart, selectionEnd - selectionStart, line);
 
-            mPaint.setColor(color);
+            mPaint.setColor(originalColor);
             drawText(
                 canvas,
                 mBuffer,
@@ -3492,9 +3673,7 @@ public class CodeEditor extends View
                 offsetX + deltaX,
                 baseline,
                 line);
-
           } else {
-
             drawText(
                 canvas,
                 mBuffer,
@@ -3519,9 +3698,7 @@ public class CodeEditor extends View
                 line);
           }
         } else {
-
           if (endIndex > selectionEnd) {
-
             drawText(
                 canvas,
                 mBuffer,
@@ -3544,9 +3721,7 @@ public class CodeEditor extends View
                 offsetX,
                 baseline,
                 line);
-
           } else {
-
             mPaint.setColor(mColors.getColor(EditorColorScheme.TEXT_SELECTED));
             drawText(
                 canvas,

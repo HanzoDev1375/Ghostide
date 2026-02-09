@@ -91,7 +91,7 @@ public class EditorRoaderFile {
       ReadFileCompat(editor, path, bar);
       fab.postDelayed(fab::show, 400);
     } else if (path.endsWith(".js")) {
-      editor.setEditorLanguage(new JavaScriptLanguage());
+      editor.setEditorLanguage(new JavaScriptLanguage((CodeEditor) editor));
       ReadFileCompat(editor, path, bar);
       fab.postDelayed(fab::show, 400);
     } else if (path.endsWith(".scss")) {
@@ -225,7 +225,6 @@ public class EditorRoaderFile {
             public String doInBackground() {
               return decompileClass(new File(path));
             }
-            
           });
 
     } else if (path.endsWith(".yml")) {

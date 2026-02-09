@@ -2,6 +2,7 @@ package io.github.rosemoe.sora.langs.javascript;
 
 import android.widget.Toast;
 
+import io.github.rosemoe.sora.widget.CodeEditor;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.Token;
 
@@ -21,6 +22,7 @@ import io.github.rosemoe.sora.widget.SymbolPairMatch;
 import ir.ninjacoder.ghostide.core.GhostIdeAppLoader;
 
 public class JavaScriptLanguage implements EditorLanguage {
+  private CodeEditor editor;
   public static String[] keywords = {
     "break",
     "do",
@@ -74,13 +76,13 @@ public class JavaScriptLanguage implements EditorLanguage {
         new BraceHandler(), new TwoIndentHandler(), new JavaDocStartHandler(), new JavaDocHandler()
       };
 
-  public JavaScriptLanguage() {
-    Toast.makeText(GhostIdeAppLoader.getContext(), "Start Server Language", 2).show();
+  public JavaScriptLanguage(CodeEditor editor) {
+    this.editor = editor;
   }
 
   @Override
   public CodeAnalyzer getAnalyzer() {
-    return new JavaScriptCodeAnalyzer();
+    return new JavaScriptCodeAnalyzer(editor);
   }
 
   @Override
@@ -134,7 +136,8 @@ public class JavaScriptLanguage implements EditorLanguage {
   @Override
   public CharSequence format(CharSequence text) {
     try {
-      return JavaScriptCodeFormatter.formatJavaScriptCode(GhostIdeAppLoader.getContext(),text.toString());
+      return JavaScriptCodeFormatter.formatJavaScriptCode(
+          GhostIdeAppLoader.getContext(), text.toString());
     } catch (Exception err) {
       return text;
     }

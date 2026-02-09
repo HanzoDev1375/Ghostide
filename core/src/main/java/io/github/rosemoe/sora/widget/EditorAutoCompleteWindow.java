@@ -52,9 +52,7 @@ public class EditorAutoCompleteWindow extends EditorPopupWindow {
   private int mMaxHeight;
   private boolean mCancelShowUp;
   private boolean mLoading;
-
-  /* === PERF CORE === */
-  private final ExecutorService executor = Executors.newSingleThreadExecutor();
+  private final ExecutorService executor = Executors.newFixedThreadPool(5);
   private Future<?> runningTask;
   private long loadingStart;
 
@@ -84,8 +82,10 @@ public class EditorAutoCompleteWindow extends EditorPopupWindow {
     listview1.setHorizontalScrollBarEnabled(false);
     listview1.setSelector(colorAccentDialog());
     listview1.setEmptyView(progress);
-
-    progress.setTrackCornerRadius(20);
+    progress.setIndeterminate(true);
+    progress.setWaveAmplitude(5);
+    progress.setWavelength(2);
+  //  progress.setTrackCornerRadius(20);
     progress.setTrackColor(getThemeColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER));
 
     LayoutTransition lt = new LayoutTransition();

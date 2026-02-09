@@ -48,4 +48,8 @@ public class ClickEvent extends Event {
   public MotionEvent getCausingEvent() {
     return event;
   }
+
+  public CharPosition getPosition() {
+    return this.pos;
+  }
 }

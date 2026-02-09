@@ -2,6 +2,7 @@ package io.github.rosemoe.sora.langs.javascript;
 
 import android.util.Log;
 
+import io.github.rosemoe.sora.widget.CodeEditor;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
 import org.antlr.v4.runtime.Token;
@@ -25,6 +26,11 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
   private int INCOMPLETE = 24;
   private BasicSyntaxJavaScriptAnalyzer as;
   RainbowBracketHelper br;
+  private CodeEditor editor;
+
+  public JavaScriptCodeAnalyzer(CodeEditor editor) {
+    this.editor = editor;
+  }
 
   @Override
   public void analyze(
@@ -32,7 +38,7 @@ public class JavaScriptCodeAnalyzer implements CodeAnalyzer {
       TextAnalyzeResult result,
       TextAnalyzer.AnalyzeThread.Delegate delegate) {
     try {
-      as = new BasicSyntaxJavaScriptAnalyzer();
+      as = new BasicSyntaxJavaScriptAnalyzer(editor);
       br = new RainbowBracketHelper(content);
       CodePointCharStream stream = CharStreams.fromReader(new StringReader(content.toString()));
       JavaScriptLexer lexer = new JavaScriptLexer(stream);

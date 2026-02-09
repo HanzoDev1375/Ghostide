@@ -209,8 +209,8 @@ public class ThemePreviewActivity extends BaseCompat {
                 if __name__ == "__main__":
                     main()
                 """;
-      case "Rubypy.js":
-        bind.editor.setEditorLanguage(new JavaScriptLanguage());
+      case "E.js":
+        bind.editor.setEditorLanguage(new JavaScriptLanguage((CodeEditor) bind.editor));
         return """
             let i = 0
             let b = 0
@@ -218,7 +218,7 @@ public class ThemePreviewActivity extends BaseCompat {
             function main() {
                 i = 0
                 b++
-				console.log("hello")
+              console.log("hello")
             }
             export class Model {
             function it() {

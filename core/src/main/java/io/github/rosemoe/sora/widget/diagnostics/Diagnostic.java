@@ -4,6 +4,7 @@ public class Diagnostic {
   int start, end;
   String text;
   DiagnosticsState state;
+  
 
   public Diagnostic(int start, int end, String text, DiagnosticsState state) {
     this.start = start;

@@ -108,13 +108,14 @@ public class IdeEditor extends CodeEditor implements IEditor {
     setBracketHighlightEnabled(true);
     setBracketHighlightColor(0xFFFF0000);
     // test
-    try {
-      Diagnostic dic = new Diagnostic(2, 5, "", DiagnosticsState.ERROR);
-      addDiagnostic(dic);
-      addDiagnostic(new Diagnostic(6, 9, "", DiagnosticsState.DEPRECATED));
-    } catch (Exception err) {
-      Log.e("EditorError", err.getMessage());
-    }
+//    try {
+//      Diagnostic dic = new Diagnostic(2, 5, "", DiagnosticsState.ERROR);
+//      addDiagnostic(dic);
+//      addDiagnostic(new Diagnostic(6, 9, "", DiagnosticsState.DEPRECATED));
+//      showCurrentDiagnostic();
+//    } catch (Exception err) {
+//      Log.e("EditorError", err.getMessage());
+//    }
 
     return this;
   }
