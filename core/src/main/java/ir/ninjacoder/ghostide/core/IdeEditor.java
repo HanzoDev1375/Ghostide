@@ -96,10 +96,7 @@ public class IdeEditor extends CodeEditor implements IEditor {
     subscribeEvent(ClickEvent.class, (ev, un) -> onClickEvent(ev));
     saveTextSize = getContext().getSharedPreferences("saveItem", Context.MODE_PRIVATE);
     var getSize = saveTextSize.getFloat("newTextSize", 16);
-    if (saveTextSize != null) {
-      setTextSizePx(getSize);
-    }
-    setHint("Type code....");
+    if (saveTextSize != null) setTextSizePx(getSize);
     setPowerModeEnabled(true);
     PowerModeEffectManager.EffectType ef = EffectTypeManager.getCurrentTheme(getContext());
 
@@ -108,14 +105,14 @@ public class IdeEditor extends CodeEditor implements IEditor {
     setBracketHighlightEnabled(true);
     setBracketHighlightColor(0xFFFF0000);
     // test
-//    try {
-//      Diagnostic dic = new Diagnostic(2, 5, "", DiagnosticsState.ERROR);
-//      addDiagnostic(dic);
-//      addDiagnostic(new Diagnostic(6, 9, "", DiagnosticsState.DEPRECATED));
-//      showCurrentDiagnostic();
-//    } catch (Exception err) {
-//      Log.e("EditorError", err.getMessage());
-//    }
+    //    try {
+    //      Diagnostic dic = new Diagnostic(2, 5, "", DiagnosticsState.ERROR);
+    //      addDiagnostic(dic);
+    //      addDiagnostic(new Diagnostic(6, 9, "", DiagnosticsState.DEPRECATED));
+    //      showCurrentDiagnostic();
+    //    } catch (Exception err) {
+    //      Log.e("EditorError", err.getMessage());
+    //    }
 
     return this;
   }
@@ -130,7 +127,7 @@ public class IdeEditor extends CodeEditor implements IEditor {
     if (click.getCausingEvent().getActionMasked() == MotionEvent.ACTION_HOVER_ENTER) {
       DataUtil.showMessage(getContext(), "this hover");
     } else if (click.getCausingEvent().getActionMasked() == MotionEvent.ACTION_UP) {
-      DataUtil.showMessage(getContext(), "this Up");
+      // DataUtil.showMessage(getContext(), "this Up");
     }
   }
 

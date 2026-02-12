@@ -63,12 +63,9 @@ public class BasicSyntaxJavaScriptAnalyzer implements CodeAnalyzer {
       TextAnalyzeResult colors,
       TextAnalyzer.AnalyzeThread.Delegate delegate) {
 
-    // پاک کردن تشخیص‌های قبلی
     if (editor != null) {
       editor.clearDiagnostics();
     }
-
-    // ریست کردن state
     diagnostics.clear();
     variables.clear();
     usedVariables.clear();

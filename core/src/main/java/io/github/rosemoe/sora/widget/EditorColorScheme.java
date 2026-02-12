@@ -62,7 +62,8 @@ public class EditorColorScheme {
   public static final int PROBLEM_TYPO = 37;
   public static final int PROBLEM_WARNING = 36;
   public static final int PROBLEM_ERROR = 35;
-  public static final int PROBLEM_UNUSED = 47;
+  public static final int PROBLEM_UNUSED = 38;
+  public static final int LINKCOLORS = 39;
   // -----------------Highlight colors-----------
   public static final int ATTRIBUTE_VALUE = 34;
   public static final int ATTRIBUTE_NAME = 33;
@@ -351,7 +352,7 @@ public class EditorColorScheme {
   protected static final int START_COLOR_ID = 1;
 
   /** Max pre-defined color id */
-  protected static final int END_COLOR_ID = 37;
+  protected static final int END_COLOR_ID = 40;
 
   public static final int FOREGROUND = 923381;
 
@@ -532,6 +533,9 @@ public class EditorColorScheme {
         break;
       case PROBLEM_TYPO:
         color = 0xffffffff;
+        break;
+      case LINKCOLORS: 
+        color = 0xFF03D4F9;
         break;
     }
 

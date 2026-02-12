@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ClipboardUtils;
 import com.google.android.material.card.MaterialCardView;
 
 import io.github.rosemoe.sora.event.ContentChangeEvent;
@@ -18,6 +19,8 @@ import io.github.rosemoe.sora.widget.EditorPopupWindow;
 import io.github.rosemoe.sora.diagnostics.Diagnostic;
 
 import ir.ninjacoder.ghostide.core.R;
+import java.util.List;
+import java.util.ArrayList;
 
 public class DiagnosticPopupWindow extends EditorPopupWindow {
 
@@ -26,10 +29,9 @@ public class DiagnosticPopupWindow extends EditorPopupWindow {
 
   private MaterialCardView card;
   private LinearLayout container;
-  private TextView tvMessage;
   private ImageView btnCopy;
   private View rootView;
-  private Diagnostic currentDiagnostic;
+  private List<Diagnostic> currentDiagnostics = new ArrayList<>();
   private boolean isViewPrepared = false;
 
   public DiagnosticPopupWindow(CodeEditor mEditor) {
@@ -37,10 +39,11 @@ public class DiagnosticPopupWindow extends EditorPopupWindow {
 
     this.mEditor = mEditor;
     this.uiHandler = new Handler(Looper.getMainLooper());
-    subscribemEditorEvents();
+    subscribeEditorEvents();
     getPopup().setOutsideTouchable(true);
     getPopup().setFocusable(false);
     getPopup().setElevation(mEditor.getDpUnit() * 8);
+    getPopup().setClippingEnabled(false);
   }
 
   private void prepareViewIfNeeded() {
@@ -58,100 +61,107 @@ public class DiagnosticPopupWindow extends EditorPopupWindow {
     setContentView(rootView);
     card = rootView.findViewById(R.id.diagnostic_card);
     container = rootView.findViewById(R.id.diagnostic_container);
-    tvMessage = rootView.findViewById(R.id.tv_diagnostic_message);
     btnCopy = rootView.findViewById(R.id.btn_copy);
 
     applyColorScheme();
     setupCopyButton();
 
     isViewPrepared = true;
-    //   rootView.measure(
-    //      View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-    //        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-    //  );
-
-    rootView.measure(
-        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-
-    int width = rootView.getMeasuredWidth();
-    int height = rootView.getMeasuredHeight();
-    setSize(width, height);
-
-    var selection = mEditor.getCursor().left();
-    float charX = mEditor.getCharOffsetX(selection.getLine(), selection.getColumn());
-    float charY =
-        mEditor.getCharOffsetY(selection.getLine(), selection.getColumn()) - mEditor.getRowHeight();
-
-    var locationBuffer = new int[2];
-    mEditor.getLocationInWindow(locationBuffer);
-    float restAbove = charY + locationBuffer[1];
-    float restBottom = mEditor.getHeight() - charY - mEditor.getRowHeight();
-
-    boolean completionShowing = mEditor.getAutoCompleteWindow().isShowing();
-    float windowY;
-    if (restAbove > restBottom || completionShowing) {
-      windowY = charY - getHeight();
-    } else {
-      windowY = charY + mEditor.getRowHeight() * 1.5f;
-    }
-
-    float windowX = Math.max(charX - getWidth() / 2f, 0f);
-    setLocationAbsolutely((int) windowX, (int) windowY);
-    show();
-
-    if (completionShowing && windowY < 0) {
-      dismiss();
-    }
   }
 
   private void setupCopyButton() {
     btnCopy.setOnClickListener(
         v -> {
-          if (currentDiagnostic != null) {
-            android.content.ClipboardManager clipboard =
-                (android.content.ClipboardManager)
-                    mEditor
-                        .getContext()
-                        .getSystemService(android.content.Context.CLIPBOARD_SERVICE);
-            clipboard.setPrimaryClip(
-                android.content.ClipData.newPlainText("diagnostic", currentDiagnostic.getText()));
+          if (!currentDiagnostics.isEmpty()) {
+            ClipboardUtils.copyText(currentDiagnostics.get(0).getText());
           }
         });
   }
 
-  public void showAtPosition(Diagnostic diagnostic, float screenX, float screenY) {
+  public void showAtPosition(List<Diagnostic> diagnostics, float screenX, float screenY) {
     if (Looper.myLooper() != Looper.getMainLooper()) {
-      uiHandler.post(() -> showAtPosition(diagnostic, screenX, screenY));
+      uiHandler.post(() -> showAtPosition(diagnostics, screenX, screenY));
       return;
     }
 
-    if (diagnostic == null) {
+    if (diagnostics == null || diagnostics.isEmpty()) {
       dismiss();
       return;
     }
 
-    currentDiagnostic = diagnostic;
+    currentDiagnostics.clear();
+    currentDiagnostics.addAll(diagnostics);
 
     prepareViewIfNeeded();
     if (!isViewPrepared || container == null || rootView == null) return;
     if (getPopup().getContentView() != rootView) {
       setContentView(rootView);
     }
-
-    tvMessage.setText(diagnostic.getText());
-    tvMessage.setTextColor(diagnostic.getState().getColor());
+    container.removeAllViews();
+    addDiagnosticView(diagnostics.get(0));
     applyColorScheme();
+    rootView.measure(
+        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
 
-    if (mEditor.getTextActionWindow().isShowing()
-        || mEditor.getAutoCompleteWindow().isShowing()) {
+    int width = rootView.getMeasuredWidth();
+    int height = rootView.getMeasuredHeight();
+    int maxWidth = (int) (mEditor.getWidth() * 0.8);
+    int maxHeight = (int) (mEditor.getHeight() * 0.6);
+    width = Math.min(Math.max(width, (int) (mEditor.getDpUnit() * 200)), maxWidth);
+    height = Math.min(Math.max(height, (int) (mEditor.getDpUnit() * 80)), maxHeight);
+    setSize(width, height);
+    float finalX, finalY;
+    if (screenX + width > mEditor.getWidth()) {
+      finalX = screenX - width;
+    } else {
+      finalX = screenX;
+    }
+    finalX = Math.max(0, finalX);
+    finalY = screenY + mEditor.getRowHeight() * 1.5f;
+    if (finalY + height > mEditor.getHeight()) {
+      finalY = screenY - height - mEditor.getRowHeight() * 0.5f;
+    }
+    finalY = Math.max(mEditor.getRowHeight() * 0.5f, finalY);
+    if (mEditor.getTextActionWindow().isShowing() || mEditor.getAutoCompleteWindow().isShowing()) {
       dismiss();
       return;
     }
+
+    setLocationAbsolutely((int) finalX, (int) finalY);
+    show();
+  }
+
+  private void addDiagnosticView(Diagnostic diagnostic) {
+    TextView tvMessage = new TextView(mEditor.getContext());
+    tvMessage.setText(diagnostic.getText());
+    tvMessage.setTextColor(diagnostic.getState().getColor());
+    tvMessage.setTextSize(14);
+    tvMessage.setPadding(
+        (int) (mEditor.getDpUnit() * 8),
+        (int) (mEditor.getDpUnit() * 6),
+        (int) (mEditor.getDpUnit() * 8),
+        (int) (mEditor.getDpUnit() * 6));
+    tvMessage.setMaxWidth((int) (mEditor.getDpUnit() * 250));
+    tvMessage.setMaxLines(3);
+    tvMessage.setEllipsize(android.text.TextUtils.TruncateAt.END);
+
+    // اضافه کردن divider بین items (به جز آخرین)
+    if (container.getChildCount() > 0) {
+      View divider = new View(mEditor.getContext());
+      divider.setLayoutParams(
+          new LinearLayout.LayoutParams(
+              ViewGroup.LayoutParams.MATCH_PARENT, (int) mEditor.getDpUnit()));
+      divider.setBackgroundColor(0x1A000000); 
+      container.addView(divider);
+    }
+
+    container.addView(tvMessage);
   }
 
   public void applyColorScheme() {
     if (card == null) return;
+    
     card.setCardBackgroundColor(
         mEditor.getColorScheme().getColor(EditorColorScheme.AUTO_COMP_PANEL_BG));
     card.setStrokeColor(
@@ -160,7 +170,7 @@ public class DiagnosticPopupWindow extends EditorPopupWindow {
     card.setRadius(mEditor.getDpUnit() * 8);
   }
 
-  private void subscribemEditorEvents() {
+  private void subscribeEditorEvents() {
     mEditor.subscribeEvent(
         ContentChangeEvent.class,
         (event, v) -> {
@@ -177,9 +187,14 @@ public class DiagnosticPopupWindow extends EditorPopupWindow {
       return;
     }
     super.dismiss();
+    currentDiagnostics.clear();
+  }
+
+  public List<Diagnostic> getCurrentDiagnostics() {
+    return new ArrayList<>(currentDiagnostics);
   }
 
   public Diagnostic getCurrentDiagnostic() {
-    return currentDiagnostic;
+    return currentDiagnostics.isEmpty() ? null : currentDiagnostics.get(0);
   }
 }

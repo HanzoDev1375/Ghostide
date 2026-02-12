@@ -118,7 +118,7 @@ public class FactoryCodeError {
       } else if (editor.getEditorLanguage() instanceof GroovyLanguage) {
         Iconnotfound();
       } else if (editor.getEditorLanguage() instanceof JavaLanguage) {
-        java();
+      /// java(); //حافظه زیاد
       } else if (editor.getEditorLanguage() instanceof JavaScriptLanguage) {
         js();
       } else if (editor.getEditorLanguage() instanceof JsonLanguage) {

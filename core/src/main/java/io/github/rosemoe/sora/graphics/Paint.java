@@ -31,72 +31,72 @@ import io.github.rosemoe.sora.text.ContentLine;
 
 public class Paint extends android.graphics.Paint {
 
-    private float spaceWidth;
+  private float spaceWidth;
 
-    public Paint() {
-        super();
-        spaceWidth = measureText(" ");
+  public Paint() {
+    super();
+    spaceWidth = measureText(" ");
+  }
+
+  public float getSpaceWidth() {
+    return spaceWidth;
+  }
+
+  public void setTypefaceWrapped(Typeface typeface) {
+    super.setTypeface(typeface);
+    spaceWidth = measureText(" ");
+  }
+
+  public void setTextSizeWrapped(float textSize) {
+    super.setTextSize(textSize);
+    spaceWidth = measureText(" ");
+  }
+
+  public void setFontFeatureSettingsWrapped(String settings) {
+    super.setFontFeatureSettings(settings);
+    spaceWidth = measureText(" ");
+  }
+
+  @Override
+  public void set(android.graphics.Paint src) {
+    super.set(src);
+    spaceWidth = measureText(" ");
+  }
+
+  /** Get the advance of text with the context positions related to shaping the characters */
+  @SuppressLint("NewApi")
+  public float measureTextRunAdvance(
+      char[] text, int start, int end, int contextStart, int contextEnd) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      return getRunAdvance(text, start, end, contextStart, contextEnd, false, end);
+    } else {
+      // Hidden, but we can call it directly on Android 21 - 22
+      return getTextRunAdvances(
+          text, start, end - start, contextStart, contextEnd - contextStart, false, null, 0);
     }
+  }
 
-    public float getSpaceWidth() {
-        return spaceWidth;
+  /**
+   * Find offset for a certain advance returned by {@link #measureTextRunAdvance(char[], int, int,
+   * int, int)}
+   */
+  public int findOffsetByRunAdvance(ContentLine text, int start, int end, float advance) {
+    if (text.widthCache != null) {
+      var cache = text.widthCache;
+      var offset = start;
+      var currAdvance = 0f;
+      for (; offset < end && currAdvance < advance; offset++) {
+        currAdvance += cache[offset];
+      }
+      if (currAdvance > advance) {
+        offset--;
+      }
+      return Math.max(offset, start);
     }
-
-    public void setTypefaceWrapped(Typeface typeface) {
-        super.setTypeface(typeface);
-        spaceWidth = measureText(" ");
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      return getOffsetForAdvance(text, start, end, start, end, false, advance);
+    } else {
+      return start + breakText(text.value, start, end - start, advance, null);
     }
-
-    public void setTextSizeWrapped(float textSize) {
-        super.setTextSize(textSize);
-        spaceWidth = measureText(" ");
-    }
-
-    public void setFontFeatureSettingsWrapped(String settings) {
-        super.setFontFeatureSettings(settings);
-        spaceWidth = measureText(" ");
-    }
-
-    @Override
-    public void set(android.graphics.Paint src) {
-        super.set(src);
-        spaceWidth = measureText(" ");
-    }
-
-    /**
-     * Get the advance of text with the context positions related to shaping the characters
-     */
-    @SuppressLint("NewApi")
-    public float measureTextRunAdvance(char[] text, int start, int end, int contextStart, int contextEnd) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return getRunAdvance(text, start, end, contextStart, contextEnd, false, end);
-        } else {
-            // Hidden, but we can call it directly on Android 21 - 22
-            return getTextRunAdvances(text, start, end - start, contextStart, contextEnd - contextStart, false, null, 0);
-        }
-    }
-
-    /**
-     * Find offset for a certain advance returned by {@link #measureTextRunAdvance(char[], int, int, int, int)}
-     */
-    public int findOffsetByRunAdvance(ContentLine text, int start, int end, float advance) {
-        if (text.widthCache != null) {
-            var cache = text.widthCache;
-            var offset = start;
-            var currAdvance = 0f;
-            for (; offset < end && currAdvance < advance; offset++) {
-                currAdvance += cache[offset];
-            }
-            if (currAdvance > advance) {
-                offset--;
-            }
-            return Math.max(offset, start);
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return getOffsetForAdvance(text, start, end, start, end, false, advance);
-        } else {
-            return start + breakText(text.value, start, end - start, advance, null);
-        }
-    }
-
+  }
 }

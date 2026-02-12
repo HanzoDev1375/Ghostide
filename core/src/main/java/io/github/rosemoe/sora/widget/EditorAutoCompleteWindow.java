@@ -85,7 +85,7 @@ public class EditorAutoCompleteWindow extends EditorPopupWindow {
     progress.setIndeterminate(true);
     progress.setWaveAmplitude(5);
     progress.setWavelength(2);
-  //  progress.setTrackCornerRadius(20);
+    //  progress.setTrackCornerRadius(20);
     progress.setTrackColor(getThemeColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER));
 
     LayoutTransition lt = new LayoutTransition();
@@ -188,6 +188,7 @@ public class EditorAutoCompleteWindow extends EditorPopupWindow {
           setLoading(false);
 
           if (results == null || results.isEmpty()) {
+            mEditor.clearGhostText();
             hide();
             return;
           }
@@ -199,10 +200,21 @@ public class EditorAutoCompleteWindow extends EditorPopupWindow {
           int height = Math.min((int) (mAdapter.getItemHeight() * results.size()), mMaxHeight);
           setSize(getWidth(), height);
           show();
+
+          if (!results.isEmpty() && mLastPrefix != null && !mLastPrefix.isEmpty()) {
+            CompletionItem firstItem = results.get(0);
+            if (firstItem.label != null && firstItem.label.startsWith(mLastPrefix)) {
+              String remaining = firstItem.label.substring(mLastPrefix.length());
+              if (!remaining.isEmpty()) {
+                mEditor.setGhostText(
+                    mEditor.getCursor().getLeftLine(),
+                    mEditor.getCursor().getLeftColumn(),
+                    remaining);
+              }
+            }
+          }
         });
   }
-
-  /* ================= حرکت ================= */
 
   public void moveDown() {
     if (mCurrent + 1 >= mAdapter.getCount()) return;
@@ -254,8 +266,6 @@ public class EditorAutoCompleteWindow extends EditorPopupWindow {
     hide();
   }
 
-  /* ================= UI ================= */
-
   public void setLoading(boolean state) {
     mLoading = state;
     if (state) {
@@ -277,6 +287,11 @@ public class EditorAutoCompleteWindow extends EditorPopupWindow {
     bg.setCornerRadius(55);
     bg.setColor(getThemeColor(EditorColorScheme.AUTO_COMP_PANEL_BG));
     bg.setStroke(2, getThemeColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER));
+  }
+
+  public CompletionItem getFirstItem() {
+    if (mAdapter == null || mAdapter.getCount() == 0) return null;
+    return mAdapter.getItem(0);
   }
 
   protected MaterialShapeDrawable colorAccentDialog() {
@@ -304,5 +319,24 @@ public class EditorAutoCompleteWindow extends EditorPopupWindow {
 
   public void hide() {
     super.dismiss();
+    mEditor.clearGhostText();
+  }
+
+  public void cancelCompletion() {
+    mLastPrefix = "";
+    mRequestTime = -1;
+    mCurrent = -1;
+    mLoading = false;
+    progress.setVisibility(View.GONE);
+
+    if (runningTask != null) {
+      runningTask.cancel(true);
+      runningTask = null;
+    }
+
+    mAdapter.attachValues(this, new ArrayList<>());
+    mAdapter.notifyDataSetChanged();
+
+    hide();
   }
 }

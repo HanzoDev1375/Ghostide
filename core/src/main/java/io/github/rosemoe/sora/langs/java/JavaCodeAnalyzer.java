@@ -3,6 +3,8 @@ package io.github.rosemoe.sora.langs.java;
 import android.graphics.Color;
 import android.util.Log;
 import androidx.core.graphics.ColorUtils;
+import io.github.rosemoe.sora.diagnostics.Diagnostic;
+import io.github.rosemoe.sora.widget.CodeEditor;
 import ir.ninjacoder.ghostide.core.GhostIdeAppLoader;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
@@ -33,6 +35,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
   private final WeakReference<IdeEditor> mEditorReference;
   private Map<String, Boolean> mapStyle;
   private RainbowBracketHelper ha;
+  private BasicSyntaxJavaAnalyzer codeax;
 
   public JavaCodeAnalyzer(IdeEditor editor) {
     mEditorReference = new WeakReference<>(editor);
@@ -52,11 +55,13 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
       TextAnalyzeResult result,
       TextAnalyzer.AnalyzeThread.Delegate delegate) {
     try {
+
       ha = new RainbowBracketHelper(content);
       IdeEditor editor = mEditorReference.get();
       if (editor == null) {
         return;
       }
+      codeax = new BasicSyntaxJavaAnalyzer(editor);
 
       CodePointCharStream stream = CharStreams.fromReader(new StringReader(content.toString()));
       JavaLexer lexer = new JavaLexer(stream);
@@ -174,27 +179,21 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                         Span.obtain(
                             column + 1,
                             TextStyle.makeStyle(
-                                EditorColorScheme.white,
-                                0,
-                                true,
-                                false,
-                                false,
-                                false,
-                                true));
+                                EditorColorScheme.white, 0, true, false, false, false, true));
                     if (span != null) {
                       span.setBackgroundColorMy(color);
                       colors.add(line, span);
                     }
                   }
 
-                  Span middle = Span.obtain(column + text1.length() - 1, EditorColorScheme.javastring);
+                  Span middle =
+                      Span.obtain(column + text1.length() - 1, EditorColorScheme.javastring);
                   middle.setBackgroundColorMy(Color.TRANSPARENT);
                   colors.add(line, middle);
 
                   Span end =
                       Span.obtain(
-                          column + text1.length(),
-                          TextStyle.makeStyle(EditorColorScheme.white));
+                          column + text1.length(), TextStyle.makeStyle(EditorColorScheme.white));
                   end.setBackgroundColorMy(Color.TRANSPARENT);
                   colors.add(line, end);
                   break;
@@ -318,6 +317,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               int colorNormal = EditorColorScheme.TEXT_NORMAL;
               boolean isClassName = false, isSh = false;
               if (previous == JavaLexer.CLASS
+                  || previous == JavaLexer.IMPORT
                   || previous == JavaLexer.INTERFACE
                   || previous == JavaLexer.ENUM
                   || previous == JavaLexer.EXTENDS
@@ -335,7 +335,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                   || previous == JavaLexer.LONG
                   || previous == JavaLexer.SHORT
                   || previous == JavaLexer.IDENTIFIER) {
-                colorNormal = EditorColorScheme.tssymbols;
+                colorNormal = EditorColorScheme.javaparament;
 
               } else if (previous == JavaLexer.THROW) {
                 colorNormal = EditorColorScheme.jsoprator;
@@ -379,7 +379,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
         first = false;
       }
       info.finish();
-      
+
       if (isCodeAnalyze()) {
         List<CodeLine> code123 = JavaAnalyzer.analyze(content.toString());
         code123.forEach(
@@ -387,7 +387,9 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               if (item.haserror) Utils.setErrorSpan(result, item.line, item.column);
               if (item.haswar) Utils.setWaringSpan(result, item.line, item.column);
             });
+        codeax.analyze(content, result, delegate);
       }
+
       result.determine(lastLine);
       result.setExtra(info);
 

@@ -33,7 +33,7 @@ import io.github.rosemoe.sora.widget.diagnostics.DiagnosticPopupWindow;
 import io.github.rosemoe.sora.event.DiagnosticsEvent;
 import static io.github.rosemoe.sora.text.TextUtils.isEmoji;
 import static io.github.rosemoe.sora.util.Numbers.stringSize;
-
+import io.github.rosemoe.sora.data.GhostText;
 import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -92,6 +92,12 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+import io.github.rosemoe.sora.data.LinkSpan;
+import java.util.regex.Pattern;
+import java.util.HashSet;
+import java.util.regex.Matcher;
+import io.github.rosemoe.sora.event.LinkClickEvent;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -386,6 +392,16 @@ public class CodeEditor extends View
   // test
   private List<Diagnostic> diagnostics = new CopyOnWriteArrayList<>();
   private DiagnosticPopupWindow mDiagnosticWindow;
+  // find link??? this demo
+  private boolean mLinkDetectionEnabled = false;
+  private int mLinkColor = 0xFF2196F3;
+  private boolean mLinkUnderline = true;
+  // beta model
+  private GhostText currentGhostText = null;
+  private final Set<LinkSpan> mLinks = new HashSet<>();
+  private static final Pattern LINK_PATTERN =
+      Pattern.compile(
+          "https?://[\\w\\-._~:/?#\\[\\]@!$&'()*+,;=]+|www\\.[\\w\\-._~:/?#\\[\\]@!$&'()*+,;=]+");
 
   public void addLineIcon(int lineNumber, int iconRes) {
     LineIcon lineIcon = new LineIcon(iconRes, lineNumber);
@@ -455,6 +471,19 @@ public class CodeEditor extends View
     dispatchDiagnosticsEvent(oldDiagnostics, diagnostics);
   }
 
+  public void setGhostText(int line, int column, String text) {
+    post(
+        () -> {
+          if (text == null || text.isEmpty()) {
+            currentGhostText = null;
+          } else {
+            currentGhostText = new GhostText(line, column, text);
+            Log.d("CodeEditor", "GhostText set: " + currentGhostText);
+          }
+          invalidate();
+        });
+  }
+
   /** Helper method to dispatch diagnostics event */
   private void dispatchDiagnosticsEvent(
       List<Diagnostic> oldDiagnostics, List<Diagnostic> newDiagnostics) {
@@ -503,19 +532,26 @@ public class CodeEditor extends View
     invalidate();
   }
 
+  public void clearGhostText() {
+    post(
+        () -> {
+          currentGhostText = null;
+          invalidate();
+        });
+  }
+
   public void setMinidraw(String minidraw) {
     this.minidraw = minidraw;
   }
 
-  /**
-   * Set hint text for editor
-   *
-   * @param hint The hint text to display when editor is empty
-   */
-  public void setHint(String hint) {
-    this.mHint = hint != null ? hint : "";
-    updateHintVisibility();
-    invalidate();
+  /** Update hint visibility based on editor content */
+  private void updateHintVisibility() {
+    boolean wasShowing = mShowHint;
+    mShowHint = mHint != null && !mHint.isEmpty() && getText().length() == 0;
+
+    if (wasShowing != mShowHint) {
+      invalidate();
+    }
   }
 
   /**
@@ -540,6 +576,21 @@ public class CodeEditor extends View
   }
 
   /**
+   * Set hint text for editor
+   *
+   * @param hint The hint text to display when editor is empty
+   */
+  public void setHint(String hint) {
+    this.mHint = hint != null ? hint : "";
+    updateHintVisibility();
+    invalidate();
+  }
+
+  public boolean hasGhostText() {
+    return currentGhostText != null && currentGhostText.visible;
+  }
+
+  /**
    * Set hint text color from color resource
    *
    * @param colorRes Color resource id
@@ -552,37 +603,103 @@ public class CodeEditor extends View
     }
   }
 
-  /** Update hint visibility based on editor content */
-  private void updateHintVisibility() {
-    boolean wasShowing = mShowHint;
-    mShowHint = mHint != null && !mHint.isEmpty() && getText().length() == 0 && !hasFocus();
-
-    if (wasShowing != mShowHint) {
-      invalidate();
-    }
-  }
-
-  /** Draw hint text on canvas */
-  protected void drawHint(Canvas canvas) {
-    if (mHint == null || mHint.isEmpty() || getText().length() > 0) {
+  protected void drawGhostTexts(Canvas canvas) {
+    if (currentGhostText == null || !currentGhostText.visible) {
       return;
     }
-    float originalTextSize = mPaint.getTextSize();
-    int originalColor = mPaint.getColor();
-    Typeface originalTypeface = mPaint.getTypeface();
 
-    mPaint.setColor(mHintColor);
-    mPaint.setAlpha(128);
-    mPaint.setTypeface(getTypefaceText());
+    GhostText ghost = currentGhostText;
+
+    // ذخیره تنظیمات Paint
+    int originalAlpha = mPaint.getAlpha();
+    float originalTextSize = mPaint.getTextSize();
+    Typeface originalTypeface = mPaint.getTypeface();
+    int originalColor = mPaint.getColor();
+    float originalSkewX = mPaint.getTextSkewX();
+
+    // تنظیمات Ghost Text
+    mPaint.setAlpha(120);
+    mPaint.setTextSize(getTextSizePx());
+    mPaint.setTypeface(Typeface.create(getTypefaceText(), Typeface.ITALIC));
+    mPaint.setColor(0xFF808080); // خاکستری
+    mPaint.setTextSkewX(-0.15f);
+    mPaint.setFakeBoldText(false);
+    mPaint.setUnderlineText(false);
+    mPaint.setTextAlign(Paint.Align.LEFT);
 
     float textRegionOffset = measureTextRegionOffset();
-    float x = textRegionOffset - getOffsetX() + getDpUnit() * 8;
-    float y = getRowBaseline(0) - getOffsetY() + getRowHeight();
-    canvas.drawText(mHint, 0, mHint.length(), x, y, mPaint);
+    float offsetX = getOffsetX();
+
+    int firstVisibleRow = getFirstVisibleRow();
+    int lastVisibleRow = getLastVisibleRow();
+
+    RowIterator iterator = mLayout.obtainRowIterator(firstVisibleRow);
+
+    for (int row = firstVisibleRow; row <= lastVisibleRow && iterator.hasNext(); row++) {
+      Row rowInfo = iterator.next();
+
+      if (ghost.line != rowInfo.lineIndex) continue;
+
+      if (ghost.column >= rowInfo.startColumn && ghost.column <= rowInfo.endColumn) {
+        float[] charPos = mLayout.getCharLayoutOffset(ghost.line, ghost.column);
+        if (charPos != null && charPos.length >= 2) {
+          float x = charPos[1] + textRegionOffset - offsetX;
+          float baseline = getRowBaseline(row) - getOffsetY();
+          canvas.drawText(ghost.text, x, baseline, mPaint);
+        }
+        break;
+      }
+    }
+    iterator.reset();
+
+    // بازگردانی تنظیمات Paint
+    mPaint.setAlpha(originalAlpha);
     mPaint.setTextSize(originalTextSize);
-    mPaint.setColor(originalColor);
     mPaint.setTypeface(originalTypeface);
-    mPaint.setAlpha(255);
+    mPaint.setColor(originalColor);
+    mPaint.setTextSkewX(originalSkewX);
+  }
+
+  protected void drawHint(Canvas canvas) {
+    if (!mShowHint || mHint == null || mHint.isEmpty()) {
+      return;
+    }
+    if (getLineCount() > 0 && getText().getColumnCount(0) == 0) {
+      float originalTextSize = mPaint.getTextSize();
+      int originalColor = mPaint.getColor();
+      Typeface originalTypeface = mPaint.getTypeface();
+      Paint.Align originalAlign = mPaint.getTextAlign();
+      boolean originalFakeBold = mPaint.isFakeBoldText();
+      float originalTextSkewX = mPaint.getTextSkewX();
+      boolean originalUnderline = mPaint.isUnderlineText();
+
+      mPaint.setColor(mHintColor);
+      mPaint.setAlpha(180);
+      mPaint.setTypeface(getTypefaceText());
+      mPaint.setTextSize(getTextSizePx());
+      mPaint.setTextAlign(Paint.Align.LEFT);
+      mPaint.setFakeBoldText(true);
+      mPaint.setTextSkewX(0);
+      mPaint.setUnderlineText(false);
+      int row = 0;
+      float textRegionOffset = measureTextRegionOffset();
+      float offsetX = textRegionOffset - getOffsetX();
+      float baseline = getRowBaseline(row) - getOffsetY();
+      float lineHeight = getRowHeight();
+      String[] lines = mHint.split("\n");
+      for (int i = 0; i < lines.length; i++) {
+        canvas.drawText(lines[i], offsetX, baseline + (i * lineHeight), mPaint);
+      }
+
+      mPaint.setTextSize(originalTextSize);
+      mPaint.setColor(originalColor);
+      mPaint.setTypeface(originalTypeface);
+      mPaint.setTextAlign(originalAlign);
+      mPaint.setFakeBoldText(originalFakeBold);
+      mPaint.setTextSkewX(originalTextSkewX);
+      mPaint.setUnderlineText(originalUnderline);
+      mPaint.setAlpha(255);
+    }
   }
 
   void drawInlay(Canvas canvas, Inlay inlay) {
@@ -703,6 +820,7 @@ public class CodeEditor extends View
   /** Hide completion window later */
   protected void hideCompletionWindow() {
     mCompletionWindow.hide();
+    clearGhostText();
   }
 
   @Override
@@ -772,7 +890,7 @@ public class CodeEditor extends View
     return false;
   }
 
-  /** دریافت لیست افکت‌های سفارشی */
+  /** دریافت لیست افکت های سفارشی */
   public List<CustomEffect> getCustomEffects() {
     if (mPowerModeEffectManager != null) {
       return mPowerModeEffectManager.getCustomEffects();
@@ -905,7 +1023,7 @@ public class CodeEditor extends View
   public float measureTextRegionOffset() {
     return isLineNumberEnabled()
         ? measureLineNumber() + mDividerMargin * 2 + mDividerWidth
-        : mDpUnit * 5;
+        : mDpUnit * 10;
   }
 
   /**
@@ -968,48 +1086,113 @@ public class CodeEditor extends View
         .toString();
   }
 
-  private void handleClickEvent(ClickEvent event) {
+  public void setLinkShow(boolean show) {
+    this.mLinkDetectionEnabled = show;
+    if (!show) {
+      mLinks.clear();
+    } else {
+      updateLinkDetection();
+    }
+    invalidate();
+  }
 
+  /** Update link detection in editor Should be called whenever text changes */
+  private void updateLinkDetection() {
+    if (mLinkDetectionEnabled && mText != null) {
+      detectLinks();
+      invalidate();
+    }
+  }
+
+  private void detectLinks() {
+    if (!mLinkDetectionEnabled || mText == null) return;
+
+    mLinks.clear();
+    String text = mText.toString();
+    Matcher matcher = LINK_PATTERN.matcher(text);
+
+    while (matcher.find()) {
+      int start = matcher.start();
+      int end = matcher.end();
+
+      if (start >= 0 && end <= text.length() && end > start) {
+        try {
+          CharPosition startPos = mText.getIndexer().getCharPosition(start);
+          CharPosition endPos = mText.getIndexer().getCharPosition(end - 1);
+
+          if (startPos.line == endPos.line) {
+            LinkSpan link =
+                new LinkSpan(matcher.group(), startPos.line, startPos.column, endPos.column + 1);
+            link.setColor(mLinkColor);
+            link.setUnderline(mLinkUnderline);
+            mLinks.add(link);
+          }
+        } catch (Exception e) {
+          Log.e(LOG_TAG, "Error detecting link", e);
+        }
+      }
+    }
+  }
+
+  private LinkSpan getLinkAt(int line, int column) {
+    for (LinkSpan link : mLinks) {
+      if (link.getLine() == line
+          && column >= link.getStartColumn()
+          && column < link.getEndColumn()) {
+        return link;
+      }
+    }
+    return null;
+  }
+
+  private void handleClickEvent(ClickEvent event) {
     CharPosition pos = event.getPosition();
     MotionEvent motionEvent = event.getCausingEvent();
-    float screenX = motionEvent.getX();
-    float screenY = motionEvent.getY();
-    Log.d(
-        LOG_TAG,
-        "Click at line: "
-            + pos.line
-            + ", column: "
-            + pos.column
-            + ", screenX: "
-            + screenX
-            + ", screenY: "
-            + screenY);
-    Diagnostic diagnostic = findDiagnosticAt(pos.line, pos.column);
-
-    if (diagnostic != null) {
-      Log.d(
-          LOG_TAG,
-          "Found diagnostic: "
-              + diagnostic.getText()
-              + " at ["
-              + diagnostic.getStart()
-              + "-"
-              + diagnostic.getEnd()
-              + "]");
-    } else {
-      Log.d(LOG_TAG, "No diagnostic found at this position");
+    float clickX = motionEvent.getX();
+    float clickY = motionEvent.getY();
+    if (mLinkDetectionEnabled) {
+      LinkSpan clickedLink = getLinkAt(pos.line, pos.column);
+      if (clickedLink != null) {
+        LinkClickEvent linkEvent = new LinkClickEvent(this, clickedLink, pos, motionEvent);
+        dispatchEvent(linkEvent);
+        return;
+      }
     }
 
-    if (diagnostic != null) {
+    List<Diagnostic> lineDiagnostics = getDiagnosticsForLine(pos.line);
+    if (!lineDiagnostics.isEmpty()) {
+      List<Diagnostic> current = mDiagnosticWindow.getCurrentDiagnostics();
+      boolean sameLine = false;
+      if (!current.isEmpty()) {
+        try {
+          int currentLine = getText().getIndexer().getCharPosition(current.get(0).getStart()).line;
+          sameLine = (currentLine == pos.line);
+        } catch (Exception e) {
+          // ignore
+        }
+      }
 
-      if (mDiagnosticWindow.getCurrentDiagnostic() != null
-          && mDiagnosticWindow.getCurrentDiagnostic().getStart() == diagnostic.getStart()
-          && mDiagnosticWindow.getCurrentDiagnostic().getEnd() == diagnostic.getEnd()) {
-
+      if (sameLine && mDiagnosticWindow.isShowing()) {
         mDiagnosticWindow.dismiss();
       } else {
-
-        mDiagnosticWindow.showAtPosition(diagnostic, screenX, screenY);
+        float charX = getCharOffsetX(pos.line, pos.column) + getOffsetX();
+        float charY = getCharOffsetY(pos.line, pos.column) + getOffsetY();
+        float displayX = clickX;
+        float displayY = clickY;
+        Diagnostic specificDiagnostic = findDiagnosticAt(pos.line, pos.column);
+        if (specificDiagnostic != null) {
+          // اگر روی یک diagnostic خاص کلیک شده، اول آن را نشان بده
+          List<Diagnostic> sorted = new ArrayList<>();
+          sorted.add(specificDiagnostic);
+          for (Diagnostic d : lineDiagnostics) {
+            if (d != specificDiagnostic) {
+              sorted.add(d);
+            }
+          }
+          mDiagnosticWindow.showAtPosition(sorted, displayX, displayY);
+        } else {
+          mDiagnosticWindow.showAtPosition(lineDiagnostics, displayX, displayY);
+        }
       }
     } else {
       mDiagnosticWindow.dismiss();
@@ -1036,15 +1219,28 @@ public class CodeEditor extends View
     int line = getCursor().getLeftLine();
     int column = getCursor().getLeftColumn();
 
-    // محاسبه موقعیت روی صفحه
-    float charX = getCharOffsetX(line, column);
-    float charY = getCharOffsetY(line, column);
-    float screenX = charX + getOffsetX();
-    float screenY = charY + getOffsetY();
+    List<Diagnostic> lineDiagnostics = getDiagnosticsForLine(line);
 
-    Diagnostic diagnostic = findDiagnosticAt(line, column);
-    if (diagnostic != null) {
-      mDiagnosticWindow.showAtPosition(diagnostic, screenX, screenY);
+    if (!lineDiagnostics.isEmpty()) {
+      // محاسبه موقعیت روی صفحه
+      float charX = getCharOffsetX(line, column) + getOffsetX();
+      float charY = getCharOffsetY(line, column) + getOffsetY();
+
+      // مرتب کردن: diagnostic مربوط به کاراکتر فعلی اول باشد
+      Diagnostic atCursor = findDiagnosticAt(line, column);
+      List<Diagnostic> sorted = new ArrayList<>();
+
+      if (atCursor != null) {
+        sorted.add(atCursor);
+        for (Diagnostic d : lineDiagnostics) {
+          if (d != atCursor) {
+            sorted.add(d);
+          }
+        }
+        mDiagnosticWindow.showAtPosition(sorted, charX, charY);
+      } else {
+        mDiagnosticWindow.showAtPosition(lineDiagnostics, charX, charY);
+      }
     }
   }
 
@@ -1053,12 +1249,10 @@ public class CodeEditor extends View
     if (!lineDiagnostics.isEmpty()) {
       Diagnostic firstDiag = lineDiagnostics.get(0);
       CharPosition startPos = getText().getIndexer().getCharPosition(firstDiag.getStart());
-      float charX = getCharOffsetX(startPos.line, startPos.column);
-      float charY = getCharOffsetY(startPos.line, startPos.column);
-      float screenX = charX + getOffsetX();
-      float screenY = charY + getOffsetY();
+      float charX = getCharOffsetX(startPos.line, startPos.column) + getOffsetX();
+      float charY = getCharOffsetY(startPos.line, startPos.column) + getOffsetY();
 
-      mDiagnosticWindow.showAtPosition(firstDiag, screenX, screenY);
+      mDiagnosticWindow.showAtPosition(lineDiagnostics, charX, charY);
     }
   }
 
@@ -1184,8 +1378,12 @@ public class CodeEditor extends View
     setInterceptParentHorizontalScrollIfNeeded(false);
     setTypefaceText(Typeface.DEFAULT);
     setMagnifierEnabled(true);
+    post(() -> setLinkShow(true));
     setIsBlockLineRpg(false);
     setMiniMapEnabled(false);
+    setHint(
+        "Welcome to Ghost Idea Version 2.0.7 \nType something to write code 🥰🥰 \n Dev by Ghost");
+    mLinkColor = mColors.getColor(EditorColorScheme.LINKCOLORS);
     setCompletionWndPositionMode(WINDOW_POS_MODE_AUTO);
     mPaintOther.setStrokeWidth(getDpUnit() * 1.9f);
     mPaintOther.setStrokeCap(Paint.Cap.ROUND);
@@ -1622,12 +1820,14 @@ public class CodeEditor extends View
             if (mSpanner != null && mText != null) {
               mSpanner.analyze(mText, true);
               invalidate();
+              clearGhostText();
             }
           });
     }
     if (mCompletionWindow != null) {
       mCompletionWindow.hide();
       mCompletionWindow.setProvider(lang.getAutoCompleteProvider());
+      mCompletionWindow.cancelCompletion();
     }
     if (mLanguageSymbolPairs != null) {
       mLanguageSymbolPairs.setParent(null);
@@ -1887,6 +2087,7 @@ public class CodeEditor extends View
       mPaint.setTextAlign(Paint.Align.LEFT);
       return;
     }
+
     if (mPowerModeEffectManager != null) {
       mPowerModeEffectManager.drawEffects(canvas);
     }
@@ -1903,7 +2104,7 @@ public class CodeEditor extends View
     float lineNumberWidth = measureLineNumber();
     float offsetX = -getOffsetX() + measureTextRegionOffset();
     float textOffset = offsetX;
-
+    drawGhostTexts(canvas);
     if (isWordwrap()) {
       if (mCachedLineNumberWidth == 0) {
         mCachedLineNumberWidth = (int) lineNumberWidth;
@@ -2640,8 +2841,6 @@ public class CodeEditor extends View
       }
 
       List<Diagnostic> lineDiagnostics = getDiagnosticsForLine(line);
-
-      // 1. رسم خط موج‌دار برای همه diagnostics
       for (Diagnostic diagnostic : lineDiagnostics) {
         drawDiagnostic(
             canvas, diagnostic, line, paintingOffset, row, firstVisibleChar, lastVisibleChar);
@@ -3257,7 +3456,7 @@ public class CodeEditor extends View
             int oldColor = mPaintOther.getColor();
 
             float y = getRowBottom(row) - getOffsetY();
-            drawWavyLine(canvas, startX, y, width, state.getColor());
+            drawWavyLine(canvas, startX, y, width, diagnostic.getColor());
 
             mPaintOther.setStyle(oldStyle);
             mPaintOther.setStrokeWidth(oldStrokeWidth);
@@ -3568,6 +3767,7 @@ public class CodeEditor extends View
 
     int originalColor = color;
 
+    // تشخیص UNUSED
     for (Diagnostic diagnostic : diagnostics) {
       if (diagnostic.getState() == DiagnosticsState.UNUSED) {
         try {
@@ -3605,7 +3805,7 @@ public class CodeEditor extends View
 
       if (currentIndex >= bracketStart
           && currentIndex < bracketStart + currentPairedBracket.leftLength) {
-        mPaint.setFakeBoldText(true);
+        mPaint.setFakeBoldText(false);
         isBracketHighlighted = true;
       } else if (currentIndex >= bracketEnd
           && currentIndex < bracketEnd + currentPairedBracket.rightLength) {
@@ -3614,140 +3814,193 @@ public class CodeEditor extends View
     }
 
     if (isBracketHighlighted) {
-      mPaint.setFakeBoldText(false);
+      mPaint.setFakeBoldText(true);
     }
+
+    LinkSpan linkInLine = null;
+    if (mLinkDetectionEnabled) {
+      for (LinkSpan link : mLinks) {
+        if (link.getLine() == line) {
+          linkInLine = link;
+          break;
+        }
+      }
+    }
+
     int contextCount = contextEnd - contextStart;
-    mPaint.setColor(originalColor);
+    int currentPos = startIndex;
+    float currentOffsetX = offsetX;
 
-    if (hasSelectionOnLine && mColors.getColor(EditorColorScheme.TEXT_SELECTED) != 0) {
-      if (endIndex <= selectionStart || startIndex >= selectionEnd) {
+    while (currentPos < endIndex) {
+      int segmentStart = currentPos;
+      int segmentEnd;
+      boolean isLinkSegment = false;
 
+      if (linkInLine != null
+          && currentPos < linkInLine.getEndColumn()
+          && currentPos >= linkInLine.getStartColumn()) {
+        segmentEnd = Math.min(endIndex, linkInLine.getEndColumn());
+        isLinkSegment = true;
+        mPaint.setColor(mLinkColor);
+        mPaint.setUnderlineText(true);
+        mPaint.setFakeBoldText(true);
+
+      } else {
+        if (linkInLine != null && currentPos < linkInLine.getStartColumn()) {
+          segmentEnd = Math.min(endIndex, linkInLine.getStartColumn());
+        } else {
+          segmentEnd = endIndex;
+        }
+        mPaint.setColor(originalColor);
+        mPaint.setUnderlineText(false);
+        mPaint.setFakeBoldText(false);
+      }
+
+      if (hasSelectionOnLine && mColors.getColor(EditorColorScheme.TEXT_SELECTED) != 0) {
+        if (segmentEnd <= selectionStart || segmentStart >= selectionEnd) {
+          drawText(
+              canvas,
+              mBuffer,
+              segmentStart,
+              segmentEnd - segmentStart,
+              contextStart,
+              contextCount,
+              currentOffsetX,
+              baseline,
+              line);
+        } else {
+          if (segmentStart <= selectionStart) {
+            if (segmentEnd >= selectionEnd) {
+              drawText(
+                  canvas,
+                  mBuffer,
+                  segmentStart,
+                  selectionStart - segmentStart,
+                  contextStart,
+                  contextCount,
+                  currentOffsetX,
+                  baseline,
+                  line);
+
+              float deltaX =
+                  measureText(mBuffer, segmentStart, selectionStart - segmentStart, line);
+
+              mPaint.setColor(mColors.getColor(EditorColorScheme.TEXT_SELECTED));
+              drawText(
+                  canvas,
+                  mBuffer,
+                  selectionStart,
+                  selectionEnd - selectionStart,
+                  contextStart,
+                  contextCount,
+                  currentOffsetX + deltaX,
+                  baseline,
+                  line);
+
+              deltaX += measureText(mBuffer, selectionStart, selectionEnd - selectionStart, line);
+
+              if (isLinkSegment) {
+                mPaint.setColor(mLinkColor);
+                mPaint.setUnderlineText(true);
+              } else {
+                mPaint.setColor(originalColor);
+                mPaint.setUnderlineText(false);
+              }
+
+              drawText(
+                  canvas,
+                  mBuffer,
+                  selectionEnd,
+                  segmentEnd - selectionEnd,
+                  contextStart,
+                  contextCount,
+                  currentOffsetX + deltaX,
+                  baseline,
+                  line);
+            } else {
+              drawText(
+                  canvas,
+                  mBuffer,
+                  segmentStart,
+                  selectionStart - segmentStart,
+                  contextStart,
+                  contextCount,
+                  currentOffsetX,
+                  baseline,
+                  line);
+
+              mPaint.setColor(mColors.getColor(EditorColorScheme.TEXT_SELECTED));
+              drawText(
+                  canvas,
+                  mBuffer,
+                  selectionStart,
+                  segmentEnd - selectionStart,
+                  contextStart,
+                  contextCount,
+                  currentOffsetX
+                      + measureText(mBuffer, segmentStart, selectionStart - segmentStart, line),
+                  baseline,
+                  line);
+            }
+          } else {
+            if (segmentEnd > selectionEnd) {
+              drawText(
+                  canvas,
+                  mBuffer,
+                  selectionEnd,
+                  segmentEnd - selectionEnd,
+                  contextStart,
+                  contextCount,
+                  currentOffsetX
+                      + measureText(mBuffer, segmentStart, selectionEnd - segmentStart, line),
+                  baseline,
+                  line);
+
+              mPaint.setColor(mColors.getColor(EditorColorScheme.TEXT_SELECTED));
+              drawText(
+                  canvas,
+                  mBuffer,
+                  segmentStart,
+                  selectionEnd - segmentStart,
+                  contextStart,
+                  contextCount,
+                  currentOffsetX,
+                  baseline,
+                  line);
+            } else {
+              mPaint.setColor(mColors.getColor(EditorColorScheme.TEXT_SELECTED));
+              drawText(
+                  canvas,
+                  mBuffer,
+                  segmentStart,
+                  segmentEnd - segmentStart,
+                  contextStart,
+                  contextCount,
+                  currentOffsetX,
+                  baseline,
+                  line);
+            }
+          }
+        }
+      } else {
         drawText(
             canvas,
             mBuffer,
-            startIndex,
-            endIndex - startIndex,
+            segmentStart,
+            segmentEnd - segmentStart,
             contextStart,
             contextCount,
-            offsetX,
+            currentOffsetX,
             baseline,
             line);
-      } else {
-        if (startIndex <= selectionStart) {
-          if (endIndex >= selectionEnd) {
-            drawText(
-                canvas,
-                mBuffer,
-                startIndex,
-                selectionStart - startIndex,
-                contextStart,
-                contextCount,
-                offsetX,
-                baseline,
-                line);
-
-            float deltaX = measureText(mBuffer, startIndex, selectionStart - startIndex, line);
-
-            mPaint.setColor(mColors.getColor(EditorColorScheme.TEXT_SELECTED));
-            drawText(
-                canvas,
-                mBuffer,
-                selectionStart,
-                selectionEnd - selectionStart,
-                contextStart,
-                contextCount,
-                offsetX + deltaX,
-                baseline,
-                line);
-
-            deltaX += measureText(mBuffer, selectionStart, selectionEnd - selectionStart, line);
-
-            mPaint.setColor(originalColor);
-            drawText(
-                canvas,
-                mBuffer,
-                selectionEnd,
-                endIndex - selectionEnd,
-                contextStart,
-                contextCount,
-                offsetX + deltaX,
-                baseline,
-                line);
-          } else {
-            drawText(
-                canvas,
-                mBuffer,
-                startIndex,
-                selectionStart - startIndex,
-                contextStart,
-                contextCount,
-                offsetX,
-                baseline,
-                line);
-
-            mPaint.setColor(mColors.getColor(EditorColorScheme.TEXT_SELECTED));
-            drawText(
-                canvas,
-                mBuffer,
-                selectionStart,
-                endIndex - selectionStart,
-                contextStart,
-                contextCount,
-                offsetX + measureText(mBuffer, startIndex, selectionStart - startIndex, line),
-                baseline,
-                line);
-          }
-        } else {
-          if (endIndex > selectionEnd) {
-            drawText(
-                canvas,
-                mBuffer,
-                selectionEnd,
-                endIndex - selectionEnd,
-                contextStart,
-                contextCount,
-                offsetX + measureText(mBuffer, startIndex, selectionEnd - startIndex, line),
-                baseline,
-                line);
-
-            mPaint.setColor(mColors.getColor(EditorColorScheme.TEXT_SELECTED));
-            drawText(
-                canvas,
-                mBuffer,
-                startIndex,
-                selectionEnd - startIndex,
-                contextStart,
-                contextCount,
-                offsetX,
-                baseline,
-                line);
-          } else {
-            mPaint.setColor(mColors.getColor(EditorColorScheme.TEXT_SELECTED));
-            drawText(
-                canvas,
-                mBuffer,
-                startIndex,
-                endIndex - startIndex,
-                contextStart,
-                contextCount,
-                offsetX,
-                baseline,
-                line);
-          }
-        }
       }
-    } else {
-      drawText(
-          canvas,
-          mBuffer,
-          startIndex,
-          endIndex - startIndex,
-          contextStart,
-          contextCount,
-          offsetX,
-          baseline,
-          line);
+
+      currentOffsetX += measureText(mBuffer, segmentStart, segmentEnd - segmentStart, line);
+      currentPos = segmentEnd;
     }
+
+    mPaint.setUnderlineText(false);
+    mPaint.setFakeBoldText(false);
   }
 
   /**
@@ -6043,9 +6296,15 @@ public class CodeEditor extends View
     createLayout();
     invalidateHwRenderer();
     invalidate();
+    detectLinks();
+
     post(
         () -> {
           updateHintVisibility();
+          if (mLinkDetectionEnabled) {
+            detectLinks();
+            invalidate();
+          }
           invalidate();
         });
   }
@@ -6832,6 +7091,7 @@ public class CodeEditor extends View
       int endColumn,
       CharSequence insertedContent) {
     updateTimestamp();
+    updateLinkDetection();
     post(this::updateMatchingBrackets);
     updateHintVisibility();
     if (mPowerModeEffectManager != null && insertedContent.length() > 0) {
@@ -6925,7 +7185,25 @@ public class CodeEditor extends View
       int endColumn,
       CharSequence deletedContent) {
     updateTimestamp();
+    updateLinkDetection();
 
+    if (mCompletionWindow != null && mCompletionWindow.isShowing()) {
+      try {
+        CompletionItem firstItem = mCompletionWindow.getFirstItem();
+        if (firstItem != null && firstItem.label != null) {
+          String prefix = mCompletionWindow.getPrefix();
+          if (prefix != null && !prefix.isEmpty() && firstItem.label.startsWith(prefix)) {
+            String remaining = firstItem.label.substring(prefix.length());
+            if (!remaining.isEmpty()) {
+
+              setGhostText(mCursor.getLeftLine(), mCursor.getLeftColumn(), remaining);
+            }
+          }
+        }
+      } catch (Exception e) {
+        Log.e("CodeEditor", "Error creating ghost text", e);
+      }
+    }
     for (int i = startLine; i <= startLine + 1 && i < getLineCount(); i++) {
       mText.getLine(i).widthCache = null;
     }
