@@ -4,47 +4,68 @@ import com.github.javaparser.*;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.text.TextAnalyzer;
-import io.github.rosemoe.sora.widget.CodeEditor;
+import io.github.rosemoe.sora.model.Inlay;
+import io.github.rosemoe.sora.model.InlayAlign;
 import io.github.rosemoe.sora.diagnostics.*;
-
 import io.github.rosemoe.sora.widget.EditorColorScheme;
 import ir.ninjacoder.ghostide.core.IdeEditor;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class BasicSyntaxJavaAnalyzer implements CodeAnalyzer {
-
   private final IdeEditor editor;
-  private final Map<String, ImportInfo> imports = new HashMap<>();
-  private final Map<String, ParamInfo> params = new HashMap<>();
+  private final Map<String, MethodInfo> methodMap = new ConcurrentHashMap<>();
+  private final Map<String, ImportInfo> importMap = new ConcurrentHashMap<>();
+  private final Map<String, ParamInfo> paramMap = new ConcurrentHashMap<>();
+  private final Set<String> usedImports = ConcurrentHashMap.newKeySet();
+  private final Set<String> usedParams = ConcurrentHashMap.newKeySet();
+  private final Set<String> activeHints = ConcurrentHashMap.newKeySet();
+  private String currentCode = "";
 
-  private final Map<String, Boolean> usedImports = new HashMap<>();
-  private final Map<String, Boolean> usedParams = new HashMap<>();
+  private static class MethodInfo {
+    String name;
+    List<String> paramNames;
+    List<String> paramTypes;
+    int line;
+
+    MethodInfo(String name, List<String> paramNames, List<String> paramTypes, int line) {
+      this.name = name;
+      this.paramNames = paramNames;
+      this.paramTypes = paramTypes;
+      this.line = line;
+    }
+  }
 
   private static class ImportInfo {
-    int startIndex;
-    int endIndex;
+    int start;
+    int end;
+    String name;
     boolean isStatic;
 
-    ImportInfo(int startIndex, int endIndex, boolean isStatic) {
-      this.startIndex = startIndex;
-      this.endIndex = endIndex;
+    ImportInfo(int start, int end, String name, boolean isStatic) {
+      this.start = start;
+      this.end = end;
+      this.name = name;
       this.isStatic = isStatic;
     }
   }
 
   private static class ParamInfo {
-    int startIndex;
-    int endIndex;
+    int start;
+    int end;
+    String name;
+    String method;
 
-    ParamInfo(int startIndex, int endIndex) {
-      this.startIndex = startIndex;
-      this.endIndex = endIndex;
+    ParamInfo(int start, int end, String name, String method) {
+      this.start = start;
+      this.end = end;
+      this.name = name;
+      this.method = method;
     }
   }
 
@@ -57,41 +78,54 @@ public class BasicSyntaxJavaAnalyzer implements CodeAnalyzer {
       CharSequence content,
       TextAnalyzeResult colors,
       TextAnalyzer.AnalyzeThread.Delegate delegate) {
+    if (editor == null) return;
+    editor.clearDiagnostics();
+    editor.getInlays().removeIf(in -> in.getId() != null && in.getId().startsWith("param:"));
 
-    if (editor != null) editor.clearDiagnostics();
+    currentCode = content.toString();
+    if (currentCode.trim().isEmpty()) return;
 
-    imports.clear();
-    params.clear();
+    methodMap.clear();
+    importMap.clear();
+    paramMap.clear();
     usedImports.clear();
     usedParams.clear();
-
-    String code = content.toString();
+    activeHints.clear();
 
     try {
-      CompilationUnit cu = StaticJavaParser.parse(code);
+      CompilationUnit cu = StaticJavaParser.parse(currentCode);
 
       for (ImportDeclaration imp : cu.getImports()) {
-        if (!imp.isAsterisk() && imp.getRange().isPresent()) {
-          var r = imp.getRange().get();
-          int start = getCharIndex(code, r.begin);
-          int end = getCharIndex(code, r.end) + 1;
-          String name = imp.getNameAsString();
-          imports.put(name, new ImportInfo(start, end, imp.isStatic()));
-          usedImports.put(getSimpleName(name), false);
+        if (imp.getRange().isPresent()) {
+          Range r = imp.getRange().get();
+          int start = getOffset(currentCode, r.begin);
+          int end = getOffset(currentCode, r.end) + 1;
+          importMap.put(
+              imp.getNameAsString(),
+              new ImportInfo(start, end, imp.getNameAsString(), imp.isStatic()));
         }
       }
 
-      for (MethodDeclaration method : cu.findAll(MethodDeclaration.class)) {
-        for (Parameter p : method.getParameters()) {
+      for (MethodDeclaration m : cu.findAll(MethodDeclaration.class)) {
+        List<String> names = new ArrayList<>();
+        List<String> types = new ArrayList<>();
+        int methodLine = m.getRange().map(r -> r.begin.line).orElse(0);
+
+        for (Parameter p : m.getParameters()) {
+          names.add(p.getNameAsString());
+          types.add(p.getType().asString());
           if (p.getName().getRange().isPresent()) {
-            var r = p.getName().getRange().get();
-            int start = getCharIndex(code, r.begin);
-            int end = getCharIndex(code, r.end) + 1;
-            String key = method.getNameAsString() + "|" + p.getNameAsString();
-            params.put(key, new ParamInfo(start, end));
-            usedParams.put(key, false);
+            Range r = p.getName().getRange().get();
+            int start = getOffset(currentCode, r.begin);
+            int end = getOffset(currentCode, r.end) + 1;
+            paramMap.put(
+                m.getNameAsString() + "|" + p.getNameAsString(),
+                new ParamInfo(start, end, p.getNameAsString(), m.getNameAsString()));
           }
         }
+        methodMap.put(
+            m.getNameAsString() + "|" + names.size(),
+            new MethodInfo(m.getNameAsString(), names, types, methodLine));
       }
 
       cu.accept(
@@ -109,93 +143,135 @@ public class BasicSyntaxJavaAnalyzer implements CodeAnalyzer {
             @Override
             public void visit(NameExpr n, Void arg) {
               if (currentMethod != null) {
-                String key = currentMethod.getNameAsString() + "|" + n.getNameAsString();
-                if (usedParams.containsKey(key)) usedParams.put(key, true);
+                usedParams.add(currentMethod.getNameAsString() + "|" + n.getNameAsString());
               }
               super.visit(n, arg);
             }
 
             @Override
             public void visit(ClassOrInterfaceType n, Void arg) {
-              String name = n.getNameAsString();
-              if (usedImports.containsKey(name)) usedImports.put(name, true);
+              usedImports.add(n.getNameAsString());
               super.visit(n, arg);
             }
 
             @Override
             public void visit(ObjectCreationExpr n, Void arg) {
-              String name = n.getType().getNameAsString();
-              if (usedImports.containsKey(name)) usedImports.put(name, true);
+              usedImports.add(n.getType().getNameAsString());
               super.visit(n, arg);
             }
 
             @Override
             public void visit(MethodCallExpr n, Void arg) {
-              if (!n.getScope().isPresent()) {
-                String name = n.getNameAsString();
-                if (usedImports.containsKey(name)) usedImports.put(name, true);
-              }
               super.visit(n, arg);
+              if (!n.getRange().isPresent()) return;
+
+              String name = n.getNameAsString();
+              int argCount = n.getArguments().size();
+              MethodInfo method = methodMap.get(name + "|" + argCount);
+              if (method == null) return;
+
+              NodeList<Expression> args = n.getArguments();
+              for (int i = 0; i < args.size() && i < method.paramNames.size(); i++) {
+                Expression argExpr = args.get(i);
+                if (!argExpr.getRange().isPresent()) continue;
+
+                Range r = argExpr.getRange().get();
+                int start = getOffset(currentCode, r.begin);
+                String id = "param:" + start + ":" + name + ":" + i;
+
+                if (!activeHints.contains(id)) {
+                  activeHints.add(id);
+                  int color = 0x4D000000;
+                  switch (i % 8) {
+                    case 0:
+                      color = 0x4D4CAF50;
+                      break;
+                    case 1:
+                      color = 0x4D2196F3;
+                      break;
+                    case 2:
+                      color = 0x4DFF9800;
+                      break;
+                    case 3:
+                      color = 0x4DE91E63;
+                      break;
+                    case 4:
+                      color = 0x4D9C27B0;
+                      break;
+                    case 5:
+                      color = 0x4D00BCD4;
+                      break;
+                    case 6:
+                      color = 0x4DFF5722;
+                      break;
+                    case 7:
+                      color = 0x4D607D8B;
+                      break;
+                  }
+                  Inlay inlay =
+                      new Inlay(
+                          start,
+                          color,
+                          0xFFFFFFFF,
+                          InlayAlign.LEFT,
+                          " " + method.paramNames.get(i) + " ",
+                          id,
+                          false);
+               //   editor.addInlay(inlay);
+                }
+              }
             }
           },
           null);
 
-      for (Map.Entry<String, ImportInfo> entry : imports.entrySet()) {
-        String name = entry.getKey();
-        ImportInfo pos = entry.getValue();
-        boolean used = usedImports.getOrDefault(getSimpleName(name), false);
-        if (!used && editor != null) {
+      for (Map.Entry<String, ImportInfo> e : importMap.entrySet()) {
+        String simpleName = getSimpleName(e.getKey());
+        if (!usedImports.contains(simpleName)) {
           editor.addDiagnostic(
               new Diagnostic(
-                  pos.startIndex,
-                  pos.endIndex,
-                  "Unused import: " + name,
+                  e.getValue().start,
+                  e.getValue().end,
+                  "Unused import: " + simpleName,
                   DiagnosticsState.UNUSED,
-                  getColorEditor(EditorColorScheme.jsfun)));
+                  editor.getColorScheme().getColor(EditorColorScheme.jsfun)));
         }
       }
 
-      for (Map.Entry<String, ParamInfo> entry : params.entrySet()) {
-        String key = entry.getKey();
-        ParamInfo pos = entry.getValue();
-        boolean used = usedParams.getOrDefault(key, false);
-        if (!used && editor != null) {
+      for (Map.Entry<String, ParamInfo> e : paramMap.entrySet()) {
+        if (!usedParams.contains(e.getKey())) {
           editor.addDiagnostic(
               new Diagnostic(
-                  pos.startIndex,
-                  pos.endIndex,
-                  "Unused parameter: " + key.split("\\|")[1],
+                  e.getValue().start,
+                  e.getValue().end,
+                  "Parameter '" + e.getValue().name + "' is never used",
                   DiagnosticsState.UNUSED,
-                  getColorEditor(EditorColorScheme.javaparament)));
+                  editor.getColorScheme().getColor(EditorColorScheme.javaparament)));
         }
       }
 
       if (editor != null) editor.showCurrentDiagnostic();
 
     } catch (Exception e) {
-      e.printStackTrace();
+      /* ignore parse errors */
     }
   }
 
-  private int getCharIndex(String code, com.github.javaparser.Position pos) {
-    int line = pos.line;
-    int column = pos.column;
-    int currentLine = 1;
-    int offset = 0;
-    for (int i = 0; i < code.length(); i++) {
-      if (currentLine == line) return offset + column - 1;
-      if (code.charAt(i) == '\n') currentLine++;
-      offset++;
+  private int getOffset(String text, Position pos) {
+    int line = 1, col = 1;
+    for (int i = 0; i < text.length(); i++) {
+      if (line == pos.line && col == pos.column) return i;
+      if (text.charAt(i) == '\n') {
+        line++;
+        col = 1;
+      } else {
+        col++;
+      }
     }
-    return code.length();
+    return text.length();
   }
 
-  private static String getSimpleName(String name) {
-    int idx = name.lastIndexOf('.');
-    return idx == -1 ? name : name.substring(idx + 1);
-  }
-
-  int getColorEditor(int id) {
-    return editor.getColorScheme().getColor(id);
+  private String getSimpleName(String name) {
+    int dot = name.lastIndexOf('.');
+    return dot == -1 ? name : name.substring(dot + 1);
   }
 }

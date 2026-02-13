@@ -28,7 +28,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.view.accessibility.AccessibilityNodeInfo;
 import com.ninjacoder.jgit.particle.custom.CustomEffect;
 import io.github.rosemoe.sora.diagnostics.Diagnostic;
-import io.github.rosemoe.sora.event.ClickEvent;
+import io.github.rosemoe.sora.event.*;
 import io.github.rosemoe.sora.widget.diagnostics.DiagnosticPopupWindow;
 import io.github.rosemoe.sora.event.DiagnosticsEvent;
 import static io.github.rosemoe.sora.text.TextUtils.isEmoji;
@@ -518,26 +518,82 @@ public class CodeEditor extends View
   private final List<Inlay> inlays = new ArrayList<>();
 
   public void addInlay(Inlay inlay) {
+    if (inlay == null) return;
+    removeInlayById(inlay.getId());
+
     inlays.add(inlay);
+    sortInlays();
     invalidate();
   }
 
+  /** افزودن چندین inlay به طور همزمان */
+  public void addInlays(List<Inlay> newInlays) {
+    if (newInlays == null || newInlays.isEmpty()) return;
+
+    for (Inlay inlay : newInlays) {
+      removeInlayById(inlay.getId());
+    }
+
+    inlays.addAll(newInlays);
+    sortInlays();
+    invalidate();
+  }
+
+  /** حذف یک inlay */
   public void removeInlay(Inlay inlay) {
-    inlays.remove(inlay);
+    if (inlay != null) {
+      inlays.remove(inlay);
+      invalidate();
+    }
+  }
+
+  /** حذف inlay با شناسه مشخص */
+  public void removeInlayById(String id) {
+    if (id == null) return;
+
+    inlays.removeIf(inlay -> id.equals(inlay.getId()));
     invalidate();
   }
 
+  /** پاک کردن همه inlayها */
   public void clearInlays() {
     inlays.clear();
     invalidate();
   }
 
-  public void clearGhostText() {
-    post(
-        () -> {
-          currentGhostText = null;
-          invalidate();
-        });
+  /** دریافت لیست همه inlayها */
+  public List<Inlay> getInlays() {
+    return new ArrayList<>(inlays);
+  }
+
+  /** دریافت inlayهای یک خط مشخص */
+  public List<Inlay> getInlaysForLine(int line) {
+    List<Inlay> result = new ArrayList<>();
+    int startIndex = getText().getCharIndex(line, 0);
+    int endIndex = getText().getCharIndex(line, getText().getColumnCount(line));
+
+    for (Inlay inlay : inlays) {
+      if (inlay.getEnd() >= startIndex && inlay.getEnd() <= endIndex) {
+        result.add(inlay);
+      }
+    }
+    return result;
+  }
+
+  /** مرتب سازی inlayها بر اساس موقعیت */
+  private void sortInlays() {
+    inlays.sort((a, b) -> Integer.compare(a.getEnd(), b.getEnd()));
+  }
+
+  /** دریافت inlay در موقعیت مشخص (برای تشخیص کلیک) */
+  public Inlay getInlayAt(float x, float y) {
+    for (Inlay inlay : inlays) {
+      if (inlay.getDrawingRect() != null
+          && inlay.getDrawingRect().contains(x + getOffsetX(), y + getOffsetY())) {
+        return inlay;
+      }
+    }
+    return null;
   }
 
   public void setMinidraw(String minidraw) {
@@ -609,23 +665,20 @@ public class CodeEditor extends View
     }
 
     GhostText ghost = currentGhostText;
-
-    // ذخیره تنظیمات Paint
     int originalAlpha = mPaint.getAlpha();
     float originalTextSize = mPaint.getTextSize();
     Typeface originalTypeface = mPaint.getTypeface();
-    int originalColor = mPaint.getColor();
+    int originalColor = mColors.getColor(EditorColorScheme.GHOSTTEXTHINT);
     float originalSkewX = mPaint.getTextSkewX();
-
-    // تنظیمات Ghost Text
-    mPaint.setAlpha(120);
+    boolean originalFakeBold = mPaint.isFakeBoldText();
+    boolean originalUnderline = mPaint.isUnderlineText();
+    mPaint.setAlpha(140);
     mPaint.setTextSize(getTextSizePx());
-    mPaint.setTypeface(Typeface.create(getTypefaceText(), Typeface.ITALIC));
-    mPaint.setColor(0xFF808080); // خاکستری
-    mPaint.setTextSkewX(-0.15f);
+    mPaint.setTypeface(originalTypeface);
+    mPaint.setColor(originalColor);
+    mPaint.setTextSkewX(0);
     mPaint.setFakeBoldText(false);
     mPaint.setUnderlineText(false);
-    mPaint.setTextAlign(Paint.Align.LEFT);
 
     float textRegionOffset = measureTextRegionOffset();
     float offsetX = getOffsetX();
@@ -651,13 +704,13 @@ public class CodeEditor extends View
       }
     }
     iterator.reset();
-
-    // بازگردانی تنظیمات Paint
     mPaint.setAlpha(originalAlpha);
     mPaint.setTextSize(originalTextSize);
     mPaint.setTypeface(originalTypeface);
     mPaint.setColor(originalColor);
     mPaint.setTextSkewX(originalSkewX);
+    mPaint.setFakeBoldText(originalFakeBold);
+    mPaint.setUnderlineText(originalUnderline);
   }
 
   protected void drawHint(Canvas canvas) {
@@ -702,93 +755,132 @@ public class CodeEditor extends View
     }
   }
 
-  void drawInlay(Canvas canvas, Inlay inlay) {
-    try {
 
-      if (inlay == null || inlay.getText() == null || inlay.getText().isEmpty()) {
-        return;
-      }
-
-      canvas.save();
-      float[] charPos = mLayout.getCharLayoutOffset(inlay.getLine(), inlay.getColumn());
-      if (charPos == null) {
-        canvas.restore();
-        return;
-      }
-
-      float charX = charPos[1] + measureTextRegionOffset() - getOffsetX();
-      float charY = charPos[0] - getOffsetY();
-      ContentLine lineContent = mText.getLine(inlay.getLine());
-      float currentCharWidth = 0;
-      if (inlay.column < lineContent.length()) {
-        currentCharWidth = measureText(lineContent, inlay.getColumn(), 1, inlay.getLine());
-      }
-      float inlayStartX = charX + currentCharWidth;
-
-      float verticalPadding = getDpUnit() * 1;
-      Paint.FontMetrics fm = mPaintGraph.getFontMetrics();
-      float textHeight = fm.descent - fm.ascent;
-      float baselineY = charY - (textHeight / 2) - verticalPadding * 2;
-
-      Paint.Style oldStyle = mPaintGraph.getStyle();
-      float oldTextSize = mPaintGraph.getTextSize();
-      Typeface oldTypeface = mPaintGraph.getTypeface();
-      int oldColor = mPaintGraph.getColor();
-      Paint.Align oldAlign = mPaintGraph.getTextAlign();
-      mPaintGraph.setTextSize(mPaint.getTextSize() * 0.85f);
-      mPaintGraph.setTypeface(getTypefaceText());
-      float textWidth = mPaintGraph.measureText(inlay.getText());
-
-      float horizontalPadding = getDpUnit() * 4;
-      float marginFromChar = getDpUnit() * 2;
-      float bgWidth = textWidth + horizontalPadding * 2;
-      float bgHeight = textHeight + verticalPadding * 2;
-      float bgLeft = inlayStartX + marginFromChar;
-      float bgTop = baselineY - (bgHeight / 2);
-      float bgRight = bgLeft + bgWidth;
-      float bgBottom = bgTop + bgHeight;
-      if (bgRight < 0 || bgLeft > getWidth() || bgBottom < 0 || bgTop > getHeight()) {
-        mPaintGraph.setStyle(oldStyle);
-        mPaintGraph.setTextSize(oldTextSize);
-        mPaintGraph.setTypeface(oldTypeface);
-        mPaintGraph.setColor(oldColor);
-        mPaintGraph.setTextAlign(oldAlign);
-        canvas.restore();
-        return;
-      }
-      int backgroundColor = inlay.getBackground();
-
-      mPaintGraph.setStyle(Paint.Style.FILL);
-      mPaintGraph.setColor(backgroundColor);
-      float cornerRadius = getDpUnit() * 3;
-      canvas.drawRoundRect(
-          bgLeft, bgTop, bgRight, bgBottom, cornerRadius, cornerRadius, mPaintGraph);
-
-      mPaintGraph.setStyle(Paint.Style.STROKE);
-      mPaintGraph.setStrokeWidth(getDpUnit() * 0.3f);
-      mPaintGraph.setColor(0x33000000);
-      canvas.drawRoundRect(
-          bgLeft, bgTop, bgRight, bgBottom, cornerRadius, cornerRadius, mPaintGraph);
-
-      float centerX = (bgLeft + bgRight) / 2f;
-      float centerY = (bgTop + bgBottom) / 2f;
-      float textY = centerY - (fm.ascent + fm.descent) / 2f;
-
-      mPaintGraph.setStyle(Paint.Style.FILL);
-      mPaintGraph.setColor(inlay.getColor());
-      mPaintGraph.setTextAlign(Paint.Align.CENTER);
-      mPaintGraph.setAntiAlias(true);
-      canvas.drawText(inlay.getText(), centerX, textY, mPaintGraph);
-      mPaintGraph.setStyle(oldStyle);
-      mPaintGraph.setTextSize(oldTextSize);
-      mPaintGraph.setTypeface(oldTypeface);
-      mPaintGraph.setColor(oldColor);
-      mPaintGraph.setTextAlign(oldAlign);
-
-      canvas.restore();
-    } catch (Exception err) {
-
+  public void clearGhostText() {
+    if (currentGhostText != null) {
+      currentGhostText = null;
+      invalidate();
     }
+  }
+
+  public float getDpUnitUnit() {
+    return mDpUnit;
+  }
+
+  /** ترسیم inlay روی canvas */
+  void drawInlay(Canvas canvas, Inlay inlay) {
+    if (inlay == null || inlay.getText() == null || inlay.getText().isEmpty()) {
+      return;
+    }
+
+    try {
+      // دریافت موقعیت کاراکتر مورد نظر
+      CharPosition pos = getText().getIndexer().getCharPosition(inlay.getEnd());
+      int line = pos.line;
+
+      // اگر خط خارج از محدوده قابل مشاهده است، ترسیم نکن
+      if (line < getFirstVisibleLine() || line > getLastVisibleLine()) {
+        return;
+      }
+
+      // محاسبه موقعیت ترسیم
+      float[] charOffset = mLayout.getCharLayoutOffset(line, pos.column);
+      float baseX = charOffset[1] + measureTextRegionOffset() - getOffsetX();
+      float baseY = getRowBaseline(getRowForLine(line)) - getOffsetY();
+
+      // ذخیره تنظیمات قبلی paint
+      float originalTextSize = mPaint.getTextSize();
+      int originalColor = mPaint.getColor();
+      Typeface originalTypeface = mPaint.getTypeface();
+      Paint.Align originalAlign = mPaint.getTextAlign();
+      boolean originalFakeBold = mPaint.isFakeBoldText();
+
+      // تنظیم paint برای inlay
+      mPaint.setTextSize(getTextSizePx() * 0.9f); // کمی کوچکتر
+      mPaint.setTypeface(Typeface.MONOSPACE);
+      mPaint.setFakeBoldText(false);
+
+      // اندازه گیری عرض متن
+      float textWidth = mPaint.measureText(inlay.getText());
+      float padding = getDpUnit() * 4;
+      float totalWidth = textWidth + (padding * 2);
+
+      // محاسبه موقعیت نهایی بر اساس align
+      float drawX = baseX;
+      float rectLeft, rectRight;
+
+      switch (inlay.getAlign()) {
+        case RIGHT:
+          rectLeft = baseX - totalWidth;
+          rectRight = baseX;
+          drawX = baseX - textWidth - padding;
+          break;
+        case LEFT:
+        default:
+          rectLeft = baseX;
+          rectRight = baseX + totalWidth;
+          drawX = baseX + padding;
+          break;
+      }
+
+      // موقعیت عمودی
+      float rectTop = baseY - getRowHeight() + getDpUnit() * 2;
+      float rectBottom = baseY + getDpUnit() * 2;
+
+      // ذخیره موقعیت برای تشخیص کلیک
+      RectF drawingRect = new RectF(rectLeft, rectTop, rectRight, rectBottom);
+      inlay.setDrawingRect(drawingRect);
+
+      // ترسیم پس مینه
+      if (inlay.getBackgroundColor() != 0) {
+        mPaint.setColor(inlay.getBackgroundColor());
+        mPaint.setStyle(Paint.Style.FILL);
+        canvas.drawRoundRect(drawingRect, getDpUnit() * 4, getDpUnit() * 4, mPaint);
+      }
+
+      // ترسیم متن
+      if (inlay.getTextColor() != 0) {
+        mPaint.setColor(inlay.getTextColor());
+      } else {
+        mPaint.setColor(mColors.getColor(EditorColorScheme.TEXT_NORMAL));
+      }
+
+      mPaint.setTextAlign(Paint.Align.LEFT);
+      canvas.drawText(inlay.getText(), drawX, baseY - getDpUnit() * 1, mPaint);
+
+      // اگر inlay از نوع بلوک است، یک خط جداکننده رسم کن
+      if (inlay.isBlock()) {
+        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStrokeWidth(getDpUnitUnit() * 1);
+        mPaint.setColor(0x80FFFFFF);
+        canvas.drawRoundRect(drawingRect, getDpUnit() * 4, getDpUnit() * 4, mPaint);
+      }
+
+      // بازیابی تنظیمات paint
+      mPaint.setTextSize(originalTextSize);
+      mPaint.setColor(originalColor);
+      mPaint.setTypeface(originalTypeface);
+      mPaint.setTextAlign(originalAlign);
+      mPaint.setFakeBoldText(originalFakeBold);
+      mPaint.setStyle(Paint.Style.FILL);
+
+    } catch (Exception e) {
+      Log.e("CodeEditor", "Error drawing inlay", e);
+    }
+  }
+
+  /** دریافت شماره ردیف برای یک خط مشخص */
+  private int getRowForLine(int line) {
+    RowIterator iterator = mLayout.obtainRowIterator(0);
+    int row = 0;
+    while (iterator.hasNext()) {
+      Row rowInfo = iterator.next();
+      if (rowInfo.lineIndex == line) {
+        return row;
+      }
+      row++;
+    }
+    return 0;
   }
 
   public CodeEditor(Context context) {
@@ -1158,6 +1250,12 @@ public class CodeEditor extends View
         return;
       }
     }
+    Inlay clickedInlay = getInlayAt(clickX, clickY);
+    if (clickedInlay != null) {
+
+      dispatchEvent(new InlayClickEvent(this, clickedInlay, pos, motionEvent));
+      return;
+    }
 
     List<Diagnostic> lineDiagnostics = getDiagnosticsForLine(pos.line);
     if (!lineDiagnostics.isEmpty()) {
@@ -1382,7 +1480,10 @@ public class CodeEditor extends View
     setIsBlockLineRpg(false);
     setMiniMapEnabled(false);
     setHint(
-        "Welcome to Ghost Idea Version 2.0.7 \nType something to write code 🥰🥰 \n Dev by Ghost");
+        "Ghost IDE v2.0.7\n"
+            + "Structured. Stable. Smart.\n"
+            + "Start typing — mistakes are part of the process.\n"
+            + "Built with care by Ghost");
     mLinkColor = mColors.getColor(EditorColorScheme.LINKCOLORS);
     setCompletionWndPositionMode(WINDOW_POS_MODE_AUTO);
     mPaintOther.setStrokeWidth(getDpUnit() * 1.9f);

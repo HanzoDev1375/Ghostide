@@ -58,13 +58,13 @@ import java.util.Objects;
  * @author Rose
  */
 public class EditorColorScheme {
-  // ----------------Issue colors----------------
   public static final int PROBLEM_TYPO = 37;
   public static final int PROBLEM_WARNING = 36;
   public static final int PROBLEM_ERROR = 35;
   public static final int PROBLEM_UNUSED = 38;
   public static final int LINKCOLORS = 39;
-  // -----------------Highlight colors-----------
+  public static final int GHOSTTEXTHINT = 40;
+
   public static final int ATTRIBUTE_VALUE = 34;
   public static final int ATTRIBUTE_NAME = 33;
   public static final int HTML_TAG = 32;
@@ -352,7 +352,7 @@ public class EditorColorScheme {
   protected static final int START_COLOR_ID = 1;
 
   /** Max pre-defined color id */
-  protected static final int END_COLOR_ID = 40;
+  protected static final int END_COLOR_ID = 44;
 
   public static final int FOREGROUND = 923381;
 
@@ -502,8 +502,8 @@ public class EditorColorScheme {
       case BLOCK_LINE_CURRENT:
         color = 0xff999999;
         break;
-      case PROBLEM_UNUSED: 
-        color = 0xFF9399B2; 
+      case PROBLEM_UNUSED:
+        color = 0xFF9399B2;
         break;
       case IDENTIFIER_VAR:
       case IDENTIFIER_NAME:
@@ -534,8 +534,11 @@ public class EditorColorScheme {
       case PROBLEM_TYPO:
         color = 0xffffffff;
         break;
-      case LINKCOLORS: 
+      case LINKCOLORS:
         color = 0xFF03D4F9;
+        break;
+      case GHOSTTEXTHINT:
+        color = 0xFF6A6A6A;
         break;
     }
 

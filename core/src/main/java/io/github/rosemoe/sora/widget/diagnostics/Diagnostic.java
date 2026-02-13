@@ -1,5 +1,6 @@
 package io.github.rosemoe.sora.diagnostics;
 
+import android.graphics.Color;
 import androidx.core.graphics.ColorUtils;
 
 public class Diagnostic {
@@ -59,11 +60,11 @@ public class Diagnostic {
     return darkenColor(this.color, 0.3f);
   }
 
-  int darkenColor(int color, float darkenFactor) {
-    darkenFactor = Math.max(0, Math.min(1, darkenFactor));
-    float[] hsl = new float[3];
-    ColorUtils.colorToHSL(color, hsl);
-    hsl[2] = hsl[2] * (1 - darkenFactor);
-    return ColorUtils.HSLToColor(hsl);
+  private int darkenColor(int color, float factor) {
+    int alpha = Color.alpha(color);
+    int red = Math.max(0, (int) (Color.red(color) * (1 - factor)));
+    int green = Math.max(0, (int) (Color.green(color) * (1 - factor)));
+    int blue = Math.max(0, (int) (Color.blue(color) * (1 - factor)));
+    return Color.argb(alpha, red, green, blue);
   }
 }
