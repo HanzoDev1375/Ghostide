@@ -86,6 +86,8 @@ import androidx.annotation.RequiresApi;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import io.github.rosemoe.sora.widget.icon.IconSpanManager;
+import io.github.rosemoe.sora.widget.icon.IconSpan;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -321,6 +323,7 @@ public class CodeEditor extends View
   private boolean mLastCursorState;
   private boolean mMagnifierEnabled;
   private RectF mRect;
+  private boolean released;
   private SelectionHandleStyle.HandleDescriptor mLeftHandle;
   private SelectionHandleStyle.HandleDescriptor mRightHandle;
   private SelectionHandleStyle.HandleDescriptor mInsertHandle;
@@ -402,6 +405,7 @@ public class CodeEditor extends View
   private static final Pattern LINK_PATTERN =
       Pattern.compile(
           "https?://[\\w\\-._~:/?#\\[\\]@!$&'()*+,;=]+|www\\.[\\w\\-._~:/?#\\[\\]@!$&'()*+,;=]+");
+  private IconSpanManager iconSpanManager;
 
   public void addLineIcon(int lineNumber, int iconRes) {
     LineIcon lineIcon = new LineIcon(iconRes, lineNumber);
@@ -754,7 +758,6 @@ public class CodeEditor extends View
       mPaint.setAlpha(255);
     }
   }
-
 
   public void clearGhostText() {
     if (currentGhostText != null) {
@@ -1256,7 +1259,11 @@ public class CodeEditor extends View
       dispatchEvent(new InlayClickEvent(this, clickedInlay, pos, motionEvent));
       return;
     }
-
+    if (iconSpanManager != null) {
+      if (iconSpanManager.handleIconClick(mEventManager, clickX, clickY, motionEvent)) {
+        return;
+      }
+    }
     List<Diagnostic> lineDiagnostics = getDiagnosticsForLine(pos.line);
     if (!lineDiagnostics.isEmpty()) {
       List<Diagnostic> current = mDiagnosticWindow.getCurrentDiagnostics();
@@ -1496,11 +1503,34 @@ public class CodeEditor extends View
       setEdgeEffectColor(ThemeUtils.getColorPrimary((ContextThemeWrapper) getContext()));
     }
     mDiagnosticWindow = new DiagnosticPopupWindow(this);
+    iconSpanManager = new IconSpanManager(this);
     subscribeEvent(
         ClickEvent.class,
         (event, unsubscribe) -> {
           handleClickEvent(event);
         });
+  }
+
+  public IconSpanManager getIconSpanManager() {
+    return iconSpanManager;
+  }
+
+  public void addIconSpan(IconSpan iconSpan) {
+    if (iconSpanManager != null) {
+      iconSpanManager.addIconSpan(iconSpan);
+    }
+  }
+
+  public void addIconSpans(List<IconSpan> iconSpans) {
+    if (iconSpanManager != null) {
+      iconSpanManager.addIconSpans(iconSpans);
+    }
+  }
+
+  public void clearIconSpans() {
+    if (iconSpanManager != null) {
+      iconSpanManager.clearIconSpans();
+    }
   }
 
   /** Set cursor animation model */
@@ -2161,6 +2191,7 @@ public class CodeEditor extends View
     updateTimestamp();
     var oldTextSize = getTextSizePx();
     dispatchEvent(new TextSizeChangeEvent(this, oldTextSize, size));
+    if (iconSpanManager != null) iconSpanManager.onZoomChanged();
   }
 
   @Override
@@ -2782,6 +2813,7 @@ public class CodeEditor extends View
     int leadingWhitespaceEnd = 0;
     int trailingWhitespaceStart = 0;
     float circleRadius = 0f;
+    iconSpanManager.drawIconSpans(canvas);
     float textRegionStart = measureTextRegionOffset();
     if (shouldInitializeNonPrintable()) {
       float spaceWidth = mPaint.getSpaceWidth();
@@ -2809,6 +2841,7 @@ public class CodeEditor extends View
       }
 
       drawLineIcons(canvas, row, line, textRegionStart);
+      
       float[] charPos =
           findFirstVisibleChar(offset3, rowInf.startColumn, rowInf.endColumn, mBuffer, line);
       int firstVisibleChar = (int) charPos[0];
@@ -2946,7 +2979,7 @@ public class CodeEditor extends View
         drawDiagnostic(
             canvas, diagnostic, line, paintingOffset, row, firstVisibleChar, lastVisibleChar);
       }
-
+      
       for (Diagnostic diagnostic : lineDiagnostics) {
         if (diagnostic.getState() == DiagnosticsState.UNUSED) {
           try {
@@ -5483,6 +5516,44 @@ public class CodeEditor extends View
   }
 
   /**
+   * Post the given action to message queue. Run the action if editor is not released.
+   *
+   * @param action The Runnable to be executed.
+   * @return Returns true if the Runnable was successfully placed in to the message queue. Returns
+   *     false on failure, usually because the looper processing the message queue is exiting.
+   * @see View#post(Runnable)
+   */
+  public boolean postInLifecycle(Runnable action) {
+    return EditorHandler.INSTANCE.post(
+        () -> {
+          if (released) {
+            return;
+          }
+          action.run();
+        });
+  }
+
+  /**
+   * Post the given action to message queue. Run the action if editor is not released.
+   *
+   * @param action The Runnable to be executed.
+   * @param delayMillis The delay (in milliseconds) until the Runnable will be executed.
+   * @return Returns true if the Runnable was successfully placed in to the message queue. Returns
+   *     false on failure, usually because the looper processing the message queue is exiting.
+   * @see View#postDelayed(Runnable, long)
+   */
+  public boolean postDelayedInLifecycle(Runnable action, long delayMillis) {
+    return EditorHandler.INSTANCE.postDelayed(
+        () -> {
+          if (released) {
+            return;
+          }
+          action.run();
+        },
+        delayMillis);
+  }
+
+  /**
    * @see CodeEditor#setInputType(int)
    */
   public int getInputType() {
@@ -7145,6 +7216,7 @@ public class CodeEditor extends View
     if (oldHeight > h) {
       ensureSelectionVisible();
     }
+    if (iconSpanManager != null) iconSpanManager.onSizeChanged();
   }
 
   @Override
@@ -7271,6 +7343,7 @@ public class CodeEditor extends View
             mText.getIndexer().getCharPosition(startLine, startColumn),
             mText.getIndexer().getCharPosition(endLine, endColumn),
             insertedContent));
+    if (iconSpanManager != null) iconSpanManager.onTextChanged();
   }
 
   private void updateTimestamp() {

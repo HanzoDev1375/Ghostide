@@ -1,5 +1,9 @@
 package io.github.rosemoe.sora.langs.java;
 
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import com.github.javaparser.*;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
@@ -7,14 +11,18 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
+import io.github.rosemoe.sora.text.CharPosition;
+import io.github.rosemoe.sora.text.Content;
 import io.github.rosemoe.sora.text.TextAnalyzeResult;
 import io.github.rosemoe.sora.text.TextAnalyzer;
 import io.github.rosemoe.sora.model.Inlay;
 import io.github.rosemoe.sora.model.InlayAlign;
 import io.github.rosemoe.sora.diagnostics.*;
+import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
 import ir.ninjacoder.ghostide.core.IdeEditor;
 import java.util.*;
+import ir.ninjacoder.ghostide.core.R;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class BasicSyntaxJavaAnalyzer implements CodeAnalyzer {
@@ -26,6 +34,9 @@ public class BasicSyntaxJavaAnalyzer implements CodeAnalyzer {
   private final Set<String> usedParams = ConcurrentHashMap.newKeySet();
   private final Set<String> activeHints = ConcurrentHashMap.newKeySet();
   private String currentCode = "";
+
+  // فاصله ثابت برای آیکون‌ها از متن (بر حسب پیکسل)
+  private static final int ICON_TEXT_PADDING = 8;
 
   private static class MethodInfo {
     String name;
@@ -79,7 +90,10 @@ public class BasicSyntaxJavaAnalyzer implements CodeAnalyzer {
       TextAnalyzeResult colors,
       TextAnalyzer.AnalyzeThread.Delegate delegate) {
     if (editor == null) return;
+
+    // پاک کردن وضعیت قبلی
     editor.clearDiagnostics();
+    
     editor.getInlays().removeIf(in -> in.getId() != null && in.getId().startsWith("param:"));
 
     currentCode = content.toString();
@@ -95,17 +109,27 @@ public class BasicSyntaxJavaAnalyzer implements CodeAnalyzer {
     try {
       CompilationUnit cu = StaticJavaParser.parse(currentCode);
 
+      // مرحله 1: جمع‌آوری اطلاعات import
       for (ImportDeclaration imp : cu.getImports()) {
         if (imp.getRange().isPresent()) {
           Range r = imp.getRange().get();
-          int start = getOffset(currentCode, r.begin);
-          int end = getOffset(currentCode, r.end) + 1;
+
+          // استفاده از متد جدید برای محاسبه دقیق آفست
+          int start = getCharOffsetFromPosition(r.begin);
+          int end = getCharOffsetFromPosition(r.end);
+
+          // محاسبه اند واقعی import (بدون فاصله‌های اضافی)
+          int actualEnd = calculateActualEnd(content, end);
+
+
+
           importMap.put(
               imp.getNameAsString(),
-              new ImportInfo(start, end, imp.getNameAsString(), imp.isStatic()));
+              new ImportInfo(start, actualEnd, imp.getNameAsString(), imp.isStatic()));
         }
       }
 
+      // مرحله 2: جمع‌آوری اطلاعات متدها
       for (MethodDeclaration m : cu.findAll(MethodDeclaration.class)) {
         List<String> names = new ArrayList<>();
         List<String> types = new ArrayList<>();
@@ -116,11 +140,17 @@ public class BasicSyntaxJavaAnalyzer implements CodeAnalyzer {
           types.add(p.getType().asString());
           if (p.getName().getRange().isPresent()) {
             Range r = p.getName().getRange().get();
-            int start = getOffset(currentCode, r.begin);
-            int end = getOffset(currentCode, r.end) + 1;
+
+            // محاسبه دقیق آفست برای پارامتر
+            int start = getCharOffsetFromPosition(r.begin);
+            int end = getCharOffsetFromPosition(r.end);
+
+            // محاسبه اند واقعی
+            int actualEnd = calculateActualEnd(content, end);
+
             paramMap.put(
                 m.getNameAsString() + "|" + p.getNameAsString(),
-                new ParamInfo(start, end, p.getNameAsString(), m.getNameAsString()));
+                new ParamInfo(start, actualEnd, p.getNameAsString(), m.getNameAsString()));
           }
         }
         methodMap.put(
@@ -128,6 +158,7 @@ public class BasicSyntaxJavaAnalyzer implements CodeAnalyzer {
             new MethodInfo(m.getNameAsString(), names, types, methodLine));
       }
 
+      // مرحله 3: تحلیل استفاده‌ها
       cu.accept(
           new VoidVisitorAdapter<Void>() {
             MethodDeclaration currentMethod = null;
@@ -176,7 +207,9 @@ public class BasicSyntaxJavaAnalyzer implements CodeAnalyzer {
                 if (!argExpr.getRange().isPresent()) continue;
 
                 Range r = argExpr.getRange().get();
-                int start = getOffset(currentCode, r.begin);
+
+                // محاسبه دقیق آفست برای نمایش inlay
+                int start = getCharOffsetFromPosition(r.begin);
                 String id = "param:" + start + ":" + name + ":" + i;
 
                 if (!activeHints.contains(id)) {
@@ -208,6 +241,8 @@ public class BasicSyntaxJavaAnalyzer implements CodeAnalyzer {
                       color = 0x4D607D8B;
                       break;
                   }
+
+                  // ایجاد inlay با فاصله مناسب
                   Inlay inlay =
                       new Inlay(
                           start,
@@ -217,16 +252,19 @@ public class BasicSyntaxJavaAnalyzer implements CodeAnalyzer {
                           " " + method.paramNames.get(i) + " ",
                           id,
                           false);
-               //   editor.addInlay(inlay);
+                  // فعال کردن خط زیر وقتی می‌خوای inlay رو اضافه کنی
+                  // editor.addInlay(inlay);
                 }
               }
             }
           },
           null);
 
+      // مرحله 4: اضافه کردن diagnostic برای import‌های استفاده نشده
       for (Map.Entry<String, ImportInfo> e : importMap.entrySet()) {
         String simpleName = getSimpleName(e.getKey());
         if (!usedImports.contains(simpleName)) {
+          // استفاده از Diagnostic با آفست‌های دقیق
           editor.addDiagnostic(
               new Diagnostic(
                   e.getValue().start,
@@ -237,8 +275,12 @@ public class BasicSyntaxJavaAnalyzer implements CodeAnalyzer {
         }
       }
 
+      // مرحله 5: اضافه کردن diagnostic و آیکون برای پارامترهای استفاده نشده
       for (Map.Entry<String, ParamInfo> e : paramMap.entrySet()) {
         if (!usedParams.contains(e.getKey())) {
+          
+
+          // Diagnostic با آفست‌های دقیق
           editor.addDiagnostic(
               new Diagnostic(
                   e.getValue().start,
@@ -249,25 +291,74 @@ public class BasicSyntaxJavaAnalyzer implements CodeAnalyzer {
         }
       }
 
+      // نمایش diagnosticها
       if (editor != null) editor.showCurrentDiagnostic();
 
     } catch (Exception e) {
-      /* ignore parse errors */
+      // خطاهای parse رو نادیده بگیر
     }
   }
 
-  private int getOffset(String text, Position pos) {
+  /**
+   * متد جدید برای محاسبه آفست دقیق با استفاده از Content این متد مثل متد داخل CodeEditor عمل می‌کنه
+   */
+  private int getCharOffsetFromPosition(Position pos) {
+    try {
+      Content text = editor.getText();
+      if (text == null) return 0;
+
+      // خط در JavaParser از 1 شروع میشه، ولی در Content از 0
+      int lineIndex = pos.line - 1;
+      int columnIndex = pos.column - 1;
+
+      // بررسی محدوده
+      if (lineIndex < 0 || lineIndex >= text.getLineCount()) {
+        return 0;
+      }
+
+      // اگه ستون از طول خط بیشتر باشه، به آخر خط برمی‌گردونیم
+      int lineLength = text.getColumnCount(lineIndex);
+      if (columnIndex > lineLength) {
+        columnIndex = lineLength;
+      }
+
+      return text.getCharIndex(lineIndex, columnIndex);
+
+    } catch (Exception e) {
+      // در صورت خطا، از متد قدیمی استفاده کن
+      return getOffsetFallback(pos);
+    }
+  }
+
+  /** متد جایگزین برای وقتی که Content در دسترس نیست */
+  private int getOffsetFallback(Position pos) {
     int line = 1, col = 1;
-    for (int i = 0; i < text.length(); i++) {
+    for (int i = 0; i < currentCode.length(); i++) {
       if (line == pos.line && col == pos.column) return i;
-      if (text.charAt(i) == '\n') {
+      if (currentCode.charAt(i) == '\n') {
         line++;
         col = 1;
       } else {
         col++;
       }
     }
-    return text.length();
+    return currentCode.length();
+  }
+
+  /** محاسبه اند واقعی (بدون در نظر گرفتن فاصله‌های بعد از کلمه) */
+  private int calculateActualEnd(CharSequence text, int endPos) {
+    if (endPos >= text.length()) return endPos;
+
+    int i = endPos;
+    while (i < text.length()) {
+      char c = text.charAt(i);
+      // اگه به فاصله یا tab یا newline برسیم، متوقف میشیم
+      if (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == ';' || c == ',' || c == ')') {
+        break;
+      }
+      i++;
+    }
+    return i;
   }
 
   private String getSimpleName(String name) {

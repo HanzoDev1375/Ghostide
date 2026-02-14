@@ -1,5 +1,9 @@
 package io.github.rosemoe.sora.langs.javascript;
 
+import androidx.core.content.ContextCompat;
+import io.github.rosemoe.sora.widget.icon.IconSpan;
+import ir.ninjacoder.ghostide.core.R;
+import ir.ninjacoder.ghostide.core.model.IconShop;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 
@@ -19,17 +23,20 @@ public class BasicSyntaxJavaScriptAnalyzer implements CodeAnalyzer {
   private Set<String> usedVariables = new HashSet<>();
   private Map<String, FuncPosition> functions = new HashMap<>();
   private Set<String> calledFunctions = new HashSet<>();
+  private CharSequence currentContent;
 
   private static class VarPosition {
     int line;
-    int column;
+    int characterColumn; // ستون واقعی از ANTLR
+    int visualColumn;    // ستون نمایشی برای IconSpan
     int length;
     int startIndex;
     int endIndex;
 
-    VarPosition(int line, int column, int length, int startIndex, int endIndex) {
+    VarPosition(int line, int characterColumn, int visualColumn, int length, int startIndex, int endIndex) {
       this.line = line;
-      this.column = column;
+      this.characterColumn = characterColumn;
+      this.visualColumn = visualColumn;
       this.length = length;
       this.startIndex = startIndex;
       this.endIndex = endIndex;
@@ -38,21 +45,22 @@ public class BasicSyntaxJavaScriptAnalyzer implements CodeAnalyzer {
 
   private static class FuncPosition {
     int line;
-    int column;
+    int characterColumn;
+    int visualColumn;
     int length;
     int startIndex;
     int endIndex;
 
-    FuncPosition(int line, int column, int length, int startIndex, int endIndex) {
+    FuncPosition(int line, int characterColumn, int visualColumn, int length, int startIndex, int endIndex) {
       this.line = line;
-      this.column = column;
+      this.characterColumn = characterColumn;
+      this.visualColumn = visualColumn;
       this.length = length;
       this.startIndex = startIndex;
       this.endIndex = endIndex;
     }
   }
 
-  // Constructor که ادیتور رو بگیره
   public BasicSyntaxJavaScriptAnalyzer(CodeEditor editor) {
     this.editor = editor;
   }
@@ -63,8 +71,11 @@ public class BasicSyntaxJavaScriptAnalyzer implements CodeAnalyzer {
       TextAnalyzeResult colors,
       TextAnalyzer.AnalyzeThread.Delegate delegate) {
 
+    this.currentContent = content;
+
     if (editor != null) {
       editor.clearDiagnostics();
+      editor.clearIconSpans();
     }
     diagnostics.clear();
     variables.clear();
@@ -117,12 +128,13 @@ public class BasicSyntaxJavaScriptAnalyzer implements CodeAnalyzer {
               try {
                 String varName = ctx.assignable().getText();
                 int line = ctx.getStart().getLine() - 1;
-                int column = ctx.getStart().getCharPositionInLine();
+                int characterColumn = ctx.getStart().getCharPositionInLine();
+                int visualColumn = calculateVisualColumn(content, line, characterColumn);
                 int length = varName.length();
-                int startIndex = getCharIndex(line, column, content);
+                int startIndex = getCharIndex(line, characterColumn, content);
                 int endIndex = startIndex + length;
 
-                variables.put(varName, new VarPosition(line, column, length, startIndex, endIndex));
+                variables.put(varName, new VarPosition(line, characterColumn, visualColumn, length, startIndex, endIndex));
                 com.addVariable(varName, "var");
               } catch (Exception e) {
                 // ignore
@@ -147,21 +159,21 @@ public class BasicSyntaxJavaScriptAnalyzer implements CodeAnalyzer {
               }
             }
 
-            // تشخیص تعریف تابع
             @Override
             public void enterFunctionDeclaration(JavaScriptParser.FunctionDeclarationContext ctx) {
               try {
                 if (ctx.identifier() != null) {
                   String funcName = ctx.identifier().getText();
                   int line = ctx.getStart().getLine() - 1;
-                  int column = ctx.getStart().getCharPositionInLine();
+                  int characterColumn = ctx.getStart().getCharPositionInLine();
+                  int visualColumn = calculateVisualColumn(content, line, characterColumn);
                   int length = funcName.length();
 
-                  int startIndex = getCharIndex(line, column, content);
+                  int startIndex = getCharIndex(line, characterColumn, content);
                   int endIndex = startIndex + length;
 
                   functions.put(
-                      funcName, new FuncPosition(line, column, length, startIndex, endIndex));
+                      funcName, new FuncPosition(line, characterColumn, visualColumn, length, startIndex, endIndex));
                   com.addFunction(funcName, "void");
                 }
               } catch (Exception e) {
@@ -192,14 +204,15 @@ public class BasicSyntaxJavaScriptAnalyzer implements CodeAnalyzer {
                 if (params.getText() != null) {
                   String funcName = params.getText();
                   int line = ctx.getStart().getLine() - 1;
-                  int column = ctx.getStart().getCharPositionInLine();
+                  int characterColumn = ctx.getStart().getCharPositionInLine();
+                  int visualColumn = calculateVisualColumn(content, line, characterColumn);
                   int length = funcName.length();
 
-                  int startIndex = getCharIndex(line, column, content);
+                  int startIndex = getCharIndex(line, characterColumn, content);
                   int endIndex = startIndex + length;
 
                   functions.put(
-                      funcName, new FuncPosition(line, column, length, startIndex, endIndex));
+                      funcName, new FuncPosition(line, characterColumn, visualColumn, length, startIndex, endIndex));
                   com.addFunction(funcName, "void");
                 }
               } catch (Exception e) {
@@ -212,14 +225,15 @@ public class BasicSyntaxJavaScriptAnalyzer implements CodeAnalyzer {
               try {
                 String methodName = ctx.classElementName().getText();
                 int line = ctx.getStart().getLine() - 1;
-                int column = ctx.getStart().getCharPositionInLine();
+                int characterColumn = ctx.getStart().getCharPositionInLine();
+                int visualColumn = calculateVisualColumn(content, line, characterColumn);
                 int length = methodName.length();
 
-                int startIndex = getCharIndex(line, column, content);
+                int startIndex = getCharIndex(line, characterColumn, content);
                 int endIndex = startIndex + length;
 
                 functions.put(
-                    methodName, new FuncPosition(line, column, length, startIndex, endIndex));
+                    methodName, new FuncPosition(line, characterColumn, visualColumn, length, startIndex, endIndex));
                 com.addFunction(methodName, "void");
               } catch (Exception e) {
                 // ignore
@@ -229,6 +243,8 @@ public class BasicSyntaxJavaScriptAnalyzer implements CodeAnalyzer {
 
       ParseTreeWalker walker = new ParseTreeWalker();
       walker.walk(listener, parser.program());
+      
+      // بررسی متغیرهای استفاده نشده
       for (Map.Entry<String, VarPosition> entry : variables.entrySet()) {
         String varName = entry.getKey();
         VarPosition pos = entry.getValue();
@@ -242,10 +258,22 @@ public class BasicSyntaxJavaScriptAnalyzer implements CodeAnalyzer {
                     "var `" + varName + "` not using",
                     DiagnosticsState.UNUSED);
             editor.addDiagnostic(diagnostic);
+            
+            // استفاده از visualColumn برای قرارگیری صحیح
+            editor.addIconSpan(
+                new IconSpan(
+                    ContextCompat.getDrawable(editor.getContext(), R.drawable.javanull),
+                    0,
+                    pos.line,
+                    pos.visualColumn,
+                    16,
+                    1));
             if (editor != null) editor.showCurrentDiagnostic();
           }
         }
       }
+      
+      // بررسی توابع استفاده نشده
       for (Map.Entry<String, FuncPosition> entry : functions.entrySet()) {
         String funcName = entry.getKey();
         FuncPosition pos = entry.getValue();
@@ -259,6 +287,16 @@ public class BasicSyntaxJavaScriptAnalyzer implements CodeAnalyzer {
                     "fun `" + funcName + "` not call or using",
                     DiagnosticsState.WARNING);
             editor.addDiagnostic(diagnostic);
+            
+            // استفاده از visualColumn برای قرارگیری صحیح
+            editor.addIconSpan(
+                new IconSpan(
+                    ContextCompat.getDrawable(editor.getContext(), R.drawable.javaclass),
+                    0,
+                    pos.line,
+                    pos.visualColumn,
+                    16,
+                    1));
             if (editor != null) editor.showCurrentDiagnostic();
           }
         }
@@ -267,6 +305,32 @@ public class BasicSyntaxJavaScriptAnalyzer implements CodeAnalyzer {
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  /**
+   * تبدیل character column به visual column با در نظر گرفتن tabها
+   */
+  private int calculateVisualColumn(CharSequence content, int line, int characterColumn) {
+    String text = content.toString();
+    String[] lines = text.split("\n", -1);
+    
+    if (line >= lines.length) return characterColumn;
+    
+    String targetLine = lines[line];
+    int visualColumn = 0;
+    int tabWidth = editor != null ? editor.getTabWidth() : 4;
+    
+    for (int i = 0; i < Math.min(characterColumn, targetLine.length()); i++) {
+      char c = targetLine.charAt(i);
+      if (c == '\t') {
+        // هر tab به اندازه tabWidth - (visualColumn % tabWidth) فاصله اضافه میکنه
+        visualColumn += tabWidth - (visualColumn % tabWidth);
+      } else {
+        visualColumn++;
+      }
+    }
+    
+    return visualColumn;
   }
 
   private int getCharIndex(int line, int column, CharSequence content) {
