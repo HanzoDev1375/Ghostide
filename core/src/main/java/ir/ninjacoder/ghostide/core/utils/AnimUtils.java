@@ -5,6 +5,7 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.view.MotionEvent;
@@ -29,6 +30,8 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 
 import com.blankj.utilcode.util.ThreadUtils;
 
+import ir.ninjacoder.ghostide.core.activities.BaseCompat;
+import ir.ninjacoder.ghostide.core.activities.SettingAppActivity;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -301,5 +304,28 @@ public class AnimUtils {
     void Start();
 
     void End();
+  }
+
+  public static void rotateBySetting(ImageView ic, BaseCompat base) {
+    ic.setOnClickListener(
+        c -> {
+          ic.setEnabled(false);
+          ic.animate()
+              .rotation(90)
+              .setDuration(500)
+              .withEndAction(
+                  () -> {
+                    ic.animate()
+                        .rotation(0)
+                        .setDuration(500)
+                        .withEndAction(
+                            () -> {
+                              base.loadAnim(new Intent(ic.getContext(), SettingAppActivity.class));
+                            })
+                        .start();
+                    ic.setEnabled(true);
+                  })
+              .start();
+        });
   }
 }

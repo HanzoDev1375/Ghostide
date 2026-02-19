@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,6 +25,10 @@ import com.google.android.material.shape.ShapeAppearanceModel;
 import io.github.rosemoe.sora.diagnostics.Diagnostic;
 import io.github.rosemoe.sora.diagnostics.DiagnosticsState;
 import io.github.rosemoe.sora.event.ClickEvent;
+import io.github.rosemoe.sora.text.CharPosition;
+import io.github.rosemoe.sora.data.RegexSpan;
+import java.util.regex.PatternSyntaxException;
+import android.widget.Toast;
 import ir.ninjacoder.ghostide.core.utils.DataUtil;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.Token;
@@ -72,7 +77,6 @@ public class IdeEditor extends CodeEditor implements IEditor {
 
   public IdeEditor(Context context, AttributeSet set) {
     super(context, set);
-    init();
   }
 
   public IdeEditor(Context context, AttributeSet set, int def) {
@@ -99,21 +103,9 @@ public class IdeEditor extends CodeEditor implements IEditor {
     if (saveTextSize != null) setTextSizePx(getSize);
     setPowerModeEnabled(true);
     PowerModeEffectManager.EffectType ef = EffectTypeManager.getCurrentTheme(getContext());
-
     getPowerModeEffectManager().setEffect(ef);
-
     setBracketHighlightEnabled(true);
     setBracketHighlightColor(0xFFFF0000);
-    // test
-    //    try {
-    //      Diagnostic dic = new Diagnostic(2, 5, "", DiagnosticsState.ERROR);
-    //      addDiagnostic(dic);
-    //      addDiagnostic(new Diagnostic(6, 9, "", DiagnosticsState.DEPRECATED));
-    //      showCurrentDiagnostic();
-    //    } catch (Exception err) {
-    //      Log.e("EditorError", err.getMessage());
-    //    }
-
     return this;
   }
 
@@ -362,6 +354,51 @@ public class IdeEditor extends CodeEditor implements IEditor {
     public void FormaterError(Throwable throwable);
   }
 
+  private void detectRegex() {
+    if (getTextAsString() == null) {
+      return;
+    }
+
+    clearRegexSpans();
+    String text = getTextAsString();
+
+    try {
+      Pattern pattern = Pattern.compile("^\\/(?:[^\\/\\s]+\\/)*[^\\/\\s]*$");
+      Matcher matcher = pattern.matcher(text);
+
+      while (matcher.find()) {
+        int start = matcher.start();
+        int end = matcher.end();
+
+        if (start >= 0 && end <= text.length() && end > start) {
+          try {
+            CharPosition startPos = getText().getIndexer().getCharPosition(start);
+            CharPosition endPos = getText().getIndexer().getCharPosition(end - 1);
+
+            if (startPos.line == endPos.line) {
+              RegexSpan span =
+                  new RegexSpan(
+                      "^\\/(?:[^\\/\\s]+\\/)*[^\\/\\s]*$",
+                      startPos.line,
+                      startPos.column,
+                      endPos.column + 1,
+                      matcher.group());
+              span.setColor(Color.CYAN);
+              span.setBold(true);
+              addRegexSpan(span);
+            }
+          } catch (Exception e) {
+            Log.e("LOG_TAG", "Error creating regex span", e);
+          }
+        }
+      }
+    } catch (PatternSyntaxException e) {
+
+      //  Log.e(LOG_TAG, "Invalid regex pattern: " + mCurrentRegex, e);
+      Toast.makeText(getContext(), "Invalid regex pattern", Toast.LENGTH_SHORT).show();
+    }
+  }
+
   private void handleContentChange(@NonNull ContentChangeEvent event) {
 
     if (event.getAction() == ContentChangeEvent.ACTION_INSERT) {
@@ -369,7 +406,7 @@ public class IdeEditor extends CodeEditor implements IEditor {
       final var content = event.getChangedText();
       final var endLine = event.getChangeEnd().line;
       final var endColumn = event.getChangeEnd().column;
-
+      post(() -> detectRegex());
       if (getEditorLanguage() instanceof XMLLanguage) {
         boolean isOpen = false;
         try {

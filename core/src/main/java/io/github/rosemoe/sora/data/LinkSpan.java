@@ -13,7 +13,7 @@ public class LinkSpan {
     this.line = line;
     this.startColumn = startColumn;
     this.endColumn = endColumn;
-    this.color = 0xFF2196F3;
+    this.color = color;
     this.underline = true;
   }
 

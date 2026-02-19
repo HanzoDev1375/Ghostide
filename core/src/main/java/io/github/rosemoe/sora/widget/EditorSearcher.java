@@ -1,483 +1,563 @@
 package io.github.rosemoe.sora.widget;
 
 import android.app.ProgressDialog;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.widget.Toast;
-import android.util.Log;
+
+import androidx.annotation.IntRange;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.List;
-import java.util.regex.MatchResult;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
-import io.github.rosemoe.sora.text.Content;
-import io.github.rosemoe.sora.text.Cursor;
-import io.github.rosemoe.sora.text.CharPosition;
+import io.github.rosemoe.sora.event.ContentChangeEvent;
 import io.github.rosemoe.sora.event.PublishSearchResultEvent;
+import io.github.rosemoe.sora.text.Content;
+import io.github.rosemoe.sora.text.PreserveCaseReplace;
+import io.github.rosemoe.sora.text.TextUtils;
+import io.github.rosemoe.sora.util.IntPair;
+import io.github.rosemoe.sora.util.LongArrayList;
+import io.github.rosemoe.sora.util.regex.RegexBackrefGrammar;
+import io.github.rosemoe.sora.util.regex.RegexBackrefHelper;
+import io.github.rosemoe.sora.util.regex.RegexBackrefParser;
+import io.github.rosemoe.sora.util.regex.RegexBackrefToken;
 
-/**
- * Search text in editor
- *
- * @author Rose
- */
-@SuppressWarnings("deprecated")
 public class EditorSearcher {
 
-  private final CodeEditor mEditor;
-  protected String mSearchText;
-  private static final String TAG = "EditorSearcher";
+    private final CodeEditor editor;
+    protected String currentPattern;
+    protected SearchOptions searchOptions;
+    protected ReplaceOptions replaceOptions;
+    protected Thread currentThread;
+    protected LongArrayList lastResults;
+    private boolean cyclicJumping = true;
 
-  EditorSearcher(CodeEditor editor) {
-    mEditor = editor;
-  }
-
-  private void checkState() {
-    if (mSearchText == null) {
-      throw new IllegalStateException("search text has not been set");
+    EditorSearcher(@NonNull CodeEditor editor) {
+        this.editor = editor;
+        this.editor.subscribeEvent(
+                ContentChangeEvent.class,
+                ((event, unsubscribe) -> {
+                    if (hasQuery()) {
+                        executeMatch();
+                    }
+                }));
+        replaceOptions = ReplaceOptions.DEFAULT;
     }
-  }
 
-  // متد شمارش نتایج
-  private int countMatches(String text, boolean isRegex) {
-    if (text == null || text.isEmpty()) {
-      return 0;
+    public void setCyclicJumping(boolean cyclicJumping) {
+        this.cyclicJumping = cyclicJumping;
     }
 
-    int count = 0;
-    Content content = mEditor.getText();
+    public boolean isCyclicJumping() {
+        return cyclicJumping;
+    }
 
-    try {
-      if (isRegex) {
-        Pattern pattern = Pattern.compile(text);
-        String fullText = content.toString();
-        Matcher matcher = pattern.matcher(fullText);
-        while (matcher.find()) {
-          count++;
+    public void setReplaceOptions(@NonNull ReplaceOptions replaceOptions) {
+        this.replaceOptions = Objects.requireNonNull(replaceOptions);
+    }
+
+    public ReplaceOptions getReplaceOptions() {
+        return replaceOptions;
+    }
+
+    public void search(@NonNull String pattern, @NonNull SearchOptions options) {
+        if (pattern == null || pattern.isEmpty()) {
+            throw new IllegalArgumentException("pattern length must be > 0");
         }
-      } else {
-        String searchText = text;
-        String fullText = content.toString();
-        int index = 0;
-        while ((index = fullText.indexOf(searchText, index)) != -1) {
-          count++;
-          index += searchText.length();
+        
+        if (options == null) {
+            options = new SearchOptions(SearchOptions.TYPE_NORMAL, false);
         }
-      }
-    } catch (PatternSyntaxException e) {
-      Log.e(TAG, "Invalid regex: " + e.getMessage());
-    } catch (Exception e) {
-      Log.e(TAG, "Error counting matches: " + e.getMessage());
-    }
-
-    return count;
-  }
-
-  private void dispatchSearchResult(boolean isRegex) {
-    int matchCount = countMatches(mSearchText, isRegex);
-    mEditor.dispatchEvent(new PublishSearchResultEvent(mEditor, matchCount, mSearchText, isRegex));
-  }
-
-  public void search(String text) {
-    search(text, false);
-  }
-
-  public void search(String text, boolean isRegex) {
-    if (text == null || text.length() == 0) {
-      mSearchText = null;
-      mEditor.postInvalidate();
-      dispatchSearchResult(isRegex);
-      return;
-    }
-
-    mSearchText = text;
-    dispatchSearchResult(isRegex);
-    mEditor.postInvalidate();
-  }
-
-  public void searchWithRegex(String regex) {
-    if (regex == null || regex.length() == 0) {
-      mSearchText = null;
-      mEditor.postInvalidate();
-      dispatchSearchResult(true);
-      return;
-    }
-
-    mSearchText = regex;
-    dispatchSearchResult(true);
-    mEditor.postInvalidate();
-  }
-  
-  public boolean replaceThisWithRegex(String newText) {
-    checkState();
-    Content text = mEditor.getText();
-    Cursor cursor = text.getCursor();
-
-    if (cursor.isSelected()) {
-      String selectedText =
-          text.subContent(
-                  cursor.getLeftLine(),
-                  cursor.getLeftColumn(),
-                  cursor.getRightLine(),
-                  cursor.getRightColumn())
-              .toString();
-
-      try {
-        Pattern pattern = Pattern.compile(mSearchText);
-        Matcher matcher = pattern.matcher(selectedText);
-
-        if (matcher.matches() || matcher.find()) {
-          cursor.onCommitText(newText);
-          mEditor.hideAutoCompleteWindow();
-          gotoNextWithRegex();
-          dispatchSearchResult(true);
-          return true;
+        
+        if (options.type == SearchOptions.TYPE_REGULAR_EXPRESSION) {
+            try {
+                Pattern.compile(pattern);
+            } catch (Exception e) {
+                throw new IllegalArgumentException("Invalid regex pattern: " + e.getMessage());
+            }
         }
-      } catch (PatternSyntaxException e) {
-        Toast.makeText(mEditor.getContext(), "Invalid regex: " + e.getMessage(), Toast.LENGTH_SHORT)
-            .show();
-      }
+        currentPattern = pattern;
+        searchOptions = options;
+        executeMatch();
+        editor.postInvalidate();
     }
-    gotoNextWithRegex();
-    return false;
-  }
 
-  public void replaceAllWithRegex(final String newText) {
-    checkState();
+    public void search(String code) {
+        search(code, new SearchOptions(SearchOptions.TYPE_NORMAL, false));
+    }
 
-    ProgressDialog progressDialog =
-        new ProgressDialog(mEditor.getContext(), ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
-    progressDialog.setTitle("Replacing with Regex...");
-    progressDialog.setMessage("Editor is now replacing texts using regex");
-    progressDialog.getWindow().setBackgroundDrawable(fb());
-    progressDialog.setCanceledOnTouchOutside(false);
-    progressDialog.setCancelable(false);
-    progressDialog.show();
+    public void search(String code, boolean caseInsensitive) {
+        search(code, new SearchOptions(SearchOptions.TYPE_NORMAL, caseInsensitive));
+    }
 
-    final String searchPattern = mSearchText;
+    public void search(String code, @IntRange(from = 1, to = 3) int searchType, boolean caseInsensitive) {
+        search(code, new SearchOptions(searchType, caseInsensitive));
+    }
 
-    new Thread() {
-      @Override
-      public void run() {
-        String result = null;
-        Exception ex = null;
+    private void executeMatch() {
+        if (currentThread != null && currentThread.isAlive()) {
+            currentThread.interrupt();
+        }
+        var runnable = new SearchRunnable(editor.getText(), searchOptions, currentPattern);
+        currentThread = new Thread(runnable);
+        currentThread.start();
+    }
 
-        try {
-          Pattern pattern = Pattern.compile(searchPattern);
-          String fullText = mEditor.getText().toString();
-          Matcher matcher = pattern.matcher(fullText);
-          result = matcher.replaceAll(newText);
-        } catch (PatternSyntaxException e) {
-          ex = e;
-        } catch (Exception e) {
-          e.printStackTrace();
-          ex = e;
+    public void stopSearch() {
+        if (currentThread != null && currentThread.isAlive()) {
+            currentThread.interrupt();
+        }
+        currentThread = null;
+        lastResults = null;
+        currentPattern = null;
+        searchOptions = null;
+        editor.dispatchEvent(new PublishSearchResultEvent(editor));
+    }
+
+    public boolean hasQuery() {
+        return currentPattern != null;
+    }
+
+    private void checkState() {
+        if (!hasQuery()) {
+            throw new IllegalStateException("pattern not set");
+        }
+    }
+
+    public int getCurrentMatchedPositionIndex() {
+        checkState();
+        var cur = editor.getCursor();
+        if (!cur.isSelected()) {
+            return -1;
+        }
+        var left = cur.getLeft();
+        var right = cur.getRight();
+
+        if (isResultValid()) {
+            var res = lastResults;
+            if (res == null) {
+                return -1;
+            }
+            var packed = IntPair.pack(left, right);
+            int index = res.lowerBound(packed);
+            if (index < res.size() && res.get(index) == packed) {
+                return index;
+            }
+        }
+        return -1;
+    }
+
+    public int getMatchedPositionCount() {
+        checkState();
+        if (!isResultValid()) {
+            return 0;
+        }
+        var result = lastResults;
+        return result == null ? 0 : result.size();
+    }
+
+    public boolean gotoNext() {
+        checkState();
+        if (!isResultValid() || lastResults == null || lastResults.size() == 0) {
+            return false;
         }
 
-        final Exception error = ex;
-        final String newContent = result;
+        var cursor = editor.getCursor();
+        var currentPos = cursor.getRight();
 
-        mEditor.post(
-            () -> {
-              if (newContent == null) {
-                Toast.makeText(
-                        mEditor.getContext(),
-                        "Regex error: " + (error != null ? error.getMessage() : "Unknown"),
-                        Toast.LENGTH_LONG)
-                    .show();
-              } else {
-                int line = mEditor.getCursor().getLeftLine();
-                int column = mEditor.getCursor().getLeftColumn();
-
-                mEditor
-                    .getText()
-                    .replace(
-                        0,
-                        0,
-                        mEditor.getLineCount() - 1,
-                        mEditor.getText().getColumnCount(mEditor.getLineCount() - 1),
-                        newContent);
-
-                mEditor.setSelectionAround(line, column);
-                mEditor.invalidate();
-
-                mSearchText = searchPattern;
-                dispatchSearchResult(true);
-
-                Toast.makeText(
-                        mEditor.getContext(),
-                        "Replaced all matches using regex",
-                        Toast.LENGTH_SHORT)
-                    .show();
-              }
-              progressDialog.cancel();
-            });
-      }
-    }.start();
-  }
-
-  public void gotoNext() {
-    gotoNext(false);
-  }
-
-  private void gotoNext(boolean tip) {
-    checkState();
-    Content text = mEditor.getText();
-    Cursor cursor = text.getCursor();
-    int line = cursor.getRightLine();
-    int column = cursor.getRightColumn();
-
-    for (int i = line; i < text.getLineCount(); i++) {
-      int idx =
-          column >= text.getColumnCount(i) ? -1 : text.getLine(i).indexOf(mSearchText, column);
-      if (idx != -1) {
-        mEditor.setSelectionRegion(i, idx, i, idx + mSearchText.length());
-        dispatchSearchResult(false);
-        return;
-      }
-      column = 0;
-    }
-
-    if (tip) {
-      Toast.makeText(mEditor.getContext(), "Not found in this direction", Toast.LENGTH_SHORT)
-          .show();
-    }
-    dispatchSearchResult(false);
-  }
-
-  // متد gotoNext برای حالت regex
-  public void gotoNextWithRegex() {
-    checkState();
-    Content text = mEditor.getText();
-    Cursor cursor = text.getCursor();
-    int currentPos = cursor.getRight();
-
-    try {
-      Pattern pattern = Pattern.compile(mSearchText);
-      String fullText = text.toString();
-      Matcher matcher = pattern.matcher(fullText);
-
-      if (matcher.find(currentPos)) {
-        CharPosition start = text.getIndexer().getCharPosition(matcher.start());
-        CharPosition end = text.getIndexer().getCharPosition(matcher.end());
-        mEditor.setSelectionRegion(start.line, start.column, end.line, end.column);
-        dispatchSearchResult(true);
-        return;
-      }
-
-      // از اول جستجو کن
-      matcher.reset();
-      if (matcher.find()) {
-        CharPosition start = text.getIndexer().getCharPosition(matcher.start());
-        CharPosition end = text.getIndexer().getCharPosition(matcher.end());
-        mEditor.setSelectionRegion(start.line, start.column, end.line, end.column);
-        Toast.makeText(
-                mEditor.getContext(), "Reached end, continuing from start", Toast.LENGTH_SHORT)
-            .show();
-        dispatchSearchResult(true);
-        return;
-      }
-
-      Toast.makeText(mEditor.getContext(), "No matches found", Toast.LENGTH_SHORT).show();
-      dispatchSearchResult(true);
-
-    } catch (PatternSyntaxException e) {
-      Toast.makeText(mEditor.getContext(), "Invalid regex: " + e.getMessage(), Toast.LENGTH_SHORT)
-          .show();
-    }
-  }
-
-  // متد gotoLast برای حالت عادی
-  public void gotoLast() {
-    checkState();
-    Content text = mEditor.getText();
-    Cursor cursor = text.getCursor();
-    int line = cursor.getLeftLine();
-    int column = cursor.getLeftColumn();
-
-    for (int i = line; i >= 0; i--) {
-      int idx = column - 1 < 0 ? -1 : text.getLine(i).lastIndexOf(mSearchText, column - 1);
-      if (idx != -1) {
-        mEditor.setSelectionRegion(i, idx, i, idx + mSearchText.length());
-        dispatchSearchResult(false);
-        return;
-      }
-      column = i - 1 >= 0 ? text.getColumnCount(i - 1) : 0;
-    }
-
-    Toast.makeText(mEditor.getContext(), "Not found in this direction", Toast.LENGTH_SHORT).show();
-    dispatchSearchResult(false);
-  }
-
-  // متد gotoLast برای حالت regex
-  public void gotoLastWithRegex() {
-    checkState();
-    Content text = mEditor.getText();
-    Cursor cursor = text.getCursor();
-    int currentPos = cursor.getLeft();
-
-    try {
-      Pattern pattern = Pattern.compile(mSearchText);
-      String fullText = text.toString();
-      Matcher matcher = pattern.matcher(fullText);
-
-      int lastMatchBeforeCursor = -1;
-      int lastMatchEnd = -1;
-
-      // پیدا کردن آخرین match قبل از موقعیت فعلی
-      while (matcher.find()) {
-        if (matcher.start() < currentPos) {
-          lastMatchBeforeCursor = matcher.start();
-          lastMatchEnd = matcher.end();
-        } else {
-          break;
+        int nextIndex = -1;
+        for (int i = 0; i < lastResults.size(); i++) {
+            long region = lastResults.get(i);
+            int start = IntPair.getFirst(region);
+            if (start > currentPos) {
+                nextIndex = i;
+                break;
+            }
         }
-      }
 
-      if (lastMatchBeforeCursor != -1) {
-        CharPosition start = text.getIndexer().getCharPosition(lastMatchBeforeCursor);
-        CharPosition end = text.getIndexer().getCharPosition(lastMatchEnd);
-        mEditor.setSelectionRegion(start.line, start.column, end.line, end.column);
-        dispatchSearchResult(true);
-        return;
-      }
+        if (nextIndex == -1) {
+            if (cyclicJumping) {
+                nextIndex = 0;
+            } else {
+                return false;
+            }
+        }
 
-      // اگه قبلی نبود، آخرین match کل متن رو پیدا کن
-      matcher.reset();
-      int lastStart = -1;
-      int lastEnd = -1;
-      while (matcher.find()) {
-        lastStart = matcher.start();
-        lastEnd = matcher.end();
-      }
-
-      if (lastStart != -1) {
-        CharPosition start = text.getIndexer().getCharPosition(lastStart);
-        CharPosition end = text.getIndexer().getCharPosition(lastEnd);
-        mEditor.setSelectionRegion(start.line, start.column, end.line, end.column);
-        Toast.makeText(
-                mEditor.getContext(), "Reached start, continuing from end", Toast.LENGTH_SHORT)
-            .show();
-        dispatchSearchResult(true);
-      } else {
-        Toast.makeText(mEditor.getContext(), "No matches found", Toast.LENGTH_SHORT).show();
-        dispatchSearchResult(true);
-      }
-
-    } catch (PatternSyntaxException e) {
-      Toast.makeText(mEditor.getContext(), "Invalid regex: " + e.getMessage(), Toast.LENGTH_SHORT)
-          .show();
+        return jumpToResult(nextIndex);
     }
-  }
 
-  @SuppressWarnings("UnusedReturnValue")
-  public boolean replaceThis(String newText) {
-    checkState();
-    Content text = mEditor.getText();
-    Cursor cursor = text.getCursor();
+    public boolean gotoLast() {
+        return gotoPrevious();
+    }
 
-    if (cursor.isSelected()) {
-      String selectedText =
-          text.subContent(
-                  cursor.getLeftLine(),
-                  cursor.getLeftColumn(),
-                  cursor.getRightLine(),
-                  cursor.getRightColumn())
-              .toString();
+    public boolean gotoPrevious() {
+        checkState();
+        if (!isResultValid() || lastResults == null || lastResults.size() == 0) {
+            return false;
+        }
 
-      if (selectedText.equals(mSearchText)) {
-        cursor.onCommitText(newText);
-        mEditor.hideAutoCompleteWindow();
-        gotoNext(false);
-        dispatchSearchResult(false);
+        var cursor = editor.getCursor();
+        var currentPos = cursor.getLeft();
+
+        int prevIndex = -1;
+        for (int i = lastResults.size() - 1; i >= 0; i--) {
+            long region = lastResults.get(i);
+            int end = IntPair.getSecond(region);
+            if (end < currentPos) {
+                prevIndex = i;
+                break;
+            }
+        }
+
+        if (prevIndex == -1) {
+            if (cyclicJumping) {
+                prevIndex = lastResults.size() - 1;
+            } else {
+                return false;
+            }
+        }
+
+        return jumpToResult(prevIndex);
+    }
+
+    private boolean jumpToResult(int index) {
+        if (index < 0 || index >= lastResults.size()) {
+            return false;
+        }
+
+        long region = lastResults.get(index);
+        int start = IntPair.getFirst(region);
+        int end = IntPair.getSecond(region);
+
+        var startPos = editor.getText().getIndexer().getCharPosition(start);
+        var endPos = editor.getText().getIndexer().getCharPosition(end);
+
+        editor.setSelectionRegion(startPos.line, startPos.column, endPos.line, endPos.column);
+        editor.ensureSelectionVisible();
+
         return true;
-      }
     }
-    gotoNext(false);
-    return false;
-  }
 
-  public void replaceAll(final String newText) {
-    checkState();
+    public boolean isMatchedPositionSelected() {
+        return getCurrentMatchedPositionIndex() > -1;
+    }
 
-    ProgressDialog progressDialog =
-        new ProgressDialog(mEditor.getContext(), ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
-    progressDialog.setTitle("Replacing...");
-    progressDialog.setMessage("Editor is now replacing texts");
-    progressDialog.getWindow().setBackgroundDrawable(fb());
-    progressDialog.setCanceledOnTouchOutside(false);
-    progressDialog.setCancelable(false);
-    progressDialog.show();
+    public void replaceThis(@NonNull String replacement) {
+        replaceCurrentMatch(replacement);
+    }
 
-    final String searchText = mSearchText;
+    public void replaceCurrentMatch(@NonNull String replacement) {
+        if (!editor.isEditable()) {
+            return;
+        }
+        if (isMatchedPositionSelected()) {
+            if (replacement.isEmpty()) {
+                editor.deleteText();
+            } else {
+                if (searchOptions != null && searchOptions.type == SearchOptions.TYPE_REGULAR_EXPRESSION
+                        && searchOptions.regexBackrefGrammar != null) {
+                    var cursor = editor.getCursor();
+                    var currentText = editor.getText().subSequence(cursor.getLeft(), cursor.getRight()).toString();
+                    var pattern = Pattern.compile(
+                            currentPattern,
+                            (searchOptions.caseInsensitive ? Pattern.CASE_INSENSITIVE : 0)
+                                    | Pattern.MULTILINE);
+                    var matcher = pattern.matcher(currentText);
+                    if (!matcher.find()) {
+                        return;
+                    }
+                    replacement = RegexBackrefHelper.computeReplacement(
+                            matcher, searchOptions.regexBackrefGrammar, replacement);
+                }
+                if (replaceOptions != null && replaceOptions.preserveCase) {
+                    var cursor = editor.getCursor();
+                    var currentText = editor.getText().subSequence(cursor.getLeft(), cursor.getRight()).toString();
+                    replacement = PreserveCaseReplace.getReplacementSimple(currentText, replacement);
+                }
+                editor.commitText(replacement, false);
+            }
+        } else {
+            gotoNext();
+        }
+    }
 
-    new Thread() {
-      @Override
-      public void run() {
-        String result = null;
-        Exception ex = null;
+    public void replaceAll(@NonNull String replacement) {
+        replaceAll(replacement, null);
+    }
 
-        try {
-          result = mEditor.getText().toString().replace(searchText, newText);
-        } catch (Exception e) {
-          e.printStackTrace();
-          ex = e;
+    public void replaceAll(@NonNull String replacement, @Nullable final Runnable whenSucceeded) {
+        if (!editor.isEditable()) {
+            return;
+        }
+        checkState();
+        if (!isResultValid()) {
+            Toast.makeText(editor.getContext(), "Editor Search has busy", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        var context = editor.getContext();
+        final var dialog = ProgressDialog.show(context, "Replace All", "Loading...", true, false);
+        final var res = lastResults;
+        final var options = searchOptions;
+        final var pattern = currentPattern;
+
+        if (res == null) {
+            dialog.dismiss();
+            return;
         }
 
-        final Exception error = ex;
-        final String newContent = result;
+        new Thread(() -> {
+            try {
+                var sb = editor.getText().toStringBuilder();
+                if (options != null && options.type == SearchOptions.TYPE_REGULAR_EXPRESSION
+                        && options.regexBackrefGrammar != null) {
+                    var regex = Pattern.compile(
+                            pattern,
+                            (options.caseInsensitive ? Pattern.CASE_INSENSITIVE : 0)
+                                    | Pattern.MULTILINE);
+                    Matcher matcher = null;
+                    List<RegexBackrefToken> tokens = null;
+                    int delta = 0;
+                    var text = sb.toString();
+                    for (int i = 0; i < res.size(); i++) {
+                        var region = res.get(i);
+                        var start = IntPair.getFirst(region);
+                        var end = IntPair.getSecond(region);
 
-        mEditor.post(
-            () -> {
-              if (newContent == null) {
-                Toast.makeText(mEditor.getContext(), String.valueOf(error), Toast.LENGTH_SHORT)
-                    .show();
-              } else {
-                int line = mEditor.getCursor().getLeftLine();
-                int column = mEditor.getCursor().getLeftColumn();
+                        var regionText = text.substring(start, end);
+                        if (matcher == null) {
+                            matcher = regex.matcher(regionText);
+                        } else {
+                            matcher.reset(regionText);
+                        }
+                        if (!matcher.find()) {
+                            continue;
+                        }
+                        if (tokens == null) {
+                            tokens = new RegexBackrefParser(options.regexBackrefGrammar)
+                                    .parse(replacement, matcher.groupCount());
+                        }
+                        var computedReplacement = RegexBackrefHelper.computeReplacement(matcher, tokens);
+                        var newLength = computedReplacement.length();
+                        var oldLength = end - start;
+                        if (replaceOptions != null && replaceOptions.preserveCase) {
+                            computedReplacement = PreserveCaseReplace.getReplacementSimple(
+                                    sb.substring(start + delta, end + delta), computedReplacement);
+                        }
+                        sb.replace(start + delta, end + delta, computedReplacement);
+                        delta += newLength - oldLength;
+                    }
+                } else {
+                    int newLength = replacement.length();
+                    int delta = 0;
+                    for (int i = 0; i < res.size(); i++) {
+                        var region = res.get(i);
+                        var start = IntPair.getFirst(region);
+                        var end = IntPair.getSecond(region);
+                        var oldLength = end - start;
+                        var replaceText = replacement;
+                        if (replaceOptions != null && replaceOptions.preserveCase) {
+                            replaceText = PreserveCaseReplace.getReplacementSimple(
+                                    sb.substring(start + delta, end + delta), replacement);
+                        }
+                        sb.replace(start + delta, end + delta, replaceText);
+                        delta += newLength - oldLength;
+                    }
+                }
+                editor.postInLifecycle(() -> {
+                    var pos = editor.getCursor().left();
+                    editor.getText().replace(
+                            0, 0,
+                            editor.getLineCount() - 1,
+                            editor.getText().getColumnCount(editor.getLineCount() - 1),
+                            sb);
+                    editor.setSelectionAround(pos.line, pos.column);
+                    dialog.dismiss();
 
-                mEditor
-                    .getText()
-                    .replace(
-                        0,
-                        0,
-                        mEditor.getLineCount() - 1,
-                        mEditor.getText().getColumnCount(mEditor.getLineCount() - 1),
-                        newContent);
+                    if (whenSucceeded != null) {
+                        whenSucceeded.run();
+                    }
+                });
+            } catch (Exception e) {
+                editor.postInLifecycle(() -> {
+                    Toast.makeText(editor.getContext(), "Replace failed:" + e, Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                });
+            }
+        }).start();
+    }
 
-                mEditor.setSelectionAround(line, column);
-                mEditor.invalidate();
+    public boolean isResultValid() {
+        return currentThread == null || !currentThread.isAlive();
+    }
 
-                mSearchText = searchText;
-                dispatchSearchResult(false);
-              }
-              progressDialog.cancel();
-            });
-      }
-    }.start();
-  }
+    public static class SearchOptions {
 
-  public void stopSearch() {
-    mSearchText = null;
-    mEditor.postInvalidate();
-    dispatchSearchResult(false);
-  }
+        public final boolean caseInsensitive;
+        @IntRange(from = 1, to = 3)
+        public final int type;
+        public final RegexBackrefGrammar regexBackrefGrammar;
 
-  public int getMatchCount() {
-    return countMatches(mSearchText, false);
-  }
+        public static final int TYPE_NORMAL = 1;
+        public static final int TYPE_WHOLE_WORD = 2;
+        public static final int TYPE_REGULAR_EXPRESSION = 3;
 
-  public int getMatchCountWithRegex() {
-    return countMatches(mSearchText, true);
-  }
+        public SearchOptions(boolean caseInsensitive, boolean useRegex) {
+            this(useRegex ? TYPE_REGULAR_EXPRESSION : TYPE_NORMAL, caseInsensitive);
+        }
 
-  private GradientDrawable fb() {
-    GradientDrawable gradientDrawable = new GradientDrawable();
-    gradientDrawable.setColor(ColorStateList.valueOf(Color.parseColor("#FF291E1C")));
-    gradientDrawable.setStroke(1, ColorStateList.valueOf(Color.parseColor("#FFFFAF7A")));
-    gradientDrawable.setShape(GradientDrawable.LINE);
-    return gradientDrawable;
-  }
+        public SearchOptions(@IntRange(from = 1, to = 3) int type, boolean caseInsensitive) {
+            this(type, caseInsensitive, null);
+        }
+
+        public SearchOptions(
+                @IntRange(from = 1, to = 3) int type,
+                boolean caseInsensitive,
+                @Nullable RegexBackrefGrammar regexBackrefGrammar) {
+            if (type < 1 || type > 3) {
+                throw new IllegalArgumentException("invalid type");
+            }
+            this.type = type;
+            this.caseInsensitive = caseInsensitive;
+            this.regexBackrefGrammar = regexBackrefGrammar;
+        }
+    }
+
+    public static class ReplaceOptions {
+
+        public static final ReplaceOptions DEFAULT = new ReplaceOptions(false);
+        public final boolean preserveCase;
+
+        public ReplaceOptions(boolean preserveCase) {
+            this.preserveCase = preserveCase;
+        }
+    }
+
+    private final class SearchRunnable implements Runnable {
+
+        private final StringBuilder text;
+        private final String pattern;
+        private final SearchOptions options;
+        private Thread localThread;
+
+        public SearchRunnable(@NonNull Content content, @NonNull SearchOptions options, @NonNull String pattern) {
+            this.text = content.toStringBuilder();
+            this.options = options;
+            this.pattern = pattern;
+        }
+
+        private boolean checkNotCancelled() {
+            return currentThread == localThread && !Thread.interrupted();
+        }
+
+        @Override
+        public void run() {
+            localThread = Thread.currentThread();
+            var results = new LongArrayList();
+            var textLength = text.length();
+            var ignoreCase = options != null && options.caseInsensitive;
+
+            if (options == null) {
+                return;
+            }
+
+            switch (options.type) {
+                case SearchOptions.TYPE_NORMAL:
+                    normalSearch(results, textLength, ignoreCase);
+                    break;
+
+                case SearchOptions.TYPE_WHOLE_WORD:
+                    String wordPattern = "\\b" + Pattern.quote(pattern) + "\\b";
+                    regexSearch(results, wordPattern, ignoreCase);
+                    break;
+
+                case SearchOptions.TYPE_REGULAR_EXPRESSION:
+                    regexSearch(results, pattern, ignoreCase);
+                    break;
+            }
+
+            if (checkNotCancelled()) {
+                editor.postInLifecycle(() -> {
+                    if (currentThread == localThread) {
+                        lastResults = results;
+                        editor.invalidate();
+                        editor.dispatchEvent(new PublishSearchResultEvent(editor));
+                        currentThread = null;
+                    }
+                });
+            }
+        }
+
+        private void normalSearch(LongArrayList results, int textLength, boolean ignoreCase) {
+            int patternLength = pattern.length();
+            int searchIndex = 0;
+
+            while (searchIndex < textLength && checkNotCancelled()) {
+                int foundIndex = -1;
+
+                for (int i = searchIndex; i <= textLength - patternLength; i++) {
+                    if (!checkNotCancelled()) {
+                        break;
+                    }
+
+                    boolean matches = true;
+                    for (int j = 0; j < patternLength; j++) {
+                        char textChar = text.charAt(i + j);
+                        char patternChar = pattern.charAt(j);
+
+                        if (ignoreCase) {
+                            if (Character.toLowerCase(textChar) != Character.toLowerCase(patternChar)) {
+                                matches = false;
+                                break;
+                            }
+                        } else {
+                            if (textChar != patternChar) {
+                                matches = false;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (matches) {
+                        foundIndex = i;
+                        break;
+                    }
+                }
+
+                if (foundIndex != -1) {
+                    results.add(IntPair.pack(foundIndex, foundIndex + patternLength));
+                    searchIndex = foundIndex + patternLength;
+                } else {
+                    searchIndex = textLength;
+                }
+            }
+        }
+
+        private void regexSearch(LongArrayList results, String regexPattern, boolean ignoreCase) {
+            try {
+                int flags = (ignoreCase ? Pattern.CASE_INSENSITIVE : 0) | Pattern.MULTILINE;
+                var regex = Pattern.compile(regexPattern, flags);
+                var string = text.toString();
+                var matcher = regex.matcher(string);
+
+                int lastEnd = -1;
+                while (matcher.find() && checkNotCancelled()) {
+                    int start = matcher.start();
+                    int end = matcher.end();
+
+                    if (start < end && (lastEnd == -1 || start > lastEnd)) {
+                        results.add(IntPair.pack(start, end));
+                        lastEnd = end;
+                    }
+
+                    if (end == string.length()) {
+                        break;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

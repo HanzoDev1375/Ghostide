@@ -202,14 +202,17 @@ public class EditorAutoCompleteWindow extends EditorPopupWindow {
           show();
 
           if (!results.isEmpty() && mLastPrefix != null && !mLastPrefix.isEmpty()) {
-            CompletionItem firstItem = results.get(0);
-            if (firstItem.label != null && firstItem.label.startsWith(mLastPrefix)) {
-              String remaining = firstItem.label.substring(mLastPrefix.length());
+            var firstItem = results.get(0);
+            // better
+            if (firstItem.label != null && firstItem.label.contains(mLastPrefix)) {
+              var remaining = firstItem.label.substring(mLastPrefix.length());
               if (!remaining.isEmpty()) {
                 mEditor.setGhostText(
                     mEditor.getCursor().getLeftLine(),
                     mEditor.getCursor().getLeftColumn(),
                     remaining);
+              } else {
+                mEditor.clearGhostText(); // clear
               }
             }
           }

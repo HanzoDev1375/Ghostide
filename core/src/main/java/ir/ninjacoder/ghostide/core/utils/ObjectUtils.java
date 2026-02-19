@@ -70,6 +70,7 @@ import com.google.gson.Gson;
 import com.ninjacoder.jgit.childer.FuzzySearchHelper;
 
 import ir.ninjacoder.ghostide.core.marco.ColorCompat;
+import ir.ninjacoder.ghostide.core.model.CodeEditorModel;
 import org.antlr.v4.runtime.Lexer;
 
 import java.io.File;
@@ -904,7 +905,9 @@ public class ObjectUtils {
   public static void addStarToTab(int pos, TabLayout tab) {
     TabLayout.Tab tabInstance = tab.getTabAt(pos);
     if (tabInstance != null) {
-      String tabText = tabInstance.getText().toString();
+      CharSequence tabTextCharSeq = tabInstance.getText();
+      String tabText = (tabTextCharSeq != null) ? tabTextCharSeq.toString() : "";
+
       if (!tabText.startsWith("*")) {
         SpannableString spannableText = new SpannableString("*" + tabText);
         spannableText.setSpan(
@@ -919,10 +922,7 @@ public class ObjectUtils {
   }
 
   public static void setSaveOprator(
-      ArrayList<HashMap<String, Object>> listTab,
-      IdeEditor editor,
-      TabLayout tab,
-      BaseCompat base) {
+      List<CodeEditorModel> listTab, IdeEditor editor, TabLayout tab, BaseCompat base) {
     int selectedTabPosition = tab.getSelectedTabPosition();
     if (selectedTabPosition >= 0 && selectedTabPosition < listTab.size()) {
       TabLayout.Tab tabInstance = tab.getTabAt(selectedTabPosition);
@@ -942,7 +942,7 @@ public class ObjectUtils {
             android.R.string.ok,
             (c, d) -> {
               if (selectedTabPosition >= 0 && selectedTabPosition < listTab.size()) {
-                String selectedFilePath = listTab.get(selectedTabPosition).get("path").toString();
+                String selectedFilePath = listTab.get(selectedTabPosition).getPath();
                 Toast.makeText(editor.getContext(), selectedFilePath, 2).show();
                 FileUtil.writeFile(selectedFilePath, editor.getTextAsString());
                 base.finish();
@@ -956,10 +956,22 @@ public class ObjectUtils {
         .show();
   }
 
+  public static void removedStarToTab(int pos, TabLayout tab) {
+    TabLayout.Tab tabInstance = tab.getTabAt(pos);
+    if (tabInstance != null) {
+      CharSequence tabTextCharSeq = tabInstance.getText();
+      String tabText = (tabTextCharSeq != null) ? tabTextCharSeq.toString() : "";
+      if (tabText.startsWith("*")) {
+        tabInstance.setText(tabText.substring(1));
+      }
+    }
+  }
+
   public static void addStarToTabError(int pos, TabLayout tab) {
     TabLayout.Tab tabInstance = tab.getTabAt(pos);
     if (tabInstance != null) {
-      String tabText = tabInstance.getText() != null ? tabInstance.getText().toString() : "";
+      CharSequence tabTextCharSeq = tabInstance.getText();
+      String tabText = (tabTextCharSeq != null) ? tabTextCharSeq.toString() : "";
       if (!tabText.startsWith("*")) {
         String newText = "*" + tabText;
         SpannableString spannableText = new SpannableString(newText);
@@ -974,16 +986,6 @@ public class ObjectUtils {
             mycustomSpan, 1, newText.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         tabInstance.setText(spannableText);
-      }
-    }
-  }
-
-  public static void removedStarToTab(int pos, TabLayout tab) {
-    TabLayout.Tab tabInstance = tab.getTabAt(pos);
-    if (tabInstance != null) {
-      String tabText = tabInstance.getText().toString();
-      if (tabText.startsWith("*")) {
-        tabInstance.setText(tabText.substring(1));
       }
     }
   }

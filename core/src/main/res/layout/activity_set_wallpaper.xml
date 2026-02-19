@@ -34,6 +34,7 @@
       android:layout_height="wrap_content"
       android:layout_marginEnd="12dp"
       app:elevation="0dp"
+      android:outlineProvider="none"
       android:layout_width="wrap_content"
       app:srcCompat="@drawable/wallpaper_24px" />
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -42,6 +43,7 @@
       android:layout_height="wrap_content"
       android:layout_marginEnd="12dp"
       app:elevation="0dp"
+      android:outlineProvider="none"
       android:layout_width="wrap_content"
       app:srcCompat="@drawable/share_24px" />
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -50,6 +52,7 @@
       android:layout_height="wrap_content"
       android:layout_marginEnd="12dp"
       app:elevation="0dp"
+      android:outlineProvider="none"
       android:layout_width="wrap_content"
       app:srcCompat="@drawable/crop_24px" />
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -57,6 +60,7 @@
       android:id="@+id/fab_metadata"
       android:layout_height="wrap_content"
       app:elevation="0dp"
+      android:outlineProvider="none"
       android:layout_width="wrap_content"
       app:srcCompat="@drawable/rotate_left_24px" />
   </LinearLayout>

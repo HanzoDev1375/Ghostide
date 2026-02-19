@@ -1,30 +1,15 @@
 package io.github.rosemoe.sora.event;
 
 import io.github.rosemoe.sora.widget.CodeEditor;
+import io.github.rosemoe.sora.widget.EditorSearcher;
 
 public class PublishSearchResultEvent extends Event {
-  private CodeEditor editor;
-  private int matchCount;
-  private String searchText;
-  private boolean isRegex;
 
-  public PublishSearchResultEvent(CodeEditor editor, int matchCount, String searchText, boolean isRegex) {
-    super(editor);
-    this.editor = editor;
-    this.matchCount = matchCount;
-    this.searchText = searchText;
-    this.isRegex = isRegex;
-  }
+    public PublishSearchResultEvent(CodeEditor editor) {
+        super(editor);
+    }
 
-  public int getMatchCount() {
-    return matchCount;
-  }
-
-  public String getSearchText() {
-    return searchText;
-  }
-
-  public boolean isRegex() {
-    return isRegex;
-  }
+    public EditorSearcher getSearcher() {
+        return ((CodeEditor) getEditor()).getSearcher();
+    }
 }

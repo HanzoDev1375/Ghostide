@@ -5,26 +5,34 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.switchmaterial.SwitchMaterial;
 import ir.ninjacoder.ghostide.core.IdeEditor;
 import ir.ninjacoder.ghostide.core.databinding.LayoutSearcherBinding;
 import ir.ninjacoder.ghostide.core.databinding.MakefolderBinding;
 import ir.ninjacoder.ghostide.core.utils.AnimUtils;
 import io.github.rosemoe.sora.event.PublishSearchResultEvent;
+import io.github.rosemoe.sora.widget.EditorSearcher;
+import io.github.rosemoe.sora.widget.CodeEditor;
+import io.github.rosemoe.sora.text.Content;
+import io.github.rosemoe.sora.text.Cursor;
 
 public class GhostWebEditorSearch extends LinearLayout {
   private LayoutSearcherBinding binding;
   private IdeEditor editor;
   protected onViewChange viewChange;
   public boolean isShowing = false;
+
   private boolean isRegexMode = false;
+  private boolean isCaseSensitive = false;
+  private boolean isWholeWord = false;
+  
+  private int currentMatchIndex = -1;
+  private int totalMatches = 0;
 
   public GhostWebEditorSearch(Context context) {
     this(context, null);
@@ -38,31 +46,44 @@ public class GhostWebEditorSearch extends LinearLayout {
     super(context, attrs, defStyle);
     binding = LayoutSearcherBinding.inflate(LayoutInflater.from(getContext()));
     removeAllViews();
-    addView(
-        binding.getRoot(), new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+    addView(binding.getRoot(), new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
+    setupTextWatcher();
+    setupClickListeners();
+    setupAnimations();
+  }
+
+  private void setupTextWatcher() {
     binding.searchText.addTextChangedListener(
         new TextWatcher() {
           @Override
           public void afterTextChanged(Editable editable) {
             if (editor == null) return;
-            performSearch(binding.searchText.getText().toString());
+            String text = binding.searchText.getText().toString();
+            if (!text.isEmpty()) {
+              performSearch(text);
+            } else {
+              stopSearch();
+            }
           }
 
           @Override
-          public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {}
+          public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
           @Override
-          public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {}
+          public void onTextChanged(CharSequence s, int start, int before, int count) {}
         });
+  }
 
+  private void setupClickListeners() {
     binding.btnMore.setOnClickListener(this::showPopupMenu);
-    binding.gotoLast.setOnClickListener((v) -> gotoLast());
-    binding.gotoNext.setOnClickListener((v) -> gotoNext());
-    binding.replace.setOnClickListener((v) -> replace());
-    binding.btnClose.setOnClickListener((v) -> showAndHide());
+    binding.gotoLast.setOnClickListener(v -> gotoPrevious());
+    binding.gotoNext.setOnClickListener(v -> gotoNext());
+    binding.replace.setOnClickListener(v -> replace());
+    binding.btnClose.setOnClickListener(v -> showAndHide());
+  }
 
-    // انیمیشن
+  private void setupAnimations() {
     AnimUtils.Worker(binding.gotoLast);
     AnimUtils.Worker(binding.gotoNext);
     AnimUtils.Worker(binding.replace);
@@ -71,69 +92,158 @@ public class GhostWebEditorSearch extends LinearLayout {
   }
 
   private void showPopupMenu(View view) {
-    PopupMenu popupMenu = new PopupMenu(getContext(), view);
-    popupMenu.getMenu().add(0, 1, 0, "Regex Mode");
+    var popupMenu = new PopupMenu(getContext(), view);
 
-    MenuItem item = popupMenu.getMenu().findItem(1);
-    SwitchMaterial switchView = new SwitchMaterial(getContext());
-    switchView.setChecked(isRegexMode);
-    switchView.setText("Regex Mode");
+    var regexItem = popupMenu.getMenu().add(0, 1, 0, "Regex Mode");
+    var caseItem = popupMenu.getMenu().add(0, 2, 1, "Case Sensitive");
+    var wordItem = popupMenu.getMenu().add(0, 3, 2, "Whole Word");
 
-    item.setActionView(switchView);
-    item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+    regexItem.setCheckable(true).setChecked(isRegexMode);
+    caseItem.setCheckable(true).setChecked(isCaseSensitive);
+    wordItem.setCheckable(true).setChecked(isWholeWord);
 
-    switchView.setOnCheckedChangeListener(
-        (buttonView, isChecked) -> {
-          isRegexMode = isChecked;
+    popupMenu.setOnMenuItemClickListener(
+        item -> {
+          int id = item.getItemId();
+
+          if (id == 1) {
+            isRegexMode = !isRegexMode;
+            item.setChecked(isRegexMode);
+            showToast("Regex mode " + (isRegexMode ? "enabled" : "disabled"));
+            if (isRegexMode) {
+              isWholeWord = false;
+              wordItem.setChecked(false);
+            }
+          } else if (id == 2) {
+            isCaseSensitive = !isCaseSensitive;
+            item.setChecked(isCaseSensitive);
+            showToast("Case sensitive " + (isCaseSensitive ? "enabled" : "disabled"));
+          } else if (id == 3) {
+            isWholeWord = !isWholeWord;
+            item.setChecked(isWholeWord);
+            showToast("Whole word " + (isWholeWord ? "enabled" : "disabled"));
+            if (isWholeWord) {
+              isRegexMode = false;
+              regexItem.setChecked(false);
+            }
+          }
+
           String searchText = binding.searchText.getText().toString();
           if (!searchText.isEmpty()) {
             performSearch(searchText);
           }
-          Toast.makeText(
-                  getContext(),
-                  "Regex mode " + (isChecked ? "enabled" : "disabled"),
-                  Toast.LENGTH_SHORT)
-              .show();
-          popupMenu.dismiss();
+
+          return true;
         });
 
     popupMenu.show();
   }
 
+  private void showToast(String message) {
+    Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+  }
+
   public void bindEditor(@Nullable IdeEditor editor) {
     this.editor = editor;
-    if (editor != null) {
-      editor.subscribeEvent(
-          PublishSearchResultEvent.class,
-          (event, unsubscribe) -> {
-            post(
-                () -> {
-                  int count = event.getMatchCount();
-                  if (count > 0) {
-                    binding.searchText.setHint("Found " + count + " matches");
-                    binding.gotoNext.setText("Next " + count);
-                  } else {
-                    binding.searchText.setHint("No matches found");
-                  }
-                });
-          });
+    if (editor == null) return;
+
+    editor.subscribeEvent(
+        PublishSearchResultEvent.class,
+        (event, unsubscribe) -> {
+          post(this::updateSearchResultInfo);
+        });
+  }
+  
+  private void updateSearchResultInfo() {
+    if (editor == null) return;
+    
+    try {
+      var searcher = editor.getSearcher();
+      if (searcher != null && searcher.hasQuery()) {
+        totalMatches = searcher.getMatchedPositionCount();
+        currentMatchIndex = searcher.getCurrentMatchedPositionIndex();
+        
+        if (totalMatches > 0) {
+          String info;
+          if (currentMatchIndex >= 0) {
+            info = String.format("%d/%d", currentMatchIndex + 1, totalMatches);
+          } else {
+            info = totalMatches + " matches";
+          }
+          binding.searchText.setHint(info);
+          
+          binding.gotoNext.setEnabled(true);
+          binding.gotoLast.setEnabled(true);
+        } else {
+          binding.searchText.setHint("No matches");
+          binding.gotoNext.setEnabled(false);
+          binding.gotoLast.setEnabled(false);
+        }
+      } else {
+        binding.searchText.setHint("Search...");
+        binding.gotoNext.setEnabled(true);
+        binding.gotoLast.setEnabled(true);
+        totalMatches = 0;
+        currentMatchIndex = -1;
+      }
+    } catch (Exception e) {
+      // خطا نادیده گرفته شود
     }
+  }
+
+  private int getSearchType() {
+    if (isRegexMode) return EditorSearcher.SearchOptions.TYPE_REGULAR_EXPRESSION;
+    if (isWholeWord) return EditorSearcher.SearchOptions.TYPE_WHOLE_WORD;
+    return EditorSearcher.SearchOptions.TYPE_NORMAL;
   }
 
   private void performSearch(String text) {
     if (editor == null) return;
 
-    if (text.isEmpty()) {
-      editor.getSearcher().stopSearch();
-      binding.searchText.setHint("Search...");
+    if (text == null || text.isEmpty()) {
+      stopSearch();
       return;
     }
 
-    if (isRegexMode) {
-      editor.getSearcher().searchWithRegex(text);
-    } else {
-      editor.getSearcher().search(text);
+    try {
+      var searcher = editor.getSearcher();
+      if (searcher == null) {
+        showToast("Searcher not available");
+        return;
+      }
+
+      int searchType = getSearchType();
+      
+      // caseSensitive = true یعنی حساس به بزرگی کوچکی
+      // در SearchOptions، caseInsensitive = false یعنی حساس به بزرگی کوچکی
+      var options = new EditorSearcher.SearchOptions(searchType, !isCaseSensitive);
+
+      try {
+        searcher.search(text, options);
+      } catch (Exception e) {
+        showToast("Invalid pattern: " + e.getMessage());
+      }
+      
+    } catch (IllegalArgumentException e) {
+      showToast("Invalid pattern: " + e.getMessage());
+    } catch (Exception e) {
+      showToast("Search error: " + e.getMessage());
     }
+  }
+
+  private void stopSearch() {
+    try {
+      if (editor != null && editor.getSearcher() != null) {
+        editor.getSearcher().stopSearch();
+      }
+    } catch (Exception e) {
+      // خطا نادیده گرفته شود
+    }
+    binding.searchText.setHint("Search...");
+    binding.gotoNext.setEnabled(true);
+    binding.gotoLast.setEnabled(true);
+    totalMatches = 0;
+    currentMatchIndex = -1;
   }
 
   public void showAndHide() {
@@ -144,12 +254,12 @@ public class GhostWebEditorSearch extends LinearLayout {
       setVisibility(View.VISIBLE);
       isShowing = true;
       if (viewChange != null) viewChange.onViewShow();
+      binding.searchText.requestFocus();
     }
-    if (editor == null) return;
 
-    editor.getSearcher().stopSearch();
+    if (editor == null) return;
+    stopSearch();
     binding.searchText.setText("");
-    binding.searchText.setHint("Search...");
   }
 
   public void hide() {
@@ -159,80 +269,138 @@ public class GhostWebEditorSearch extends LinearLayout {
 
   private void gotoNext() {
     try {
-      if (editor == null) return;
-
-      if (isRegexMode) {
-        editor.getSearcher().gotoNextWithRegex();
-      } else {
-        editor.getSearcher().gotoNext();
+      if (editor == null) {
+        showToast("Editor not available");
+        return;
       }
-    } catch (IllegalStateException e) {
-      e.printStackTrace();
-      Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+
+      var searcher = editor.getSearcher();
+      if (searcher == null) {
+        showToast("Searcher not available");
+        return;
+      }
+
+      if (!searcher.hasQuery()) {
+        showToast("No active search");
+        return;
+      }
+
+      if (!searcher.isResultValid()) {
+        showToast("Searching...");
+        return;
+      }
+
+      boolean result = searcher.gotoNext();
+      
+      if (result) {
+        updateSearchResultInfo();
+      } else {
+        showToast("No more matches");
+        binding.gotoNext.setEnabled(false);
+      }
+      
+    } catch (Exception e) {
+      showToast("Error: " + e.getMessage());
     }
   }
 
-  private void gotoLast() {
+  private void gotoPrevious() {
     try {
-      if (editor == null) return;
-
-      if (isRegexMode) {
-        editor.getSearcher().gotoLastWithRegex();
-      } else {
-        editor.getSearcher().gotoLast();
+      if (editor == null) {
+        showToast("Editor not available");
+        return;
       }
-    } catch (IllegalStateException e) {
-      e.printStackTrace();
-      Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+
+      var searcher = editor.getSearcher();
+      if (searcher == null) {
+        showToast("Searcher not available");
+        return;
+      }
+
+      if (!searcher.hasQuery()) {
+        showToast("No active search");
+        return;
+      }
+
+      if (!searcher.isResultValid()) {
+        showToast("Searching...");
+        return;
+      }
+
+      boolean result = searcher.gotoPrevious();
+      
+      if (result) {
+        updateSearchResultInfo();
+      } else {
+        showToast("No more matches");
+        binding.gotoLast.setEnabled(false);
+      }
+      
+    } catch (Exception e) {
+      showToast("Error: " + e.getMessage());
     }
   }
 
   private void replace() {
     if (editor == null) return;
 
-    if (!binding.searchText.getText().toString().isEmpty()) {
-      MakefolderBinding bind = MakefolderBinding.inflate(LayoutInflater.from(getContext()));
-
-      String dialogTitle = isRegexMode ? "Replace with Regex" : "Replace";
-
-      new MaterialAlertDialogBuilder(getContext())
-          .setTitle(dialogTitle)
-          .setView(bind.getRoot())
-          .setPositiveButton(
-              "Replace",
-              (c1, c2) -> {
-                if (isRegexMode) {
-                  gotoNextWithRegex();
-                  editor.getSearcher().replaceThisWithRegex(bind.editor.getText().toString());
-                } else {
-                  gotoNext();
-                  editor.getSearcher().replaceThis(bind.editor.getText().toString());
-                }
-              })
-          .setNeutralButton(android.R.string.cancel, null)
-          .setNegativeButton(
-              "Replace All",
-              (f1, f2) -> {
-                if (isRegexMode) {
-                  editor.getSearcher().replaceAllWithRegex(bind.editor.getText().toString());
-                } else {
-                  editor.getSearcher().replaceAll(bind.editor.getText().toString());
-                }
-              })
-          .show();
-      bind.top.setHint("Replacement");
-    } else {
-      Toast.makeText(getContext(), "Search text is empty", Toast.LENGTH_SHORT).show();
+    String searchText = binding.searchText.getText().toString();
+    if (searchText.isEmpty()) {
+      showToast("Search text is empty");
+      return;
     }
+
+    var bind = MakefolderBinding.inflate(LayoutInflater.from(getContext()));
+    String dialogTitle = buildDialogTitle();
+
+    new MaterialAlertDialogBuilder(getContext())
+        .setTitle(dialogTitle)
+        .setView(bind.getRoot())
+        .setPositiveButton(
+            "Replace",
+            (c1, c2) -> {
+              try {
+                String replacement = bind.editor.getText().toString();
+                var searcher = editor.getSearcher();
+                
+                if (searcher.isMatchedPositionSelected()) {
+                  searcher.replaceCurrentMatch(replacement);
+                  // بعد از جایگزینی، به نتیجه بعدی برو
+                  editor.postDelayed(() -> {
+                    searcher.gotoNext();
+                    updateSearchResultInfo();
+                  }, 100);
+                } else {
+                  showToast("No match selected");
+                }
+              } catch (Exception e) {
+                showToast("Replace failed: " + e.getMessage());
+              }
+            })
+        .setNeutralButton(android.R.string.cancel, null)
+        .setNegativeButton(
+            "Replace All",
+            (f1, f2) -> {
+              try {
+                String replacement = bind.editor.getText().toString();
+                editor.getSearcher().replaceAll(replacement, () -> post(() -> {
+                  showToast("Replace all completed");
+                  performSearch(searchText);
+                }));
+              } catch (Exception e) {
+                showToast("Replace all failed: " + e.getMessage());
+              }
+            })
+        .show();
+
+    bind.top.setHint("Replacement");
   }
 
-  private void gotoNextWithRegex() {
-    if (editor == null) return;
-    try {
-      editor.getSearcher().gotoNextWithRegex();
-    } catch (IllegalStateException e) {
-      e.printStackTrace();
-    }
+  private String buildDialogTitle() {
+    String title = isRegexMode ? "Replace with Regex" : "Replace";
+    if (isWholeWord) title += " (Whole Word)";
+    if (isCaseSensitive) title += " (Case Sensitive)";
+    return title;
   }
 
   public void setCallBack(onViewChange viewChange) {
@@ -241,7 +409,6 @@ public class GhostWebEditorSearch extends LinearLayout {
 
   public interface onViewChange {
     void onViewShow();
-
     void onViewHide();
   }
 }

@@ -1,315 +1,270 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:id="@+id/Coordinator"
+  android:layout_height="match_parent"
+  android:layout_width="match_parent">
+  <ImageView
+    android:id="@+id/icon_backgroundghost"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:id="@+id/Coordinator">
-
-    <ImageView
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:scaleType="centerCrop"
-        android:id="@+id/icon_backgroundghost" />
-
-    <ir.ninjacoder.prograsssheet.VideoSurfaceView
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:visibility="gone"
-        android:id="@+id/videoback" />
-
+    android:scaleType="centerCrop" />
+  <ir.ninjacoder.prograsssheet.VideoSurfaceView
+    android:id="@+id/videoback"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:visibility="gone" />
+  <LinearLayout
+    android:id="@+id/getColorPass"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
     <LinearLayout
+      android:layout_height="match_parent"
+      android:layout_width="match_parent"
+      android:orientation="vertical">
+      <ir.ninjacoder.ghostide.core.widget.PraramnetLayoutNinja
+        android:gravity="center_vertical"
+        android:id="@+id/Mainlinear"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:orientation="vertical"
-        android:id="@+id/getColorPass">
-
+        android:orientation="vertical">
         <LinearLayout
+          android:gravity="center_horizontal|center_vertical"
+          android:id="@+id/multytab"
+          android:layout_height="wrap_content"
+          android:layout_width="match_parent"
+          android:orientation="vertical">
+          <LinearLayout
+            android:gravity="center_horizontal|center_vertical"
+            android:id="@+id/CustomToolbar"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:translationX="2.0dp">
+            <LinearLayout
+              android:gravity="center_vertical"
+              android:layout_height="wrap_content"
+              android:layout_width="match_parent"
+              android:orientation="vertical"
+              android:padding="4dp">
+              <LinearLayout
+                android:gravity="center_vertical"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:padding="8dp">
+                <ImageView
+                  android:id="@+id/avatargithubuser"
+                  android:layout_height="50dp"
+                  android:layout_width="50dp"
+                  android:orientation="horizontal"
+                  android:padding="5dp"
+                  android:scaleType="centerInside" />
+                <TextView
+                  android:ellipsize="end"
+                  android:id="@+id/titleauthor"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="2"
+                  android:layout_width="wrap_content"
+                  android:padding="8dp"
+                  android:singleLine="true"
+                  android:textSize="16sp"
+                  android:visibility="invisible" />
+                <ImageView
+                  android:id="@+id/setting"
+                  android:layout_height="25dp"
+                  android:layout_marginLeft="3dp"
+                  android:layout_marginRight="3dp"
+                  android:layout_width="25dp"
+                  android:scaleType="centerInside"
+                  android:src="@drawable/drawer_item15" />
+                <ImageView
+                  android:id="@+id/codesnapimg"
+                  android:layout_height="25dp"
+                  android:layout_marginLeft="3dp"
+                  android:layout_marginRight="3dp"
+                  android:layout_width="25dp"
+                  android:scaleType="centerInside"
+                  android:src="@drawable/cameracode_24px" />
+                <ImageView
+                  android:id="@+id/image"
+                  android:layout_height="25dp"
+                  android:layout_marginLeft="3dp"
+                  android:layout_marginRight="3dp"
+                  android:layout_width="25dp"
+                  android:scaleType="centerInside"
+                  android:src="@drawable/okeye" />
+                <ImageView
+                  android:id="@+id/redo"
+                  android:layout_height="25dp"
+                  android:layout_marginLeft="3dp"
+                  android:layout_marginRight="3dp"
+                  android:layout_width="25dp"
+                  android:scaleType="fitCenter"
+                  android:src="@drawable/redo" />
+                <ImageView
+                  android:id="@+id/undo"
+                  android:layout_height="25dp"
+                  android:layout_marginLeft="3dp"
+                  android:layout_marginRight="3dp"
+                  android:layout_width="25dp"
+                  android:scaleType="fitCenter"
+                  android:src="@drawable/undos" />
+                <ImageView
+                  android:id="@+id/menupopnew"
+                  android:layout_height="25dp"
+                  android:layout_marginRight="4dp"
+                  android:layout_width="25dp"
+                  android:scaleType="fitCenter"
+                  android:src="@drawable/ic_more_vert_white" />
+                <androidx.recyclerview.widget.RecyclerView
+                  android:id="@+id/rvmenueditor"
+                  android:layout_height="wrap_content"
+                  android:layout_marginLeft="3dp"
+                  android:layout_marginRight="3dp"
+                  android:layout_width="wrap_content" />
+              </LinearLayout>
+            </LinearLayout>
+          </LinearLayout>
+          <ProgressBar
+            android:id="@+id/progressbar1"
+            android:indeterminate="true"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:padding="8dp"
+            style="?android:progressBarStyleHorizontal" />
+          <com.google.android.material.tabs.TabLayout
+            android:background="@android:color/transparent"
+            android:id="@+id/tablayouteditor"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            app:tabGravity="fill"
+            app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
+            style="@style/AppTheme.TabLayout" />
+          <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/dir"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:padding="8dp" />
+        </LinearLayout>
+        <FrameLayout
+          android:id="@+id/FrameLayout01"
+          android:layout_height="wrap_content"
+          android:layout_weight="5"
+          android:layout_width="match_parent">
+          <ir.ninjacoder.ghostide.core.IdeEditor
+            android:id="@+id/editor"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent" />
+          <ImageView
+            android:id="@+id/imageloadereditor"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
+            android:scaleType="centerInside" />
+          <LinearLayout
+            android:gravity="right|center_vertical"
+            android:id="@+id/FrameLayout02"
+            android:layout_gravity="right"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="horizontal">
+            <LinearLayout
+              android:gravity="right|center_vertical"
+              android:id="@+id/linear3"
+              android:layout_height="wrap_content"
+              android:layout_width="wrap_content"
+              android:padding="8dp">
+              <ImageView
+                android:id="@+id/iconAuthor"
+                android:layout_gravity="right|center_vertical"
+                android:layout_height="30dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="8dp"
+                android:layout_width="30dp"
+                android:scaleType="centerInside" />
+              <ProgressBar
+                android:id="@+id/proanjctor"
+                android:indeterminate="false"
+                android:layout_gravity="right|center_vertical"
+                android:layout_height="30dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="8dp"
+                android:layout_width="30dp"
+                style="?android:progressBarStyle" />
+            </LinearLayout>
+          </LinearLayout>
+        </FrameLayout>
+        <LinearLayout
+          android:gravity="center_vertical"
+          android:id="@+id/newLayoutSymbolBar"
+          android:layout_height="wrap_content"
+          android:layout_width="match_parent"
+          android:orientation="horizontal"
+          android:padding="3dp">
+          <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
             android:orientation="vertical">
-
-            <ir.ninjacoder.ghostide.core.widget.PraramnetLayoutNinja
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
+            <LinearLayout
+              android:background="@android:color/transparent"
+              android:gravity="right"
+              android:id="@+id/barSymoble"
+              android:layout_height="0dp"
+              android:layout_width="match_parent"
+              android:orientation="vertical"
+              android:padding="2dp">
+              <ImageView
+                android:id="@+id/imageview1"
+                android:layout_height="25dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_width="25dp"
+                android:padding="3dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/close" />
+              <LinearLayout
                 android:gravity="center_vertical"
-                android:orientation="vertical"
-                android:id="@+id/Mainlinear">
-
-                <LinearLayout
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:gravity="center_horizontal|center_vertical"
-                    android:orientation="vertical"
-                    android:id="@+id/multytab">
-
-                    <LinearLayout
-                        android:layout_height="wrap_content"
-                        android:layout_width="match_parent"
-                        android:gravity="center_horizontal|center_vertical"
-                        android:orientation="horizontal"
-                        android:translationX="2.0dp"
-                        android:id="@+id/CustomToolbar">
-
-                        <LinearLayout
-                            android:layout_height="wrap_content"
-                            android:layout_width="match_parent"
-                            android:gravity="center_vertical"
-                            android:padding="4dp"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:layout_height="wrap_content"
-                                android:layout_width="match_parent"
-                                android:gravity="center_vertical"
-                                android:padding="8dp"
-                                android:orientation="horizontal">
-
-                                <ImageView
-                                    android:layout_height="50dp"
-                                    android:layout_width="50dp"
-                                    android:padding="5dp"
-                                    android:scaleType="centerInside"
-                                    android:orientation="horizontal"
-                                    android:id="@+id/avatargithubuser" />
-
-                                <TextView
-                                    android:layout_height="wrap_content"
-                                    android:layout_width="wrap_content"
-                                    android:padding="8dp"
-                                    android:ellipsize="end"
-                                    android:textSize="16sp"
-                                    android:singleLine="true"
-                                    android:layout_weight="2"
-                                    android:id="@+id/titleauthor" />
-
-                                <ImageView
-                                    android:layout_height="25dp"
-                                    android:layout_width="25dp"
-                                    android:src="@drawable/cameracode_24px"
-                                    android:scaleType="centerInside"
-                                    android:layout_marginLeft="3dp"
-                                    android:layout_marginRight="3dp"
-                                    android:id="@+id/codesnapimg" />
-
-                                <ImageView
-                                    android:layout_height="25dp"
-                                    android:layout_width="25dp"
-                                    android:src="@drawable/okeye"
-                                    android:scaleType="centerInside"
-                                    android:layout_marginLeft="3dp"
-                                    android:layout_marginRight="3dp"
-                                    android:id="@+id/image" />
-
-                                <ImageView
-                                    android:layout_height="25dp"
-                                    android:layout_width="25dp"
-                                    android:src="@drawable/redo"
-                                    android:scaleType="fitCenter"
-                                    android:layout_marginLeft="3dp"
-                                    android:layout_marginRight="3dp"
-                                    android:id="@+id/redo" />
-
-                                <ImageView
-                                    android:layout_height="25dp"
-                                    android:layout_width="25dp"
-                                    android:src="@drawable/undos"
-                                    android:scaleType="fitCenter"
-                                    android:layout_marginLeft="3dp"
-                                    android:layout_marginRight="3dp"
-                                    android:id="@+id/undo" />
-
-                                <ImageView
-                                    android:layout_height="25dp"
-                                    android:layout_width="25dp"
-                                    android:src="@drawable/ic_more_vert_white"
-                                    android:scaleType="fitCenter"
-                                    android:layout_marginRight="4dp"
-                                    android:id="@+id/menupopnew" />
-                                    
-                                <androidx.recyclerview.widget.RecyclerView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="3dp"
-                                    android:layout_marginRight="3dp"
-                                    android:id="@+id/rvmenueditor" />
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <ProgressBar
-                        android:layout_height="wrap_content"
-                        android:layout_width="match_parent"
-                        android:indeterminate="true"
-                        android:padding="8dp"
-                        style="?android:progressBarStyleHorizontal"
-                        android:id="@+id/progressbar1" />
-
-                    <com.google.android.material.tabs.TabLayout
-                        android:layout_height="wrap_content"
-                        android:layout_width="match_parent"
-                        android:background="@android:color/transparent"
-                        app:tabGravity="fill"
-                        style="@style/AppTheme.TabLayout"
-                        app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
-                        android:id="@+id/tablayouteditor" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:padding="8dp"
-                        android:id="@+id/dir" />
-
-                </LinearLayout>
-
-                <FrameLayout
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:layout_weight="5"
-                    android:id="@+id/FrameLayout01">
-
-                    <ir.ninjacoder.ghostide.core.IdeEditor
-                        android:layout_height="match_parent"
-                        android:layout_width="match_parent"
-                        android:id="@+id/editor" />
-
-                    <ImageView
-                        android:layout_height="match_parent"
-                        android:layout_width="match_parent"
-                        android:scaleType="centerInside"
-                        android:id="@+id/imageloadereditor" />
-
-                    <LinearLayout
-                        android:layout_height="wrap_content"
-                        android:layout_width="match_parent"
-                        android:gravity="right|center_vertical"
-                        android:orientation="horizontal"
-                        android:id="@+id/FrameLayout02"
-                        android:layout_gravity="right">
-
-                        <LinearLayout
-                            android:layout_height="wrap_content"
-                            android:layout_width="wrap_content"
-                            android:gravity="right|center_vertical"
-                            android:padding="8dp"
-                            android:id="@+id/linear3">
-
-                            <ImageView
-                                android:layout_height="30dp"
-                                android:layout_width="30dp"
-                                android:layout_marginBottom="8dp"
-                                android:scaleType="centerInside"
-                                android:layout_marginLeft="5dp"
-                                android:layout_marginRight="5dp"
-                                android:layout_marginTop="8dp"
-                                android:layout_gravity="right|center_vertical"
-                                android:id="@+id/iconAuthor" />
-
-                            <ProgressBar
-                                android:layout_height="30dp"
-                                android:layout_width="30dp"
-                                android:layout_marginBottom="8dp"
-                                android:indeterminate="false"
-                                android:layout_marginLeft="5dp"
-                                android:layout_marginRight="5dp"
-                                style="?android:progressBarStyle"
-                                android:layout_marginTop="8dp"
-                                android:id="@+id/proanjctor"
-                                android:layout_gravity="right|center_vertical" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </FrameLayout>
-
-                <LinearLayout
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:gravity="center_vertical"
-                    android:padding="3dp"
-                    android:orientation="horizontal"
-                    android:id="@+id/newLayoutSymbolBar">
-
-                    <LinearLayout
-                        android:layout_height="wrap_content"
-                        android:layout_width="match_parent"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_height="0dp"
-                            android:layout_width="match_parent"
-                            android:background="@android:color/transparent"
-                            android:gravity="right"
-                            android:padding="2dp"
-                            android:orientation="vertical"
-                            android:id="@+id/barSymoble">
-
-                            <ImageView
-                                android:layout_height="25dp"
-                                android:layout_width="25dp"
-                                android:src="@drawable/close"
-                                android:scaleType="centerInside"
-                                android:padding="3dp"
-                                android:layout_marginLeft="2dp"
-                                android:layout_marginRight="2dp"
-                                android:id="@+id/imageview1" />
-
-                            <LinearLayout
-                                android:layout_height="wrap_content"
-                                android:layout_width="match_parent"
-                                android:gravity="center_vertical"
-                                android:padding="8dp"
-                                android:orientation="horizontal">
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_height="match_parent"
-                            android:layout_width="match_parent"
-                            android:orientation="vertical">
-
-                            <ir.ninjacoder.ghostide.core.marco.GhostWebEditorSearch
-                                android:layout_height="match_parent"
-                                android:layout_width="wrap_content"
-                                android:padding="8dp"
-                                android:id="@+id/editor_ser" />
-
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:layout_height="wrap_content"
-                                android:layout_width="match_parent"
-                                android:padding="8dp"
-                                android:id="@+id/syspiar" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </ir.ninjacoder.ghostide.core.widget.PraramnetLayoutNinja>
-
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:padding="8dp" />
+            </LinearLayout>
+            <LinearLayout
+              android:layout_height="match_parent"
+              android:layout_width="match_parent"
+              android:orientation="vertical">
+              <ir.ninjacoder.ghostide.core.marco.GhostWebEditorSearch
+                android:id="@+id/editor_ser"
+                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:padding="8dp" />
+              <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/syspiar"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:padding="8dp" />
+            </LinearLayout>
+          </LinearLayout>
         </LinearLayout>
-
+      </ir.ninjacoder.ghostide.core.widget.PraramnetLayoutNinja>
     </LinearLayout>
-
-    <ir.ninjacoder.ghostide.core.widget.ExrtaFab
-        android:layout_height="80dp"
-        android:layout_width="80dp"
-        android:layout_marginBottom="44dp"
-        app:backgroundTint="?colorPrimary"
-        android:padding="24dp"
-        app:iconTint="?colorSurface"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="18dp"
-        android:id="@+id/_fab"
-        android:layout_gravity="right|bottom" />
-
+  </LinearLayout>
+  <ir.ninjacoder.ghostide.core.widget.ExrtaFab
+    android:id="@+id/_fab"
+    android:layout_gravity="right|bottom"
+    android:layout_height="80dp"
+    android:layout_marginBottom="44dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginTop="18dp"
+    android:layout_width="80dp"
+    android:padding="24dp"
+    app:backgroundTint="?colorPrimary"
+    app:iconTint="?colorSurface" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -8,7 +8,8 @@ public enum FileState {
   ADD(2, Color.parseColor("#4CAF50")),
   SELECTBELITEM(3, Color.parseColor("#FFFF5900")),
   SEARCH(4, Color.parseColor("#FFBF00")),
-  ARCHIVES(5,Color.parseColor("#FFE60B"));
+  ARCHIVES(5,Color.parseColor("#FFE60B")),
+  DELETED(6, 0);
   int id;
   int color;
 

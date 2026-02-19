@@ -34,8 +34,6 @@ public class BasicSyntaxJavaAnalyzer implements CodeAnalyzer {
   private final Set<String> usedParams = ConcurrentHashMap.newKeySet();
   private final Set<String> activeHints = ConcurrentHashMap.newKeySet();
   private String currentCode = "";
-
-  // فاصله ثابت برای آیکون‌ها از متن (بر حسب پیکسل)
   private static final int ICON_TEXT_PADDING = 8;
 
   private static class MethodInfo {
@@ -264,7 +262,7 @@ public class BasicSyntaxJavaAnalyzer implements CodeAnalyzer {
       for (Map.Entry<String, ImportInfo> e : importMap.entrySet()) {
         String simpleName = getSimpleName(e.getKey());
         if (!usedImports.contains(simpleName)) {
-          // استفاده از Diagnostic با آفست‌های دقیق
+         
           editor.addDiagnostic(
               new Diagnostic(
                   e.getValue().start,
@@ -280,13 +278,13 @@ public class BasicSyntaxJavaAnalyzer implements CodeAnalyzer {
         if (!usedParams.contains(e.getKey())) {
           
 
-          // Diagnostic با آفست‌های دقیق
+    
           editor.addDiagnostic(
               new Diagnostic(
                   e.getValue().start,
                   e.getValue().end,
                   "Parameter '" + e.getValue().name + "' is never used",
-                  DiagnosticsState.UNUSED,
+                  DiagnosticsState.UNUSEDWAVE,
                   editor.getColorScheme().getColor(EditorColorScheme.javaparament)));
         }
       }

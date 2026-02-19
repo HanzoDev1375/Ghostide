@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string name="app_name">Ghost IDE</string>
+  <string name="dkplayer_replay">إعادة</string>
+  <string name="dkplayer_lock_tip">مقفل</string>
+  <string name="dkplayer_unlocked">غير مقفل</string>
+  <string name="dkplayer_locked">مقفل</string>
+  <string name="dkplayer_error_message">خطأ</string>
+  <string name="dkplayer_retry">إعادة المحاولة</string>
+  <string name="dkplayer_continue_play">متابعة التشغيل</string>
+  <string name="dkplayer_wifi_tip">WiFi غير متاح</string>
+  <string name="word_separators">.,;:!?\10()[]*&amp;@{}/&lt;&gt;_+=|</string>
+  <item
+    name="last"
+    type="string">الأخير</item>
+  <item
+    name="next"
+    type="string">التالي</item>
+  <item
+    name="replace"
+    type="string">استبدال</item>
+  <item
+    name="replaceAll"
+    type="string">استبدال الكل</item>
+  <item
+    name="replacement"
+    type="string">البديل</item>
+  <item
+    name="cancel"
+    type="string">إلغاء</item>
+  <item
+    name="text_to_search"
+    type="string">نص للبحث</item>
+  <string name="Settings">الإعدادات</string>
+  <string name="theme">سمة التطبيق</string>
+  <string name="Customize_font">تخصيص الخط</string>
+  <string name="gos">GWI</string>
+  <string name="paste_text">لصق</string>
+  <string name="copy_text">نسخ</string>
+  <string name="text_selection_more">المزيد…</string>
+  <string name="customwindows">وضع علامات النافذة</string>
+  <string name="customwindowsdesc">تأكد من وضع النافذة المناسب لأشرطة النظام على جهازك</string>
+  <string name="settings_char_preview">معاينة الحروف</string>
+  <string name="settings_display_row">عرض صف الأرقام</string>
+  <string name="settings_keyboard_height">ارتفاع لوحة المفاتيح</string>
+  <string name="drawer_subtitles">IDE لكل شيء</string>
+  <string name="customthemetitle">سمة مخصصة</string>
+  <string name="customthemesub">يمكنك استخدام سمة مخصصة (ملف .ghost) من أي مسار</string>
+  <string name="customblursizetitle">حجم تمويه الخلفية</string>
+  <string name="customblursizesubtitle">يمكنك ضبط حجم تمويه الخلفية بين 1 و 25</string>
+  <string name="codeazsubtitle">قم بتعطيل هذا الخيار إذا كان جهازك يعاني من ضعف في الأداء</string>
+  <string name="materialyoutitle">Material You</string>
+  <string name="materialyousubtitle">تمكين الألوان الديناميكية تلقائيًا للحصول على أفضل تجربة ألوان</string>
+  <string name="effect_title">تأثير جميل</string>
+  <string name="effect_description">قم بتفعيل هذا الخيار لإضافة تأثير اهتزاز خفي للخلفية</string>
+  <string name="grids_title">وضع الشبكة</string>
+  <string name="grids_description">التبديل إلى وضع الشبكة لتجربة أكثر تنظيماً</string>
+  <string name="walpapersystem_title">الحصول على خلفية النظام</string>
+  <string name="walpapersystem_description">قم بتفعيل هذا الخيار لاستخدام خلفية نظام جهازك</string>
+  <string name="deftheme_title">السمة الافتراضية</string>
+  <string name="deftheme_description">بتفعيل هذا الخيار، لن تتم قراءة سمة البرنامج من JSON افتراضيًا</string>
+  <string name="autoSaveText_title">حفظ تلقائي</string>
+  <string name="autoSaveText_description">احفظ عملك تلقائيًا عندما تنسى! \uD83D\uDE00</string>
+  <string name="drawer_title">العنوان</string>
+  <string name="inittheme">يرجى تثبيت السمة</string>
+  <string name="initphp">يرجى تثبيت PHP</string>
+  <string name="initpy">قم بتثبيت Python قبل دخول التطبيق</string>
+  <string name="filecreator">تم إنشاء الملف بنجاح</string>
+  <string name="codeaztitles">محلل الأكواد</string>
+  <string name="errorEmptyFile">خطأ: لا يمكن حفظ الملفات الفارغة</string>
+  <string name="themewarning">تحذير السمة</string>
+  <string name="themewaringmassge">ملف السمة موجود بالفعل. هل تريد استبداله؟</string>
+  <string name="sdcarderror">لم يتم العثور على بطاقة SD</string>
+  <string name="make_folder">إنشاء مجلد</string>
+  <string name="make_file">إنشاء ملف</string>
+  <string name="make_project">إنشاء مشروع</string>
+  <string name="search_file">بحث في الملفات (تجريبي)</string>
+  <string name="folder_tree">شجرة المجلدات</string>
+  <string name="file_tree">شجرة الملفات</string>
+  <string name="git_clone">Git Clone</string>
+  <string name="android_module">وحدة أندرويد</string>
+  <string name="git_tools">أدوات Git</string>
+  <string name="gson_to_class">GSON إلى كلاس</string>
+  <string name="sheetlive">فتح الويب في حوار</string>
+  <string name="sheetsub">عرض الكود في BottomSheetDialog أسرع بمرتين</string>
+  <string name="custom_icons">أيقونات مخصصة</string>
+  <string name="termthemes">سمة الطرفية</string>
+  <string name="scriptcustom">سكريبت مخصص</string>
+  <string name="customthemeapp">سمة التطبيق المخصصة</string>
+  <string name="customchareditor">محرر الحروف المخصص</string>
+  <string name="cursoreditoricon">أيقونة محرر المؤشر</string>
+  <string name="backgroundimageeditor">صورة الخلفية</string>
+  <string name="pastjavacode">لصق كود جافا؟</string>
+  <string name="menu_sandisk_card">بطاقة SanDisk</string>
+  <string name="menu_java_code">كود جافا</string>
+  <string name="menu_terminal">الطرفية</string>
+  <string name="menu_settings">الإعدادات</string>
+  <string name="menu_logcat_reader">قارئ LogCat</string>
+  <string name="menu_icon_shop">متجر الأيقونات</string>
+  <string name="menu_update_app">تحديث التطبيق</string>
+  <string name="menu_plugins_manager">مدير الإضافات</string>
+  <string name="menu_backup_theme">نسخ احتياطي للسمة</string>
+  <string name="menu_bookmarks_beta">المرجعيات (تجريبي)</string>
+  <string name="menu_apk_manager">مدير APK</string>
+  <string name="menu_about">حول</string>
+  <string name="menu_store">المتجر</string>
+  <string name="menu_exit">خروج</string>
+  <string name="particle">جسيمات</string>
+  <string name="lightning">برق</string>
+  <string name="flame">لهب</string>
+  <string name="spark">شرارة</string>
+  <string name="rain">مطر</string>
+  <string name="magic">سحر</string>
+  <string name="none">بدون</string>
+  <string name="explosion">انفجار</string>
+  <string name="bubbles">فقاعات</string>
+  <string name="neon">نيون</string>
+  <string name="glitch">خلل</string>
+  <string name="galaxy">مجرة</string>
+  <string name="typing">كتابة</string>
+  <string name="custom_theme_terminal">سمة الطرفية المخصصة</string>
+  <string name="select_property_theme">اختر خاصية السمة</string>
+  <string name="custom_python_code">سكريبت مخصص من الطرفية</string>
+  <string name="type_python_script">اكتب سكريبت Python...</string>
+  <string name="custom_char_editor">محرر الحروف المخصص</string>
+  <string name="select_char_name">اختر اسم الحرف مثل 👻</string>
+  <string name="custom_image_background">صورة خلفية مخصصة</string>
+  <string name="select_dir_image">اختر مسار الصورة</string>
+  <string name="select_icon_app">اختر أيقونة التطبيق</string>
+  <string name="set_custom_icon_message">يمكنك تعيين أيقونة مخصصة</string>
+  <string name="glow_effect">تأثير التوهج</string>
+  <string name="no_methods_found">لم يتم العثور على دوال في الكود</string>
+  <string name="code_parsing_error">خطأ في تحليل الكود: %s</string>
+  <string name="select_method_for_overload">اختر دالة للتحميل الزائد</string>
+  <string name="method_has_no_parameters">هذه الدالة لا تحتوي على معاملات</string>
+  <string name="select_parameters_for_overload">اختر المعاملات للتحميل الزائد: %s</string>
+  <string name="select_at_least_one_parameter">يرجى اختيار معامل واحد على الأقل</string>
+  <string name="modify_selected_parameters">تعديل المعاملات المحددة</string>
+  <string name="type">النوع</string>
+  <string name="name">الاسم</string>
+  <string name="overload_created_successfully">تم إنشاء التحميل الزائد بنجاح</string>
+  <string name="overload_creation_error">خطأ في إنشاء التحميل الزائد: %s</string>
+  <string name="globalsearch">بحث شامل</string>
+  <string name="ftpdownloader">تحميل FTP</string>
+  <string name="search_normal">بحث عادي</string>
+  <string name="search_regex">تعبير نمطي</string>
+  <string name="search_regex_case">تعبير نمطي + حساس للحالة</string>
+  <string name="search_regex_multiline">تعبير نمطي + متعدد الأسطر</string>
+  <string name="search_regex_dotall">تعبير نمطي + نقطة للكل</string>
+</resources>

@@ -27,8 +27,8 @@ public class BasicSyntaxJavaScriptAnalyzer implements CodeAnalyzer {
 
   private static class VarPosition {
     int line;
-    int characterColumn; // ستون واقعی از ANTLR
-    int visualColumn;    // ستون نمایشی برای IconSpan
+    int characterColumn;
+    int visualColumn;  
     int length;
     int startIndex;
     int endIndex;
@@ -75,7 +75,7 @@ public class BasicSyntaxJavaScriptAnalyzer implements CodeAnalyzer {
 
     if (editor != null) {
       editor.clearDiagnostics();
-      editor.clearIconSpans();
+      
     }
     diagnostics.clear();
     variables.clear();
@@ -258,16 +258,6 @@ public class BasicSyntaxJavaScriptAnalyzer implements CodeAnalyzer {
                     "var `" + varName + "` not using",
                     DiagnosticsState.UNUSED);
             editor.addDiagnostic(diagnostic);
-            
-            // استفاده از visualColumn برای قرارگیری صحیح
-            editor.addIconSpan(
-                new IconSpan(
-                    ContextCompat.getDrawable(editor.getContext(), R.drawable.javanull),
-                    0,
-                    pos.line,
-                    pos.visualColumn,
-                    16,
-                    1));
             if (editor != null) editor.showCurrentDiagnostic();
           }
         }
@@ -285,18 +275,8 @@ public class BasicSyntaxJavaScriptAnalyzer implements CodeAnalyzer {
                     pos.startIndex,
                     pos.endIndex,
                     "fun `" + funcName + "` not call or using",
-                    DiagnosticsState.WARNING);
+                    DiagnosticsState.UNUSED);
             editor.addDiagnostic(diagnostic);
-            
-            // استفاده از visualColumn برای قرارگیری صحیح
-            editor.addIconSpan(
-                new IconSpan(
-                    ContextCompat.getDrawable(editor.getContext(), R.drawable.javaclass),
-                    0,
-                    pos.line,
-                    pos.visualColumn,
-                    16,
-                    1));
             if (editor != null) editor.showCurrentDiagnostic();
           }
         }

@@ -25,6 +25,7 @@ import com.ninjacoder.jgit.particle.SparkleParticle;
 import com.ninjacoder.jgit.particle.SpiralParticle;
 import com.ninjacoder.jgit.particle.StarParticle;
 import com.ninjacoder.jgit.particle.SvgParticle;
+import com.ninjacoder.jgit.particle.ThanosInfinityParticle;
 import com.ninjacoder.jgit.particle.custom.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,6 +57,7 @@ public class PowerModeEffectManager {
     TYPING(getString(R.string.typing)),
     LIGHTNING_SVG("Lightning SVG"),
     GHOST("ghost"),
+    TANOS("tanos"),
     CUSTOM("Custom");
 
     private String displayName;
@@ -207,6 +209,36 @@ public class PowerModeEffectManager {
     }
   }
 
+  private void spawnInfinitySnapEffect(float x, float y) {
+    int count = (int) (30 * effectIntensity);
+
+    for (int i = 0; i < count; i++) {
+      float angle = random.nextFloat() * (float) Math.PI * 2;
+      float speed = random.nextFloat() * 20 * effectIntensity + 8;
+      float dx = (float) Math.cos(angle) * speed;
+      float dy = (float) Math.sin(angle) * speed;
+
+      int stoneIndex = i % 6;
+      float size = random.nextFloat() * 15 * effectIntensity + 8;
+      float gravity = 0.2f * effectIntensity;
+      float friction = 0.95f;
+      int life = (int) (70 + random.nextInt(40) * effectIntensity);
+
+      particles.add(
+          new ThanosInfinityParticle(x, y, dx, dy, stoneIndex, size, gravity, friction, life));
+    }
+
+    for (int i = 0; i < 6; i++) {
+      float angle = (i * 60) * (float) Math.PI / 180f;
+      float ringX = x + (float) Math.cos(angle) * 50;
+      float ringY = y + (float) Math.sin(angle) * 50;
+
+      particles.add(
+          new ShockwaveParticle(
+              ringX, ringY, ThanosInfinityParticle.INFINITY_COLORS[i], 80 * effectIntensity, 20));
+    }
+  }
+
   private void spawnGhostEffect(float x, float y) {
     if (ghostSvg == null) return;
     int[] ghostColors = {
@@ -348,13 +380,16 @@ public class PowerModeEffectManager {
         break;
       case CUSTOM:
         if (customEffectManager != null) {
-          List<CustomEffect> effects = customEffectManager.getAllEffects  ();
+          List<CustomEffect> effects = customEffectManager.getAllEffects();
           if (!effects.isEmpty()) {
             for (CustomEffect effect : effects) {
               customEffectManager.spawnEffect(effect.getName(), x, y, effectIntensity);
             }
           }
         }
+        break;
+      case TANOS:
+        spawnInfinitySnapEffect(x, y);
         break;
       case NONE:
         clearEffects();

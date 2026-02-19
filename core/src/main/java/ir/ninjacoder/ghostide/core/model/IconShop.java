@@ -216,7 +216,7 @@ public class IconShop {
         + File.separator
         + "png"
         + File.separator
-        + name.getName().replace(".svg",".png");
+        + name.getName().replace(".svg", ".png");
   }
 
   public File getDir(File name) {

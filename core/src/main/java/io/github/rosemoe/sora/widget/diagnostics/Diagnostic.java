@@ -57,14 +57,14 @@ public class Diagnostic {
   }
 
   public int getColor() {
-    return darkenColor(this.color, 0.3f);
+
+    if (this.color != 0) {
+      return this.color;
+    }
+    return state.getColor();
   }
 
-  private int darkenColor(int color, float factor) {
-    int alpha = Color.alpha(color);
-    int red = Math.max(0, (int) (Color.red(color) * (1 - factor)));
-    int green = Math.max(0, (int) (Color.green(color) * (1 - factor)));
-    int blue = Math.max(0, (int) (Color.blue(color) * (1 - factor)));
-    return Color.argb(alpha, red, green, blue);
+  public void setColor(int color) {
+    this.color = color;
   }
 }

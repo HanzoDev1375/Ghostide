@@ -1,32 +1,11 @@
-/*
- *    sora-editor - the awesome code editor for Android
- *    https://github.com/Rosemoe/sora-editor
- *    Copyright (C) 2020-2022  Rosemoe
- *
- *     This library is free software; you can redistribute it and/or
- *     modify it under the terms of the GNU Lesser General Public
- *     License as published by the Free Software Foundation; either
- *     version 2.1 of the License, or (at your option) any later version.
- *
- *     This library is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *     Lesser General Public License for more details.
- *
- *     You should have received a copy of the GNU Lesser General Public
- *     License along with this library; if not, write to the Free Software
- *     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
- *     USA
- *
- *     Please contact Rosemoe by email 2073412493@qq.com if you need
- *     additional information or have any questions
- */
 package io.github.rosemoe.sora.widget;
 
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.view.accessibility.AccessibilityNodeInfo;
 import com.ninjacoder.jgit.particle.custom.CustomEffect;
+import io.github.rosemoe.sora.data.RegexSpan;
+import java.util.regex.PatternSyntaxException;
 import io.github.rosemoe.sora.diagnostics.Diagnostic;
 import io.github.rosemoe.sora.event.*;
 import io.github.rosemoe.sora.widget.diagnostics.DiagnosticPopupWindow;
@@ -182,10 +161,8 @@ public class CodeEditor extends View
 
   private PowerModeEffectManager mPowerModeEffectManager;
 
-  /** The default size when creating the editor object. Unit is sp. */
   public static final int DEFAULT_TEXT_SIZE = 18;
 
-  /** The default cursor blinking period */
   public static final int DEFAULT_CURSOR_BLINK_PERIOD = 500;
 
   /**
@@ -245,13 +222,10 @@ public class CodeEditor extends View
   public static final int FLAG_GHOSTWEB = 1 << 7;
   public static final int FLAG_Scrop = 1 << 8;
 
-  /** Adjust the completion window's position scheme according to the device's screen size. */
   public static final int WINDOW_POS_MODE_AUTO = 0;
 
-  /** Completion window always follow the cursor */
   public static final int WINDOW_POS_MODE_FOLLOW_CURSOR_ALWAYS = 1;
 
-  /** Completion window always stay at the bottom of view and occupies the horizontal viewport */
   public static final int WINDOW_POS_MODE_FULL_WIDTH_ALWAYS = 2;
 
   /*
@@ -261,10 +235,8 @@ public class CodeEditor extends View
   static final int ACTION_MODE_SEARCH_TEXT = 1;
   static final int ACTION_MODE_SELECT_TEXT = 2;
 
-  /** Digits for line number measuring */
   private static final String NUMBER_DIGITS = "0 1 2 3 4 5 6 7 8 9";
 
-  /** Text size scale of small graph */
   private static final float SCALE_MINI_GRAPH = 0.9f;
 
   private static final String LOG_TAG = "CodeEditor";
@@ -405,6 +377,12 @@ public class CodeEditor extends View
   private static final Pattern LINK_PATTERN =
       Pattern.compile(
           "https?://[\\w\\-._~:/?#\\[\\]@!$&'()*+,;=]+|www\\.[\\w\\-._~:/?#\\[\\]@!$&'()*+,;=]+");
+  private static final Pattern UNICODE_PATTERN =
+      Pattern.compile("\\\\[uU][0-9a-fA-F]{4}(?:[0-9a-fA-F]{4})?");
+
+  private final Set<RegexSpan> mRegexSpans = new HashSet<>();
+  private String mCurrentRegex = "";
+  private int mRegexColor = 0xFF4CAF50;
   private IconSpanManager iconSpanManager;
 
   public void addLineIcon(int lineNumber, int iconRes) {
@@ -442,7 +420,6 @@ public class CodeEditor extends View
     return this.minidraw;
   }
 
-  /** Add a new diagnostic to the editor and dispatch event */
   public void addDiagnostic(Diagnostic diagnostic) {
     List<Diagnostic> oldDiagnostics = new ArrayList<>(diagnostics);
     diagnostics.add(diagnostic);
@@ -450,7 +427,6 @@ public class CodeEditor extends View
     dispatchDiagnosticsEvent(oldDiagnostics, diagnostics);
   }
 
-  /** Remove a diagnostic from the editor and dispatch event */
   public void removeDiagnostic(Diagnostic diagnostic) {
     List<Diagnostic> oldDiagnostics = new ArrayList<>(diagnostics);
     diagnostics.remove(diagnostic);
@@ -458,7 +434,6 @@ public class CodeEditor extends View
     dispatchDiagnosticsEvent(oldDiagnostics, diagnostics);
   }
 
-  /** Clear all diagnostics and dispatch event */
   public void clearDiagnostics() {
     List<Diagnostic> oldDiagnostics = new ArrayList<>(diagnostics);
     diagnostics.clear();
@@ -466,7 +441,6 @@ public class CodeEditor extends View
     dispatchDiagnosticsEvent(oldDiagnostics, diagnostics);
   }
 
-  /** Set all diagnostics at once and dispatch event */
   public void setDiagnostics(List<Diagnostic> newDiagnostics) {
     List<Diagnostic> oldDiagnostics = new ArrayList<>(diagnostics);
     diagnostics.clear();
@@ -488,13 +462,11 @@ public class CodeEditor extends View
         });
   }
 
-  /** Helper method to dispatch diagnostics event */
   private void dispatchDiagnosticsEvent(
       List<Diagnostic> oldDiagnostics, List<Diagnostic> newDiagnostics) {
     dispatchEvent(new DiagnosticsEvent(this, oldDiagnostics, newDiagnostics));
   }
 
-  /** Get diagnostics for a specific line */
   public List<Diagnostic> getDiagnosticsForLine(int line) {
     List<Diagnostic> lineDiagnostics = new ArrayList<>();
     for (var diagnostic : diagnostics) {
@@ -530,7 +502,6 @@ public class CodeEditor extends View
     invalidate();
   }
 
-  /** افزودن چندین inlay به طور همزمان */
   public void addInlays(List<Inlay> newInlays) {
     if (newInlays == null || newInlays.isEmpty()) return;
 
@@ -543,7 +514,6 @@ public class CodeEditor extends View
     invalidate();
   }
 
-  /** حذف یک inlay */
   public void removeInlay(Inlay inlay) {
     if (inlay != null) {
       inlays.remove(inlay);
@@ -551,7 +521,6 @@ public class CodeEditor extends View
     }
   }
 
-  /** حذف inlay با شناسه مشخص */
   public void removeInlayById(String id) {
     if (id == null) return;
 
@@ -559,18 +528,15 @@ public class CodeEditor extends View
     invalidate();
   }
 
-  /** پاک کردن همه inlayها */
   public void clearInlays() {
     inlays.clear();
     invalidate();
   }
 
-  /** دریافت لیست همه inlayها */
   public List<Inlay> getInlays() {
     return new ArrayList<>(inlays);
   }
 
-  /** دریافت inlayهای یک خط مشخص */
   public List<Inlay> getInlaysForLine(int line) {
     List<Inlay> result = new ArrayList<>();
     int startIndex = getText().getCharIndex(line, 0);
@@ -584,12 +550,10 @@ public class CodeEditor extends View
     return result;
   }
 
-  /** مرتب سازی inlayها بر اساس موقعیت */
   private void sortInlays() {
     inlays.sort((a, b) -> Integer.compare(a.getEnd(), b.getEnd()));
   }
 
-  /** دریافت inlay در موقعیت مشخص (برای تشخیص کلیک) */
   public Inlay getInlayAt(float x, float y) {
     for (Inlay inlay : inlays) {
       if (inlay.getDrawingRect() != null
@@ -604,7 +568,6 @@ public class CodeEditor extends View
     this.minidraw = minidraw;
   }
 
-  /** Update hint visibility based on editor content */
   private void updateHintVisibility() {
     boolean wasShowing = mShowHint;
     mShowHint = mHint != null && !mHint.isEmpty() && getText().length() == 0;
@@ -612,6 +575,30 @@ public class CodeEditor extends View
     if (wasShowing != mShowHint) {
       invalidate();
     }
+  }
+
+  public void addRegexSpan(RegexSpan span) {
+    mRegexSpans.add(span);
+    invalidate();
+  }
+
+  public void removeRegexSpan(RegexSpan span) {
+    mRegexSpans.remove(span);
+    invalidate();
+  }
+
+  public void clearRegexSpans() {
+    mRegexSpans.clear();
+    invalidate();
+  }
+
+  private RegexSpan getRegexAt(int line, int column) {
+    for (RegexSpan span : mRegexSpans) {
+      if (span.getLine() == line && span.contains(column)) {
+        return span;
+      }
+    }
+    return null;
   }
 
   /**
@@ -770,7 +757,6 @@ public class CodeEditor extends View
     return mDpUnit;
   }
 
-  /** ترسیم inlay روی canvas */
   void drawInlay(Canvas canvas, Inlay inlay) {
     if (inlay == null || inlay.getText() == null || inlay.getText().isEmpty()) {
       return;
@@ -872,7 +858,6 @@ public class CodeEditor extends View
     }
   }
 
-  /** دریافت شماره ردیف برای یک خط مشخص */
   private int getRowForLine(int line) {
     RowIterator iterator = mLayout.obtainRowIterator(0);
     int row = 0;
@@ -907,12 +892,10 @@ public class CodeEditor extends View
     return (end > first && begin < last);
   }
 
-  /** Cancel the next animation for {@link CodeEditor#ensurePositionVisible(int, int)} */
   protected void cancelAnimation() {
     mLastMakeVisible = System.currentTimeMillis();
   }
 
-  /** Hide completion window later */
   protected void hideCompletionWindow() {
     mCompletionWindow.hide();
     clearGhostText();
@@ -969,7 +952,6 @@ public class CodeEditor extends View
     }
   }
 
-  /** ثبت یک افکت سفارشی جدید */
   public boolean registerCustomEffect(CustomEffect effect) {
     if (mPowerModeEffectManager != null) {
       return mPowerModeEffectManager.registerCustomEffect(effect);
@@ -977,7 +959,6 @@ public class CodeEditor extends View
     return false;
   }
 
-  /** حذف یک افکت سفارشی */
   public boolean unregisterCustomEffect(String effectName) {
     if (mPowerModeEffectManager != null) {
       return mPowerModeEffectManager.unregisterCustomEffect(effectName);
@@ -985,7 +966,6 @@ public class CodeEditor extends View
     return false;
   }
 
-  /** دریافت لیست افکت های سفارشی */
   public List<CustomEffect> getCustomEffects() {
     if (mPowerModeEffectManager != null) {
       return mPowerModeEffectManager.getCustomEffects();
@@ -993,7 +973,6 @@ public class CodeEditor extends View
     return new ArrayList<>();
   }
 
-  /** فعال کردن یک افکت سفارشی در موقعیت مشخص */
   public void spawnCustomEffect(String effectName, float x, float y) {
     if (mPowerModeEffectManager != null) {
       mPowerModeEffectManager.spawnCustomEffect(effectName, x, y);
@@ -1098,13 +1077,11 @@ public class CodeEditor extends View
     }
   }
 
-  /** Get using EditorAutoCompleteWindow */
   @NonNull
   public EditorAutoCompleteWindow getAutoCompleteWindow() {
     return mCompletionWindow;
   }
 
-  /** Get EditorTextActionWindow instance of this editor */
   @NonNull
   public EditorTextActionWindow getTextActionWindow() {
     return mTextActionWindow;
@@ -1191,7 +1168,6 @@ public class CodeEditor extends View
     invalidate();
   }
 
-  /** Update link detection in editor Should be called whenever text changes */
   private void updateLinkDetection() {
     if (mLinkDetectionEnabled && mText != null) {
       detectLinks();
@@ -1204,11 +1180,11 @@ public class CodeEditor extends View
 
     mLinks.clear();
     String text = mText.toString();
-    Matcher matcher = LINK_PATTERN.matcher(text);
 
-    while (matcher.find()) {
-      int start = matcher.start();
-      int end = matcher.end();
+    Matcher linkMatcher = LINK_PATTERN.matcher(text);
+    while (linkMatcher.find()) {
+      int start = linkMatcher.start();
+      int end = linkMatcher.end();
 
       if (start >= 0 && end <= text.length() && end > start) {
         try {
@@ -1217,13 +1193,39 @@ public class CodeEditor extends View
 
           if (startPos.line == endPos.line) {
             LinkSpan link =
-                new LinkSpan(matcher.group(), startPos.line, startPos.column, endPos.column + 1);
+                new LinkSpan(
+                    linkMatcher.group(), startPos.line, startPos.column, endPos.column + 1);
             link.setColor(mLinkColor);
             link.setUnderline(mLinkUnderline);
             mLinks.add(link);
           }
         } catch (Exception e) {
           Log.e(LOG_TAG, "Error detecting link", e);
+        }
+      }
+    }
+
+    Matcher unicodeMatcher = UNICODE_PATTERN.matcher(text);
+    while (unicodeMatcher.find()) {
+      int start = unicodeMatcher.start();
+      int end = unicodeMatcher.end();
+
+      if (start >= 0 && end <= text.length() && end > start) {
+        try {
+          CharPosition startPos = mText.getIndexer().getCharPosition(start);
+          CharPosition endPos = mText.getIndexer().getCharPosition(end - 1);
+
+          if (startPos.line == endPos.line) {
+            String unicode = unicodeMatcher.group();
+            LinkSpan link =
+                new LinkSpan(unicode, startPos.line, startPos.column, endPos.column + 1);
+
+            link.setColor(mColors.getColor(EditorColorScheme.LINKCOLORS));
+            link.setUnderline(false);
+            mLinks.add(link);
+          }
+        } catch (Exception e) {
+          Log.e(LOG_TAG, "Error detecting unicode", e);
         }
       }
     }
@@ -1253,6 +1255,13 @@ public class CodeEditor extends View
         return;
       }
     }
+    RegexSpan clickedRegex = getRegexAt(pos.line, pos.column);
+    if (clickedRegex != null) {
+      RegexClickEvent regexEvent = new RegexClickEvent(this, clickedRegex, pos, motionEvent);
+      dispatchEvent(regexEvent);
+      return;
+    }
+
     Inlay clickedInlay = getInlayAt(clickX, clickY);
     if (clickedInlay != null) {
 
@@ -1361,7 +1370,6 @@ public class CodeEditor extends View
     }
   }
 
-  /** Prepare editor Initialize variants */
   private void initialize() {
     Log.i(LOG_TAG, COPYRIGHT);
     helper = new CommentHelper(this);
@@ -1533,18 +1541,15 @@ public class CodeEditor extends View
     }
   }
 
-  /** Set cursor animation model */
   public void setCursorAnimationModel(CursorAnimationModel model) {
     mCursorBlink.setModel(model);
     invalidate();
   }
 
-  /** Get current cursor animation model */
   public CursorAnimationModel getCursorAnimationModel() {
     return mCursorBlink.getModel();
   }
 
-  /** Called when typing occurs */
   public void onTyping() {
     mCursorBlink.onTyping();
   }
@@ -1658,12 +1663,10 @@ public class CodeEditor extends View
     return mSymbolCompletionEnabled;
   }
 
-  /** Control whether auto-completes for symbol pairs */
   public void setSymbolCompletionEnabled(boolean symbolCompletionEnabled) {
     mSymbolCompletionEnabled = symbolCompletionEnabled;
   }
 
-  /** Create a channel to insert symbols */
   public SymbolChannel createNewSymbolChannel() {
     return new SymbolChannel(this);
   }
@@ -1920,6 +1923,7 @@ public class CodeEditor extends View
       lang = new EmptyLanguage();
     }
     clearDiagnostics();
+    clearRegexSpans();
     Log.d("CodeEditor", "Setting new language analyzer: " + lang.getClass().getSimpleName());
 
     if (mSpanner != null) {
@@ -2405,7 +2409,6 @@ public class CodeEditor extends View
     rememberDisplayedLines();
   }
 
-  /** Update displayed lines after drawing */
   private void rememberDisplayedLines() {
     mAvailableFloatArrayRegion = IntPair.pack(getFirstVisibleLine(), getLastVisibleLine());
   }
@@ -2510,7 +2513,6 @@ public class CodeEditor extends View
     return new float[desiredSize];
   }
 
-  /** Build measure cache for the given lines, if the timestamp indicates that it is outdated. */
   private void buildMeasureCacheForLines(int startLine, int endLine, long timestamp) {
     var text = mText;
     while (startLine <= endLine && startLine < text.getLineCount()) {
@@ -2545,7 +2547,6 @@ public class CodeEditor extends View
     return (flags & flag) != 0 ? flags ^ flag : flags;
   }
 
-  /** Whether non-printable is to be drawn */
   protected boolean shouldInitializeNonPrintable() {
     return clearFlag(
             clearFlag(mNonPrintableOptions, FLAG_DRAW_WHITESPACE_FOR_EMPTY_LINE),
@@ -2799,13 +2800,15 @@ public class CodeEditor extends View
       List<DrawCursorTask> postDrawCursor,
       LongArrayList postDrawCurrentLines,
       MutableInt requiredFirstLn) {
+
     int firstVis = getFirstVisibleRow();
     final float waveLength = getDpUnit() * 18;
     final float amplitude = getDpUnit() * 4;
     RowIterator rowIterator = mLayout.obtainRowIterator(firstVis);
     List<Span> temporaryEmptySpans = null;
     List<List<Span>> spanMap = mSpanner.getResult().getSpanMap();
-    List<Integer> matchedPositions = new ArrayList<>();
+    LongArrayList matchedPositions = new LongArrayList(); // اصلاح شد
+
     int currentLine = mCursor.isSelected() ? -1 : mCursor.getLeftLine();
     int currentLineBgColor = mColors.getColor(EditorColorScheme.CURRENT_LINE);
     int lastPreparedLine = -1;
@@ -2815,18 +2818,21 @@ public class CodeEditor extends View
     float circleRadius = 0f;
     iconSpanManager.drawIconSpans(canvas);
     float textRegionStart = measureTextRegionOffset();
+
     if (shouldInitializeNonPrintable()) {
       float spaceWidth = mPaint.getSpaceWidth();
       float maxD = Math.min(getRowHeight(), spaceWidth);
       maxD *= 0.25f;
       circleRadius = maxD / 2;
     }
+
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
         && !isWordwrap()
         && canvas.isHardwareAccelerated()
         && isHardwareAcceleratedDrawAllowed()) {
       mRenderer.keepCurrentInDisplay(firstVis, getLastVisibleRow());
     }
+
     float offset2 = getOffsetX() - measureTextRegionOffset();
     float offset3 = offset2 - mDpUnit * 15;
 
@@ -2834,6 +2840,7 @@ public class CodeEditor extends View
       Row rowInf = rowIterator.next();
       int line = rowInf.lineIndex;
       int columnCount = mText.getColumnCount(line);
+
       if (lastPreparedLine != line) {
         computeMatchedPositions(line, matchedPositions);
         prepareLine(line);
@@ -2841,7 +2848,7 @@ public class CodeEditor extends View
       }
 
       drawLineIcons(canvas, row, line, textRegionStart);
-      
+
       float[] charPos =
           findFirstVisibleChar(offset3, rowInf.startColumn, rowInf.endColumn, mBuffer, line);
       int firstVisibleChar = (int) charPos[0];
@@ -2861,86 +2868,41 @@ public class CodeEditor extends View
         postDrawCurrentLines.add(row);
       }
 
-      if (!matchedPositions.isEmpty()) {
-        for (int position : matchedPositions) {
-          if (mSearcher.mSearchText.length() == 1) {
-            drawPillSearch(
-                canvas,
-                paintingOffset,
-                row,
-                firstVisibleChar,
-                lastVisibleChar,
-                position,
-                position + mSearcher.mSearchText.length(),
-                mColors.getColor(EditorColorScheme.searchcolor1),
-                line);
-          } else if (mSearcher.mSearchText.length() == 2) {
-            drawPillSearch(
-                canvas,
-                paintingOffset,
-                row,
-                firstVisibleChar,
-                lastVisibleChar,
-                position,
-                position + mSearcher.mSearchText.length(),
-                mColors.getColor(EditorColorScheme.searchcolor2),
-                line);
-          } else if (mSearcher.mSearchText.length() == 3) {
-            drawPillSearch(
-                canvas,
-                paintingOffset,
-                row,
-                firstVisibleChar,
-                lastVisibleChar,
-                position,
-                position + mSearcher.mSearchText.length(),
-                mColors.getColor(EditorColorScheme.searchcolor3),
-                line);
-          } else if (mSearcher.mSearchText.length() == 4) {
-            drawPillSearch(
-                canvas,
-                paintingOffset,
-                row,
-                firstVisibleChar,
-                lastVisibleChar,
-                position,
-                position + mSearcher.mSearchText.length(),
-                mColors.getColor(EditorColorScheme.searchcolor4),
-                line);
-          } else if (mSearcher.mSearchText.length() == 5) {
-            drawPillSearch(
-                canvas,
-                paintingOffset,
-                row,
-                firstVisibleChar,
-                lastVisibleChar,
-                position,
-                position + mSearcher.mSearchText.length(),
-                mColors.getColor(EditorColorScheme.searchcolor5),
-                line);
-          } else if (mSearcher.mSearchText.length() == 6) {
-            drawPillSearch(
-                canvas,
-                paintingOffset,
-                row,
-                firstVisibleChar,
-                lastVisibleChar,
-                position,
-                position + mSearcher.mSearchText.length(),
-                mColors.getColor(EditorColorScheme.searchcolor6),
-                line);
+      // رسم نتایج جستجو با LongArrayList
+      if (matchedPositions.size() > 0) {
+        for (int i = 0; i < matchedPositions.size(); i++) {
+          long pos = matchedPositions.get(i);
+          int startCol = IntPair.getFirst(pos);
+          int endCol = IntPair.getSecond(pos);
+
+          // انتخاب رنگ بر اساس طول واقعی match
+          int matchLength = endCol - startCol;
+          int color;
+
+          if (matchLength == 1) {
+            color = mColors.getColor(EditorColorScheme.searchcolor1);
+          } else if (matchLength == 2) {
+            color = mColors.getColor(EditorColorScheme.searchcolor2);
+          } else if (matchLength == 3) {
+            color = mColors.getColor(EditorColorScheme.searchcolor3);
+          } else if (matchLength == 4) {
+            color = mColors.getColor(EditorColorScheme.searchcolor4);
+          } else if (matchLength == 5) {
+            color = mColors.getColor(EditorColorScheme.searchcolor5);
           } else {
-            drawPillSearch(
-                canvas,
-                paintingOffset,
-                row,
-                firstVisibleChar,
-                lastVisibleChar,
-                position,
-                position + mSearcher.mSearchText.length(),
-                mColors.getColor(EditorColorScheme.searchcolor1),
-                line);
+            color = mColors.getColor(EditorColorScheme.searchcolor6);
           }
+
+          drawPillSearch(
+              canvas,
+              paintingOffset,
+              row,
+              firstVisibleChar,
+              lastVisibleChar,
+              startCol,
+              endCol,
+              color,
+              line);
         }
       }
 
@@ -2979,24 +2941,17 @@ public class CodeEditor extends View
         drawDiagnostic(
             canvas, diagnostic, line, paintingOffset, row, firstVisibleChar, lastVisibleChar);
       }
-      
-      for (Diagnostic diagnostic : lineDiagnostics) {
-        if (diagnostic.getState() == DiagnosticsState.UNUSED) {
-          try {
-            CharPosition startPos = getText().getIndexer().getCharPosition(diagnostic.getStart());
-            CharPosition endPos = getText().getIndexer().getCharPosition(diagnostic.getEnd());
 
-            if (startPos.line != line || endPos.line != line) continue;
-
-            int startCol = startPos.column;
-            int endCol = endPos.column;
-
-            if (endCol < firstVisibleChar || startCol > lastVisibleChar) continue;
-          } catch (Exception ignored) {
+      if (!mRegexSpans.isEmpty()) {
+        for (RegexSpan regexSpan : mRegexSpans) {
+          if (regexSpan.getLine() == line) {
+            drawRegexSpan(
+                canvas, paintingOffset, row, firstVisibleChar, lastVisibleChar, regexSpan, line);
           }
         }
       }
     }
+
     rowIterator.reset();
 
     if (mCursorAnimator.isRunning()) {
@@ -3008,11 +2963,14 @@ public class CodeEditor extends View
     }
 
     long lastStyle = 0;
+    rowIterator = mLayout.obtainRowIterator(firstVis);
+
     for (int row = firstVis; row <= getLastVisibleRow() && rowIterator.hasNext(); row++) {
       Row rowInf = rowIterator.next();
       int line = rowInf.lineIndex;
       ContentLine contentLine = mText.getLine(line);
       int columnCount = contentLine.length();
+
       if (row == firstVis && requiredFirstLn != null) {
         requiredFirstLn.value = line;
       } else if (rowInf.isLeadingRow) {
@@ -3050,7 +3008,7 @@ public class CodeEditor extends View
           || !canvas.isHardwareAccelerated()
           || isWordwrap()
           || Build.VERSION.SDK_INT < Build.VERSION_CODES.Q
-          || rowInf.endColumn - rowInf.startColumn > 256 /* Save memory */) {
+          || rowInf.endColumn - rowInf.startColumn > 256) {
 
         List<Span> spans = null;
         if (line < spanMap.size() && line >= 0) {
@@ -3067,7 +3025,6 @@ public class CodeEditor extends View
         float phi = 0f;
         while (spanOffset + 1 < spans.size()) {
           if (spans.get(spanOffset + 1).column <= firstVisibleChar) {
-
             Span span = spans.get(spanOffset);
             if (span.problemFlags > 0
                 && Integer.highestOneBit(span.problemFlags) != Span.FLAG_DEPRECATED) {
@@ -3094,6 +3051,7 @@ public class CodeEditor extends View
             break;
           }
         }
+
         Span span = spans.get(spanOffset);
         if (span.drawminiText != null) {
           drawMiniGraph(canvas, paintingOffset, row, span.drawminiText);
@@ -3140,7 +3098,6 @@ public class CodeEditor extends View
             } else {
               mPaint.setTextSkewX(0);
             }
-
             lastStyle = styleBits;
           }
 
@@ -3159,10 +3116,8 @@ public class CodeEditor extends View
           }
 
           if (span.backgroundColorMy != 0) {
-
             mPaintOther.setColor(span.backgroundColorMy);
             float cornerRadius = 10;
-
             canvas.drawRoundRect(
                 new RectF(
                     paintingOffset,
@@ -3558,51 +3513,156 @@ public class CodeEditor extends View
     try {
       if (diagnostic == null) return;
 
-      switch (diagnostic.getState()) {
+      CharPosition startPos = getText().getIndexer().getCharPosition(diagnostic.getStart());
+      CharPosition endPos = getText().getIndexer().getCharPosition(diagnostic.getEnd());
+
+      if (startPos.line != line || endPos.line != line) return;
+
+      int startCol = startPos.column;
+      int endCol = endPos.column;
+
+      if (endCol < firstVisibleChar || startCol > lastVisibleChar) return;
+
+      int drawStart = Math.max(startCol, firstVisibleChar);
+      int drawEnd = Math.min(endCol, lastVisibleChar);
+
+      if (drawStart >= drawEnd) return;
+
+      float startX =
+          paintingOffset
+              + measureText(mBuffer, firstVisibleChar, drawStart - firstVisibleChar, line);
+      float width = measureText(mBuffer, drawStart, drawEnd - drawStart, line);
+      float y = getRowBottom(row) - getOffsetY();
+
+      DiagnosticsState state = diagnostic.getState();
+
+      switch (state) {
         case ERROR:
         case WARNING:
         case TYPO:
         case DEPRECATED:
-          {
-            CharPosition startPos = getText().getIndexer().getCharPosition(diagnostic.getStart());
-            CharPosition endPos = getText().getIndexer().getCharPosition(diagnostic.getEnd());
+          drawWavyLine(canvas, startX, y, width, diagnostic.getColor());
+          break;
+        case UNUSEDWAVE:
+          int oldColor = mPaint.getColor();
 
-            if (startPos.line != line || endPos.line != line) return;
+          int baseColor = oldColor;
+          int dimmedColor = (baseColor & 0x00FFFFFF) | (80 << 24);
 
-            int startCol = startPos.column;
-            int endCol = endPos.column;
+          mPaint.setColor(dimmedColor);
 
-            if (endCol < firstVisibleChar || startCol > lastVisibleChar) return;
+          drawText(
+              canvas,
+              mBuffer,
+              drawStart,
+              drawEnd - drawStart,
+              firstVisibleChar,
+              lastVisibleChar - firstVisibleChar,
+              startX,
+              getRowBaseline(row) - getOffsetY(),
+              line);
 
-            int drawStart = Math.max(startCol, firstVisibleChar);
-            int drawEnd = Math.min(endCol, lastVisibleChar);
-
-            if (drawStart >= drawEnd) return;
-
-            DiagnosticsState state = diagnostic.getState();
-            float startX =
-                paintingOffset
-                    + measureText(mBuffer, firstVisibleChar, drawStart - firstVisibleChar, line);
-            float width = measureText(mBuffer, drawStart, drawEnd - drawStart, line);
-
-            Paint.Style oldStyle = mPaintOther.getStyle();
-            float oldStrokeWidth = mPaintOther.getStrokeWidth();
-            int oldColor = mPaintOther.getColor();
-
-            float y = getRowBottom(row) - getOffsetY();
-            drawWavyLine(canvas, startX, y, width, diagnostic.getColor());
-
-            mPaintOther.setStyle(oldStyle);
-            mPaintOther.setStrokeWidth(oldStrokeWidth);
-            mPaintOther.setColor(oldColor);
-            break;
-          }
+          mPaint.setColor(oldColor);
+          drawTextWithAlpha(
+              canvas,
+              startX,
+              getRowBaseline(row) - getOffsetY(),
+              line,
+              drawStart,
+              drawEnd,
+              firstVisibleChar,
+              lastVisibleChar);
+          drawWavyLine(canvas, startX, y, width, diagnostic.getColor());
+          break;
       }
     } catch (Exception ignored) {
     }
   }
 
-  /** Draw a wavy line for error diagnostics */
+  private void drawTextWithAlpha(
+      Canvas canvas,
+      float startX,
+      float baseline,
+      int line,
+      int drawStart,
+      int drawEnd,
+      int firstVisibleChar,
+      int lastVisibleChar) {
+    drawText(
+        canvas,
+        mBuffer,
+        drawStart,
+        drawEnd - drawStart,
+        firstVisibleChar,
+        lastVisibleChar - firstVisibleChar,
+        startX,
+        baseline,
+        line);
+  }
+
+  protected void drawRegexSpan(
+      Canvas canvas,
+      float paintingOffset,
+      int row,
+      int firstVisibleChar,
+      int lastVisibleChar,
+      RegexSpan span,
+      int line) {
+
+    int startCol = span.getStartColumn();
+    int endCol = span.getEndColumn();
+    if (endCol < firstVisibleChar || startCol > lastVisibleChar) {
+      return;
+    }
+
+    int drawStart = Math.max(startCol, firstVisibleChar);
+    int drawEnd = Math.min(endCol, lastVisibleChar);
+
+    if (drawStart >= drawEnd) return;
+
+    int oldColor = mPaint.getColor();
+    boolean oldUnderline = mPaint.isUnderlineText();
+    boolean oldFakeBold = mPaint.isFakeBoldText();
+    float oldTextSkewX = mPaint.getTextSkewX();
+    mPaint.setColor(span.getColor());
+    mPaint.setUnderlineText(span.isUnderline());
+    mPaint.setFakeBoldText(span.isBold());
+    mPaint.setTextSkewX(span.isItalic() ? -0.2f : 0);
+    float startX =
+        paintingOffset + measureText(mBuffer, firstVisibleChar, drawStart - firstVisibleChar, line);
+    float width = measureText(mBuffer, drawStart, drawEnd - drawStart, line);
+
+    int bgColor = span.getColor();
+    mRect.top = getRowTop(row) - getOffsetY();
+    mRect.bottom = getRowBottom(row) - getOffsetY();
+    mRect.left = startX;
+    mRect.right = startX + width;
+    mPaint.setColor(bgColor);
+    canvas.drawRect(mRect, mPaint);
+    drawText(
+        canvas,
+        mBuffer,
+        drawStart,
+        drawEnd - drawStart,
+        firstVisibleChar,
+        lastVisibleChar - firstVisibleChar,
+        startX,
+        getRowBaseline(row) - getOffsetY(),
+        line);
+    if (span.isUnderline()) {
+      float lineY = getRowBottom(row) - getOffsetY() - mDpUnit * 2;
+      mPaintOther.setColor(span.getColor());
+      mPaintOther.setStrokeWidth(mDpUnit * 1.5f);
+      canvas.drawLine(startX, lineY, startX + width, lineY, mPaintOther);
+    }
+
+    // بازیابی تنظیمات
+    mPaint.setColor(oldColor);
+    mPaint.setUnderlineText(oldUnderline);
+    mPaint.setFakeBoldText(oldFakeBold);
+    mPaint.setTextSkewX(oldTextSkewX);
+  }
+
   private void drawWavyLine(Canvas canvas, float startX, float y, float width, int color) {
     float waveLength = getDpUnit() * 18;
     float amplitude = getDpUnit() * 4;
@@ -3621,7 +3681,7 @@ public class CodeEditor extends View
     canvas.translate(startX, y);
     canvas.clipRect(0, -amplitude, width, amplitude);
     mPaintOther.setStyle(Paint.Style.STROKE);
-    mPaintOther.setStrokeWidth(getDpUnit() * 1.8f);
+    mPaintOther.setStrokeWidth(getDpUnit() * 0.9f);
     mPaintOther.setColor(color);
     mPaintOther.setAntiAlias(true);
     canvas.drawPath(mPath, mPaintOther);
@@ -3633,7 +3693,6 @@ public class CodeEditor extends View
     mPaintOther.setStyle(Paint.Style.FILL);
   }
 
-  /** Draw small characters as graph */
   protected void drawMiniGraph(Canvas canvas, float offset, int row, String graph) {
 
     mPaintGraph.setColor(mColors.getColor(EditorColorScheme.KEYWORD));
@@ -3666,7 +3725,6 @@ public class CodeEditor extends View
       int max,
       float circleRadius) {}
 
-  /** Draw non-printable characters */
   protected void drawWhitespaces(
       Canvas canvas,
       float offset,
@@ -3757,7 +3815,6 @@ public class CodeEditor extends View
     return IntPair.pack(leading, trailing);
   }
 
-  /** A quick method to predicate whitespace character */
   private boolean isWhitespace(char ch) {
     return ch == '\t' || ch == ' ';
   }
@@ -3768,19 +3825,41 @@ public class CodeEditor extends View
    * @param line Target line
    * @param positions Outputs start positions
    */
-  protected void computeMatchedPositions(int line, List<Integer> positions) {
+  protected void computeMatchedPositions(int line, LongArrayList positions) {
     positions.clear();
-    CharSequence pattern = mSearcher.mSearchText;
-    if (pattern == null || pattern.length() == 0) {
+
+    if (mSearcher == null || mSearcher.currentPattern == null || mSearcher.searchOptions == null) {
       return;
     }
-    ContentLine seq = mText.getLine(line);
-    int index = 0;
-    while (index != -1) {
-      index = seq.indexOf(pattern, index);
-      if (index != -1) {
-        positions.add(index);
-        index += pattern.length();
+
+    if (!mSearcher.isResultValid()) {
+      return;
+    }
+
+    // استفاده از lastResults
+    var res = mSearcher.lastResults;
+    if (res == null) {
+      return;
+    }
+
+    var lineLeft = mText.getCharIndex(line, 0);
+    var lineRight = lineLeft + mText.getColumnCount(line);
+
+    for (int i = Math.max(0, res.lowerBoundByFirst(lineLeft) - 1); i < res.size(); i++) {
+      var region = res.get(i);
+      var start = IntPair.getFirst(region);
+      var end = IntPair.getSecond(region);
+
+      var highlightStart = Math.max(start, lineLeft);
+      var highlightEnd = Math.min(end, lineRight);
+
+      if (highlightStart < highlightEnd) {
+
+        positions.add(IntPair.pack(highlightStart - lineLeft, highlightEnd - lineLeft));
+      }
+
+      if (start > lineRight) {
+        break;
       }
     }
   }
@@ -3900,8 +3979,8 @@ public class CodeEditor extends View
       int color) {
 
     int originalColor = color;
+    int contextCount = contextEnd - contextStart;
 
-    // تشخیص UNUSED
     for (Diagnostic diagnostic : diagnostics) {
       if (diagnostic.getState() == DiagnosticsState.UNUSED) {
         try {
@@ -3919,6 +3998,14 @@ public class CodeEditor extends View
         }
       }
     }
+    List<LinkSpan> linksInLine = new ArrayList<>();
+    if (mLinkDetectionEnabled) {
+      for (LinkSpan link : mLinks) {
+        if (link.getLine() == line) {
+          linksInLine.add(link);
+        }
+      }
+    }
 
     boolean hasSelectionOnLine =
         mCursor.isSelected() && line >= mCursor.getLeftLine() && line <= mCursor.getRightLine();
@@ -3931,65 +4018,44 @@ public class CodeEditor extends View
       selectionEnd = mCursor.getRightColumn();
     }
 
-    boolean isBracketHighlighted = false;
-    if (currentPairedBracket != null) {
-      int currentIndex = getText().getCharIndex(line, startIndex);
-      int bracketStart = currentPairedBracket.leftIndex;
-      int bracketEnd = currentPairedBracket.rightIndex;
-
-      if (currentIndex >= bracketStart
-          && currentIndex < bracketStart + currentPairedBracket.leftLength) {
-        mPaint.setFakeBoldText(false);
-        isBracketHighlighted = true;
-      } else if (currentIndex >= bracketEnd
-          && currentIndex < bracketEnd + currentPairedBracket.rightLength) {
-        isBracketHighlighted = true;
-      }
-    }
-
-    if (isBracketHighlighted) {
-      mPaint.setFakeBoldText(true);
-    }
-
-    LinkSpan linkInLine = null;
-    if (mLinkDetectionEnabled) {
-      for (LinkSpan link : mLinks) {
-        if (link.getLine() == line) {
-          linkInLine = link;
-          break;
-        }
-      }
-    }
-
-    int contextCount = contextEnd - contextStart;
     int currentPos = startIndex;
     float currentOffsetX = offsetX;
 
     while (currentPos < endIndex) {
       int segmentStart = currentPos;
-      int segmentEnd;
+      int segmentEnd = endIndex; // مقدار پیش‌فرض
       boolean isLinkSegment = false;
+      LinkSpan currentLink = null;
 
-      if (linkInLine != null
-          && currentPos < linkInLine.getEndColumn()
-          && currentPos >= linkInLine.getStartColumn()) {
-        segmentEnd = Math.min(endIndex, linkInLine.getEndColumn());
-        isLinkSegment = true;
-        mPaint.setColor(mLinkColor);
-        mPaint.setUnderlineText(true);
-        mPaint.setFakeBoldText(true);
-
-      } else {
-        if (linkInLine != null && currentPos < linkInLine.getStartColumn()) {
-          segmentEnd = Math.min(endIndex, linkInLine.getStartColumn());
-        } else {
-          segmentEnd = endIndex;
+      // بررسی اینکه آیا در محدوده یک لینک هستیم
+      for (LinkSpan link : linksInLine) {
+        if (currentPos >= link.getStartColumn() && currentPos < link.getEndColumn()) {
+          segmentEnd = Math.min(endIndex, link.getEndColumn());
+          isLinkSegment = true;
+          currentLink = link;
+          break;
         }
+      }
+
+      if (!isLinkSegment) {
+        int nextLinkStart = endIndex;
+        for (LinkSpan link : linksInLine) {
+          if (link.getStartColumn() > currentPos && link.getStartColumn() < nextLinkStart) {
+            nextLinkStart = link.getStartColumn();
+          }
+        }
+        segmentEnd = Math.min(endIndex, nextLinkStart);
+
         mPaint.setColor(originalColor);
         mPaint.setUnderlineText(false);
         mPaint.setFakeBoldText(false);
+      } else {
+        mPaint.setColor(currentLink.getColor());
+        mPaint.setUnderlineText(currentLink.isUnderline());
+        mPaint.setFakeBoldText(true);
       }
 
+      // رسم متن با در نظر گرفتن انتخاب
       if (hasSelectionOnLine && mColors.getColor(EditorColorScheme.TEXT_SELECTED) != 0) {
         if (segmentEnd <= selectionStart || segmentStart >= selectionEnd) {
           drawText(
@@ -4005,6 +4071,7 @@ public class CodeEditor extends View
         } else {
           if (segmentStart <= selectionStart) {
             if (segmentEnd >= selectionEnd) {
+              // رسم بخش قبل از انتخاب
               drawText(
                   canvas,
                   mBuffer,
@@ -4019,6 +4086,7 @@ public class CodeEditor extends View
               float deltaX =
                   measureText(mBuffer, segmentStart, selectionStart - segmentStart, line);
 
+              // رسم بخش انتخاب شده
               mPaint.setColor(mColors.getColor(EditorColorScheme.TEXT_SELECTED));
               drawText(
                   canvas,
@@ -4033,14 +4101,14 @@ public class CodeEditor extends View
 
               deltaX += measureText(mBuffer, selectionStart, selectionEnd - selectionStart, line);
 
+              // برگرداندن رنگ لینک اگر بخش بعدی لینک است
               if (isLinkSegment) {
-                mPaint.setColor(mLinkColor);
-                mPaint.setUnderlineText(true);
-              } else {
-                mPaint.setColor(originalColor);
-                mPaint.setUnderlineText(false);
+                mPaint.setColor(currentLink.getColor());
+                mPaint.setUnderlineText(currentLink.isUnderline());
+                mPaint.setFakeBoldText(true);
               }
 
+              // رسم بخش بعد از انتخاب
               drawText(
                   canvas,
                   mBuffer,
@@ -4052,6 +4120,7 @@ public class CodeEditor extends View
                   baseline,
                   line);
             } else {
+              // رسم بخش قبل از انتخاب
               drawText(
                   canvas,
                   mBuffer,
@@ -4063,6 +4132,7 @@ public class CodeEditor extends View
                   baseline,
                   line);
 
+              // رسم بخش انتخاب شده
               mPaint.setColor(mColors.getColor(EditorColorScheme.TEXT_SELECTED));
               drawText(
                   canvas,
@@ -4078,6 +4148,7 @@ public class CodeEditor extends View
             }
           } else {
             if (segmentEnd > selectionEnd) {
+              // رسم بخش انتخاب شده
               drawText(
                   canvas,
                   mBuffer,
@@ -4694,7 +4765,6 @@ public class CodeEditor extends View
     return res;
   }
 
-  /** Get spans on the given line */
   public List<Span> getSpansForLine(int line) {
     var spanMap = getTextAnalyzeResult().getSpanMap();
     if (defSpans.size() == 0) {
@@ -4761,7 +4831,6 @@ public class CodeEditor extends View
     return findFirstVisibleChar(target, start, end, start, line, lineNumber);
   }
 
-  /** Find first visible character */
   @UnsupportedUserUsage
   public float[] findFirstVisibleChar(
       float target, int start, int end, int contextStart, ContentLine line, int lineNumber) {
@@ -4784,7 +4853,6 @@ public class CodeEditor extends View
     mBuffer = mText.getLine(line);
   }
 
-  /** Draw background for whole row */
   protected void drawRowBackground(Canvas canvas, int color, int row) {
     drawRowBackground(canvas, color, row, mViewRect.right);
   }
@@ -4900,7 +4968,6 @@ public class CodeEditor extends View
     }
   }
 
-  /** Indents the selected lines. Does nothing if the text is not selected. */
   public void indentSelection() {
     indentLines(true);
   }
@@ -4983,7 +5050,6 @@ public class CodeEditor extends View
     return single * count;
   }
 
-  /** Create layout for text */
   protected void createLayout() {
     if (mLayout != null) {
       mLayout.destroyLayout();
@@ -5045,14 +5111,12 @@ public class CodeEditor extends View
     }
   }
 
-  /** Commit a tab to cursor */
   private void commitTab() {
     if (mConnection != null && isEditable()) {
       mConnection.commitTextInternal("\t", true);
     }
   }
 
-  /** Whether span map is valid */
   protected boolean isSpanMapPrepared(boolean insert, int delta) {
     List<List<Span>> map = mSpanner.getResult().getSpanMap();
     if (map != null) {
@@ -5070,7 +5134,6 @@ public class CodeEditor extends View
     updateCompletionWindowPosition(true);
   }
 
-  /** Apply new position of auto-completion window */
   protected void updateCompletionWindowPosition(boolean shift) {
     float panelX = updateCursorAnchor() + mDpUnit * 20;
     float[] rightLayoutOffset =
@@ -5237,7 +5300,6 @@ public class CodeEditor extends View
     return mNonPrintableOptions;
   }
 
-  /** Make the selection visible */
   public void ensureSelectionVisible() {
     ensurePositionVisible(getCursor().getRightLine(), getCursor().getRightColumn());
   }
@@ -5571,13 +5633,11 @@ public class CodeEditor extends View
     mInputType = inputType;
   }
 
-  /** Undo last action */
   public void undo() {
     mText.undo();
     mCompletionWindow.hide();
   }
 
-  /** Redo last action */
   public void redo() {
     mText.redo();
     mCompletionWindow.hide();
@@ -5657,7 +5717,6 @@ public class CodeEditor extends View
     mOverScrollEnabled = overScrollEnabled;
   }
 
-  /** Start search action mode */
   public void beginSearchMode() {
     class SearchActionMode implements ActionMode.Callback {
 
@@ -6046,7 +6105,6 @@ public class CodeEditor extends View
     invalidate();
   }
 
-  /** Get the target cursor to move when shift is pressed */
   private CharPosition getSelectingTarget() {
     if (mCursor.left().equals(mLockedSelection)) {
       return mCursor.right();
@@ -6055,7 +6113,6 @@ public class CodeEditor extends View
     }
   }
 
-  /** Make sure the moving selection is visible */
   private void ensureSelectingTargetVisible() {
     if (mCursor.left().equals(mLockedSelection)) {
 
@@ -6089,7 +6146,6 @@ public class CodeEditor extends View
     }
   }
 
-  /** Move the selection up If Auto complete panel is shown,move the selection in panel to last */
   public void moveSelectionUp() {
     if (mLockedSelection == null) {
       if (mCompletionWindow.isShowing()) {
@@ -6111,7 +6167,6 @@ public class CodeEditor extends View
     }
   }
 
-  /** Move the selection left */
   public void moveSelectionLeft() {
     if (mLockedSelection == null) {
       Cursor c = getCursor();
@@ -6149,7 +6204,6 @@ public class CodeEditor extends View
     }
   }
 
-  /** Move the selection right */
   public void moveSelectionRight() {
     if (mLockedSelection == null) {
       Cursor c = getCursor();
@@ -6187,7 +6241,6 @@ public class CodeEditor extends View
     }
   }
 
-  /** Move selection to end of line */
   public void moveSelectionEnd() {
     if (mLockedSelection == null) {
       int line = mCursor.getLeftLine();
@@ -6204,7 +6257,6 @@ public class CodeEditor extends View
     }
   }
 
-  /** Move selection to start of line */
   public void moveSelectionHome() {
     if (mLockedSelection == null) {
       setSelection(mCursor.getLeftLine(), 0);
@@ -6259,7 +6311,6 @@ public class CodeEditor extends View
     onSelectionChanged();
   }
 
-  /** Select all text */
   public void selectAll() {
     setSelectionRegion(0, 0, getLineCount() - 1, getText().getColumnCount(getLineCount() - 1));
   }
@@ -6348,19 +6399,16 @@ public class CodeEditor extends View
     if (!lastState && mCursor.isSelected() && mStartedActionMode != ACTION_MODE_SEARCH_TEXT) {}
   }
 
-  /** Move to next page */
   public void movePageDown() {
     mEventHandler.scrollBy(0, getHeight(), true);
     mCompletionWindow.hide();
   }
 
-  /** Move to previous page */
   public void movePageUp() {
     mEventHandler.scrollBy(0, -getHeight(), true);
     mCompletionWindow.hide();
   }
 
-  /** Paste text from clip board */
   public void pasteText() {
     try {
       if (!mClipboardManager.hasPrimaryClip() || mClipboardManager.getPrimaryClip() == null) {
@@ -6378,7 +6426,6 @@ public class CodeEditor extends View
     }
   }
 
-  /** Copy text to clip board */
   public void copyText() {
     try {
       if (mCursor.isSelected()) {
@@ -6398,7 +6445,6 @@ public class CodeEditor extends View
     }
   }
 
-  /** Copy text to clipboard and delete them */
   public void cutText() {
     copyText();
     if (mCursor.isSelected()) {
@@ -6595,20 +6641,17 @@ public class CodeEditor extends View
     setSelection(line, 0);
   }
 
-  /** If there is an Analyzer, do analysis */
   public void doAnalyze() {
     if (mSpanner != null && mText != null) {
       mSpanner.analyze(mText);
     }
   }
 
-  /** Get analyze result. <strong>Do not make changes to it or read concurrently</strong> */
   @NonNull
   public TextAnalyzeResult getTextAnalyzeResult() {
     return mSpanner.getResult();
   }
 
-  /** Hide auto complete window if shown */
   public void hideAutoCompleteWindow() {
     if (mCompletionWindow != null) {
       mCompletionWindow.hide();
@@ -6624,7 +6667,6 @@ public class CodeEditor extends View
     return mCursorPosition;
   }
 
-  /** Display soft input method for self */
   public void showSoftInput() {
     if (isEditable() && isEnabled()) {
       if (isInTouchMode()) {
@@ -6638,12 +6680,10 @@ public class CodeEditor extends View
     invalidate();
   }
 
-  /** Hide soft input */
   public void hideSoftInput() {
     mInputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
   }
 
-  /** Send current selection position to input method */
   protected void updateSelection() {
     int candidatesStart = -1, candidatesEnd = -1;
     if (mConnection.mComposingLine != -1) {
@@ -6659,7 +6699,6 @@ public class CodeEditor extends View
         this, mCursor.getLeft(), mCursor.getRight(), candidatesStart, candidatesEnd);
   }
 
-  /** Update request result for monitoring request */
   protected void updateExtractedText() {
     if (mExtracting != null) {
 
@@ -6667,12 +6706,10 @@ public class CodeEditor extends View
     }
   }
 
-  /** Set request needed to update when editor updates selection */
   protected void setExtracting(@Nullable ExtractedTextRequest request) {
     mExtracting = request;
   }
 
-  /** Extract text in editor for input method */
   protected ExtractedText extractText(@NonNull ExtractedTextRequest request) {
     Cursor cur = getCursor();
     ExtractedText text = new ExtractedText();
@@ -6694,7 +6731,6 @@ public class CodeEditor extends View
     return text;
   }
 
-  /** Notify input method that text has been changed for external reason */
   protected void notifyExternalCursorChange() {
     updateExtractedText();
     updateSelection();
@@ -6710,7 +6746,6 @@ public class CodeEditor extends View
     mInputMethodManager.restartInput(this);
   }
 
-  /** Send cursor position in text and on screen to input method */
   protected void updateCursor() {
     updateCursorAnchor();
     updateExtractedText();
@@ -6739,7 +6774,6 @@ public class CodeEditor extends View
     invalidate();
   }
 
-  /** Called by color scheme to init colors */
   protected void onColorFullUpdate() {
     if (mCompletionWindow != null) mCompletionWindow.applyColorScheme();
     if (mTextActionWindow != null) {
@@ -6750,18 +6784,15 @@ public class CodeEditor extends View
     invalidate();
   }
 
-  /** Get using InputMethodManager */
   protected InputMethodManager getInputMethodManager() {
     return mInputMethodManager;
   }
 
-  /** Called by CodeEditorInputConnection */
   protected void onCloseConnection() {
     setExtracting(null);
     invalidate();
   }
 
-  /** Called when the text is edited or {@link CodeEditor#setSelection} is called */
   protected void onSelectionChanged() {
     mCursorBlink.onSelectionChanged();
     dispatchEvent(new SelectionChangeEvent(this));
@@ -7265,6 +7296,7 @@ public class CodeEditor extends View
       CharSequence insertedContent) {
     updateTimestamp();
     updateLinkDetection();
+
     post(this::updateMatchingBrackets);
     updateHintVisibility();
     if (mPowerModeEffectManager != null && insertedContent.length() > 0) {
@@ -7360,13 +7392,12 @@ public class CodeEditor extends View
       CharSequence deletedContent) {
     updateTimestamp();
     updateLinkDetection();
-
     if (mCompletionWindow != null && mCompletionWindow.isShowing()) {
       try {
         CompletionItem firstItem = mCompletionWindow.getFirstItem();
         if (firstItem != null && firstItem.label != null) {
           String prefix = mCompletionWindow.getPrefix();
-          if (prefix != null && !prefix.isEmpty() && firstItem.label.startsWith(prefix)) {
+          if (prefix != null && !prefix.isEmpty() && firstItem.label.contains(prefix)) {
             String remaining = firstItem.label.substring(prefix.length());
             if (!remaining.isEmpty()) {
 

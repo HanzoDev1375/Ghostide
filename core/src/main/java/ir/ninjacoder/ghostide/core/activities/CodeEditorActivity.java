@@ -74,6 +74,7 @@ import ir.ninjacoder.ghostide.core.JavaCcComplierImpl;
 import ir.ninjacoder.ghostide.core.R;
 import ir.ninjacoder.ghostide.core.adapter.SyspiarAdapter;
 import ir.ninjacoder.ghostide.core.adapter.ToolbarListFileAdapter;
+import ir.ninjacoder.ghostide.core.model.CodeEditorModel;
 import ir.ninjacoder.ghostide.core.pl.PluginChildRegistry;
 import ir.ninjacoder.ghostide.core.utils.AnimUtils;
 import ir.ninjacoder.ghostide.core.utils.FileUtil;
@@ -91,7 +92,7 @@ import ir.ninjacoder.ghostide.core.marco.KotlinCompilerImpl;
 import ir.ninjacoder.ghostide.core.marco.WallpaperParallaxEffect;
 import ir.ninjacoder.ghostide.core.model.EditorViewModel;
 import ir.ninjacoder.ghostide.core.navigator.EditorRoaderFile;
-import ir.ninjacoder.ghostide.core.pl.*;
+import ir.ninjacoder.ghostide.core.pl.PluginLoader;
 import ir.ninjacoder.ghostide.core.project.JavaCompilerBeta;
 import ir.ninjacoder.ghostide.core.project.ProjectManager;
 import ir.ninjacoder.ghostide.core.tasks.FileChangeReceiver;
@@ -117,7 +118,7 @@ public class CodeEditorActivity extends BaseCompat {
   private ThemeUtils themeForJson2;
 
   private double ic = 1;
-  private ArrayList<HashMap<String, Object>> tabs_listmap = new ArrayList<>();
+  private ArrayList<CodeEditorModel> tabsList = new ArrayList<>();
   private ArrayList<HashMap<String, Object>> staticSymbiolPiare = new ArrayList<>();
   private final ArrayList<String> string = new ArrayList<>();
 
@@ -128,7 +129,7 @@ public class CodeEditorActivity extends BaseCompat {
   private ProgressBar progressbar1;
   private RecyclerView dir, rvmenueditor;
   private TextView titleauthor;
-  private ImageView image, redo, undo, menupopnew, iconAuthor, codesnapimg;
+  private ImageView image, redo, undo, menupopnew, iconAuthor, codesnapimg, setting;
   private LinearLayout FrameLayout02;
   private LinearLayout linear3, getColorPass;
   private ProgressBar proanjctor;
@@ -205,6 +206,7 @@ public class CodeEditorActivity extends BaseCompat {
     image = findViewById(R.id.image);
     redo = findViewById(R.id.redo);
     undo = findViewById(R.id.undo);
+    setting = findViewById(R.id.setting);
     codesnapimg = findViewById(R.id.codesnapimg);
     tablayouteditor = findViewById(R.id.tablayouteditor);
     menupopnew = findViewById(R.id.menupopnew);
@@ -256,8 +258,8 @@ public class CodeEditorActivity extends BaseCompat {
     rvmenueditor.setAdapter(new ChildAdapter(aars));
     var userview = new SecurePrefs(this);
     handleIncomingIntent(getIntent());
-    GithubProfileImpl.bindByActivity(titleauthor,avatargithubuser);
-        
+    GithubProfileImpl.bindByActivity(titleauthor, avatargithubuser);
+    AnimUtils.rotateBySetting(setting, this);
     ghostIcon.animate().scaleX(1.0f).scaleY(1.0f).setDuration(1000).start();
     mRootView
         .getViewTreeObserver()
@@ -273,9 +275,7 @@ public class CodeEditorActivity extends BaseCompat {
                 if (keypadHeight > screenHeight * 0.15) {
                   float minScale = 1.0f;
                   ghostIcon.animate().scaleX(minScale).scaleY(minScale).setDuration(1000).start();
-
                   ObjectUtils.showViewWithAnimation(syspiar);
-
                 } else {
                   var max = 1.4f;
                   ghostIcon
@@ -284,7 +284,6 @@ public class CodeEditorActivity extends BaseCompat {
                       .scaleY(Math.max(max, 1))
                       .setDuration(1000)
                       .start();
-
                   ObjectUtils.hideViewWithAnimation(syspiar, _fab);
                 }
               }
@@ -293,7 +292,6 @@ public class CodeEditorActivity extends BaseCompat {
     ghost_searchs.bindEditor(editor);
     ghost_searchs.setCallBack(
         new GhostWebEditorSearch.onViewChange() {
-
           @Override
           public void onViewShow() {
             if (_fab.getVisibility() == View.VISIBLE) {
@@ -321,46 +319,29 @@ public class CodeEditorActivity extends BaseCompat {
             ic++;
           }
         });
+
     getOnBackPressedDispatcher()
         .addCallback(
             this,
             new OnBackPressedCallback(true) {
-
               @Override
               public void handleOnBackPressed() {
                 ObjectUtils.setSaveOprator(
-                    tabs_listmap, editor, tablayouteditor, CodeEditorActivity.this);
+                    tabsList, editor, tablayouteditor, CodeEditorActivity.this);
               }
             });
-    redo.setOnClickListener(
-        (v) -> {
-          editor.AutoRedo();
-        });
 
-    undo.setOnClickListener(
-        (it) -> {
-          editor.AutoUndo();
-        });
-
-    menupopnew.setOnClickListener(
-        (___) -> {
-          setManagerpanel(menupopnew);
-        });
-
+    redo.setOnClickListener((v) -> editor.AutoRedo());
+    undo.setOnClickListener((it) -> editor.AutoUndo());
+    menupopnew.setOnClickListener((___) -> setManagerpanel(menupopnew));
     imageview1.setOnClickListener(
         (it) -> {
           barSymoble.setVisibility(View.GONE);
           _fab.setVisibility(View.VISIBLE);
         });
-
-    _fab.setOnClickListener(
-        (it) -> {
-          FabFileRuner();
-        });
+    _fab.setOnClickListener((it) -> FabFileRuner());
     codesnapimg.setOnClickListener(
-        v -> {
-          new CodeSnap(CodeEditorActivity.this, getTabPathCode(), editor);
-        });
+        v -> new CodeSnap(CodeEditorActivity.this, getTabPathCode(), editor));
 
     List<Child> editorPluginChildren = PluginChildRegistry.getCodeEditorChildren();
     for (Child child : editorPluginChildren) {
@@ -393,7 +374,6 @@ public class CodeEditorActivity extends BaseCompat {
             () -> {
               try {
                 String filePath = getRealPathFromUri(uri);
-
                 if (filePath == null || !FileUtil.isExistFile(filePath)) {
                   Toast.makeText(this, "Error opening file", Toast.LENGTH_LONG).show();
                   return;
@@ -401,9 +381,10 @@ public class CodeEditorActivity extends BaseCompat {
 
                 SharedPreferences.Editor editorPrefs = shp.edit();
                 editorPrefs.putString("pos_path", filePath).apply();
+
                 int existingTabIndex = -1;
-                for (int i = 0; i < tabs_listmap.size(); i++) {
-                  if (filePath.equals(tabs_listmap.get(i).get("path"))) {
+                for (int i = 0; i < tabsList.size(); i++) {
+                  if (filePath.equals(tabsList.get(i).getPath())) {
                     existingTabIndex = i;
                     break;
                   }
@@ -418,22 +399,17 @@ public class CodeEditorActivity extends BaseCompat {
                   return;
                 }
 
-                // Create new tab
-                HashMap<String, Object> newTab = new HashMap<>();
-                newTab.put("path", filePath);
-                newTab.put("exists", true);
-                tabs_listmap.add(newTab);
-
-                editorPrefs.putString("path", new Gson().toJson(tabs_listmap)).apply();
-                editorPrefs
-                    .putString("positionTabs", String.valueOf(tabs_listmap.size() - 1))
-                    .apply();
-
                 String fileName = new File(filePath).getName();
+                CodeEditorModel newTab =
+                    new CodeEditorModel(
+                        fileName, filePath, String.valueOf(tabsList.size()), false, false);
+                tabsList.add(newTab);
+
+                editorPrefs.putString("path", new Gson().toJson(tabsList)).apply();
+                editorPrefs.putString("positionTabs", String.valueOf(tabsList.size() - 1)).apply();
+
                 TabLayout.Tab newTabView = tablayouteditor.newTab().setText(fileName);
                 tablayouteditor.addTab(newTabView);
-
-                // Selecting the tab will trigger file loading
                 tablayouteditor.post(() -> newTabView.select());
 
               } catch (Exception e) {
@@ -448,10 +424,8 @@ public class CodeEditorActivity extends BaseCompat {
 
     try {
       if ("file".equals(uri.getScheme())) {
-
         filePath = uri.getPath();
       } else if ("content".equals(uri.getScheme())) {
-
         Cursor cursor =
             getContentResolver()
                 .query(uri, new String[] {MediaStore.MediaColumns.DATA}, null, null, null);
@@ -498,7 +472,6 @@ public class CodeEditorActivity extends BaseCompat {
       }
 
       File outputFile = new File(tempDir, fileName);
-
       FileOutputStream outputStream = new FileOutputStream(outputFile);
       byte[] buffer = new byte[4096];
       int bytesRead;
@@ -527,8 +500,8 @@ public class CodeEditorActivity extends BaseCompat {
 
   String getTabPathCode() {
     int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
-    if (selectedTabPosition >= 0 && selectedTabPosition < tabs_listmap.size()) {
-      return tabs_listmap.get(selectedTabPosition).get("path").toString();
+    if (selectedTabPosition >= 0 && selectedTabPosition < tabsList.size()) {
+      return tabsList.get(selectedTabPosition).getPath();
     }
     return "";
   }
@@ -539,8 +512,8 @@ public class CodeEditorActivity extends BaseCompat {
 
   public String getPathBytab() {
     int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
-    if (selectedTabPosition >= 0 && selectedTabPosition < tabs_listmap.size()) {
-      return tabs_listmap.get(selectedTabPosition).get("path").toString();
+    if (selectedTabPosition >= 0 && selectedTabPosition < tabsList.size()) {
+      return tabsList.get(selectedTabPosition).getPath();
     }
     return "";
   }
@@ -585,6 +558,7 @@ public class CodeEditorActivity extends BaseCompat {
           @Override
           public void Enter() {}
         });
+
     if (sf.contains("sd100")) {
       if (sf.getInt("sd100", 1) == 1) {
         editor.setCompletionWndPositionMode(CodeEditor.WINDOW_POS_MODE_AUTO);
@@ -601,20 +575,18 @@ public class CodeEditorActivity extends BaseCompat {
 
     var projectz = new ProjectManager();
     projectz.setProjectName(getIntent().getStringExtra("root"));
+
     editor.subscribeEvent(
         ContentChangeEvent.class,
         (event, subscribe) -> {
           var iscode = new FactoryCodeError(editor, iconAuthor, tablayouteditor);
           int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
-          if (selectedTabPosition >= 0 && selectedTabPosition < tabs_listmap.size()) {
+          if (selectedTabPosition >= 0 && selectedTabPosition < tabsList.size()) {
             ObjectUtils.addStarToTab(selectedTabPosition, tablayouteditor);
+            CodeEditorModel model = tabsList.get(selectedTabPosition);
+            model.setTextchange(true);
           }
-          new Handler(Looper.getMainLooper())
-              .postDelayed(
-                  () -> {
-                    iscode.run();
-                  },
-                  3000);
+          new Handler(Looper.getMainLooper()).postDelayed(() -> iscode.run(), 3000);
         });
 
     if (sve.contains("getAutoSave")) {
@@ -626,12 +598,13 @@ public class CodeEditorActivity extends BaseCompat {
               try {
                 FileChangeReceiver.stopWatching();
                 int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
-                if (selectedTabPosition >= 0 && selectedTabPosition < tabs_listmap.size()) {
-                  String selectedFilePath =
-                      tabs_listmap.get(selectedTabPosition).get("path").toString();
+                if (selectedTabPosition >= 0 && selectedTabPosition < tabsList.size()) {
+                  String selectedFilePath = tabsList.get(selectedTabPosition).getPath();
                   String fileContent = editor.getText().toString();
                   FileUtil.writeFile(selectedFilePath, fileContent);
                   ObjectUtils.removedStarToTab(selectedTabPosition, tablayouteditor);
+                  CodeEditorModel model = tabsList.get(selectedTabPosition);
+                  model.setTextchange(false);
                 }
               } catch (Exception e) {
                 DataUtil.showMessage(getApplicationContext(), "Error not File saved!");
@@ -639,11 +612,13 @@ public class CodeEditorActivity extends BaseCompat {
             });
       } else {
         int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
-        if (selectedTabPosition >= 0 && selectedTabPosition < tabs_listmap.size()) {
-          String selectedFilePath = tabs_listmap.get(selectedTabPosition).get("path").toString();
+        if (selectedTabPosition >= 0 && selectedTabPosition < tabsList.size()) {
+          String selectedFilePath = tabsList.get(selectedTabPosition).getPath();
           String fileContent = editor.getText().toString();
           FileUtil.writeFile(selectedFilePath, fileContent);
           ObjectUtils.removedStarToTab(selectedTabPosition, tablayouteditor);
+          CodeEditorModel model = tabsList.get(selectedTabPosition);
+          model.setTextchange(false);
           FileChangeReceiver.startWatching(
               CodeEditorActivity.this,
               selectedFilePath,
@@ -658,17 +633,20 @@ public class CodeEditorActivity extends BaseCompat {
         }
       }
     }
+
     Symbloinit();
     ReloadFileInPos();
+
     if (shp.contains("pos_path")) {
       if (!shp.getString("pos_path", "").equals("")) {
         setCodeEditorFileReader(shp.getString("pos_path", ""));
       }
     }
+
     FileUtil.writeFile(
         "/storage/emulated/0/GhostWebIDE/ninjacoder/openFile.json", shp.getString("path", ""));
-
     progressbar1.setVisibility(View.GONE);
+
     if (re.getString("f380", "").equals("true")) {
       editor.setNonPrintablePaintingFlags(CodeEditor.FLAG_DRAW_LINE_SEPARATOR);
     }
@@ -687,12 +665,12 @@ public class CodeEditorActivity extends BaseCompat {
         codesnapimg, this, KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
     themeForJson2.addImageColor(
         image, this, KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
-
     themeForJson2.setStatusNavColor(this, imap, KeySet.navstatusbar, Coordinator, getColorPass);
     themeForJson2.addImageColor(
         menupopnew, this, KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
     themeForJson2.setFabBackground(_fab, imap);
     AnimUtils.ClickAnimation(menupopnew);
+
     tablayouteditor.setSelectedTabIndicatorColor(
         imap.containsKey(KeySet.tabback)
             ? Color.parseColor(imap.get(KeySet.tabback).toString())
@@ -705,8 +683,8 @@ public class CodeEditorActivity extends BaseCompat {
 
     AnimUtils.ClickAnimation(undo);
     AnimUtils.ClickAnimation(redo);
-
     AnimUtils.Worker(_fab);
+
     editor
         .getColorScheme()
         .setColor(EditorColorScheme.MATCHED_TEXT_BACKGROUND, Color.parseColor("#75800F31"));
@@ -718,7 +696,6 @@ public class CodeEditorActivity extends BaseCompat {
         DataUtil.showMessage(getApplicationContext(), "Custom Font Not Found");
         titleauthor.setTypeface(
             Typeface.createFromAsset(getAssets(), "fonts/ghostfont.ttf"), Typeface.NORMAL);
-
       } else {
         setFontEditorFromFile(setfont.getString("mfont", ""));
         titleauthor.setTypeface(Typeface.createFromFile(new File(setfont.getString("mfont", ""))));
@@ -729,8 +706,10 @@ public class CodeEditorActivity extends BaseCompat {
       titleauthor.setTypeface(
           Typeface.createFromAsset(getAssets(), "fonts/ghostfont.ttf"), Typeface.NORMAL);
     }
+
     var data = thememanagersoft.contains("br") ? thememanagersoft.getFloat("br", 2) : 3;
     mvideo.setLifecycle(getLifecycle());
+
     if (getvb.getString("dir", "").endsWith(".mp4")) {
       mvideo.setPath(getvb.getString("dir", ""));
       mvideo.setVisibility(View.VISIBLE);
@@ -738,8 +717,10 @@ public class CodeEditorActivity extends BaseCompat {
       mvideo.setVisibility(View.GONE);
       mvideo.releasePlayer();
     }
+
     BlurImage.setBlurInWallpaperMobile(this, data, ghostIcon);
     getColorPass.setBackgroundColor(Color.parseColor(imap.get("backgroundcolorlinear").toString()));
+
     if (getinitdir.contains("mdir")) {
       if (getinitdir.getString("mdir", "").equals("true")) {
         dir.setVisibility(View.GONE);
@@ -747,14 +728,13 @@ public class CodeEditorActivity extends BaseCompat {
         dir.setVisibility(View.VISIBLE);
       }
     }
+
     if (imap.containsKey("tabback")) {
       if (Build.VERSION.SDK_INT >= 21) {
         proanjctor
             .getIndeterminateDrawable()
             .setColorFilter(
                 Color.parseColor(imap.get("tabback").toString()), PorterDuff.Mode.SRC_IN);
-      }
-      if (Build.VERSION.SDK_INT >= 21) {
         progressbar1
             .getIndeterminateDrawable()
             .setColorFilter(
@@ -763,26 +743,25 @@ public class CodeEditorActivity extends BaseCompat {
     } else {
       if (Build.VERSION.SDK_INT >= 21) {
         proanjctor.getIndeterminateDrawable().setColorFilter(0xFFFFB689, PorterDuff.Mode.SRC_IN);
-      }
-      if (Build.VERSION.SDK_INT >= 21) {
         progressbar1.getIndeterminateDrawable().setColorFilter(0xFFFFB689, PorterDuff.Mode.SRC_IN);
       }
     }
+
     AnimUtils.ClickAnimation(image);
+
     if (mthemepost.getString("mytheme", "").equals("true")) {
       EdgeToEdge.enable(this);
-    } else {
     }
   }
 
   void setManagerpanel(final View _view) {
     pvr =
         new PowerMenu.Builder(CodeEditorActivity.this)
-            .addItem(new PowerMenuItem("Search Text", false, R.drawable.textsearch))
-            .addItem(new PowerMenuItem("Color", false, R.drawable.color))
-            .addItem(new PowerMenuItem("Log cat", false, R.drawable.codeformat))
-            .addItem(new PowerMenuItem("Save", false, R.drawable.save))
-            .addItem(new PowerMenuItem("Code nave", false, R.drawable.setsavefileall))
+            .addItem(new PowerMenuItem("Search Text", false))
+            .addItem(new PowerMenuItem("Color", false))
+            .addItem(new PowerMenuItem("Log cat", false))
+            .addItem(new PowerMenuItem("Save", false))
+            .addItem(new PowerMenuItem("Code nave", false))
             .setIsMaterial(true)
             .build();
 
@@ -798,83 +777,74 @@ public class CodeEditorActivity extends BaseCompat {
     pvr.setTextSize(14);
 
     themeForJson2.subPowerMenu(pvr, imap);
+
     pvr.setOnMenuItemClickListener(
         new OnMenuItemClickListener<PowerMenuItem>() {
           @Override
           public void onItemClick(int position, PowerMenuItem item) {
             switch (position) {
               case 0:
-                {
-                  ghost_searchs.showAndHide();
-                  break;
-                }
+                ghost_searchs.showAndHide();
+                break;
 
               case 1:
-                {
-                  ColorPickerDialogBuilder.with(CodeEditorActivity.this)
-                      .setTitle("Set Color")
-                      .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
-                      .showColorPreview(true)
-                      .showColorEdit(true)
-                      .density(22)
-                      .showColorEdit(true)
-                      .setOnColorSelectedListener(
-                          new OnColorSelectedListener() {
-                            @Override
-                            public void onColorSelected(int selectedColor) {}
-                          })
-                      .setPositiveButton(
-                          "انتخاب",
-                          new ColorPickerClickListener() {
-                            @Override
-                            public void onClick(
-                                DialogInterface dialog, int selectedColor, Integer[] allColors) {
-                              String rgs = Integer.toHexString(selectedColor);
-                              try {
-
-                                setSymbols("#".concat(rgs.replace("#ff", "#")));
-                              } catch (Exception exception) {
-                                exception.printStackTrace();
-                              }
+                ColorPickerDialogBuilder.with(CodeEditorActivity.this)
+                    .setTitle("Set Color")
+                    .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                    .showColorPreview(true)
+                    .showColorEdit(true)
+                    .density(22)
+                    .setOnColorSelectedListener(
+                        new OnColorSelectedListener() {
+                          @Override
+                          public void onColorSelected(int selectedColor) {}
+                        })
+                    .setPositiveButton(
+                        "انتخاب",
+                        new ColorPickerClickListener() {
+                          @Override
+                          public void onClick(
+                              DialogInterface dialog, int selectedColor, Integer[] allColors) {
+                            String rgs = Integer.toHexString(selectedColor);
+                            try {
+                              setSymbols("#".concat(rgs.replace("#ff", "#")));
+                            } catch (Exception exception) {
+                              exception.printStackTrace();
                             }
-                          })
-                      .setNegativeButton(
-                          "لغو",
-                          new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                          }
+                        })
+                    .setNegativeButton(
+                        "لغو",
+                        new DialogInterface.OnClickListener() {
+                          @Override
+                          public void onClick(DialogInterface dialog, int which) {
+                            DataUtil.showMessage(getApplicationContext(), "لغو شد");
+                          }
+                        })
+                    .build()
+                    .show();
+                break;
 
-                              DataUtil.showMessage(getApplicationContext(), "لغو شد");
-                            }
-                          })
-                      .build()
-                      .show();
-
-                  break;
-                }
               case 2:
-                {
-                  var sheet = new LogCatBottomSheet(CodeEditorActivity.this);
-                  sheet.run();
-                  break;
-                }
+                var sheet = new LogCatBottomSheet(CodeEditorActivity.this);
+                sheet.run();
+                break;
+
               case 3:
-                {
-                  saveFileByIo();
-                  int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
-                  if (selectedTabPosition >= 0 && selectedTabPosition < tabs_listmap.size()) {
-                    ObjectUtils.removedStarToTab(selectedTabPosition, tablayouteditor);
-                  }
-                  break;
+                saveFileByIo();
+                int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
+                if (selectedTabPosition >= 0 && selectedTabPosition < tabsList.size()) {
+                  ObjectUtils.removedStarToTab(selectedTabPosition, tablayouteditor);
+                  CodeEditorModel model = tabsList.get(selectedTabPosition);
+                  model.setTextchange(false);
                 }
+                break;
 
               case 4:
-                {
-                  var colorview = new ColorView();
-                  colorview.runJavaAsSmail(
-                      CodeEditorActivity.this, shp.getString("pos_path", ""), editor);
-                  break;
-                }
+                var colorview = new ColorView();
+                colorview.runJavaAsSmail(
+                    CodeEditorActivity.this, shp.getString("pos_path", ""), editor);
+                break;
             }
           }
         });
@@ -895,7 +865,6 @@ public class CodeEditorActivity extends BaseCompat {
   }
 
   void saveFileByIo() {
-
     FileChangeReceiver.stopWatching();
 
     if (editor.getTextAsString().isEmpty()) {
@@ -904,10 +873,11 @@ public class CodeEditorActivity extends BaseCompat {
       try {
         isFileChangeDialogShowing = false;
         int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
-        if (selectedTabPosition >= 0 && selectedTabPosition < tabs_listmap.size()) {
-          String selectedFilePath = tabs_listmap.get(selectedTabPosition).get("path").toString();
+        if (selectedTabPosition >= 0 && selectedTabPosition < tabsList.size()) {
+          String selectedFilePath = tabsList.get(selectedTabPosition).getPath();
           Toast.makeText(this, selectedFilePath, 2).show();
           String fileContent = editor.getText().toString();
+
           ObjectUtils.runAndPostInTime(
               () -> {
                 FileChangeReceiver.startWatching(
@@ -923,9 +893,16 @@ public class CodeEditorActivity extends BaseCompat {
                     });
               },
               3000);
+
           if (selectedFilePath.endsWith(".class")) {
             FileUtil.writeFile(selectedFilePath.replace(".class", ".java"), fileContent);
-          } else FileUtil.writeFile(selectedFilePath, fileContent);
+          } else {
+            FileUtil.writeFile(selectedFilePath, fileContent);
+          }
+
+          ObjectUtils.removedStarToTab(selectedTabPosition, tablayouteditor);
+          CodeEditorModel model = tabsList.get(selectedTabPosition);
+          model.setTextchange(false);
         }
       } catch (Exception e) {
         DataUtil.showMessage(getApplicationContext(), "Error not File saved!");
@@ -939,7 +916,6 @@ public class CodeEditorActivity extends BaseCompat {
       return;
     }
 
-    // تعیین پسوند فایل با بررسی ایمن
     int dotIndex = _path.lastIndexOf('.');
     if (dotIndex > 0 && dotIndex < _path.length() - 1) {
       this.currentFileType = _path.substring(dotIndex);
@@ -964,8 +940,8 @@ public class CodeEditorActivity extends BaseCompat {
 
   private void updateFileTypeForCurrentTab() {
     int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
-    if (selectedTabPosition >= 0 && selectedTabPosition < tabs_listmap.size()) {
-      String filePath = tabs_listmap.get(selectedTabPosition).get("path").toString();
+    if (selectedTabPosition >= 0 && selectedTabPosition < tabsList.size()) {
+      String filePath = tabsList.get(selectedTabPosition).getPath();
 
       if (filePath == null || filePath.isEmpty()) {
         this.currentFileType = "";
@@ -977,7 +953,6 @@ public class CodeEditorActivity extends BaseCompat {
       if (dotIndex > 0 && dotIndex < filePath.length() - 1) {
         this.currentFileType = filePath.substring(dotIndex);
       } else {
-
         this.currentFileType = "";
         Log.w("Editor", "File has no extension: " + filePath);
       }
@@ -998,9 +973,16 @@ public class CodeEditorActivity extends BaseCompat {
     return currentFileType;
   }
 
-  void setClosetab(int _position, ArrayList<HashMap<String, Object>> _data) {
-    if (FileUtil.isExistFile(_data.get(_position).get("path").toString())) {
-      _data.remove((_position));
+  void setClosetab(int _position, ArrayList<CodeEditorModel> _data) {
+    if (_position >= 0 && _position < _data.size()) {
+      if (_data.get(_position).getPinmod()) {
+        Toast.makeText(this, "این تب پین شده است", Toast.LENGTH_SHORT).show();
+        return;
+      }
+    }
+
+    if (FileUtil.isExistFile(_data.get(_position).getPath())) {
+      _data.remove(_position);
       if (_data.isEmpty()) {
         editor.setText("");
         _data.clear();
@@ -1009,20 +991,18 @@ public class CodeEditorActivity extends BaseCompat {
         finish();
       } else {
         if ((_position == 0) && (_data.size() > 1)) {
-          shp.edit().putString("pos_path", _data.get(_position + 1).get("path").toString()).apply();
+          shp.edit().putString("pos_path", _data.get(_position + 1).getPath()).apply();
           shp.edit().putString("positionTabs", String.valueOf((long) (_position + 1))).apply();
-          setCodeEditorFileReader(_data.get(_position + 1).get("path").toString());
+          setCodeEditorFileReader(_data.get(_position + 1).getPath());
         } else {
           if ((_position == 0) && (_data.size() == 1)) {
-            shp.edit().putString("pos_path", _data.get(0).get("path").toString()).apply();
-            setCodeEditorFileReader(_data.get(0).get("path").toString());
+            shp.edit().putString("pos_path", _data.get(0).getPath()).apply();
+            setCodeEditorFileReader(_data.get(0).getPath());
             editor.setText("");
           } else {
-            shp.edit()
-                .putString("pos_path", _data.get(_position - 1).get("path").toString())
-                .apply();
+            shp.edit().putString("pos_path", _data.get(_position - 1).getPath()).apply();
             shp.edit().putString("positionTabs", String.valueOf((long) (_position - 1))).apply();
-            setCodeEditorFileReader(_data.get(_position - 1).get("path").toString());
+            setCodeEditorFileReader(_data.get(_position - 1).getPath());
           }
         }
       }
@@ -1036,15 +1016,13 @@ public class CodeEditorActivity extends BaseCompat {
         finish();
       } else {
         if ((_position == 0) && (_data.size() > 1)) {
-          shp.edit().putString("pos_path", _data.get(_position + 1).get("path").toString()).apply();
+          shp.edit().putString("pos_path", _data.get(_position + 1).getPath()).apply();
           shp.edit().putString("positionTabs", String.valueOf((long) (_position + 1))).apply();
         } else {
           if ((_position == 0) && (_data.size() == 1)) {
-            shp.edit().putString("pos_path", _data.get(0).get("path").toString()).apply();
+            shp.edit().putString("pos_path", _data.get(0).getPath()).apply();
           } else {
-            shp.edit()
-                .putString("pos_path", _data.get(_position - 1).get("path").toString())
-                .apply();
+            shp.edit().putString("pos_path", _data.get(_position - 1).getPath()).apply();
             shp.edit().putString("positionTabs", String.valueOf((long) (_position - 1))).apply();
           }
         }
@@ -1056,54 +1034,59 @@ public class CodeEditorActivity extends BaseCompat {
   void ReloadFileInPos() {
     if (shp.contains("path")) {
       if (!shp.getString("path", "").equals("")) {
-        tabs_listmap =
+        tabsList =
             new Gson()
                 .fromJson(
                     shp.getString("path", ""),
-                    new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
+                    new TypeToken<ArrayList<CodeEditorModel>>() {}.getType());
 
-        tabs_listmap.forEach(
-            it -> {
-              path =
-                  it.containsKey("path") && it.get("path") != null ? it.get("path").toString() : "";
-              boolean fileExists = FileUtil.isExistFile(path);
-              it.put("exists", fileExists);
-              String tabText = Uri.parse(path).getLastPathSegment();
-              if (FileUtil.isExistFile(path)) {
-                tablayouteditor.addTab(tablayouteditor.newTab().setText(tabText));
-                isFileChangeDialogShowing = true;
-                if (isFileChangeDialogShowing)
-                  FileChangeReceiver.startWatching(
-                      CodeEditorActivity.this,
-                      path,
-                      (filePath) -> {
-                        FileChangeReceiver.showFileChangedDialog(
-                            CodeEditorActivity.this,
-                            filePath,
-                            () -> {
-                              setCodeEditorFileReader(filePath);
-                            });
-                      });
+        for (CodeEditorModel model : tabsList) {
+          path = model.getPath();
+          boolean fileExists = FileUtil.isExistFile(path);
+          String tabText = new File(model.getPath()).getName();
+          if (FileUtil.isExistFile(path)) {
+            TabLayout.Tab tab = tablayouteditor.newTab().setText(tabText);
+            if (model.getPinmod()) {
+              tab.setIcon(R.drawable.ic_pin_filled);
+            }
+            tablayouteditor.addTab(tab);
 
-              } else {
-                tablayouteditor.addTab(
-                    tablayouteditor.newTab().setText("File not found" + tabText));
-              }
-            });
+            isFileChangeDialogShowing = true;
+            if (isFileChangeDialogShowing) {
+              FileChangeReceiver.startWatching(
+                  CodeEditorActivity.this,
+                  path,
+                  (filePath) -> {
+                    FileChangeReceiver.showFileChangedDialog(
+                        CodeEditorActivity.this,
+                        filePath,
+                        () -> {
+                          setCodeEditorFileReader(filePath);
+                        });
+                  });
+            }
+          } else {
+            tablayouteditor.addTab(tablayouteditor.newTab().setText("File not found " + tabText));
+          }
+        }
+
         setDistreeView();
+
         tablayouteditor.addOnTabSelectedListener(
             new TabLayout.OnTabSelectedListener() {
-
               @Override
               public void onTabReselected(TabLayout.Tab tabs) {
                 int pos = tabs.getPosition();
 
                 try {
+                  CodeEditorModel model = tabsList.get(pos);
+
                   PowerMenu powers =
                       new PowerMenu.Builder(CodeEditorActivity.this)
                           .addItem(new PowerMenuItem("close"))
                           .addItem(new PowerMenuItem("close other"))
                           .addItem(new PowerMenuItem("close all"))
+                          .addItem(new PowerMenuItem(model.getPinmod() ? "unpin" : "pin"))
                           .setIsMaterial(true)
                           .setShowBackground(false)
                           .setAutoDismiss(true)
@@ -1120,35 +1103,81 @@ public class CodeEditorActivity extends BaseCompat {
                           .setMenuRadius(15)
                           .setAnimation(MenuAnimation.FADE)
                           .build();
+
                   powers.setOnMenuItemClickListener(
                       (ii, c) -> {
                         switch (ii) {
                           case 0:
-                            if (pos >= 0 && pos < tabs_listmap.size()) {
+                            if (pos >= 0 && pos < tabsList.size()) {
+                              CodeEditorModel selectedModel = tabsList.get(pos);
+                              if (selectedModel.getPinmod()) {
+                                Toast.makeText(
+                                        CodeEditorActivity.this,
+                                        "این تب پین شده است",
+                                        Toast.LENGTH_SHORT)
+                                    .show();
+                                return;
+                              }
                               tablayouteditor.removeTabAt(pos);
-                              setClosetab(pos, tabs_listmap);
+                              setClosetab(pos, tabsList);
                             }
                             break;
 
                           case 1:
-                            for (int i = tabs_listmap.size() - 1; i >= 0; i--) {
+                            for (int i = tabsList.size() - 1; i >= 0; i--) {
                               if (i != pos) {
+                                CodeEditorModel otherModel = tabsList.get(i);
+                                if (otherModel.getPinmod()) {
+                                  continue;
+                                }
                                 tablayouteditor.removeTabAt(i);
-                                tabs_listmap.remove(i);
+                                tabsList.remove(i);
                               }
                             }
                             setCloseother();
                             break;
 
                           case 2:
+                            boolean allPinned = true;
+                            for (CodeEditorModel m : tabsList) {
+                              if (!m.getPinmod()) {
+                                allPinned = false;
+                                break;
+                              }
+                            }
+
+                            if (allPinned) {
+                              Toast.makeText(
+                                      CodeEditorActivity.this,
+                                      "همه تب‌ها پین شده‌اند",
+                                      Toast.LENGTH_SHORT)
+                                  .show();
+                              return;
+                            }
+
                             tablayouteditor.removeAllTabs();
                             setCloseall();
+                            break;
+
+                          case 3:
+                            boolean newPinState = !model.getPinmod();
+                            model.setPinmod(newPinState);
+                            if (newPinState) {
+                              tabs.setIcon(R.drawable.ic_pin_filled);
+                            } else {
+                              tabs.setIcon(null);
+                            }
+                            shp.edit().putString("path", new Gson().toJson(tabsList)).apply();
+                            Toast.makeText(
+                                    CodeEditorActivity.this,
+                                    newPinState ? "تب پین شد" : "پین تب برداشته شد",
+                                    Toast.LENGTH_SHORT)
+                                .show();
                             break;
                         }
                       });
                   powers.showAsDropDown(tabs.view);
                 } catch (Exception e) {
-
                   e.printStackTrace();
                 }
               }
@@ -1156,10 +1185,9 @@ public class CodeEditorActivity extends BaseCompat {
               @Override
               public void onTabSelected(TabLayout.Tab tabs) {
                 int pos = tabs.getPosition();
-                if (pos >= 0 && pos < tabs_listmap.size()) {
-                  String filePath = tabs_listmap.get(pos).get("path").toString();
-                  boolean fileExists =
-                      (boolean) tabs_listmap.get(pos).getOrDefault("exists", false);
+                if (pos >= 0 && pos < tabsList.size()) {
+                  String filePath = tabsList.get(pos).getPath();
+                  boolean fileExists = FileUtil.isExistFile(filePath);
                   if (!fileExists) {
                     showFileNotFoundDialog(pos, filePath);
                   } else {
@@ -1199,15 +1227,13 @@ public class CodeEditorActivity extends BaseCompat {
             "close tab",
             (dialog, which) -> {
               tablayouteditor.removeTabAt(position);
-              tabs_listmap.remove(position);
+              tabsList.remove(position);
               setCloseother();
             })
         .setNegativeButton(
             "tryit",
             (dialog, which) -> {
               boolean existsNow = FileUtil.isExistFile(filePath);
-              tabs_listmap.get(position).put("exists", existsNow);
-
               if (existsNow) {
                 TabLayout.Tab tab = tablayouteditor.getTabAt(position);
                 if (tab != null) {
@@ -1238,6 +1264,7 @@ public class CodeEditorActivity extends BaseCompat {
               .fromJson(
                   DataUtil.copyFromInputStream(inputstream5),
                   new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
+
       SyspiarAdapter syspiarAdapter =
           new SyspiarAdapter(
               staticSymbiolPiare,
@@ -1262,28 +1289,118 @@ public class CodeEditorActivity extends BaseCompat {
     }
   }
 
-  void setCloseall() {
-    tabs_listmap.clear();
-    shp.edit().remove("pos_path").apply();
-    shp.edit().remove("positionTabs").apply();
-
-    shp.edit().putString("path", new Gson().toJson(tabs_listmap)).apply();
-    FileUtil.deleteFile("/storage/emulated/0/GhostWebIDE/ninjacoder/openFile.json");
-    finish();
-  }
-
   void setCloseother() {
-    tabs_listmap.clear();
-    {
-      HashMap<String, Object> _item = new HashMap<>();
-      _item.put("path", shp.getString("pos_path", ""));
-      tabs_listmap.add(_item);
+    int currentPos = tablayouteditor.getSelectedTabPosition();
+    if (currentPos < 0 || currentPos >= tabsList.size()) return;
+
+    CodeEditorModel currentTab = tabsList.get(currentPos);
+
+    // ساخت لیست جدید شامل تب فعلی و تب‌های پین شده
+    ArrayList<CodeEditorModel> newTabsList = new ArrayList<>();
+    newTabsList.add(currentTab);
+
+    for (int i = 0; i < tabsList.size(); i++) {
+      if (i != currentPos && tabsList.get(i).getPinmod()) {
+        newTabsList.add(tabsList.get(i));
+      }
     }
 
-    shp.edit().putString("positionTabs", "0").apply();
-    FileUtil.writeFile(
-        "/storage/emulated/0/GhostWebIDE/ninjacoder/openFile.json", shp.getString("pos_path", ""));
-    shp.edit().putString("path", new Gson().toJson(tabs_listmap)).apply();
+    // پاک کردن و بازسازی tablayout
+    tablayouteditor.removeAllTabs();
+    tabsList.clear();
+    tabsList.addAll(newTabsList);
+
+    for (CodeEditorModel model : tabsList) {
+      TabLayout.Tab tab = tablayouteditor.newTab().setText(new File(model.getPath()).getName());
+      if (model.getPinmod()) {
+        tab.setIcon(R.drawable.ic_pin_filled);
+      }
+      tablayouteditor.addTab(tab);
+    }
+
+    // انتخاب تب فعلی
+    int newCurrentPos = 0; // تب فعلی همیشه اوله
+    shp.edit().putString("positionTabs", String.valueOf(newCurrentPos)).apply();
+    shp.edit().putString("path", new Gson().toJson(tabsList)).apply();
+
+    if (newCurrentPos >= 0 && newCurrentPos < tabsList.size()) {
+      FileUtil.writeFile(
+          "/storage/emulated/0/GhostWebIDE/ninjacoder/openFile.json",
+          tabsList.get(newCurrentPos).getPath());
+    }
+  }
+
+  void setCloseall() {
+    try {
+      if (tabsList == null || tabsList.isEmpty()) {
+        return;
+      }
+
+      // بررسی وجود تب‌های غیرپین شده
+      boolean hasUnpinned = false;
+      for (CodeEditorModel model : tabsList) {
+        if (!model.getPinmod()) {
+          hasUnpinned = true;
+          break;
+        }
+      }
+
+      if (!hasUnpinned) {
+        Toast.makeText(this, "همه تب‌ها پین شده‌اند", Toast.LENGTH_SHORT).show();
+        return;
+      }
+
+      // ایجاد لیست جدید از تب‌های پین شده
+      ArrayList<CodeEditorModel> pinnedTabs = new ArrayList<>();
+      for (CodeEditorModel model : tabsList) {
+        if (model.getPinmod()) {
+          pinnedTabs.add(model);
+        }
+      }
+
+      // پاک کردن همه تب‌ها از tablayout
+      tablayouteditor.removeAllTabs();
+
+      // اضافه کردن مجدد تب‌های پین شده
+      tabsList.clear();
+      tabsList.addAll(pinnedTabs);
+
+      // بازسازی tablayout با تب‌های پین شده
+      for (CodeEditorModel model : tabsList) {
+        TabLayout.Tab tab = tablayouteditor.newTab().setText(new File(model.getPath()).getName());
+        if (model.getPinmod()) {
+          tab.setIcon(R.drawable.ic_pin_filled);
+        }
+        tablayouteditor.addTab(tab);
+      }
+
+      // ذخیره در SharedPreferences
+      shp.edit().putString("path", new Gson().toJson(tabsList)).apply();
+
+      if (!tabsList.isEmpty()) {
+        // انتخاب اولین تب پین شده
+        int newPosition = 0;
+        shp.edit().putString("positionTabs", String.valueOf(newPosition)).apply();
+        shp.edit().putString("pos_path", tabsList.get(newPosition).getPath()).apply();
+
+        TabLayout.Tab firstTab = tablayouteditor.getTabAt(newPosition);
+        if (firstTab != null) {
+          firstTab.select();
+        }
+
+        setCodeEditorFileReader(tabsList.get(newPosition).getPath());
+      } else {
+        // اگر هیچ تبی باقی نمونده
+        shp.edit().remove("pos_path").apply();
+        shp.edit().remove("positionTabs").apply();
+        FileUtil.deleteFile("/storage/emulated/0/GhostWebIDE/ninjacoder/openFile.json");
+        finish();
+      }
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      Toast.makeText(this, "خطا در بستن تب‌ها: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+    }
   }
 
   public List<String> spiltIntoBreadcrumbItems(String filePath) {
@@ -1315,7 +1432,6 @@ public class CodeEditorActivity extends BaseCompat {
             pospath,
             this,
             new ToolbarListFileAdapter.CallBack() {
-
               @Override
               public void GoToDir(View view) {}
 
@@ -1333,12 +1449,15 @@ public class CodeEditorActivity extends BaseCompat {
       FileChangeReceiver.stopWatching();
 
       int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
-      if (selectedTabPosition >= 0 && selectedTabPosition < tabs_listmap.size()) {
-        String selectedFilePath = tabs_listmap.get(selectedTabPosition).get("path").toString();
+      if (selectedTabPosition >= 0 && selectedTabPosition < tabsList.size()) {
+        String selectedFilePath = tabsList.get(selectedTabPosition).getPath();
         Toast.makeText(this, selectedFilePath, 2).show();
         String fileContent = editor.getText().toString();
         ObjectUtils.removedStarToTab(selectedTabPosition, tablayouteditor);
+        CodeEditorModel model = tabsList.get(selectedTabPosition);
+        model.setTextchange(false);
         FileUtil.writeFile(selectedFilePath, fileContent);
+
         ObjectUtils.runAndPostInTime(
             () -> {
               FileChangeReceiver.startWatching(
@@ -1354,6 +1473,7 @@ public class CodeEditorActivity extends BaseCompat {
                   });
             },
             3000);
+
         if (selectedFilePath.contains(".html")) {
           if (ru.getBoolean("live", false)) {
             var it = new CompilerUtils(selectedFilePath, Mode.WEB, CodeEditorActivity.this);
@@ -1413,12 +1533,10 @@ public class CodeEditorActivity extends BaseCompat {
           intent.putExtra(XmlLayoutDesignActivity.EXTRA_STANDALONE, false);
           intent.putExtra(XmlLayoutDesignActivity.EXTRA_TRAINER, false);
           loadAnim(intent);
-
         } else if (selectedFilePath.contains(".jj")) {
           var file = new File(selectedFilePath);
           JavaCcComplierImpl.main(file.toString(), file.getParent() + "/");
         } else if (selectedFilePath.contains(".kt")) {
-
           new KotlinCompilerImpl(CodeEditorActivity.this, selectedFilePath, editor);
         } else if (selectedFilePath.contains(".ts")) {
           SassForAndroid.runObjectWeb(editor, selectedFilePath, CompilerModel.TYPESRCIPT);
@@ -1430,7 +1548,6 @@ public class CodeEditorActivity extends BaseCompat {
           loadAnim(res);
         }
       } else {
-
         Toast.makeText(this, "تب انتخاب‌شده معتبر نیست", Toast.LENGTH_SHORT).show();
       }
     } catch (Exception ex) {
@@ -1440,7 +1557,6 @@ public class CodeEditorActivity extends BaseCompat {
 
   void setAntlr4Compiler(String path) {
     final var bottomSheetDialog = new BottomSheetDialog(this);
-
     Antcomp8lerBinding bind = Antcomp8lerBinding.inflate(getLayoutInflater());
     bottomSheetDialog.setContentView(bind.getRoot());
     File file = new File(path);
@@ -1457,7 +1573,6 @@ public class CodeEditorActivity extends BaseCompat {
   }
 
   void setWallpaperParallaxEffect() {
-
     effect = new WallpaperParallaxEffect(this);
     effect.setCallback(
         (offsetX, offsetY, angle) -> {
@@ -1465,13 +1580,11 @@ public class CodeEditorActivity extends BaseCompat {
           Coordinator.setTranslationX(offsetX * progress);
           Coordinator.setTranslationY(offsetY * progress);
         });
-
     effect.setEnabled(thememanagersoft.contains("effect"));
   }
 
   @Override
   public boolean onKeyDown(int data, KeyEvent key) {
-
     if (key.isAltPressed() || key.isCtrlPressed()) {
       switch (data) {
         case KeyEvent.KEYCODE_S:
@@ -1479,7 +1592,6 @@ public class CodeEditorActivity extends BaseCompat {
           return true;
       }
     }
-
     return super.onKeyDown(data, key);
   }
 }

@@ -5,6 +5,7 @@ import android.util.Log;
 
 import androidx.core.graphics.ColorUtils;
 
+import io.github.rosemoe.sora.langs.internal.CodeHighlighter;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
@@ -270,7 +271,7 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
               } else {
                 result.addIfNeeded(line, column, forString());
               }
-
+              CodeHighlighter.highlightFilePath(token.getText(), line, column, result);
               result.addIfNeeded(line, column, forString());
               break;
             }

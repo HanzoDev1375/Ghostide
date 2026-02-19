@@ -286,6 +286,10 @@ public class ContentLine implements CharSequence, GetChars {
     return value[index];
   }
 
+  public String getSubstring(int startIndex, int endIndex) {
+    return subSequence(startIndex, endIndex).toString();
+  }
+
   @Override
   @NonNull
   public ContentLine subSequence(int start, int end) {

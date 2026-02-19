@@ -410,4 +410,5 @@ public class ListItemView extends LinearLayout {
     this.storkeColor = storkeColor;
     refreshBackground();
   }
+  public void startDisintegration(int posit) {}
 }

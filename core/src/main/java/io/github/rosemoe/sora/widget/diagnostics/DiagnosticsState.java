@@ -8,6 +8,7 @@ public enum DiagnosticsState {
   TYPO(2, Color.GREEN),
   DEPRECATED(3, Color.parseColor("#FF333333")),
   UNUSED(4, Color.parseColor("#FF595959")),
+  UNUSEDWAVE(6,Color.parseColor("#ff707070")),
   NONE(5);
 
   int value;
