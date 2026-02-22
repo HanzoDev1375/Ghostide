@@ -151,12 +151,11 @@ public class ObjectUtils {
   public static int ColorAConNormal = colorPrimary;
   public static int SubTitle = colorOnSurfaceVariant;
   public static int ButtonBack = colorPrimary;
-  // public static int colorOnPrimaryFixed = R.attr.colorOnPrimaryFixed;
+
   public static int FabBack = colorPrimaryContainer;
   public static int ColorFilter = colorOnPrimaryContainer;
   public static int TvColorFab = colorOnPrimaryContainer;
-  //  public static int colorOnSurface = R.attr.colorOnSurface;
-  //  public static int colorSurfaceContainerHigh = R.attr.colorSurfaceContainerHigh;
+
   public static String name = "";
 
   public static void setColorBackground(View view) {
@@ -795,27 +794,27 @@ public class ObjectUtils {
   public static String findClassData(String code) throws Exception {
     Class cls = Class.forName(code);
     String text = cls.getName();
-    text += "\n\n// Annotations (if it's empty means there's nothing)";
+    text += "\n\n";
     for (var a : cls.getDeclaredAnnotations()) {
       text += "\n\n" + a.toString();
     }
 
-    text += "\n\n// Fields (if it's empty means there's nothing)";
+    text += "\n\n";
     for (var f : cls.getDeclaredFields()) {
       text += "\n\n" + f.toString();
     }
 
-    text += "\n\n// Constructors (if it's empty means there's nothing)";
+    text += "\n\n";
     for (var c : cls.getDeclaredConstructors()) {
       text += "\n\n" + c.toString();
     }
 
-    text += "\n\n// Methods (if it's empty means there's nothing)";
+    text += "\n\n";
     for (var m : cls.getDeclaredMethods()) {
       text += "\n\n" + m.toString();
     }
 
-    text += "\n\n// Classes (if it's empty means there's nothing)";
+    text += "\n\n";
     for (var c : cls.getDeclaredClasses()) {
       text += "\n\n" + c.toString();
     }
@@ -905,18 +904,32 @@ public class ObjectUtils {
   public static void addStarToTab(int pos, TabLayout tab) {
     TabLayout.Tab tabInstance = tab.getTabAt(pos);
     if (tabInstance != null) {
-      CharSequence tabTextCharSeq = tabInstance.getText();
-      String tabText = (tabTextCharSeq != null) ? tabTextCharSeq.toString() : "";
 
-      if (!tabText.startsWith("*")) {
-        SpannableString spannableText = new SpannableString("*" + tabText);
-        spannableText.setSpan(
-            new ForegroundColorSpan(Color.GREEN),
-            0,
-            spannableText.length(),
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+      if (tabInstance.getCustomView() != null) {
+        View customView = tabInstance.getCustomView();
+        TextView textView = customView.findViewById(ir.ninjacoder.ghostide.core.R.id.text_view);
 
-        tabInstance.setText(spannableText);
+        if (textView != null) {
+          String currentText = textView.getText().toString();
+          if (!currentText.startsWith("*")) {
+            textView.setText("*" + currentText);
+          }
+        }
+      } else {
+
+        CharSequence tabTextCharSeq = tabInstance.getText();
+        String tabText = (tabTextCharSeq != null) ? tabTextCharSeq.toString() : "";
+
+        if (!tabText.startsWith("*")) {
+          SpannableString spannableText = new SpannableString("*" + tabText);
+          spannableText.setSpan(
+              new ForegroundColorSpan(Color.GREEN),
+              0,
+              spannableText.length(),
+              Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+          tabInstance.setText(spannableText);
+        }
       }
     }
   }
@@ -959,10 +972,24 @@ public class ObjectUtils {
   public static void removedStarToTab(int pos, TabLayout tab) {
     TabLayout.Tab tabInstance = tab.getTabAt(pos);
     if (tabInstance != null) {
-      CharSequence tabTextCharSeq = tabInstance.getText();
-      String tabText = (tabTextCharSeq != null) ? tabTextCharSeq.toString() : "";
-      if (tabText.startsWith("*")) {
-        tabInstance.setText(tabText.substring(1));
+
+      if (tabInstance.getCustomView() != null) {
+        View customView = tabInstance.getCustomView();
+        TextView textView = customView.findViewById(ir.ninjacoder.ghostide.core.R.id.text_view);
+
+        if (textView != null) {
+          String currentText = textView.getText().toString();
+          if (currentText.startsWith("*")) {
+            textView.setText(currentText.substring(1));
+          }
+        }
+      } else {
+
+        CharSequence tabTextCharSeq = tabInstance.getText();
+        String tabText = (tabTextCharSeq != null) ? tabTextCharSeq.toString() : "";
+        if (tabText.startsWith("*")) {
+          tabInstance.setText(tabText.substring(1));
+        }
       }
     }
   }
@@ -970,22 +997,46 @@ public class ObjectUtils {
   public static void addStarToTabError(int pos, TabLayout tab) {
     TabLayout.Tab tabInstance = tab.getTabAt(pos);
     if (tabInstance != null) {
-      CharSequence tabTextCharSeq = tabInstance.getText();
-      String tabText = (tabTextCharSeq != null) ? tabTextCharSeq.toString() : "";
-      if (!tabText.startsWith("*")) {
-        String newText = "*" + tabText;
-        SpannableString spannableText = new SpannableString(newText);
-        spannableText.setSpan(
-            new ForegroundColorSpan(Color.WHITE), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        WavyUnderlineSpan mycustomSpan = new WavyUnderlineSpan();
-        mycustomSpan.setEnabled(true);
-        mycustomSpan.setMod(WavyUnderlineSpan.StatosMod.ERROR);
+      if (tabInstance.getCustomView() != null) {
+        View customView = tabInstance.getCustomView();
+        TextView textView = customView.findViewById(ir.ninjacoder.ghostide.core.R.id.text_view);
 
-        spannableText.setSpan(
-            mycustomSpan, 1, newText.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        if (textView != null) {
+          String currentText = textView.getText().toString();
+          if (!currentText.startsWith("*")) {
+            String newText = "*" + currentText;
 
-        tabInstance.setText(spannableText);
+            SpannableString spannableText = new SpannableString(newText);
+
+            WavyUnderlineSpan wavySpan = new WavyUnderlineSpan();
+            wavySpan.setEnabled(true);
+            wavySpan.setMod(WavyUnderlineSpan.StatosMod.ERROR);
+            spannableText.setSpan(
+                wavySpan, 1, newText.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            textView.setText(spannableText);
+          }
+        }
+      } else {
+
+        CharSequence tabTextCharSeq = tabInstance.getText();
+        String tabText = (tabTextCharSeq != null) ? tabTextCharSeq.toString() : "";
+        if (!tabText.startsWith("*")) {
+          String newText = "*" + tabText;
+          SpannableString spannableText = new SpannableString(newText);
+          spannableText.setSpan(
+              new ForegroundColorSpan(Color.WHITE), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+          WavyUnderlineSpan mycustomSpan = new WavyUnderlineSpan();
+          mycustomSpan.setEnabled(true);
+          mycustomSpan.setMod(WavyUnderlineSpan.StatosMod.ERROR);
+
+          spannableText.setSpan(
+              mycustomSpan, 1, newText.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+          tabInstance.setText(spannableText);
+        }
       }
     }
   }
@@ -995,7 +1046,7 @@ public class ObjectUtils {
   }
 
   public static void runAndPostInTime(Runnable runs) {
-    ThreadUtils.runOnUiThreadDelayed(runs, 2000); // 2s
+    ThreadUtils.runOnUiThreadDelayed(runs, 2000);
   }
 
   public static Drawable getCookieShape() {
@@ -1018,12 +1069,10 @@ public class ObjectUtils {
     return false;
   }
 
-  // char
   public static boolean getNextLexer(Lexer lexer, char ch) {
     return lexer._input.LA(1) == ch;
   }
 
-  // برای مقایسه رشته (تعدادی کاراکتر پشت سر هم)
   public static boolean getNextLexer(Lexer lexer, String s) {
     for (int i = 0; i < s.length(); i++) {
       if (lexer._input.LA(i + 1) != s.charAt(i)) {
@@ -1033,7 +1082,6 @@ public class ObjectUtils {
     return true;
   }
 
-  // برای مقایسه با offset خاص
   public static boolean getNextLexer(Lexer lexer, String s, int typeGo) {
     for (int i = 0; i < s.length(); i++) {
       if (lexer._input.LA(typeGo + i) != s.charAt(i)) {

@@ -19,10 +19,12 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.jsibbold.zoomage.ZoomageView;
 
+import com.sdsmdg.harjot.vectormaster.VectorModel;
 import ir.ninjacoder.ghostide.core.R;
 import ir.ninjacoder.ghostide.core.Store.BaseFragment;
 import ir.ninjacoder.ghostide.core.glidecompat.GlideCompat;
 import ir.ninjacoder.ghostide.core.interfaces.OnItemClickListener;
+import java.io.File;
 
 public class WallpaperFragments extends BaseFragment {
 
@@ -79,14 +81,17 @@ public class WallpaperFragments extends BaseFragment {
     if (imagePath == null) return;
 
     Glide.with(imageView.getContext())
-        .load(imagePath)
+        .load(
+            imagePath.endsWith(".xml")
+                ? new VectorModel(new File(imagePath), imageView.getContext())
+                : imagePath)
         .placeholder(GlideCompat.CircelPrograssBar())
         .error(R.drawable.ic_image)
         .into(
             new SimpleTarget<Drawable>() {
               @Override
               public void onResourceReady(Drawable resource, Transition<? super Drawable> t) {
-                crossfadeDrawable(imageView,resource,1000);
+                crossfadeDrawable(imageView, resource, 1000);
               }
             });
 
@@ -132,8 +137,6 @@ public class WallpaperFragments extends BaseFragment {
   public void setClick(OnItemClickListener click) {
     this.click = click;
   }
-
-  // ===== متدهایی که Adapter صدا می‌زند =====
 
   public void changeScaleType() {
     if (imageView == null) return;

@@ -5,23 +5,19 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.transition.Transition;
-import android.transition.TransitionManager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.OvershootInterpolator;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.color.MaterialColors;
-import com.google.android.material.shape.MaterialShapeDrawable;
 import com.google.android.material.shape.ShapeAppearanceModel;
 import static com.google.android.material.R.*;
-import com.google.android.material.transition.platform.MaterialSharedAxis;
 import com.ninjacoder.jgit.databinding.LayoutSearchsBinding;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.html.HtmlPlugin;
@@ -47,10 +43,6 @@ public class SearchBar extends FrameLayout implements TextWatcher {
     float radius = 20;
     background = attr.colorSurfaceContainerHigh;
     ShapeAppearanceModel shape = ShapeAppearanceModel.builder().setAllCornerSizes(radius).build();
-    MaterialShapeDrawable bg = new MaterialShapeDrawable(shape);
-    bg.setCornerSize(20);
-    bg.setFillColor(MaterialColors.getColorStateListOrNull(getContext(), background));
-    setBackground(bg);
     setShowAvatar(false);
     setHint(getMarkdowntext("**Search File...**"));
     binding.etSearch.addTextChangedListener(this);
@@ -80,8 +72,28 @@ public class SearchBar extends FrameLayout implements TextWatcher {
     binding.btnClear.setOnClickListener(
         v -> {
           binding.etSearch.setText("");
-          binding.btnClear.setVisibility(GONE);
+          animChange(binding.btnClear, false);
         });
+  }
+
+  void animChange(View v, boolean show) {
+    if (show) {
+      v.animate()
+          .scaleX(1)
+          .scaleY(1)
+          .alpha(1)
+          .setDuration(500)
+          .withStartAction(() -> v.setVisibility(View.VISIBLE)) // StartAction
+          .start();
+    } else {
+      v.animate()
+          .scaleX(0)
+          .scaleY(0)
+          .alpha(0)
+          .setDuration(500)
+          .withEndAction(() -> v.setVisibility(View.INVISIBLE))
+          .start();
+    }
   }
 
   /**
@@ -89,10 +101,10 @@ public class SearchBar extends FrameLayout implements TextWatcher {
    */
   public void setShowAvatar(boolean show) {
     this.showAvatar = show;
-    binding.imgAvatar.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+    animChange(binding.imgAvatar, show ? true : false);
   }
 
-  public void setAvatarOnClick(View.OnClickListener c) {
+  public void setAvatarOnClickListener(View.OnClickListener c) {
     binding.imgAvatar.setOnClickListener(c);
   }
 
@@ -107,7 +119,7 @@ public class SearchBar extends FrameLayout implements TextWatcher {
   @Override
   public void afterTextChanged(Editable s) {
     call.onafterTextChanged(s, s.toString());
-    binding.btnClear.setVisibility(s.length() > 0 ? View.VISIBLE : View.INVISIBLE);
+    animChange(binding.btnClear, s.length() > 0 ? true : false);
   }
 
   /**
@@ -149,18 +161,38 @@ public class SearchBar extends FrameLayout implements TextWatcher {
   }
 
   public void show() {
-    Transition sharedAxis = new MaterialSharedAxis(MaterialSharedAxis.Z, true);
-    TransitionManager.beginDelayedTransition(this, sharedAxis);
-    if (getVisibility() != VISIBLE) {
-      setVisibility(VISIBLE);
-    }
+    if (getVisibility() == VISIBLE) return;
+
+    setAlpha(0f);
+    setScaleX(0.8f);
+    setScaleY(0.8f);
+    setVisibility(VISIBLE);
+
+    animate()
+        .alpha(1f)
+        .scaleX(1f)
+        .scaleY(1f)
+        .setDuration(500)
+        .setInterpolator(new OvershootInterpolator())
+        .start();
   }
 
   public void hide() {
-    Transition sharedAxis = new MaterialSharedAxis(MaterialSharedAxis.Z, false);
-    TransitionManager.beginDelayedTransition(this, sharedAxis);
-    if (getVisibility() == VISIBLE) {
-      setVisibility(GONE);
-    }
+    if (getVisibility() != VISIBLE) return;
+
+    animate()
+        .alpha(0f)
+        .scaleX(0.5f)
+        .scaleY(0.5f)
+        .setDuration(400)
+        .setInterpolator(new AccelerateInterpolator())
+        .withEndAction(
+            () -> {
+              setVisibility(GONE);
+              setAlpha(1f);
+              setScaleX(1f);
+              setScaleY(1f);
+            })
+        .start();
   }
 }

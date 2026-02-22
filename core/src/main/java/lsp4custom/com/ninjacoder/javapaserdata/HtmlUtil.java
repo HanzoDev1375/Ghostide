@@ -15,4 +15,8 @@ public class HtmlUtil {
     var scriptTag = doc.select("script");
     return !scriptTag.isEmpty();
   }
+
+  public static String getH1(String code) {
+    return "<h1>" + code + "</h1>";
+  }
 }

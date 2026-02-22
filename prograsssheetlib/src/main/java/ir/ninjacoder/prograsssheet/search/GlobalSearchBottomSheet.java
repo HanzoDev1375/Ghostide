@@ -37,17 +37,24 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GlobalSearchBottomSheet extends BottomSheetDialogFragment {
+
   private ItemBottomsheetSearchBinding bind;
 
   public interface OnItemClickListener {
+
     void onItemClick(String filePath);
   }
 
   private SearchAdapter adapter;
+
   private GlobalSearchManager manager;
+
   private OnItemClickListener itemClickListener;
+
   private String pathInput;
+
   private int pendingIcon = -1;
+
   private String currentQuery = "";
 
   @Nullable
@@ -64,22 +71,18 @@ public class GlobalSearchBottomSheet extends BottomSheetDialogFragment {
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-
     adapter = new SearchAdapter();
     bind.resultsList.setLayoutManager(new LinearLayoutManager(getContext()));
     bind.resultsList.setAdapter(adapter);
-
     if (pendingIcon != -1) {
       adapter.setIcon(pendingIcon);
       pendingIcon = -1;
     }
-
     bind.fileCheck.setChecked(true);
     bind.folderCheck.setChecked(true);
     bind.hiddenCheck.setChecked(false);
     bind.searchButton.setOnClickListener(v -> startSearch());
     bind.stopButton.setOnClickListener(v -> stopSearch());
-
     bind.regexCheck.setOnCheckedChangeListener(
         (buttonView, isChecked) -> {
           bind.caseCheck.setEnabled(!isChecked);
@@ -90,7 +93,6 @@ public class GlobalSearchBottomSheet extends BottomSheetDialogFragment {
           bind.regexCheck.setEnabled(!isChecked);
           updateTextColor();
         });
-
     bind.progressBar.setWaveAmplitude(3);
     bind.progressBar.setWavelength(99);
   }
@@ -134,12 +136,9 @@ public class GlobalSearchBottomSheet extends BottomSheetDialogFragment {
     adapter.clear();
     setSearching(true);
     bind.resultsText.setText(getMarkDown("_Start Search..._"));
-
     manager = new GlobalSearchManager();
-
     File searchRoot;
     File initialFile = new File(pathInput);
-
     if (initialFile.exists()) {
       if (initialFile.isDirectory()) {
         searchRoot = initialFile;
@@ -156,12 +155,10 @@ public class GlobalSearchBottomSheet extends BottomSheetDialogFragment {
       setSearching(false);
       return;
     }
-
     Log.d("GlobalSearch", "Starting search in: " + searchRoot.getAbsolutePath());
     Log.d("GlobalSearch", "Query: " + query);
     Log.d("GlobalSearch", "Search files: " + bind.fileCheck.isChecked());
     Log.d("GlobalSearch", "Search folders: " + bind.folderCheck.isChecked());
-
     manager.search(
         searchRoot.getAbsolutePath(),
         query,
@@ -171,6 +168,7 @@ public class GlobalSearchBottomSheet extends BottomSheetDialogFragment {
         bind.folderCheck.isChecked(),
         bind.hiddenCheck.isChecked(),
         new SearchListener() {
+
           @Override
           public void onSearchStarted() {
             Log.d("GlobalSearch", "Search started");
@@ -218,7 +216,6 @@ public class GlobalSearchBottomSheet extends BottomSheetDialogFragment {
                         Log.d(
                             "GlobalSearch",
                             "Search completed. Found " + results.size() + " results");
-
                         if (results.isEmpty()) {
                           showMarkdownMessage("_No data found_");
                         } else {
@@ -260,7 +257,6 @@ public class GlobalSearchBottomSheet extends BottomSheetDialogFragment {
     bind.stopButton.setVisibility(searching ? View.VISIBLE : View.GONE);
     bind.progressBar.setVisibility(searching ? View.VISIBLE : View.GONE);
     bind.progressText.setVisibility(searching ? View.VISIBLE : View.GONE);
-
     bind.searchInput.setEnabled(!searching);
     bind.regexCheck.setEnabled(!searching);
     bind.caseCheck.setEnabled(!searching && !bind.regexCheck.isChecked());
@@ -301,14 +297,18 @@ public class GlobalSearchBottomSheet extends BottomSheetDialogFragment {
   private class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
 
     private List<HashMap<String, Object>> items = new ArrayList<>();
+
     private int icon = android.R.drawable.ic_menu_search;
     private String searchQuery = "";
     private boolean isRegexMode = false;
     private boolean isCaseSensitive = false;
 
     class ViewHolder extends RecyclerView.ViewHolder {
+
       ImageView icon;
-      TextView name;
+
+      SearchableTextView name;
+
       TextView path;
 
       ViewHolder(View itemView) {
@@ -333,9 +333,7 @@ public class GlobalSearchBottomSheet extends BottomSheetDialogFragment {
       HashMap<String, Object> item = items.get(position);
       String path = (String) item.get("path");
       String name = (String) item.get("name");
-
       if (icon != 0) holder.icon.setImageResource(icon);
-
       if (path.endsWith(".gif")) {
         Glide.with(holder.icon.getContext())
             .asGif()
@@ -352,7 +350,6 @@ public class GlobalSearchBottomSheet extends BottomSheetDialogFragment {
             .error(new ColorDrawable(Color.parseColor("#720110")))
             .into(holder.icon);
       }
-
       holder.path.setText(path);
       setHighlightSearchText(holder.name, name, searchQuery);
       holder.itemView.setOnClickListener(
@@ -396,59 +393,20 @@ public class GlobalSearchBottomSheet extends BottomSheetDialogFragment {
       this.isCaseSensitive = caseSensitive;
     }
 
-    void setHighlightSearchText(TextView textView, String fullText, String searchText) {
+    void setHighlightSearchText(SearchableTextView textView, String fullText, String searchText) {
+      textView.setText(fullText);
       if (searchText.isEmpty()) {
-        textView.setText(fullText);
+        textView.clearSearch();
         return;
       }
-
-      textView.setTextColor(MaterialColors.getColor(textView, getColorOnSurface()));
-
-      var spannableString = new SpannableString(fullText);
-      int startPos = -1;
-      int endPos = -1;
-
+      SearchTextHelper mod;
       if (isRegexMode) {
-        try {
-          int flags = isCaseSensitive ? 0 : Pattern.CASE_INSENSITIVE;
-          Pattern pattern = Pattern.compile(searchText, flags);
-          Matcher matcher = pattern.matcher(fullText);
-          if (matcher.find()) {
-            startPos = matcher.start();
-            endPos = matcher.end();
-          }
-        } catch (Exception e) {
-          textView.setText(fullText);
-          return;
-        }
-      } else {
-        if (isCaseSensitive) {
-          startPos = fullText.indexOf(searchText);
-        } else {
-          startPos = fullText.toLowerCase().indexOf(searchText.toLowerCase());
-        }
-        endPos = startPos + searchText.length();
-      }
+        mod = SearchTextHelper.REGEX;
+      } else if (isCaseSensitive) {
+        mod = SearchTextHelper.CASEMODE;
+      } else mod = SearchTextHelper.NORMAL;
 
-      if (startPos != -1 && startPos < fullText.length()) {
-        spannableString.setSpan(
-            new ForegroundColorSpan(Color.BLACK),
-            startPos,
-            endPos,
-            SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spannableString.setSpan(
-            new BackgroundColorSpan(Color.parseColor("#FFFFE0B2")),
-            startPos,
-            endPos,
-            SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spannableString.setSpan(
-            new RelativeSizeSpan(0.95f),
-            startPos,
-            endPos,
-            SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
-      }
-
-      textView.setText(spannableString);
+      textView.search(searchText, mod);
     }
 
     boolean getPath(String path) {
@@ -459,7 +417,6 @@ public class GlobalSearchBottomSheet extends BottomSheetDialogFragment {
               ".avi", ".mov", ".wmv", ".flv", ".mkv", ".webm", ".m4v", ".mpg", ".mpeg", ".3gp",
               ".mts", ".m2ts", ".vob", ".ogv", ".divx", ".f4v", ".h264", ".264", ".hevc", ".265",
               ".rm", ".rmvb", ".asf", ".mxf");
-
       for (var ext : extensions) {
         if (path.endsWith(ext)) {
           return true;

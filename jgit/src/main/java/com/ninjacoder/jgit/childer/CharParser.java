@@ -10,7 +10,7 @@ public class CharParser {
         || ch == '/'
         || ch == '-'
         || ch == '+'
-		|| ch == '*'
+        || ch == '*'
         || ch == '#'
         || ch == '='
         || ch == ':'

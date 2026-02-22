@@ -14,11 +14,7 @@ public class Materialize {
     return this.name;
   }
 
-  
-
   public String getId() {
     return this.id;
   }
-
-  
 }

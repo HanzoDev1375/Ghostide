@@ -252,7 +252,7 @@ public class SetHomeWallpActivity extends BaseCompat {
   private boolean canSetWallpaper(String path) {
     if (path == null) return false;
     String p = path.toLowerCase();
-    return !(p.endsWith(".svg") || p.endsWith(".gif"));
+    return !(p.endsWith(".svg") || p.endsWith(".gif") || p.endsWith(".xml"));
   }
 
   private void postGlide(String path) {
@@ -311,7 +311,6 @@ public class SetHomeWallpActivity extends BaseCompat {
           bind.toolbar.setTitleTextColor(imagecolor);
           bind.toolbar.setSubtitleTextColor(imagecolor);
           bind.fabMetadata.setImageTintList(ColorStateList.valueOf(imagecolor));
-          
         });
   }
 
@@ -336,7 +335,8 @@ public class SetHomeWallpActivity extends BaseCompat {
           || name.endsWith(".png")
           || name.endsWith(".webp")
           || name.endsWith(".gif")
-          || name.endsWith(".svg")) {
+          || name.endsWith(".svg")
+          || name.endsWith(".xml")) {
         list.add(f.getAbsolutePath());
       }
     }

@@ -1,31 +1,24 @@
 package ir.ninjacoder.ghostide.core.activities;
 
+import android.animation.Animator;
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
-import android.provider.MediaStore;
-import android.provider.OpenableColumns;
-import android.util.Log;
-import ir.ninjacoder.ghostide.core.git.GithubProfileImpl;
-import java.io.FileOutputStream;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Vibrator;
+import android.provider.MediaStore;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewTreeObserver;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,81 +26,76 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
-import androidx.appcompat.app.AlertDialog;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
+import com.airbnb.lottie.LottieAnimationView;
+import com.airbnb.lottie.LottieProperty;
+import com.airbnb.lottie.SimpleColorFilter;
+import com.airbnb.lottie.model.KeyPath;
+import com.airbnb.lottie.value.LottieValueCallback;
 import com.flask.colorpicker.ColorPickerView;
-import com.flask.colorpicker.OnColorSelectedListener;
-import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.mcal.uidesigner.XmlLayoutDesignActivity;
 import com.skydoves.powermenu.MenuAnimation;
-import com.skydoves.powermenu.OnMenuItemClickListener;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
 
 import ir.ninjacoder.prograsssheet.listchild.ChildAdapter;
-import ir.ninjacoder.prograsssheet.listchild.ChildIconEditorManager;
+import com.mcal.uidesigner.XmlLayoutDesignActivity;
+import java.io.FileOutputStream;
+import android.provider.OpenableColumns;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import io.github.rosemoe.sora.event.ContentChangeEvent;
-import io.github.rosemoe.sora.widget.CodeEditor;
-import io.github.rosemoe.sora.widget.EditorColorScheme;
-import ir.ninjacoder.ghostide.core.G4Compiler;
 import ir.ninjacoder.ghostide.core.IdeEditor;
-import ir.ninjacoder.ghostide.core.JavaCcComplierImpl;
 import ir.ninjacoder.ghostide.core.R;
+import ir.ninjacoder.ghostide.core.adapter.EditorPagerAdapter;
 import ir.ninjacoder.ghostide.core.adapter.SyspiarAdapter;
 import ir.ninjacoder.ghostide.core.adapter.ToolbarListFileAdapter;
-import ir.ninjacoder.ghostide.core.model.CodeEditorModel;
-import ir.ninjacoder.ghostide.core.pl.PluginChildRegistry;
-import ir.ninjacoder.ghostide.core.utils.AnimUtils;
-import ir.ninjacoder.ghostide.core.utils.FileUtil;
-import ir.ninjacoder.ghostide.core.utils.KeySet;
-import ir.ninjacoder.ghostide.core.utils.ThemeUtils;
-import ir.ninjacoder.ghostide.core.databinding.Antcomp8lerBinding;
-import ir.ninjacoder.ghostide.core.enums.CompilerModel;
 import ir.ninjacoder.ghostide.core.enums.Mode;
+import ir.ninjacoder.ghostide.core.fragments.EditorFragment;
+import ir.ninjacoder.ghostide.core.git.GithubProfileImpl;
 import ir.ninjacoder.ghostide.core.layoutmanager.LogCatBottomSheet;
 import ir.ninjacoder.ghostide.core.marco.CodeSnap;
 import ir.ninjacoder.ghostide.core.marco.ColorView;
-import ir.ninjacoder.ghostide.core.marco.FactoryCodeError;
 import ir.ninjacoder.ghostide.core.marco.GhostWebEditorSearch;
 import ir.ninjacoder.ghostide.core.marco.KotlinCompilerImpl;
 import ir.ninjacoder.ghostide.core.marco.WallpaperParallaxEffect;
+import ir.ninjacoder.ghostide.core.model.CodeEditorModel;
 import ir.ninjacoder.ghostide.core.model.EditorViewModel;
-import ir.ninjacoder.ghostide.core.navigator.EditorRoaderFile;
+import ir.ninjacoder.ghostide.core.pl.PluginChildRegistry;
 import ir.ninjacoder.ghostide.core.pl.PluginLoader;
 import ir.ninjacoder.ghostide.core.project.JavaCompilerBeta;
-import ir.ninjacoder.ghostide.core.project.ProjectManager;
 import ir.ninjacoder.ghostide.core.tasks.FileChangeReceiver;
-import ir.ninjacoder.ghostide.core.tasks.SecurePrefs;
-import ir.ninjacoder.ghostide.core.tasks.app.SassForAndroid;
 import ir.ninjacoder.ghostide.core.terminal.TerminalActivity;
+import ir.ninjacoder.ghostide.core.utils.AnimUtils;
 import ir.ninjacoder.ghostide.core.utils.CompilerUtils;
 import ir.ninjacoder.ghostide.core.utils.DataUtil;
+import ir.ninjacoder.ghostide.core.utils.FileUtil;
+import ir.ninjacoder.ghostide.core.utils.KeySet;
 import ir.ninjacoder.ghostide.core.utils.ObjectUtils;
+import ir.ninjacoder.ghostide.core.utils.ThemeUtils;
 import ir.ninjacoder.ghostide.core.widget.BlurImage;
 import ir.ninjacoder.ghostide.core.widget.ExrtaFab;
 import ir.ninjacoder.prograsssheet.VideoSurfaceView;
 import ir.ninjacoder.prograsssheet.listchild.Child;
+import ir.ninjacoder.prograsssheet.listchild.ChildIconEditorManager;
 
-public class CodeEditorActivity extends BaseCompat {
+public class CodeEditorActivity extends BaseCompat
+    implements EditorPagerAdapter.OnEditorPageListener {
 
   public final int REQ_CD_SETPASZAMINE = 101;
 
@@ -120,66 +108,38 @@ public class CodeEditorActivity extends BaseCompat {
   private double ic = 1;
   private ArrayList<CodeEditorModel> tabsList = new ArrayList<>();
   private ArrayList<HashMap<String, Object>> staticSymbiolPiare = new ArrayList<>();
-  private final ArrayList<String> string = new ArrayList<>();
 
   private LinearLayout multytab;
-  private FrameLayout FrameLayout01;
   private LinearLayout newLayoutSymbolBar;
   private LinearLayout CustomToolbar;
   private ProgressBar progressbar1;
   private RecyclerView dir, rvmenueditor;
   private TextView titleauthor;
   private ImageView image, redo, undo, menupopnew, iconAuthor, codesnapimg, setting;
-  private LinearLayout FrameLayout02;
   private LinearLayout linear3, getColorPass;
-  private ProgressBar proanjctor;
   private LinearLayout barSymoble;
-  private ImageView imageview1, imageloadereditor, avatargithubuser;
+  private ImageView imageview1, avatargithubuser;
   private RecyclerView syspiar;
-
-  private final Intent htmlrus = new Intent();
-  private SharedPreferences word, line, shp, qo, savecursor;
-  private AlertDialog.Builder myDialog;
-  private final Intent res = new Intent();
-
-  private AlertDialog.Builder di;
-  private final Intent jsonview = new Intent();
-  private final Intent getmd = new Intent();
-  private Vibrator vb;
-  private SharedPreferences getvb;
-
-  private SharedPreferences re;
-  private SharedPreferences war;
-  private SharedPreferences setfont;
-  private SharedPreferences ru;
-
-  private SharedPreferences tabimageview;
-
-  private PowerMenu pvr;
-
-  private final Intent setPaszamine = new Intent(Intent.ACTION_GET_CONTENT);
-  private SharedPreferences pss;
-  private SharedPreferences sve;
-  private TabLayout tablayouteditor;
-  private SharedPreferences getinitdir;
-  private SharedPreferences mthemepost;
   private ImageView ghostIcon;
-  private SharedPreferences shSizePx;
-  private List<ChildIconEditorManager> aars = new ArrayList<>();
-  private SharedPreferences t;
-  private SharedPreferences thememanagersoft;
-  private SharedPreferences sf;
+  private VideoSurfaceView mvideo;
   private GhostWebEditorSearch ghost_searchs;
 
-  private EditorViewModel modelEditor;
-  private String path;
+  private SharedPreferences word, line, shp, qo, savecursor, getvb, re, war, setfont, ru;
+  private SharedPreferences tabimageview, pss, sve, getinitdir, mthemepost, shSizePx, t;
+  private SharedPreferences thememanagersoft, sf;
+  private Vibrator vb;
 
-  private IdeEditor editor;
-  private VideoSurfaceView mvideo;
-  private boolean isFileChangeDialogShowing = false;
+  private TabLayout tablayouteditor;
+  private ViewPager2 viewPager;
+  private EditorPagerAdapter pagerAdapter;
+  private EditorViewModel modelEditor;
+  private List<ChildIconEditorManager> aars = new ArrayList<>();
   private List<Child> listChild = new ArrayList<>();
   private PluginLoader pluginLoader;
   private String currentFileType = "";
+  private PowerMenu pvr;
+  private int currentPosition = 0;
+  private Handler mainHandler = new Handler(Looper.getMainLooper());
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
@@ -191,12 +151,10 @@ public class CodeEditorActivity extends BaseCompat {
   }
 
   private void initialize(Bundle _savedInstanceState) {
-
     _fab = findViewById(R.id._fab);
     getColorPass = findViewById(R.id.getColorPass);
     Coordinator = findViewById(R.id.Coordinator);
     multytab = findViewById(R.id.multytab);
-    FrameLayout01 = findViewById(R.id.FrameLayout01);
     newLayoutSymbolBar = findViewById(R.id.newLayoutSymbolBar);
     CustomToolbar = findViewById(R.id.CustomToolbar);
     progressbar1 = findViewById(R.id.progressbar1);
@@ -210,35 +168,28 @@ public class CodeEditorActivity extends BaseCompat {
     codesnapimg = findViewById(R.id.codesnapimg);
     tablayouteditor = findViewById(R.id.tablayouteditor);
     menupopnew = findViewById(R.id.menupopnew);
-    FrameLayout02 = findViewById(R.id.FrameLayout02);
     linear3 = findViewById(R.id.linear3);
-    proanjctor = findViewById(R.id.proanjctor);
     barSymoble = findViewById(R.id.barSymoble);
     imageview1 = findViewById(R.id.imageview1);
     ghost_searchs = findViewById(R.id.editor_ser);
     rvmenueditor = findViewById(R.id.rvmenueditor);
-    ghost_searchs.hide();
-    editor = findViewById(R.id.editor);
+    viewPager = findViewById(R.id.viewPager);
     syspiar = findViewById(R.id.syspiar);
     mvideo = findViewById(R.id.videoback);
+    ghostIcon = findViewById(R.id.icon_backgroundghost);
+    iconAuthor = findViewById(R.id.iconAuthor);
     savecursor = getSharedPreferences("editor", MODE_PRIVATE);
     word = getSharedPreferences("word", MODE_PRIVATE);
     line = getSharedPreferences("line", MODE_PRIVATE);
     shp = getSharedPreferences("shp", MODE_PRIVATE);
     qo = getSharedPreferences("qo", MODE_PRIVATE);
-    myDialog = new AlertDialog.Builder(this);
-    di = new AlertDialog.Builder(this);
     vb = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
     getvb = getSharedPreferences("getvb", Activity.MODE_PRIVATE);
     re = getSharedPreferences("re", Activity.MODE_PRIVATE);
     war = getSharedPreferences("war", Activity.MODE_PRIVATE);
     setfont = getSharedPreferences("setfont", Activity.MODE_PRIVATE);
-    pluginLoader = new PluginLoader();
-
     ru = getSharedPreferences("ru", Activity.MODE_PRIVATE);
     tabimageview = getSharedPreferences("tabimageview", Activity.MODE_PRIVATE);
-    setPaszamine.setType("image/*");
-    setPaszamine.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
     pss = getSharedPreferences("pss", Activity.MODE_PRIVATE);
     sve = getSharedPreferences("sve", Activity.MODE_PRIVATE);
     getinitdir = getSharedPreferences("getinitdir", Activity.MODE_PRIVATE);
@@ -247,287 +198,114 @@ public class CodeEditorActivity extends BaseCompat {
     t = getSharedPreferences("t", Activity.MODE_PRIVATE);
     thememanagersoft = getSharedPreferences("thememanagersoft", Activity.MODE_PRIVATE);
     sf = getSharedPreferences("sf", Activity.MODE_PRIVATE);
-    iconAuthor = findViewById(R.id.iconAuthor);
-    imageloadereditor = findViewById(R.id.imageloadereditor);
+
+    pluginLoader = new PluginLoader();
     modelEditor = new ViewModelProvider(this).get(EditorViewModel.class);
     themeForJson2 = new ThemeUtils();
-    ghostIcon = findViewById(R.id.icon_backgroundghost);
-    var mRootView = getWindow().getDecorView();
+    ghost_searchs.hide();
+
     syspiar.setVisibility(View.GONE);
     rvmenueditor.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
     rvmenueditor.setAdapter(new ChildAdapter(aars));
-    var userview = new SecurePrefs(this);
+
     handleIncomingIntent(getIntent());
-    GithubProfileImpl.bindByActivity(titleauthor, avatargithubuser);
-    AnimUtils.rotateBySetting(setting, this);
-    ghostIcon.animate().scaleX(1.0f).scaleY(1.0f).setDuration(1000).start();
-    mRootView
-        .getViewTreeObserver()
-        .addOnGlobalLayoutListener(
-            new ViewTreeObserver.OnGlobalLayoutListener() {
-              @Override
-              public void onGlobalLayout() {
-                Rect r = new Rect();
-                mRootView.getWindowVisibleDisplayFrame(r);
-                int screenHeight = mRootView.getRootView().getHeight();
-                int keypadHeight = screenHeight - r.bottom;
-
-                if (keypadHeight > screenHeight * 0.15) {
-                  float minScale = 1.0f;
-                  ghostIcon.animate().scaleX(minScale).scaleY(minScale).setDuration(1000).start();
-                  ObjectUtils.showViewWithAnimation(syspiar);
-                } else {
-                  var max = 1.4f;
-                  ghostIcon
-                      .animate()
-                      .scaleX(Math.max(max, 1))
-                      .scaleY(Math.max(max, 1))
-                      .setDuration(1000)
-                      .start();
-                  ObjectUtils.hideViewWithAnimation(syspiar, _fab);
-                }
-              }
-            });
-
-    ghost_searchs.bindEditor(editor);
-    ghost_searchs.setCallBack(
-        new GhostWebEditorSearch.onViewChange() {
-          @Override
-          public void onViewShow() {
-            if (_fab.getVisibility() == View.VISIBLE) {
-              _fab.hide();
-            }
-          }
-
-          @Override
-          public void onViewHide() {
-            if (_fab.getVisibility() == View.GONE) {
-              _fab.show();
-            }
-          }
-        });
-
-    image.setOnClickListener(
-        (it) -> {
-          if (ic == 1) {
-            image.setImageResource(R.drawable.noeye);
-            editor.setEditable(false);
-            ic--;
-          } else {
-            editor.setEditable(true);
-            image.setImageResource(R.drawable.okeye);
-            ic++;
-          }
-        });
-
-    getOnBackPressedDispatcher()
-        .addCallback(
-            this,
-            new OnBackPressedCallback(true) {
-              @Override
-              public void handleOnBackPressed() {
-                ObjectUtils.setSaveOprator(
-                    tabsList, editor, tablayouteditor, CodeEditorActivity.this);
-              }
-            });
-
-    redo.setOnClickListener((v) -> editor.AutoRedo());
-    undo.setOnClickListener((it) -> editor.AutoUndo());
-    menupopnew.setOnClickListener((___) -> setManagerpanel(menupopnew));
-    imageview1.setOnClickListener(
-        (it) -> {
-          barSymoble.setVisibility(View.GONE);
-          _fab.setVisibility(View.VISIBLE);
-        });
-    _fab.setOnClickListener((it) -> FabFileRuner());
-    codesnapimg.setOnClickListener(
-        v -> new CodeSnap(CodeEditorActivity.this, getTabPathCode(), editor));
-
-    List<Child> editorPluginChildren = PluginChildRegistry.getCodeEditorChildren();
-    for (Child child : editorPluginChildren) {
-      listChild.add(child);
-    }
-  }
-
-  @Override
-  protected void onNewIntent(Intent intent) {
-    super.onNewIntent(intent);
-    handleIncomingIntent(intent);
-  }
-
-  private void handleIncomingIntent(Intent intent) {
-    if (intent == null || intent.getAction() == null) {
-      return;
-    }
-
-    if (Intent.ACTION_VIEW.equals(intent.getAction())) {
-      Uri uri = intent.getData();
-      if (uri != null) {
-        openFileFromUri(uri);
-      }
-    }
-  }
-
-  private void openFileFromUri(Uri uri) {
-    new Handler()
-        .post(
-            () -> {
-              try {
-                String filePath = getRealPathFromUri(uri);
-                if (filePath == null || !FileUtil.isExistFile(filePath)) {
-                  Toast.makeText(this, "Error opening file", Toast.LENGTH_LONG).show();
-                  return;
-                }
-
-                SharedPreferences.Editor editorPrefs = shp.edit();
-                editorPrefs.putString("pos_path", filePath).apply();
-
-                int existingTabIndex = -1;
-                for (int i = 0; i < tabsList.size(); i++) {
-                  if (filePath.equals(tabsList.get(i).getPath())) {
-                    existingTabIndex = i;
-                    break;
-                  }
-                }
-
-                if (existingTabIndex != -1) {
-                  editorPrefs.putString("positionTabs", String.valueOf(existingTabIndex)).apply();
-                  TabLayout.Tab tab = tablayouteditor.getTabAt(existingTabIndex);
-                  if (tab != null) {
-                    tablayouteditor.post(() -> tab.select());
-                  }
-                  return;
-                }
-
-                String fileName = new File(filePath).getName();
-                CodeEditorModel newTab =
-                    new CodeEditorModel(
-                        fileName, filePath, String.valueOf(tabsList.size()), false, false);
-                tabsList.add(newTab);
-
-                editorPrefs.putString("path", new Gson().toJson(tabsList)).apply();
-                editorPrefs.putString("positionTabs", String.valueOf(tabsList.size() - 1)).apply();
-
-                TabLayout.Tab newTabView = tablayouteditor.newTab().setText(fileName);
-                tablayouteditor.addTab(newTabView);
-                tablayouteditor.post(() -> newTabView.select());
-
-              } catch (Exception e) {
-                e.printStackTrace();
-                Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-              }
-            });
-  }
-
-  private String getRealPathFromUri(Uri uri) {
-    String filePath = null;
-
-    try {
-      if ("file".equals(uri.getScheme())) {
-        filePath = uri.getPath();
-      } else if ("content".equals(uri.getScheme())) {
-        Cursor cursor =
-            getContentResolver()
-                .query(uri, new String[] {MediaStore.MediaColumns.DATA}, null, null, null);
-
-        if (cursor != null && cursor.moveToFirst()) {
-          int columnIndex = cursor.getColumnIndex(MediaStore.MediaColumns.DATA);
-          if (columnIndex != -1) {
-            filePath = cursor.getString(columnIndex);
-          }
-          cursor.close();
-        }
-
-        if (filePath == null) {
-          filePath = copyFileFromContentUri(uri);
-        }
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-
-    return filePath;
-  }
-
-  private String copyFileFromContentUri(Uri uri) {
-    try {
-      InputStream inputStream = getContentResolver().openInputStream(uri);
-      if (inputStream == null) return null;
-      String fileName = "opened_file";
-      Cursor cursor =
-          getContentResolver()
-              .query(uri, new String[] {OpenableColumns.DISPLAY_NAME}, null, null, null);
-
-      if (cursor != null && cursor.moveToFirst()) {
-        int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-        if (nameIndex != -1) {
-          fileName = cursor.getString(nameIndex);
-        }
-        cursor.close();
-      }
-
-      File tempDir = new File("/storage/emulated/0/GhostWebIDE/temp/");
-      if (!tempDir.exists()) {
-        tempDir.mkdirs();
-      }
-
-      File outputFile = new File(tempDir, fileName);
-      FileOutputStream outputStream = new FileOutputStream(outputFile);
-      byte[] buffer = new byte[4096];
-      int bytesRead;
-      while ((bytesRead = inputStream.read(buffer)) != -1) {
-        outputStream.write(buffer, 0, bytesRead);
-      }
-
-      outputStream.close();
-      inputStream.close();
-
-      return outputFile.getAbsolutePath();
-
-    } catch (Exception e) {
-      e.printStackTrace();
-      return null;
-    }
-  }
-
-  public void addChild(Child child) {
-    listChild.add(child);
-  }
-
-  public void addChildManagerEditor(ChildIconEditorManager model) {
-    aars.add(model);
-  }
-
-  String getTabPathCode() {
-    int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
-    if (selectedTabPosition >= 0 && selectedTabPosition < tabsList.size()) {
-      return tabsList.get(selectedTabPosition).getPath();
-    }
-    return "";
-  }
-
-  public IdeEditor getEditor() {
-    return editor;
-  }
-
-  public String getPathBytab() {
-    int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
-    if (selectedTabPosition >= 0 && selectedTabPosition < tabsList.size()) {
-      return tabsList.get(selectedTabPosition).getPath();
-    }
-    return "";
-  }
-
-  public TabLayout getEditorTabLayout() {
-    return tablayouteditor;
   }
 
   private void initializeLogic() {
-    proanjctor.setVisibility(View.GONE);
+    progressbar1.setVisibility(View.GONE);
     barSymoble.setVisibility(View.VISIBLE);
     setWallpaperParallaxEffect();
-    imap = new HashMap<>();
+    loadTheme();
+    pagerAdapter = new EditorPagerAdapter(this, imap, this);
+    viewPager.setAdapter(pagerAdapter);
+    viewPager.setOffscreenPageLimit(3);
+    viewPager.registerOnPageChangeCallback(
+        new ViewPager2.OnPageChangeCallback() {
+          @Override
+          public void onPageSelected(int position) {
+            super.onPageSelected(position);
+            currentPosition = position;
+            updateCurrentFileType(position);
+            setDistreeView();
+            if (position < tabsList.size()) {
+              String path = tabsList.get(position).getPath();
+              shp.edit().putString("pos_path", path).apply();
+              shp.edit().putString("positionTabs", String.valueOf(position)).apply();
+            }
+          }
+        });
 
+    viewPager.setUserInputEnabled(false);
+    new TabLayoutMediator(
+            tablayouteditor,
+            viewPager,
+            (tab, position) -> {
+              if (position < tabsList.size()) {
+                CodeEditorModel model = tabsList.get(position);
+                String tabText = new File(model.getPath()).getName();
+                TabLayout.Tab customTab = createAnimatedTab(tabText, model.getPinmod());
+                tab.setCustomView(customTab.getCustomView());
+                tab.setText(customTab.getText());
+              }
+            })
+        .attach();
+
+    setupTabListeners();
+    setupToolbar();
+    setupSymbolBar();
+    loadSavedTabs();
+
+    GithubProfileImpl.bindByActivity(titleauthor, avatargithubuser);
+    AnimUtils.rotateBySetting(setting, this);
+    AnimUtils.ClickAnimation(menupopnew);
+    AnimUtils.ClickAnimation(undo);
+    AnimUtils.ClickAnimation(redo);
+    AnimUtils.ClickAnimation(image);
+    AnimUtils.Worker(_fab);
+
+    setupKeyboardListener();
+    setupVideoBackground();
+    setupFileWatching();
+
+    List<Child> editorPluginChildren = PluginChildRegistry.getCodeEditorChildren();
+    listChild.addAll(editorPluginChildren);
+    setupSearchBarCallback();
+    bindEditorToSearchBar();
+  }
+
+  private interface EditorAction {
+    void execute(IdeEditor editor);
+  }
+
+  private void executeOnEditor(int position, EditorAction action) {
+    executeOnEditor(position, action, null);
+  }
+
+  private void executeOnEditor(int position, EditorAction action, String actionName) {
+    EditorFragment fragment = pagerAdapter.getFragmentAt(position);
+
+    if (fragment != null && fragment.isAdded() && fragment.getEditor() != null) {
+      action.execute(fragment.getEditor());
+    } else {
+      String finalActionName = actionName != null ? actionName : "عملیات";
+      Toast.makeText(this, finalActionName + " در حال آماده سازی...", Toast.LENGTH_SHORT).show();
+
+      mainHandler.postDelayed(
+          () -> {
+            EditorFragment delayedFragment = pagerAdapter.getFragmentAt(position);
+            if (delayedFragment != null
+                && delayedFragment.isAdded()
+                && delayedFragment.getEditor() != null) {
+              action.execute(delayedFragment.getEditor());
+            } else {
+              Toast.makeText(this, "خطا: ادیتور آماده نیست", Toast.LENGTH_SHORT).show();
+            }
+          },
+          300);
+    }
+  }
+
+  private void loadTheme() {
     if (FileUtil.isExistFile(thememanagersoft.getString("themes", ""))) {
       if (thememanagersoft.contains("themes")) {
         imap =
@@ -544,119 +322,6 @@ public class CodeEditorActivity extends BaseCompat {
                   new TypeToken<HashMap<String, Object>>() {}.getType());
     }
 
-    editor.setKeyboardOperation(
-        new CodeEditor.OnKeyboardOperation() {
-          @Override
-          public void Tab() {}
-
-          @Override
-          public void Space() {}
-
-          @Override
-          public void Removed() {}
-
-          @Override
-          public void Enter() {}
-        });
-
-    if (sf.contains("sd100")) {
-      if (sf.getInt("sd100", 1) == 1) {
-        editor.setCompletionWndPositionMode(CodeEditor.WINDOW_POS_MODE_AUTO);
-      } else if (sf.getInt("sd100", 1) == 2) {
-        editor.setCompletionWndPositionMode(CodeEditor.WINDOW_POS_MODE_FOLLOW_CURSOR_ALWAYS);
-      } else if (sf.getInt("sd100", 1) == 3) {
-        editor.setCompletionWndPositionMode(CodeEditor.WINDOW_POS_MODE_FULL_WIDTH_ALWAYS);
-      }
-    }
-
-    if (getvb.contains("chars")) {
-      editor.setCustomCharName(getvb.getString("chars", ""));
-    }
-
-    var projectz = new ProjectManager();
-    projectz.setProjectName(getIntent().getStringExtra("root"));
-
-    editor.subscribeEvent(
-        ContentChangeEvent.class,
-        (event, subscribe) -> {
-          var iscode = new FactoryCodeError(editor, iconAuthor, tablayouteditor);
-          int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
-          if (selectedTabPosition >= 0 && selectedTabPosition < tabsList.size()) {
-            ObjectUtils.addStarToTab(selectedTabPosition, tablayouteditor);
-            CodeEditorModel model = tabsList.get(selectedTabPosition);
-            model.setTextchange(true);
-          }
-          new Handler(Looper.getMainLooper()).postDelayed(() -> iscode.run(), 3000);
-        });
-
-    if (sve.contains("getAutoSave")) {
-      if (sve.getString("getAutoSave", "").equals("true")) {
-        FileChangeReceiver.stopWatching();
-        editor.subscribeEvent(
-            ContentChangeEvent.class,
-            (event, subscribe) -> {
-              try {
-                FileChangeReceiver.stopWatching();
-                int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
-                if (selectedTabPosition >= 0 && selectedTabPosition < tabsList.size()) {
-                  String selectedFilePath = tabsList.get(selectedTabPosition).getPath();
-                  String fileContent = editor.getText().toString();
-                  FileUtil.writeFile(selectedFilePath, fileContent);
-                  ObjectUtils.removedStarToTab(selectedTabPosition, tablayouteditor);
-                  CodeEditorModel model = tabsList.get(selectedTabPosition);
-                  model.setTextchange(false);
-                }
-              } catch (Exception e) {
-                DataUtil.showMessage(getApplicationContext(), "Error not File saved!");
-              }
-            });
-      } else {
-        int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
-        if (selectedTabPosition >= 0 && selectedTabPosition < tabsList.size()) {
-          String selectedFilePath = tabsList.get(selectedTabPosition).getPath();
-          String fileContent = editor.getText().toString();
-          FileUtil.writeFile(selectedFilePath, fileContent);
-          ObjectUtils.removedStarToTab(selectedTabPosition, tablayouteditor);
-          CodeEditorModel model = tabsList.get(selectedTabPosition);
-          model.setTextchange(false);
-          FileChangeReceiver.startWatching(
-              CodeEditorActivity.this,
-              selectedFilePath,
-              (filePath) -> {
-                FileChangeReceiver.showFileChangedDialog(
-                    CodeEditorActivity.this,
-                    filePath,
-                    () -> {
-                      setCodeEditorFileReader(filePath);
-                    });
-              });
-        }
-      }
-    }
-
-    Symbloinit();
-    ReloadFileInPos();
-
-    if (shp.contains("pos_path")) {
-      if (!shp.getString("pos_path", "").equals("")) {
-        setCodeEditorFileReader(shp.getString("pos_path", ""));
-      }
-    }
-
-    FileUtil.writeFile(
-        "/storage/emulated/0/GhostWebIDE/ninjacoder/openFile.json", shp.getString("path", ""));
-    progressbar1.setVisibility(View.GONE);
-
-    if (re.getString("f380", "").equals("true")) {
-      editor.setNonPrintablePaintingFlags(CodeEditor.FLAG_DRAW_LINE_SEPARATOR);
-    }
-
-    getWindow()
-        .setSoftInputMode(
-            WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
-                | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-
-    themeForJson2.setThemeCodeEditor(editor, imap, false, this);
     themeForJson2.addTextColor(
         titleauthor, KeySet.syombolbartextcolor, Color.parseColor("#FFFFA0FB"), this, imap);
     themeForJson2.addImageColor(undo, this, KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
@@ -669,94 +334,315 @@ public class CodeEditorActivity extends BaseCompat {
     themeForJson2.addImageColor(
         menupopnew, this, KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
     themeForJson2.setFabBackground(_fab, imap);
-    AnimUtils.ClickAnimation(menupopnew);
 
     tablayouteditor.setSelectedTabIndicatorColor(
         imap.containsKey(KeySet.tabback)
             ? Color.parseColor(imap.get(KeySet.tabback).toString())
-            : MaterialColors.getColor(tablayouteditor, ObjectUtils.Back));
+            : MaterialColors.getColor(tablayouteditor, ObjectUtils.colorPrimary));
+
     tablayouteditor.setTabTextColors(
         ColorStateList.valueOf(
             imap.containsKey(KeySet.tabtextcolor)
                 ? Color.parseColor(imap.get(KeySet.tabtextcolor).toString())
-                : MaterialColors.getColor(tablayouteditor, ObjectUtils.TvColor)));
+                : MaterialColors.getColor(tablayouteditor, android.R.attr.textColor)));
 
-    AnimUtils.ClickAnimation(undo);
-    AnimUtils.ClickAnimation(redo);
-    AnimUtils.Worker(_fab);
-
-    editor
-        .getColorScheme()
-        .setColor(EditorColorScheme.MATCHED_TEXT_BACKGROUND, Color.parseColor("#75800F31"));
-
-    if (setfont.contains("mfont")) {
-      if (!FileUtil.isFile(setfont.getString("mfont", ""))) {
-        editor.setTypefaceText(Typeface.createFromAsset(getAssets(), "ghostfont.ttf"));
-        editor.setTypefaceLineNumber(Typeface.createFromAsset(getAssets(), "ghostfont.ttf"));
-        DataUtil.showMessage(getApplicationContext(), "Custom Font Not Found");
-        titleauthor.setTypeface(
-            Typeface.createFromAsset(getAssets(), "fonts/ghostfont.ttf"), Typeface.NORMAL);
-      } else {
-        setFontEditorFromFile(setfont.getString("mfont", ""));
-        titleauthor.setTypeface(Typeface.createFromFile(new File(setfont.getString("mfont", ""))));
-      }
-    } else {
-      editor.setTypefaceText(Typeface.createFromAsset(getAssets(), "ghostfont.ttf"));
-      editor.setTypefaceLineNumber(Typeface.createFromAsset(getAssets(), "ghostfont.ttf"));
-      titleauthor.setTypeface(
-          Typeface.createFromAsset(getAssets(), "fonts/ghostfont.ttf"), Typeface.NORMAL);
-    }
-
-    var data = thememanagersoft.contains("br") ? thememanagersoft.getFloat("br", 2) : 3;
-    mvideo.setLifecycle(getLifecycle());
-
-    if (getvb.getString("dir", "").endsWith(".mp4")) {
-      mvideo.setPath(getvb.getString("dir", ""));
-      mvideo.setVisibility(View.VISIBLE);
-    } else {
-      mvideo.setVisibility(View.GONE);
-      mvideo.releasePlayer();
-    }
-
-    BlurImage.setBlurInWallpaperMobile(this, data, ghostIcon);
     getColorPass.setBackgroundColor(Color.parseColor(imap.get("backgroundcolorlinear").toString()));
 
-    if (getinitdir.contains("mdir")) {
-      if (getinitdir.getString("mdir", "").equals("true")) {
-        dir.setVisibility(View.GONE);
-      } else {
-        dir.setVisibility(View.VISIBLE);
-      }
+    if (imap.containsKey("tabback") && Build.VERSION.SDK_INT >= 21) {
+      progressbar1
+          .getIndeterminateDrawable()
+          .setColorFilter(Color.parseColor(imap.get("tabback").toString()), PorterDuff.Mode.SRC_IN);
     }
-
-    if (imap.containsKey("tabback")) {
-      if (Build.VERSION.SDK_INT >= 21) {
-        proanjctor
-            .getIndeterminateDrawable()
-            .setColorFilter(
-                Color.parseColor(imap.get("tabback").toString()), PorterDuff.Mode.SRC_IN);
-        progressbar1
-            .getIndeterminateDrawable()
-            .setColorFilter(
-                Color.parseColor(imap.get("tabback").toString()), PorterDuff.Mode.SRC_IN);
-      }
-    } else {
-      if (Build.VERSION.SDK_INT >= 21) {
-        proanjctor.getIndeterminateDrawable().setColorFilter(0xFFFFB689, PorterDuff.Mode.SRC_IN);
-        progressbar1.getIndeterminateDrawable().setColorFilter(0xFFFFB689, PorterDuff.Mode.SRC_IN);
-      }
-    }
-
-    AnimUtils.ClickAnimation(image);
-
-    if (mthemepost.getString("mytheme", "").equals("true")) {
-      EdgeToEdge.enable(this);
+    if (pagerAdapter != null) {
+      pagerAdapter.updateTheme(imap);
     }
   }
 
-  void setManagerpanel(final View _view) {
+  private TabLayout.Tab createAnimatedTab(String tabText, boolean isPinned) {
+    View tabView = getLayoutInflater().inflate(R.layout.tab_custom_layout, null);
+    LottieAnimationView animationView = tabView.findViewById(R.id.animation_view);
+    TextView textView = tabView.findViewById(R.id.text_view);
+    textView.setText(tabText);
+    int textColor =
+        imap.containsKey(KeySet.tabtextcolor)
+            ? Color.parseColor(imap.get(KeySet.tabtextcolor).toString())
+            : MaterialColors.getColor(tablayouteditor, android.R.attr.textColor);
+    textView.setTextColor(textColor);
+
+    if (isPinned) {
+      animationView.setVisibility(View.VISIBLE);
+      animationView.setAnimation(R.raw.ic_pin);
+      SimpleColorFilter filter = new SimpleColorFilter(textColor);
+      animationView.addValueCallback(
+          new KeyPath("**"), LottieProperty.COLOR_FILTER, new LottieValueCallback<>(filter));
+      animationView.playAnimation();
+      animationView.setProgress(1f);
+    } else {
+      animationView.setVisibility(View.GONE);
+    }
+
+    TabLayout.Tab tab = tablayouteditor.newTab();
+    tab.setCustomView(tabView);
+    return tab;
+  }
+
+  private void setupTabListeners() {
+    tablayouteditor.addOnTabSelectedListener(
+        new TabLayout.OnTabSelectedListener() {
+          @Override
+          public void onTabSelected(TabLayout.Tab tab) {
+            if (tab.getPosition() != viewPager.getCurrentItem()) {
+              viewPager.setCurrentItem(tab.getPosition(), false);
+            }
+          }
+
+          @Override
+          public void onTabUnselected(TabLayout.Tab tab) {}
+
+          @Override
+          public void onTabReselected(TabLayout.Tab tab) {
+            showTabContextMenu(tab.getPosition());
+          }
+        });
+
+    viewPager.registerOnPageChangeCallback(
+        new ViewPager2.OnPageChangeCallback() {
+          @Override
+          public void onPageSelected(int position) {
+            super.onPageSelected(position);
+            TabLayout.Tab tab = tablayouteditor.getTabAt(position);
+            if (tab != null && !tab.isSelected()) {
+              tab.select();
+            }
+          }
+        });
+  }
+
+  private void showTabContextMenu(int position) {
+    if (position >= tabsList.size()) return;
+
+    CodeEditorModel model = tabsList.get(position);
+    PowerMenu powers =
+        new PowerMenu.Builder(this)
+            .addItem(new PowerMenuItem("close"))
+            .addItem(new PowerMenuItem("close other"))
+            .addItem(new PowerMenuItem("close all"))
+            .addItem(new PowerMenuItem(model.getPinmod() ? "unpin" : "pin"))
+            .setIsMaterial(true)
+            .setShowBackground(false)
+            .setAutoDismiss(true)
+            .setMenuColor(
+                imap.containsKey(KeySet.menuPosBackground)
+                    ? Color.parseColor(imap.get(KeySet.menuPosBackground).toString())
+                    : MaterialColors.getColor(
+                        this, com.google.android.material.R.attr.colorSurface, 0))
+            .setTextColor(
+                imap.containsKey(KeySet.menuPosTextColor)
+                    ? Color.parseColor(imap.get(KeySet.menuPosTextColor).toString())
+                    : MaterialColors.getColor(this, android.R.attr.textColor, 0))
+            .setMenuRadius(15)
+            .setAnimation(MenuAnimation.FADE)
+            .build();
+
+    powers.setOnMenuItemClickListener(
+        (ii, c) -> {
+          switch (ii) {
+            case 0:
+              if (!model.getPinmod()) {
+                closeTab(position);
+              } else {
+                Toast.makeText(this, "این تب پین شده است", Toast.LENGTH_SHORT).show();
+              }
+              break;
+            case 1:
+              closeOtherTabs(position);
+              break;
+            case 2:
+              closeAllTabs();
+              break;
+            case 3:
+              togglePinTab(position);
+              break;
+          }
+        });
+    powers.showAsDropDown(tablayouteditor.getTabAt(position).view);
+  }
+
+  private void closeTab(int position) {
+    if (position >= 0 && position < tabsList.size()) {
+      tabsList.remove(position);
+      pagerAdapter.setTabs(tabsList);
+      shp.edit().putString("path", new Gson().toJson(tabsList)).apply();
+
+      if (tabsList.isEmpty()) {
+        finish();
+      } else {
+        int newPos = Math.min(position, tabsList.size() - 1);
+        viewPager.setCurrentItem(newPos);
+      }
+    }
+  }
+
+  private void closeOtherTabs(int position) {
+    CodeEditorModel current = tabsList.get(position);
+    ArrayList<CodeEditorModel> newList = new ArrayList<>();
+    newList.add(current);
+
+    for (int i = 0; i < tabsList.size(); i++) {
+      if (i != position && tabsList.get(i).getPinmod()) {
+        newList.add(tabsList.get(i));
+      }
+    }
+
+    tabsList = newList;
+    pagerAdapter.setTabs(tabsList);
+    shp.edit().putString("path", new Gson().toJson(tabsList)).apply();
+    viewPager.setCurrentItem(0);
+  }
+
+  private void closeAllTabs() {
+    ArrayList<CodeEditorModel> pinnedTabs = new ArrayList<>();
+    for (CodeEditorModel model : tabsList) {
+      if (model.getPinmod()) {
+        pinnedTabs.add(model);
+      }
+    }
+
+    tabsList = pinnedTabs;
+    pagerAdapter.setTabs(tabsList);
+    shp.edit().putString("path", new Gson().toJson(tabsList)).apply();
+
+    if (tabsList.isEmpty()) {
+      finish();
+    } else {
+      viewPager.setCurrentItem(0);
+    }
+  }
+
+  private void togglePinTab(int position) {
+    CodeEditorModel model = tabsList.get(position);
+    model.setPinmod(!model.getPinmod());
+
+    TabLayout.Tab tab = tablayouteditor.getTabAt(position);
+    if (tab != null && tab.getCustomView() != null) {
+      View tabView = tab.getCustomView();
+      LottieAnimationView animationView = tabView.findViewById(R.id.animation_view);
+
+      if (model.getPinmod()) {
+        animationView.setVisibility(View.VISIBLE);
+        animationView.setAnimation(R.raw.ic_pin);
+        animationView.playAnimation();
+      } else {
+        animationView.setAnimation(R.raw.ic_unpin);
+        animationView.playAnimation();
+        animationView.addAnimatorListener(
+            new Animator.AnimatorListener() {
+              @Override
+              public void onAnimationCancel(Animator arg0) {}
+
+              @Override
+              public void onAnimationEnd(Animator arg0) {
+                animationView.setVisibility(View.GONE);
+              }
+
+              @Override
+              public void onAnimationRepeat(Animator arg0) {}
+
+              @Override
+              public void onAnimationStart(Animator arg0) {}
+            });
+      }
+    }
+
+    shp.edit().putString("path", new Gson().toJson(tabsList)).apply();
+    Toast.makeText(this, model.getPinmod() ? "تب پین شد" : "پین برداشته شد", Toast.LENGTH_SHORT)
+        .show();
+  }
+
+  private void setupToolbar() {
+    image.setOnClickListener(
+        it -> {
+          executeOnEditor(
+              currentPosition,
+              editor -> {
+                if (ic == 1) {
+                  image.setImageResource(R.drawable.noeye);
+                  editor.setEditable(false);
+                  ic--;
+                } else {
+                  editor.setEditable(true);
+                  image.setImageResource(R.drawable.okeye);
+                  ic++;
+                }
+              },
+              "تغییر حالت ویرایش");
+        });
+
+    redo.setOnClickListener(
+        v -> {
+          executeOnEditor(
+              currentPosition,
+              editor -> {
+                editor.AutoRedo();
+              },
+              "Redo");
+        });
+
+    undo.setOnClickListener(
+        v -> {
+          executeOnEditor(
+              currentPosition,
+              editor -> {
+                editor.AutoUndo();
+              },
+              "Undo");
+        });
+
+    menupopnew.setOnClickListener(this::showMainMenu);
+
+    imageview1.setOnClickListener(
+        it -> {
+          barSymoble.setVisibility(View.GONE);
+          _fab.setVisibility(View.VISIBLE);
+        });
+
+    _fab.setOnClickListener(it -> fabFileRunner());
+
+    codesnapimg.setOnClickListener(
+        v -> {
+          if (currentPosition >= 0 && currentPosition < tabsList.size()) {
+            String filePath = tabsList.get(currentPosition).getPath();
+            Toast.makeText(this, "در حال آماده‌سازی CodeSnap...", Toast.LENGTH_SHORT).show();
+
+            mainHandler.postDelayed(
+                () -> {
+                  executeOnEditor(
+                      currentPosition,
+                      editor -> {
+                        new CodeSnap(CodeEditorActivity.this, filePath, editor);
+                      },
+                      "CodeSnap");
+                },
+                300);
+          } else {
+            Toast.makeText(this, "فایلی انتخاب نشده", Toast.LENGTH_SHORT).show();
+          }
+        });
+
+    getOnBackPressedDispatcher()
+        .addCallback(
+            this,
+            new OnBackPressedCallback(true) {
+              @Override
+              public void handleOnBackPressed() {
+                checkUnsavedChangesAndExit();
+              }
+            });
+  }
+
+  private void showMainMenu(View view) {
     pvr =
-        new PowerMenu.Builder(CodeEditorActivity.this)
+        new PowerMenu.Builder(this)
             .addItem(new PowerMenuItem("Search Text", false))
             .addItem(new PowerMenuItem("Color", false))
             .addItem(new PowerMenuItem("Log cat", false))
@@ -768,495 +654,98 @@ public class CodeEditorActivity extends BaseCompat {
     pvr.setIconPadding(8);
     pvr.setIconSize(30);
     pvr.setAutoDismiss(true);
-    pvr.showAsDropDown(_view);
     pvr.setAnimation(MenuAnimation.ELASTIC_CENTER);
     pvr.setMenuRadius(20f);
     pvr.setSelectedEffect(true);
     pvr.setShowBackground(false);
     pvr.setDividerHeight(2);
     pvr.setTextSize(14);
-
     themeForJson2.subPowerMenu(pvr, imap);
 
     pvr.setOnMenuItemClickListener(
-        new OnMenuItemClickListener<PowerMenuItem>() {
-          @Override
-          public void onItemClick(int position, PowerMenuItem item) {
-            switch (position) {
-              case 0:
-                ghost_searchs.showAndHide();
-                break;
-
-              case 1:
-                ColorPickerDialogBuilder.with(CodeEditorActivity.this)
-                    .setTitle("Set Color")
-                    .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
-                    .showColorPreview(true)
-                    .showColorEdit(true)
-                    .density(22)
-                    .setOnColorSelectedListener(
-                        new OnColorSelectedListener() {
-                          @Override
-                          public void onColorSelected(int selectedColor) {}
-                        })
-                    .setPositiveButton(
-                        "انتخاب",
-                        new ColorPickerClickListener() {
-                          @Override
-                          public void onClick(
-                              DialogInterface dialog, int selectedColor, Integer[] allColors) {
-                            String rgs = Integer.toHexString(selectedColor);
-                            try {
-                              setSymbols("#".concat(rgs.replace("#ff", "#")));
-                            } catch (Exception exception) {
-                              exception.printStackTrace();
-                            }
-                          }
-                        })
-                    .setNegativeButton(
-                        "لغو",
-                        new DialogInterface.OnClickListener() {
-                          @Override
-                          public void onClick(DialogInterface dialog, int which) {
-                            DataUtil.showMessage(getApplicationContext(), "لغو شد");
-                          }
-                        })
-                    .build()
-                    .show();
-                break;
-
-              case 2:
-                var sheet = new LogCatBottomSheet(CodeEditorActivity.this);
-                sheet.run();
-                break;
-
-              case 3:
-                saveFileByIo();
-                int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
-                if (selectedTabPosition >= 0 && selectedTabPosition < tabsList.size()) {
-                  ObjectUtils.removedStarToTab(selectedTabPosition, tablayouteditor);
-                  CodeEditorModel model = tabsList.get(selectedTabPosition);
-                  model.setTextchange(false);
-                }
-                break;
-
-              case 4:
-                var colorview = new ColorView();
-                colorview.runJavaAsSmail(
-                    CodeEditorActivity.this, shp.getString("pos_path", ""), editor);
-                break;
-            }
+        (position, item) -> {
+          switch (position) {
+            case 0:
+              ghost_searchs.showAndHide();
+              break;
+            case 1:
+              showColorPicker();
+              break;
+            case 2:
+              new LogCatBottomSheet(this).run();
+              break;
+            case 3:
+              saveCurrentFile();
+              break;
+            case 4:
+              if (currentPosition < tabsList.size()) {
+                executeOnEditor(
+                    currentPosition,
+                    editor -> {
+                      new ColorView()
+                          .runJavaAsSmail(
+                              CodeEditorActivity.this,
+                              tabsList.get(currentPosition).getPath(),
+                              editor);
+                    },
+                    "Code nave");
+              }
+              break;
           }
         });
+    pvr.showAsDropDown(view);
   }
 
-  public void forceRefreshRecycler() {
-    try {
-      if (rvmenueditor != null) {
-        rvmenueditor.post(
-            () -> {
-              rvmenueditor.getAdapter().notifyDataSetChanged();
-              rvmenueditor.invalidate();
-              rvmenueditor.requestLayout();
-            });
-      }
-    } catch (Exception e) {
-    }
-  }
-
-  void saveFileByIo() {
-    FileChangeReceiver.stopWatching();
-
-    if (editor.getTextAsString().isEmpty()) {
-      DataUtil.showMessage(getApplicationContext(), getString(R.string.errorEmptyFile));
-    } else {
-      try {
-        isFileChangeDialogShowing = false;
-        int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
-        if (selectedTabPosition >= 0 && selectedTabPosition < tabsList.size()) {
-          String selectedFilePath = tabsList.get(selectedTabPosition).getPath();
-          Toast.makeText(this, selectedFilePath, 2).show();
-          String fileContent = editor.getText().toString();
-
-          ObjectUtils.runAndPostInTime(
-              () -> {
-                FileChangeReceiver.startWatching(
-                    CodeEditorActivity.this,
-                    selectedFilePath,
-                    (filePath) -> {
-                      FileChangeReceiver.showFileChangedDialog(
-                          CodeEditorActivity.this,
-                          filePath,
-                          () -> {
-                            setCodeEditorFileReader(filePath);
-                          });
-                    });
-              },
-              3000);
-
-          if (selectedFilePath.endsWith(".class")) {
-            FileUtil.writeFile(selectedFilePath.replace(".class", ".java"), fileContent);
-          } else {
-            FileUtil.writeFile(selectedFilePath, fileContent);
-          }
-
-          ObjectUtils.removedStarToTab(selectedTabPosition, tablayouteditor);
-          CodeEditorModel model = tabsList.get(selectedTabPosition);
-          model.setTextchange(false);
-        }
-      } catch (Exception e) {
-        DataUtil.showMessage(getApplicationContext(), "Error not File saved!");
-      }
-    }
-  }
-
-  void setCodeEditorFileReader(String _path) {
-    if (_path == null || _path.isEmpty()) {
-      Log.e("Editor", "path is null or empty");
-      return;
-    }
-
-    int dotIndex = _path.lastIndexOf('.');
-    if (dotIndex > 0 && dotIndex < _path.length() - 1) {
-      this.currentFileType = _path.substring(dotIndex);
-    } else {
-      this.currentFileType = "";
-      Log.w("Editor", "File has no extension: " + _path);
-    }
-
-    pluginLoader
-        .setEditor(editor)
-        .setCodeEditorActivity(this)
-        .setFileType(currentFileType)
-        .reloadAllPlugins("/storage/emulated/0/GhostWebIDE/plugins/config.json");
-
-    new Handler()
-        .postDelayed(
-            () -> {
-              EditorRoaderFile.RuningTask(editor, _fab, _path, proanjctor, listChild);
-            },
-            200);
-  }
-
-  private void updateFileTypeForCurrentTab() {
-    int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
-    if (selectedTabPosition >= 0 && selectedTabPosition < tabsList.size()) {
-      String filePath = tabsList.get(selectedTabPosition).getPath();
-
-      if (filePath == null || filePath.isEmpty()) {
-        this.currentFileType = "";
-        Log.w("Editor", "File path is null or empty");
-        return;
-      }
-
-      int dotIndex = filePath.lastIndexOf('.');
-      if (dotIndex > 0 && dotIndex < filePath.length() - 1) {
-        this.currentFileType = filePath.substring(dotIndex);
-      } else {
-        this.currentFileType = "";
-        Log.w("Editor", "File has no extension: " + filePath);
-      }
-
-      pluginLoader
-          .setEditor(editor)
-          .setCodeEditorActivity(this)
-          .setFileType(currentFileType)
-          .reloadAllPlugins("/storage/emulated/0/GhostWebIDE/plugins/config.json");
-    }
-  }
-
-  public List<ChildIconEditorManager> getChildIconEditorManager() {
-    return aars;
-  }
-
-  public String getcurrentFileType() {
-    return currentFileType;
-  }
-
-  void setClosetab(int _position, ArrayList<CodeEditorModel> _data) {
-    if (_position >= 0 && _position < _data.size()) {
-      if (_data.get(_position).getPinmod()) {
-        Toast.makeText(this, "این تب پین شده است", Toast.LENGTH_SHORT).show();
-        return;
-      }
-    }
-
-    if (FileUtil.isExistFile(_data.get(_position).getPath())) {
-      _data.remove(_position);
-      if (_data.isEmpty()) {
-        editor.setText("");
-        _data.clear();
-        shp.edit().remove("pos_path").apply();
-        shp.edit().remove("path").apply();
-        finish();
-      } else {
-        if ((_position == 0) && (_data.size() > 1)) {
-          shp.edit().putString("pos_path", _data.get(_position + 1).getPath()).apply();
-          shp.edit().putString("positionTabs", String.valueOf((long) (_position + 1))).apply();
-          setCodeEditorFileReader(_data.get(_position + 1).getPath());
-        } else {
-          if ((_position == 0) && (_data.size() == 1)) {
-            shp.edit().putString("pos_path", _data.get(0).getPath()).apply();
-            setCodeEditorFileReader(_data.get(0).getPath());
-            editor.setText("");
-          } else {
-            shp.edit().putString("pos_path", _data.get(_position - 1).getPath()).apply();
-            shp.edit().putString("positionTabs", String.valueOf((long) (_position - 1))).apply();
-            setCodeEditorFileReader(_data.get(_position - 1).getPath());
-          }
-        }
-      }
-      shp.edit().putString("path", new Gson().toJson(_data)).apply();
-    } else {
-      _data.remove(_position);
-      if (_data.isEmpty()) {
-        _data.clear();
-        shp.edit().remove("pos_path").apply();
-        shp.edit().remove("path").apply();
-        finish();
-      } else {
-        if ((_position == 0) && (_data.size() > 1)) {
-          shp.edit().putString("pos_path", _data.get(_position + 1).getPath()).apply();
-          shp.edit().putString("positionTabs", String.valueOf((long) (_position + 1))).apply();
-        } else {
-          if ((_position == 0) && (_data.size() == 1)) {
-            shp.edit().putString("pos_path", _data.get(0).getPath()).apply();
-          } else {
-            shp.edit().putString("pos_path", _data.get(_position - 1).getPath()).apply();
-            shp.edit().putString("positionTabs", String.valueOf((long) (_position - 1))).apply();
-          }
-        }
-      }
-      shp.edit().putString("path", new Gson().toJson(_data)).apply();
-    }
-  }
-
-  void ReloadFileInPos() {
-    if (shp.contains("path")) {
-      if (!shp.getString("path", "").equals("")) {
-        tabsList =
-            new Gson()
-                .fromJson(
-                    shp.getString("path", ""),
-                    new TypeToken<ArrayList<CodeEditorModel>>() {}.getType());
-
-        for (CodeEditorModel model : tabsList) {
-          path = model.getPath();
-          boolean fileExists = FileUtil.isExistFile(path);
-          String tabText = new File(model.getPath()).getName();
-          if (FileUtil.isExistFile(path)) {
-            TabLayout.Tab tab = tablayouteditor.newTab().setText(tabText);
-            if (model.getPinmod()) {
-              tab.setIcon(R.drawable.ic_pin_filled);
-            }
-            tablayouteditor.addTab(tab);
-
-            isFileChangeDialogShowing = true;
-            if (isFileChangeDialogShowing) {
-              FileChangeReceiver.startWatching(
-                  CodeEditorActivity.this,
-                  path,
-                  (filePath) -> {
-                    FileChangeReceiver.showFileChangedDialog(
-                        CodeEditorActivity.this,
-                        filePath,
-                        () -> {
-                          setCodeEditorFileReader(filePath);
-                        });
-                  });
-            }
-          } else {
-            tablayouteditor.addTab(tablayouteditor.newTab().setText("File not found " + tabText));
-          }
-        }
-
-        setDistreeView();
-
-        tablayouteditor.addOnTabSelectedListener(
-            new TabLayout.OnTabSelectedListener() {
-              @Override
-              public void onTabReselected(TabLayout.Tab tabs) {
-                int pos = tabs.getPosition();
-
-                try {
-                  CodeEditorModel model = tabsList.get(pos);
-
-                  PowerMenu powers =
-                      new PowerMenu.Builder(CodeEditorActivity.this)
-                          .addItem(new PowerMenuItem("close"))
-                          .addItem(new PowerMenuItem("close other"))
-                          .addItem(new PowerMenuItem("close all"))
-                          .addItem(new PowerMenuItem(model.getPinmod() ? "unpin" : "pin"))
-                          .setIsMaterial(true)
-                          .setShowBackground(false)
-                          .setAutoDismiss(true)
-                          .setMenuColor(
-                              imap.containsKey(KeySet.menuPosBackground)
-                                  ? Color.parseColor(imap.get(KeySet.menuPosBackground).toString())
-                                  : MaterialColors.getColor(
-                                      CodeEditorActivity.this, ObjectUtils.Back, 0))
-                          .setTextColor(
-                              imap.containsKey(KeySet.menuPosTextColor)
-                                  ? Color.parseColor(imap.get(KeySet.menuPosTextColor).toString())
-                                  : MaterialColors.getColor(
-                                      CodeEditorActivity.this, ObjectUtils.TvColor, 0))
-                          .setMenuRadius(15)
-                          .setAnimation(MenuAnimation.FADE)
-                          .build();
-
-                  powers.setOnMenuItemClickListener(
-                      (ii, c) -> {
-                        switch (ii) {
-                          case 0:
-                            if (pos >= 0 && pos < tabsList.size()) {
-                              CodeEditorModel selectedModel = tabsList.get(pos);
-                              if (selectedModel.getPinmod()) {
-                                Toast.makeText(
-                                        CodeEditorActivity.this,
-                                        "این تب پین شده است",
-                                        Toast.LENGTH_SHORT)
-                                    .show();
-                                return;
-                              }
-                              tablayouteditor.removeTabAt(pos);
-                              setClosetab(pos, tabsList);
-                            }
-                            break;
-
-                          case 1:
-                            for (int i = tabsList.size() - 1; i >= 0; i--) {
-                              if (i != pos) {
-                                CodeEditorModel otherModel = tabsList.get(i);
-                                if (otherModel.getPinmod()) {
-                                  continue;
-                                }
-                                tablayouteditor.removeTabAt(i);
-                                tabsList.remove(i);
-                              }
-                            }
-                            setCloseother();
-                            break;
-
-                          case 2:
-                            boolean allPinned = true;
-                            for (CodeEditorModel m : tabsList) {
-                              if (!m.getPinmod()) {
-                                allPinned = false;
-                                break;
-                              }
-                            }
-
-                            if (allPinned) {
-                              Toast.makeText(
-                                      CodeEditorActivity.this,
-                                      "همه تب‌ها پین شده‌اند",
-                                      Toast.LENGTH_SHORT)
-                                  .show();
-                              return;
-                            }
-
-                            tablayouteditor.removeAllTabs();
-                            setCloseall();
-                            break;
-
-                          case 3:
-                            boolean newPinState = !model.getPinmod();
-                            model.setPinmod(newPinState);
-                            if (newPinState) {
-                              tabs.setIcon(R.drawable.ic_pin_filled);
-                            } else {
-                              tabs.setIcon(null);
-                            }
-                            shp.edit().putString("path", new Gson().toJson(tabsList)).apply();
-                            Toast.makeText(
-                                    CodeEditorActivity.this,
-                                    newPinState ? "تب پین شد" : "پین تب برداشته شد",
-                                    Toast.LENGTH_SHORT)
-                                .show();
-                            break;
-                        }
-                      });
-                  powers.showAsDropDown(tabs.view);
-                } catch (Exception e) {
-                  e.printStackTrace();
-                }
-              }
-
-              @Override
-              public void onTabSelected(TabLayout.Tab tabs) {
-                int pos = tabs.getPosition();
-                if (pos >= 0 && pos < tabsList.size()) {
-                  String filePath = tabsList.get(pos).getPath();
-                  boolean fileExists = FileUtil.isExistFile(filePath);
-                  if (!fileExists) {
-                    showFileNotFoundDialog(pos, filePath);
-                  } else {
-                    forceRefreshRecycler();
-                    updateFileTypeForCurrentTab();
-                    setCodeEditorFileReader(filePath);
-                  }
-                }
-                setDistreeView();
-              }
-
-              @Override
-              public void onTabUnselected(TabLayout.Tab tabs) {}
-            });
-      }
-    }
-
-    if (FileUtil.isExistFile(shp.getString("pos_path", ""))) {
-      setCodeEditorFileReader(shp.getString("pos_path", ""));
-      if (tablayouteditor.getTabCount() > 0) {
-        int savedPosition =
-            (int) Math.floor(Double.parseDouble(shp.getString("positionTabs", "0")));
-        TabLayout.Tab savedTab = tablayouteditor.getTabAt(savedPosition);
-        if (tablayouteditor.getSelectedTabPosition() != savedPosition) {
-          tablayouteditor.selectTab(tablayouteditor.getTabAt(savedPosition), true);
-          tablayouteditor.post(() -> tablayouteditor.setScrollPosition(savedPosition, 0f, true));
-        }
-      }
-    }
-  }
-
-  private void showFileNotFoundDialog(int position, String filePath) {
-    new MaterialAlertDialogBuilder(this)
-        .setTitle("File not found ")
-        .setMessage("file " + Uri.parse(filePath).getLastPathSegment() + " وجود ندارد")
+  private void showColorPicker() {
+    ColorPickerDialogBuilder.with(this)
+        .setTitle("Set Color")
+        .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+        .showColorPreview(true)
+        .showColorEdit(true)
+        .density(22)
         .setPositiveButton(
-            "close tab",
-            (dialog, which) -> {
-              tablayouteditor.removeTabAt(position);
-              tabsList.remove(position);
-              setCloseother();
+            "انتخاب",
+            (dialog, selectedColor, allColors) -> {
+              String rgs = Integer.toHexString(selectedColor);
+              insertSymbol("#".concat(rgs.replace("#ff", "#")));
             })
-        .setNegativeButton(
-            "tryit",
-            (dialog, which) -> {
-              boolean existsNow = FileUtil.isExistFile(filePath);
-              if (existsNow) {
-                TabLayout.Tab tab = tablayouteditor.getTabAt(position);
-                if (tab != null) {
-                  tab.setText(Uri.parse(filePath).getLastPathSegment());
-                  setCodeEditorFileReader(filePath);
-                }
-              }
-            })
-        .setNeutralButton("close dialog", null)
+        .setNegativeButton("لغو", null)
+        .build()
         .show();
   }
 
-  public void setSymbols(String input) {
-    var channel = editor.createNewSymbolChannel();
-    channel.insertSymbol(input, input.length());
+  private void insertSymbol(String symbol) {
+    executeOnEditor(
+        currentPosition,
+        editor -> {
+          var channel = editor.createNewSymbolChannel();
+          channel.insertSymbol(symbol, symbol.length());
+        },
+        "درج نماد");
   }
 
-  void setFontEditorFromFile(final String _files) {
-    editor.setTypefaceText(Typeface.createFromFile(new File(_files)));
-    editor.setTypefaceLineNumber(Typeface.createFromFile(new File(_files)));
+  private void saveCurrentFile() {
+    executeOnEditor(
+        currentPosition,
+        editor -> {
+          EditorFragment fragment = pagerAdapter.getFragmentAt(currentPosition);
+          if (fragment != null) {
+            fragment.saveFile();
+            runOnUiThread(
+                () -> {
+                  Toast.makeText(this, "ذخیره شد", Toast.LENGTH_SHORT).show();
+
+                  if (currentPosition < tabsList.size()) {
+                    ObjectUtils.removedStarToTab(currentPosition, tablayouteditor);
+                    tabsList.get(currentPosition).setTextchange(false);
+                  }
+                });
+          }
+        },
+        "ذخیره فایل");
   }
 
-  void Symbloinit() {
+  private void setupSymbolBar() {
     try {
       InputStream inputstream5 = getAssets().open("symbol.json");
       staticSymbiolPiare =
@@ -1271,135 +760,529 @@ public class CodeEditorActivity extends BaseCompat {
               new SyspiarAdapter.OnTabView() {
                 @Override
                 public void TAB(String tab) {
-                  setSymbols(tab);
+                  insertSymbol(tab);
                 }
 
                 @Override
                 public void POST(String post) {
-                  setSymbols(post);
+                  insertSymbol(post);
                 }
               },
-              editor);
+              null);
 
       syspiar.setAdapter(syspiarAdapter);
       syspiar.setLayoutManager(
           new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
     } catch (Exception e) {
-      DataUtil.showMessage(getApplicationContext(), e.toString());
+      DataUtil.showMessage(this, e.toString());
     }
   }
 
-  void setCloseother() {
-    int currentPos = tablayouteditor.getSelectedTabPosition();
-    if (currentPos < 0 || currentPos >= tabsList.size()) return;
+  private void loadSavedTabs() {
+    if (shp.contains("path") && !shp.getString("path", "").isEmpty()) {
+      tabsList =
+          new Gson()
+              .fromJson(
+                  shp.getString("path", ""),
+                  new TypeToken<ArrayList<CodeEditorModel>>() {}.getType());
+    } else {
+      tabsList = new ArrayList<>();
+    }
+    if (tabsList.isEmpty()) {
+      String defaultPath = "/storage/emulated/0/GhostWebIDE/newfile.txt";
+      tabsList.add(new CodeEditorModel("newfile.txt", defaultPath, "0", false, false));
+    }
 
-    CodeEditorModel currentTab = tabsList.get(currentPos);
+    pagerAdapter.setTabs(tabsList);
 
-    // ساخت لیست جدید شامل تب فعلی و تب‌های پین شده
-    ArrayList<CodeEditorModel> newTabsList = new ArrayList<>();
-    newTabsList.add(currentTab);
+    int savedPosition = 0;
+    if (shp.contains("positionTabs")) {
+      savedPosition = Integer.parseInt(shp.getString("positionTabs", "0"));
+    }
+
+    if (savedPosition < tabsList.size()) {
+      viewPager.setCurrentItem(savedPosition);
+    }
+  }
+
+  private void updateCurrentFileType(int position) {
+    if (position >= 0 && position < tabsList.size()) {
+      String filePath = tabsList.get(position).getPath();
+      int dotIndex = filePath.lastIndexOf('.');
+      currentFileType = (dotIndex > 0) ? filePath.substring(dotIndex) : "";
+
+      EditorFragment fragment = pagerAdapter.getFragmentAt(position);
+      pluginLoader
+          .setEditor(fragment != null ? fragment.getEditor() : null)
+          .setCodeEditorActivity(this)
+          .setFileType(currentFileType)
+          .reloadAllPlugins("/storage/emulated/0/GhostWebIDE/plugins/config.json");
+    }
+  }
+
+  private void setupKeyboardListener() {
+    View rootView = getWindow().getDecorView();
+    rootView
+        .getViewTreeObserver()
+        .addOnGlobalLayoutListener(
+            () -> {
+              Rect r = new Rect();
+              rootView.getWindowVisibleDisplayFrame(r);
+              int screenHeight = rootView.getRootView().getHeight();
+              int keypadHeight = screenHeight - r.bottom;
+
+              if (keypadHeight > screenHeight * 0.15) {
+                ghostIcon.animate().scaleX(1.0f).scaleY(1.0f).setDuration(1000).start();
+                ObjectUtils.showViewWithAnimation(syspiar);
+              } else {
+                ghostIcon.animate().scaleX(1.4f).scaleY(1.4f).setDuration(1000).start();
+                ObjectUtils.hideViewWithAnimation(syspiar, _fab);
+              }
+            });
+  }
+
+  private void setupVideoBackground() {
+    float blurData = thememanagersoft.contains("br") ? thememanagersoft.getFloat("br", 2) : 3;
+    mvideo.setLifecycle(getLifecycle());
+
+    if (getvb.getString("dir", "").endsWith(".mp4")) {
+      mvideo.setPath(getvb.getString("dir", ""));
+      mvideo.setVisibility(View.VISIBLE);
+    } else {
+      mvideo.setVisibility(View.GONE);
+      mvideo.releasePlayer();
+    }
+
+    BlurImage.setBlurInWallpaperMobile(this, blurData, ghostIcon);
+  }
+
+  private void setupFileWatching() {
+    if (getinitdir.contains("mdir")) {
+      dir.setVisibility(getinitdir.getString("mdir", "").equals("true") ? View.GONE : View.VISIBLE);
+    }
+
+    if (sve.contains("getAutoSave") && sve.getString("getAutoSave", "").equals("true")) {
+      FileChangeReceiver.stopWatching();
+    }
+  }
+
+  private void setWallpaperParallaxEffect() {
+    effect = new WallpaperParallaxEffect(this);
+    effect.setCallback(
+        (offsetX, offsetY, angle) -> {
+          Coordinator.setTranslationX(offsetX);
+          Coordinator.setTranslationY(offsetY);
+        });
+    effect.setEnabled(thememanagersoft.contains("effect"));
+  }
+
+  private void fabFileRunner() {
+    if (currentPosition >= tabsList.size()) return;
+
+    String filePath = tabsList.get(currentPosition).getPath();
+
+    executeOnEditor(
+        currentPosition,
+        editor -> {
+          EditorFragment fragment = pagerAdapter.getFragmentAt(currentPosition);
+          if (fragment != null) {
+            fragment.saveFile();
+          }
+
+          runOnUiThread(
+              () -> {
+                if (filePath.endsWith(".html")) {
+                  runHtmlFile(filePath);
+                } else if (filePath.endsWith(".java")) {
+                  JavaCompilerBeta.run(this, new File(filePath));
+                } else if (filePath.endsWith(".xml")) {
+                  runXmlFile(filePath);
+                } else if (filePath.endsWith(".js")) {
+                  runJsFile(filePath);
+                } else if (filePath.endsWith(".kt")) {
+                  new KotlinCompilerImpl(this, filePath, editor);
+                } else if (filePath.endsWith(".php")
+                    || filePath.endsWith(".py")
+                    || filePath.endsWith(".dart")) {
+                  runTerminalFile(filePath);
+                } else {
+                  Toast.makeText(this, "نوع فایل پشتیبانی نمی‌شود", Toast.LENGTH_SHORT).show();
+                }
+              });
+        },
+        "اجرای فایل");
+  }
+
+  private void runHtmlFile(String path) {
+    if (ru.getBoolean("live", false)) {
+      new CompilerUtils(path, Mode.WEB, this);
+    } else {
+      Intent intent = new Intent(this, HtmlRunerActivity.class);
+      intent.putExtra("run", path);
+      intent.putExtra("root", new File(path).getParent());
+      startActivity(intent);
+    }
+  }
+
+  private void runXmlFile(String path) {
+    Intent intent = new Intent(this, XmlLayoutDesignActivity.class);
+    intent.putExtra(XmlLayoutDesignActivity.EXTRA_FILE, path);
+    intent.putExtra(XmlLayoutDesignActivity.EXTRA_LANGUAGE, "xml");
+    startActivity(intent);
+  }
+
+  private void runJsFile(String path) {
+    Intent intent = new Intent(this, JsRunerActivity.class);
+    intent.putExtra("sendCode", path);
+    startActivity(intent);
+  }
+
+  private void runTerminalFile(String path) {
+    Intent intent = new Intent(this, TerminalActivity.class);
+    if (path.endsWith(".php")) {
+      intent.putExtra("phpcode", path);
+    } else if (path.endsWith(".py")) {
+      intent.putExtra("path", path);
+    } else if (path.endsWith(".dart")) {
+      intent.putExtra("dart", path);
+    }
+    startActivity(intent);
+  }
+
+  private void checkUnsavedChangesAndExit() {
+    boolean hasUnsaved = false;
+    for (int i = 0; i < tabsList.size(); i++) {
+      EditorFragment frag = pagerAdapter.getFragmentAt(i);
+      if (frag != null && frag.isTextChanged()) {
+        hasUnsaved = true;
+        break;
+      }
+    }
+
+    if (hasUnsaved) {
+      new MaterialAlertDialogBuilder(this)
+          .setTitle("ذخیره تغییرات")
+          .setMessage("تغییرات ذخیره نشده وجود دارد. می‌خواهید ذخیره کنید؟")
+          .setPositiveButton(
+              "ذخیره",
+              (d, w) -> {
+                pagerAdapter.saveAllFiles();
+                finish();
+              })
+          .setNegativeButton("خروج بدون ذخیره", (d, w) -> finish())
+          .setNeutralButton("انصراف", null)
+          .show();
+    } else {
+      finish();
+    }
+  }
+
+  @Override
+  public void onEditorCreated(int position, EditorFragment fragment) {
+    if (position < tabsList.size()) {
+      String path = tabsList.get(position).getPath();
+      if (path != null && !path.equals(fragment.getFilePath())) {
+        fragment = EditorFragment.newInstance(path, new Gson().toJson(imap));
+      }
+    }
+  }
+
+  @Override
+  public void onTextChanged(int position, String path, boolean changed) {
+    if (position < tabsList.size()) {
+      tabsList.get(position).setTextchange(changed);
+      if (changed) {
+        ObjectUtils.addStarToTab(position, tablayouteditor);
+      } else {
+        ObjectUtils.removedStarToTab(position, tablayouteditor);
+      }
+    }
+  }
+
+  @Override
+  public void onErrorDetected(int position, String error) {
+    if (progressbar1 != null) {
+      progressbar1.setVisibility(View.VISIBLE);
+      mainHandler.postDelayed(() -> progressbar1.setVisibility(View.GONE), 2000);
+    }
+  }
+
+  public void openFile(String filePath) {
+    if (!FileUtil.isExistFile(filePath)) return;
 
     for (int i = 0; i < tabsList.size(); i++) {
-      if (i != currentPos && tabsList.get(i).getPinmod()) {
-        newTabsList.add(tabsList.get(i));
+      if (tabsList.get(i).getPath().equals(filePath)) {
+        viewPager.setCurrentItem(i);
+        return;
       }
     }
 
-    // پاک کردن و بازسازی tablayout
-    tablayouteditor.removeAllTabs();
-    tabsList.clear();
-    tabsList.addAll(newTabsList);
+    String fileName = new File(filePath).getName();
+    CodeEditorModel newTab =
+        new CodeEditorModel(fileName, filePath, String.valueOf(tabsList.size()), false, false);
+    tabsList.add(newTab);
 
-    for (CodeEditorModel model : tabsList) {
-      TabLayout.Tab tab = tablayouteditor.newTab().setText(new File(model.getPath()).getName());
-      if (model.getPinmod()) {
-        tab.setIcon(R.drawable.ic_pin_filled);
-      }
-      tablayouteditor.addTab(tab);
-    }
+    pagerAdapter.setTabs(tabsList);
+    viewPager.setCurrentItem(tabsList.size() - 1);
 
-    // انتخاب تب فعلی
-    int newCurrentPos = 0; // تب فعلی همیشه اوله
-    shp.edit().putString("positionTabs", String.valueOf(newCurrentPos)).apply();
     shp.edit().putString("path", new Gson().toJson(tabsList)).apply();
+  }
 
-    if (newCurrentPos >= 0 && newCurrentPos < tabsList.size()) {
-      FileUtil.writeFile(
-          "/storage/emulated/0/GhostWebIDE/ninjacoder/openFile.json",
-          tabsList.get(newCurrentPos).getPath());
+  private void handleIncomingIntent(Intent intent) {
+    if (intent == null || intent.getAction() == null) return;
+
+    if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+      Uri uri = intent.getData();
+      if (uri != null) {
+        String path = getRealPathFromUri(uri);
+        if (path != null) {
+          new Handler().post(() -> openFile(path));
+        }
+      }
     }
   }
 
-  void setCloseall() {
+  private String getRealPathFromUri(Uri uri) {
+    String filePath = null;
+
+    if (uri == null) return null;
+
     try {
-      if (tabsList == null || tabsList.isEmpty()) {
-        return;
-      }
+      if ("file".equals(uri.getScheme())) {
+        filePath = uri.getPath();
+      } else if ("content".equals(uri.getScheme())) {
+        String[] projection = {MediaStore.MediaColumns.DATA};
+        Cursor cursor = null;
 
-      // بررسی وجود تب‌های غیرپین شده
-      boolean hasUnpinned = false;
-      for (CodeEditorModel model : tabsList) {
-        if (!model.getPinmod()) {
-          hasUnpinned = true;
-          break;
-        }
-      }
-
-      if (!hasUnpinned) {
-        Toast.makeText(this, "همه تب‌ها پین شده‌اند", Toast.LENGTH_SHORT).show();
-        return;
-      }
-
-      // ایجاد لیست جدید از تب‌های پین شده
-      ArrayList<CodeEditorModel> pinnedTabs = new ArrayList<>();
-      for (CodeEditorModel model : tabsList) {
-        if (model.getPinmod()) {
-          pinnedTabs.add(model);
-        }
-      }
-
-      // پاک کردن همه تب‌ها از tablayout
-      tablayouteditor.removeAllTabs();
-
-      // اضافه کردن مجدد تب‌های پین شده
-      tabsList.clear();
-      tabsList.addAll(pinnedTabs);
-
-      // بازسازی tablayout با تب‌های پین شده
-      for (CodeEditorModel model : tabsList) {
-        TabLayout.Tab tab = tablayouteditor.newTab().setText(new File(model.getPath()).getName());
-        if (model.getPinmod()) {
-          tab.setIcon(R.drawable.ic_pin_filled);
-        }
-        tablayouteditor.addTab(tab);
-      }
-
-      // ذخیره در SharedPreferences
-      shp.edit().putString("path", new Gson().toJson(tabsList)).apply();
-
-      if (!tabsList.isEmpty()) {
-        // انتخاب اولین تب پین شده
-        int newPosition = 0;
-        shp.edit().putString("positionTabs", String.valueOf(newPosition)).apply();
-        shp.edit().putString("pos_path", tabsList.get(newPosition).getPath()).apply();
-
-        TabLayout.Tab firstTab = tablayouteditor.getTabAt(newPosition);
-        if (firstTab != null) {
-          firstTab.select();
+        try {
+          cursor = getContentResolver().query(uri, projection, null, null, null);
+          if (cursor != null && cursor.moveToFirst()) {
+            int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+            filePath = cursor.getString(columnIndex);
+          }
+        } catch (Exception e) {
+          e.printStackTrace();
+        } finally {
+          if (cursor != null) {
+            cursor.close();
+          }
         }
 
-        setCodeEditorFileReader(tabsList.get(newPosition).getPath());
-      } else {
-        // اگر هیچ تبی باقی نمونده
-        shp.edit().remove("pos_path").apply();
-        shp.edit().remove("positionTabs").apply();
-        FileUtil.deleteFile("/storage/emulated/0/GhostWebIDE/ninjacoder/openFile.json");
-        finish();
+        if (filePath == null) {
+          filePath = copyFileFromContentUri(uri);
+        }
       }
+    } catch (Exception e) {
+      e.printStackTrace();
+      DataUtil.showMessage(this, "خطا در باز کردن فایل: " + e.getMessage());
+    }
+
+    return filePath;
+  }
+
+  private String copyFileFromContentUri(Uri uri) {
+    String filePath = null;
+    InputStream inputStream = null;
+    FileOutputStream outputStream = null;
+
+    try {
+      inputStream = getContentResolver().openInputStream(uri);
+      if (inputStream == null) return null;
+
+      String fileName = "temp_file";
+      Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+      if (cursor != null && cursor.moveToFirst()) {
+        int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+        if (nameIndex != -1) {
+          fileName = cursor.getString(nameIndex);
+        }
+        cursor.close();
+      }
+
+      File tempDir = new File("/storage/emulated/0/GhostWebIDE/temp/");
+      if (!tempDir.exists()) {
+        tempDir.mkdirs();
+      }
+
+      File outputFile = new File(tempDir, fileName);
+      outputStream = new FileOutputStream(outputFile);
+
+      byte[] buffer = new byte[4096];
+      int bytesRead;
+      while ((bytesRead = inputStream.read(buffer)) != -1) {
+        outputStream.write(buffer, 0, bytesRead);
+      }
+
+      filePath = outputFile.getAbsolutePath();
 
     } catch (Exception e) {
       e.printStackTrace();
-      Toast.makeText(this, "خطا در بستن تب‌ها: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+    } finally {
+      try {
+        if (inputStream != null) inputStream.close();
+        if (outputStream != null) outputStream.close();
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+
+    return filePath;
+  }
+
+  public void setDistreeView() {
+    if (currentPosition >= tabsList.size()) return;
+
+    String path = tabsList.get(currentPosition).getPath();
+    List<String> items = spiltIntoBreadcrumbItems(path);
+
+    ToolbarListFileAdapter adapter =
+        new ToolbarListFileAdapter(
+            items,
+            this,
+            new ToolbarListFileAdapter.CallBack() {
+              @Override
+              public void GoToDir(View view) {}
+
+              @Override
+              public void GoToTreeFile(View view) {}
+            });
+
+    dir.setAdapter(adapter);
+    dir.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+    dir.smoothScrollToPosition(items.size());
+  }
+
+  public IdeEditor getCurrentEditor() {
+    EditorFragment fragment = pagerAdapter.getFragmentAt(currentPosition);
+    return fragment != null ? fragment.getEditor() : null;
+  }
+
+  public String getCurrentFilePath() {
+    return currentPosition < tabsList.size() ? tabsList.get(currentPosition).getPath() : "";
+  }
+
+  @Override
+  public boolean onKeyDown(int keyCode, KeyEvent event) {
+    if ((event.isCtrlPressed() || event.isAltPressed()) && keyCode == KeyEvent.KEYCODE_S) {
+      saveCurrentFile();
+      return true;
+    }
+    return super.onKeyDown(keyCode, event);
+  }
+
+  private void setupSearchBarCallback() {
+    ghost_searchs.setCallBack(
+        new GhostWebEditorSearch.onViewChange() {
+          @Override
+          public void onViewShow() {
+
+            runOnUiThread(
+                () -> {
+                  barSymoble.setVisibility(View.GONE);
+                  _fab.hide();
+                });
+          }
+
+          @Override
+          public void onViewHide() {
+
+            runOnUiThread(
+                () -> {
+                  barSymoble.setVisibility(View.VISIBLE);
+                  _fab.show();
+                });
+          }
+        });
+  }
+
+  private void bindEditorToSearchBar() {
+    mainHandler.postDelayed(
+        () -> {
+          EditorFragment fragment = pagerAdapter.getFragmentAt(currentPosition);
+          if (fragment != null && fragment.getEditor() != null) {
+            ghost_searchs.bindEditor(fragment.getEditor());
+            if (fragment.getEditor().getTextActionWindow().isShowing()) {
+              fragment.getEditor().getTextActionWindow().dismiss();
+            }
+          }
+        },
+        300);
+    viewPager.registerOnPageChangeCallback(
+        new ViewPager2.OnPageChangeCallback() {
+          @Override
+          public void onPageSelected(int position) {
+            super.onPageSelected(position);
+            mainHandler.postDelayed(
+                () -> {
+                  EditorFragment fragment = pagerAdapter.getFragmentAt(position);
+                  if (fragment != null && fragment.getEditor() != null) {
+                    if (fragment.getEditor().getTextActionWindow().isShowing()) {
+                      fragment.getEditor().getTextActionWindow().dismiss();
+                    }
+                    ghost_searchs.bindEditor(fragment.getEditor());
+                  }
+                },
+                200);
+          }
+        });
+  }
+
+  public void addChild(Child child) {
+    listChild.add(child);
+  }
+
+  public void addChildManagerEditor(ChildIconEditorManager model) {
+    aars.add(model);
+  }
+
+  public String getTabPathCode() {
+    int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
+    if (selectedTabPosition >= 0 && selectedTabPosition < tabsList.size()) {
+      return tabsList.get(selectedTabPosition).getPath();
+    }
+    return "";
+  }
+
+  public IdeEditor getEditor() {
+    EditorFragment fragment = pagerAdapter.getFragmentAt(currentPosition);
+    if (fragment != null) {
+      return fragment.getEditor();
+    }
+    return null;
+  }
+
+  public String getPathBytab() {
+    int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
+    if (selectedTabPosition >= 0 && selectedTabPosition < tabsList.size()) {
+      return tabsList.get(selectedTabPosition).getPath();
+    }
+    return "";
+  }
+
+  public TabLayout getEditorTabLayout() {
+    return tablayouteditor;
+  }
+
+  public List<ChildIconEditorManager> getChildIconEditorManager() {
+    return aars;
+  }
+
+  public String getcurrentFileType() {
+    return currentFileType;
+  }
+
+  public void forceRefreshRecycler() {
+    try {
+      if (rvmenueditor != null) {
+        rvmenueditor.post(
+            () -> {
+              rvmenueditor.getAdapter().notifyDataSetChanged();
+              rvmenueditor.invalidate();
+              rvmenueditor.requestLayout();
+            });
+      }
+    } catch (Exception e) {
+      // خطا نادیده گرفته شود
     }
   }
 
@@ -1422,176 +1305,5 @@ public class CodeEditorActivity extends BaseCompat {
       return combinedItems;
     }
     return filteredItems;
-  }
-
-  void setDistreeView() {
-    List<String> pospath = spiltIntoBreadcrumbItems(getPathBytab());
-
-    var adps =
-        new ToolbarListFileAdapter(
-            pospath,
-            this,
-            new ToolbarListFileAdapter.CallBack() {
-              @Override
-              public void GoToDir(View view) {}
-
-              @Override
-              public void GoToTreeFile(View view) {}
-            });
-
-    dir.setAdapter(adps);
-    dir.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-    dir.smoothScrollToPosition(pospath.size());
-  }
-
-  void FabFileRuner() {
-    try {
-      FileChangeReceiver.stopWatching();
-
-      int selectedTabPosition = tablayouteditor.getSelectedTabPosition();
-      if (selectedTabPosition >= 0 && selectedTabPosition < tabsList.size()) {
-        String selectedFilePath = tabsList.get(selectedTabPosition).getPath();
-        Toast.makeText(this, selectedFilePath, 2).show();
-        String fileContent = editor.getText().toString();
-        ObjectUtils.removedStarToTab(selectedTabPosition, tablayouteditor);
-        CodeEditorModel model = tabsList.get(selectedTabPosition);
-        model.setTextchange(false);
-        FileUtil.writeFile(selectedFilePath, fileContent);
-
-        ObjectUtils.runAndPostInTime(
-            () -> {
-              FileChangeReceiver.startWatching(
-                  CodeEditorActivity.this,
-                  selectedFilePath,
-                  (filePath) -> {
-                    FileChangeReceiver.showFileChangedDialog(
-                        CodeEditorActivity.this,
-                        filePath,
-                        () -> {
-                          setCodeEditorFileReader(filePath);
-                        });
-                  });
-            },
-            3000);
-
-        if (selectedFilePath.contains(".html")) {
-          if (ru.getBoolean("live", false)) {
-            var it = new CompilerUtils(selectedFilePath, Mode.WEB, CodeEditorActivity.this);
-          } else {
-            htmlrus.setClass(getApplicationContext(), HtmlRunerActivity.class);
-            htmlrus.putExtra("run", selectedFilePath);
-            htmlrus.putExtra("runs", Uri.parse(selectedFilePath).getLastPathSegment());
-            File file = new File(selectedFilePath);
-            if (file.exists()) {
-              String phpz = file.getParent();
-              htmlrus.putExtra("root", phpz);
-              Toast.makeText(getApplicationContext(), phpz, Toast.LENGTH_SHORT).show();
-            }
-            loadAnim(htmlrus);
-          }
-        } else if (selectedFilePath.contains(".json")) {
-          jsonview.setClass(getApplicationContext(), JsonViewerActivity.class);
-          jsonview.putExtra("g", selectedFilePath);
-          loadAnim(jsonview);
-        } else if (selectedFilePath.contains(".jsx")) {
-          SassForAndroid.runObjectWeb(editor, selectedFilePath, CompilerModel.JSX);
-        } else if (selectedFilePath.contains(".js")) {
-          getmd.setClass(getApplicationContext(), JsRunerActivity.class);
-          getmd.putExtra("sendCode", selectedFilePath);
-          loadAnim(getmd);
-        } else if (selectedFilePath.contains(".sh")) {
-          res.setClass(getApplicationContext(), ShellCodeActivity.class);
-          res.putExtra("sh", selectedFilePath);
-          loadAnim(res);
-        } else if (selectedFilePath.contains(".svg")) {
-          htmlrus.setClass(getApplicationContext(), HtmlRunerActivity.class);
-          htmlrus.putExtra("run", selectedFilePath);
-          loadAnim(htmlrus);
-        } else if (selectedFilePath.contains(".md")) {
-          getmd.setClass(getApplicationContext(), MdCodeViewActivity.class);
-          getmd.putExtra("v", selectedFilePath);
-          loadAnim(getmd);
-        } else if (selectedFilePath.contains(".py")) {
-          getmd.setClass(getApplicationContext(), TerminalActivity.class);
-          getmd.putExtra("path", selectedFilePath);
-          loadAnim(getmd);
-        } else if (selectedFilePath.contains(".g4")) {
-          setAntlr4Compiler(selectedFilePath);
-        } else if (selectedFilePath.contains(".php")) {
-          getmd.setClass(getApplicationContext(), TerminalActivity.class);
-          getmd.putExtra("phpcode", selectedFilePath);
-          loadAnim(getmd);
-        } else if (selectedFilePath.contains(".scss") || selectedFilePath.contains(".sass")) {
-          SassForAndroid.run(CodeEditorActivity.this, selectedFilePath, selectedFilePath);
-        } else if (selectedFilePath.contains(".java")) {
-          JavaCompilerBeta.run(CodeEditorActivity.this, new File(selectedFilePath));
-        } else if (selectedFilePath.contains(".xml")) {
-          Intent intent = new Intent(CodeEditorActivity.this, XmlLayoutDesignActivity.class);
-          intent.putExtra(XmlLayoutDesignActivity.EXTRA_FILE, selectedFilePath);
-          intent.putExtra(XmlLayoutDesignActivity.EXTRA_LANGUAGE, "xml");
-          intent.putExtra(XmlLayoutDesignActivity.EXTRA_DEMO, false);
-          intent.putExtra(XmlLayoutDesignActivity.EXTRA_STANDALONE, false);
-          intent.putExtra(XmlLayoutDesignActivity.EXTRA_TRAINER, false);
-          loadAnim(intent);
-        } else if (selectedFilePath.contains(".jj")) {
-          var file = new File(selectedFilePath);
-          JavaCcComplierImpl.main(file.toString(), file.getParent() + "/");
-        } else if (selectedFilePath.contains(".kt")) {
-          new KotlinCompilerImpl(CodeEditorActivity.this, selectedFilePath, editor);
-        } else if (selectedFilePath.contains(".ts")) {
-          SassForAndroid.runObjectWeb(editor, selectedFilePath, CompilerModel.TYPESRCIPT);
-        } else if (selectedFilePath.contains(".less")) {
-          SassForAndroid.runObjectWeb(editor, selectedFilePath, CompilerModel.LESS);
-        } else if (selectedFilePath.contains(".dart")) {
-          res.setClass(getApplicationContext(), TerminalActivity.class);
-          res.putExtra("dart", selectedFilePath);
-          loadAnim(res);
-        }
-      } else {
-        Toast.makeText(this, "تب انتخاب‌شده معتبر نیست", Toast.LENGTH_SHORT).show();
-      }
-    } catch (Exception ex) {
-      ex.printStackTrace();
-    }
-  }
-
-  void setAntlr4Compiler(String path) {
-    final var bottomSheetDialog = new BottomSheetDialog(this);
-    Antcomp8lerBinding bind = Antcomp8lerBinding.inflate(getLayoutInflater());
-    bottomSheetDialog.setContentView(bind.getRoot());
-    File file = new File(path);
-    bind.edpath.setText(file.getParent());
-    bind.btnrun.setOnClickListener(
-        (noy) -> {
-          G4Compiler.compile(
-              shp.getString("pos_path", ""),
-              bind.edpath.getText().toString(),
-              bind.etpa.getText().toString());
-          bottomSheetDialog.dismiss();
-        });
-    bottomSheetDialog.show();
-  }
-
-  void setWallpaperParallaxEffect() {
-    effect = new WallpaperParallaxEffect(this);
-    effect.setCallback(
-        (offsetX, offsetY, angle) -> {
-          float progress = 1.0f;
-          Coordinator.setTranslationX(offsetX * progress);
-          Coordinator.setTranslationY(offsetY * progress);
-        });
-    effect.setEnabled(thememanagersoft.contains("effect"));
-  }
-
-  @Override
-  public boolean onKeyDown(int data, KeyEvent key) {
-    if (key.isAltPressed() || key.isCtrlPressed()) {
-      switch (data) {
-        case KeyEvent.KEYCODE_S:
-          saveFileByIo();
-          return true;
-      }
-    }
-    return super.onKeyDown(data, key);
   }
 }
