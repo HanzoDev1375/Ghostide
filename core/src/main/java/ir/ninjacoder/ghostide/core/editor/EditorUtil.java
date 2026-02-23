@@ -6,6 +6,7 @@ import android.util.Log;
 
 import io.github.rosemoe.sora.event.ClickEvent;
 import io.github.rosemoe.sora.event.LongPressEvent;
+import io.github.rosemoe.sora.event.SelectionChangeEvent;
 import io.github.rosemoe.sora.text.ContentLine;
 import io.github.rosemoe.sora.text.ICUUtils;
 import io.github.rosemoe.sora.util.IntPair;
@@ -36,7 +37,8 @@ public class EditorUtil {
         }
       }
     }
-    editor.setSelectionRegion(startLine, startColumn, endLine, endColumn);
+    editor.setSelectionRegion(
+        startLine, startColumn, endLine, endColumn, SelectionChangeEvent.CAUSE_LONG_PRESS);
   }
 
   public static boolean isWhitespace(CharSequence charSequence) {
@@ -50,8 +52,6 @@ public class EditorUtil {
   }
 
   public static void setClick(IdeEditor editor) {
-    editor.getTextActionWindow().dismiss();
-
     editor.subscribeEvent(
         ClickEvent.class,
         (event, unsubscribe) -> {
@@ -105,6 +105,4 @@ public class EditorUtil {
   public static void restorecursor(IdeEditor editor, Context ct, SharedPreferences sh) {
     Log.e("sub", "sub");
   }
-
-  
 }

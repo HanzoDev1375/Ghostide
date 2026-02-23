@@ -33,47 +33,47 @@ public class TitleView extends FrameLayout implements IControlComponent {
 
   private LinearLayout mTitleContainer;
   private TextView mTitle;
-  private TextView mSysTime; // 系统当前时间
+  private TextView mSysTime;
 
   private BatteryReceiver mBatteryReceiver;
-  private boolean mIsRegister; // 是否注册BatteryReceiver
+  private boolean mIsRegister;
 
-  {
+  public TitleView(@NonNull Context context) {
+    super(context);
+    init();
+  }
+
+  public TitleView(@NonNull Context context, @Nullable AttributeSet attrs) {
+    super(context, attrs);
+    init();
+  }
+
+  public TitleView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    super(context, attrs, defStyleAttr);
+    init();
+  }
+
+  void init() {
     setVisibility(GONE);
     LayoutInflater.from(getContext()).inflate(R.layout.dkplayer_layout_title_view, this, true);
     mTitleContainer = findViewById(R.id.title_container);
     ImageView back = findViewById(R.id.back);
     back.setOnClickListener(
-        new OnClickListener() {
-          @Override
-          public void onClick(View v) {
-            Activity activity = PlayerUtils.scanForActivity(getContext());
-            if (activity != null && mControlWrapper.isFullScreen()) {
-              activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-              mControlWrapper.stopFullScreen();
-            }
+        v -> {
+          var activity = PlayerUtils.scanForActivity(getContext());
+          if (activity != null && mControlWrapper.isFullScreen()) {
+            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            mControlWrapper.stopFullScreen();
           }
         });
     mTitle = findViewById(R.id.title);
     mSysTime = findViewById(R.id.sys_time);
-    // 电量
+
     ImageView batteryLevel = findViewById(R.id.iv_battery);
     mBatteryReceiver = new BatteryReceiver(batteryLevel);
     ObjectUtils.setColorFilter(batteryLevel);
     ObjectUtils.setTextColor(mTitle);
     ObjectUtils.setTextColor(mSysTime);
-  }
-
-  public TitleView(@NonNull Context context) {
-    super(context);
-  }
-
-  public TitleView(@NonNull Context context, @Nullable AttributeSet attrs) {
-    super(context, attrs);
-  }
-
-  public TitleView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-    super(context, attrs, defStyleAttr);
   }
 
   public void setTitle(String title) {

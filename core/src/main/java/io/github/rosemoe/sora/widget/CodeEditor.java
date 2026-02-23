@@ -346,7 +346,6 @@ public class CodeEditor extends View
   private CommentHelper helper;
 
   private OnKeyboardOperation enters;
-  private OnCompletionItemSelectedListener onCompletionItemSelectedListener;
   private boolean mHardwareAccAllowed;
   private File mCurrentFile;
   private boolean isBlockLineRpg;
@@ -1781,14 +1780,6 @@ public class CodeEditor extends View
   public void setLigatureEnabled(boolean enabled) {
     this.mLigatureEnabled = enabled;
     setFontFeatureSettings(enabled ? null : "'liga' 0,'calt' 0,'hlig' 0,'dlig' 0,'clig' 0");
-  }
-
-  public OnCompletionItemSelectedListener getOnCompletionItemSelectedListener() {
-    return onCompletionItemSelectedListener;
-  }
-
-  public void setOnCompletionItemSelectedListener(OnCompletionItemSelectedListener listener) {
-    onCompletionItemSelectedListener = listener;
   }
 
   /**
@@ -6274,7 +6265,7 @@ public class CodeEditor extends View
    * @param column The column to move
    */
   public void setSelection(int line, int column) {
-    setSelection(line, column, true);
+    setSelection(line, column, true, SelectionChangeEvent.CAUSE_UNKNOWN);
   }
 
   /**
@@ -6285,46 +6276,53 @@ public class CodeEditor extends View
    * @param makeItVisible Make the character visible
    */
   public void setSelection(int line, int column, boolean makeItVisible) {
+    setSelection(line, column, makeItVisible, SelectionChangeEvent.CAUSE_UNKNOWN);
+  }
+
+  /**
+   * Move selection to given position
+   *
+   * @param line The line to move
+   * @param column The column to move
+   * @param makeItVisible Make the character visible
+   * @param cause The cause of selection change
+   */
+  public void setSelection(int line, int column, boolean makeItVisible, int cause) {
     invalidateInCursor();
     mCursorAnimator.markStartPos();
+
     if (column > 0 && Character.isHighSurrogate(mText.charAt(line, column - 1))) {
       column++;
       if (column > mText.getColumnCount(line)) {
         column--;
       }
     }
+
     mCursor.set(line, column);
+
     if (mHighlightCurrentBlock) {
       mCursorPosition = findCursorBlock();
     }
+
     updateCursor();
     invalidateInCursor();
+
     if (!mEventHandler.hasAnyHeldHandle()) {
       mCursorAnimator.markEndPosAndStart();
     }
+
     if (makeItVisible) {
       ensurePositionVisible(line, column);
     } else {
       invalidate();
     }
+
     updateMatchingBrackets();
-    onSelectionChanged();
+    onSelectionChanged(cause);
   }
 
   public void selectAll() {
     setSelectionRegion(0, 0, getLineCount() - 1, getText().getColumnCount(getLineCount() - 1));
-  }
-
-  /**
-   * Set selection region with a call to {@link CodeEditor#ensureSelectionVisible()}
-   *
-   * @param lineLeft Line left
-   * @param columnLeft Column Left
-   * @param lineRight Line right
-   * @param columnRight Column right
-   */
-  public void setSelectionRegion(int lineLeft, int columnLeft, int lineRight, int columnRight) {
-    setSelectionRegion(lineLeft, columnLeft, lineRight, columnRight, true);
   }
 
   /**
@@ -6335,18 +6333,27 @@ public class CodeEditor extends View
    * @param lineRight Line right
    * @param columnRight Column right
    * @param makeRightVisible Whether to make right cursor visible
+   * @param cause The cause of selection change
    */
   public void setSelectionRegion(
-      int lineLeft, int columnLeft, int lineRight, int columnRight, boolean makeRightVisible) {
+      int lineLeft,
+      int columnLeft,
+      int lineRight,
+      int columnRight,
+      boolean makeRightVisible,
+      int cause) {
+
     invalidateInCursor();
     int start = getText().getCharIndex(lineLeft, columnLeft);
     int end = getText().getCharIndex(lineRight, columnRight);
+
     if (start == end) {
-      setSelection(lineLeft, columnLeft);
+      setSelection(lineLeft, columnLeft, makeRightVisible, cause);
       return;
     }
+
     if (start > end) {
-      setSelectionRegion(lineRight, columnRight, lineLeft, columnLeft, makeRightVisible);
+      setSelectionRegion(lineRight, columnRight, lineLeft, columnLeft, makeRightVisible, cause);
       Log.w(
           LOG_TAG,
           "setSelectionRegion() error: start > end:start = "
@@ -6363,8 +6370,11 @@ public class CodeEditor extends View
               + columnRight);
       return;
     }
+
     mCursorAnimator.cancel();
     boolean lastState = mCursor.isSelected();
+
+    // Fix surrogate pairs
     if (columnLeft > 0) {
       int column = columnLeft - 1;
       char ch = mText.charAt(lineLeft, column);
@@ -6385,18 +6395,68 @@ public class CodeEditor extends View
         }
       }
     }
+
     mCursor.setLeft(lineLeft, columnLeft);
     mCursor.setRight(lineRight, columnRight);
+
     invalidateInCursor();
     updateCursor();
     mCompletionWindow.hide();
+
     if (makeRightVisible) {
       ensurePositionVisible(lineRight, columnRight);
     } else {
       invalidate();
     }
-    onSelectionChanged();
-    if (!lastState && mCursor.isSelected() && mStartedActionMode != ACTION_MODE_SEARCH_TEXT) {}
+
+    onSelectionChanged(cause);
+  }
+
+  /**
+   * Set selection region with a call to {@link CodeEditor#ensureSelectionVisible()}
+   *
+   * @param lineLeft Line left
+   * @param columnLeft Column Left
+   * @param lineRight Line right
+   * @param columnRight Column right
+   */
+  public void setSelectionRegion(int lineLeft, int columnLeft, int lineRight, int columnRight) {
+    setSelectionRegion(
+        lineLeft, columnLeft, lineRight, columnRight, true, SelectionChangeEvent.CAUSE_UNKNOWN);
+  }
+
+  /**
+   * Set selection region with a call to {@link CodeEditor#ensureSelectionVisible()}
+   *
+   * @param lineLeft Line left
+   * @param columnLeft Column Left
+   * @param lineRight Line right
+   * @param columnRight Column right
+   * @param cause The cause of selection change
+   */
+  public void setSelectionRegion(
+      int lineLeft, int columnLeft, int lineRight, int columnRight, int cause) {
+    setSelectionRegion(lineLeft, columnLeft, lineRight, columnRight, true, cause);
+  }
+
+  /**
+   * Set selection region
+   *
+   * @param lineLeft Line left
+   * @param columnLeft Column Left
+   * @param lineRight Line right
+   * @param columnRight Column right
+   * @param makeRightVisible Whether to make right cursor visible
+   */
+  public void setSelectionRegion(
+      int lineLeft, int columnLeft, int lineRight, int columnRight, boolean makeRightVisible) {
+    setSelectionRegion(
+        lineLeft,
+        columnLeft,
+        lineRight,
+        columnRight,
+        makeRightVisible,
+        SelectionChangeEvent.CAUSE_UNKNOWN);
   }
 
   public void movePageDown() {
@@ -7532,14 +7592,6 @@ public class CodeEditor extends View
     public void Tab();
   }
 
-  /**
-   * @param Tanks to Androis ide
-   * @gouid Tanks for Tryon to Helping to Smart Enter
-   * @see EditorAutoCompleteWindow to install
-   */
-  public interface OnCompletionItemSelectedListener {
-    void onItemSelect(EditorAutoCompleteWindow window, CompletionItem item);
-  }
 
   private class DrawCursorTask {
 

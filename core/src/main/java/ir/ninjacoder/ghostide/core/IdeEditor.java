@@ -16,7 +16,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
+import ir.ninjacoder.ghostide.core.editor.EditorUtil;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.shape.CornerFamily;
 import com.google.android.material.shape.MaterialShapeDrawable;
@@ -77,6 +77,7 @@ public class IdeEditor extends CodeEditor implements IEditor {
 
   public IdeEditor(Context context, AttributeSet set) {
     super(context, set);
+    init();
   }
 
   public IdeEditor(Context context, AttributeSet set, int def) {
@@ -106,6 +107,7 @@ public class IdeEditor extends CodeEditor implements IEditor {
     getPowerModeEffectManager().setEffect(ef);
     setBracketHighlightEnabled(true);
     setBracketHighlightColor(0xFFFF0000);
+    EditorUtil.setClick(this);
     return this;
   }
 

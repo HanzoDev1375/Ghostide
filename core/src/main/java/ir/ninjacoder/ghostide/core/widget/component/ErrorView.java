@@ -25,31 +25,31 @@ public class ErrorView extends LinearLayout implements IControlComponent {
 
   private ControlWrapper mControlWrapper;
 
-  {
-    setVisibility(GONE);
-    LayoutInflater.from(getContext()).inflate(R.layout.dkplayer_layout_error_view, this, true);
-    findViewById(R.id.status_btn)
-        .setOnClickListener(
-            new OnClickListener() {
-              @Override
-              public void onClick(View v) {
-                setVisibility(GONE);
-                mControlWrapper.replay(false);
-              }
-            });
-    setClickable(true);
-  }
-
   public ErrorView(Context context) {
     this(context, null);
+    init();
   }
 
   public ErrorView(Context context, @Nullable AttributeSet attrs) {
     super(context, attrs);
+    init();
   }
 
   public ErrorView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
     super(context, attrs, defStyleAttr);
+    init();
+  }
+
+  void init() {
+    setVisibility(GONE);
+    LayoutInflater.from(getContext()).inflate(R.layout.dkplayer_layout_error_view, this, true);
+    findViewById(R.id.status_btn)
+        .setOnClickListener(
+            v -> {
+              setVisibility(GONE);
+              mControlWrapper.replay(false);
+            });
+    setClickable(true);
   }
 
   @Override

@@ -19,7 +19,6 @@ import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -50,6 +49,8 @@ import com.skydoves.powermenu.MenuAnimation;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
 
+import ir.ninjacoder.ghostide.core.marco.FactoryCodeError;
+import ir.ninjacoder.ghostide.core.navigator.EditorRoaderFile;
 import ir.ninjacoder.prograsssheet.listchild.ChildAdapter;
 import com.mcal.uidesigner.XmlLayoutDesignActivity;
 import java.io.FileOutputStream;
@@ -115,7 +116,7 @@ public class CodeEditorActivity extends BaseCompat
   private ProgressBar progressbar1;
   private RecyclerView dir, rvmenueditor;
   private TextView titleauthor;
-  private ImageView image, redo, undo, menupopnew, iconAuthor, codesnapimg, setting;
+  private ImageView image, redo, undo, menupopnew, codesnapimg, setting;
   private LinearLayout linear3, getColorPass;
   private LinearLayout barSymoble;
   private ImageView imageview1, avatargithubuser;
@@ -138,6 +139,7 @@ public class CodeEditorActivity extends BaseCompat
   private PluginLoader pluginLoader;
   private String currentFileType = "";
   private PowerMenu pvr;
+  private TabLayoutMediator tabMediator;
   private int currentPosition = 0;
   private Handler mainHandler = new Handler(Looper.getMainLooper());
 
@@ -177,7 +179,6 @@ public class CodeEditorActivity extends BaseCompat
     syspiar = findViewById(R.id.syspiar);
     mvideo = findViewById(R.id.videoback);
     ghostIcon = findViewById(R.id.icon_backgroundghost);
-    iconAuthor = findViewById(R.id.iconAuthor);
     savecursor = getSharedPreferences("editor", MODE_PRIVATE);
     word = getSharedPreferences("word", MODE_PRIVATE);
     line = getSharedPreferences("line", MODE_PRIVATE);
@@ -236,19 +237,7 @@ public class CodeEditorActivity extends BaseCompat
         });
 
     viewPager.setUserInputEnabled(false);
-    new TabLayoutMediator(
-            tablayouteditor,
-            viewPager,
-            (tab, position) -> {
-              if (position < tabsList.size()) {
-                CodeEditorModel model = tabsList.get(position);
-                String tabText = new File(model.getPath()).getName();
-                TabLayout.Tab customTab = createAnimatedTab(tabText, model.getPinmod());
-                tab.setCustomView(customTab.getCustomView());
-                tab.setText(customTab.getText());
-              }
-            })
-        .attach();
+    setupTabLayoutMediator();
 
     setupTabListeners();
     setupToolbar();
@@ -266,6 +255,7 @@ public class CodeEditorActivity extends BaseCompat
     setupKeyboardListener();
     setupVideoBackground();
     setupFileWatching();
+    EditorRoaderFile.RuningTask(_fab, getPathBytab(), listChild);
 
     List<Child> editorPluginChildren = PluginChildRegistry.getCodeEditorChildren();
     listChild.addAll(editorPluginChildren);
@@ -275,6 +265,27 @@ public class CodeEditorActivity extends BaseCompat
 
   private interface EditorAction {
     void execute(IdeEditor editor);
+  }
+
+  private void setupTabLayoutMediator() {
+    if (tabMediator != null) {
+      tabMediator.detach();
+    }
+
+    tabMediator =
+        new TabLayoutMediator(
+            tablayouteditor,
+            viewPager,
+            (tab, position) -> {
+              if (position < tabsList.size()) {
+                CodeEditorModel model = tabsList.get(position);
+                String tabText = new File(model.getPath()).getName();
+                TabLayout.Tab customTab = createAnimatedTab(tabText, model.getPinmod());
+                tab.setCustomView(customTab.getCustomView());
+              }
+            });
+
+    tabMediator.attach();
   }
 
   private void executeOnEditor(int position, EditorAction action) {
@@ -326,6 +337,8 @@ public class CodeEditorActivity extends BaseCompat
         titleauthor, KeySet.syombolbartextcolor, Color.parseColor("#FFFFA0FB"), this, imap);
     themeForJson2.addImageColor(undo, this, KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
     themeForJson2.addImageColor(redo, this, KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
+    themeForJson2.addImageColor(
+        setting, this, KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
     themeForJson2.addImageColor(
         codesnapimg, this, KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
     themeForJson2.addImageColor(
@@ -392,7 +405,7 @@ public class CodeEditorActivity extends BaseCompat
           @Override
           public void onTabSelected(TabLayout.Tab tab) {
             if (tab.getPosition() != viewPager.getCurrentItem()) {
-              viewPager.setCurrentItem(tab.getPosition(), false);
+              viewPager.setCurrentItem(tab.getPosition(), true); // true برای انیمیشن
             }
           }
 
@@ -415,12 +428,19 @@ public class CodeEditorActivity extends BaseCompat
               tab.select();
             }
           }
+
+          @Override
+          public void onPageScrollStateChanged(int state) {
+            if (state == ViewPager2.SCROLL_STATE_IDLE) {
+              tablayouteditor.requestLayout();
+            }
+          }
         });
   }
 
   private void showTabContextMenu(int position) {
     if (position >= tabsList.size()) return;
-
+    if (getEditor().getTextActionWindow().isShowing()) getEditor().getTextActionWindow().dismiss();
     CodeEditorModel model = tabsList.get(position);
     PowerMenu powers =
         new PowerMenu.Builder(this)
@@ -473,7 +493,7 @@ public class CodeEditorActivity extends BaseCompat
       tabsList.remove(position);
       pagerAdapter.setTabs(tabsList);
       shp.edit().putString("path", new Gson().toJson(tabsList)).apply();
-
+      setupTabLayoutMediator();
       if (tabsList.isEmpty()) {
         finish();
       } else {
@@ -493,7 +513,7 @@ public class CodeEditorActivity extends BaseCompat
         newList.add(tabsList.get(i));
       }
     }
-
+    setupTabLayoutMediator();
     tabsList = newList;
     pagerAdapter.setTabs(tabsList);
     shp.edit().putString("path", new Gson().toJson(tabsList)).apply();
@@ -526,8 +546,14 @@ public class CodeEditorActivity extends BaseCompat
     TabLayout.Tab tab = tablayouteditor.getTabAt(position);
     if (tab != null && tab.getCustomView() != null) {
       View tabView = tab.getCustomView();
+      int textColor =
+          imap.containsKey(KeySet.tabtextcolor)
+              ? Color.parseColor(imap.get(KeySet.tabtextcolor).toString())
+              : MaterialColors.getColor(tablayouteditor, android.R.attr.textColor);
       LottieAnimationView animationView = tabView.findViewById(R.id.animation_view);
-
+      SimpleColorFilter filter = new SimpleColorFilter(textColor);
+      animationView.addValueCallback(
+          new KeyPath("**"), LottieProperty.COLOR_FILTER, new LottieValueCallback<>(filter));
       if (model.getPinmod()) {
         animationView.setVisibility(View.VISIBLE);
         animationView.setAnimation(R.raw.ic_pin);
@@ -996,6 +1022,13 @@ public class CodeEditorActivity extends BaseCompat
       } else {
         ObjectUtils.removedStarToTab(position, tablayouteditor);
       }
+      new Handler(Looper.getMainLooper())
+          .postDelayed(
+              () -> {
+                var errorChecker = new FactoryCodeError(getEditor(), geticonAuthor(), tablayouteditor);
+                errorChecker.run();
+              },
+              3000);
     }
   }
 
@@ -1024,7 +1057,7 @@ public class CodeEditorActivity extends BaseCompat
 
     pagerAdapter.setTabs(tabsList);
     viewPager.setCurrentItem(tabsList.size() - 1);
-
+    setupTabLayoutMediator();
     shp.edit().putString("path", new Gson().toJson(tabsList)).apply();
   }
 
@@ -1053,7 +1086,6 @@ public class CodeEditorActivity extends BaseCompat
       } else if ("content".equals(uri.getScheme())) {
         String[] projection = {MediaStore.MediaColumns.DATA};
         Cursor cursor = null;
-
         try {
           cursor = getContentResolver().query(uri, projection, null, null, null);
           if (cursor != null && cursor.moveToFirst()) {
@@ -1247,6 +1279,14 @@ public class CodeEditorActivity extends BaseCompat
     EditorFragment fragment = pagerAdapter.getFragmentAt(currentPosition);
     if (fragment != null) {
       return fragment.getEditor();
+    }
+    return null;
+  }
+
+  private IdeEditor geticonAuthor() {
+    EditorFragment fragment = pagerAdapter.getFragmentAt(currentPosition);
+    if (fragment != null) {
+      return fragment.geticonAuthor();
     }
     return null;
   }

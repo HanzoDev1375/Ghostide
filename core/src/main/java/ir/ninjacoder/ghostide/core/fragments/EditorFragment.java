@@ -64,7 +64,6 @@ import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
 import ir.ninjacoder.ghostide.core.IdeEditor;
 import ir.ninjacoder.ghostide.core.R;
-import ir.ninjacoder.ghostide.core.marco.FactoryCodeError;
 import ir.ninjacoder.ghostide.core.utils.FileUtil;
 import ir.ninjacoder.ghostide.core.utils.ThemeUtils;
 import java.util.*;
@@ -156,7 +155,6 @@ public class EditorFragment extends Fragment {
         .getColorScheme()
         .setColor(EditorColorScheme.MATCHED_TEXT_BACKGROUND, Color.parseColor("#75800F31"));
 
-    // لیسنر تغییرات متن
     editor.subscribeEvent(
         ContentChangeEvent.class,
         (event, subscribe) -> {
@@ -164,17 +162,9 @@ public class EditorFragment extends Fragment {
           if (editorListener != null) {
             editorListener.onTextChanged(filePath, true);
           }
-
-          // چک کردن خطا بعد از 3 ثانیه
-          new android.os.Handler(android.os.Looper.getMainLooper())
-              .postDelayed(
-                  () -> {
-                    FactoryCodeError errorChecker = new FactoryCodeError(editor, iconAuthor, null);
-                    errorChecker.run();
-                  },
-                  3000);
         });
-
+    editor.setPinLineNumber(true);
+    editor.setDividerMargin(3.9f);
     if (editorListener != null) {
       editorListener.onEditorReady(this, editor);
     }
@@ -210,15 +200,19 @@ public class EditorFragment extends Fragment {
       isTextChanged = false;
     }
   }
-
+  @Nullable
   public String getFilePath() {
     return filePath;
   }
-
+  @NonNull
   public IdeEditor getEditor() {
     return editor;
   }
-
+  @NonNull
+  public ImageView geticonAuthor() {
+    return iconAuthor;
+  }
+  
   public boolean isTextChanged() {
     return isTextChanged;
   }
