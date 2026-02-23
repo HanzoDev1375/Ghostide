@@ -7592,7 +7592,6 @@ public class CodeEditor extends View
     public void Tab();
   }
 
-
   private class DrawCursorTask {
 
     float x;
