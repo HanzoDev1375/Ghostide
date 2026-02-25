@@ -1,5 +1,5 @@
 package ir.ninjacoder.ghostide.core.utils;
-
+ 
 import android.app.Activity;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;

@@ -91,7 +91,6 @@
           android:layout_height="0dp"
           android:layout_width="match_parent"
           android:layout_weight="1">
-
           <androidx.recyclerview.widget.RecyclerView
             android:layout_height="match_parent"
             android:layout_width="match_parent"
@@ -102,23 +101,22 @@
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:layout_gravity="center"
+            android:gravity="center"
             app:show="false"
             app:emptyStateButtonText="This list Empty"
             android:id="@+id/emptyview" />
+          <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:visibility="gone"
+            android:indeterminate="true"
+            app:trackThickness="5dp"
+            android:layout_gravity="center"
+            android:id="@+id/filedir_bar" />
 
         </FrameLayout>
 
-        <com.google.android.material.progressindicator.CircularProgressIndicator
-          android:layout_height="wrap_content"
-          android:layout_width="wrap_content"
-          android:visibility="gone"
-          android:indeterminate="true"
-          app:trackThickness="5dp"
-          android:layout_gravity="center"
-          android:id="@+id/filedir_bar" />
-
       </LinearLayout>
-
     </LinearLayout>
 
     <ir.ninjacoder.ghostide.core.widget.ExrtaFab

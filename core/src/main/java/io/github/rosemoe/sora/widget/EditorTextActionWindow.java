@@ -204,7 +204,8 @@ public class EditorTextActionWindow extends EditorPopupWindow
                       break;
                   }
                 }
-              },editor);
+              },
+              editor);
       bin.rvEditor.setAdapter(adptor);
       bin.rvEditor.setLayoutManager(
           new LinearLayoutManager(editor.getContext(), RecyclerView.HORIZONTAL, false));
@@ -262,17 +263,28 @@ public class EditorTextActionWindow extends EditorPopupWindow
       return;
     }
     if (event.isSelected()) {
-      if (!isShowing()) {
-        mEditor.post(this::displayWindow);
-      }
+
+      // if (!isShowing()) {
+      mEditor.post(this::displayWindow);
+      // }
       mLastPosition = -1;
     } else {
-      if (event.getLeft().index == mLastPosition && !isShowing()) {
+      var show = false;
+      if (event.getCause() == SelectionChangeEvent.CAUSE_TAP
+          && event.getLeft().index == mLastPosition
+          && !isShowing()
+          && !mEditor.getText().isInBatchEdit()
+          && mEditor.isEditable()) {
         mEditor.post(this::displayWindow);
+        show = true;
       } else {
         dismiss();
       }
-      mLastPosition = event.getLeft().index;
+      if (event.getCause() == SelectionChangeEvent.CAUSE_TAP && !show) {
+        mLastPosition = event.getLeft().index;
+      } else {
+        mLastPosition = -1;
+      }
     }
   }
 
@@ -441,7 +453,8 @@ public class EditorTextActionWindow extends EditorPopupWindow
   public void setShowItems(boolean showItems) {
     this.showItems = showItems;
   }
-  public void apply(){
+
+  public void apply() {
     getPopup().setBackgroundDrawable(post());
   }
 }

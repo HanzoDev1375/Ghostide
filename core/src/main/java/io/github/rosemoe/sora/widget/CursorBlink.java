@@ -28,9 +28,12 @@ package io.github.rosemoe.sora.widget;
  *
  * @author Rose & Ghost
  */
+import io.github.rosemoe.sora.event.EventReceiver;
+import io.github.rosemoe.sora.event.SelectionChangeEvent;
+import io.github.rosemoe.sora.event.Unsubscribe;
 
 // برای دست رسی کلاس رو عمومی میکنیم
-public class CursorBlink implements Runnable {
+public class CursorBlink implements Runnable, EventReceiver<SelectionChangeEvent> {
 
   final CodeEditor editor;
   long lastSelectionModificationTime = 0;
@@ -39,16 +42,15 @@ public class CursorBlink implements Runnable {
   boolean visibility;
   boolean valid;
   private float[] buffer;
-
-  // متغیرهای انیمیشن
   private CursorAnimationModel model = CursorAnimationModel.BLINK;
   private float animationValue = 1.0f;
   private boolean increasing = false;
 
-  CursorBlink(CodeEditor editor, int period) {
+  public CursorBlink(CodeEditor editor, int period) {
     visibility = true;
     this.editor = editor;
     this.period = period;
+    editor.subscribeEvent(SelectionChangeEvent.class, this);
   }
 
   public void setModel(CursorAnimationModel model) {
@@ -59,6 +61,11 @@ public class CursorBlink implements Runnable {
     if (model == CursorAnimationModel.BLINK) {
       visibility = true;
     }
+    onSelectionChanged();
+  }
+
+  @Override
+  public void onReceive(SelectionChangeEvent event, Unsubscribe unsubscribe) {
     onSelectionChanged();
   }
 

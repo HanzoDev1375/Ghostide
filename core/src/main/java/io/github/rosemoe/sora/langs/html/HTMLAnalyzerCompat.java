@@ -271,7 +271,6 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
               } else {
                 result.addIfNeeded(line, column, forString());
               }
-              CodeHighlighter.highlightFilePath(token.getText(), line, column, result);
               result.addIfNeeded(line, column, forString());
               break;
             }

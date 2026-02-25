@@ -330,6 +330,7 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     notifyDataSetChanged();
   }
 
+
   public interface onClick {
     void onClick(View view, int pos);
 

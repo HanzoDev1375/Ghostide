@@ -6854,8 +6854,12 @@ public class CodeEditor extends View
   }
 
   protected void onSelectionChanged() {
+    onSelectionChanged(SelectionChangeEvent.CAUSE_UNKNOWN);
+  }
+
+  protected void onSelectionChanged(int type) {
     mCursorBlink.onSelectionChanged();
-    dispatchEvent(new SelectionChangeEvent(this));
+    dispatchEvent(new SelectionChangeEvent(this, type));
     invalidate();
   }
 

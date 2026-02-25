@@ -82,9 +82,7 @@ public class UpadteAppView {
               di.setPositiveButton("Ask Later", null);
               di.show();
             } else {
-              DataUtil.showMessage(
-                  context, getMarkDownText("**Not found** <ins>new version</ins>"));
-              /// Empty
+              //TODO:Empty not adding code....
             }
           }
 

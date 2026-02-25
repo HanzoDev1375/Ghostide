@@ -48,9 +48,8 @@ import com.google.gson.reflect.TypeToken;
 import com.skydoves.powermenu.MenuAnimation;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
-
-import ir.ninjacoder.ghostide.core.marco.FactoryCodeError;
 import ir.ninjacoder.ghostide.core.navigator.EditorRoaderFile;
+import ir.ninjacoder.ghostide.core.utils.ScalePageTransformer;
 import ir.ninjacoder.prograsssheet.listchild.ChildAdapter;
 import com.mcal.uidesigner.XmlLayoutDesignActivity;
 import java.io.FileOutputStream;
@@ -261,6 +260,7 @@ public class CodeEditorActivity extends BaseCompat
     listChild.addAll(editorPluginChildren);
     setupSearchBarCallback();
     bindEditorToSearchBar();
+    viewPager.setPageTransformer(new ScalePageTransformer());
   }
 
   private interface EditorAction {
@@ -1022,13 +1022,6 @@ public class CodeEditorActivity extends BaseCompat
       } else {
         ObjectUtils.removedStarToTab(position, tablayouteditor);
       }
-      new Handler(Looper.getMainLooper())
-          .postDelayed(
-              () -> {
-                var errorChecker = new FactoryCodeError(getEditor(), geticonAuthor(), tablayouteditor);
-                errorChecker.run();
-              },
-              3000);
     }
   }
 
@@ -1283,7 +1276,7 @@ public class CodeEditorActivity extends BaseCompat
     return null;
   }
 
-  private IdeEditor geticonAuthor() {
+  private ImageView geticonAuthor() {
     EditorFragment fragment = pagerAdapter.getFragmentAt(currentPosition);
     if (fragment != null) {
       return fragment.geticonAuthor();

@@ -9,7 +9,7 @@ import com.google.android.material.shape.MaterialShapeDrawable;
 import com.google.android.material.shape.ShapeAppearanceModel;
 import static com.google.android.material.R.attr.*;
 
-class Shape {
+public class Shape {
   public static Drawable normal(View v) {
     var shapeDrawable =
         new MaterialShapeDrawable(

@@ -197,8 +197,10 @@ public class ThemeUtils {
     editor.getColorScheme().setColor(EditorColorScheme.WHOLE_BACKGROUND, Color.TRANSPARENT);
     // برای اخطار ها و متتودهای منسوخ شده
     // رنگ غیرقابل ادیت کردن است و به راحتی در کد ادیتور نشون میده
-    editor.getColorScheme().setColor(EditorColorScheme.wars,Color.parseColor("#79F9CB80"));
-    editor.getColorScheme().setColor(EditorColorScheme.BLOCK_LINE_SELECTOR,Color.parseColor("#443A93FF"));
+    editor.getColorScheme().setColor(EditorColorScheme.wars, Color.parseColor("#79F9CB80"));
+    editor
+        .getColorScheme()
+        .setColor(EditorColorScheme.BLOCK_LINE_SELECTOR, Color.parseColor("#443A93FF"));
     return this;
   }
 
@@ -206,15 +208,15 @@ public class ThemeUtils {
       HashMap<String, Object> imap,
       CodeEditor editor,
       String key,
-      int colorValue,
+      int colorType,
       String colorNull) {
-    editor
-        .getColorScheme()
-        .setColor(
-            imap.containsKey(key) ? colorValue : Color.parseColor(colorNull),
-            imap.containsKey(key)
-                ? Color.parseColor(imap.get(key).toString())
-                : Color.parseColor(colorNull));
+    String colorStr = imap.getOrDefault(key, colorNull).toString();
+
+    try {
+      editor.getColorScheme().setColor(colorType, Color.parseColor(colorStr));
+    } catch (Exception e) {
+      editor.getColorScheme().setColor(colorType, Color.parseColor(colorNull));
+    }
   }
 
   public ThemeUtils setHashMapInabel(boolean isEnabel, HashMap<String, Object> imap) {
@@ -274,32 +276,25 @@ public class ThemeUtils {
 
   public ThemeUtils setFabBackground(
       ExtendedFloatingActionButton fab, HashMap<String, Object> map) {
-    fab.setIconTint(
-        ColorStateList.valueOf(
-            map.containsKey("fabimagecolor")
-                ? Color.parseColor(map.get("fabimagecolor").toString())
-                : MaterialColors.getColor(fab, ObjectUtils.TvColor)));
-    fab.setBackgroundTintList(
-        ColorStateList.valueOf(
-            map.containsKey("fabbackgroundcolorcolor")
-                ? Color.parseColor(map.get("fabbackgroundcolorcolor").toString())
-                : Color.BLACK));
+    int iconColor = Color.parseColor(map.getOrDefault("fabimagecolor", "#ffff9c9c").toString());
+    fab.setIconTint(ColorStateList.valueOf(iconColor));
+
+    int bgColor =
+        Color.parseColor(map.getOrDefault("fabbackgroundcolorcolor", "#ff250009").toString());
+    fab.setBackgroundTintList(ColorStateList.valueOf(bgColor));
+
     return this;
   }
 
   public ThemeUtils subPowerMenu(PowerMenu menu, HashMap<String, Object> map) {
-    menu.setTextColor(
-        map.containsKey("toolbartextcolor")
-            ? Color.parseColor(map.get("toolbartextcolor").toString())
-            : Color.parseColor("#ffffff"));
-    menu.setMenuColor(
-        map.containsKey("menubackground")
-            ? Color.parseColor(map.get("menubackground").toString())
-            : Color.parseColor("#ff000000"));
-    menu.setIconColor(
-        map.containsKey("tabimagecolorfilter")
-            ? Color.parseColor(map.get("tabimagecolorfilter").toString())
-            : Color.parseColor("#fff472"));
+    int textColor = Color.parseColor(map.getOrDefault("toolbartextcolor", "#ffffff").toString());
+    menu.setTextColor(textColor);
+
+    int menuColor = Color.parseColor(map.getOrDefault("menubackground", "#ff000000").toString());
+    menu.setMenuColor(menuColor);
+
+    int iconColor = Color.parseColor(map.getOrDefault("tabimagecolorfilter", "#fff472").toString());
+    menu.setIconColor(iconColor);
 
     return this;
   }

@@ -93,7 +93,7 @@ public class EmptyState extends LinearLayout {
     }
   }
 
-  public boolean isShow() {
+  public boolean isShowing() {
     return getVisibility() == VISIBLE;
   }
 

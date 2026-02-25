@@ -37,6 +37,7 @@ import io.github.rosemoe.sora.event.HandleStateChangeEvent;
 import io.github.rosemoe.sora.event.IconLineNumberEvent;
 import io.github.rosemoe.sora.event.LongPressEvent;
 import io.github.rosemoe.sora.event.ScrollEvent;
+import io.github.rosemoe.sora.event.SelectionChangeEvent;
 import io.github.rosemoe.sora.text.ICUUtils;
 import io.github.rosemoe.sora.util.IntPair;
 import io.github.rosemoe.sora.widget.style.SelectionHandleStyle;
@@ -91,7 +92,7 @@ public class EditorTouchEventHandler
   public EditorTouchEventHandler(CodeEditor editor) {
     mEditor = editor;
     mScroller = new OverScroller(editor.getContext());
-    
+
     maxSize =
         TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_SP, 32, Resources.getSystem().getDisplayMetrics());
@@ -547,7 +548,7 @@ public class EditorTouchEventHandler
         new ClickEvent(mEditor, mEditor.getText().getIndexer().getCharPosition(line, column), e));
     mEditor.showSoftInput();
     notifyLater();
-    mEditor.setSelection(line, column);
+    mEditor.setSelection(line, column, true,SelectionChangeEvent.CAUSE_TAP);
     mEditor.hideAutoCompleteWindow();
     return true;
   }
@@ -880,7 +881,8 @@ public class EditorTouchEventHandler
           switch (type) {
             case BOTH:
               mEditor.cancelAnimation();
-              mEditor.setSelection(line, column, false);
+              mEditor.setSelection(
+                  line, column, false, SelectionChangeEvent.CAUSE_SELECTION_HANDLE);
               break;
             case RIGHT:
               if (anotherLine > line || (anotherLine == line && anotherColumn > column)) {
@@ -894,10 +896,22 @@ public class EditorTouchEventHandler
                   SelectionHandle tmp = right;
                   right = left;
                   left = tmp;
-                  mEditor.setSelectionRegion(line, column, anotherLine, anotherColumn, false);
+                  mEditor.setSelectionRegion(
+                      line,
+                      column,
+                      anotherLine,
+                      anotherColumn,
+                      false,
+                      SelectionChangeEvent.CAUSE_SELECTION_HANDLE);
                 }
               } else {
-                mEditor.setSelectionRegion(anotherLine, anotherColumn, line, column, false);
+                mEditor.setSelectionRegion(
+                    anotherLine,
+                    anotherColumn,
+                    line,
+                    column,
+                    false,
+                    SelectionChangeEvent.CAUSE_SELECTION_HANDLE);
               }
               break;
             case LEFT:
@@ -912,10 +926,22 @@ public class EditorTouchEventHandler
                   SelectionHandle tmp = right;
                   right = left;
                   left = tmp;
-                  mEditor.setSelectionRegion(anotherLine, anotherColumn, line, column, false);
+                  mEditor.setSelectionRegion(
+                      anotherLine,
+                      anotherColumn,
+                      line,
+                      column,
+                      false,
+                      SelectionChangeEvent.CAUSE_SELECTION_HANDLE);
                 }
               } else {
-                mEditor.setSelectionRegion(line, column, anotherLine, anotherColumn, false);
+                mEditor.setSelectionRegion(
+                    line,
+                    column,
+                    anotherLine,
+                    anotherColumn,
+                    false,
+                    SelectionChangeEvent.CAUSE_SELECTION_HANDLE);
               }
               break;
           }

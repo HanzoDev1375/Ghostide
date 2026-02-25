@@ -42,6 +42,9 @@ import android.text.TextUtils;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -206,6 +209,14 @@ public class FileManagerActivity extends BaseCompat
   protected void onCreate(Bundle _savedInstanceState) {
     super.onCreate(_savedInstanceState);
     bind = FiledirBinding.inflate(LayoutInflater.from(this));
+    ViewCompat.setOnApplyWindowInsetsListener(
+        bind.getRoot(),
+        (v, insets) -> {
+          Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+          v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+          return insets;
+        });
+
     setContentView(bind.getRoot());
     initialize(_savedInstanceState);
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -408,7 +419,7 @@ public class FileManagerActivity extends BaseCompat
               checkedItem = item5;
               break;
             default:
-              checkedItem = item1; 
+              checkedItem = item1;
               break;
           }
 
@@ -730,8 +741,6 @@ public class FileManagerActivity extends BaseCompat
               FileManagerModel _item = new FileManagerModel(item, FileState.NORMAL);
               fileItems.add(_item);
             }
-
-            // ایجاد لیست نهایی
             fileModels.clear();
             fileModels.addAll(folderItems);
             fileModels.addAll(fileItems);
@@ -873,6 +882,19 @@ public class FileManagerActivity extends BaseCompat
       }
     }
     fileListItem.removeItemByPath(filePath);
+
+    runOnUiThread(
+        () -> {
+          if (fileModels.isEmpty()) {
+            if (!bind.emptyview.isShowing()) {
+              bind.emptyview.show();
+            }
+          } else {
+            if (bind.emptyview.isShowing()) {
+              bind.emptyview.hide();
+            }
+          }
+        });
   }
 
   private void updateFileInLists(String oldPath, String newPath) {
@@ -885,25 +907,6 @@ public class FileManagerActivity extends BaseCompat
         break;
       }
     }
-  }
-
-  private void addNewFileToList(String filePath) {
-    FileManagerModel newItem = new FileManagerModel(filePath, FileState.ADD);
-    fileModels.add(newItem);
-    Collections.sort(
-        fileModels,
-        (o1, o2) -> {
-          String path1 = o1.getFilePath();
-          String path2 = o2.getFilePath();
-          boolean isDir1 = FileUtil.isDirectory(path1);
-          boolean isDir2 = FileUtil.isDirectory(path2);
-
-          if (isDir1 && !isDir2) return -1;
-          if (!isDir1 && isDir2) return 1;
-          return path1.compareToIgnoreCase(path2);
-        });
-
-    fileListItem.addNewFile(newItem);
   }
 
   @Override
@@ -974,8 +977,20 @@ public class FileManagerActivity extends BaseCompat
             @Override
             protected void onPostExecute(String deletedPath) {
               prodel.dismiss();
-
               removeFileFromLists(deletedPath);
+              runOnUiThread(
+                  () -> {
+                    if (fileModels.isEmpty()) {
+                      if (!bind.emptyview.isShowing()) {
+                        bind.emptyview.show();
+                      }
+                    } else {
+                      if (bind.emptyview.isShowing()) {
+                        bind.emptyview.hide();
+                      }
+                    }
+                  });
+
               Toast.makeText(getApplicationContext(), "فایل حذف شد", Toast.LENGTH_SHORT).show();
             }
           }.execute(filePath);
@@ -2521,5 +2536,36 @@ public class FileManagerActivity extends BaseCompat
       }
     }
     return super.onKeyDown(keyCode, event);
+  }
+
+  private void addNewFileToList(String filePath) {
+    FileManagerModel newItem = new FileManagerModel(filePath, FileState.ADD);
+    fileModels.add(newItem);
+    Collections.sort(
+        fileModels,
+        (o1, o2) -> {
+          String path1 = o1.getFilePath();
+          String path2 = o2.getFilePath();
+          boolean isDir1 = FileUtil.isDirectory(path1);
+          boolean isDir2 = FileUtil.isDirectory(path2);
+
+          if (isDir1 && !isDir2) return -1;
+          if (!isDir1 && isDir2) return 1;
+          return path1.compareToIgnoreCase(path2);
+        });
+
+    fileListItem.addNewFile(newItem);
+    runOnUiThread(
+        () -> {
+          if (fileModels.isEmpty()) {
+            if (!bind.emptyview.isShowing()) {
+              bind.emptyview.show();
+            }
+          } else {
+            if (bind.emptyview.isShowing()) {
+              bind.emptyview.hide();
+            }
+          }
+        });
   }
 }

@@ -20,7 +20,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:scaleType="centerInside"
-            android:visibility="gone" />
+             />
 
         <ProgressBar
             android:id="@+id/proanjctor"

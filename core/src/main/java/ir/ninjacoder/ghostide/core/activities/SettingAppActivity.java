@@ -35,6 +35,7 @@ import com.quickersilver.themeengine.ThemeChooserDialogBuilder;
 import com.quickersilver.themeengine.ThemeEngine;
 import com.quickersilver.themeengine.ThemeMode;
 import ir.ninjacoder.ghostide.core.model.AppIconManagerImpl;
+import ir.ninjacoder.prograsssheet.setting.SettingAdapter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -446,7 +447,29 @@ public class SettingAppActivity extends BaseCompat {
     }
   }
 
-  public void _seechackswich() {
+  void themeSelector() {
+    ThemeChooserDialogBuilder dialog = new ThemeChooserDialogBuilder(SettingAppActivity.this);
+    dialog.setPositiveButton(
+        android.R.string.ok,
+        (positin, theme) -> {
+          GhostIdeAppLoader.getThemeEngine().setStaticTheme(theme);
+          themeEngine.setStaticTheme(theme);
+          ((GhostIdeAppLoader) getApplicationContext()).onThemeChange();
+          themechange.edit().putBoolean("themechange", true).apply();
+        });
+    dialog.setNegativeButton(android.R.string.cancel);
+    dialog.setNeutralButton(
+        "Default",
+        (param1, param2) -> {
+          themeEngine.resetTheme();
+          GhostIdeAppLoader.getThemeEngine().resetTheme();
+          ((GhostIdeAppLoader) getApplicationContext()).onThemeChange();
+          recreate();
+        });
+    dialog.create().show();
+  }
+
+  void _seechackswich() {
     if (ru.contains("rup")) {
       deftheme.setValue(true);
     }
@@ -477,18 +500,35 @@ public class SettingAppActivity extends BaseCompat {
     else codeAZ.setValue(false);
 
     List<String> fb = new ArrayList<>();
-    fb.add("");
-    fb.add("");
-    fb.add("");
-    fb.add("");
-    fb.add("");
-    fb.add("");
-    fb.add("");
-    fb.add("");
-    fb.add("");
+    fb.add(getString(R.string.custom_icons));
+    fb.add(getString(R.string.termthemes));
+    fb.add(getString(R.string.scriptcustom));
+    fb.add(getString(R.string.customthemeapp));
+    fb.add(getString(R.string.customchareditor));
+    fb.add(getString(R.string.cursoreditoricon));
+    fb.add(getString(R.string.backgroundimageeditor));
+    fb.add(getString(R.string.glow_effect));
+    fb.add(getString(R.string.Customize_font));
+
     grids.setValue(gridMode.contains("gride"));
     rvsetting.setLayoutManager(new LinearLayoutManager(this));
-    rvsetting.setAdapter(new Recyclerview2Adapter(fb));
+    rvsetting.setAdapter(
+        new SettingAdapter(
+            (pos, view, str) -> {
+              switch (pos) {
+                case 0 -> initIconColors();
+                case 1 -> terminalTheme();
+                case 2 -> CustomPythonCode();
+                case 3 -> themeSelector();
+                case 4 -> getCustomChar();
+                case 5 -> new IconCursorImpl(SettingAppActivity.this);
+                case 6 -> getVideoBackground();
+                case 7 -> showEF();
+                case 8 -> customDataRow(
+                    "Custom Font Editor", "type dir font .ttf format... ", "mfont", setfont);
+              }
+            },
+            fb));
   }
 
   void setBlursize() {
@@ -497,7 +537,7 @@ public class SettingAppActivity extends BaseCompat {
     bind.slider.setTrackIconActiveStart(
         MaterialShapes.createShapeDrawable(MaterialShapes.SOFT_BURST));
     di.setTitle("Blur Size");
-    di.setMessage("Set Number 1~25");
+    di.setMessage("set blur in 1~25");
     if (thememanagersoft != null) {
 
       bind.slider.setValue(thememanagersoft.getFloat("br", 1));
@@ -593,132 +633,6 @@ public class SettingAppActivity extends BaseCompat {
     list.setAdapter(new ListAppIconAd(modelimpl.getModel()));
     ((BaseAdapter) list.getAdapter()).notifyDataSetChanged();
     dialog.show();
-  }
-
-  public class Recyclerview2Adapter extends RecyclerView.Adapter<Recyclerview2Adapter.ViewHolder> {
-
-    List<String> bind;
-
-    public Recyclerview2Adapter(List<String> bind) {
-      this.bind = bind;
-    }
-
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-      Mp2Binding f = Mp2Binding.inflate(LayoutInflater.from(parent.getContext()));
-      var param =
-          new RecyclerView.LayoutParams(
-              new RecyclerView.LayoutParams(
-                  RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
-      f.getRoot().setLayoutParams(param);
-      return new ViewHolder(f);
-    }
-
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-      View view = holder.itemView;
-
-      var titlemodel = holder.title;
-      var modelicon = holder.icon;
-      String api = bind.get(position);
-
-      ObjectUtils.setColorFilter(modelicon);
-      ObjectUtils.setTextColor(titlemodel);
-      ShapeList.getShapeListStatus(bind, position, view);
-      if (position == 0) {
-        titlemodel.setText(R.string.Customize_font);
-        modelicon.setImageResource(R.drawable.mfont);
-        view.setOnClickListener(
-            c -> {
-              customDataRow(
-                  "Custom Font Editor", "type dir font .ttf format... ", "mfont", setfont);
-            });
-      }
-      if (position == 1) {
-        view.setOnClickListener(
-            c -> {
-              initIconColors();
-            });
-        titlemodel.setText(getString(R.string.custom_icons));
-        modelicon.setImageResource(R.drawable.keyboardlisnertalluserpost_3);
-      }
-      if (position == 2) {
-        view.setOnClickListener(_riee_ -> terminalTheme());
-        titlemodel.setText(getString(R.string.termthemes));
-        modelicon.setImageResource(R.drawable.ic_material_settings);
-      }
-      if (position == 3) {
-        view.setOnClickListener(_ddd_ -> CustomPythonCode());
-        titlemodel.setText(getString(R.string.scriptcustom));
-        modelicon.setImageResource(R.drawable.ic_material_console);
-      }
-      if (position == 4) {
-        titlemodel.setText(getString(R.string.customthemeapp));
-        modelicon.setImageResource(R.drawable.ghosttheme);
-        view.setOnClickListener(
-            _dddrr_ -> {
-              ThemeChooserDialogBuilder dialog =
-                  new ThemeChooserDialogBuilder(SettingAppActivity.this);
-              dialog.setPositiveButton(
-                  android.R.string.ok,
-                  (positin, theme) -> {
-                    GhostIdeAppLoader.getThemeEngine().setStaticTheme(theme);
-                    themeEngine.setStaticTheme(theme);
-                    ((GhostIdeAppLoader) getApplicationContext()).onThemeChange();
-                    themechange.edit().putBoolean("themechange", true).apply();
-                  });
-              dialog.setNegativeButton(android.R.string.cancel);
-              dialog.setNeutralButton(
-                  "Default",
-                  (param1, param2) -> {
-                    themeEngine.resetTheme();
-                    GhostIdeAppLoader.getThemeEngine().resetTheme();
-                    ((GhostIdeAppLoader) getApplicationContext()).onThemeChange();
-                    recreate();
-                  });
-              dialog.create().show();
-            });
-      }
-      if (position == 5) {
-        titlemodel.setText(getString(R.string.customchareditor));
-        view.setOnClickListener(v -> getCustomChar());
-        modelicon.setImageResource(0);
-      }
-      if (position == 6) {
-        titlemodel.setText(getString(R.string.cursoreditoricon));
-        view.setOnClickListener(
-            g -> {
-              new IconCursorImpl(SettingAppActivity.this);
-            });
-        modelicon.setImageResource(0);
-      }
-      if (position == 7) {
-        titlemodel.setText(getString(R.string.backgroundimageeditor));
-        view.setOnClickListener(v -> getVideoBackground());
-        modelicon.setImageResource(0);
-      }
-      if (position == 8) {
-        titlemodel.setText(getString(R.string.glow_effect));
-        view.setOnClickListener(v -> showEF());
-        modelicon.setImageResource(0);
-      }
-    }
-
-    @Override
-    public int getItemCount() {
-      return bind.size();
-    }
-
-    class ViewHolder extends RecyclerView.ViewHolder {
-      TextView title;
-      ImageView icon;
-
-      public ViewHolder(Mp2Binding v) {
-        super(v.getRoot());
-        title = v.mytitleViews;
-        icon = v.imageview1;
-      }
-    }
   }
 
   void terminalTheme() {

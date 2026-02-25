@@ -1,263 +1,262 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:id="@+id/Coordinator"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent">
-
-  <ImageView
-    android:id="@+id/icon_backgroundghost"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/Coordinator"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:scaleType="centerCrop" />
+    android:layout_height="match_parent">
 
-  <ir.ninjacoder.prograsssheet.VideoSurfaceView
-    android:id="@+id/videoback"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:visibility="gone" />
-
-  <LinearLayout
-    android:id="@+id/getColorPass"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-    <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:orientation="vertical">
-
-      <ir.ninjacoder.ghostide.core.widget.PraramnetLayoutNinja
-        android:id="@+id/Mainlinear"
+    <ImageView
+        android:id="@+id/icon_backgroundghost"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="vertical">
+        android:scaleType="centerCrop" />
+
+    <ir.ninjacoder.prograsssheet.VideoSurfaceView
+        android:id="@+id/videoback"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/getColorPass"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
-          android:id="@+id/multytab"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:gravity="center_horizontal|center_vertical"
-          android:orientation="vertical">
-
-          <!-- نوار ابزار -->
-          <LinearLayout
-            android:id="@+id/CustomToolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal|center_vertical"
-            android:orientation="horizontal"
-            android:translationX="2.0dp">
-
-            <LinearLayout
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="center_vertical"
-              android:orientation="vertical"
-              android:padding="4dp">
-
-              <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="8dp">
-
-                <ImageView
-                  android:id="@+id/avatargithubuser"
-                  android:layout_width="50dp"
-                  android:layout_height="50dp"
-                  android:orientation="horizontal"
-                  android:padding="5dp"
-                  android:scaleType="centerInside" />
-
-                <TextView
-                  android:id="@+id/titleauthor"
-                  android:layout_width="0dp"
-                  android:layout_height="wrap_content"
-                  android:layout_weight="2"
-                  android:ellipsize="end"
-                  android:padding="8dp"
-                  android:singleLine="true"
-                  android:textSize="16sp"
-                  android:visibility="invisible" />
-
-                <ImageView
-                  android:id="@+id/setting"
-                  android:layout_width="25dp"
-                  android:layout_height="25dp"
-                  android:layout_marginLeft="3dp"
-                  android:layout_marginRight="3dp"
-                  android:scaleType="centerInside"
-                  android:src="@drawable/drawer_item15" />
-
-                <ImageView
-                  android:id="@+id/codesnapimg"
-                  android:layout_width="25dp"
-                  android:layout_height="25dp"
-                  android:layout_marginLeft="3dp"
-                  android:layout_marginRight="3dp"
-                  android:scaleType="centerInside"
-                  android:src="@drawable/cameracode_24px" />
-
-                <ImageView
-                  android:id="@+id/image"
-                  android:layout_width="25dp"
-                  android:layout_height="25dp"
-                  android:layout_marginLeft="3dp"
-                  android:layout_marginRight="3dp"
-                  android:scaleType="centerInside"
-                  android:src="@drawable/okeye" />
-
-                <ImageView
-                  android:id="@+id/redo"
-                  android:layout_width="25dp"
-                  android:layout_height="25dp"
-                  android:layout_marginLeft="3dp"
-                  android:layout_marginRight="3dp"
-                  android:scaleType="fitCenter"
-                  android:src="@drawable/redo" />
-
-                <ImageView
-                  android:id="@+id/undo"
-                  android:layout_width="25dp"
-                  android:layout_height="25dp"
-                  android:layout_marginLeft="3dp"
-                  android:layout_marginRight="3dp"
-                  android:scaleType="fitCenter"
-                  android:src="@drawable/undos" />
-
-                <ImageView
-                  android:id="@+id/menupopnew"
-                  android:layout_width="25dp"
-                  android:layout_height="25dp"
-                  android:layout_marginRight="4dp"
-                  android:scaleType="fitCenter"
-                  android:src="@drawable/ic_more_vert_white" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                  android:id="@+id/rvmenueditor"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_marginLeft="3dp"
-                  android:layout_marginRight="3dp" />
-              </LinearLayout>
-            </LinearLayout>
-          </LinearLayout>
-
-          <ProgressBar
-            android:id="@+id/progressbar1"
-            style="?android:progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:padding="8dp" />
-
-          <!-- TabLayout -->
-          <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tablayouteditor"
-            style="@style/AppTheme.TabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            app:tabGravity="fill"
-            app:tabMode="scrollable"
-            app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget" />
-
-          <!-- مسیر فایل -->
-          <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/dir"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp" />
-
-        </LinearLayout>
-
-        <!-- ViewPager2 برای ادیتورها -->
-        <androidx.viewpager2.widget.ViewPager2
-          android:id="@+id/viewPager"
-          android:layout_width="match_parent"
-          android:layout_height="0dp"
-          android:layout_weight="5" />
-
-        <!-- نوار پایین -->
-        <LinearLayout
-          android:id="@+id/newLayoutSymbolBar"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:gravity="center_vertical"
-          android:orientation="horizontal"
-          android:padding="3dp">
-
-          <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
-              android:id="@+id/barSymoble"
-              android:layout_width="match_parent"
-              android:layout_height="0dp"
-              android:background="@android:color/transparent"
-              android:gravity="right"
-              android:orientation="vertical"
-              android:padding="2dp"
-              android:visibility="visible">
-
-              <ImageView
-                android:id="@+id/imageview1"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="2dp"
-                android:padding="3dp"
-                android:scaleType="centerInside"
-                android:src="@drawable/close" />
-
-              <LinearLayout
+            <ir.ninjacoder.ghostide.core.widget.PraramnetLayoutNinja
+                android:id="@+id/Mainlinear"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="8dp" />
-            </LinearLayout>
-
-            <LinearLayout
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
-
-              <ir.ninjacoder.ghostide.core.marco.GhostWebEditorSearch
-                android:id="@+id/editor_ser"
-                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:padding="8dp" />
+                android:gravity="center_vertical"
+                android:orientation="vertical">
 
-              <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/syspiar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp" />
-            </LinearLayout>
-          </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/multytab"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="vertical">
+
+                    <!-- نوار ابزار -->
+                    <LinearLayout
+                        android:id="@+id/CustomToolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:orientation="horizontal"
+                        android:translationX="2.0dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="vertical"
+                            android:padding="4dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:padding="8dp">
+
+                                <ImageView
+                                    android:id="@+id/avatargithubuser"
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:orientation="horizontal"
+                                    android:padding="5dp"
+                                    android:scaleType="centerInside" />
+
+                                <TextView
+                                    android:id="@+id/titleauthor"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="2"
+                                    android:ellipsize="end"
+                                    android:padding="8dp"
+                                    android:singleLine="true"
+                                    android:textSize="16sp"
+                                    android:visibility="invisible" />
+
+                                <ImageView
+                                    android:id="@+id/setting"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:layout_marginLeft="3dp"
+                                    android:layout_marginRight="3dp"
+                                    android:scaleType="centerInside"
+                                    android:src="@drawable/drawer_item15" />
+
+                                <ImageView
+                                    android:id="@+id/codesnapimg"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:layout_marginLeft="3dp"
+                                    android:layout_marginRight="3dp"
+                                    android:scaleType="centerInside"
+                                    android:src="@drawable/cameracode_24px" />
+
+                                <ImageView
+                                    android:id="@+id/image"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:layout_marginLeft="3dp"
+                                    android:layout_marginRight="3dp"
+                                    android:scaleType="centerInside"
+                                    android:src="@drawable/okeye" />
+
+                                <ImageView
+                                    android:id="@+id/redo"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:layout_marginLeft="3dp"
+                                    android:layout_marginRight="3dp"
+                                    android:scaleType="fitCenter"
+                                    android:src="@drawable/redo" />
+
+                                <ImageView
+                                    android:id="@+id/undo"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:layout_marginLeft="3dp"
+                                    android:layout_marginRight="3dp"
+                                    android:scaleType="fitCenter"
+                                    android:src="@drawable/undos" />
+
+                                <ImageView
+                                    android:id="@+id/menupopnew"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:layout_marginRight="4dp"
+                                    android:scaleType="fitCenter"
+                                    android:src="@drawable/ic_more_vert_white" />
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/rvmenueditor"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="3dp"
+                                    android:layout_marginRight="3dp" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <ProgressBar
+                        android:id="@+id/progressbar1"
+                        style="?android:progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:indeterminate="true"
+                        android:padding="8dp" />
+
+                    <!-- TabLayout -->
+                    <com.google.android.material.tabs.TabLayout
+                        android:id="@+id/tablayouteditor"
+                        style="@style/AppTheme.TabLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        app:tabGravity="fill"
+                        app:tabMode="scrollable"
+                        app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget" />
+
+                    <!-- مسیر فایل -->
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/dir"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp" />
+
+                </LinearLayout>
+
+                <!-- ViewPager2 برای ادیتورها -->
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/viewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="5" />
+
+                <!-- نوار پایین -->
+                <LinearLayout
+                    android:id="@+id/newLayoutSymbolBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="3dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/barSymoble"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:background="@android:color/transparent"
+                            android:gravity="right"
+                            android:orientation="vertical"
+                            android:padding="2dp"
+                            android:visibility="visible">
+
+                            <ImageView
+                                android:id="@+id/imageview1"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_marginLeft="2dp"
+                                android:layout_marginRight="2dp"
+                                android:padding="3dp"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/close" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:padding="8dp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <ir.ninjacoder.ghostide.core.marco.GhostWebEditorSearch
+                                android:id="@+id/editor_ser"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:padding="8dp" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/syspiar"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="8dp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </ir.ninjacoder.ghostide.core.widget.PraramnetLayoutNinja>
         </LinearLayout>
-      </ir.ninjacoder.ghostide.core.widget.PraramnetLayoutNinja>
     </LinearLayout>
-  </LinearLayout>
-
-  <!-- FAB -->
-  <ir.ninjacoder.ghostide.core.widget.ExrtaFab
-    android:id="@+id/_fab"
-    android:layout_width="80dp"
-    android:layout_height="80dp"
-    android:layout_gravity="bottom|end"
-    android:layout_margin="16dp"
-    android:layout_marginBottom="44dp"
-    android:padding="24dp"
-    app:backgroundTint="?colorPrimary"
-    app:iconTint="?colorSurface" />
+    <ir.ninjacoder.ghostide.core.widget.ExrtaFab
+        android:id="@+id/_fab"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:layout_marginBottom="55dp"
+        android:padding="24dp"
+        app:backgroundTint="?colorPrimary"
+        app:iconTint="?colorSurface" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

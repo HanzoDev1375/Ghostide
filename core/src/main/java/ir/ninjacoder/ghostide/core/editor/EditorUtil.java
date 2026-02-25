@@ -10,11 +10,13 @@ import io.github.rosemoe.sora.event.SelectionChangeEvent;
 import io.github.rosemoe.sora.text.ContentLine;
 import io.github.rosemoe.sora.text.ICUUtils;
 import io.github.rosemoe.sora.util.IntPair;
+import io.github.rosemoe.sora.widget.CodeEditor;
+import io.github.rosemoe.sora.text.Cursor;
 import ir.ninjacoder.ghostide.core.IdeEditor;
 
 public class EditorUtil {
 
-  public static void selectWord(IdeEditor editor, int line, int column) {
+  public static void selectWord(CodeEditor editor, int line, int column) {
     // Find word edges
     int startLine = line, endLine = line;
     ContentLine lineObj = editor.getText().getLine(line);
@@ -52,11 +54,38 @@ public class EditorUtil {
   }
 
   public static void setClick(IdeEditor editor) {
+
+    editor.subscribeEvent(
+        LongPressEvent.class,
+        (event, unsubscribe) -> {
+          event.intercept();
+
+          Cursor cursor = editor.getCursor();
+          if (cursor.isSelected()) {
+              
+            int index = editor.getText().getCharIndex(event.getLine(), event.getColumn());
+            int cursorLeft = cursor.getLeft();
+            int cursorRight = cursor.getRight();
+            char c = editor.getText().charAt(index);
+            if (Character.isWhitespace(c)) {
+              editor.setSelection(event.getLine(), event.getColumn());
+            } else if (index < cursorLeft || index > cursorRight) {
+              EditorUtil.selectWord(editor, event.getLine(), event.getColumn());
+            }
+          } else {
+            char c = editor.getText().charAt(event.getIndex());
+            if (!Character.isWhitespace(c)) {
+              selectWord(editor, event.getLine(), event.getColumn());
+            } else {
+              editor.setSelection(event.getLine(), event.getColumn());
+            }
+          }
+        });
     editor.subscribeEvent(
         ClickEvent.class,
         (event, unsubscribe) -> {
-          var cursor = editor.getCursor();
-          if (cursor.isSelected()) {
+          Cursor cursor = editor.getCursor();
+          if (editor.getCursor().isSelected()) {
             int index = editor.getText().getCharIndex(event.getLine(), event.getColumn());
             int cursorLeft = cursor.getLeft();
             int cursorRight = cursor.getRight();
@@ -67,32 +96,6 @@ public class EditorUtil {
               event.intercept();
             }
           }
-        });
-
-    editor.subscribeEvent(
-        LongPressEvent.class,
-        (event, unsubscribe) -> {
-          event.intercept();
-          var cursor = editor.getCursor();
-          if (cursor.isSelected()) {
-            int index = editor.getText().getCharIndex(event.getLine(), event.getColumn());
-            int cursorLeft = cursor.getLeft();
-            int cursorRight = cursor.getRight();
-            char c = editor.getText().charAt(index);
-            if (Character.isWhitespace(c)) {
-              editor.setSelection(event.getLine(), event.getColumn());
-            } else if (index < cursorLeft || index > cursorRight) {
-              selectWord(editor, event.getLine(), event.getColumn());
-            }
-          } else {
-            char c = editor.getText().charAt(event.getIndex());
-            if (!Character.isWhitespace(c)) {
-              selectWord(editor, event.getLine(), event.getColumn());
-            } else {
-              editor.setSelection(event.getLine(), event.getColumn());
-            }
-          }
-          editor.getTextActionWindow().show();
         });
   }
 

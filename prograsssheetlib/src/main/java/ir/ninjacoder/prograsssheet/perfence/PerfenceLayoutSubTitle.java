@@ -6,30 +6,35 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
-import androidx.appcompat.widget.LinearLayoutCompat;
+import android.widget.LinearLayout;
 import ir.ninjacoder.prograsssheet.R;
 import ir.ninjacoder.prograsssheet.databinding.LayoutPerfenceGroupsBinding;
 import ir.ninjacoder.prograsssheet.enums.ModBackground;
+import java.util.List;
 
-public class PerfenceLayoutSubTitle extends LinearLayoutCompat {
+public class PerfenceLayoutSubTitle extends LinearLayout {
   private LayoutPerfenceGroupsBinding binding;
   private ModBackground mod = ModBackground.NONE;
 
-  public PerfenceLayoutSubTitle(Context context, AttributeSet set) {
-    super(context, set);
-    init(set,context);
+  public PerfenceLayoutSubTitle(Context context) {
+    super(context, null);
+    init(null, context);
   }
 
-  void init(AttributeSet attrs,Context context) {
+  public PerfenceLayoutSubTitle(Context context, AttributeSet set) {
+    super(context, set);
+    init(set, context);
+  }
+
+  void init(AttributeSet attrs, Context context) {
     binding = LayoutPerfenceGroupsBinding.inflate(LayoutInflater.from(getContext()));
     if (binding != null) {
       removeAllViews();
       addView(binding.getRoot());
-      LinearLayoutCompat.LayoutParams params =
-          new LinearLayoutCompat.LayoutParams(
-              LinearLayoutCompat.LayoutParams.MATCH_PARENT,
-              LinearLayoutCompat.LayoutParams.WRAP_CONTENT);
+      LinearLayout.LayoutParams params =
+          new LinearLayout.LayoutParams(
+              LinearLayout.LayoutParams.MATCH_PARENT,
+              LinearLayout.LayoutParams.WRAP_CONTENT);
 
       binding.getRoot().setLayoutParams(params);
       if (attrs != null) {
@@ -38,18 +43,10 @@ public class PerfenceLayoutSubTitle extends LinearLayoutCompat {
         a.recycle();
 
         switch (modBackground) {
-          case 0:
-            mod = ModBackground.NONE;
-            break;
-          case 1:
-            mod = ModBackground.TOP;
-            break;
-          case 2:
-            mod = ModBackground.MIDDLE;
-            break;
-          case 3:
-            mod = ModBackground.BOTTOM;
-            break;
+          case 0 -> mod = ModBackground.NONE;
+          case 1 -> mod = ModBackground.TOP;
+          case 2 -> mod = ModBackground.MIDDLE;
+          case 3 -> mod = ModBackground.BOTTOM;
         }
         updateBackground();
       }
@@ -64,9 +61,26 @@ public class PerfenceLayoutSubTitle extends LinearLayoutCompat {
     binding.description.setText(value);
   }
 
+  public void setTextSetting(String title) {
+    binding.preferenceTitle.setText(title);
+    binding.description.setVisibility(INVISIBLE);
+  }
+
   public void setBackgroundMod(ModBackground mod) {
     this.mod = mod;
     updateBackground();
+  }
+
+  public <T> Drawable get(List<T> list, int position) {
+    if (list.size() == 1) {
+      return Shape.bottom(this);
+    } else if (position == 0) {
+      return Shape.top(this);
+    } else if (position == list.size() - 1) {
+      return Shape.bottom(this);
+    } else {
+      return Shape.middel(this);
+    }
   }
 
   public void updateBackground() {
