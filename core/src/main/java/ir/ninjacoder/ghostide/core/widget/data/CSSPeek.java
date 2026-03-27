@@ -26,7 +26,6 @@ import java.util.List;
  */
 public class CSSPeek {
 
-  // فقط این متد از بیرون صدا زده میشه
   public static void peekFromHtmlString(
       String htmlContent, String cssPath, String elementSelector, Context context) {
     try {
@@ -80,8 +79,6 @@ public class CSSPeek {
     }
 
     Element targetElement = elements.first();
-
-    // 1. بررسی فایل‌های CSS
     for (File cssFile : cssFiles) {
       try {
         CascadingStyleSheet externalCss =
@@ -89,16 +86,14 @@ public class CSSPeek {
         List<String> rules = findRulesForElement(targetElement, externalCss);
 
         if (!rules.isEmpty()) {
-          showToast(context, "📂 استایل از نوع فایل است برای '" + elementSelector + "'");
+          showToast(context, " استایل از نوع فایل است برای '" + elementSelector + "'");
           return;
         }
       } catch (Exception e) {
-        showToast(context, "❌ خطا در پردازش فایل CSS: " + e.getMessage());
+        showToast(context, " خطا در پردازش فایل CSS: " + e.getMessage());
         return;
       }
     }
-
-    // 2. بررسی CSS درون‌خطی
     Elements styleTags = doc.select("style");
     for (int i = 0; i < styleTags.size(); i++) {
       try {

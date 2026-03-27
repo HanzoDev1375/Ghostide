@@ -33,6 +33,7 @@ public class FileBookmarkActivity extends BaseCompat {
   private String Folder = "";
   private double position = 0;
   private String UPFolder = "";
+  public static final String keybookmark ="bookmark.key";
   private ArrayList<HashMap<String, Object>> map = new ArrayList<>();
   private SharedPreferences book, shp;
   protected FilebookmarkBinding bin;
@@ -58,17 +59,17 @@ public class FileBookmarkActivity extends BaseCompat {
           }
         });
 
-    book = getSharedPreferences("hsipsot4444", Activity.MODE_PRIVATE);
+    book = getSharedPreferences(keybookmark, Activity.MODE_PRIVATE);
     shp = getSharedPreferences("path", Activity.MODE_PRIVATE);
 
     initializeLogic();
     bin.listviewBookmark.setVisibility(View.VISIBLE);
     bin.listviewBookmark.setEmptyView(bin.layoutBookmarkEmptyview);
-    if (book.contains("hsipsot4444")) {
+    if (book.contains(keybookmark)) {
       map =
           new Gson()
               .fromJson(
-                  book.getString("hsipsot4444", ""),
+                  book.getString(keybookmark, ""),
                   new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
       bin.listviewBookmark.setAdapter(new FileBookMarkAdapter(map));
       ((BaseAdapter) bin.listviewBookmark.getAdapter()).notifyDataSetChanged();
@@ -107,7 +108,7 @@ public class FileBookmarkActivity extends BaseCompat {
               AdapterView<?> _param1, View _param2, int _param3, long _param4) {
             final int _position = _param3;
             map.remove(_position);
-            book.edit().putString("hsipsot4444", new Gson().toJson(map)).apply();
+            book.edit().putString(keybookmark, new Gson().toJson(map)).apply();
             ((BaseAdapter) bin.listviewBookmark.getAdapter()).notifyDataSetChanged();
 
             return true;

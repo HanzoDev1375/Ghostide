@@ -509,6 +509,7 @@ public class SettingAppActivity extends BaseCompat {
     fb.add(getString(R.string.backgroundimageeditor));
     fb.add(getString(R.string.glow_effect));
     fb.add(getString(R.string.Customize_font));
+    fb.add(getString(R.string.fontsize));
 
     grids.setValue(gridMode.contains("gride"));
     rvsetting.setLayoutManager(new LinearLayoutManager(this));
@@ -526,9 +527,31 @@ public class SettingAppActivity extends BaseCompat {
                 case 7 -> showEF();
                 case 8 -> customDataRow(
                     "Custom Font Editor", "type dir font .ttf format... ", "mfont", setfont);
+                case 9 -> setFontsize();
               }
             },
             fb));
+  }
+
+  void setFontsize() {
+    var di = new MaterialAlertDialogBuilder(this);
+    var bind = LayoutEditorSizeBlurBinding.inflate(getLayoutInflater());
+    bind.slider.setTrackIconActiveStart(
+        MaterialShapes.createShapeDrawable(MaterialShapes.SOFT_BURST));
+    di.setTitle("Font Size");
+    di.setMessage("set font in 6.0 ~ 30.1");
+    bind.slider.setValueFrom(6.0f);
+    bind.slider.setValueTo(30.0f);
+    if (setfont != null) {
+      bind.slider.setValue(setfont.getFloat("fontsize", 6));
+    }
+    di.setNeutralButton(
+        android.R.string.ok,
+        (p, d) -> {
+          setfont.edit().putFloat("fontsize", bind.slider.getValue()).apply();
+        });
+    di.setView(bind.getRoot());
+    di.show();
   }
 
   void setBlursize() {

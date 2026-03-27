@@ -13,9 +13,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.transition.Explode;
+import android.transition.Transition;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -23,11 +25,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.graphics.Insets;
 import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
@@ -39,10 +43,12 @@ import com.blankj.utilcode.util.FileIOUtils;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.internal.EdgeToEdgeUtils;
 import com.google.android.material.shape.CornerFamily;
 import com.google.android.material.shape.MaterialShapeDrawable;
 import com.google.android.material.shape.ShapeAppearanceModel;
 
+import com.google.android.material.transition.platform.MaterialSharedAxis;
 import ir.ninjacoder.ghostide.core.pl.PluginLoaderImpl;
 import java.io.File;
 
@@ -71,25 +77,18 @@ public class BaseCompat extends AppCompatActivity {
   @Nullable
   @Override
   protected void onCreate(@Nullable Bundle saveInStatous) {
+    EdgeToEdge.enable(this);
     super.onCreate(saveInStatous);
     initErrorDialogpackageAPP();
     thememanagersoft = getSharedPreferences("thememanagersoft", MODE_PRIVATE);
     themechange = getSharedPreferences("themechange", MODE_PRIVATE);
+    getWindow().setNavigationBarColor(Color.TRANSPARENT);
+    getWindow().setStatusBarColor(Color.TRANSPARENT);
     initParseWallpapaer();
-    if (Build.VERSION.SDK_INT >= 28)
-      getWindow()
-          .setNavigationBarDividerColor(MaterialColors.getColor(this, ObjectUtils.TvColor, 0));
-    /// using system Wallpapar
-    if (Build.VERSION.SDK_INT >= 21)
-      getWindow().setNavigationBarColor(MaterialColors.getColor(this, ObjectUtils.Back, 0));
-    if (Build.VERSION.SDK_INT >= 21)
-      getWindow().setStatusBarColor(MaterialColors.getColor(this, ObjectUtils.Back, 0));
-
     try {
       if (themechange.contains("themechange")) {
         if (themechange.getBoolean("themechange", false) == true) {
           ((GhostIdeAppLoader) getApplicationContext()).onThemeChange();
-          
         }
       }
     } catch (Exception err) {
@@ -285,6 +284,16 @@ public class BaseCompat extends AppCompatActivity {
     WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
   }
 
+  public void setFitViewGroup(ViewGroup viewgroup) {
+    ViewCompat.setOnApplyWindowInsetsListener(
+        viewgroup,
+        (v, insets) -> {
+          Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+          v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+          return insets;
+        });
+  }
+
   public BaseCompat autoSize(TextView textView, float size) {
     ReSizeApp.resize(textView, this, size);
     return this;
@@ -330,68 +339,22 @@ public class BaseCompat extends AppCompatActivity {
     startActivity(i);
   }
 
-  public void applyWall() {
-    if (Build.VERSION.SDK_INT >= 21) getWindow().setNavigationBarColor(0);
-    if (Build.VERSION.SDK_INT >= 21) getWindow().setStatusBarColor(0);
-  }
+  public void applyWall() {}
 
-  public void Wall() {
-    var data = thememanagersoft.contains("br") ? thememanagersoft.getFloat("br", 2) : 3;
-    BlurImage.setBlurInWallpaperMobile(this, data, getWindow().getDecorView());
-    if (Build.VERSION.SDK_INT >= 21) getWindow().setNavigationBarColor(0);
-    if (Build.VERSION.SDK_INT >= 21) getWindow().setStatusBarColor(0);
-  }
+  @Deprecated
+  public void Wall() {}
 
   public void NoWall() {
     try {
       getWindow()
           .getDecorView()
           .setBackgroundColor(MaterialColors.getColor(this, ObjectUtils.Back, 0));
-      if (Build.VERSION.SDK_INT >= 21)
-        getWindow().setNavigationBarColor(MaterialColors.getColor(this, ObjectUtils.Back, 0));
-      if (Build.VERSION.SDK_INT >= 21)
-        getWindow().setStatusBarColor(MaterialColors.getColor(this, ObjectUtils.Back, 0));
     } catch (Exception err) {
 
     }
   }
 
   public void setBackGroundIsMobile() {
-
-    if (thememanagersoft.getString("thememanagersoft", "").equals("ok")) {
-      Wall();
-    } else {
-
-    }
-    thememanagersoft.registerOnSharedPreferenceChangeListener(
-        new SharedPreferences.OnSharedPreferenceChangeListener() {
-
-          @Override
-          public void onSharedPreferenceChanged(SharedPreferences sh, String key) {
-            if (key.equals("thememanagersoft")) {
-              String datapost = sh.getString("thememanagersoft", "");
-              if (datapost.equals("ok")) {
-                Wall();
-                recreate();
-              }
-            }
-          }
-        });
-
-    thememanagersoft.unregisterOnSharedPreferenceChangeListener(
-        new SharedPreferences.OnSharedPreferenceChangeListener() {
-
-          @Override
-          public void onSharedPreferenceChanged(SharedPreferences sh, String key) {
-            if (key.equals("thememanagersoft")) {
-              String datapost = sh.getString("thememanagersoft", "");
-              if (datapost.equals("no")) {
-                NoWall();
-                recreate();
-              }
-            }
-          }
-        });
   }
 
   public int colors() {
@@ -451,9 +414,16 @@ public class BaseCompat extends AppCompatActivity {
 
   public void loadAnim(Intent o) {
     var op = ActivityOptions.makeSceneTransitionAnimation(this);
-    getWindow().setExitTransition(new Explode());
-    getWindow().setEnterTransition(new Explode());
-    getWindow().setReenterTransition(new Explode());
+    var enter = new MaterialSharedAxis(MaterialSharedAxis.Z, true);
+    enter.setDuration(1000);
+    var exit = new MaterialSharedAxis(MaterialSharedAxis.Z, false);
+    exit.setDuration(1000);
+    var rttype = new MaterialSharedAxis(MaterialSharedAxis.Y, true);
+    rttype.setDuration(1000);
+
+    getWindow().setExitTransition(exit);
+    getWindow().setEnterTransition(enter);
+    getWindow().setReenterTransition(rttype);
     if (op == null) return;
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
       op.setPendingIntentBackgroundActivityLaunchAllowed(true);

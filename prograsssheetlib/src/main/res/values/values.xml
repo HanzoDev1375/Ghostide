@@ -1,112 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- res/values/attrs.xml -->
-    <declare-styleable name="PreferenceSwitchGroup">
-        <attr
-            name="modBackground"
-            format="enum">
-            <enum
-                name="none"
-                value="0" />
-            <enum
-                name="top"
-                value="1" />
-            <enum
-                name="middle"
-                value="2" />
-            <enum
-                name="bottom"
-                value="3" />
-        </attr>
-    </declare-styleable>
-    <dimen name="media_seekbar_progress_wavelength">27dp</dimen>
-    <dimen name="media_seekbar_progress_amplitude">2.7dp</dimen>
-    <dimen name="media_seekbar_progress_phase">8dp</dimen>
-    <dimen name="media_seekbar_progress_stroke_width">3.4dp</dimen>
-    <style
-        name="MediaPlayer.ProgressBar"
-        parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
-        <item name="android:thumb">@drawable/media_seekbar_thumb</item>
-        <item name="android:thumbTint">?android:attr/textColorPrimary</item>
-        <item name="android:progressTint">?android:attr/textColorPrimary</item>
-        <item name="android:progressBackgroundTint">?android:attr/textColorTertiary</item>
-        <item name="android:clickable">true</item>
-        <item name="android:splitTrack">false</item>
-    </style>
-    <declare-styleable name="ListItemViews">
-        <attr
-            name="strokesize"
-            format="dimension" />
-        <attr
-            name="strokemod"
-            format="boolean" />
-        <attr
-            name="strokecolor"
-            format="color" />
+  <!-- res/values/attrs.xml -->
+  <declare-styleable name="PreferenceSwitchGroup">
+    <attr
+      name="modBackground"
+      format="enum">
+      <enum
+        name="none"
+        value="0" />
+      <enum
+        name="top"
+        value="1" />
+      <enum
+        name="middle"
+        value="2" />
+      <enum
+        name="bottom"
+        value="3" />
+    </attr>
+  </declare-styleable>
+  <dimen name="media_seekbar_progress_wavelength">27dp</dimen>
+  <dimen name="media_seekbar_progress_amplitude">2.7dp</dimen>
+  <dimen name="media_seekbar_progress_phase">8dp</dimen>
+  <dimen name="media_seekbar_progress_stroke_width">3.4dp</dimen>
+  <style
+    name="MediaPlayer.ProgressBar"
+    parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
+    <item name="android:thumb">@drawable/media_seekbar_thumb</item>
+    <item name="android:thumbTint">?android:attr/textColorPrimary</item>
+    <item name="android:progressTint">?android:attr/textColorPrimary</item>
+    <item name="android:progressBackgroundTint">?android:attr/textColorTertiary</item>
+    <item name="android:clickable">true</item>
+    <item name="android:splitTrack">false</item>
+  </style>
+  <declare-styleable name="ListItemViews">
+    <attr
+      name="strokesize"
+      format="dimension" />
+    <attr
+      name="strokemod"
+      format="boolean" />
+    <attr
+      name="strokecolor"
+      format="color" />
 
-    </declare-styleable>
-    <declare-styleable name="EmptyState">
+  </declare-styleable>
+  <declare-styleable name="EmptyState">
 
-        <attr
-            name="emptyStateIcon"
-            format="reference" />
-        <attr
-            name="emptyStateIconColor"
-            format="color" />
-        <attr
-            name="emptyStateIconRoundSize"
-            format="dimension" />
-        <attr
-            name="emptyStateText"
-            format="string" />
-        <attr
-            name="iconsize"
-            fromat="dimension" />
-        <attr
-            name="emptyStateTextColor"
-            format="color" />
+    <attr
+      name="emptyStateIcon"
+      format="reference" />
+    <attr
+      name="emptyStateIconColor"
+      format="color" />
+    <attr
+      name="emptyStateIconRoundSize"
+      format="dimension" />
+    <attr
+      name="emptyStateText"
+      format="string" />
+    <attr
+      name="iconsize"
+      fromat="dimension" />
+    <attr
+      name="emptyStateTextColor"
+      format="color" />
 
-        <attr
-            name="emptyStateShowButton"
-            format="boolean" />
-        <attr
-            name="emptyStateButtonText"
-            format="string" />
-        <attr
-            name="show"
-            format="boolean" />
-        <attr
-            name="hide"
-            format="boolean" />
+    <attr
+      name="emptyStateShowButton"
+      format="boolean" />
+    <attr
+      name="emptyStateButtonText"
+      format="string" />
+    <attr
+      name="show"
+      format="boolean" />
+    <attr
+      name="hide"
+      format="boolean" />
 
-        <attr
-            name="IconScaleType"
-            format="enum">
-            <enum
-                name="center"
-                value="0" />
-            <enum
-                name="centerCrop"
-                value="1" />
-            <enum
-                name="centerInside"
-                value="2" />
-            <enum
-                name="fitCenter"
-                value="3" />
-            <enum
-                name="fitStart"
-                value="4" />
-            <enum
-                name="fitEnd"
-                value="5" />
-            <enum
-                name="fitXY"
-                value="6" />
-            <enum
-                name="matrix"
-                value="7" />
-        </attr>
-    </declare-styleable>
-
+    <attr
+      name="IconScaleType"
+      format="enum">
+      <enum
+        name="center"
+        value="0" />
+      <enum
+        name="centerCrop"
+        value="1" />
+      <enum
+        name="centerInside"
+        value="2" />
+      <enum
+        name="fitCenter"
+        value="3" />
+      <enum
+        name="fitStart"
+        value="4" />
+      <enum
+        name="fitEnd"
+        value="5" />
+      <enum
+        name="fitXY"
+        value="6" />
+      <enum
+        name="matrix"
+        value="7" />
+    </attr>
+  </declare-styleable>
+  <style name="FadeMenuAnimation">
+    <item name="android:windowEnterAnimation">@anim/mymenu_fade_in</item>
+    <item name="android:windowExitAnimation">@anim/mymenu_fade_out</item>
+  </style>
 </resources>

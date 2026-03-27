@@ -23,9 +23,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public class RecyclerviewViewHolderBinder {
-  
+
   public static void bindHolder(
-     List<FileManagerModel> files,
+      List<FileManagerModel> files,
       TextView folderName,
       TextView tvTools,
       ImageView icon,

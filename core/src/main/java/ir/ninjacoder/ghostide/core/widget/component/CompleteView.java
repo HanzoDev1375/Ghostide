@@ -27,7 +27,23 @@ public class CompleteView extends FrameLayout implements IControlComponent {
 
   private ImageView mStopFullscreen;
 
-  {
+
+  public CompleteView(@NonNull Context context) {
+    super(context);
+   init();
+  }
+
+  public CompleteView(@NonNull Context context, @Nullable AttributeSet attrs) {
+    super(context, attrs);
+   init();
+  }
+
+  public CompleteView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    super(context, attrs, defStyleAttr);
+    init();
+  }
+
+  void init()  {
     setVisibility(GONE);
     LayoutInflater.from(getContext()).inflate(R.layout.dkplayer_layout_complete_view, this, true);
     findViewById(R.id.iv_replay)
@@ -57,17 +73,6 @@ public class CompleteView extends FrameLayout implements IControlComponent {
     ObjectUtils.setColorFilter(mStopFullscreen);
   }
 
-  public CompleteView(@NonNull Context context) {
-    super(context);
-  }
-
-  public CompleteView(@NonNull Context context, @Nullable AttributeSet attrs) {
-    super(context, attrs);
-  }
-
-  public CompleteView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-    super(context, attrs, defStyleAttr);
-  }
 
   @Override
   public void attach(@NonNull ControlWrapper controlWrapper) {

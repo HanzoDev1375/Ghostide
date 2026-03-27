@@ -1,125 +1,115 @@
 package ir.ninjacoder.ghostide.core.adapter;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.color.MaterialColors;
-
-import java.io.File;
-import java.util.List;
-
-import ir.ninjacoder.ghostide.core.R;
 import ir.ninjacoder.ghostide.core.utils.ObjectUtils;
+import ir.ninjacoder.prograsssheet.perfence.DrawableUtil;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import ir.ninjacoder.ghostide.core.R;
 
 public class ToolbarListFileAdapter extends RecyclerView.Adapter<ToolbarListFileAdapter.VH> {
-
-  public String Folder = "";
   protected CallBack back;
-  protected boolean isClickNot = false;
-  List<String> _data;
-  Context context;
+  private List<String> data;
+  private Context context;
+  private int normalColor, normalBackground, lastitemColor, lastitemBackground;
+  private DrawableUtil drawableutil = new DrawableUtil();
 
-  public ToolbarListFileAdapter(List<String> _arr, Context context, CallBack back) {
-    this._data = _arr;
+  public ToolbarListFileAdapter(List<String> data, Context context, CallBack back) {
+    this.data = data;
     this.context = context;
     this.back = back;
   }
 
   @Override
-  public VH onCreateViewHolder(ViewGroup parent, int viewType) {
-    View _v = LayoutInflater.from(parent.getContext()).inflate(R.layout.instettab, parent, false);
-    RecyclerView.LayoutParams _lp =
-        new RecyclerView.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-    _v.setLayoutParams(_lp);
-    return new VH(_v);
-  }
+  public void onBindViewHolder(VH holder, int position) {
 
-  @Override
-  public void onBindViewHolder(VH holder, int _position) {
-    View _view = holder.itemView;
+    String fullPath = data.get(position);
+    String displayName = new File(fullPath).getName();
 
-    RecyclerView.LayoutParams _lp =
-        new RecyclerView.LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-    _view.setLayoutParams(_lp);
-    holder.textview2.setText(_data.get(_position));
-
-    if (holder.textview2 != null) {
-      File file = new File(_data.get(_position).toString());
-
-      holder.textview2.setAlpha(file.isHidden() ? 0.5f : 1f);
+    if (displayName.isEmpty()) {
+      displayName = fullPath;
     }
-    holder.itemView.setOnClickListener(
-        v -> {
-          Log.e("This pos : ", _data.get(_position));
-        });
-    holder.textview2.setTextColor(
-        MaterialColors.getColor(holder.textview2, ObjectUtils.colorOnSurface));
-    holder.imageview1.setColorFilter(
-        MaterialColors.getColor(holder.imageview1, ObjectUtils.colorOnSurface, 0),
-        PorterDuff.Mode.SRC_IN);
-    holder.textview2.setOnLongClickListener(
-        longClick -> {
-          isClickNot = true;
-          if (isClickNot) {
-            if (back != null) {
-              back.GoToDir(holder.textview2);
-            }
-          }
 
-          return false;
-        });
-    holder.textview2.setOnClickListener(
+    holder.tvtitle.setText(displayName);
+
+    holder.contentview.setOnClickListener(
         v -> {
           if (back != null) {
-            back.GoToTreeFile(v);
+            back.GoToDir(v, position, fullPath);
           }
         });
-    if (_position == 0) {
-      holder.textview2.setTextColor(
-          MaterialColors.getColor(
-              holder.textview2, com.google.android.material.R.attr.colorOutline, 0));
-    }
+
+    holder.contentview.setOnLongClickListener(
+        longClick -> {
+          if (back != null) {
+            back.GoToTreeFile(holder.itemView, position, fullPath);
+          }
+          return true;
+        });
+    normalColor = ObjectUtils.colorSecondary;
+    normalBackground = ObjectUtils.colorOnSecondary;
+    lastitemColor = ObjectUtils.colorOnPrimary;
+    lastitemBackground = ObjectUtils.colorPrimary;
+    drawableutil.setColorByPosition(
+        data,
+        position,
+        holder.contentview,
+        holder.tvtitle,
+        lastitemColor,
+        lastitemBackground,
+        normalColor,
+        normalBackground);
   }
 
   @Override
   public int getItemCount() {
-    return _data.size();
+    return data.size();
   }
 
-  public File getFileFromBreadcrumb(List<String> items) {
-    String filePath = String.join("/", items);
-    return new File(filePath);
+  public void bindColor(
+      int normalColor, int normalBackground, int lastitemColor, int lastitemBackground) {
+    this.normalColor = normalColor;
+    this.normalBackground = normalBackground;
+    this.lastitemColor = lastitemColor;
+    this.lastitemBackground = lastitemBackground;
   }
 
   public interface CallBack {
-    public void GoToDir(View view);
+    void GoToDir(View view, int pos, String dir);
 
-    public void GoToTreeFile(View view);
+    void GoToTreeFile(View view, int pos, String dir);
   }
 
   public class VH extends RecyclerView.ViewHolder {
-    protected LinearLayout linear2;
-    protected TextView textview2;
-    protected ImageView imageview1;
-    protected View bindview;
+    protected TextView tvtitle;
+    protected ImageView iconarrow;
+    protected View contentview;
 
     public VH(View v) {
       super(v);
-      linear2 = v.findViewById(R.id.linear2);
-      textview2 = v.findViewById(R.id.textview2);
-      imageview1 = v.findViewById(R.id.imageview1);
-      bindview = v;
+      tvtitle = v.findViewById(R.id.tvtitle);
+      contentview = v.findViewById(R.id.contentview);
+      iconarrow = v.findViewById(R.id.iconarrow);
     }
+  }
+
+  @Override
+  public VH onCreateViewHolder(ViewGroup parent, int typeview) {
+    return new VH(
+        LayoutInflater.from(parent.getContext()).inflate(R.layout.instettab, parent, false));
+  }
+
+  public void submitList(List<String> list) {
+    if (list == null) {
+      data = new ArrayList<>();
+    } else data = new ArrayList<>(list);
+    notifyDataSetChanged();
   }
 }

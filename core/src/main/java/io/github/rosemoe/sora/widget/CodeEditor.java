@@ -4,6 +4,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.view.accessibility.AccessibilityNodeInfo;
 import com.ninjacoder.jgit.particle.custom.CustomEffect;
+
 import io.github.rosemoe.sora.data.RegexSpan;
 import java.util.regex.PatternSyntaxException;
 import io.github.rosemoe.sora.diagnostics.Diagnostic;
@@ -383,6 +384,7 @@ public class CodeEditor extends View
   private String mCurrentRegex = "";
   private int mRegexColor = 0xFF4CAF50;
   private IconSpanManager iconSpanManager;
+  private List<String> patternCode = new ArrayList<>();
 
   public void addLineIcon(int lineNumber, int iconRes) {
     LineIcon lineIcon = new LineIcon(iconRes, lineNumber);
@@ -1174,12 +1176,31 @@ public class CodeEditor extends View
     }
   }
 
+  public void setPatternCustomList(List<String> patternCode) {
+    this.patternCode = patternCode;
+    if (mLinkDetectionEnabled) {
+      detectLinks();
+      invalidate();
+    }
+  }
+
+  public List<String> getPatternCustomList() {
+    return patternCode;
+  }
+
+  public void addPattern(String code) {
+    patternCode.add(code);
+    if (mLinkDetectionEnabled) {
+      detectLinks();
+      invalidate();
+    }
+  }
+
   private void detectLinks() {
     if (!mLinkDetectionEnabled || mText == null) return;
 
     mLinks.clear();
     String text = mText.toString();
-
     Matcher linkMatcher = LINK_PATTERN.matcher(text);
     while (linkMatcher.find()) {
       int start = linkMatcher.start();
@@ -1203,7 +1224,36 @@ public class CodeEditor extends View
         }
       }
     }
+    if (!patternCode.isEmpty()) {
+      for (var it : patternCode) {
+        Matcher customMatcher = Pattern.compile(it).matcher(text);
+        while (customMatcher.find()) {
+          int start = customMatcher.start();
+          int end = customMatcher.end();
+          Log.e("RegexMod", it + start + end);
 
+          if (start >= 0 && end <= text.length() && end > start) {
+            try {
+              CharPosition startPos = mText.getIndexer().getCharPosition(start);
+              CharPosition endPos = mText.getIndexer().getCharPosition(end - 1);
+
+              if (startPos.line == endPos.line) {
+                String code = customMatcher.group();
+                LinkSpan link =
+                    new LinkSpan(code, startPos.line, startPos.column, endPos.column + 1);
+                Log.e("RegexCode", code);
+
+                link.setColor(mColors.getColor(EditorColorScheme.LINKCOLORS));
+                link.setUnderline(false);
+                mLinks.add(link);
+              }
+            } catch (Exception e) {
+              Log.e(LOG_TAG, "Error detecting unicode", e);
+            }
+          }
+        }
+      }
+    }
     Matcher unicodeMatcher = UNICODE_PATTERN.matcher(text);
     while (unicodeMatcher.find()) {
       int start = unicodeMatcher.start();
@@ -1294,7 +1344,6 @@ public class CodeEditor extends View
         float displayY = clickY;
         Diagnostic specificDiagnostic = findDiagnosticAt(pos.line, pos.column);
         if (specificDiagnostic != null) {
-          // اگر روی یک diagnostic خاص کلیک شده، اول آن را نشان بده
           List<Diagnostic> sorted = new ArrayList<>();
           sorted.add(specificDiagnostic);
           for (Diagnostic d : lineDiagnostics) {
@@ -2798,7 +2847,7 @@ public class CodeEditor extends View
     RowIterator rowIterator = mLayout.obtainRowIterator(firstVis);
     List<Span> temporaryEmptySpans = null;
     List<List<Span>> spanMap = mSpanner.getResult().getSpanMap();
-    LongArrayList matchedPositions = new LongArrayList(); // اصلاح شد
+    LongArrayList matchedPositions = new LongArrayList();
 
     int currentLine = mCursor.isSelected() ? -1 : mCursor.getLeftLine();
     int currentLineBgColor = mColors.getColor(EditorColorScheme.CURRENT_LINE);
@@ -4014,10 +4063,10 @@ public class CodeEditor extends View
 
     while (currentPos < endIndex) {
       int segmentStart = currentPos;
-      int segmentEnd = endIndex; // مقدار پیش‌فرض
+      int segmentEnd = endIndex;
       boolean isLinkSegment = false;
-      LinkSpan currentLink = null;
 
+      LinkSpan currentLink = null;
       // بررسی اینکه آیا در محدوده یک لینک هستیم
       for (LinkSpan link : linksInLine) {
         if (currentPos >= link.getStartColumn() && currentPos < link.getEndColumn()) {
@@ -4027,7 +4076,6 @@ public class CodeEditor extends View
           break;
         }
       }
-
       if (!isLinkSegment) {
         int nextLinkStart = endIndex;
         for (LinkSpan link : linksInLine) {
@@ -7032,7 +7080,6 @@ public class CodeEditor extends View
         if (isEditable()) {
           mCursor.onDeleteKeyPressed();
           notifyExternalCursorChange();
-          enters.Removed();
         }
         return true;
       case KeyEvent.KEYCODE_FORWARD_DEL:
@@ -7049,7 +7096,7 @@ public class CodeEditor extends View
           if (isEditable()) {
             if (mCompletionWindow.isShowing() && mCompletionWindow.trySelect()) {
               mCompletionWindow.setItemClick();
-              enters.Enter();
+
               return true;
             }
             NewlineHandler[] handlers = mLanguage.getNewlineHandlers();
@@ -7123,7 +7170,6 @@ public class CodeEditor extends View
         if (isEditable()) {
           if (mCompletionWindow.isShowing()) {
             mCompletionWindow.select();
-            enters.Tab();
           } else {
             commitTab();
           }
@@ -7559,9 +7605,14 @@ public class CodeEditor extends View
           () -> {
             int line = mCursor.getLeftLine();
             int column = mCursor.getLeftColumn();
+            int x = getOffsetX();
+            int y = getOffsetY();
             mText.replace(
                 0, 0, getLineCount() - 1, mText.getColumnCount(getLineCount() - 1), newText);
             getScroller().forceFinished(true);
+            getScroller().startScroll(x, y, 0, 0, 0);
+            getScroller().abortAnimation();
+            mEventHandler.scrollBy(0, 0);
             mCompletionWindow.hide();
             setSelectionAround(line, column);
           });

@@ -3,17 +3,12 @@ package ir.ninjacoder.prograsssheet.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
-import android.transition.Transition;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-
 import com.bumptech.glide.Glide;
-import com.google.android.material.transition.platform.MaterialSharedAxis;
-import android.transition.TransitionManager;
-
 import ir.ninjacoder.prograsssheet.R;
 import ir.ninjacoder.prograsssheet.databinding.EmptystateviewBinding;
 import ir.ninjacoder.prograsssheet.util.RoundedCornersTransformation;
@@ -43,9 +38,6 @@ public class EmptyState extends LinearLayout {
       addView(bin.getRoot());
     }
     hide();
-    setLayoutParams(
-        new LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
     if (attrs != null) {
       TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.EmptyState);
 
@@ -174,7 +166,7 @@ public class EmptyState extends LinearLayout {
         scaleType = ImageView.ScaleType.MATRIX;
         break;
       default:
-        scaleType = ImageView.ScaleType.CENTER_INSIDE; // مقدار پیش‌فرض
+        scaleType = ImageView.ScaleType.CENTER_INSIDE;
         break;
     }
     bin.iconEmptystate.setScaleType(scaleType);

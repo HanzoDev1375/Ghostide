@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_height="wrap_content"
+     android:layout_width="wrap_content"
+     android:visibility="gone"
+     android:padding="4dp"
+     android:layout_margin="8dp">
+
+    <LinearLayout
+         android:layout_height="match_parent"
+         android:layout_width="match_parent"
+         android:orientation="vertical">
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:gravity="center_vertical"
+             android:paddingVertical="8dp"
+             android:orientation="horizontal">
+
+            <CheckBox
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:gravity="center_vertical"
+                 android:padding="8dp"
+                 android:textSize="14sp"
+                 android:layout_marginLeft="8dp"
+                 android:id="@+id/checkbox_select_all"
+                 android:text="Select All " />
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:gravity="center"
+                 android:padding="8dp"
+                 android:textSize="14sp"
+                 android:layout_weight="1"
+                 android:id="@+id/tv_selected_count"
+                 android:text="Select 0"
+                 android:textStyle="bold" />
+
+            <ImageView
+                 android:layout_height="30dp"
+                 android:layout_width="30dp"
+                 android:scaleType="centerInside"
+                 android:background="?selectableItemBackgroundBorderless"
+                 android:clickable="true"
+                 android:layout_marginRight="8dp"
+                 app:srcCompat="@drawable/ic_clear_black_24"
+                 android:id="@+id/btn_close" />
+
+        </LinearLayout>
+
+        <com.google.android.material.divider.MaterialDivider
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:id="@+id/div" />
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:padding="4dp"
+             android:orientation="horizontal"
+             android:layout_marginTop="3dp"
+             android:id="@+id/actions_container">
+
+            <LinearLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="0dp"
+                 android:gravity="center"
+                 android:background="?selectableItemBackgroundBorderless"
+                 android:clickable="true"
+                 android:padding="8dp"
+                 android:orientation="vertical"
+                 android:layout_weight="1"
+                 android:id="@+id/action_copy">
+
+                <ImageView
+                     android:layout_height="30dp"
+                     android:layout_width="30dp"
+                     android:scaleType="centerInside"
+                     android:tint="?attr/colorOnSurface"
+                     app:srcCompat="@drawable/ic_copy_black_24px"
+                     android:id="@+id/iv_copy" />
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:textSize="12sp"
+                     android:layout_marginTop="5dp"
+                     android:id="@+id/tv_copy"
+                     android:text="copy" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="0dp"
+                 android:gravity="center"
+                 android:background="?selectableItemBackgroundBorderless"
+                 android:clickable="true"
+                 android:padding="8dp"
+                 android:orientation="vertical"
+                 android:layout_weight="1"
+                 android:id="@+id/action_move">
+
+                <ImageView
+                     android:layout_height="30dp"
+                     android:layout_width="30dp"
+                     android:scaleType="centerInside"
+                     android:tint="?attr/colorOnSurface"
+                     app:srcCompat="@drawable/ic_move_black_24px"
+                     android:id="@+id/iv_move" />
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:textSize="12sp"
+                     android:layout_marginTop="5dp"
+                     android:id="@+id/tv_move"
+                     android:text="move" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="0dp"
+                 android:gravity="center"
+                 android:background="?selectableItemBackgroundBorderless"
+                 android:clickable="true"
+                 android:padding="8dp"
+                 android:orientation="vertical"
+                 android:layout_weight="1"
+                 android:id="@+id/action_delete">
+
+                <ImageView
+                     android:layout_height="30dp"
+                     android:layout_width="30dp"
+                     android:scaleType="centerInside"
+                     android:tint="?attr/colorOnSurface"
+                     app:srcCompat="@drawable/ic_delete"
+                     android:id="@+id/iv_delete" />
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:textSize="12sp"
+                     android:layout_marginTop="5dp"
+                     android:id="@+id/tv_delete"
+                     android:text="delete" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="0dp"
+                 android:gravity="center"
+                 android:background="?selectableItemBackgroundBorderless"
+                 android:clickable="true"
+                 android:padding="8dp"
+                 android:orientation="vertical"
+                 android:layout_weight="1"
+                 android:id="@+id/action_more">
+
+                <ImageView
+                     android:layout_height="30dp"
+                     android:layout_width="30dp"
+                     android:scaleType="centerInside"
+                     android:tint="?attr/colorOnSurface"
+                     app:srcCompat="@drawable/ic_more_vert_white"
+                     android:id="@+id/iv_more" />
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:textSize="12sp"
+                     android:layout_marginTop="5dp"
+                     android:id="@+id/tv_more"
+                     android:text="more" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

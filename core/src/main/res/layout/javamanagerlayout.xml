@@ -1,53 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/_coordinator"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     android:id="@+id/_coordinator">
+
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/_app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-    >
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:fitsSystemWindows="true"
+         android:id="@+id/_app_bar">
+
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-        />
+             android:layout_height="?attr/actionBarSize"
+             android:layout_width="match_parent"
+             android:id="@+id/_toolbar">
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
     </com.google.android.material.appbar.AppBarLayout>
+
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+         android:layout_height="match_parent"
+         android:layout_width="match_parent"
+         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+         android:orientation="vertical"
+         android:fitsSystemWindows="true">
+
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+             android:layout_height="match_parent"
+             android:layout_width="match_parent"
+             android:orientation="vertical">
+
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textinputlayoutsearch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                app:endIconMode="clear_text"
-            >
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 app:endIconMode="clear_text"
+                 android:layout_margin="8dp"
+                 android:id="@+id/textinputlayoutsearch">
+
                 <EditText
-                    android:id="@+id/edittext1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:textSize="16sp"
-                    android:hint="Search Title Code "
-                />
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:hint="Search Title Code "
+                     android:padding="8dp"
+                     android:textSize="16sp"
+                     android:id="@+id/edittext1" />
+
             </com.google.android.material.textfield.TextInputLayout>
+
             <ListView
-                android:id="@+id/listview1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:dividerHeight="0dp"
-                android:divider="@null"
-                android:choiceMode="none" />
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:divider="@null"
+                 android:padding="8dp"
+                 android:choiceMode="none"
+                 android:id="@+id/listview1"
+                 android:dividerHeight="0dp">
+
+            </ListView>
+
         </LinearLayout>
+
     </LinearLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

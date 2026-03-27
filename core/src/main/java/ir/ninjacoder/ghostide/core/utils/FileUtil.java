@@ -20,17 +20,26 @@ import android.graphics.RectF;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Looper;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 
+import androidx.annotation.MainThread;
+import com.blankj.utilcode.util.ThreadUtils;
+import ir.ninjacoder.ghostide.core.GhostIdeAppLoader;
+import ir.ninjacoder.prograsssheet.PrograssSheet;
+import ir.ninjacoder.prograsssheet.enums.StateMod;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URLDecoder;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -108,6 +117,10 @@ public class FileUtil {
     }
   }
 
+  interface OnStateChange {
+    void change(int count, String name);
+  }
+
   public static void copyFile(String sourcePath, String destPath) {
     if (!isExistFile(sourcePath)) return;
     createNewFile(destPath);
@@ -161,9 +174,238 @@ public class FileUtil {
     }
   }
 
+  private static long getFolderSize(File folder) {
+    long size = 0;
+    File[] files = folder.listFiles();
+    if (files != null) {
+      for (File file : files) {
+        if (file.isFile()) {
+          size += file.length();
+        } else if (file.isDirectory()) {
+          size += getFolderSize(file);
+        }
+      }
+    }
+    return size;
+  }
+
   public static void moveFile(String sourcePath, String destPath) {
     copyFile(sourcePath, destPath);
     deleteFile(sourcePath);
+  }
+
+  public interface OnFileChangeCall {
+    @MainThread
+    void onFileDone();
+
+    @MainThread
+    void onFileError(String error);
+  }
+
+  static long totalSize, currentSize,processedSize;
+  static String currentFileName;
+
+  public static void copyAuto(
+      String oldPath, String newPath, OnStateChange state, boolean movemod) {
+    File oldFile = new File(oldPath);
+    if (!oldFile.exists()) return;
+
+    if (oldFile.isFile()) {
+      String destFilePath;
+      File newFile = new File(newPath);
+
+      if (newFile.isDirectory() || newPath.endsWith("/")) {
+        destFilePath = newPath + "/" + oldFile.getName();
+      } else {
+        destFilePath = newPath;
+      }
+
+      File destDir = new File(destFilePath).getParentFile();
+      if (destDir != null && !destDir.exists()) {
+        destDir.mkdirs();
+      }
+
+      copyFile(oldPath, destFilePath);
+
+      if (state != null) {
+        state.change((int) oldFile.length(), oldFile.getName());
+      }
+
+      if (movemod) {
+        oldFile.delete();
+      }
+
+      return;
+    }
+
+    File[] files = oldFile.listFiles();
+    if (files == null) {
+      File newFile = new File(newPath);
+      if (!newFile.exists()) {
+        newFile.mkdirs();
+      }
+      return;
+    }
+
+    File newFile = new File(newPath);
+    if (!newFile.exists()) {
+      newFile.mkdirs();
+    }
+
+     totalSize = calculateSize(oldFile);
+     processedSize = 0;
+
+    for (File file : files) {
+      String destPath = newPath + "/" + file.getName();
+
+      if (file.isFile()) {
+        copyFile(file.getPath(), destPath);
+
+        if (state != null) {
+          processedSize += file.length();
+          state.change((int) file.length(), file.getName());
+        }
+
+        if (movemod) {
+          file.delete();
+        }
+
+      } else if (file.isDirectory()) {
+        copyAuto(
+            file.getPath(),
+            destPath,
+            new OnStateChange() {
+              @Override
+              public void change(int count, String name) {
+                if (state != null) {
+                  processedSize += count;
+                  state.change(count, name);
+                }
+              }
+            },
+            movemod);
+
+        if (movemod) {
+          file.delete();
+        }
+      }
+    }
+  }
+
+  public static void moveFileOrDirByGhostide(
+      String sourcePath, String destPath, OnFileChangeCall call, boolean copymod, Context context) {
+
+    var sheet = new PrograssSheet(context);
+    sheet.setMode(StateMod.PROGRASSV);
+
+    String type = isDirectory(sourcePath) ? "Folder" : "File";
+    sheet.setTitle((copymod ? "Copy " : "Move ") + type);
+    sheet.setCancelable(false);
+    sheet.showBottonLayout(true);
+    sheet.show();
+
+    var thread =
+        new Thread(
+            () -> {
+              try {
+                File sourceFile = new File(sourcePath);
+                if (!sourceFile.exists()) {
+                  throw new Exception("Source " + type + " does not exist");
+                }
+
+                totalSize = calculateSize(sourceFile);
+                currentSize = 0L;
+
+                copyAuto(
+                    sourcePath,
+                    destPath,
+                    (count, name) -> {
+                      currentSize += count;
+                      currentFileName = name;
+
+                      ThreadUtils.runOnUiThread(
+                          () -> {
+                            int progress = (int) ((double) currentSize / totalSize * 100);
+                            sheet.setPrograss(progress, true);
+                            sheet.setSubTitle(
+                                (copymod ? "Copying: " : "Moving: ") + currentFileName);
+                          });
+                    },
+                    !copymod);
+
+                ThreadUtils.runOnUiThread(
+                    () -> {
+                      sheet.dismiss();
+                      if (call != null) {
+                        call.onFileDone();
+                      }
+                    });
+
+              } catch (Exception err) {
+                err.printStackTrace();
+                ThreadUtils.runOnUiThread(
+                    () -> {
+                      sheet.dismiss();
+                      if (call != null) {
+                        call.onFileError(
+                            err.getMessage() != null ? err.getMessage() : "Unknown error");
+                      }
+                    });
+              }
+            });
+    thread.start();
+
+    sheet.clickButton(
+        v -> {
+          if (thread != null && thread.isAlive()) {
+            thread.interrupt();
+            ThreadUtils.runOnUiThread(
+                () -> {
+                  sheet.dismiss();
+                });
+          }
+        });
+  }
+
+  public static long calculateSize(File file) {
+    if (file.isFile()) {
+      return file.length();
+    }
+
+    long size = 0;
+    File[] files = file.listFiles();
+    if (files != null) {
+      for (File f : files) {
+        size += calculateSize(f);
+      }
+    }
+    return size;
+  }
+
+  private static long getTotalSize(File directory) {
+    long totalSize = 0;
+    File[] files = directory.listFiles();
+
+    if (files != null) {
+      for (File file : files) {
+        if (file.isFile()) {
+          totalSize += file.length();
+        } else {
+          totalSize += getTotalSize(file);
+        }
+      }
+    }
+
+    return totalSize;
+  }
+
+  public static String formatFileSize(long size) {
+    if (size <= 0) return "0 B";
+    final String[] units = new String[] {"B", "KB", "MB", "GB", "TB"};
+    int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
+    return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups))
+        + " "
+        + units[digitGroups];
   }
 
   public static void deleteFile(String path) {

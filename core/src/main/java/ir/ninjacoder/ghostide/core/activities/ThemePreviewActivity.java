@@ -13,7 +13,9 @@ import com.google.gson.Gson;
 import com.skydoves.powermenu.MenuAnimation;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
-
+import android.view.WindowManager;
+import io.github.rosemoe.sora.langs.jsx.JavaScriptJsxLanguage;
+import io.github.rosemoe.sora.langs.php.PHPLanguage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,16 +49,14 @@ public class ThemePreviewActivity extends BaseCompat {
     // TODO: Implement this method
     bind = ThemepreviewLayoutBinding.inflate(LayoutInflater.from(this));
     setContentView(bind.getRoot());
-
     map = new HashMap<>();
     bind.editor.setEditorLanguage(new JavaLanguage(bind.editor));
     if (getIntent().hasExtra("keyitem")) {
       setLoadTheme(getIntent().getStringExtra("keyitem"));
       Toast.makeText(getApplicationContext(), getIntent().getStringExtra("keyitem"), 2).show();
     }
-
+    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     bind.fab.setIconResource(R.drawable.save);
-    bind.editor.setEditable(false);
     bind.fab.setOnClickListener(
         c -> {
           loadTheme = new LoadTheme();
@@ -92,13 +92,15 @@ public class ThemePreviewActivity extends BaseCompat {
             ? Color.parseColor(map.get(KeySet.backgroundcolorlinear).toString())
             : MaterialColors.getColor(this, ObjectUtils.Back, 0));
     List<String> fakeitem = new ArrayList<>();
-    fakeitem.add("Ninjacoder.java");
-    fakeitem.add("Test.py");
-    fakeitem.add("Index.html");
-    fakeitem.add("Rubypy.js");
-    fakeitem.add("termuxitem.sh");
-    fakeitem.add("build.json");
-    fakeitem.add("it.ninja");
+    fakeitem.add("main.java");
+    fakeitem.add("main.py");
+    fakeitem.add("main.html");
+    fakeitem.add("main.js");
+    fakeitem.add("main.sh");
+    fakeitem.add("main.json");
+    fakeitem.add("main.ninja");
+    fakeitem.add("main.php");
+  //  fakeitem.add("main.ts");
     fakeitem.forEach(
         it -> {
           bind.tabtest.addTab(bind.tabtest.newTab().setText(it));
@@ -147,15 +149,17 @@ public class ThemePreviewActivity extends BaseCompat {
 
   private String getNewTextForItem(String item) {
     switch (item) {
-      case "Ninjacoder.java":
+      case "main.java":
         bind.editor.setEditorLanguage(new JavaLanguage(bind.editor));
         return """
                import java.io.File;
                import android.util.Log;
 
-                public class NinjaCoder extends AppCompatActivity {
+                public class MainActivity extends AppCompatActivity {
 
                     private File file;
+                    private int id;
+                    private boolean read;
 
                     @Override
                     protected void onCreate(Bundle _savedInstanceState) {
@@ -168,7 +172,7 @@ public class ThemePreviewActivity extends BaseCompat {
                     }
                 }
                 """;
-      case "Index.html":
+      case "main.html":
         bind.editor.setEditorLanguage(new HTMLLanguage(bind.editor));
         return """
         <html lang="en">
@@ -200,7 +204,7 @@ public class ThemePreviewActivity extends BaseCompat {
 
           """;
 
-      case "Test.py":
+      case "main.py":
         bind.editor.setEditorLanguage(new PythonLang(bind.editor));
         return """
                 def main():
@@ -209,7 +213,7 @@ public class ThemePreviewActivity extends BaseCompat {
                 if __name__ == "__main__":
                     main()
                 """;
-      case "E.js":
+      case "main.js":
         bind.editor.setEditorLanguage(new JavaScriptLanguage((CodeEditor) bind.editor));
         return """
             let i = 0
@@ -226,26 +230,27 @@ public class ThemePreviewActivity extends BaseCompat {
               }
             }
                 """;
-      case "termuxitem.sh":
+      case "main.sh":
         bind.editor.setEditorLanguage(new NinjaLang());
         return """
                 #! /bin/bash
                 echo 'Hello, Ghosy ide!'
                 """;
-      case "build.json":
+      case "main.json":
         bind.editor.setEditorLanguage(new JsonLanguage((CodeEditor) bind.editor));
         return """
                 {
                     "build": {
                         "version": "1.0",
-                        "name": "My App"
+                        "name": "My App",
+                        "hex": "#fffffff"
                     }
                 }
                 """;
-      case "it.ninja":
+      case "main.ninja":
         bind.editor.setEditorLanguage(new NinjaLang());
         return """
-        program class it{
+        program class main{
          val its!! = 0
          val bb!!
 
@@ -257,6 +262,25 @@ public class ThemePreviewActivity extends BaseCompat {
 
         }
         """;
+      case "main.php":
+        {
+          bind.editor.setEditorLanguage(new PHPLanguage(bind.editor));
+          return """
+          <?php
+           function ghost(){
+             $item = 100;
+             if(item >= 101){
+               echo("ok");
+
+             }
+
+           }
+
+          ?>
+
+           """;
+        }
+
       default:
         return item;
     }

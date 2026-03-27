@@ -3,6 +3,27 @@ package ir.ninjacoder.ghostide.core.adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.SpannableString;
+import com.blankj.utilcode.util.ClipboardUtils;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.skydoves.powermenu.MenuAnimation;
+import com.skydoves.powermenu.PowerMenu;
+import com.skydoves.powermenu.PowerMenuItem;
+import ir.ninjacoder.ghostide.core.activities.FileBookmarkActivity;
+import ir.ninjacoder.ghostide.core.activities.FileManagerActivity;
+import ir.ninjacoder.ghostide.core.editor.PluginCompressorPgb;
+import ir.ninjacoder.ghostide.core.editor.PluginextractorFace;
+import ir.ninjacoder.ghostide.core.enums.FileConentChange;
+import ir.ninjacoder.ghostide.core.marco.ColorView;
+import ir.ninjacoder.ghostide.core.marco.FileShareManager;
+import ir.ninjacoder.ghostide.core.marco.binder.bindchilder.GhostToast;
+import ir.ninjacoder.ghostide.core.model.dataobject.ShortcutInfoImpl;
+import ir.ninjacoder.ghostide.core.mult.MultiSelectionManager;
+import ir.ninjacoder.ghostide.core.mult.MultiSelectionAction;
+import ir.ninjacoder.ghostide.core.pl.PluginLoaderImpl;
+import ir.ninjacoder.prograsssheet.GTheme;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.BackgroundColorSpan;
@@ -45,6 +66,57 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
   private List<FileManagerModel> allFiles = new ArrayList<>();
   private List<FileManagerModel> filteredFiles = new ArrayList<>();
   private String currentFilter = "";
+  private Map<String, FileConentChange> fileContentStates = new HashMap<>();
+  private OnFileOperationStateChangeListener stateChangeListener;
+  private MultiSelectionManager selectionManager = new MultiSelectionManager();
+  private boolean multiSelectionEnabled = false;
+  private boolean isMultiSelectionMode;
+  private OnMultiSelectionListener multiSelectionListener;
+
+  public interface OnMultiSelectionListener {
+    void onSelectionChanged(int count);
+
+    void onPerformAction(MultiSelectionAction action, List<String> selectedPaths);
+  }
+
+  public interface OnFileOperationStateChangeListener {
+    void onStateChanged(FileConentChange newState);
+  }
+
+  public void setOnFileOperationStateChangeListener(OnFileOperationStateChangeListener listener) {
+    this.stateChangeListener = listener;
+  }
+
+  public void enableMultiSelection(boolean enable) {
+
+    if (!enable && selectionManager.getSelectedCount() > 0) {
+      return;
+    }
+
+    this.multiSelectionEnabled = enable;
+    if (!enable) {
+      selectionManager.clearSelection();
+    }
+    notifyDataSetChanged();
+  }
+
+  public boolean isMultiSelectionEnabled() {
+    return multiSelectionEnabled;
+  }
+
+  public MultiSelectionManager getSelectionManager() {
+    return selectionManager;
+  }
+
+  public void setOnMultiSelectionListener(OnMultiSelectionListener listener) {
+    this.multiSelectionListener = listener;
+    selectionManager.setOnSelectionChangedListener(
+        (count, isMode) -> {
+          if (multiSelectionListener != null) {
+            multiSelectionListener.onSelectionChanged(count);
+          }
+        });
+  }
 
   public enum SearchMode {
     NORMAL,
@@ -105,7 +177,10 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     }
 
     setSettingTextView(holder.folderName);
-
+    if (multiSelectionEnabled) {
+      holder.iconMoreOptions.setEnabled(selectionManager.isSelected(position));
+      holder.roots.setItemSelect(selectionManager.isSelected(position));
+    }
     File file = new File(item.getFilePath());
     boolean isSearch = !TextUtils.isEmpty(currentFilter);
     holder.folderName.setText(file.getName());
@@ -177,7 +252,7 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     }
 
     if (viewType == ViewType.ROW) {
-      holder.cardblur.setCardBackgroundColor(Color.TRANSPARENT);
+      holder.cardblur.setCardBackgroundColor(null);
       holder.cardblur.setRadius(0);
       holder.cardblur.setStrokeWidth(0);
       holder.cardblur.setCardElevation(0);
@@ -197,7 +272,7 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
         if (holder.getAdapterPosition() == position)
           holder.cardblur.setBlurFromImageView(holder.icon, filePath);
       } else {
-        holder.cardblur.setBackground(null);
+        holder.cardblur.setCardBackgroundColor(null);
         holder.cardblur.cancelBlur();
       }
     }
@@ -226,6 +301,10 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
 
   public void highlightFile(String path) {
     highlightFile(path, FileState.SELECTBELITEM);
+  }
+
+  public Context getContext() {
+    return context;
   }
 
   public void clearHighlights() {
@@ -330,17 +409,18 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     notifyDataSetChanged();
   }
 
-
   public interface onClick {
     void onClick(View view, int pos);
 
     void onLongClick(View view, int pos);
+
+    void onChildFile(int pos);
   }
 
   public class VH extends RecyclerView.ViewHolder {
     protected TextView folderName, tvTools;
     protected ListItemView roots;
-    protected ImageView icon;
+    protected ImageView icon, iconMoreOptions;
     protected BlurMaterialCardView cardblur;
 
     public VH(View view) {
@@ -350,23 +430,184 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
       roots = view.findViewById(R.id.roots);
       icon = view.findViewById(R.id.icon);
       cardblur = view.findViewById(R.id.cardblur);
+      iconMoreOptions = view.findViewById(R.id.iconMoreOptions);
+      if (click != null) {
+        click.onChildFile(getAdapterPosition());
+      }
+      iconMoreOptions.setOnClickListener(
+          v -> {
+            var menu =
+                new PowerMenu.Builder(v.getContext())
+                    .setIsMaterial(true)
+                    .addItem(new PowerMenuItem("Copy name dir or file"))
+                    .addItem(new PowerMenuItem("Copy"))
+                    .addItem(new PowerMenuItem("Move"))
+                    .addItem(new PowerMenuItem("Rename"))
+                    .addItem(new PowerMenuItem("Removed"))
+                    .addItem(new PowerMenuItem("Share"))
+                    .addItem(new PowerMenuItem("Zip"))
+                    .addItem(new PowerMenuItem("Shortcut"))
+                    .addItem(new PowerMenuItem("Add to Bookmark"))
+                    .addItem(new PowerMenuItem("Add to Pgb"))
+                    .addItem(new PowerMenuItem("JavaRename"))
+                    .addItem(new PowerMenuItem("Backup theme"))
+                    .build();
+            menu.setShowBackground(false);
+            menu.setAnimation(MenuAnimation.FADE);
+            menu.setMenuRadius(19f);
+            menu.setTextColor(
+                MaterialColors.getColor(v.getContext(), ObjectUtils.colorOnSurface, 0));
+            menu.setMenuColor(MaterialColors.getColor(v.getContext(), ObjectUtils.colorSurface, 0));
+            menu.setOnMenuItemClickListener(
+                (pos, vm) -> {
+                  int adapterPosition = getAdapterPosition();
+                  if (adapterPosition == RecyclerView.NO_POSITION) return;
+                  String filePath = filteredFiles.get(adapterPosition).getFilePath();
+                  if (pos == 0) {
+                    ClipboardUtils.copyText(filePath);
+                    GhostToast.showSuccess(context, "Copying path in -> " + filePath);
+                    menu.dismiss();
+                  } else if (pos == 1) {
+                    fileContentStates.put(filePath, FileConentChange.COPYING);
+                    notifyItemChanged(adapterPosition);
+                    if (stateChangeListener != null) {
+                      stateChangeListener.onStateChanged(FileConentChange.COPYING);
+                    }
+                    menu.dismiss();
+                  } else if (pos == 2) {
+                    fileContentStates.put(filePath, FileConentChange.MOVEING);
+                    notifyItemChanged(adapterPosition);
+                    if (stateChangeListener != null) {
+                      stateChangeListener.onStateChanged(FileConentChange.MOVEING);
+                    }
+                    menu.dismiss();
+                  } else if (pos == 3) {
+                    ((FileManagerActivity) context).setRenameFile(getAdapterPosition());
+                    menu.dismiss();
+                  } else if (pos == 4) {
+                    ((FileManagerActivity) context).removedFiles(getAdapterPosition());
+                    menu.dismiss();
+                  } else if (pos == 5) {
+                    var fileShareManager = new FileShareManager(context);
+                    File file = new File(filteredFiles.get(getAdapterPosition()).getFilePath());
+                    try {
+                      if (file.isFile()) fileShareManager.shareFile(file);
+                    } catch (Exception e) {
+                      e.printStackTrace();
+                    }
+                    menu.dismiss();
+                  } else if (pos == 6) {
+                    ((FileManagerActivity) context).MakeZipFileFromThreads(getAdapterPosition());
+                    menu.dismiss();
+                  } else if (pos == 7) {
+                    ShortcutInfoImpl impl =
+                        new ShortcutInfoImpl(
+                            context, filteredFiles.get(getAdapterPosition()).getFilePath());
+                    impl.createFileShortcut(
+                        0, filteredFiles.get(getAdapterPosition()).getFilePath(), () -> {});
+                    menu.dismiss();
+                  } else if (pos == 8) {
+                    ((FileManagerActivity) context).bookmark(getAdapterPosition());
+                    menu.dismiss();
+                  } else if (pos == 9) {
+                    pgbmaker(getAdapterPosition());
+                    menu.dismiss();
+                  } else if (pos == 10) {
+                    ColorView.renameJavaFileImpl(
+                        context,
+                        filteredFiles.get(getAdapterPosition()).getFilePath(),
+                        ((FileManagerActivity) context).getFolder(),
+                        () -> {
+                          ((FileManagerActivity) context).reLoadFile();
+                        });
+                  } else if (pos == 11) {
+                    var path = filteredFiles.get(getAdapterPosition()).getFilePath();
+                    if (FileUtil.isDirectory(path)) {
+                      GTheme.pack(
+                          path,
+                          path + "/",
+                          context,
+                          () -> {
+                            ((FileManagerActivity) context).reLoadFile();
+                          });
+                    }
+                  }
+                });
+            menu.showAsDropDown(v);
+          });
 
       roots.setOnClickListener(
-          c -> {
-            int pos = getBindingAdapterPosition();
-            if (pos == RecyclerView.NO_POSITION) return;
-            click.onClick(c, pos);
-            cardblur.cancelBlur();
+          v -> {
+            int position = getAdapterPosition();
+            if (position == RecyclerView.NO_POSITION) return;
+
+            if (multiSelectionEnabled) {
+
+              selectionManager.toggleSelection(position);
+              notifyItemChanged(position);
+
+              if (selectionManager.getSelectedCount() == 0) {
+                enableMultiSelection(false);
+
+                ((FileManagerActivity) context).exitMultiSelectionMode();
+              }
+            } else {
+
+              click.onClick(v, position);
+            }
           });
 
       roots.setOnLongClickListener(
           v -> {
-            int pos = getBindingAdapterPosition();
-            if (pos != RecyclerView.NO_POSITION && pos < filteredFiles.size()) {
-              click.onLongClick(v, pos);
+            int position = getAdapterPosition();
+            if (position == RecyclerView.NO_POSITION) return true;
+
+            if (!multiSelectionEnabled) {
+
+              enableMultiSelection(true);
+
+              ((FileManagerActivity) context).enterMultiSelectionMode(position);
+              selectionManager.toggleSelection(position);
+              notifyItemChanged(position);
+              click.onLongClick(v, position);
+            } else {
+              selectionManager.toggleSelection(position);
+              notifyItemChanged(position);
+              if (selectionManager.getSelectedCount() == 0) {
+                enableMultiSelection(false);
+                roots.setItemSelect(false);
+
+                ((FileManagerActivity) context).exitMultiSelectionMode();
+                notifyItemChanged(position);
+              } else {
+                click.onLongClick(v, position);
+              }
             }
             return true;
           });
+    }
+  }
+
+  void pgbmaker(int pos) {
+    String currentPgbPath = filteredFiles.get(pos).getFilePath();
+    if (FileUtil.isExistFile(PluginLoaderImpl.DEFAULT_CONFIG_PATH)) {
+
+      var plugin =
+          new PluginCompressorPgb(
+              new PluginextractorFace() {
+
+                @Override
+                public void onPluginExtractorDone() {
+                  ((FileManagerActivity) context).reLoadFile();
+                }
+
+                @Override
+                public void onPluginExtractorError() {}
+              },
+              context,
+              currentPgbPath);
+    } else {
+      GhostToast.showError(context, "File -> config.json not found");
     }
   }
 
@@ -734,5 +975,33 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
       default:
         return Pattern.compile(searchText);
     }
+  }
+
+  public FileConentChange getFileContentState(String filePath) {
+    return fileContentStates.getOrDefault(filePath, FileConentChange.NONE);
+  }
+
+  public void setFileContentState(String filePath, FileConentChange state) {
+    fileContentStates.put(filePath, state);
+    for (int i = 0; i < filteredFiles.size(); i++) {
+      if (filteredFiles.get(i).getFilePath().equals(filePath)) {
+        notifyItemChanged(i);
+        break;
+      }
+    }
+  }
+
+  public void clearFileContentState(String filePath) {
+    fileContentStates.remove(filePath);
+    for (int i = 0; i < filteredFiles.size(); i++) {
+      if (filteredFiles.get(i).getFilePath().equals(filePath)) {
+        notifyItemChanged(i);
+        break;
+      }
+    }
+  }
+
+  public Map<String, FileConentChange> getFileContentStatesMap() {
+    return this.fileContentStates;
   }
 }

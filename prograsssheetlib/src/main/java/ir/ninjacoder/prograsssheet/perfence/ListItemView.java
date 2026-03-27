@@ -218,57 +218,57 @@ public class ListItemView extends LinearLayout {
                 this, backgroundColor, getContext().getColor(android.R.color.white));
     backgroundDrawable.setColor(backgroundColorValue);
 
-    // اگر استروک نیاز نیست
+    
     if (!isStrokeColor || storkeSize <= 0) {
       return getRi(backgroundDrawable);
     }
 
-    // تشخیص نوع آیتم
+    
     boolean isTopState = tl == 18f && tr == 18f && bl == 6f && br == 6f;
     boolean isBottomState = tl == 6f && tr == 6f && bl == 18f && br == 18f;
     boolean isMiddleState = tl == 6f && tr == 6f && bl == 6f && br == 6f;
     boolean isNormalState = tl == 18f && tr == 18f && bl == 18f && br == 18f;
 
-    // ایجاد لیست drawableها
+    
     List<Drawable> layers = new ArrayList<>();
-    layers.add(backgroundDrawable); // لایه اصلی
+    layers.add(backgroundDrawable); 
 
-    // ایجاد خطوط استروک
+    
     if (isTopState) {
-      // بالا + چپ + راست
-      layers.add(createStrokeDrawable(true, true, false, false, radii)); // بالا
-      layers.add(createStrokeDrawable(false, false, true, false, radii)); // چپ
-      layers.add(createStrokeDrawable(false, false, false, true, radii)); // راست
+      
+      layers.add(createStrokeDrawable(true, true, false, false, radii)); 
+      layers.add(createStrokeDrawable(false, false, true, false, radii)); 
+      layers.add(createStrokeDrawable(false, false, false, true, radii)); 
     } else if (isMiddleState) {
-      // فقط چپ + راست
-      layers.add(createStrokeDrawable(false, false, true, false, radii)); // چپ
-      layers.add(createStrokeDrawable(false, false, false, true, radii)); // راست
+      
+      layers.add(createStrokeDrawable(false, false, true, false, radii)); 
+      layers.add(createStrokeDrawable(false, false, false, true, radii)); 
     } else if (isBottomState) {
-      // پایین + چپ + راست
-      layers.add(createStrokeDrawable(false, false, false, false, radii)); // پایین
-      layers.add(createStrokeDrawable(false, false, true, false, radii)); // چپ
-      layers.add(createStrokeDrawable(false, false, false, true, radii)); // راست
+      
+      layers.add(createStrokeDrawable(false, false, false, false, radii)); 
+      layers.add(createStrokeDrawable(false, false, true, false, radii)); 
+      layers.add(createStrokeDrawable(false, false, false, true, radii)); 
     }
-    // normal state بدون استروک
+    
 
-    // اگر فقط background داریم
+    
     if (layers.size() == 1) {
       return getRi(backgroundDrawable);
     }
 
-    // ایجاد LayerDrawable
+    
     LayerDrawable layerDrawable = new LayerDrawable(layers.toArray(new Drawable[0]));
 
-    // تنظیم inset برای هر لایه خط
+    
     for (int i = 1; i < layers.size(); i++) {
       GradientDrawable stroke = (GradientDrawable) layers.get(i);
 
       if (stroke.getShape() == GradientDrawable.LINE) {
-        // برای خطوط عمودی (چپ/راست)
+        
         if (stroke.getOrientation() == GradientDrawable.Orientation.LEFT_RIGHT) {
           layerDrawable.setLayerInset(i, storkeSize, 0, storkeSize, 0);
         }
-        // برای خطوط افقی (بالا/پایین)
+        
         else {
           layerDrawable.setLayerInset(i, 0, storkeSize, 0, storkeSize);
         }
@@ -278,13 +278,13 @@ public class ListItemView extends LinearLayout {
     return getRi(layerDrawable);
   }
 
-  // متد کمکی برای ایجاد خط استروک
+  
   private GradientDrawable createStrokeDrawable(
       boolean isTop, boolean isBottom, boolean isLeft, boolean isRight, float[] radii) {
     GradientDrawable stroke = new GradientDrawable();
 
     if (isLeft || isRight) {
-      // خط عمودی
+      
       stroke.setShape(GradientDrawable.LINE);
       stroke.setOrientation(
           isLeft
@@ -292,7 +292,7 @@ public class ListItemView extends LinearLayout {
               : GradientDrawable.Orientation.RIGHT_LEFT);
       stroke.setSize(storkeSize, 0);
     } else {
-      // خط افقی
+      
       stroke.setShape(GradientDrawable.LINE);
       stroke.setOrientation(
           isTop

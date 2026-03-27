@@ -88,7 +88,7 @@ public class EditorFragment extends Fragment {
   private ProgressBar proanjctor;
   private boolean isTextChanged = false;
 
-  private SharedPreferences svePref;
+  private SharedPreferences svePref, setfont;
   private boolean isAutoSaveEnabled = false;
 
   public interface OnEditorListener {
@@ -145,8 +145,8 @@ public class EditorFragment extends Fragment {
     if (getActivity() == null) return;
 
     svePref = getActivity().getSharedPreferences("sve", Context.MODE_PRIVATE);
+    setfont = getActivity().getSharedPreferences("setfont", Context.MODE_PRIVATE);
     isAutoSaveEnabled = svePref.getString("getAutoSave", "").equals("true");
-
     svePref.registerOnSharedPreferenceChangeListener(autoSavePrefListener);
   }
 
@@ -283,6 +283,9 @@ public class EditorFragment extends Fragment {
       editor.setTypefaceLineNumber(
           Typeface.createFromAsset(requireActivity().getAssets(), "ghostfont.ttf"));
     }
+    if (setfont.contains("fontsize")) {
+      editor.setTextSize(setfont.getFloat("fontsize", 16));
+    }
   }
 
   private void detectLanguage(String path) {
@@ -293,11 +296,22 @@ public class EditorFragment extends Fragment {
     } else if (path.endsWith(".cpp")
         || path.endsWith(".cxx")
         || path.endsWith(".cc")
+        || path.endsWith(".c++")
         || path.endsWith(".h")
-        || path.endsWith(".hpp")) {
+        || path.endsWith(".hpp")
+        || path.endsWith(".hxx")
+        || path.endsWith(".hh")
+        || path.endsWith(".inl")
+        || path.endsWith(".tcc")
+        || path.endsWith(".ipp")) {
       editor.setEditorLanguage(new CppLanguage());
-    } else if (path.endsWith(".html")) {
+    } else if (path.endsWith(".html")
+        || path.endsWith(".htm")
+        || path.endsWith(".xhtml")
+        || path.endsWith(".shtml")
+        || path.endsWith(".shtm")) {
       editor.setEditorLanguage(new HTMLLanguage(editor));
+
     } else if (path.endsWith(".js")) {
       editor.setEditorLanguage(new JavaScriptLanguage((CodeEditor) editor));
     } else if (path.endsWith(".scss")) {
@@ -386,6 +400,14 @@ public class EditorFragment extends Fragment {
 
   public void saveFile() {
     if (filePath != null && editor != null) {
+      String content = editor.getText().toString();
+      FileUtil.writeFile(filePath, content);
+      isTextChanged = false;
+    }
+  }
+
+  public void saveFileIfNeeded() {
+    if (isTextChanged && filePath != null && editor != null) {
       String content = editor.getText().toString();
       FileUtil.writeFile(filePath, content);
       isTextChanged = false;

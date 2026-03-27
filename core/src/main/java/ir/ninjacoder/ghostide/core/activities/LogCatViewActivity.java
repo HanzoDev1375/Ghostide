@@ -101,7 +101,7 @@ public class LogCatViewActivity extends BaseCompat {
     return super.onOptionsItemSelected(menuitem);
   }
 
-  public boolean itemShowingSrc(boolean r) {
+  boolean itemShowingSrc(boolean r) {
     if (r) {
       post.post(
           () -> {

@@ -37,6 +37,7 @@ public class BrowserActivity extends BaseCompat implements NetworkChangeReceiver
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
+    
     super.onCreate(_savedInstanceState);
     setContentView(R.layout.browser);
     layout1 = findViewById(R.id.browers_main_layout);

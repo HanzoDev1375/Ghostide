@@ -1,4 +1,4 @@
-package ir.ninjacoder.ghostide.core.Store;
+package ir.ninjacoder.ghostide.core.store;
 
 import android.app.Activity;
 import android.content.Context;
@@ -80,7 +80,7 @@ public class WallpaperFragment extends BaseFragment {
                   new Gson()
                       .fromJson(response, new TypeToken<List<Map<String, String>>>() {}.getType());
 
-              // پر کردن لیست اصلی برای فیلتر کردن
+              
               originalList.clear();
               originalList.addAll(listAllImage);
 

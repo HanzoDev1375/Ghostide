@@ -67,7 +67,7 @@ public class SassForAndroid {
     try {
 
       String code = input.getText().toString();
-      URL specifier = new URL("file:///storage/emulated/0/Apktool_M/hsi.js");
+      URL specifier = new URL("file:///storage/emulated/0/hsi.js");
       if (model == CompilerModel.JSX) {
         Swc4jTranspileOptions options =
             new Swc4jTranspileOptions()

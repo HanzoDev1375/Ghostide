@@ -2,37 +2,41 @@ package ir.ninjacoder.ghostide.core.editor;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import com.blankj.utilcode.util.ClipboardUtils;
+import com.blankj.utilcode.util.ThreadUtils;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.ninjacoder.jgit.databinding.SheetAddPluginBinding;
-import ir.ninjacoder.ghostide.core.activities.FileManagerActivity;
-import ir.ninjacoder.ghostide.core.marco.HsiZip;
+import ir.ninjacoder.ghostide.core.marco.binder.bindchilder.GhostToast;
 import ir.ninjacoder.ghostide.core.model.PlModel;
 import ir.ninjacoder.ghostide.core.model.PluginMetaData;
-import ir.ninjacoder.ghostide.core.pl.PluginManifest;
 import ir.ninjacoder.ghostide.core.utils.FileUtil;
+import ir.ninjacoder.prograsssheet.PrograssSheet;
+import ir.ninjacoder.prograsssheet.ViewSheet;
+import ir.ninjacoder.prograsssheet.enums.StateMod;
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import net.lingala.zip4j.ZipFile;
+import net.lingala.zip4j.model.FileHeader;
 
-public class PluginExtractor implements HsiZip.OnCallBack {
-  // تغییر مسیر به محل مورد نظر شما
+public class PluginExtractor {
   private String constPath = "/storage/emulated/0/GhostWebIDE/plugins/";
   private List<PlModel> listPlugin = new ArrayList<>();
   private PluginextractorFace helper;
   private String pgbPath;
   private Context context;
   private Gson gson = new GsonBuilder().setPrettyPrinting().create();
-  private HsiZip unzipData;
   SheetAddPluginBinding bind;
   private BottomSheetDialog dialog;
   private PlModel model;
+  boolean isDuplicate = false;
+  private PluginMetaData meta;
   private String fileNameWithoutExt, manifestPath;
-
-  // مسیر فایل کانفیگ
   private String configPath = "/storage/emulated/0/GhostWebIDE/plugins/config.json";
 
   public PluginExtractor(PluginextractorFace helper, String pgbPath, Context context) {
@@ -43,18 +47,16 @@ public class PluginExtractor implements HsiZip.OnCallBack {
     dialog = new BottomSheetDialog(context);
     dialog.setContentView(bind.getRoot());
     dialog.show();
-    unzipData = new HsiZip(context, this);
+
     try {
       init();
     } catch (Exception err) {
-
+      err.printStackTrace();
     }
   }
 
   void init() throws Exception {
     File file = new File(pgbPath);
-
-    // خواندن کانفیگ از مسیر صحیح
     File configFile = new File(configPath);
     if (configFile.exists()) {
       listPlugin =
@@ -62,7 +64,6 @@ public class PluginExtractor implements HsiZip.OnCallBack {
     } else {
       listPlugin = new ArrayList<>();
     }
-
     if (file.getName().endsWith(".pgb")) {
       fileNameWithoutExt = file.getName().replace(".pgb", "");
       manifestPath = constPath + fileNameWithoutExt + "/manifest.json";
@@ -71,30 +72,56 @@ public class PluginExtractor implements HsiZip.OnCallBack {
       bind.inputType.setHint(".json,.kt");
       bind.inputIcon.setHint("Type Icon dir");
     }
-    String metaPath = context.getCacheDir() + "/metadata.json";
-    ZipFile zipFile = new ZipFile(pgbPath);
-    zipFile.extractFile(
-        zipFile.getFileHeader("metadata.json"), context.getCacheDir() + File.separator);
-    if (FileUtil.isExistFile(metaPath)) {
-      PluginMetaData meta = new Gson().fromJson(FileUtil.readFile(metaPath), PluginMetaData.class);
-      if (meta != null)
+    /*
+        {
+      "dexName": "CssColorPreview",
+      "dexPackage": "ir.ninjacoder.plloader",
+      "dexPath": "/storage/emulated/0/GhostWebIDE/plugins/csscolorview/cs.dex",
+      "pluginIcon": "/storage/emulated/0/GhostWebIDE/plugins/csscolorview/icon.png",
+      "pluginName": "/storage/emulated/0/GhostWebIDE/plugins/csscolorview",
+      "pluginPath": "csscolorview",
+      "pluginType": ".html,.css",
+      "pluginUsing": false
+    }
+        */
+    try (var zipFile = new ZipFile(pgbPath)) {
+      var metadataHeader = zipFile.getFileHeader("metadata.json");
+      if (metadataHeader != null) {
+        try (var inputStream = zipFile.getInputStream(metadataHeader);
+            var reader = new InputStreamReader(inputStream)) {
+
+          meta = gson.fromJson(reader, PluginMetaData.class);
+
+          if (meta != null) {
+            model =
+                new PlModel(
+                    meta.getPluginName(),
+                    meta.getPluginPath(),
+                    meta.getPluginName(),
+                    meta.getPluginUsing(),
+                    meta.getPluginType(),
+                    meta.getPluginIcon());
+
+            bind.editName.setText(meta.getPluginName());
+            bind.editDir.setText(meta.getPluginPath());
+            bind.editDev.setText(meta.getPluginName());
+            bind.editType.setText(meta.getPluginType());
+            bind.editIcon.setText(meta.getPluginIcon());
+            bind.checkUsing.setChecked(meta.getPluginUsing());
+          }
+        }
+      } else {
         model =
             new PlModel(
-                meta.getPluginName(),
-                meta.getPluginPath(),
-                meta.getPluginName(),
-                meta.getPluginUsing(),
-                meta.getPluginType(),
-                meta.getPluginIcon());
-      if (meta != null) {
-        bind.editName.setText(meta.getPluginName());
-        bind.editDir.setText(meta.getPluginPath());
-        bind.editDev.setText(meta.getPluginName());
-        bind.editType.setText(meta.getPluginType());
-        bind.editIcon.setText(meta.getPluginIcon());
-        bind.checkUsing.setChecked(meta.getPluginUsing());
+                fileNameWithoutExt,
+                manifestPath,
+                bind.editDev.getText().toString(),
+                bind.checkUsing.isChecked(),
+                bind.editType.getText().toString(),
+                bind.editIcon.getText().toString());
       }
-    } else
+    } catch (Exception e) {
+      e.printStackTrace();
       model =
           new PlModel(
               fileNameWithoutExt,
@@ -103,34 +130,80 @@ public class PluginExtractor implements HsiZip.OnCallBack {
               bind.checkUsing.isChecked(),
               bind.editType.getText().toString(),
               bind.editIcon.getText().toString());
-    listPlugin.add(model);
-
-    if (!dialog.isShowing()) {
-      FileUtil.deleteFile(metaPath);
     }
+    if (meta != null && model != null) {
+      if (meta.getPluginName().equals(model.getName())) {
+        isDuplicate = true;
+        return;
+      }
+    }
+
+    listPlugin.add(model);
     bind.sheetok.setOnClickListener(
         v -> {
           dialog.dismiss();
+          if (isDuplicate) {
+            ThreadUtils.runOnUiThread(
+                () ->
+                    GhostToast.showWarning(
+                        context, "The data is available but we are still extracting it"));
+          }
 
           FileUtil.writeFile(configPath, gson.toJson(listPlugin));
           String pluginName = file.getName().replace(".pgb", "");
-          String extractPath = constPath + File.separator;
+          String extractPath = constPath + pluginName + "/";
 
           File dir = new File(extractPath);
           if (!dir.exists()) {
             dir.mkdirs();
           }
-          unzipData.execute(pgbPath, extractPath);
+          extractZipFile(pgbPath, extractPath);
         });
   }
 
-  @Override
-  public void onError() {
-    helper.onPluginExtractorError();
-  }
+  private void extractZipFile(String zipPath, String destinationPath) {
+    PrograssSheet sheet = new PrograssSheet(context);
+    sheet.setMode(StateMod.PROGRASSV);
+    sheet.setTitle("Loading....");
+    sheet.show();
+    new Thread(
+            () -> {
+              try {
+                ZipFile zipFile = new ZipFile(zipPath);
+                if (!zipFile.isValidZipFile()) {
+                  ThreadUtils.runOnUiThread(
+                      () -> {
+                        ViewSheet viewSheet = new ViewSheet(context);
+                        viewSheet.setTitle("## Pgb File Error");
+                        viewSheet.setMassges("<h3>Pgb has Valid File</h3>");
+                        viewSheet.setOnButtonNoClick(v -> viewSheet.hide());
+                      });
 
-  @Override
-  public void onResult() {
-    helper.onPluginExtractorDone();
+                } else {
+                  zipFile.extractAll(destinationPath);
+                  ThreadUtils.runOnUiThread(
+                      () -> sheet.setPrograss(zipFile.getBufferSize(), false));
+                  File metadataFile = new File(destinationPath + "metadata.json");
+                  if (metadataFile.exists()) {
+                    metadataFile.delete();
+                  }
+                  ThreadUtils.runOnUiThread(
+                      () -> {
+                        helper.onPluginExtractorDone();
+                        sheet.dismiss();
+                      });
+                }
+              } catch (Exception e) {
+                e.printStackTrace();
+                ThreadUtils.runOnUiThread(
+                    () -> {
+                      helper.onPluginExtractorError();
+                      sheet.dismiss();
+                      GhostToast.showError(context, e.getMessage());
+                      ClipboardUtils.copyText(e.getMessage());
+                    });
+              }
+            })
+        .start();
   }
 }

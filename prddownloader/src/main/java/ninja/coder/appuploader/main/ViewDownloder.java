@@ -2,6 +2,7 @@ package ninja.coder.appuploader.main;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.animation.ValueAnimator;
 import android.animation.ArgbEvaluator;
@@ -63,6 +64,10 @@ public class ViewDownloder extends RelativeLayout {
     colorAnimation.start();
     child.progrssdownload.setVisibility(View.GONE);
     addView(child.getRoot(), param);
+    child.tvname.setTextColor(Color.BLACK);
+    child.progrssdownload.setWaveAmplitude(1);
+    child.progrssdownload.setWavelength(20);
+    child.progrssdownload.setWaveSpeed(19);
   }
 
   public void setTitle(String title) {

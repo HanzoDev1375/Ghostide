@@ -47,8 +47,6 @@ public class HsiZip extends AsyncTaskCompat<String, Object, Boolean> {
   protected Boolean doInBackground(String... params) {
     String zipFilePath = params[0];
     destDirectory = params[1];
-
-    // ساخت شیء ZipInputStream
     ZipInputStream zipIn = null;
     try {
       zipIn = new ZipInputStream(new FileInputStream(zipFilePath));
@@ -56,8 +54,6 @@ public class HsiZip extends AsyncTaskCompat<String, Object, Boolean> {
       long extractedBytes = 0;
       byte[] buffer = new byte[4096];
       int readBytes;
-
-      // خواندن و استخراج فایل‌ها از ZIP
       ZipEntry entry = zipIn.getNextEntry();
       while (entry != null) {
         String filePath = destDirectory + File.separator + entry.getName();
@@ -81,7 +77,7 @@ public class HsiZip extends AsyncTaskCompat<String, Object, Boolean> {
     }
   }
 
-  // استخراج فایل‌ها
+
   private void extractFile(ZipInputStream zipIn, String filePath, byte[] buffer)
       throws IOException {
     BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filePath));

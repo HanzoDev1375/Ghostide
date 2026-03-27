@@ -42,18 +42,18 @@ public class SplashWord extends AppIntro2 {
     var ghostPath = "/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost";
     var ghostStyle = "/storage/emulated/0/GhostWebIDE/theme/style.ghost";
 
-    TestFragment t1 =
-        TestFragment.newIns(
-            "prm.json",
-            "Permissions",
-            "Submit all files",
-            true);
-    t1.setCallBack(
-        () -> {
+    // TestFragment t1 =
+        // TestFragment.newIns(
+            // "prm.json",
+            // "Permissions",
+            // "Submit all files",
+            // true);
+    // t1.setCallBack(
+        // () -> {
           
-        });
+        // });
 
-    addSlide(t1);
+    // addSlide(t1);
 
     TestFragment t2 =
         TestFragment.newIns(

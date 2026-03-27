@@ -11,6 +11,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
@@ -34,6 +36,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 
@@ -59,16 +62,30 @@ import com.ninjacoder.jgit.childer.LayoutBinder;
 import com.ninjacoder.jgit.childer.TextFind;
 import com.ninjacoder.jgit.childer.TextFindListener;
 import com.ninjacoder.jgit.search.SearchCallBack;
+import ir.ninjacoder.ghostide.core.NetworkChangeReceiver;
+import ir.ninjacoder.ghostide.core.adapter.ToolbarListFileAdapter;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import ir.ninjacoder.ghostide.core.appupdate.UpadteAppView;
 import ir.ninjacoder.ghostide.core.config.IconRes;
 import ir.ninjacoder.ghostide.core.editor.PluginCompressorPgb;
 import ir.ninjacoder.ghostide.core.editor.PluginExtractor;
 import ir.ninjacoder.ghostide.core.editor.PluginextractorFace;
+import ir.ninjacoder.ghostide.core.enums.FileConentChange;
 import ir.ninjacoder.ghostide.core.git.GithubProfileImpl;
 import ir.ninjacoder.ghostide.core.git.JgitHelperImpl;
+import ir.ninjacoder.ghostide.core.marco.binder.ThemeChkerErrorBinder;
+import ir.ninjacoder.ghostide.core.marco.binder.bindchilder.GhostToast;
 import ir.ninjacoder.ghostide.core.marco.search.SearchBarImpl;
 import ir.ninjacoder.ghostide.core.model.filemanager.FileManagerModel;
 import ir.ninjacoder.ghostide.core.model.filemanager.FileState;
+import ir.ninjacoder.ghostide.core.mult.MultiSelectionActionView;
+import ir.ninjacoder.ghostide.core.mult.MultiSelectionAction;
+import androidx.core.content.FileProvider;
+import ir.ninjacoder.ghostide.core.mult.MultiSelectionManager;
+import ir.ninjacoder.prograsssheet.GTheme;
+import ir.ninjacoder.prograsssheet.view.RenameDialogFragmentImpl;
+import net.lingala.zip4j.ZipFile;
+import ir.ninjacoder.ghostide.core.utils.GhostFileUtilImpl;
 import ir.ninjacoder.ghostide.core.widget.*;
 import ir.ninjacoder.prograsssheet.search.GlobalSearchBottomSheet;
 import ir.ninjacoder.prograsssheet.view.ParticleDisintegrationView;
@@ -78,11 +95,15 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.LinkedHashMap;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import ir.ninjacoder.ghostide.PluginManager.IntentHelper;
 import ir.ninjacoder.ghostide.core.R;
-import ir.ninjacoder.ghostide.core.Store.StoreAcitvity;
+import ir.ninjacoder.ghostide.core.store.StoreAcitvity;
 import ir.ninjacoder.ghostide.core.adapter.FileManagerAd;
 import ir.ninjacoder.ghostide.core.adapter.ViewType;
 import ir.ninjacoder.ghostide.core.compressor.TarGzExtractor;
@@ -135,7 +156,10 @@ import storage.sdcard.SdCardUtil;
 import ir.ninjacoder.ghostide.core.layoutmanager.NavigationViewCompnet;
 
 public class FileManagerActivity extends BaseCompat
-    implements FileManagerAd.onClick, FileWatcher.OnFileChangeListener {
+    implements FileManagerAd.onClick,
+        FileWatcher.OnFileChangeListener,
+        FileManagerAd.OnFileOperationStateChangeListener,
+        NetworkChangeReceiver.CallBackNetWork {
 
   public String Folder = "";
   protected SdCardUtil externalspace;
@@ -203,7 +227,14 @@ public class FileManagerActivity extends BaseCompat
   private ExecutorService executor;
   private View mview;
   private List<Child> listchild = new ArrayList<>();
-  private boolean fileWatcherBindingRequested = false;
+  private boolean fileWatcherBindingRequested = false, isMultiSelectionMode = false;
+  private NetworkChangeReceiver networkChangeReceiver;
+  private MultiSelectionActionView multiSelectionView;
+  private View.OnClickListener fabOriginalClickListener;
+  private List<String> copyPaths = new ArrayList<>();
+  private boolean isCopyMode = true;
+
+  private int currentPosition = 0;
 
   @Override
   protected void onCreate(Bundle _savedInstanceState) {
@@ -256,6 +287,7 @@ public class FileManagerActivity extends BaseCompat
     bind.recyclerview2.setAdapter(fileListItem);
 
     fileListItem.submitList(new ArrayList<>(fileModels));
+    fileListItem.setOnFileOperationStateChangeListener(this);
     shp = getSharedPreferences("shp", Activity.MODE_PRIVATE);
     soglo = getSharedPreferences("soglo", Activity.MODE_PRIVATE);
     np = getSharedPreferences("np", Activity.MODE_PRIVATE);
@@ -269,10 +301,45 @@ public class FileManagerActivity extends BaseCompat
     save_path = getSharedPreferences("save_path", Activity.MODE_PRIVATE);
     materialYou = getSharedPreferences("materialYou", Activity.MODE_PRIVATE);
     executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-    book = getSharedPreferences("hsipsot4444", Activity.MODE_PRIVATE);
+    book = getSharedPreferences(FileBookmarkActivity.keybookmark, Activity.MODE_PRIVATE);
     sh = new ShortcutInfoImpl(FileManagerActivity.this, Folder);
     new PluginLoaderImpl().runInFileManager(this);
-    appUpdate();
+    networkChangeReceiver = new NetworkChangeReceiver(this);
+    IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+    this.registerReceiver(networkChangeReceiver, filter);
+    multiSelectionView = bind.multiSelectionActions;
+    if (multiSelectionView != null) {
+      setupMultiSelection();
+
+      if (fileListItem != null && fileListItem.getSelectionManager() != null) {
+        fileListItem
+            .getSelectionManager()
+            .setOnSelectionChangedListener(
+                (selectedCount, isSelectionMode) -> {
+                  runOnUiThread(
+                      () -> {
+                        Log.d(
+                            "MultiSelection",
+                            "Listener: selectedCount="
+                                + selectedCount
+                                + ", isSelectionMode="
+                                + isSelectionMode);
+                        if (fileListItem.isMultiSelectionEnabled() && selectedCount > 0) {
+                          if (multiSelectionView != null) {
+                            multiSelectionView.setSelectedCount(selectedCount);
+                            if (!multiSelectionView.isShowing()) {
+                              multiSelectionView.show();
+                            }
+                          }
+                        } else {
+                          if (multiSelectionView != null && multiSelectionView.isShowing()) {
+                            multiSelectionView.hide();
+                          }
+                        }
+                      });
+                });
+      }
+    }
     if (Build.VERSION.SDK_INT >= 21)
       getWindow().setNavigationBarColor(MaterialColors.getColor(this, ObjectUtils.Back, 0));
     if (Build.VERSION.SDK_INT >= 21)
@@ -357,6 +424,7 @@ public class FileManagerActivity extends BaseCompat
             () -> {
               reLoadFile();
             });
+    // setDistreeView();
 
     List<Child> pluginChildren = PluginChildRegistry.getFileManagerChildren();
     for (Child child : pluginChildren) {
@@ -368,12 +436,373 @@ public class FileManagerActivity extends BaseCompat
     return fileListItem;
   }
 
+  private int getOriginalPosition(int filteredPosition) {
+    if (fileListItem != null) {
+      return fileListItem.getOriginalPosition(filteredPosition);
+    }
+    return -1;
+  }
+
+  private void setupMultiSelection() {
+    if (multiSelectionView == null) return;
+
+    multiSelectionView.removeAllActions();
+    multiSelectionView.addAction(MultiSelectionAction.COPY);
+    multiSelectionView.addAction(MultiSelectionAction.MOVE);
+    multiSelectionView.addAction(MultiSelectionAction.DELETE);
+    multiSelectionView.addAction(MultiSelectionAction.SHARE);
+    // multiSelectionView.addAction(MultiSelectionAction.ZIP);
+    multiSelectionView.addAction(MultiSelectionAction.RENAME);
+    // MORE حذف شد چون خودت داری
+
+    multiSelectionView.setOnActionClickListener(
+        new MultiSelectionActionView.OnActionClickListener() {
+          @Override
+          public void onActionClick(MultiSelectionAction action) {
+            performMultiSelectionAction(action);
+          }
+
+          @Override
+          public void onCloseClick() {
+            exitMultiSelectionMode();
+          }
+
+          @Override
+          public void onSelectAllClick(boolean isChecked) {
+            if (fileListItem != null && fileListItem.getSelectionManager() != null) {
+              if (isChecked) {
+                // انتخاب همه
+                fileListItem.getSelectionManager().selectAll(fileModels.size());
+              } else {
+                isMultiSelectionMode = true;
+                fileListItem.getSelectionManager().selectAll(0);
+                // fileListItem.getSelectionManager().clearSelection();
+                // if (!multiSelectionView.isShowing()) {
+                // multiSelectionView.show();
+                // }
+              }
+              fileListItem.notifyDataSetChanged();
+
+              int count = fileListItem.getSelectionManager().getSelectedCount();
+              if (count > 0) {
+                multiSelectionView.setSelectedCount(count);
+              } // else {
+              // exitMultiSelectionMode();
+              // }
+            }
+          }
+        });
+  }
+
+  @Override
+  public void onStateChanged(FileConentChange newState) {
+    runOnUiThread(
+        () -> {
+          var fabState = newState;
+          for (var entry : fileListItem.getFileContentStatesMap().entrySet()) {
+            if (entry.getValue() != FileConentChange.NONE) {
+              fabState = entry.getValue();
+              break;
+            }
+          }
+          bind.fabAdd.setIconResource(fabState.getValue());
+          ObjectUtils.setFab(bind.fabAdd);
+        });
+  }
+
   void TypeChange() {
     if (gridMode.contains("gride")) {
       setViewType(ViewType.GRID);
     } else {
       setViewType(ViewType.ROW);
     }
+  }
+
+  public void enterMultiSelectionMode(int count) {
+    if (isMultiSelectionMode) return;
+    isMultiSelectionMode = true;
+    if (multiSelectionView != null) {
+      multiSelectionView.setSelectedCount(count);
+      multiSelectionView.show();
+    }
+  }
+
+  public void exitMultiSelectionMode() {
+    Log.d("MultiSelection", "exitMultiSelectionMode called");
+
+    if (!isMultiSelectionMode) {
+      Log.d("MultiSelection", "Already not in multi selection mode");
+      return;
+    }
+
+    isMultiSelectionMode = false;
+
+    if (fileListItem != null) {
+      fileListItem.enableMultiSelection(false);
+    }
+
+    if (multiSelectionView != null && multiSelectionView.isShowing()) {
+      multiSelectionView.hide();
+    }
+    Log.d("MultiSelection", "Exit completed");
+  }
+
+  private void performMultiSelectionAction(MultiSelectionAction action) {
+    List<String> selectedPaths =
+        fileListItem.getSelectionManager().getSelectedPaths(fileListItem.getAllFilesList());
+
+    if (selectedPaths.isEmpty()) {
+      exitMultiSelectionMode();
+      return;
+    }
+    if (action == MultiSelectionAction.COPY) {
+      if (fileListItem != null) {
+        fileListItem.getSelectionManager().clearSelection();
+      }
+      isMultiSelectionMode = true;
+      copySelectedFiles(selectedPaths);
+      return;
+    } else if (action == MultiSelectionAction.MOVE) {
+      if (fileListItem != null) {
+        fileListItem.getSelectionManager().clearSelection();
+      }
+      isMultiSelectionMode = true;
+      moveSelectedFiles(selectedPaths);
+      return;
+    } else {
+      exitMultiSelectionMode();
+    }
+
+    switch (action) {
+      case DELETE:
+        deleteSelectedFiles(selectedPaths);
+        break;
+      case SHARE:
+        shareSelectedFiles(selectedPaths);
+        break;
+      case MORE:
+        // zipSelectedFiles(selectedPaths);
+        break;
+      case RENAME:
+        if (selectedPaths.size() == 1) {
+          int pos = fileListItem.getSelectionManager().getSelectedPositions().get(0);
+          setRenameFile(pos);
+        } else {
+          Toast.makeText(this, "فقط یک فایل میتونه تغییر نام بده", Toast.LENGTH_SHORT).show();
+        }
+        break;
+    }
+  }
+
+  private void copySelectedFiles(List<String> paths) {
+    copyPaths.clear();
+    copyPaths.addAll(paths);
+    isCopyMode = true;
+    Toast.makeText(this, paths.size() + " فایل برای انتقال ذخیره شد", Toast.LENGTH_SHORT).show();
+    multiSelectionView.setActionCopyLayout(
+        "past",
+        R.drawable.paste_white,
+        it -> {
+          fileListItem.getSelectionManager().clearSelection();
+          if (fileListItem != null) {
+            fileListItem.enableMultiSelection(false);
+          }
+          if (Folder == null || Folder.isEmpty()) {
+            Toast.makeText(it.getContext(), "مسیر مقصد نامعتبر است", Toast.LENGTH_SHORT).show();
+            return;
+          }
+          if (copyPaths.isEmpty()) {
+            Toast.makeText(it.getContext(), "هیچ فایلی انتخاب نشده است", Toast.LENGTH_SHORT).show();
+            return;
+          }
+          for (String path : copyPaths) {
+            FileUtil.moveFileOrDirByGhostide(
+                path,
+                Folder,
+                new FileUtil.OnFileChangeCall() {
+                  @Override
+                  public void onFileDone() {
+                    reLoadFile();
+                    multiSelectionView.setResetActionCopyLayout();
+                  }
+
+                  @Override
+                  public void onFileError(String error) {
+                    multiSelectionView.setResetActionCopyLayout();
+                  }
+                },
+                true,
+                it.getContext());
+          }
+          copyPaths.clear();
+          isMultiSelectionMode = false;
+        });
+  }
+
+  private void moveSelectedFiles(List<String> paths) {
+    copyPaths.clear();
+    copyPaths.addAll(paths);
+    isCopyMode = false;
+
+    Toast.makeText(this, paths.size() + " فایل برای انتقال ذخیره شد", Toast.LENGTH_SHORT).show();
+    multiSelectionView.setActionMoveLayout(
+        "past",
+        R.drawable.paste_white,
+        it -> {
+          fileListItem.getSelectionManager().clearSelection();
+          if (fileListItem != null) {
+            fileListItem.enableMultiSelection(false);
+          }
+          if (Folder == null || Folder.isEmpty()) {
+            Toast.makeText(it.getContext(), "مسیر مقصد نامعتبر است", Toast.LENGTH_SHORT).show();
+            return;
+          }
+
+          if (copyPaths.isEmpty()) {
+            Toast.makeText(it.getContext(), "هیچ فایلی انتخاب نشده است", Toast.LENGTH_SHORT).show();
+            return;
+          }
+
+          for (String path : copyPaths) {
+            FileUtil.moveFileOrDirByGhostide(
+                path,
+                Folder,
+                new FileUtil.OnFileChangeCall() {
+                  @Override
+                  public void onFileDone() {
+                    reLoadFile();
+                    multiSelectionView.setResetActionMoveLayout();
+                  }
+
+                  @Override
+                  public void onFileError(String error) {
+                    multiSelectionView.setResetActionMoveLayout();
+                  }
+                },
+                false,
+                it.getContext());
+          }
+
+          copyPaths.clear();
+          isMultiSelectionMode = false;
+        });
+  }
+
+  private void deleteSelectedFiles(List<String> paths) {
+    new MaterialAlertDialogBuilder(this)
+        .setTitle("حذف فایل ها")
+        .setMessage("آیا از حذف " + paths.size() + " فایل اطمینان دارید؟")
+        .setPositiveButton(
+            "حذف",
+            (d, i) -> {
+              new AsyncTask<Void, Void, Boolean>() {
+                @Override
+                protected Boolean doInBackground(Void... voids) {
+                  for (String path : paths) {
+                    FileUtil.deleteFile(path);
+                  }
+                  return true;
+                }
+
+                @Override
+                protected void onPostExecute(Boolean result) {
+                  multiSelectionView.showProgress(false);
+                  reLoadFile();
+                  Toast.makeText(
+                          FileManagerActivity.this,
+                          paths.size() + " فایل حذف شد",
+                          Toast.LENGTH_SHORT)
+                      .show();
+                  exitMultiSelectionMode();
+                }
+              }.execute();
+            })
+        .setNegativeButton("انصراف", null)
+        .show();
+  }
+
+  private void shareSelectedFiles(List<String> paths) {
+    ArrayList<Uri> uris = new ArrayList<>();
+    for (String path : paths) {
+      File file = new File(path);
+      Uri uri = FileProvider.getUriForFile(this, getPackageName() + ".provider", file);
+      uris.add(uri);
+    }
+
+    Intent shareIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+    shareIntent.setType("*/*");
+    shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
+    shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+    startActivity(Intent.createChooser(shareIntent, "اشتراک گذاری"));
+
+    exitMultiSelectionMode();
+  }
+
+  private void zipSelectedFilesAsync(List<String> paths) {
+    String zipName = "archive_" + System.currentTimeMillis() + ".zip";
+    String zipPath = Folder + "/" + zipName;
+
+    multiSelectionView.showProgress(true);
+
+    new AsyncTask<Void, Integer, Boolean>() {
+      private String errorMessage = "";
+
+      @Override
+      protected void onPreExecute() {
+        Toast.makeText(
+                FileManagerActivity.this,
+                "در حال فشرده سازی " + paths.size() + " فایل...",
+                Toast.LENGTH_SHORT)
+            .show();
+      }
+
+      @Override
+      protected Boolean doInBackground(Void... params) {
+        try {
+          ZipFile zipFile = new ZipFile(zipPath);
+          int total = paths.size();
+          int current = 0;
+
+          for (String path : paths) {
+            File file = new File(path);
+            if (file.isDirectory()) {
+              zipFile.addFolder(file);
+            } else {
+              zipFile.addFile(file);
+            }
+            current++;
+            publishProgress(current, total);
+          }
+          return true;
+        } catch (Exception e) {
+          errorMessage = e.getMessage();
+          return false;
+        }
+      }
+
+      @Override
+      protected void onProgressUpdate(Integer... values) {
+
+        Log.d("ZIP", "Progress: " + values[0] + "/" + values[1]);
+      }
+
+      @Override
+      protected void onPostExecute(Boolean success) {
+        multiSelectionView.showProgress(false);
+
+        if (success) {
+          Toast.makeText(
+                  FileManagerActivity.this, "فشرده سازی انجام شد: " + zipName, Toast.LENGTH_SHORT)
+              .show();
+          reLoadFile();
+        } else {
+          Toast.makeText(FileManagerActivity.this, "خطا: " + errorMessage, Toast.LENGTH_SHORT)
+              .show();
+        }
+
+        exitMultiSelectionMode();
+      }
+    }.execute();
   }
 
   public ExrtaFab getFab() {
@@ -384,6 +813,14 @@ public class FileManagerActivity extends BaseCompat
     return bind.navs;
   }
 
+  @Override
+  public void ConnectionIS() {
+    appUpdate();
+  }
+
+  @Override
+  public void ConnectionNOT() {}
+
   private void setupSearchModeMenu() {
     bind.searchbar.setShowAvatar(true);
     bind.searchbar.showAvatarByGlideRes(R.drawable.ic_more_vert_white);
@@ -391,17 +828,16 @@ public class FileManagerActivity extends BaseCompat
         v -> {
           var popup = new PopupMenu(this, v);
           var menu = popup.getMenu();
-          var item1 = menu.add(0, 1, 0, getString(R.string.search_normal));
-          var item2 = menu.add(0, 2, 0, getString(R.string.search_regex));
-          var item3 = menu.add(0, 3, 0, getString(R.string.search_regex_case));
-          var item4 = menu.add(0, 4, 0, getString(R.string.search_regex_multiline));
-          var item5 = menu.add(0, 5, 0, getString(R.string.search_regex_dotall));
+          var item1 = menu.add(0, 1, 0, getString(R.string.search_normal)).setCheckable(true);
+          var item2 = menu.add(0, 2, 0, getString(R.string.search_regex)).setCheckable(true);
+          var item3 = menu.add(0, 3, 0, getString(R.string.search_regex_case)).setCheckable(true);
+          var item4 =
+              menu.add(0, 4, 0, getString(R.string.search_regex_multiline)).setCheckable(true);
+          var item5 = menu.add(0, 5, 0, getString(R.string.search_regex_dotall)).setCheckable(true);
           menu.setQwertyMode(true);
 
           var currentMode = fileListItem.getCurrentSearchMode();
           MenuItem checkedItem = null;
-
-          // تبدیل switch statement به if-else یا استفاده از default در switch
           switch (currentMode) {
             case NORMAL:
               checkedItem = item1;
@@ -587,12 +1023,53 @@ public class FileManagerActivity extends BaseCompat
     RefreshTabs();
 
     AnimUtils.Worker(bind.fabAdd);
-    bind.fabAdd.setIconResource(R.drawable.create);
+
+    FileConentChange currentState = FileConentChange.NONE;
+    String currentFilePath = null;
+
+    for (var entry : fileListItem.getFileContentStatesMap().entrySet()) {
+      if (entry.getValue() != FileConentChange.NONE) {
+        currentState = entry.getValue();
+        currentFilePath = entry.getKey();
+        break;
+      }
+    }
+
+    GhostFileUtilImpl.changeIconFab(bind.fabAdd, currentState);
     ObjectUtils.setFab(bind.fabAdd);
+
     bind.fabAdd.setOnClickListener(
         v -> {
-          DialogItemSheet();
+          FileConentChange fabState = FileConentChange.NONE;
+          String filePath = null;
+
+          for (var entry : fileListItem.getFileContentStatesMap().entrySet()) {
+            if (entry.getValue() != FileConentChange.NONE) {
+              fabState = entry.getValue();
+              filePath = entry.getKey();
+              break;
+            }
+          }
+
+          switch (fabState) {
+            case COPYING:
+            case MOVEING:
+              if (filePath != null) {
+                GhostFileUtilImpl.impl(fabState, Folder, filePath, FileManagerActivity.this);
+              }
+
+              fileListItem.getFileContentStatesMap().clear();
+              fileListItem.notifyDataSetChanged();
+
+              bind.fabAdd.setIconResource(FileConentChange.NONE.getValue());
+              ObjectUtils.setFab(bind.fabAdd);
+              break;
+            case NONE:
+              DialogItemSheet();
+              break;
+          }
         });
+
     bind.navs.bindView(bind.Drawer);
     bind.navs
         .getMenu()
@@ -606,6 +1083,7 @@ public class FileManagerActivity extends BaseCompat
         .getMenu()
         .add(0, 3, 0, getString(R.string.menu_terminal))
         .setIcon(R.drawable.drawer_item13);
+
     bind.navs
         .getMenu()
         .add(0, 4, 0, getString(R.string.menu_settings))
@@ -693,6 +1171,7 @@ public class FileManagerActivity extends BaseCompat
     if (executor != null) {
       executor.shutdown();
     }
+    this.unregisterReceiver(networkChangeReceiver);
   }
 
   public void reLoadFile(boolean isSortFile) {
@@ -754,6 +1233,7 @@ public class FileManagerActivity extends BaseCompat
                 bind.recyclerview2.setVisibility(View.VISIBLE);
                 bind.filedirBar.setVisibility(View.GONE);
                 fileListItem.clearFilter();
+                // setDistreeView();
                 fileListItem.submitList(new ArrayList<>(fileModels));
                 if (fileModels.isEmpty()) {
                   bind.emptyview.show();
@@ -764,7 +1244,7 @@ public class FileManagerActivity extends BaseCompat
         });
   }
 
-  public void reLoadFile() { // reload file
+  public void reLoadFile() {
     reLoadFile(true);
   }
 
@@ -909,11 +1389,73 @@ public class FileManagerActivity extends BaseCompat
     }
   }
 
+  void setDistreeView(int pos) {
+    // var model = fileListItem.getItem(pos);
+    // if (model == null) return;
+    // String path = model.getFilePath();
+    // List<String> items = spiltIntoBreadcrumbItems(path);
+
+    // ToolbarListFileAdapter adapter =
+    // new ToolbarListFileAdapter(
+    // items,
+    // this,
+    // new ToolbarListFileAdapter.CallBack() {
+    // @Override
+    // public void GoToDir(View view, int pos, String dirs) {
+    // if ("/storage/emulated/".equals(dirs)) {
+    // return;
+    // }
+    // if (FileUtil.isDirectory(dirs)) {
+    // setFolder(dirs);
+    // reLoadFile();
+    // } else {
+    // GhostToast.showWarning(FileManagerActivity.this, "This not Directory");
+    // }
+    // }
+
+    // @Override
+    // public void GoToTreeFile(View view, int pos, String dir) {}
+    // });
+
+    // bind.treerv.setAdapter(adapter);
+    // bind.treerv.setLayoutManager(
+    // new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+    // bind.treerv.smoothScrollToPosition(items.size());
+  }
+
+  List<String> spiltIntoBreadcrumbItems(String filePath) {
+    String separator = "/";
+    String[] items = filePath.split(separator);
+    List<String> fullPaths = new ArrayList<>();
+    StringBuilder currentPath = new StringBuilder();
+
+    for (String item : items) {
+      if (!item.trim().isEmpty()) {
+        if (currentPath.length() > 0) {
+          currentPath.append(separator);
+        }
+        currentPath.append(item);
+        fullPaths.add(currentPath.toString());
+      }
+    }
+
+    return fullPaths;
+  }
+
+  @Override
+  public void onChildFile(int pos) {
+    // TODO: Implement this method
+    setDistreeView(pos);
+  }
+
   @Override
   public void onClick(View view, int pos) {
-
+    if (fileListItem.isMultiSelectionEnabled()) {
+      return;
+    }
     FileManagerModel item = fileListItem.getItem(pos);
     if (item == null) return;
+    currentPosition = pos;
 
     String path = item.getFilePath();
     staticstring = path;
@@ -923,6 +1465,7 @@ public class FileManagerActivity extends BaseCompat
 
     if (FileUtil.isDirectory(path)) {
       Folder = path;
+      setDistreeView(pos);
       reLoadFile();
       return;
     }
@@ -934,14 +1477,10 @@ public class FileManagerActivity extends BaseCompat
 
   @Override
   public void onLongClick(View view, int pos) {
-
-    int originalPos = fileListItem.getOriginalPosition(pos);
-    if (originalPos != -1) {
-      setItemSheetOld(originalPos, view);
-    }
+    Log.d("MultiSelection", "onLongClick called at position: " + pos);
   }
 
-  void removedFiles(int _pos) {
+  public void removedFiles(int _pos) {
     if (_pos < 0 || _pos >= fileModels.size()) {
       Log.e("FileManager", "Invalid position in removedFiles: " + _pos);
       return;
@@ -951,17 +1490,17 @@ public class FileManagerActivity extends BaseCompat
     String fileName = new File(filePath).getName();
 
     var di = new DialogUtil(FileManagerActivity.this);
-    di.setTitle("حذف فایل");
-    di.setMessage("آیا مطمئن هستید که میخواهید '" + fileName + "' را حذف کنید؟");
-    di.setNeutralButton("لغو", null);
+    di.setTitle("Removed?");
+    di.setMessage("Are you sure you want to " + fileName);
+    di.setNeutralButton("no", null);
     di.setPositiveButton(
-        "حذف",
+        "yes",
         (p1, d2) -> {
           new AsyncTask<String, String, String>() {
             @Override
             protected void onPreExecute() {
-              prodel.setTitle("در حال حذف ...");
-              prodel.setMessage("در حال حذف " + fileName);
+              prodel.setTitle("deleting...");
+              prodel.setMessage("deleting " + fileName);
               prodel.setCancelable(false);
               prodel.setCanceledOnTouchOutside(false);
               prodel.show();
@@ -991,14 +1530,16 @@ public class FileManagerActivity extends BaseCompat
                     }
                   });
 
-              Toast.makeText(getApplicationContext(), "فایل حذف شد", Toast.LENGTH_SHORT).show();
+              Toast.makeText(
+                      getApplicationContext(), "This file has been deleted", Toast.LENGTH_SHORT)
+                  .show();
             }
           }.execute(filePath);
         });
     di.build();
   }
 
-  void setRenameFile(int _pos) {
+  public void setRenameFile(int _pos) {
     int position = _pos;
     if (position < 0 || position >= fileModels.size()) {
       Log.e("FileManager", "Invalid position in setRenameFile: " + position);
@@ -1007,63 +1548,31 @@ public class FileManagerActivity extends BaseCompat
 
     String currentPath = fileModels.get(position).getFilePath();
     String currentName = new File(currentPath).getName();
+    RenameDialogFragmentImpl.impl(
+        currentName,
+        this,
+        newName -> {
+          File oldFile = new File(currentPath);
+          File parentDir = oldFile.getParentFile();
 
-    AlertDialog dialog =
-        new GhostWebMaterialDialog(FileManagerActivity.this)
-            .setView(R.layout.ranme)
-            .setTitle("تغییر نام")
-            .setMessage("نام جدید را وارد کنید")
-            .setCancelable(false)
-            .setPositiveButton("تأیید", null)
-            .setNegativeButton("لغو", null)
-            .create();
+          if (parentDir != null) {
+            File newFile = new File(parentDir, newName);
+            if (oldFile.renameTo(newFile)) {
 
-    dialog.setOnShowListener(
-        (var) -> {
-          EditText editor = dialog.findViewById(R.id.editor);
-          Button positive = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+              updateFileInLists(currentPath, newFile.getAbsolutePath());
 
-          editor.setText(currentName);
+              if (fileListItem != null) {
+                fileListItem.highlightRename(newFile.getAbsolutePath());
+              }
+              Toast.makeText(
+                      getApplicationContext(), "Name changed successfully", Toast.LENGTH_SHORT)
+                  .show();
+            } else {
 
-          positive.setOnClickListener(
-              (__) -> {
-                String newName = editor.getText().toString().trim();
-                if (newName.isEmpty()) {
-                  editor.setError("نام نمیتواند خالی باشد");
-                  return;
-                }
-
-                if (newName.equals(currentName)) {
-                  dialog.dismiss();
-                  return;
-                }
-
-                File oldFile = new File(currentPath);
-                File newFile = new File(oldFile.getParent(), newName);
-
-                if (newFile.exists()) {
-                  editor.setError("فایلی با این نام از قبل وجود دارد");
-                  return;
-                }
-
-                if (oldFile.renameTo(newFile)) {
-
-                  updateFileInLists(currentPath, newFile.getAbsolutePath());
-                  if (fileListItem != null) {
-                    fileListItem.highlightRename(newFile.getAbsolutePath());
-                  }
-
-                  Toast.makeText(
-                          getApplicationContext(), "نام با موفقیت تغییر کرد", Toast.LENGTH_SHORT)
-                      .show();
-                } else {
-                  Toast.makeText(getApplicationContext(), "خطا در تغییر نام", Toast.LENGTH_SHORT)
-                      .show();
-                }
-                dialog.dismiss();
-              });
+              Toast.makeText(getApplicationContext(), "Error to Rename", Toast.LENGTH_SHORT).show();
+            }
+          }
         });
-    dialog.show();
   }
 
   private void FileMaker() {
@@ -1073,7 +1582,7 @@ public class FileManagerActivity extends BaseCompat
         new FileCallBack() {
           @Override
           public void onDoneMakeFile(String filePath) {
-            DataUtil.showMessage(FileManagerActivity.this, "فایل ایجاد شد!");
+            DataUtil.showMessage(FileManagerActivity.this, "File created successfully!");
             JgitHelperImpl.run(Folder, FileManagerActivity.this);
 
             runOnUiThread(
@@ -1088,7 +1597,7 @@ public class FileManagerActivity extends BaseCompat
 
           @Override
           public void onError(String error) {
-            DataUtil.showMessage(FileManagerActivity.this, "خطا: " + error);
+            DataUtil.showMessage(FileManagerActivity.this, "Error: " + error);
           }
         });
   }
@@ -1384,217 +1893,234 @@ public class FileManagerActivity extends BaseCompat
 
   public void _dataOnClickItemList(int _pos) {
     newpos = _pos;
+
     if (staticstring.endsWith(".snippet")) {
       new SnippetManagerImpl(new File(staticstring), this);
+      return;
     }
+
     for (var id : listchild) {
       if (staticstring.endsWith(id.getTypeExz())) {
         SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
         return;
       }
     }
+
+    Map<String, Runnable> specialHandlers = new HashMap<>();
     if (staticstring.endsWith(".pgb")) {
-      var x =
-          new PluginExtractor(
-              new PluginextractorFace() {
+      Log.d("FileManager", "Processing PGB file: " + staticstring);
+      try {
+        new PluginExtractor(
+            new PluginextractorFace() {
+              @Override
+              public void onPluginExtractorDone() {
+                runOnUiThread(
+                    () -> {
+                      Toast.makeText(
+                              FileManagerActivity.this,
+                              "پلاگین با موفقیت نصب شد",
+                              Toast.LENGTH_SHORT)
+                          .show();
+                      reLoadFile();
+                    });
+              }
 
-                @Override
-                public void onPluginExtractorDone() {
-                  reLoadFile();
-                }
-
-                @Override
-                public void onPluginExtractorError() {}
-              },
+              @Override
+              public void onPluginExtractorError() {
+                runOnUiThread(
+                    () -> {
+                      Toast.makeText(
+                              FileManagerActivity.this, "خطا در نصب پلاگین", Toast.LENGTH_SHORT)
+                          .show();
+                    });
+              }
+            },
+            staticstring,
+            FileManagerActivity.this);
+      } catch (Exception e) {
+        Log.e("FileManager", "Error creating PluginExtractor: " + e.getMessage());
+        e.printStackTrace();
+        Toast.makeText(this, "خطا: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+      }
+      return;
+    }
+    specialHandlers.put(".ghost", () -> loadThemeGhost());
+    specialHandlers.put(".dex", () -> loadjadx());
+    specialHandlers.put(
+        ".gtheme",
+        () -> {
+          GTheme.install(
+              FileManagerActivity.this,
               staticstring,
-              this);
-    }
-    if (staticstring.endsWith(".txt") || staticstring.endsWith(".log")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".go")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".css")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".php")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".js")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".less")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".jsx") || staticstring.endsWith(".tsx")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".html")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".dart")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".kt")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".swift")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".rb")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".rbw")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".c")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".scss")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".sass")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".cs")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".java")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".rs")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".json")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".cpp")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".frag")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
+              () -> {
+                reLoadFile();
+              });
+        });
+
+    specialHandlers.put(
+        ".jar",
+        () -> {
+          var di = new DialogUtil(FileManagerActivity.this);
+          di.setTitle("Please select one of the following options");
+          di.setMessage(
+              "Note that to change the JAR to DeX, the appropriate option may take a few minutes to change or decompile, or even this will not be done.");
+          di.setCancelable(false);
+          di.setNeutralButton("Dicompile", (p, d) -> setJarDecompiler());
+          di.setNegativeButton(
+              "jar to dex",
+              (p3, d3) -> {
+                R8Tools tools = new R8Tools();
+                tools.onlyCompile(
+                    staticstring.trim(),
+                    GetTab.trim(),
+                    26,
+                    FileManagerActivity.this,
+                    () -> reLoadFile());
+              });
+          di.build();
+        });
+
+    specialHandlers.put(
+        ".mp3",
+        () -> {
+          var musicsheet = new MusicSheet(this, staticstring);
+          musicsheet.show();
+          musicsheet.playMusic();
+        });
+
+    specialHandlers.put(".apk", () -> apkShowDataRoom());
+
+    specialHandlers.put(
+        ".pdf",
+        () -> {
+          getabout.setClass(getApplicationContext(), PdfViewNewActivity.class);
+          getabout.putExtra("pdf", staticstring);
+          getabout.putExtra("t", Uri.parse(staticstring).getLastPathSegment());
+          loadAnim(getabout);
+        });
+
+    specialHandlers.put(".svg", () -> loadsvg(newpos));
+    specialHandlers.put(".xml", () -> loadVector(newpos));
+
+    Map<String, Runnable> archiveHandlers = new LinkedHashMap<>();
+    archiveHandlers.put(".tar.gz", () -> setTarExs(staticstring, Folder));
+    archiveHandlers.put(".tar.xz", () -> setTarExz(staticstring, Folder));
+    archiveHandlers.put(".7z", () -> setSevenUnzipByPath(staticstring, Folder));
+    archiveHandlers.put(".zip", () -> InstallTakesZip(newpos, staticstring));
+    archiveHandlers.put(".project", () -> InstallTakesProject(newpos, staticstring));
+
+    Set<String> codeEditorExtensions =
+        new HashSet<>(
+            Arrays.asList(
+                ".txt",
+                ".log",
+                ".java",
+                ".kt",
+                ".kotlin",
+                ".scala",
+                ".cpp",
+                ".cc",
+                ".cxx",
+                ".c++",
+                ".h",
+                ".hpp",
+                ".hxx",
+                ".hh",
+                ".inl",
+                ".tcc",
+                ".ipp",
+                ".c",
+                ".cs",
+                ".go",
+                ".rs",
+                ".zig",
+                ".frag",
+                ".py",
+                ".py3",
+                ".pyw",
+                ".pyi",
+                ".js",
+                ".mjs",
+                ".cjs",
+                ".jsx",
+                ".ts",
+                ".tsx",
+                ".php",
+                ".rb",
+                ".rbw",
+                ".lua",
+                ".swift",
+                ".dart",
+                ".r",
+                ".jl",
+                ".html",
+                ".htm",
+                ".xhtml",
+                ".shtml",
+                ".shtm",
+                ".css",
+                ".scss",
+                ".sass",
+                ".less",
+                ".json",
+                ".xml",
+                ".yaml",
+                ".yml",
+                ".toml",
+                ".ini",
+                ".cfg",
+                ".conf",
+                ".properties",
+                ".gradle",
+                ".gradle.kts",
+                ".groovy",
+                ".g4",
+                ".jj",
+                ".smali",
+                ".class",
+                ".dex",
+                ".ninja",
+                ".mk",
+                ".cmake",
+                ".md",
+                ".markdown",
+                ".rst",
+                ".adoc",
+                ".sh",
+                ".bash",
+                ".zsh",
+                ".fish",
+                ".ps1",
+                ".bat",
+                ".cmd",
+                ".ghost",
+                ".svg"));
+
+    for (var entry : specialHandlers.entrySet()) {
+      if (staticstring.endsWith(entry.getKey())) {
+        entry.getValue().run();
+        return;
+      }
     }
 
-    if (staticstring.endsWith(".dex")) {
-      loadjadx();
+    for (var entry : archiveHandlers.entrySet()) {
+      if (staticstring.endsWith(entry.getKey())) {
+        entry.getValue().run();
+        return;
+      }
     }
-    if (staticstring.endsWith(".py")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".zig")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".lua")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".yml")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".class")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".ghost")) {
-      loadThemeGhost();
-    }
-    if (staticstring.endsWith(".xml")) {
-      loadVector(newpos);
-    }
-    if (staticstring.endsWith(".ninja")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".md")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".sh")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".smali")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".groovy")
-        || staticstring.endsWith(".gradle")
-        || staticstring.endsWith(".gradle.kts")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".g4")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".ts")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".properties")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".sql")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".jj")) {
-      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-    }
-    if (staticstring.endsWith(".svg")) {
-      loadsvg(newpos);
-    }
-    if (staticstring.endsWith(".jar")) {
-      var di = new DialogUtil(FileManagerActivity.this);
-      di.setTitle("لطفا یکی از گزینه های زیر را انتخاب کنید");
-      di.setMessage(
-          "توجه داشته باشید که برای تغییر jar به dex گزینه مناسب را انتخاب کنید ممکن است تغییرات و یا دیکامپایل کردن چند دقیقه طول بکشد یا حتی این عمل انجام نشود");
-      di.setCancelable(false);
-      di.setNeutralButton(
-          "Dicompile",
-          (p, d) -> {
-            setJarDecompiler();
-          });
-      di.setNegativeButton(
-          "jar to dex",
-          (p3, d3) -> {
-            R8Tools tools = new R8Tools();
-            tools.onlyCompile(
-                staticstring.trim(),
-                GetTab.trim(),
-                26,
-                FileManagerActivity.this,
-                () -> {
-                  reLoadFile();
-                });
-          });
-      di.build();
-    }
-    if (staticstring.endsWith(".mp3")) {
-      var musicsheet = new MusicSheet(this, staticstring);
-      musicsheet.show();
-      musicsheet.playMusic();
-    }
+
     if (BinderRecyclerview1.TaskVideo(staticstring)) {
       govirwFilm.setClass(getApplicationContext(), VideoViewsActivity.class);
       govirwFilm.putExtra("getPath", staticstring);
       govirwFilm.putExtra("getTitle", Uri.parse(staticstring).getLastPathSegment());
       loadAnim(govirwFilm);
+      return;
     }
-    if (staticstring.endsWith(".apk")) {
-      apkShowDataRoom();
-    }
-    if (staticstring.endsWith(".pdf")) {
-      getabout.setClass(getApplicationContext(), PdfViewNewActivity.class);
-      getabout.putExtra("pdf", staticstring);
-      getabout.putExtra("t", Uri.parse(staticstring).getLastPathSegment());
-      loadAnim(getabout);
-    }
-    if (staticstring.endsWith(".tar.gz")) {
-      setTarExs(staticstring, Folder);
-    }
-    if (staticstring.endsWith(".tar.xz")) {
-      setTarExz(staticstring, Folder);
-    }
-    if (staticstring.endsWith(".7z")) {
-      setSevenUnzipByPath(staticstring, Folder);
-    }
-    if (staticstring.endsWith(".zip")) {
-      InstallTakesZip(newpos, staticstring);
-    }
-    if (staticstring.endsWith(".project")) {
-      InstallTakesProject(newpos, staticstring);
+
+    if (codeEditorExtensions.stream().anyMatch(staticstring::endsWith)) {
+      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
+      return;
     }
 
     var bindjpegWall = new BindJpegWall();
@@ -1604,49 +2130,58 @@ public class FileManagerActivity extends BaseCompat
   }
 
   void loadThemeGhost() {
-    var sheet = new ListSheet();
-    sheet.setSheetDialog(this);
-    sheet.addItem("OpenThemeEditor");
-    sheet.addItem("OpenCodeEditor");
-    sheet.addItem("applyTheme");
-    sheet.setOnItemClickLabe(
-        pos -> {
-          switch (pos) {
-            case 0:
-              {
-                var it = new Intent();
-                it.setClass(getApplicationContext(), ThemePreviewActivity.class);
-                it.putExtra("keyitem", staticstring);
-                loadAnim(it);
-                sheet.getDismiss(true);
-                break;
-              }
-            case 1:
-              {
-                SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
-                sheet.getDismiss(true);
-                break;
-              }
-            case 2:
-              {
-                SharedPreferences themePrefs =
-                    getSharedPreferences("thememanagersoft", MODE_PRIVATE);
-                themePrefs.edit().putString("themes", staticstring).apply();
-                Toast.makeText(getApplicationContext(), themePrefs.getString("themes", ""), 2)
-                    .show();
-                sheet.getDismiss(true);
-                break;
-              }
-          }
+    ThemeChkerErrorBinder.showSheet(
+        staticstring,
+        this,
+        () -> {
+          var sheet = new ListSheet();
+          sheet.setSheetDialog(FileManagerActivity.this);
+          sheet.addItem("OpenThemeEditor");
+          sheet.addItem("OpenCodeEditor");
+          sheet.addItem("applyTheme");
+          sheet.setOnItemClickLabe(
+              pos -> {
+                switch (pos) {
+                  case 0:
+                    {
+                      var it = new Intent();
+                      it.setClass(getApplicationContext(), ThemePreviewActivity.class);
+                      it.putExtra("keyitem", staticstring);
+                      loadAnim(it);
+                      sheet.getDismiss(true);
+                      break;
+                    }
+                  case 1:
+                    {
+                      SendDataFromCodeEditor(newpos, "path", fileModels, newlistmap);
+                      sheet.getDismiss(true);
+                      break;
+                    }
+                  case 2:
+                    {
+                      SharedPreferences themePrefs =
+                          getSharedPreferences("thememanagersoft", MODE_PRIVATE);
+                      themePrefs.edit().putString("themes", staticstring).apply();
+                      Toast.makeText(getApplicationContext(), themePrefs.getString("themes", ""), 2)
+                          .show();
+                      sheet.getDismiss(true);
+                      break;
+                    }
+                }
+              });
         });
   }
 
   void MakeZipFileFromThread(int pos) {
-    MakeZipFileFromThread(pos, "Add project?", "ایا میخواهید یک پروژه بسازید؟", ".project");
+    MakeZipFileFromThread(pos, "Add project?", "Do you want to build a project?", ".project");
   }
 
-  void MakeZipFileFromThreads(int pos) {
-    MakeZipFileFromThread(pos, "Make ZipFile", "Add Zip ?", ".zip");
+  public void MakeZipFileFromThreads(int pos) {
+    MakeZipFileFromThread(pos, "Make ZipFile", "Add Zip?", ".zip");
+  }
+
+  public void setFolder(String Folder) {
+    this.Folder = Folder;
   }
 
   void MakeZipFileFromThread(int _number, String title, String massges, String format) {
@@ -1675,8 +2210,7 @@ public class FileManagerActivity extends BaseCompat
                                         .concat(format));
                         new net.lingala.zip4j.ZipFile(outputFilePath)
                             .addFolder(new File(originalFilePath));
-                        ///
-                        // fileListItem.highlightFile(fileModels.get(_number).getFilePath(),FileState.ARCHIVES);
+
                       } catch (Exception e) {
                         runOnUiThread(() -> showMessage(e.toString()));
                       }
@@ -1704,7 +2238,7 @@ public class FileManagerActivity extends BaseCompat
                   });
           thread.start();
         });
-    di.setNeutralButton("خیر", null);
+    di.setNeutralButton("no", null);
     di.build();
   }
 
@@ -1811,7 +2345,7 @@ public class FileManagerActivity extends BaseCompat
             () -> {
               reLoadFile(false);
             });
-    // input    //out
+
     extra.extract(new File(_in), new File(_ou));
   }
 
@@ -1826,7 +2360,7 @@ public class FileManagerActivity extends BaseCompat
   }
 
   public void setSevenUnzipByPath(String inputFile, String outFilePath) {
-    // Z7Extractor.extractFile()
+
     try {
       AlertDialog dialog =
           new MaterialAlertDialogBuilder(this)
@@ -2383,13 +2917,6 @@ public class FileManagerActivity extends BaseCompat
               }
             case 1:
               {
-                var fileShareManager = new FileShareManager(FileManagerActivity.this);
-                File file = new File(fileModels.get((int) _position).getFilePath());
-                try {
-                  fileShareManager.shareFile(file);
-                } catch (Exception e) {
-                  e.printStackTrace();
-                }
                 sheet.getDismiss(true);
                 break;
               }
@@ -2413,20 +2940,7 @@ public class FileManagerActivity extends BaseCompat
               }
             case 5:
               {
-                if (!book.getString("hsipsot4444", "").equals("")) {
-                  a =
-                      new Gson()
-                          .fromJson(
-                              book.getString("hsipsot4444", ""),
-                              new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
-                  mapz32 = new HashMap<>();
-                  mapz32.put("list", fileModels.get((int) _position).getFilePath());
-                  a.add(mapz32);
-                  book.edit().putString("hsipsot4444", new Gson().toJson(a)).apply();
-                  showMessage("Added!");
-                } else {
-                  book.edit().putString("hsipsot4444", "[]").apply();
-                }
+                bookmark(_position);
                 sheet.getDismiss(true);
                 break;
               }
@@ -2444,12 +2958,7 @@ public class FileManagerActivity extends BaseCompat
               }
             case 7:
               {
-                sh.createFileShortcut(
-                    0,
-                    fileModels.get(_position).getFilePath(),
-                    () -> {
-                      // reLoadFile();
-                    });
+                sh.createFileShortcut(0, fileModels.get(_position).getFilePath(), () -> {});
                 sheet.getDismiss(true);
                 break;
               }
@@ -2486,33 +2995,41 @@ public class FileManagerActivity extends BaseCompat
         });
   }
 
+  public void bookmark(int position) {
+    a =
+        new Gson()
+            .fromJson(
+                book.getString(FileBookmarkActivity.keybookmark, "[]"),
+                new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
+    mapz32 = new HashMap<>();
+    mapz32.put("list", fileModels.get(position).getFilePath());
+    a.add(mapz32);
+    book.edit().putString(FileBookmarkActivity.keybookmark, new Gson().toJson(a)).apply();
+    showMessage("Added!");
+  }
+
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     if (event.isCtrlPressed()) {
       switch (keyCode) {
         case KeyEvent.KEYCODE_S:
-          // open settings
           loadAnim(new Intent(getApplicationContext(), SettingAppActivity.class));
           return true;
         case KeyEvent.KEYCODE_F:
-          /// open dialog make folder
           FolderMaker();
           return true;
         case KeyEvent.KEYCODE_F1:
           FileMaker();
           return true;
         case KeyEvent.KEYCODE_G:
-          // git
           setDialogGitDownload();
           return true;
         case KeyEvent.KEYCODE_D:
-          // open drawer
           if (!bind.Drawer.isOpen()) {
             bind.Drawer.open();
           }
           return true;
         case KeyEvent.KEYCODE_J:
-          // open gson to java
           var jsonToJava =
               new GsonToClass(
                   FileManagerActivity.this,
@@ -2523,11 +3040,9 @@ public class FileManagerActivity extends BaseCompat
           jsonToJava.run();
           return true;
         case KeyEvent.KEYCODE_T:
-          // open terminal
           loadAnim(new Intent(getApplicationContext(), TerminalActivity.class));
           return true;
         case KeyEvent.KEYCODE_A:
-          // open apk manager;
           loadAnim(new Intent(getApplicationContext(), ApkViewActivity.class));
           return true;
         case KeyEvent.KEYCODE_ESCAPE:

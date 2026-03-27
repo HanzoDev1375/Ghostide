@@ -50,9 +50,9 @@ public class PrograssSheet {
   }
 
   public PrograssSheet setTitleColor(int color) {
-    if (mod == StateMod.PROGRASSH) {
-      bindig.sheettitle.setTextColor(color);
-    } else bindig.sheettitlev.setTextColor(color);
+
+    bindig.sheettitle.setTextColor(color);
+    bindig.sheettitlev.setTextColor(color);
 
     return this;
   }
@@ -60,6 +60,11 @@ public class PrograssSheet {
   public PrograssSheet dismiss() {
     dialog.dismiss();
 
+    return this;
+  }
+
+  public PrograssSheet setSubTitle(CharSequence title) {
+    bindig.subtitle.setText(title);
     return this;
   }
 

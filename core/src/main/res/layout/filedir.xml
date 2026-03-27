@@ -16,9 +16,10 @@
     <com.google.android.material.appbar.AppBarLayout
       android:layout_height="wrap_content"
       android:layout_width="match_parent"
-      app:liftOnScrollColor="@android:color/transparent"
       android:background="@android:color/transparent"
+      app:liftOnScrollColor="@android:color/transparent"
       app:liftOnScroll="false"
+      android:fitsSystemWindows="true"
       android:id="@+id/_app_bar">
 
       <LinearLayout
@@ -32,8 +33,8 @@
           android:layout_width="35dp"
           android:scaleType="centerInside"
           android:src="@drawable/ic_more_vert_white"
-          android:layout_marginRight="6dp"
           android:layout_marginLeft="10dp"
+          android:layout_marginRight="6dp"
           android:id="@+id/opendraw" />
 
         <TextView
@@ -58,28 +59,37 @@
         <ImageView
           android:layout_height="40dp"
           android:layout_width="40dp"
-          android:background="?attr/selectableItemBackground"
-          android:tint="?@attr/colorPrimary"
           android:scaleType="centerInside"
           android:src="@drawable/ic_search_black_24"
+          android:background="?attr/selectableItemBackground"
           android:layout_marginLeft="5dp"
           android:layout_marginRight="10dp"
+          android:tint="?@attr/colorPrimary"
           android:id="@+id/searchfiledir" />
 
       </LinearLayout>
 
       <com.ninjacoder.jgit.search.SearchBar
         android:layout_height="56dp"
-        android:visibility="gone"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:id="@+id/searchbar" />
+
+
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
       android:layout_height="match_parent"
       android:layout_width="match_parent"
-      app:layout_behavior="@string/appbar_scrolling_view_behavior">
+      app:layout_behavior="@string/appbar_scrolling_view_behavior"
+      android:orientation="vertical"
+      android:fitsSystemWindows="true">
+      <androidx.recyclerview.widget.RecyclerView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:padding="4dp"
+        android:id="@+id/treerv" />
 
       <LinearLayout
         android:layout_height="match_parent"
@@ -91,6 +101,7 @@
           android:layout_height="0dp"
           android:layout_width="match_parent"
           android:layout_weight="1">
+
           <androidx.recyclerview.widget.RecyclerView
             android:layout_height="match_parent"
             android:layout_width="match_parent"
@@ -100,34 +111,37 @@
           <ir.ninjacoder.prograsssheet.view.EmptyState
             android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
             app:show="false"
+            android:gravity="center"
             app:emptyStateButtonText="This list Empty"
-            android:id="@+id/emptyview" />
+            android:id="@+id/emptyview"
+            android:layout_gravity="center" />
+
           <com.google.android.material.progressindicator.CircularProgressIndicator
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:visibility="gone"
             android:indeterminate="true"
             app:trackThickness="5dp"
-            android:layout_gravity="center"
-            android:id="@+id/filedir_bar" />
+            android:id="@+id/filedir_bar"
+            android:layout_gravity="center" />
 
         </FrameLayout>
 
       </LinearLayout>
+
     </LinearLayout>
 
     <ir.ninjacoder.ghostide.core.widget.ExrtaFab
       android:layout_height="80dp"
       android:layout_width="80dp"
+      android:layout_marginBottom="50dp"
       android:clickable="true"
-      android:layout_margin="17dp"
-      android:focusable="true"
+      android:elevation="8dp"
+      android:layout_marginRight="20dp"
       app:fabSize="normal"
-      android:layout_gravity="right|bottom"
-      android:id="@+id/fabAdd" />
+      android:id="@+id/fabAdd"
+      android:layout_gravity="bottom|right" />
 
     <LinearLayout
       android:layout_height="wrap_content"
@@ -142,8 +156,8 @@
       <LinearLayout
         android:layout_height="match_parent"
         android:layout_width="wrap_content"
-        android:gravity="center_horizontal|center_vertical"
         android:background="?attr/selectableItemBackground"
+        android:gravity="center_horizontal|center_vertical"
         android:padding="8dp"
         android:orientation="vertical"
         android:id="@+id/mdel">
@@ -151,8 +165,8 @@
         <ImageView
           android:layout_height="25dp"
           android:layout_width="25dp"
-          android:src="@drawable/delete"
-          android:scaleType="centerInside" />
+          android:scaleType="centerInside"
+          android:src="@drawable/delete" />
 
         <TextView
           android:layout_height="wrap_content"
@@ -165,12 +179,23 @@
 
     </LinearLayout>
 
+    <ir.ninjacoder.ghostide.core.mult.MultiSelectionActionView
+      android:layout_height="wrap_content"
+      android:layout_width="match_parent"
+      android:layout_marginBottom="65dp"
+      android:visibility="gone"
+      android:layout_marginEnd="10dp"
+      android:elevation="16dp"
+      android:layout_marginStart="10dp"
+      android:id="@+id/multiSelectionActions"
+      android:layout_gravity="right|bottom" />
+
     <ninja.coder.appuploader.main.ViewDownloder
       android:layout_height="wrap_content"
       android:layout_width="match_parent"
       android:visibility="gone"
-      android:layout_gravity="right|bottom"
-      android:id="@+id/downloder" />
+      android:id="@+id/downloder"
+      android:layout_gravity="right|bottom" />
 
   </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

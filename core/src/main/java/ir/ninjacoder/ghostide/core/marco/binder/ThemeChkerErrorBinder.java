@@ -1,13 +1,40 @@
 package ir.ninjacoder.ghostide.core.marco.binder;
 
+import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import ir.ninjacoder.ghostide.core.activities.FileManagerActivity;
+import ir.ninjacoder.ghostide.core.utils.ThemeUtils;
+import ir.ninjacoder.prograsssheet.ViewSheet;
 import java.util.Map;
 
 import ir.ninjacoder.ghostide.core.utils.FileUtil;
 
 public class ThemeChkerErrorBinder {
+  public static void showSheet(String path, Context c, Runnable run) {
+    if (!runbinder(path)) {
+      mssges("## Error to parserTheme", "### Reload theme?", c, true, path);
+    } else {
+      run.run();
+    }
+  }
+
+  static void mssges(String title, String msg, Context c, boolean showbutton, String path) {
+    ViewSheet sheet = new ViewSheet(c);
+    sheet.setTitle(title);
+    sheet.setMassges(msg);
+    if (showbutton) {
+      sheet.setOnButtonOkClick(
+          v -> {
+            FileUtil.writeFile(path + "/", ThemeUtils.themeAsString()); // default
+            ((FileManagerActivity) c).reLoadFile();
+            sheet.hide();
+          });
+    }
+
+    sheet.setOnButtonNoClick(v -> sheet.hide());
+  }
 
   public static boolean runbinder(String ghostFile) {
     try {
@@ -130,14 +157,13 @@ public class ThemeChkerErrorBinder {
             return false;
           }
         }
-
         return true;
       } else if (ghostFile.equals("style.ghost")) {
         return true;
       }
 
     } catch (Exception e) {
-      
+
     }
     return false;
   }

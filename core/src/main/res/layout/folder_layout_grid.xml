@@ -1,64 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ir.ninjacoder.ghostide.core.marco.binder.BlurMaterialCardView
      xmlns:android="http://schemas.android.com/apk/res/android"
-     android:layout_height="130dp"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_height="wrap_content"
      android:layout_width="match_parent"
-     android:id="@+id/cardblur"
-     android:layout_margin="4dp">
+     android:layout_marginTop="4dp"
+     android:id="@+id/cardblur">
 
     <ir.ninjacoder.prograsssheet.perfence.ListItemView
          android:layout_height="match_parent"
          android:layout_width="match_parent"
-         android:gravity="center_vertical|center_horizontal"
+         android:gravity="center_horizontal"
+         android:padding="8dp"
          android:orientation="vertical"
          android:id="@+id/roots">
 
-        <CheckBox
-             android:layout_height="wrap_content"
-             android:layout_width="wrap_content"
-             android:text=" "
-             android:visibility="gone"
-             android:id="@+id/box"
+        <ImageView
+             android:layout_height="35dp"
+             android:layout_width="35dp"
+             android:layout_marginBottom="2dp"
+             android:src="@drawable/ic_more_vert_white"
+             android:scaleType="centerInside"
+             android:rotation="90"
+             android:layout_marginRight="5dp"
+             android:tint="?attr/colorPrimary"
+             android:layout_marginTop="3dp"
+             android:id="@+id/iconMoreOptions"
              android:layout_gravity="right" />
 
-        <ImageView
-             android:layout_height="60dp"
-             android:layout_width="60dp"
-             android:src="@drawable/ic_material_pascal"
-             android:padding="9dp"
-             android:layout_marginTop="6dp"
-             android:paddingHorizontal="3dp"
-             android:id="@+id/icon" />
+        <LinearLayout
+             android:layout_height="1dp"
+             android:layout_width="match_parent"
+             android:padding="8dp"
+             android:orientation="horizontal">
+
+        </LinearLayout>
 
         <LinearLayout
-             android:layout_height="wrap_content"
+             android:layout_height="match_parent"
              android:layout_width="match_parent"
-             android:gravity="center_vertical|center_horizontal"
+             android:gravity="center_horizontal|center_vertical"
              android:orientation="vertical">
 
-            <TextView
-                 android:layout_height="wrap_content"
-                 android:layout_width="match_parent"
-                 android:gravity="center_vertical|center_horizontal"
-                 android:textAppearance="?android:attr/textAppearanceMedium"
-                 android:ellipsize="end"
-                 android:textSize="17sp"
-                 android:lines="1"
-                 android:singleLine="true"
-                 android:text="MyApp.apk"
-                 android:id="@+id/folderName" />
+            <ImageView
+                 android:layout_height="70dp"
+                 android:layout_width="70dp"
+                 android:scaleType="centerInside"
+                 android:padding="9dp"
+                 android:id="@+id/icon"
+                 android:layout_gravity="center" />
 
             <TextView
                  android:layout_height="wrap_content"
-                 android:layout_width="match_parent"
-                 android:gravity="center_vertical|center_horizontal"
-                 android:textAppearance="?android:attr/textAppearanceSmall"
+                 android:layout_width="wrap_content"
+                 android:textAppearance="?android:attr/textAppearanceMedium"
+                 android:padding="8dp"
                  android:ellipsize="end"
-                 android:textSize="14dp"
-                 android:lines="1"
-                 android:singleLine="true"
-                 android:text="File 0 | Folder 0 | 2024 جولای | time 20: 11 | Format Apk | Size 330.Mb | Install not"
-                 android:id="@+id/tvTools" />
+                 android:textSize="17sp"
+                 android:id="@+id/folderName"
+                 android:text="TextView" />
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:layout_marginBottom="3dp"
+                 android:gravity="center_horizontal|center_vertical"
+                 android:textAppearance="?android:attr/textAppearanceSmall"
+                 android:padding="8dp"
+                 android:ellipsize="end"
+                 android:textSize="14sp"
+                 android:id="@+id/tvTools"
+                 android:text="" />
 
         </LinearLayout>
 

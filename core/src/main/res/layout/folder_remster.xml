@@ -5,63 +5,72 @@
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
     android:layout_marginBottom="4dp"
-    android:id="@+id/cardblur"
->
-    <LinearLayout
+    android:id="@+id/cardblur">
+
+    <ir.ninjacoder.prograsssheet.perfence.ListItemView
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:orientation="vertical">
-        <ir.ninjacoder.prograsssheet.perfence.ListItemView
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:background="?android:attr/selectableItemBackground"
-            android:gravity="center"
-            android:clickable="true"
-            android:orientation="horizontal"
-            android:id="@+id/roots">
+        android:background="?android:attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:clickable="true"
+        android:orientation="horizontal"
+        android:id="@+id/roots">
 
-            <LinearLayout
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:padding="8dp"
+            android:id="@+id/icon_container">
+
+            <ImageView
+                android:layout_height="38dp"
+                android:layout_width="38dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/file"
+                android:layout_marginStart="4dp"
+                android:id="@+id/icon" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:padding="8dp"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <TextView
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:gravity="center"
-                android:padding="8dp"
-                android:id="@+id/icon_container">
+                android:paddingEnd="8dp"
+                android:textSize="16sp"
+                android:maxLines="2"
+                android:id="@+id/folderName"
+                android:text="Android" />
 
-                <ImageView
-                    android:layout_height="38dp"
-                    android:layout_width="38dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/file"
-                    android:layout_marginStart="4dp"
-                    android:id="@+id/icon" />
-
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
                 android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:padding="8dp"
-                android:orientation="vertical">
+                android:layout_width="wrap_content"
+                android:paddingEnd="8dp"
+                android:textSize="13sp"
+                android:id="@+id/tvTools"
+                android:text="File: 40" />
 
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:paddingEnd="8dp"
-                    android:textSize="16sp"
-                    android:maxLines="2"
-                    android:id="@+id/folderName"
-                    android:text="Android" />
+        </LinearLayout>
 
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:paddingEnd="8dp"
-                    android:textSize="13sp"
-                    android:id="@+id/tvTools"
-                    android:text="File: 40" />
+        <ImageView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:contentDescription="More options"
+            android:src="@drawable/ic_more_vert_white"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="8dp"
+            android:layout_marginRight="8dp"
+            android:tint="?attr/colorPrimary"
+            android:id="@+id/iconMoreOptions"
+            android:layout_gravity="center_vertical" />
 
-            </LinearLayout>
+    </ir.ninjacoder.prograsssheet.perfence.ListItemView>
 
-        </ir.ninjacoder.prograsssheet.perfence.ListItemView>
-    </LinearLayout>
 </ir.ninjacoder.ghostide.core.marco.binder.BlurMaterialCardView>

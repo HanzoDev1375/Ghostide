@@ -1,30 +1,32 @@
-package ir.ninjacoder.ghostide.core.Store;
+package ir.ninjacoder.ghostide.core.store;
 
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-
+import android.view.View;
+import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
+import androidx.transition.Transition;
+import com.google.android.material.transition.MaterialSharedAxis;
+import androidx.transition.TransitionManager;
 import androidx.viewpager2.widget.ViewPager2;
-
 import com.google.android.material.color.MaterialColors;
-
+import ir.ninjacoder.ghostide.core.NetworkChangeReceiver;
 import java.util.ArrayList;
 import java.util.List;
-
 import ir.ninjacoder.ghostide.core.R;
-import ir.ninjacoder.ghostide.core.Store.FontFragment;
-import ir.ninjacoder.ghostide.core.Store.ThemeFragment;
-import ir.ninjacoder.ghostide.core.Store.WebShopFragment;
 import ir.ninjacoder.ghostide.core.activities.BaseCompat;
 import ir.ninjacoder.ghostide.core.databinding.LayoutStoreAcitvityBinding;
 import ir.ninjacoder.ghostide.core.utils.ObjectUtils;
 
-public class StoreAcitvity extends BaseCompat {
+public class StoreAcitvity extends BaseCompat implements NetworkChangeReceiver.CallBackNetWork {
   private LayoutStoreAcitvityBinding bind;
   private StoreAdapter adapter;
   private List<Fragment> mylist = new ArrayList<>();
+  private NetworkChangeReceiver networkChangeReceiver;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,12 @@ public class StoreAcitvity extends BaseCompat {
     bind.bottomNavigation.setBackgroundTintList(
         ColorStateList.valueOf(
             MaterialColors.getColor(bind.bottomNavigation, ObjectUtils.Back, 0)));
+    networkChangeReceiver = new NetworkChangeReceiver(this);
+    IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+    registerReceiver(networkChangeReceiver, filter);
+  }
+
+  void bind() {
     mylist.add(new WallpaperFragment());
     mylist.add(new FontFragment());
     mylist.add(new ThemeFragment());
@@ -132,12 +140,49 @@ public class StoreAcitvity extends BaseCompat {
       ((WallpaperFragment) it).filter(newText);
     } else if (it instanceof SvgStoreFragment) {
       ((SvgStoreFragment) it).filter(newText);
-    }else if (it instanceof WebShopFragment) {
+    } else if (it instanceof WebShopFragment) {
       ((WebShopFragment) it).filter(newText);
     }
   }
 
   private void clear() {
     bindSearch("");
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    unregisterReceiver(networkChangeReceiver);
+    // TODO: Implement this method
+  }
+
+  @Override
+  public void ConnectionIS() {
+    bind();
+    bind.emptystateview.hide();
+    show(bind.bottomNavigation);
+    show(bind.toolbarstore);
+    show(bind.viewpagerstore);
+  }
+
+  @Override
+  public void ConnectionNOT() {
+    bind.emptystateview.show();
+    hide(bind.bottomNavigation);
+    hide(bind.toolbarstore);
+    hide(bind.viewpagerstore);
+  }
+
+  void hide(ViewGroup group) {
+    Transition sharedAxis = new MaterialSharedAxis(MaterialSharedAxis.Z, true);
+    TransitionManager.beginDelayedTransition(group, sharedAxis);
+    group.setVisibility(View.GONE);
+    
+  }
+
+  void show(ViewGroup group) {
+    Transition sharedAxis = new MaterialSharedAxis(MaterialSharedAxis.Z, true);
+    TransitionManager.beginDelayedTransition(group, sharedAxis);
+    group.setVisibility(View.VISIBLE);
   }
 }

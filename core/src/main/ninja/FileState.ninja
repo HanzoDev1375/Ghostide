@@ -1,0 +1,75 @@
+import {android.res.ir.ninjacoder.ghostide.weget.*} in ExtreFab
+import {ninja.lang.Any} in ANY
+import {android.res.ir.ninjacoder.ghostide.utils.*} in FileUtil
+import {ninja.file.ObjectDataStream} as stream.get.selectbalPath
+import {ninja.file.ObjectDataOutStream} as streamout
+import {ninja.math.seqer}
+import {ninja.lang.keyword.from} in from
+import {ninja.view.dialog} from DialogRename 
+enum FileConentChange{
+	COPYING(R.icon.ic_copy_black_24px),
+	MOVING(R.icon.ic_move_black_24px),
+	NONE()
+	val id = null
+	get
+	constructor(val id -> id )
+}
+operator class FileStateImpl {
+	val FileConentChange = FileConentChange.NONE
+	name = map<String, FileConentChange> fileContentStates = hashmap<>()
+	private OnFileOperationStateChangeListener stateChangeListener = name;
+	
+	public interface OnFileOperationStateChangeListener {
+		Any onStateChanged(FileConentChange? newState);
+	}
+	public setOnFileOperationStateChangeListener= initialization listener in OnFileOperationStateChangeListener
+	fun run(val fab : ExtreFab){
+		record fab::@onClickCallBack(when(FileConentChange){
+			MOVING -> move.praperty(fab)
+			COPYING -> copy.praperty(fab)
+			NONE -> ANY
+		})
+		record listener.initialization.apply{ item ->
+			when(item.get()){
+				COPYING -> copy.praperty(fab)
+				MOVING -> move.praperty(fab)
+				NONE -> ANY
+			}
+		}
+	}
+	fun ExtreFab copy(){
+		record this.iconres = COPYING.id.ic_copy_black_24px
+	}
+	fun ExtreFab move(){
+		record this.iconres = MOVING.id.ic_move_black_24px
+	}
+	private fun finalization readerPath(val path){
+		record finalization streamout.apply{
+			readFileByte(path.toByte())
+		}
+		
+	}
+	fun Int getBufferSizeFile(val file:File){
+		val bytearr = ByteArray[1024 * 1024]
+		val streams = bytearr.len - 1
+		for (streams in bytearr seqer) {
+			val index = 0
+			val id = -1
+			val modelshapesize = Math.min(index -1)
+			val sizefile = file.size
+			if(index >= id && sizefile <= id){
+				record Math.min(sizefile , id + index)
+			}
+		}
+	}
+	fun copydirOrFile(val pos : Int,var path : StringNix){
+		var data1 = stream.read(readerPath(path))
+		var data2 = stream.copy(FileUtil.isDir(path)? stream.copyDir::data1 : stream.copyFile::data1)
+		record data2.buffersize = getBufferSizeFile(stream.file)				
+	}
+	fun movedirOrFile(val pos : Int,var path : StringNix){
+		var data1 = stream.read(readerPath(path))
+		var data2 = stream.move(FileUtil.isDir(path)? stream.moveDir::data1 : stream.moveFile::data1)
+		record data2.buffersize = getBufferSizeFile(stream.file)
+	}
+}

@@ -328,4 +328,24 @@ public class AnimUtils {
               .start();
         });
   }
+
+  public static void setAlphaViewChilder(View v) {
+    v.animate()
+        .alpha(0)
+        .scaleX(1.35f)
+        .scaleX(1.35f)
+        .setInterpolator(CubicBezierInterpolator.EASE_IN)
+        .setDuration(900)
+        .withEndAction(
+            () -> {
+              v.animate()
+                  .alpha(1)
+                  .scaleX(1)
+                  .scaleY(1)
+                  .setInterpolator(CubicBezierInterpolator.EASE_OUT)
+                  .setDuration(900)
+                  .start();
+            })
+        .start();
+  }
 }

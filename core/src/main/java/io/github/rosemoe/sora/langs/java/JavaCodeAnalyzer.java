@@ -338,22 +338,22 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 colorNormal = EditorColorScheme.javaparament;
 
               } else if (previous == JavaLexer.THROW) {
-                colorNormal = EditorColorScheme.jsoprator;
+                colorNormal = EditorColorScheme.javaoprator;
               } else if (previous == JavaLexer.CASE) {
-                colorNormal = EditorColorScheme.jsoprator;
+                colorNormal = EditorColorScheme.javaoprator;
               } else if (lexer._input.LA(1) == '.') {
-                colorNormal = EditorColorScheme.pystring;
+                colorNormal = EditorColorScheme.javatype;
               } else if (lexer._input.LA(1) == '[' || lexer._input.LA(1) == ']') {
                 colorNormal = EditorColorScheme.tscolormatch1;
               } else if (lexer._input.LA(1) == '(') {
                 colorNormal = EditorColorScheme.tscolormatch4;
               } else if (previous == JavaLexer.DOT) {
-                colorNormal = EditorColorScheme.tscolormatch3;
+                colorNormal = EditorColorScheme.javafun;
               } else if (!isClassName && Character.isUpperCase(token.getText().charAt(0))) {
                 Pattern pattern = Pattern.compile("^[A-Z][a-zA-Z0-9_]*$");
                 var matcher = pattern.matcher(token.getText());
                 if (matcher.matches()) {
-                  colorNormal = EditorColorScheme.javatype;
+                  colorNormal = EditorColorScheme.javafield;
                 }
               }
 

@@ -30,9 +30,8 @@ public class PlModel {
     this.type = type;
     this.icon = icon;
   }
-  public PlModel(){
-    
-  }
+
+  public PlModel() {}
 
   public String getName() {
     return this.name;
@@ -76,5 +75,24 @@ public class PlModel {
   public void setIsusing(Boolean isusing) {
     this.isusing = isusing;
   }
-  
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public void setDir(String dir) {
+    this.dir = dir;
+  }
+
+  public void setDev(String dev) {
+    this.dev = dev;
+  }
+
+  public void setType(String type) {
+    this.type = type;
+  }
+
+  public void setIcon(String icon) {
+    this.icon = icon;
+  }
 }

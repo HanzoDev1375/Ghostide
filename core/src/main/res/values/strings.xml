@@ -34,6 +34,7 @@
   <string name="Settings">Settings</string>
   <string name="theme">App Theme</string>
   <string name="Customize_font">Customize Font</string>
+  <string name="fontsize">Select font size</string>
   <string name="gos">GWI</string>
   <string name="paste_text">Paste</string>
   <string name="copy_text">Copy</string>
@@ -147,4 +148,5 @@
   <string name="search_regex_case">Regex + Case Sensitive</string>
   <string name="search_regex_multiline">Regex + Multiline</string>
   <string name="search_regex_dotall">Regex + Dot All</string>
+  <string name="selected_items">اSelect Item</string>
 </resources>

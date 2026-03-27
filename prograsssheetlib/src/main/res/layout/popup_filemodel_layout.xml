@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ir.ninjacoder.prograsssheet.perfence.ListItemViewCard
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:layout_height="wrap_content"
+     android:layout_width="match_parent"
+     android:layout_marginTop="4dp"
+     android:id="@+id/cardroot">
+
+    <LinearLayout
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:gravity="center_vertical"
+         android:padding="8dp"
+         android:orientation="horizontal">
+
+        <ImageView
+             android:layout_height="40dp"
+             android:layout_width="40dp"
+             android:scaleType="centerInside"
+             android:id="@+id/icon" />
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:gravity="end"
+             android:padding="8dp"
+             android:textSize="15sp"
+             android:layout_weight="1"
+             android:id="@+id/textresult"
+             android:text="File " />
+
+    </LinearLayout>
+
+</ir.ninjacoder.prograsssheet.perfence.ListItemViewCard>

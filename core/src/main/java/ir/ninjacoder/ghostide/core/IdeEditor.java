@@ -22,8 +22,6 @@ import com.google.android.material.shape.CornerFamily;
 import com.google.android.material.shape.MaterialShapeDrawable;
 import com.google.android.material.shape.ShapeAppearanceModel;
 
-import io.github.rosemoe.sora.diagnostics.Diagnostic;
-import io.github.rosemoe.sora.diagnostics.DiagnosticsState;
 import io.github.rosemoe.sora.event.ClickEvent;
 import io.github.rosemoe.sora.text.CharPosition;
 import io.github.rosemoe.sora.data.RegexSpan;
@@ -32,17 +30,14 @@ import android.widget.Toast;
 import ir.ninjacoder.ghostide.core.utils.DataUtil;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.Token;
-
 import java.io.File;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import io.github.rosemoe.sora.event.ContentChangeEvent;
 import io.github.rosemoe.sora.event.DoubleClickEvent;
 import io.github.rosemoe.sora.event.LongPressEvent;
-import io.github.rosemoe.sora.event.SelectionChangeEvent;
 import io.github.rosemoe.sora.event.TextSizeChangeEvent;
 import io.github.rosemoe.sora.interfaces.EditorLanguage;
 import io.github.rosemoe.sora.langs.java.FieldUsageChecker;

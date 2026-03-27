@@ -187,8 +187,14 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
             break;
 
           case PythonLexerCompat.STRING:
-            CodeHighlighter.highlightFString(token.getText(), line, column, result);
-            break;
+            {
+              int color = EditorColorScheme.pystring;
+              if (previous == PythonLexerCompat.LBRACE || previous == PythonLexerCompat.RBRACE) {
+                color = EditorColorScheme.javafield;
+              }
+              result.addIfNeeded(line, column, color);
+              break;
+            }
           case PythonLexerCompat.NUMBER:
             result.addIfNeeded(
                 line,
@@ -196,7 +202,7 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
                 TextStyle.makeStyle(EditorColorScheme.pynumber, 0, true, false, false));
             break;
           case PythonLexerCompat.FSTRING:
-            result.addIfNeeded(line, column, EditorColorScheme.ATTRIBUTE_VALUE);
+            result.addIfNeeded(line, column, EditorColorScheme.pysymbol);
             break;
 
           case PythonLexerCompat.IDENTIFIER:
@@ -253,7 +259,8 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
                 }
               }
 
-              result.addIfNeeded(line,column,TextStyle.makeStyle(colorId,0,isbold,false,false));
+              result.addIfNeeded(
+                  line, column, TextStyle.makeStyle(colorId, 0, isbold, false, false));
               break;
             }
 
@@ -275,62 +282,65 @@ public class PythonCodeAnalyzer implements CodeAnalyzer {
       info.finish();
       result.setExtra(info);
       result.determine(lastLine);
-      var ch = new PythonSyntaxChecker();
-      ch.checkSyntax(GhostIdeAppLoader.getContext(), content.toString());
-      if (ch.hasErrors()) {
-        ch.getErrors()
+      if (isCodeAnalyze()) {
+
+        var ch = new PythonSyntaxChecker();
+        ch.checkSyntax(GhostIdeAppLoader.getContext(), content.toString());
+        if (ch.hasErrors()) {
+          ch.getErrors()
+              .forEach(
+                  it -> {
+                    Utils.setErrorSpan(result, it.line, it.column);
+                  });
+        }
+        if (ch.hasWarnings()) {
+          ch.getWarnings()
+              .forEach(
+                  it -> {
+                    Utils.setWaringSpan(result, it.line, it.column, EditorColorScheme.pysymbol);
+                  });
+        }
+        if (ch.hasTypo()) {
+          ch.getTypo()
+              .forEach(
+                  it -> {
+                    Utils.setTypoSpan(result, it.line, it.column);
+                  });
+        }
+      }
+      if (isCodeAnalyze()) {
+        var pyast = new PythonCodeAnalyzerAst(editor);
+        pyast.analyze(GhostIdeAppLoader.getContext(), content.toString());
+        var listAst = pyast.getElements();
+        pyast
+            .getMethods()
             .forEach(
-                it -> {
-                  Utils.setErrorSpan(result, it.line, it.column);
+                v -> {
+                  Utils.setSpanEFO2(
+                      result, v.line, v.column, EditorColorScheme.javafield, false, true);
+                });
+        pyast
+            .getFunctions()
+            .forEach(
+                v -> {
+                  Utils.setSpanEFO2(
+                      result, v.line, v.column, EditorColorScheme.javafun, true, false);
+                });
+        pyast
+            .getClasses()
+            .forEach(
+                v -> {
+                  Utils.setSpanEFO2(
+                      result, v.line, v.column, EditorColorScheme.javaoprator, true, false);
+                });
+        pyast
+            .getVariables()
+            .forEach(
+                v -> {
+                  Utils.setSpanEFO2(
+                      result, v.line, v.column, EditorColorScheme.javatype, false, false);
                 });
       }
-      if (ch.hasWarnings()) {
-        ch.getWarnings()
-            .forEach(
-                it -> {
-                  Utils.setWaringSpan(result, it.line, it.column, EditorColorScheme.pysymbol);
-                });
-      }
-      if (ch.hasTypo()) {
-        ch.getTypo()
-            .forEach(
-                it -> {
-                  Utils.setTypoSpan(result, it.line, it.column);
-                });
-      }
-      // error manager not work
-      //   errors.analyze(content, result, delegate);
-      result.setSuppressSwitch(maxSwitch + 10);
-      var pyast = new PythonCodeAnalyzerAst(editor);
-      pyast.analyze(GhostIdeAppLoader.getContext(), content.toString());
-      var listAst = pyast.getElements();
-      pyast
-          .getMethods()
-          .forEach(
-              v -> {
-                Utils.setSpanEFO2(
-                    result, v.line, v.column, EditorColorScheme.javafield, false, true);
-              });
-      pyast
-          .getFunctions()
-          .forEach(
-              v -> {
-                Utils.setSpanEFO2(result, v.line, v.column, EditorColorScheme.javafun, true, false);
-              });
-      pyast
-          .getClasses()
-          .forEach(
-              v -> {
-                Utils.setSpanEFO2(
-                    result, v.line, v.column, EditorColorScheme.javaoprator, true, false);
-              });
-      pyast
-          .getVariables()
-          .forEach(
-              v -> {
-                Utils.setSpanEFO2(
-                    result, v.line, v.column, EditorColorScheme.javatype, false, false);
-              });
       result.setNavigation(labels);
     } catch (IOException e) {
       e.printStackTrace();

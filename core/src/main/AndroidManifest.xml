@@ -17,6 +17,7 @@
       android:launchMode="singleTop"
       android:label="Code Editor"
       android:exported="true"
+      android:windowSoftInputMode="adjustResize"
       android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
       android:hardwareAccelerated="true">
 
@@ -87,8 +88,7 @@
     <activity android:name=".activities.SettingAppActivity" />
     <activity android:name=".activities.ErrorManagerActivity" />
     <activity android:name=".activities.AboutActivity" />
-    <activity android:name=".activities.ShellCodeActivity" />
-    <activity android:name="ir.ninjacoder.ghostide.core.Store.StoreAcitvity" />
+    <activity android:name="ir.ninjacoder.ghostide.core.store.StoreAcitvity" />
 
 
     <activity
@@ -309,14 +309,12 @@
     </activity>
     <activity android:name=".activities.PdfViewActivity" />
     <activity android:name=".activities.GouidHtmlActivity" />
-    <activity android:name=".activities.MianbarActivity" />
     <activity android:name=".activities.FontViewActivity" />
     <activity android:name=".activities.LogCatViewActivity" />
     <activity
       android:name=".activities.LeranPdfActivity"
       android:windowSoftInputMode="stateHidden" />
     <activity android:name=".activities.IconModActivity" />
-    <activity android:name=".activities.MusicPlayerActivity" />
     <activity android:name=".activities.FontChakerActivity" />
     <activity android:name=".activities.StreamSoftAppActivity" />
     <activity

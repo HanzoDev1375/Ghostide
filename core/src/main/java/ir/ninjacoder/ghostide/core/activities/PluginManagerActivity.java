@@ -39,25 +39,20 @@ public class PluginManagerActivity extends BaseCompat {
     super.onCreate(_savedInstanceState);
     bind = LayoutPluginActivityBinding.inflate(getLayoutInflater());
     setContentView(bind.getRoot());
+    setFitViewGroup(bind.getRoot());
     setSupportActionBar(bind.toolbar);
     gson = new GsonBuilder().setPrettyPrinting().create();
-
-    // اول همه چیز را مخفی کن
     bind.empty.setVisibility(View.GONE);
     bind.rvplugin.setVisibility(View.GONE);
     bind.inputpluginsearch.setVisibility(View.GONE);
-
-    // بررسی وجود فایل config.json
     String configPath = PluginLoaderImpl.DEFAULT_CONFIG_PATH;
     if (!FileUtil.isExistFile(configPath)) {
-      // فایل وجود ندارد
       bind.empty.setVisibility(View.VISIBLE);
       bind.emptyicon.setImageResource(R.drawable.drawer_item5);
       bind.fabmod.hide();
     } else {
-      // فایل وجود دارد
       bind.fabmod.show();
-      bind.fabmod.setIconResource(R.drawable.ic_add);
+      bind.fabmod.setImageResource(R.drawable.ic_add);
       bind.fabmod.setOnClickListener(v -> showAddPluginDialog());
 
       loadPluginData();

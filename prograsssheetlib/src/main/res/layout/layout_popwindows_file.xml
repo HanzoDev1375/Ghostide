@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     android:background="?attr/selectableItemBackground"
+     android:id="@+id/an">
+
+    <LinearLayout
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:padding="3dp"
+         android:orientation="vertical">
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_marginEnd="4dp"
+             android:gravity="center_vertical"
+             android:padding="8dp"
+             android:orientation="horizontal"
+             android:layout_marginStart="4dp"
+             android:id="@+id/layout_back">
+
+            <ImageView
+                 android:layout_height="30dp"
+                 android:layout_width="30dp"
+                 android:scaleType="centerInside"
+                 android:src="@drawable/icon_arrow_back_round"
+                 android:focusable="false"
+                 android:id="@+id/icondata" />
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:padding="8dp"
+                 android:textSize="15sp"
+                 android:layout_marginLeft="5dp"
+                 android:text="......." />
+
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:hint="Search">
+
+            <com.google.android.material.textfield.TextInputEditText
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:id="@+id/filterItem" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:padding="8dp"
+             android:layout_marginLeft="3dp"
+             android:layout_marginRight="3dp"
+             android:layout_marginTop="5dp"
+             android:id="@+id/rvroot" />
+
+        <ir.ninjacoder.prograsssheet.view.EmptyState
+             android:layout_height="match_parent"
+             android:layout_width="match_parent"
+             app:emptyStateText="List Has Empty!"
+             android:gravity="center"
+             android:padding="8dp"
+             app:emptyStateTextColor="?attr/colorOnSurface"
+             android:layout_marginLeft="3dp"
+             android:layout_marginRight="3dp"
+             app:emptyStateShowButton="false"
+             android:layout_marginTop="5dp"
+             android:layout_gravity="center_vertical"
+             android:id="@+id/emptyviews" />
+
+    </LinearLayout>
+
+    <include
+         layout="@layout/layout_selection_panel"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_marginLeft="4dp"
+         android:layout_marginRight="4dp"
+         android:layout_marginTop="8dp"
+         android:id="@+id/selectionPanel"
+         android:layout_gravity="bottom|end" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

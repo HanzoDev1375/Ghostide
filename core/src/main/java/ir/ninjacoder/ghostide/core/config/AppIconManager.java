@@ -151,7 +151,7 @@ public class AppIconManager {
   void sub(String name) {
     disableAllComponentsExcept(name);
     enableComponent(name);
-    restartApp();
+  //  restartApp();
   }
   private void disableAllComponentsExcept(String componentNameToEnable) {
     PackageManager manager = appcompat.getPackageManager();

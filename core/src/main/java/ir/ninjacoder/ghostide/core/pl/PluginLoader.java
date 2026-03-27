@@ -65,7 +65,7 @@ public class PluginLoader {
     activeClassLoaders.clear();
 
     System.gc();
-    Log.d("PluginLoader", "تمامی پلاگین‌ها پاک شدند");
+    Log.d("PluginLoader", "تمامی پلاگین ها پاک شدند");
   }
 
   public void reloadAllPlugins(String configPath) {

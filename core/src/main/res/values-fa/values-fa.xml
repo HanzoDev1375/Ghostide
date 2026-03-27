@@ -147,4 +147,5 @@
   <string name="search_regex_case">Regex + حساس به حروف</string>
   <string name="search_regex_multiline">Regex + چندخطی</string>
   <string name="search_regex_dotall">Regex + نقطه روی همه</string>
+  <string name="fontsize">سایز فونت را انتخاب کنید </string>
 </resources>

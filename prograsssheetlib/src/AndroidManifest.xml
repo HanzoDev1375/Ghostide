@@ -1,2 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <service
+            android:name="ir.ninjacoder.prograsssheet.plugin.api.ObjectService"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name="ir.ninjacoder.prograsssheet.plugin.api.ObjectBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
+    </application>
+
 </manifest>

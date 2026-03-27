@@ -1,4 +1,4 @@
-package ir.ninjacoder.ghostide.core.Store;
+package ir.ninjacoder.ghostide.core.store;
 
 import android.app.Activity;
 import android.content.Context;
@@ -289,7 +289,6 @@ public class ThemeFragment extends Fragment {
       }
     }
 
-    // ذخیره مسیر فایل پس‌زمینه
     if (themeData.containsKey(backgroundKey)) {
       String bgUrl = themeData.get(backgroundKey);
       if (bgUrl != null && !bgUrl.isEmpty()) {

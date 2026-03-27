@@ -24,6 +24,9 @@ import ir.ninjacoder.ghostide.core.folder.FileIconHelper;
 import ir.ninjacoder.ghostide.core.utils.DataUtil;
 import ir.ninjacoder.ghostide.core.utils.ObjectUtils;
 import ir.ninjacoder.prograsssheet.perfence.ListItemView;
+import java.io.InputStream;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.Glide;
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.FileHeader;
@@ -44,6 +47,7 @@ public class ZipListFileShowAd extends RecyclerView.Adapter<ZipListFileShowAd.Ho
   private OnFileActionListener actionListener;
   private boolean multiSelectMode = false;
   private String unzipDir;
+  private final ZipFile zipFile;
   private Set<Integer> selectedItems = new HashSet<>();
 
   public interface OnFileActionListener {
@@ -74,7 +78,7 @@ public class ZipListFileShowAd extends RecyclerView.Adapter<ZipListFileShowAd.Ho
       Context context, List<FileHeader> allFiles, String zipFilePath, String unzipDir) {
     this.context = context;
     this.allFiles = allFiles;
-    this.zipFilePath = zipFilePath;
+    this.zipFile = new ZipFile(zipFilePath);
     this.unzipDir = unzipDir;
     this.showFiles = filterAndSortFiles(currentPath);
   }
@@ -90,16 +94,21 @@ public class ZipListFileShowAd extends RecyclerView.Adapter<ZipListFileShowAd.Ho
     FileHeader fh = showFiles.get(pos);
     boolean isDir = isDirectory(fh);
     String displayName = getDisplayName(fh);
-
+    String fileName = fh.getFileName().toLowerCase();
     h.name.setText(displayName);
     h.size.setText(isDir ? "Folder" : formatSize(fh.getUncompressedSize()));
+    if (!isDir
+        && (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName.endsWith(".png"))) {
+      loadImageWithGlide(fh, h.icon);
+    } else {
+      var icon = new FileIconHelper(displayName);
+      if (isDir) {
+        h.icon.setImageResource(R.drawable.ic_material_folder);
+      } else {
+        icon.bindIcon(h.icon);
+      }
+    }
 
-    var icon = new FileIconHelper(displayName);
-    icon.setDynamicFolderEnabled(true);
-    icon.setEnvironmentEnabled(true);
-    if (isDir) {
-      h.icon.setImageResource(R.drawable.ic_material_folder);
-    } else icon.bindIcon(h.icon);
     updateSelectionBackground(h, pos);
     h.root.setOnClickListener(null);
     h.root.setOnLongClickListener(null);
@@ -109,6 +118,30 @@ public class ZipListFileShowAd extends RecyclerView.Adapter<ZipListFileShowAd.Ho
     h.root.setStrokeColorMod(true);
     h.root.setStorkeSize(1);
   }
+
+  private void loadImageWithGlide(FileHeader fileHeader, ImageView imageView) {
+    try {
+        String entryPath = fileHeader.getFileName();
+
+        FileHeader imageHeader = zipFile.getFileHeader(entryPath);
+        if (imageHeader == null) {
+            imageView.setImageResource(R.drawable.ic_material_image);
+            return;
+        }
+
+        try (InputStream is = zipFile.getInputStream(imageHeader)) {
+            Glide.with(context)
+                 .load(is)                         // InputStream معتبر
+                 .diskCacheStrategy(DiskCacheStrategy.NONE)
+                 .placeholder(R.drawable.ic_material_image)
+                 .error(R.drawable.ic_material_image)
+                 .into(imageView);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        imageView.setImageResource(R.drawable.ic_material_image);
+    }
+}
 
   private void updateSelectionBackground(Holder h, int pos) {
     var itemSelect = multiSelectMode && selectedItems.contains(pos);

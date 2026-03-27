@@ -105,11 +105,11 @@ public class GhostIdeAppLoader extends Application {
       soft.copyOneFileFromAssets("icon.png", getFilesDir().getAbsolutePath() + "/", this);
     }
     try (SassCompiler compiler = AndroidSassCompilerFactory.bundled(this)) {
-    ///  DataUtil.showMessage(getApplicationContext(), compiler.getVersion().toString());
+      ///  DataUtil.showMessage(getApplicationContext(), compiler.getVersion().toString());
     } catch (Exception err) {
       err.printStackTrace();
     }
-    
+
     ThemeLoader.init(this);
     themeEngine = ThemeEngine.getInstance(this);
     themeEngine.setThemeMode(ThemeMode.DARK);
@@ -155,15 +155,6 @@ public class GhostIdeAppLoader extends Application {
         themeEngine.setDynamicTheme(false);
       }
     }
-    try {
-      PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), 0);
-      String v = info.versionName;
-      DataUtil.showMessage(getApplicationContext(), "Welcom to Ghost ide " + v);
-    } catch (PackageManager.NameNotFoundException err) {
-
-    }
-    // CCppEngine.install(this);
-
     super.onCreate();
   }
 

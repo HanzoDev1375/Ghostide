@@ -210,11 +210,8 @@ public class ListKeyword {
   public void installFromSora(List<CompletionItem> items, String prfex) {
     for (var keylist : TAGS) {
       if (keylist.contains(prfex)) {
-        if (HtmlUtil.hasStyleTag(editor.getTextAsString())) {
+
           items.add(getCustomTag(keylist, htmlconfig.HTMLTAG));
-        } else {
-          items.add(new CompletionItem(keylist, keylist, "Hash Tag"));
-        }
       }
     }
   }

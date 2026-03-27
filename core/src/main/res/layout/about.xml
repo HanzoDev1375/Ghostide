@@ -5,7 +5,8 @@
      xmlns:tools="http://schemas.android.com/tools"
      android:layout_height="match_parent"
      android:layout_width="match_parent"
-     android:orientation="vertical">
+     android:orientation="vertical"
+     android:fitsSystemWindows="true">
 
     <LinearLayout
          android:layout_height="match_parent"
@@ -51,7 +52,7 @@
                      android:textSize="14sp"
                      android:textColor="#4CAF50"
                      android:id="@+id/textview2"
-                     android:text="App version 1.4.6beta" />
+                     android:text="App version 2.0.8" />
 
             </LinearLayout>
 

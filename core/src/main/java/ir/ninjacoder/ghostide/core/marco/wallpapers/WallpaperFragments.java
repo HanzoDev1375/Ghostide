@@ -21,7 +21,7 @@ import com.jsibbold.zoomage.ZoomageView;
 
 import com.sdsmdg.harjot.vectormaster.VectorModel;
 import ir.ninjacoder.ghostide.core.R;
-import ir.ninjacoder.ghostide.core.Store.BaseFragment;
+import ir.ninjacoder.ghostide.core.store.BaseFragment;
 import ir.ninjacoder.ghostide.core.glidecompat.GlideCompat;
 import ir.ninjacoder.ghostide.core.interfaces.OnItemClickListener;
 import java.io.File;

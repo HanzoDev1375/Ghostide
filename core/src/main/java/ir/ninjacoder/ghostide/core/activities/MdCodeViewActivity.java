@@ -12,6 +12,8 @@ import ir.ninjacoder.ghostide.core.utils.FileUtil;
 
 public class MdCodeViewActivity extends BaseCompat {
   private MdcodeviewBinding bind;
+  public static final String REQCODE = "mdviewer";
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -19,6 +21,6 @@ public class MdCodeViewActivity extends BaseCompat {
     setContentView(bind.getRoot());
     setSupportActionBar(bind.mdtoolbar);
     MarkDownTextHelper.handleMarkDown(
-        bind.mdview, FileUtil.readFile(getIntent().getStringExtra("v")));
+        bind.mdview, FileUtil.readFile(getIntent().getStringExtra(REQCODE)));
   }
 }

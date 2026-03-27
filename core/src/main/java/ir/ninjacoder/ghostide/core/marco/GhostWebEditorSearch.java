@@ -10,8 +10,14 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.transition.Transition;
+import com.google.android.material.transition.MaterialSharedAxis;
+import androidx.transition.TransitionManager;
+import com.google.android.material.color.MaterialColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import ir.ninjacoder.ghostide.core.IdeEditor;
+import ir.ninjacoder.ghostide.core.R;
 import ir.ninjacoder.ghostide.core.databinding.LayoutSearcherBinding;
 import ir.ninjacoder.ghostide.core.databinding.MakefolderBinding;
 import ir.ninjacoder.ghostide.core.utils.AnimUtils;
@@ -20,17 +26,16 @@ import io.github.rosemoe.sora.widget.EditorSearcher;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.text.Content;
 import io.github.rosemoe.sora.text.Cursor;
+import ir.ninjacoder.ghostide.core.utils.ObjectUtils;
 
-public class GhostWebEditorSearch extends LinearLayout {
+public class GhostWebEditorSearch extends LinearLayoutCompat {
   private LayoutSearcherBinding binding;
   private IdeEditor editor;
   protected onViewChange viewChange;
   public boolean isShowing = false;
-
   private boolean isRegexMode = false;
   private boolean isCaseSensitive = false;
   private boolean isWholeWord = false;
-  
   private int currentMatchIndex = -1;
   private int totalMatches = 0;
 
@@ -46,7 +51,8 @@ public class GhostWebEditorSearch extends LinearLayout {
     super(context, attrs, defStyle);
     binding = LayoutSearcherBinding.inflate(LayoutInflater.from(getContext()));
     removeAllViews();
-    addView(binding.getRoot(), new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+    addView(
+        binding.getRoot(), new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
     setupTextWatcher();
     setupClickListeners();
@@ -81,6 +87,7 @@ public class GhostWebEditorSearch extends LinearLayout {
     binding.gotoNext.setOnClickListener(v -> gotoNext());
     binding.replace.setOnClickListener(v -> replace());
     binding.btnClose.setOnClickListener(v -> showAndHide());
+    binding.btnMore.setImageResource(R.drawable.ic_more_vert_white);
   }
 
   private void setupAnimations() {
@@ -153,29 +160,32 @@ public class GhostWebEditorSearch extends LinearLayout {
           post(this::updateSearchResultInfo);
         });
   }
-  
+
   private void updateSearchResultInfo() {
     if (editor == null) return;
-    
+
     try {
+      String info="Result:0";
+      int textcolor = 0;
       var searcher = editor.getSearcher();
       if (searcher != null && searcher.hasQuery()) {
         totalMatches = searcher.getMatchedPositionCount();
         currentMatchIndex = searcher.getCurrentMatchedPositionIndex();
         
         if (totalMatches > 0) {
-          String info;
+
           if (currentMatchIndex >= 0) {
             info = String.format("%d/%d", currentMatchIndex + 1, totalMatches);
           } else {
-            info = totalMatches + " matches";
+            textcolor = MaterialColors.getColor(binding.tvresult, ObjectUtils.colorOnSurface);
+            info = "Result: " + totalMatches;
           }
-          binding.searchText.setHint(info);
-          
+
           binding.gotoNext.setEnabled(true);
           binding.gotoLast.setEnabled(true);
         } else {
-          binding.searchText.setHint("No matches");
+          info = "Result 0";
+          textcolor = MaterialColors.getColor(binding.tvresult, ObjectUtils.colorError);
           binding.gotoNext.setEnabled(false);
           binding.gotoLast.setEnabled(false);
         }
@@ -186,8 +196,11 @@ public class GhostWebEditorSearch extends LinearLayout {
         totalMatches = 0;
         currentMatchIndex = -1;
       }
+      binding.tvresult.setTextColor(textcolor);
+      binding.tvresult.setText(info);
+
     } catch (Exception e) {
-      // خطا نادیده گرفته شود
+
     }
   }
 
@@ -213,9 +226,7 @@ public class GhostWebEditorSearch extends LinearLayout {
       }
 
       int searchType = getSearchType();
-      
-      // caseSensitive = true یعنی حساس به بزرگی کوچکی
-      // در SearchOptions، caseInsensitive = false یعنی حساس به بزرگی کوچکی
+
       var options = new EditorSearcher.SearchOptions(searchType, !isCaseSensitive);
 
       try {
@@ -223,7 +234,7 @@ public class GhostWebEditorSearch extends LinearLayout {
       } catch (Exception e) {
         showToast("Invalid pattern: " + e.getMessage());
       }
-      
+
     } catch (IllegalArgumentException e) {
       showToast("Invalid pattern: " + e.getMessage());
     } catch (Exception e) {
@@ -237,7 +248,7 @@ public class GhostWebEditorSearch extends LinearLayout {
         editor.getSearcher().stopSearch();
       }
     } catch (Exception e) {
-      // خطا نادیده گرفته شود
+
     }
     binding.searchText.setHint("Search...");
     binding.gotoNext.setEnabled(true);
@@ -251,6 +262,8 @@ public class GhostWebEditorSearch extends LinearLayout {
       hide();
       if (viewChange != null) viewChange.onViewHide();
     } else {
+      Transition sharedAxis = new MaterialSharedAxis(MaterialSharedAxis.Z, true);
+      TransitionManager.beginDelayedTransition(this, sharedAxis);
       setVisibility(View.VISIBLE);
       isShowing = true;
       if (viewChange != null) viewChange.onViewShow();
@@ -263,6 +276,8 @@ public class GhostWebEditorSearch extends LinearLayout {
   }
 
   public void hide() {
+    Transition sharedAxis = new MaterialSharedAxis(MaterialSharedAxis.Z, true);
+    TransitionManager.beginDelayedTransition(this, sharedAxis);
     setVisibility(View.GONE);
     isShowing = false;
   }
@@ -291,14 +306,14 @@ public class GhostWebEditorSearch extends LinearLayout {
       }
 
       boolean result = searcher.gotoNext();
-      
+
       if (result) {
         updateSearchResultInfo();
       } else {
         showToast("No more matches");
         binding.gotoNext.setEnabled(false);
       }
-      
+
     } catch (Exception e) {
       showToast("Error: " + e.getMessage());
     }
@@ -328,14 +343,14 @@ public class GhostWebEditorSearch extends LinearLayout {
       }
 
       boolean result = searcher.gotoPrevious();
-      
+
       if (result) {
         updateSearchResultInfo();
       } else {
         showToast("No more matches");
         binding.gotoLast.setEnabled(false);
       }
-      
+
     } catch (Exception e) {
       showToast("Error: " + e.getMessage());
     }
@@ -362,14 +377,15 @@ public class GhostWebEditorSearch extends LinearLayout {
               try {
                 String replacement = bind.editor.getText().toString();
                 var searcher = editor.getSearcher();
-                
+
                 if (searcher.isMatchedPositionSelected()) {
                   searcher.replaceCurrentMatch(replacement);
-                  // بعد از جایگزینی، به نتیجه بعدی برو
-                  editor.postDelayed(() -> {
-                    searcher.gotoNext();
-                    updateSearchResultInfo();
-                  }, 100);
+                  editor.postDelayed(
+                      () -> {
+                        searcher.gotoNext();
+                        updateSearchResultInfo();
+                      },
+                      100);
                 } else {
                   showToast("No match selected");
                 }
@@ -383,10 +399,16 @@ public class GhostWebEditorSearch extends LinearLayout {
             (f1, f2) -> {
               try {
                 String replacement = bind.editor.getText().toString();
-                editor.getSearcher().replaceAll(replacement, () -> post(() -> {
-                  showToast("Replace all completed");
-                  performSearch(searchText);
-                }));
+                editor
+                    .getSearcher()
+                    .replaceAll(
+                        replacement,
+                        () ->
+                            post(
+                                () -> {
+                                  showToast("Replace all completed");
+                                  performSearch(searchText);
+                                }));
               } catch (Exception e) {
                 showToast("Replace all failed: " + e.getMessage());
               }
@@ -409,6 +431,7 @@ public class GhostWebEditorSearch extends LinearLayout {
 
   public interface onViewChange {
     void onViewShow();
+
     void onViewHide();
   }
 }

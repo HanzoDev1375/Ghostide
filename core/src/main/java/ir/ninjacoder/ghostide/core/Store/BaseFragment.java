@@ -1,4 +1,4 @@
-package ir.ninjacoder.ghostide.core.Store;
+package ir.ninjacoder.ghostide.core.store;
 
 import androidx.fragment.app.Fragment;
 

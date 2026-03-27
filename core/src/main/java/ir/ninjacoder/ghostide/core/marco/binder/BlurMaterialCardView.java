@@ -62,7 +62,7 @@ public class BlurMaterialCardView extends MaterialCardView {
   }
 
   private void init() {
-    setCardBackgroundColor(Color.TRANSPARENT);
+    setCardBackgroundColor(null);
     setPreventCornerOverlap(false);
     setUseCompatPadding(false);
   }

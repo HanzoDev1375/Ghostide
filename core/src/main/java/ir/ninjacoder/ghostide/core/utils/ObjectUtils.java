@@ -632,22 +632,15 @@ public class ObjectUtils {
   }
 
   public static void showViewWithAnimation(View view) {
-
     Transition sharedAxis = new MaterialSharedAxis(MaterialSharedAxis.Z, true);
     TransitionManager.beginDelayedTransition((ViewGroup) view, sharedAxis);
-
-    if (view.getVisibility() != View.VISIBLE) {
-      view.setVisibility(View.VISIBLE);
-    }
+    view.setVisibility(View.VISIBLE);
   }
 
   public static void hideViewWithAnimation(View view, ExrtaFab fab) {
-
     Transition sharedAxis = new MaterialSharedAxis(MaterialSharedAxis.Z, false);
     TransitionManager.beginDelayedTransition((ViewGroup) view, sharedAxis);
-    if (view.getVisibility() == View.VISIBLE) {
-      view.setVisibility(View.GONE);
-    }
+    view.setVisibility(View.GONE);
   }
 
   public static Drawable getCircularProgress() {

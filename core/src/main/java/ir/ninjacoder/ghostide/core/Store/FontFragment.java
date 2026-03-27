@@ -1,4 +1,4 @@
-package ir.ninjacoder.ghostide.core.Store;
+package ir.ninjacoder.ghostide.core.store;
 
 import android.app.Activity;
 import android.content.Context;

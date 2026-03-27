@@ -46,7 +46,6 @@ public class SetHomeWallpActivity extends BaseCompat {
     bind = ActivitySetWallpaperBinding.inflate(getLayoutInflater());
     setContentView(bind.getRoot());
     setSupportActionBar(bind.toolbar);
-
     String path = getIntent().getStringExtra("path");
     images = loadImages(path);
 
@@ -57,6 +56,7 @@ public class SetHomeWallpActivity extends BaseCompat {
     getWindow().setNavigationBarColor(Color.TRANSPARENT);
     getWindow().setStatusBarColor(Color.TRANSPARENT);
     updateFabVisibility(images.get(startIndex));
+    setFitViewGroup(bind.getRoot());
     bind.toolbar.setSubtitle(new File(images.get(startIndex)).getName());
     bind.viewPager.registerOnPageChangeCallback(
         new ViewPager2.OnPageChangeCallback() {
@@ -279,20 +279,20 @@ public class SetHomeWallpActivity extends BaseCompat {
                       });
                 }
               });
-
-      Glide.with(this)
-          .asBitmap()
-          .load(path)
-          .transform(new MultiTransformation<>(new BlurTransformation(17)))
-          .into(
-              new SimpleTarget<Bitmap>() {
-                @Override
-                public void onResourceReady(Bitmap resource, Transition<? super Bitmap> t) {
-                  getWindow()
-                      .getDecorView()
-                      .setBackground(new BitmapDrawable(getResources(), resource));
-                }
-              });
+//
+//      Glide.with(this)
+//          .asBitmap()
+//          .load(path)
+//          .transform(new MultiTransformation<>(new BlurTransformation(17)))
+//          .into(
+//              new SimpleTarget<Bitmap>() {
+//                @Override
+//                public void onResourceReady(Bitmap resource, Transition<? super Bitmap> t) {
+//                  getWindow()
+//                      .getDecorView()
+//                      .setBackground(new BitmapDrawable(getResources(), resource));
+//                }
+//              });
     }
   }
 

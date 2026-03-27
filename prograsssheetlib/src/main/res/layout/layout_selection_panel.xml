@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="56dp"
+    android:layout_width="match_parent"
+    android:visibility="gone"
+    android:layout_marginEnd="8dp"
+    android:orientation="vertical"
+    android:layout_marginStart="8dp">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_height="56dp"
+        android:layout_width="match_parent"
+        app:cardElevation="1dp"
+        app:cardCornerRadius="9dp"
+        android:id="@+id/cardview1">
+
+        <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:padding="8dp"
+                android:textSize="15sp"
+                android:text="SelectItem" />
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:padding="8dp"
+                android:textSize="15sp"
+                android:layout_weight="1"
+                android:id="@+id/txt_selected_count"
+                android:text="100" />
+
+            <ImageView
+                android:layout_height="40dp"
+                android:layout_width="40dp"
+                android:src="@drawable/icon_content_paste_round"
+                android:scaleType="centerInside"
+                android:background="?attr/selectableItemBackground"
+                android:padding="8dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:id="@+id/btn_paste" />
+
+            <ImageView
+                android:layout_height="40dp"
+                android:layout_width="40dp"
+                android:src="@drawable/icon_content_cut_round"
+                android:scaleType="centerInside"
+                android:background="?attr/selectableItemBackground"
+                android:padding="8dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:id="@+id/btn_cut" />
+
+            <ImageView
+                android:layout_height="40dp"
+                android:layout_width="40dp"
+                android:src="@drawable/icon_content_copy_round"
+                android:scaleType="centerInside"
+                android:background="?attr/selectableItemBackground"
+                android:padding="8dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:id="@+id/btn_copy" />
+
+            <ImageView
+                android:layout_height="40dp"
+                android:layout_width="40dp"
+                android:src="@drawable/icon_delete_round"
+                android:scaleType="centerInside"
+                android:background="?attr/selectableItemBackground"
+                android:padding="8dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:id="@+id/btn_delete" />
+
+            <ImageView
+                android:layout_height="40dp"
+                android:layout_width="40dp"
+                android:src="@drawable/icon_close_round"
+                android:scaleType="centerInside"
+                android:background="?attr/selectableItemBackground"
+                android:padding="8dp"
+                android:layout_marginRight="2dp"
+                android:id="@+id/btn_close" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>
