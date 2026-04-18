@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class GTheme {
+  private static String TAG = "GTheme";
 
   public interface OnCallBack {
     void call();
@@ -25,17 +26,24 @@ public class GTheme {
       return;
     }
     String password = "HanzoDev1375";
+    File zipFileObj = new File(zipFilePath);
+    String folderName = zipFileObj.getName().replace(".gtheme", "");
+    String parentPath = zipFileObj.getParent();
 
-    File destDir = new File(context.getExternalFilesDir(null), "temp_theme_extract");
+    File destDir;
+    if (parentPath != null) {
+      destDir = new File(parentPath, folderName);
+    } else {
+      destDir = new File(context.getExternalFilesDir(null), folderName);
+    }
 
     if (destDir.exists()) {
       deleteRecursive(destDir);
     }
     destDir.mkdirs();
+
     try {
-
       ZipFile zipFile = new ZipFile(zipFilePath);
-
       if (zipFile.isEncrypted()) {
         if (password == null || password.isEmpty()) {
           Log.e("ThemePacker", "Zip file is encrypted but no password provided.");
@@ -43,14 +51,11 @@ public class GTheme {
         }
         zipFile.setPassword(password.toCharArray());
       }
-
       zipFile.extractAll(destDir.getAbsolutePath());
 
       File wallpaperFile = findWallpaper(destDir);
       if (wallpaperFile != null) {
-
         String themePath = destDir.getAbsolutePath();
-
         String wallpaperPath = wallpaperFile.getAbsolutePath();
         new MaterialAlertDialogBuilder(context)
             .setTitle("Install Theme")
@@ -62,7 +67,6 @@ public class GTheme {
                 })
             .setNegativeButton(android.R.string.cancel, null)
             .show();
-
         if (call != null) {
           call.call();
         }
@@ -76,7 +80,7 @@ public class GTheme {
   }
 
   private static File findWallpaper(File folder) {
-    String[] validExtensions = {".jpg", ".png", ".webp", ".gif"};
+    String[] validExtensions = {".jpg", ".png", ".webp", ".gif", ".jpeg"};
     File[] files = folder.listFiles();
     if (files == null) return null;
     for (File file : files) {
@@ -95,16 +99,25 @@ public class GTheme {
 
   private static void saveToSharedPreferences(
       Context context, String themePath, String wallpaperPath) {
-    SharedPreferences sharedPreferences =
-        context.getSharedPreferences("getvb", Context.MODE_PRIVATE);
-    SharedPreferences.Editor editor = sharedPreferences.edit();
-    editor.putString("dir", wallpaperPath);
-    editor.apply();
-    SharedPreferences thememanagersoft =
-        context.getSharedPreferences("getvb", Context.MODE_PRIVATE);
-    SharedPreferences.Editor editors = thememanagersoft.edit();
-    editors.putString("themes", themePath);
-    editors.apply();
+    if (wallpaperPath.startsWith("preview")) {
+      return;
+    } else {
+      SharedPreferences sharedPreferences =
+          context.getSharedPreferences("getvb", Context.MODE_PRIVATE);
+      SharedPreferences.Editor editor = sharedPreferences.edit();
+      editor.putString("dir", wallpaperPath);
+      editor.apply();
+      Log.i(TAG, "wallpaper dir -> " + wallpaperPath);
+    }
+
+    if (themePath.endsWith(".ghost")) {
+      SharedPreferences thememanagersoft =
+          context.getSharedPreferences("thememanagersoft", Context.MODE_PRIVATE);
+      SharedPreferences.Editor editors = thememanagersoft.edit();
+      editors.putString("themes", themePath);
+      editors.apply();
+      Log.i(TAG, "Theme soft path" + themePath);
+    }
   }
 
   private static void deleteRecursive(File fileOrDirectory) {
@@ -116,7 +129,8 @@ public class GTheme {
     fileOrDirectory.delete();
   }
 
-  public static void pack(String folderPath, String outputZipPath, Context context,OnCallBack call) {
+  public static void pack(
+      String folderPath, String outputZipPath, Context context, OnCallBack call) {
     String password = "HanzoDev1375";
     var sheet = new PrograssSheet(context);
     sheet.setMode(StateMod.PROGRASSH);
@@ -151,7 +165,7 @@ public class GTheme {
 
                     if (isImage) {
                       parameters.setCompressionLevel(CompressionLevel.NO_COMPRESSION);
-                    } else { 
+                    } else {
                       parameters.setCompressionLevel(CompressionLevel.MAXIMUM);
                     }
                     zipFile.addFile(file, parameters);

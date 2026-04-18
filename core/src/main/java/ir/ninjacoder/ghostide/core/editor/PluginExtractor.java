@@ -165,34 +165,24 @@ public class PluginExtractor {
     PrograssSheet sheet = new PrograssSheet(context);
     sheet.setMode(StateMod.PROGRASSV);
     sheet.setTitle("Loading....");
+    sheet.setSubTitle("Loading...");
     sheet.show();
     new Thread(
             () -> {
               try {
                 ZipFile zipFile = new ZipFile(zipPath);
-                if (!zipFile.isValidZipFile()) {
-                  ThreadUtils.runOnUiThread(
-                      () -> {
-                        ViewSheet viewSheet = new ViewSheet(context);
-                        viewSheet.setTitle("## Pgb File Error");
-                        viewSheet.setMassges("<h3>Pgb has Valid File</h3>");
-                        viewSheet.setOnButtonNoClick(v -> viewSheet.hide());
-                      });
-
-                } else {
-                  zipFile.extractAll(destinationPath);
-                  ThreadUtils.runOnUiThread(
-                      () -> sheet.setPrograss(zipFile.getBufferSize(), false));
-                  File metadataFile = new File(destinationPath + "metadata.json");
-                  if (metadataFile.exists()) {
-                    metadataFile.delete();
-                  }
-                  ThreadUtils.runOnUiThread(
-                      () -> {
-                        helper.onPluginExtractorDone();
-                        sheet.dismiss();
-                      });
+                zipFile.extractAll(destinationPath);
+                ThreadUtils.runOnUiThread(() -> sheet.setPrograss(zipFile.getBufferSize(), false));
+                File metadataFile = new File(destinationPath + "metadata.json");
+                if (metadataFile.exists()) {
+                  metadataFile.delete();
                 }
+                ThreadUtils.runOnUiThread(
+                    () -> {
+                      helper.onPluginExtractorDone();
+                      sheet.dismiss();
+                    });
+
               } catch (Exception e) {
                 e.printStackTrace();
                 ThreadUtils.runOnUiThread(

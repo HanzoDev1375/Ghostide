@@ -1,6 +1,8 @@
 package ir.ninjacoder.ghostide;
 
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -67,10 +69,32 @@ public class MainActivity extends BaseCompat {
   private void initialize(Bundle _savedInstanceState) {
     iconSpash = getSharedPreferences("iconSpash", MODE_PRIVATE);
     setac = getSharedPreferences("setac", MODE_PRIVATE);
-    runtimePermissions();
+    var obj = new ObjectAnimator();
+    obj.setTarget(bind.iconSp);
+    obj.setPropertyName("translationX");
+    obj.setDuration(1000);
+    obj.setFloatValues(0, .10f, -25, .26f, 25, .42f, -25, .58f, 25, .74f, -25, .90f, 1, 0);
+    obj.start();
+    obj.addListener(
+        new Animator.AnimatorListener() {
+
+          @Override
+          public void onAnimationCancel(Animator arg0) {}
+
+          @Override
+          public void onAnimationEnd(Animator arg0) {
+            runtimePermissions();
+          }
+          @Override
+          public void onAnimationRepeat(Animator arg0) {}
+
+          @Override
+          public void onAnimationStart(Animator arg0) {}
+        });
   }
 
   void runtimePermissions() {
+
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
       if (!Environment.isExternalStorageManager()) {
         isWaitingForPermissionResult = true;

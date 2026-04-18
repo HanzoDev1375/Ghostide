@@ -82,7 +82,7 @@
                   android:layout_weight="2"
                   android:id="@+id/titleauthor" />
 
-                <ImageView
+                <ir.ninjacoder.ghostide.core.widget.ImageViewAnimation
                   android:layout_height="25dp"
                   android:layout_width="25dp"
                   android:scaleType="centerInside"
@@ -91,7 +91,7 @@
                   android:layout_marginRight="3dp"
                   android:id="@+id/setting" />
 
-                <ImageView
+                <ir.ninjacoder.ghostide.core.widget.ImageViewAnimation
                   android:layout_height="25dp"
                   android:layout_width="25dp"
                   android:scaleType="centerInside"

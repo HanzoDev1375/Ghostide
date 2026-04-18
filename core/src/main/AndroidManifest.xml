@@ -1,26 +1,32 @@
-<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-
   <application>
     <activity
-      android:name=".activities.FileManagerActivity"
       android:exported="true"
-      android:launchMode="singleTop">
+      android:label="GTheme installer"
+      android:launchMode="singleTop"
+      android:name=".activities.FileManagerActivity">
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" />
         <data android:scheme="file" />
       </intent-filter>
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <data android:scheme="file" />
+        <data android:scheme="content" />
+        <data android:host="*" />
+        <data android:pathPattern=".*\\.gtheme" />
+      </intent-filter>
     </activity>
     <activity
-      android:name=".activities.CodeEditorActivity"
-      android:launchMode="singleTop"
-      android:label="Code Editor"
-      android:exported="true"
-      android:windowSoftInputMode="adjustResize"
       android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
-      android:hardwareAccelerated="true">
-
+      android:exported="true"
+      android:hardwareAccelerated="true"
+      android:label="Code Editor"
+      android:launchMode="singleTop"
+      android:name=".activities.CodeEditorActivity"
+      android:windowSoftInputMode="adjustResize">
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" />
@@ -30,14 +36,12 @@
         <data android:mimeType="application/xml" />
         <data android:mimeType="application/javascript" />
       </intent-filter>
-
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" />
         <data android:scheme="file" />
         <data android:scheme="content" />
         <data android:host="*" />
-
         <data android:pathPattern=".*\\.java" />
         <data android:pathPattern=".*\\.kt" />
         <data android:pathPattern=".*\\.xml" />
@@ -89,34 +93,30 @@
     <activity android:name=".activities.ErrorManagerActivity" />
     <activity android:name=".activities.AboutActivity" />
     <activity android:name="ir.ninjacoder.ghostide.core.store.StoreAcitvity" />
-
-
     <activity
-      android:name=".terminal.TerminalActivity"
       android:configChanges="orientation|screenSize|smallestScreenSize|density|screenLayout|keyboard|keyboardHidden|navigation"
       android:label="ghostweb terminal "
       android:launchMode="singleTask"
+      android:name=".terminal.TerminalActivity"
       android:resizeableActivity="true" />
     <activity
-      android:name=".activities.JsonViewerActivity"
       android:configChanges="orientation|screenSize"
       android:hardwareAccelerated="true"
+      android:name=".activities.JsonViewerActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity android:name=".activities.MdCodeViewActivity" />
     <activity android:name=".activities.ThemePreviewActivity" />
     <activity android:name=".activities.JavaManagerLayoutActivity" />
     <activity
-      android:name=".activities.VideoViewsActivity"
       android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
       android:exported="true"
       android:hardwareAccelerated="true"
+      android:name=".activities.VideoViewsActivity"
       android:supportsPictureInPicture="true">
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
-
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
-
         <data android:scheme="rtmp" />
         <data android:scheme="rtmpe" />
         <data android:scheme="rtmps" />
@@ -128,13 +128,10 @@
         <data android:scheme="httplive" />
         <data android:scheme="udp" />
       </intent-filter>
-      <!-- This filter captures protocols with type info -->
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
-
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
-
         <data android:mimeType="video/*" />
         <data android:mimeType="audio/*" />
         <data android:scheme="rtmp" />
@@ -150,10 +147,8 @@
       </intent-filter>
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
-
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
-
         <data android:scheme="file" />
         <data android:scheme="content" />
         <data android:mimeType="video/*" />
@@ -179,10 +174,8 @@
       </intent-filter>
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
-
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
-
         <data android:scheme="" />
         <data android:scheme="file" />
         <data android:scheme="ftp" />
@@ -190,7 +183,6 @@
         <data android:scheme="http" />
         <data android:scheme="https" />
         <data android:host="*" />
-        <!-- video -->
         <data android:pathPattern=".*\\.3g2" />
         <data android:pathPattern=".*\\.3gp" />
         <data android:pathPattern=".*\\.3gp2" />
@@ -210,7 +202,6 @@
         <data android:pathPattern=".*\\.m2v" />
         <data android:pathPattern=".*\\.m2t" />
         <data android:pathPattern=".*\\.m2ts" />
-        <!-- <data android:pathPattern=".*\\.m3u" /> -->
         <data android:pathPattern=".*\\.m3u8" />
         <data android:pathPattern=".*\\.mkv" />
         <data android:pathPattern=".*\\.mov" />
@@ -267,7 +258,6 @@
         <data android:pathPattern=".*\\.M2V" />
         <data android:pathPattern=".*\\.M2T" />
         <data android:pathPattern=".*\\.M2TS" />
-        <!-- <data android:pathPattern=".*\\.M3U" /> -->
         <data android:pathPattern=".*\\.M3U8" />
         <data android:pathPattern=".*\\.MKV" />
         <data android:pathPattern=".*\\.MOV" />
@@ -314,28 +304,25 @@
     <activity
       android:name=".activities.LeranPdfActivity"
       android:windowSoftInputMode="stateHidden" />
-    <activity android:name=".activities.IconModActivity" />
     <activity android:name=".activities.FontChakerActivity" />
     <activity android:name=".activities.StreamSoftAppActivity" />
     <activity
-      android:name=".activities.BrowserActivity"
       android:exported="true"
       android:hardwareAccelerated="true"
       android:label="Ghost web Browers"
+      android:name=".activities.BrowserActivity"
       android:supportsPictureInPicture="true" />
     <activity
-      android:name=".activities.PdfViewNewActivity"
       android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
       android:exported="true"
       android:hardwareAccelerated="true"
       android:label="Ghost web pdf view"
+      android:name=".activities.PdfViewNewActivity"
       android:supportsPictureInPicture="true">
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
-
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
-
         <data android:mimeType="application/pdf" />
         <data android:mimeType="application/x-pdf" />
         <data android:mimeType="image/djvu" />
@@ -349,10 +336,8 @@
       </intent-filter>
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
-
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
-
         <data android:host="*" />
         <data android:scheme="file" />
         <data android:scheme="smb" />
@@ -375,32 +360,22 @@
     <activity android:name=".activities.PhpActivity" />
     <activity android:name=".activities.FileBookmarkActivity" />
     <activity android:name=".activities.SetHomeWallpActivity" />
-
     <activity android:name="ir.ninjacoder.ghostide.core.keyboard.Setting" />
-
     <receiver
-      android:name="ir.ninjacoder.ghostide.core.NetworkChangeReceiver"
       android:enabled="false"
-      android:exported="true">
+      android:exported="true"
+      android:name="ir.ninjacoder.ghostide.core.NetworkChangeReceiver">
       <intent-filter>
         <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
       </intent-filter>
     </receiver>
-
     <activity android:name=".activities.ApkViewActivity" />
     <activity android:name=".Welcome.SplashWord" />
-
-    <!-- <service -->
-    <!-- android:name="ir.ninjacoder.ghostide.core.tasks.FileWatcherService" -->
-    <!-- android:enabled="true" -->
-    <!-- android:exported="false" -->
-    <!-- android:foregroundServiceType="dataSync" -->
-    <!-- android:stopWithTask="true" /> -->
     <provider
-      android:name="androidx.core.content.FileProvider"
       android:authorities="ir.ninjacoder.ghostide.core.provider"
       android:exported="false"
-      android:grantUriPermissions="true">
+      android:grantUriPermissions="true"
+      android:name="androidx.core.content.FileProvider">
       <meta-data
         android:name="android.support.FILE_PROVIDER_PATHS"
         android:resource="@xml/provider" />

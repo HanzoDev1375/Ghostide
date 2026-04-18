@@ -63,6 +63,7 @@ import ir.ninjacoder.ghostide.core.navigator.EditorRoaderFile;
 import ir.ninjacoder.ghostide.core.tasks.TaskItemCodeEditor;
 import ir.ninjacoder.ghostide.core.tasks.app.SassForAndroid;
 import ir.ninjacoder.ghostide.core.utils.ScalePageTransformer;
+import ir.ninjacoder.ghostide.core.widget.ImageViewAnimation;
 import ir.ninjacoder.ghostide.core.widget.component.RegexComponent;
 import ir.ninjacoder.prograsssheet.listchild.ChildAdapter;
 import com.mcal.uidesigner.XmlLayoutDesignActivity;
@@ -129,7 +130,8 @@ public class CodeEditorActivity extends BaseCompat
   private ProgressBar progressbar1;
   private RecyclerView dir, rvmenueditor;
   private TextView titleauthor;
-  private ImageView image, redo, undo, menupopnew, codesnapimg, setting;
+  private ImageView image, redo, undo, menupopnew;
+  private ImageViewAnimation codesnapimg, setting;
   private LinearLayout linear3, getColorPass;
   private LinearLayout barSymoble;
   private ImageView imageview1, avatargithubuser;
@@ -466,6 +468,7 @@ public class CodeEditorActivity extends BaseCompat
             .addItem(new PowerMenuItem("close other"))
             .addItem(new PowerMenuItem("close all"))
             .addItem(new PowerMenuItem(model.getPinmod() ? "unpin" : "pin"))
+            .addItem(new PowerMenuItem("info file"))
             .setIsMaterial(true)
             .setShowBackground(false)
             .setAutoDismiss(true)
@@ -500,6 +503,9 @@ public class CodeEditorActivity extends BaseCompat
               break;
             case 3:
               togglePinTab(position);
+              break;
+            case 4:
+              GhostToast.showSuccess(this, "### Soon..");
               break;
           }
         });
@@ -668,24 +674,24 @@ public class CodeEditorActivity extends BaseCompat
 
     _fab.setOnClickListener(it -> fabFileRunner());
 
-    codesnapimg.setOnClickListener(
+    codesnapimg.setOnClickByAnim(
         v -> {
           if (currentPosition >= 0 && currentPosition < tabsList.size()) {
             String filePath = tabsList.get(currentPosition).getPath();
-            Toast.makeText(this, "در حال آماده سازی CodeSnap...", Toast.LENGTH_SHORT).show();
+            GhostToast.showSuccess(this, "### Loading..");
 
             mainHandler.postDelayed(
                 () -> {
                   executeOnEditor(
                       currentPosition,
                       editor -> {
-                        new CodeSnap(CodeEditorActivity.this, filePath, editor);
+                        if (editor.getCursor().isSelected())
+                          new CodeSnap(CodeEditorActivity.this, filePath, editor);
+                        else GhostToast.showSuccess(this, "### Not SelectText");
                       },
                       "CodeSnap");
                 },
                 300);
-          } else {
-            Toast.makeText(this, "فایلی انتخاب نشده", Toast.LENGTH_SHORT).show();
           }
         });
 
@@ -935,8 +941,8 @@ public class CodeEditorActivity extends BaseCompat
     effect = new WallpaperParallaxEffect(this);
     effect.setCallback(
         (offsetX, offsetY, angle) -> {
-          Coordinator.setTranslationX(offsetX);
-          Coordinator.setTranslationY(offsetY);
+          ghostIcon.setTranslationX(offsetX);
+          ghostIcon.setTranslationY(offsetY);
         });
     effect.setEnabled(thememanagersoft.contains("effect"));
   }
@@ -1004,10 +1010,7 @@ public class CodeEditorActivity extends BaseCompat
   }
 
   private void runXmlFile(String path) {
-    Intent intent = new Intent(this, XmlLayoutDesignActivity.class);
-    intent.putExtra(XmlLayoutDesignActivity.EXTRA_FILE, path);
-    intent.putExtra(XmlLayoutDesignActivity.EXTRA_LANGUAGE, "xml");
-    loadAnim(intent);
+    XmlLayoutDesignActivity.show(this, "xml", path, false, false);
   }
 
   void setAntlr4Compiler(String path) {
@@ -1518,7 +1521,7 @@ public class CodeEditorActivity extends BaseCompat
   private void setupEdgeToEdgeAndFab() {
 
     setupWindowForKeyboard(getWindow());
-   // transparentNavigationBar(getWindow());
+    // transparentNavigationBar(getWindow());
 
     getWindow()
         .getDecorView()

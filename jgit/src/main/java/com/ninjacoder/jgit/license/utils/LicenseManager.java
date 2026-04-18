@@ -79,7 +79,7 @@ public class LicenseManager {
     try {
       CompilationUnit cu = StaticJavaParser.parse(javaCode);
       String licenseText = generateLicenseText(licenseType, authorName, companyName);
-      BlockComment licenseComment = new BlockComment(licenseText);
+      BlockComment licenseComment = new BlockComment("*"+licenseText);
       cu.addOrphanComment(licenseComment);
       
       if (cu.getPackageDeclaration().isPresent()) {

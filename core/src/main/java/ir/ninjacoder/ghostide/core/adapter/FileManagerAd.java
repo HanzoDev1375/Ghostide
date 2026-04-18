@@ -3,58 +3,63 @@ package ir.ninjacoder.ghostide.core.adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.SpannableString;
+import android.view.LayoutInflater;
+import ir.ninjacoder.ghostide.core.activities.FileManagerActivity;
+import ir.ninjacoder.ghostide.core.model.dataobject.ShortcutInfoImpl;
+import ir.ninjacoder.ghostide.core.pl.PluginLoaderImpl;
+import ir.ninjacoder.ghostide.core.editor.PluginCompressorPgb;
+import ir.ninjacoder.ghostide.core.editor.PluginextractorFace;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.selection.ItemDetailsLookup;
+import androidx.recyclerview.selection.ItemKeyProvider;
+import androidx.recyclerview.selection.SelectionTracker;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.blankj.utilcode.util.ClipboardUtils;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.google.android.material.color.MaterialColors;
 import com.skydoves.powermenu.MenuAnimation;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
-import ir.ninjacoder.ghostide.core.activities.FileBookmarkActivity;
-import ir.ninjacoder.ghostide.core.activities.FileManagerActivity;
-import ir.ninjacoder.ghostide.core.editor.PluginCompressorPgb;
-import ir.ninjacoder.ghostide.core.editor.PluginextractorFace;
-import ir.ninjacoder.ghostide.core.enums.FileConentChange;
-import ir.ninjacoder.ghostide.core.marco.ColorView;
-import ir.ninjacoder.ghostide.core.marco.FileShareManager;
-import ir.ninjacoder.ghostide.core.marco.binder.bindchilder.GhostToast;
-import ir.ninjacoder.ghostide.core.model.dataobject.ShortcutInfoImpl;
-import ir.ninjacoder.ghostide.core.mult.MultiSelectionManager;
-import ir.ninjacoder.ghostide.core.mult.MultiSelectionAction;
-import ir.ninjacoder.ghostide.core.pl.PluginLoaderImpl;
-import ir.ninjacoder.prograsssheet.GTheme;
-import java.util.Map;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.BackgroundColorSpan;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.color.MaterialColors;
-import ir.ninjacoder.ghostide.core.marco.binder.BlurMaterialCardView;
-import ir.ninjacoder.ghostide.core.marco.binder.bindchilder.RecyclerviewViewHolderBinder;
-import ir.ninjacoder.ghostide.core.utils.ObjectUtils;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+
 import ir.ninjacoder.ghostide.core.R;
-import ir.ninjacoder.ghostide.core.utils.FileUtil;
-import ir.ninjacoder.prograsssheet.listchild.Child;
-import ir.ninjacoder.prograsssheet.perfence.ListItemView;
-import ir.ninjacoder.ghostide.core.widget.component.fastscrollcompat.PopupTextProvider;
+import ir.ninjacoder.ghostide.core.enums.FileConentChange;
+import ir.ninjacoder.ghostide.core.marco.ColorView;
+import ir.ninjacoder.ghostide.core.marco.FileShareManager;
+import ir.ninjacoder.ghostide.core.marco.binder.bindchilder.GhostToast;
+import ir.ninjacoder.ghostide.core.marco.binder.bindchilder.RecyclerviewViewHolderBinder;
+import ir.ninjacoder.ghostide.core.marco.binder.BlurMaterialCardView;
 import ir.ninjacoder.ghostide.core.model.filemanager.FileManagerModel;
 import ir.ninjacoder.ghostide.core.model.filemanager.FileState;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
+import ir.ninjacoder.ghostide.core.mult.MultiSelectionAction;
+import ir.ninjacoder.ghostide.core.utils.FileUtil;
+import ir.ninjacoder.ghostide.core.utils.ObjectUtils;
+import ir.ninjacoder.ghostide.core.widget.component.fastscrollcompat.PopupTextProvider;
+import ir.ninjacoder.prograsssheet.GTheme;
+import ir.ninjacoder.prograsssheet.listchild.Child;
+import ir.ninjacoder.prograsssheet.perfence.ListItemView;
 
 public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     implements PopupTextProvider, Filterable {
@@ -68,10 +73,9 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
   private String currentFilter = "";
   private Map<String, FileConentChange> fileContentStates = new HashMap<>();
   private OnFileOperationStateChangeListener stateChangeListener;
-  private MultiSelectionManager selectionManager = new MultiSelectionManager();
-  private boolean multiSelectionEnabled = false;
-  private boolean isMultiSelectionMode;
-  private OnMultiSelectionListener multiSelectionListener;
+
+  // SelectionTracker for multi-selection
+  private SelectionTracker<Long> selectionTracker;
 
   public interface OnMultiSelectionListener {
     void onSelectionChanged(int count);
@@ -87,35 +91,39 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     this.stateChangeListener = listener;
   }
 
-  public void enableMultiSelection(boolean enable) {
+  public void setSelectionTracker(SelectionTracker<Long> selectionTracker) {
+    this.selectionTracker = selectionTracker;
+  }
 
-    if (!enable && selectionManager.getSelectedCount() > 0) {
-      return;
+  public SelectionTracker<Long> getSelectionTracker() {
+    return selectionTracker;
+  }
+
+  public boolean isSelectionActive() {
+    return selectionTracker != null && selectionTracker.hasSelection();
+  }
+
+  public int getSelectedCount() {
+    return selectionTracker != null ? selectionTracker.getSelection().size() : 0;
+  }
+
+  public List<String> getSelectedPaths() {
+    List<String> paths = new ArrayList<>();
+    if (selectionTracker != null && selectionTracker.hasSelection()) {
+      for (Long key : selectionTracker.getSelection()) {
+        int pos = getPositionForKey(key);
+        if (pos >= 0 && pos < filteredFiles.size()) {
+          paths.add(filteredFiles.get(pos).getFilePath());
+        }
+      }
     }
+    return paths;
+  }
 
-    this.multiSelectionEnabled = enable;
-    if (!enable) {
-      selectionManager.clearSelection();
+  public void clearSelection() {
+    if (selectionTracker != null) {
+      selectionTracker.clearSelection();
     }
-    notifyDataSetChanged();
-  }
-
-  public boolean isMultiSelectionEnabled() {
-    return multiSelectionEnabled;
-  }
-
-  public MultiSelectionManager getSelectionManager() {
-    return selectionManager;
-  }
-
-  public void setOnMultiSelectionListener(OnMultiSelectionListener listener) {
-    this.multiSelectionListener = listener;
-    selectionManager.setOnSelectionChangedListener(
-        (count, isMode) -> {
-          if (multiSelectionListener != null) {
-            multiSelectionListener.onSelectionChanged(count);
-          }
-        });
   }
 
   public enum SearchMode {
@@ -175,12 +183,14 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     if (item == null) {
       return;
     }
+    boolean isSelected = selectionTracker != null && selectionTracker.isSelected((long) position);
 
     setSettingTextView(holder.folderName);
-    if (multiSelectionEnabled) {
-      holder.iconMoreOptions.setEnabled(selectionManager.isSelected(position));
-      holder.roots.setItemSelect(selectionManager.isSelected(position));
+    if (selectionTracker != null) {
+      // holder.iconMoreOptions.setEnabled(isSelected);
+      holder.roots.setItemSelect(isSelected);
     }
+
     File file = new File(item.getFilePath());
     boolean isSearch = !TextUtils.isEmpty(currentFilter);
     holder.folderName.setText(file.getName());
@@ -197,7 +207,6 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
             viewType,
             allFilesPosition,
             listChild);
-
       } catch (Exception e) {
         Log.e("FileManagerAd", "Error in binder: " + e.getMessage());
       }
@@ -227,10 +236,8 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
           }
           break;
         case DELETED:
-          {
-            holder.roots.startDisintegration(position);
-            break;
-          }
+          holder.roots.startDisintegration(position);
+          break;
         case NORMAL:
         default:
           if (isSearch) {
@@ -263,19 +270,27 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
       holder.roots.setBackground(holder.roots.get(filteredFiles, position));
       holder.cardblur.setClickable(false);
       holder.cardblur.setFocusable(false);
-
     } else if (viewType == ViewType.GRID) {
       holder.cardblur.setClickable(true);
       holder.cardblur.setFocusable(true);
       String filePath = item.getFilePath();
       if (shouldApplyBlur(filePath)) {
-        if (holder.getAdapterPosition() == position)
+        if (holder.getAdapterPosition() == position) {
           holder.cardblur.setBlurFromImageView(holder.icon, filePath);
+        }
       } else {
         holder.cardblur.setCardBackgroundColor(null);
         holder.cardblur.cancelBlur();
       }
     }
+  }
+
+  private int getPositionForKey(Long key) {
+    int position = key.intValue();
+    if (position >= 0 && position < filteredFiles.size()) {
+      return position;
+    }
+    return RecyclerView.NO_POSITION;
   }
 
   public void highlightFile(String path, FileState state) {
@@ -417,6 +432,76 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     void onChildFile(int pos);
   }
 
+  // ItemDetails class for SelectionTracker
+  public class FileItemDetails extends ItemDetailsLookup.ItemDetails<Long> {
+    private final int adapterPosition;
+    private final Long selectionKey;
+
+    public FileItemDetails(int adapterPosition, Long selectionKey) {
+      this.adapterPosition = adapterPosition;
+      this.selectionKey = selectionKey;
+    }
+
+    @Override
+    public Long getSelectionKey() {
+      return selectionKey;
+    }
+
+    @Override
+    public int getPosition() {
+      return adapterPosition;
+    }
+  }
+
+  public FileItemDetailsLookup getFileItemDetailsLookup(RecyclerView recyclerView) {
+    return new FileItemDetailsLookup(recyclerView);
+  }
+
+  public class FileItemDetailsLookup extends ItemDetailsLookup<Long> {
+    private final RecyclerView recyclerView;
+
+    public FileItemDetailsLookup(RecyclerView recyclerView) {
+      this.recyclerView = recyclerView;
+    }
+
+    @Override
+    public ItemDetails<Long> getItemDetails(MotionEvent e) {
+      View view = recyclerView.findChildViewUnder(e.getX(), e.getY());
+      if (view != null) {
+        RecyclerView.ViewHolder holder = recyclerView.getChildViewHolder(view);
+        if (holder instanceof VH) {
+          int position = holder.getAdapterPosition();
+          if (position != RecyclerView.NO_POSITION && position < filteredFiles.size()) {
+
+            return new FileItemDetails(position, (long) position);
+          }
+        }
+      }
+      return null;
+    }
+  }
+
+  public FileKeyProvider getFileKeyProvider() {
+    return new FileKeyProvider();
+  }
+
+  // ItemKeyProvider implementation
+  public class FileKeyProvider extends ItemKeyProvider<Long> {
+    public FileKeyProvider() {
+      super(SCOPE_MAPPED);
+    }
+
+    @Override
+    public Long getKey(int position) {
+      return (long) position;
+    }
+
+    @Override
+    public int getPosition(@NonNull Long key) {
+      return getPositionForKey(key);
+    }
+  }
+
   public class VH extends RecyclerView.ViewHolder {
     protected TextView folderName, tvTools;
     protected ListItemView roots;
@@ -431,171 +516,160 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
       icon = view.findViewById(R.id.icon);
       cardblur = view.findViewById(R.id.cardblur);
       iconMoreOptions = view.findViewById(R.id.iconMoreOptions);
+
       if (click != null) {
         click.onChildFile(getAdapterPosition());
       }
-      iconMoreOptions.setOnClickListener(
-          v -> {
-            var menu =
-                new PowerMenu.Builder(v.getContext())
-                    .setIsMaterial(true)
-                    .addItem(new PowerMenuItem("Copy name dir or file"))
-                    .addItem(new PowerMenuItem("Copy"))
-                    .addItem(new PowerMenuItem("Move"))
-                    .addItem(new PowerMenuItem("Rename"))
-                    .addItem(new PowerMenuItem("Removed"))
-                    .addItem(new PowerMenuItem("Share"))
-                    .addItem(new PowerMenuItem("Zip"))
-                    .addItem(new PowerMenuItem("Shortcut"))
-                    .addItem(new PowerMenuItem("Add to Bookmark"))
-                    .addItem(new PowerMenuItem("Add to Pgb"))
-                    .addItem(new PowerMenuItem("JavaRename"))
-                    .addItem(new PowerMenuItem("Backup theme"))
-                    .build();
-            menu.setShowBackground(false);
-            menu.setAnimation(MenuAnimation.FADE);
-            menu.setMenuRadius(19f);
-            menu.setTextColor(
-                MaterialColors.getColor(v.getContext(), ObjectUtils.colorOnSurface, 0));
-            menu.setMenuColor(MaterialColors.getColor(v.getContext(), ObjectUtils.colorSurface, 0));
-            menu.setOnMenuItemClickListener(
-                (pos, vm) -> {
-                  int adapterPosition = getAdapterPosition();
-                  if (adapterPosition == RecyclerView.NO_POSITION) return;
-                  String filePath = filteredFiles.get(adapterPosition).getFilePath();
-                  if (pos == 0) {
-                    ClipboardUtils.copyText(filePath);
-                    GhostToast.showSuccess(context, "Copying path in -> " + filePath);
-                    menu.dismiss();
-                  } else if (pos == 1) {
-                    fileContentStates.put(filePath, FileConentChange.COPYING);
-                    notifyItemChanged(adapterPosition);
-                    if (stateChangeListener != null) {
-                      stateChangeListener.onStateChanged(FileConentChange.COPYING);
-                    }
-                    menu.dismiss();
-                  } else if (pos == 2) {
-                    fileContentStates.put(filePath, FileConentChange.MOVEING);
-                    notifyItemChanged(adapterPosition);
-                    if (stateChangeListener != null) {
-                      stateChangeListener.onStateChanged(FileConentChange.MOVEING);
-                    }
-                    menu.dismiss();
-                  } else if (pos == 3) {
-                    ((FileManagerActivity) context).setRenameFile(getAdapterPosition());
-                    menu.dismiss();
-                  } else if (pos == 4) {
-                    ((FileManagerActivity) context).removedFiles(getAdapterPosition());
-                    menu.dismiss();
-                  } else if (pos == 5) {
-                    var fileShareManager = new FileShareManager(context);
-                    File file = new File(filteredFiles.get(getAdapterPosition()).getFilePath());
-                    try {
-                      if (file.isFile()) fileShareManager.shareFile(file);
-                    } catch (Exception e) {
-                      e.printStackTrace();
-                    }
-                    menu.dismiss();
-                  } else if (pos == 6) {
-                    ((FileManagerActivity) context).MakeZipFileFromThreads(getAdapterPosition());
-                    menu.dismiss();
-                  } else if (pos == 7) {
-                    ShortcutInfoImpl impl =
-                        new ShortcutInfoImpl(
-                            context, filteredFiles.get(getAdapterPosition()).getFilePath());
-                    impl.createFileShortcut(
-                        0, filteredFiles.get(getAdapterPosition()).getFilePath(), () -> {});
-                    menu.dismiss();
-                  } else if (pos == 8) {
-                    ((FileManagerActivity) context).bookmark(getAdapterPosition());
-                    menu.dismiss();
-                  } else if (pos == 9) {
-                    pgbmaker(getAdapterPosition());
-                    menu.dismiss();
-                  } else if (pos == 10) {
-                    ColorView.renameJavaFileImpl(
-                        context,
-                        filteredFiles.get(getAdapterPosition()).getFilePath(),
-                        ((FileManagerActivity) context).getFolder(),
-                        () -> {
-                          ((FileManagerActivity) context).reLoadFile();
-                        });
-                  } else if (pos == 11) {
-                    var path = filteredFiles.get(getAdapterPosition()).getFilePath();
-                    if (FileUtil.isDirectory(path)) {
-                      GTheme.pack(
-                          path,
-                          path + "/",
-                          context,
-                          () -> {
-                            ((FileManagerActivity) context).reLoadFile();
-                          });
-                    }
-                  }
-                });
-            menu.showAsDropDown(v);
-          });
 
+      iconMoreOptions.setOnClickListener(v -> showPopupMenu(v, getAdapterPosition()));
       roots.setOnClickListener(
           v -> {
             int position = getAdapterPosition();
             if (position == RecyclerView.NO_POSITION) return;
-
-            if (multiSelectionEnabled) {
-
-              selectionManager.toggleSelection(position);
-              notifyItemChanged(position);
-
-              if (selectionManager.getSelectedCount() == 0) {
-                enableMultiSelection(false);
-
-                ((FileManagerActivity) context).exitMultiSelectionMode();
-              }
+            // If selection is active, toggle selection
+            if (selectionTracker != null && selectionTracker.hasSelection()) {
+              //  String key = getKeyForPosition(position);
+              //   selectionTracker.toggleSelection(key);
             } else {
-
               click.onClick(v, position);
             }
           });
-
       roots.setOnLongClickListener(
           v -> {
             int position = getAdapterPosition();
             if (position == RecyclerView.NO_POSITION) return true;
-
-            if (!multiSelectionEnabled) {
-
-              enableMultiSelection(true);
-
-              ((FileManagerActivity) context).enterMultiSelectionMode(position);
-              selectionManager.toggleSelection(position);
-              notifyItemChanged(position);
+            // Start selection mode if not already active
+            if (selectionTracker == null || !selectionTracker.hasSelection()) {
+              //   String key = getKeyForPosition(position);
+              //  selectionTracker.startRangeSelection(position, position);
               click.onLongClick(v, position);
             } else {
-              selectionManager.toggleSelection(position);
-              notifyItemChanged(position);
-              if (selectionManager.getSelectedCount() == 0) {
-                enableMultiSelection(false);
-                roots.setItemSelect(false);
-
-                ((FileManagerActivity) context).exitMultiSelectionMode();
-                notifyItemChanged(position);
-              } else {
-                click.onLongClick(v, position);
-              }
+              // String key = getKeyForPosition(position);
+              // selectionTracker.toggleSelection(key);
+              click.onLongClick(v, position);
             }
             return true;
           });
     }
+
+    public ItemDetailsLookup.ItemDetails<Long> getItemDetails() {
+      int position = getAdapterPosition();
+      if (position == RecyclerView.NO_POSITION || position >= filteredFiles.size()) {
+        return null;
+      }
+      return new FileItemDetails(position, (long) position);
+    }
+  }
+
+  private void showPopupMenu(View v, int adapterPosition) {
+    if (adapterPosition == RecyclerView.NO_POSITION || adapterPosition >= filteredFiles.size())
+      return;
+
+    String filePath = filteredFiles.get(adapterPosition).getFilePath();
+
+    var menu =
+        new PowerMenu.Builder(v.getContext())
+            .setIsMaterial(true)
+            .addItem(new PowerMenuItem("Copy name dir or file"))
+            .addItem(new PowerMenuItem("Copy"))
+            .addItem(new PowerMenuItem("Move"))
+            .addItem(new PowerMenuItem("Rename"))
+            .addItem(new PowerMenuItem("Removed"))
+            .addItem(new PowerMenuItem("Share"))
+            .addItem(new PowerMenuItem("Zip"))
+            .addItem(new PowerMenuItem("Shortcut"))
+            .addItem(new PowerMenuItem("Add to Bookmark"))
+            .addItem(new PowerMenuItem("Add to Pgb"))
+            .addItem(new PowerMenuItem("JavaRename"))
+            .addItem(new PowerMenuItem("Backup theme"))
+            .build();
+
+    menu.setShowBackground(false);
+    menu.setAnimation(MenuAnimation.FADE);
+    menu.setMenuRadius(19f);
+    menu.setTextColor(MaterialColors.getColor(v.getContext(), ObjectUtils.colorOnSurface, 0));
+    menu.setMenuColor(MaterialColors.getColor(v.getContext(), ObjectUtils.colorSurface, 0));
+
+    menu.setOnMenuItemClickListener(
+        (pos, vm) -> {
+          if (pos == 0) {
+            ClipboardUtils.copyText(filePath);
+            GhostToast.showSuccess(context, "Copying path in -> " + filePath);
+            menu.dismiss();
+          } else if (pos == 1) {
+            fileContentStates.put(filePath, FileConentChange.COPYING);
+            notifyItemChanged(adapterPosition);
+            if (stateChangeListener != null) {
+              stateChangeListener.onStateChanged(FileConentChange.COPYING);
+            }
+            menu.dismiss();
+          } else if (pos == 2) {
+            fileContentStates.put(filePath, FileConentChange.MOVEING);
+            notifyItemChanged(adapterPosition);
+            if (stateChangeListener != null) {
+              stateChangeListener.onStateChanged(FileConentChange.MOVEING);
+            }
+            menu.dismiss();
+          } else if (pos == 3) {
+            ((FileManagerActivity) context).setRenameFile(adapterPosition);
+            menu.dismiss();
+          } else if (pos == 4) {
+            ((FileManagerActivity) context).removedFiles(adapterPosition);
+            menu.dismiss();
+          } else if (pos == 5) {
+            var fileShareManager = new FileShareManager(context);
+            File file = new File(filteredFiles.get(adapterPosition).getFilePath());
+            try {
+              if (file.isFile()) fileShareManager.shareFile(file);
+            } catch (Exception e) {
+              e.printStackTrace();
+            }
+            menu.dismiss();
+          } else if (pos == 6) {
+            ((FileManagerActivity) context).MakeZipFileFromThreads(adapterPosition);
+            menu.dismiss();
+          } else if (pos == 7) {
+            ShortcutInfoImpl impl =
+                new ShortcutInfoImpl(context, filteredFiles.get(adapterPosition).getFilePath());
+            impl.createFileShortcut(0, filteredFiles.get(adapterPosition).getFilePath(), () -> {});
+            menu.dismiss();
+          } else if (pos == 8) {
+            ((FileManagerActivity) context).bookmark(adapterPosition);
+            menu.dismiss();
+          } else if (pos == 9) {
+            pgbmaker(adapterPosition);
+            menu.dismiss();
+          } else if (pos == 10) {
+            ColorView.renameJavaFileImpl(
+                context,
+                filteredFiles.get(adapterPosition).getFilePath(),
+                ((FileManagerActivity) context).getFolder(),
+                () -> {
+                  ((FileManagerActivity) context).reLoadFile();
+                });
+          } else if (pos == 11) {
+            var path = filteredFiles.get(adapterPosition).getFilePath();
+            if (FileUtil.isDirectory(path)) {
+              GTheme.pack(
+                  path,
+                  ((FileManagerActivity) context).getFolder() + "/",
+                  context,
+                  () -> {
+                    ((FileManagerActivity) context).reLoadFile();
+                  });
+            }
+          }
+        });
+
+    menu.showAsDropDown(v);
   }
 
   void pgbmaker(int pos) {
     String currentPgbPath = filteredFiles.get(pos).getFilePath();
     if (FileUtil.isExistFile(PluginLoaderImpl.DEFAULT_CONFIG_PATH)) {
-
       var plugin =
           new PluginCompressorPgb(
               new PluginextractorFace() {
-
                 @Override
                 public void onPluginExtractorDone() {
                   ((FileManagerActivity) context).reLoadFile();
@@ -718,7 +792,6 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
 
   private boolean shouldApplyBlur(String filePath) {
     if (filePath == null) return false;
-
     String lowerPath = filePath.toLowerCase();
     return lowerPath.endsWith(".jpg")
         || lowerPath.endsWith(".jpeg")
@@ -953,7 +1026,6 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
   private void applyHighlight(SpannableString spannableString, int start, int end) {
     spannableString.setSpan(
         new ForegroundColorSpan(Color.BLACK), start, end, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
-
     spannableString.setSpan(
         new BackgroundColorSpan(Color.parseColor("#FFFFE0B2")),
         start,

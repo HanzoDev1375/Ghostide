@@ -214,13 +214,11 @@ public class HTMLAnalyzerCompat implements CodeAnalyzer {
 
                 var colors = result;
                 String colorString = text1;
-
-                // تبدیل رنگ سه رقمی به شش رقمی
-                if (colorString.length() == 4) { // اگر رنگ سه رقمی باشد
+                if (colorString.length() == 4) { 
                   String red = colorString.substring(1, 2);
                   String green = colorString.substring(2, 3);
                   String blue = colorString.substring(3, 4);
-                  colorString = "#" + red + red + green + green + blue + blue; // تبدیل به شش رقمی
+                  colorString = "#" + red + red + green + green + blue + blue; 
                 }
 
                 try {

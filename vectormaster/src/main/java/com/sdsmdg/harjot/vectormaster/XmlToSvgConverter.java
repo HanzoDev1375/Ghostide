@@ -65,7 +65,7 @@ public class XmlToSvgConverter {
 
       if (isHexColor(strokeColor)) {
         svg.append(" stroke=\"").append(strokeColor).append("\"");
-      }else svg.append(" stroke=\"").append("#000").append("\"");
+      } else svg.append(" stroke=\"").append("#000").append("\"");
       if (!strokeWidth.isEmpty()) {
         svg.append(" stroke-width=\"").append(strokeWidth).append("\"");
       }

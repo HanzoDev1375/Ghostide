@@ -1,5 +1,6 @@
 package io.github.rosemoe.sora.widget.diagnostics;
 
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.ClipboardUtils;
 import com.google.android.material.card.MaterialCardView;
 
+import com.google.android.material.color.MaterialColors;
 import io.github.rosemoe.sora.event.ContentChangeEvent;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.EditorColorScheme;
@@ -19,6 +21,7 @@ import io.github.rosemoe.sora.widget.EditorPopupWindow;
 import io.github.rosemoe.sora.diagnostics.Diagnostic;
 
 import ir.ninjacoder.ghostide.core.R;
+import ir.ninjacoder.ghostide.core.utils.ObjectUtils;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -135,7 +138,7 @@ public class DiagnosticPopupWindow extends EditorPopupWindow {
   private void addDiagnosticView(Diagnostic diagnostic) {
     TextView tvMessage = new TextView(mEditor.getContext());
     tvMessage.setText(diagnostic.getText());
-    tvMessage.setTextColor(diagnostic.getState().getColor());
+    tvMessage.setTextColor(MaterialColors.getColor(tvMessage, ObjectUtils.colorOnSurface));
     tvMessage.setTextSize(14);
     tvMessage.setPadding(
         (int) (mEditor.getDpUnit() * 8),
@@ -145,14 +148,12 @@ public class DiagnosticPopupWindow extends EditorPopupWindow {
     tvMessage.setMaxWidth((int) (mEditor.getDpUnit() * 250));
     tvMessage.setMaxLines(3);
     tvMessage.setEllipsize(android.text.TextUtils.TruncateAt.END);
-
-    // اضافه کردن divider بین items (به جز آخرین)
     if (container.getChildCount() > 0) {
       View divider = new View(mEditor.getContext());
       divider.setLayoutParams(
           new LinearLayout.LayoutParams(
               ViewGroup.LayoutParams.MATCH_PARENT, (int) mEditor.getDpUnit()));
-      divider.setBackgroundColor(0x1A000000); 
+      divider.setBackgroundColor(0x1A000000);
       container.addView(divider);
     }
 
@@ -161,11 +162,37 @@ public class DiagnosticPopupWindow extends EditorPopupWindow {
 
   public void applyColorScheme() {
     if (card == null) return;
-    
-    card.setCardBackgroundColor(
-        mEditor.getColorScheme().getColor(EditorColorScheme.AUTO_COMP_PANEL_BG));
-    card.setStrokeColor(
-        mEditor.getColorScheme().getColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER));
+    int colorNormal;
+    int colorStroke;
+    switch (currentDiagnostics.get(0).getState()) {
+      case ERROR:
+        {
+          colorNormal = Color.parseColor("#ffff0023");
+          colorStroke = Color.parseColor("#FFFF8C8C");
+          break;
+        }
+      case WARNING:
+        {
+          colorNormal = Color.parseColor("#FFFFDD00");
+          colorStroke = Color.parseColor("#FFFFE883");
+          break;
+        }
+      case TYPO:
+        {
+          colorNormal = Color.parseColor("#FF11FF00");
+          colorStroke = Color.parseColor("#FF8BFF83");
+          break;
+        }
+      case NONE:
+      default:
+        {
+          colorNormal = mEditor.getColorScheme().getColor(EditorColorScheme.AUTO_COMP_PANEL_BG);
+          colorStroke = mEditor.getColorScheme().getColor(EditorColorScheme.AUTO_COMP_PANEL_CORNER);
+          break;
+        }
+    }
+    card.setCardBackgroundColor(colorNormal);
+    card.setStrokeColor(colorStroke);
     card.setStrokeWidth((int) mEditor.getDpUnit());
     card.setRadius(mEditor.getDpUnit() * 8);
   }

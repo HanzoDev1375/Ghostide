@@ -3,22 +3,19 @@ package ir.ninjacoder.ghostide.core.mult;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.widget.FrameLayout;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import android.view.View.OnClickListener;
-import com.google.android.material.color.MaterialColors;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.transition.MaterialSharedAxis;
 import androidx.transition.TransitionManager;
 import ir.ninjacoder.ghostide.core.R;
 import ir.ninjacoder.ghostide.core.databinding.MultiSelectionActionsBinding;
-import ir.ninjacoder.ghostide.core.utils.ObjectUtils;
-import ir.ninjacoder.prograsssheet.view.GlassFrameLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MultiSelectionActionView extends FrameLayout {
+public class MultiSelectionActionView extends MaterialCardView {
 
   private OnActionClickListener actionClickListener;
   private MultiSelectionActionsBinding bind;
@@ -50,43 +47,42 @@ public class MultiSelectionActionView extends FrameLayout {
   }
 
   private void init(Context context) {
-
     bind = MultiSelectionActionsBinding.inflate(LayoutInflater.from(context), this, true);
     setupActionViews();
-    bind.btnClose.setOnClickListener(
-        v -> {
-          if (actionClickListener != null) actionClickListener.onCloseClick();
-        });
+    setCardBackgroundColor(null);
+    setStrokeWidth(0);
+    setStrokeColor(null);
+    
+    bind.btnClose.setOnClickListener(v -> {
+        if (actionClickListener != null) {
+            actionClickListener.onCloseClick();
+        }
+    });
 
-    bind.checkboxSelectAll.setOnCheckedChangeListener(
-        (buttonView, isChecked) -> {
-          if (actionClickListener != null) actionClickListener.onSelectAllClick(isChecked);
-        });
+    bind.checkboxSelectAll.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        if (actionClickListener != null) actionClickListener.onSelectAllClick(isChecked);
+    });
 
-    bind.actionCopy.setOnClickListener(
-        v -> {
-          if (actionClickListener != null)
+    bind.actionCopy.setOnClickListener(v -> {
+        if (actionClickListener != null)
             actionClickListener.onActionClick(MultiSelectionAction.COPY);
-        });
+    });
 
-    bind.actionMove.setOnClickListener(
-        v -> {
-          if (actionClickListener != null)
+    bind.actionMove.setOnClickListener(v -> {
+        if (actionClickListener != null)
             actionClickListener.onActionClick(MultiSelectionAction.MOVE);
-        });
+    });
 
-    bind.actionDelete.setOnClickListener(
-        v -> {
-          if (actionClickListener != null)
+    bind.actionDelete.setOnClickListener(v -> {
+        if (actionClickListener != null)
             actionClickListener.onActionClick(MultiSelectionAction.DELETE);
-        });
+    });
 
-    bind.actionMore.setOnClickListener(
-        v -> {
-          if (actionClickListener != null)
+    bind.actionMore.setOnClickListener(v -> {
+        if (actionClickListener != null)
             actionClickListener.onActionClick(MultiSelectionAction.MORE);
-        });
-  }
+    });
+}
 
   private void setupActionViews() {
     bind.ivCopy.setImageResource(R.drawable.ic_copy_black_24px);
@@ -115,11 +111,11 @@ public class MultiSelectionActionView extends FrameLayout {
 
   public void removeAllActions() {
     actions.clear();
-    updateActionVisibility();
+    hide();
   }
 
   public void updateActionVisibility() {
-    
+    if (getVisibility() == GONE) setVisibility(VISIBLE);
   }
 
   public void setOnActionClickListener(OnActionClickListener listener) {
@@ -129,6 +125,7 @@ public class MultiSelectionActionView extends FrameLayout {
   public void setSelectAllChecked(boolean checked) {
     if (bind.checkboxSelectAll != null) {
       bind.checkboxSelectAll.setChecked(checked);
+      setVisibility(VISIBLE);
     }
   }
 

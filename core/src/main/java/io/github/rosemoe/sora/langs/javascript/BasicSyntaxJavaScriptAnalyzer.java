@@ -278,6 +278,7 @@ public class BasicSyntaxJavaScriptAnalyzer implements CodeAnalyzer {
                     DiagnosticsState.UNUSED);
             editor.addDiagnostic(diagnostic);
             if (editor != null) editor.showCurrentDiagnostic();
+            
           }
         }
       }

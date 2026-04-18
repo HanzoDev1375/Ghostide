@@ -26,6 +26,7 @@ import android.text.Editable;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -38,6 +39,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
 import android.view.MenuItem;
@@ -49,6 +51,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
@@ -154,6 +157,10 @@ import ninja.coder.appuploader.data.SnippetManagerImpl;
 import ninjacoder.ghostide.androidtools.r8.android.R8Tools;
 import storage.sdcard.SdCardUtil;
 import ir.ninjacoder.ghostide.core.layoutmanager.NavigationViewCompnet;
+import androidx.recyclerview.selection.ItemDetailsLookup;
+import androidx.recyclerview.selection.ItemKeyProvider;
+import androidx.recyclerview.selection.SelectionTracker;
+import androidx.recyclerview.selection.StorageStrategy;
 
 public class FileManagerActivity extends BaseCompat
     implements FileManagerAd.onClick,
@@ -232,13 +239,14 @@ public class FileManagerActivity extends BaseCompat
   private MultiSelectionActionView multiSelectionView;
   private View.OnClickListener fabOriginalClickListener;
   private List<String> copyPaths = new ArrayList<>();
-  private boolean isCopyMode = true;
+  private boolean isExitingSelection = false;
+  private SelectionTracker<Long> selectionTracker;
 
   private int currentPosition = 0;
 
   @Override
-  protected void onCreate(Bundle _savedInstanceState) {
-    super.onCreate(_savedInstanceState);
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
     bind = FiledirBinding.inflate(LayoutInflater.from(this));
     ViewCompat.setOnApplyWindowInsetsListener(
         bind.getRoot(),
@@ -249,7 +257,7 @@ public class FileManagerActivity extends BaseCompat
         });
 
     setContentView(bind.getRoot());
-    initialize(_savedInstanceState);
+    initialize();
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
             == PackageManager.PERMISSION_DENIED
         || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -274,7 +282,7 @@ public class FileManagerActivity extends BaseCompat
     }
   }
 
-  private void initialize(Bundle _savedInstanceState) {
+  private void initialize() {
 
     gridLayoutManager = new GridLayoutManager(this, 1);
     if (gridLayoutManager != null) {
@@ -308,38 +316,6 @@ public class FileManagerActivity extends BaseCompat
     IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
     this.registerReceiver(networkChangeReceiver, filter);
     multiSelectionView = bind.multiSelectionActions;
-    if (multiSelectionView != null) {
-      setupMultiSelection();
-
-      if (fileListItem != null && fileListItem.getSelectionManager() != null) {
-        fileListItem
-            .getSelectionManager()
-            .setOnSelectionChangedListener(
-                (selectedCount, isSelectionMode) -> {
-                  runOnUiThread(
-                      () -> {
-                        Log.d(
-                            "MultiSelection",
-                            "Listener: selectedCount="
-                                + selectedCount
-                                + ", isSelectionMode="
-                                + isSelectionMode);
-                        if (fileListItem.isMultiSelectionEnabled() && selectedCount > 0) {
-                          if (multiSelectionView != null) {
-                            multiSelectionView.setSelectedCount(selectedCount);
-                            if (!multiSelectionView.isShowing()) {
-                              multiSelectionView.show();
-                            }
-                          }
-                        } else {
-                          if (multiSelectionView != null && multiSelectionView.isShowing()) {
-                            multiSelectionView.hide();
-                          }
-                        }
-                      });
-                });
-      }
-    }
     if (Build.VERSION.SDK_INT >= 21)
       getWindow().setNavigationBarColor(MaterialColors.getColor(this, ObjectUtils.Back, 0));
     if (Build.VERSION.SDK_INT >= 21)
@@ -430,6 +406,92 @@ public class FileManagerActivity extends BaseCompat
     for (Child child : pluginChildren) {
       addChild(child);
     }
+    setupSelectionTracker();
+    if (multiSelectionView != null) {
+      setupMultiSelection();
+      multiSelectionView.hide();
+    }
+  }
+
+  private void setupSelectionTracker() {
+    selectionTracker =
+        new SelectionTracker.Builder<>(
+                "file_selection",
+                bind.recyclerview2,
+                fileListItem.getFileKeyProvider(),
+                fileListItem.getFileItemDetailsLookup(bind.recyclerview2),
+                StorageStrategy.createLongStorage())
+            .build();
+
+    fileListItem.setSelectionTracker(selectionTracker);
+    selectionTracker.addObserver(
+        new SelectionTracker.SelectionObserver<Long>() {
+          @Override
+          public void onSelectionChanged() {
+            super.onSelectionChanged();
+            int selectedCount = selectionTracker.getSelection().size();
+
+            if (selectedCount > 0) {
+              if (!isMultiSelectionMode) {
+                isMultiSelectionMode = true;
+                enterMultiSelectionMode(selectedCount);
+              }
+              if (multiSelectionView != null) {
+                multiSelectionView.setSelectedCount(selectedCount);
+                if (!multiSelectionView.isShowing()) {
+                  multiSelectionView.show();
+                }
+              }
+            } else {
+              if (isMultiSelectionMode && !isExitingSelection) {
+                exitMultiSelectionMode();
+              }
+            }
+          }
+
+          @Override
+          public void onSelectionRestored() {
+            super.onSelectionRestored();
+            int selectedCount = selectionTracker.getSelection().size();
+            if (selectedCount > 0) {
+              isMultiSelectionMode = true;
+              enterMultiSelectionMode(selectedCount);
+            } else {
+              if (isMultiSelectionMode && !isExitingSelection) {
+                exitMultiSelectionMode();
+              }
+            }
+          }
+        });
+  }
+
+  public void exitMultiSelectionMode() {
+    if (isExitingSelection) return;
+    isExitingSelection = true;
+
+    isMultiSelectionMode = false;
+
+    if (selectionTracker != null && selectionTracker.hasSelection()) {
+      selectionTracker.clearSelection();
+    }
+
+    if (multiSelectionView != null && multiSelectionView.isShowing()) {
+      multiSelectionView.hide();
+    }
+
+    new Handler().postDelayed(() -> isExitingSelection = false, 100);
+  }
+
+  public void clearSelection() {
+    if (selectionTracker != null && selectionTracker.hasSelection()) {
+      selectionTracker.clearSelection();
+    }
+  }
+
+  @Override
+  public void onStateChanged(FileConentChange newState) {
+    // TODO: Implement this method
+    GhostFileUtilImpl.changeIconFab(getFab(), newState);
   }
 
   public FileManagerAd getFileManagerAd() {
@@ -451,9 +513,7 @@ public class FileManagerActivity extends BaseCompat
     multiSelectionView.addAction(MultiSelectionAction.MOVE);
     multiSelectionView.addAction(MultiSelectionAction.DELETE);
     multiSelectionView.addAction(MultiSelectionAction.SHARE);
-    // multiSelectionView.addAction(MultiSelectionAction.ZIP);
     multiSelectionView.addAction(MultiSelectionAction.RENAME);
-    // MORE حذف شد چون خودت داری
 
     multiSelectionView.setOnActionClickListener(
         new MultiSelectionActionView.OnActionClickListener() {
@@ -469,44 +529,12 @@ public class FileManagerActivity extends BaseCompat
 
           @Override
           public void onSelectAllClick(boolean isChecked) {
-            if (fileListItem != null && fileListItem.getSelectionManager() != null) {
-              if (isChecked) {
-                // انتخاب همه
-                fileListItem.getSelectionManager().selectAll(fileModels.size());
-              } else {
-                isMultiSelectionMode = true;
-                fileListItem.getSelectionManager().selectAll(0);
-                // fileListItem.getSelectionManager().clearSelection();
-                // if (!multiSelectionView.isShowing()) {
-                // multiSelectionView.show();
-                // }
-              }
-              fileListItem.notifyDataSetChanged();
-
-              int count = fileListItem.getSelectionManager().getSelectedCount();
-              if (count > 0) {
-                multiSelectionView.setSelectedCount(count);
-              } // else {
-              // exitMultiSelectionMode();
-              // }
+            if (isChecked) {
+              selectAllFiles();
+            } else {
+              clearSelection();
             }
           }
-        });
-  }
-
-  @Override
-  public void onStateChanged(FileConentChange newState) {
-    runOnUiThread(
-        () -> {
-          var fabState = newState;
-          for (var entry : fileListItem.getFileContentStatesMap().entrySet()) {
-            if (entry.getValue() != FileConentChange.NONE) {
-              fabState = entry.getValue();
-              break;
-            }
-          }
-          bind.fabAdd.setIconResource(fabState.getValue());
-          ObjectUtils.setFab(bind.fabAdd);
         });
   }
 
@@ -519,7 +547,6 @@ public class FileManagerActivity extends BaseCompat
   }
 
   public void enterMultiSelectionMode(int count) {
-    if (isMultiSelectionMode) return;
     isMultiSelectionMode = true;
     if (multiSelectionView != null) {
       multiSelectionView.setSelectedCount(count);
@@ -527,45 +554,32 @@ public class FileManagerActivity extends BaseCompat
     }
   }
 
-  public void exitMultiSelectionMode() {
-    Log.d("MultiSelection", "exitMultiSelectionMode called");
-
-    if (!isMultiSelectionMode) {
-      Log.d("MultiSelection", "Already not in multi selection mode");
-      return;
+  public void selectAllFiles() {
+    if (selectionTracker != null) {
+      for (int i = 0; i < fileListItem.getItemCount(); i++) {
+        FileManagerModel item = fileListItem.getItem(i);
+        if (item != null) {
+          selectionTracker.select((long) i);
+        }
+      }
     }
-
-    isMultiSelectionMode = false;
-
-    if (fileListItem != null) {
-      fileListItem.enableMultiSelection(false);
-    }
-
-    if (multiSelectionView != null && multiSelectionView.isShowing()) {
-      multiSelectionView.hide();
-    }
-    Log.d("MultiSelection", "Exit completed");
   }
 
   private void performMultiSelectionAction(MultiSelectionAction action) {
-    List<String> selectedPaths =
-        fileListItem.getSelectionManager().getSelectedPaths(fileListItem.getAllFilesList());
+    List<String> selectedPaths = fileListItem.getSelectedPaths();
 
     if (selectedPaths.isEmpty()) {
       exitMultiSelectionMode();
       return;
     }
+
     if (action == MultiSelectionAction.COPY) {
-      if (fileListItem != null) {
-        fileListItem.getSelectionManager().clearSelection();
-      }
+      clearSelection();
       isMultiSelectionMode = true;
       copySelectedFiles(selectedPaths);
       return;
     } else if (action == MultiSelectionAction.MOVE) {
-      if (fileListItem != null) {
-        fileListItem.getSelectionManager().clearSelection();
-      }
+      clearSelection();
       isMultiSelectionMode = true;
       moveSelectedFiles(selectedPaths);
       return;
@@ -580,13 +594,9 @@ public class FileManagerActivity extends BaseCompat
       case SHARE:
         shareSelectedFiles(selectedPaths);
         break;
-      case MORE:
-        // zipSelectedFiles(selectedPaths);
-        break;
       case RENAME:
         if (selectedPaths.size() == 1) {
-          int pos = fileListItem.getSelectionManager().getSelectedPositions().get(0);
-          setRenameFile(pos);
+          //  setRenameFile(selectedPaths.get(0));
         } else {
           Toast.makeText(this, "فقط یک فایل میتونه تغییر نام بده", Toast.LENGTH_SHORT).show();
         }
@@ -597,16 +607,12 @@ public class FileManagerActivity extends BaseCompat
   private void copySelectedFiles(List<String> paths) {
     copyPaths.clear();
     copyPaths.addAll(paths);
-    isCopyMode = true;
+
     Toast.makeText(this, paths.size() + " فایل برای انتقال ذخیره شد", Toast.LENGTH_SHORT).show();
     multiSelectionView.setActionCopyLayout(
         "past",
         R.drawable.paste_white,
         it -> {
-          fileListItem.getSelectionManager().clearSelection();
-          if (fileListItem != null) {
-            fileListItem.enableMultiSelection(false);
-          }
           if (Folder == null || Folder.isEmpty()) {
             Toast.makeText(it.getContext(), "مسیر مقصد نامعتبر است", Toast.LENGTH_SHORT).show();
             return;
@@ -624,11 +630,13 @@ public class FileManagerActivity extends BaseCompat
                   public void onFileDone() {
                     reLoadFile();
                     multiSelectionView.setResetActionCopyLayout();
+                    exitMultiSelectionMode();
                   }
 
                   @Override
                   public void onFileError(String error) {
                     multiSelectionView.setResetActionCopyLayout();
+                    exitMultiSelectionMode();
                   }
                 },
                 true,
@@ -642,17 +650,11 @@ public class FileManagerActivity extends BaseCompat
   private void moveSelectedFiles(List<String> paths) {
     copyPaths.clear();
     copyPaths.addAll(paths);
-    isCopyMode = false;
-
     Toast.makeText(this, paths.size() + " فایل برای انتقال ذخیره شد", Toast.LENGTH_SHORT).show();
     multiSelectionView.setActionMoveLayout(
         "past",
         R.drawable.paste_white,
         it -> {
-          fileListItem.getSelectionManager().clearSelection();
-          if (fileListItem != null) {
-            fileListItem.enableMultiSelection(false);
-          }
           if (Folder == null || Folder.isEmpty()) {
             Toast.makeText(it.getContext(), "مسیر مقصد نامعتبر است", Toast.LENGTH_SHORT).show();
             return;
@@ -672,11 +674,13 @@ public class FileManagerActivity extends BaseCompat
                   public void onFileDone() {
                     reLoadFile();
                     multiSelectionView.setResetActionMoveLayout();
+                    exitMultiSelectionMode();
                   }
 
                   @Override
                   public void onFileError(String error) {
                     multiSelectionView.setResetActionMoveLayout();
+                    exitMultiSelectionMode();
                   }
                 },
                 false,
@@ -1164,6 +1168,22 @@ public class FileManagerActivity extends BaseCompat
   }
 
   @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    if (selectionTracker != null) {
+      selectionTracker.onSaveInstanceState(outState);
+    }
+  }
+
+  @Override
+  protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    super.onRestoreInstanceState(savedInstanceState);
+    if (selectionTracker != null) {
+      selectionTracker.onRestoreInstanceState(savedInstanceState);
+    }
+  }
+
+  @Override
   protected void onDestroy() {
     super.onDestroy();
     unbindFileWatcherService();
@@ -1450,9 +1470,7 @@ public class FileManagerActivity extends BaseCompat
 
   @Override
   public void onClick(View view, int pos) {
-    if (fileListItem.isMultiSelectionEnabled()) {
-      return;
-    }
+
     FileManagerModel item = fileListItem.getItem(pos);
     if (item == null) return;
     currentPosition = pos;

@@ -35,7 +35,7 @@ public class ToolTipHelperImpl extends ToolTipHelper {
 
   public void showmsg(String message) {
     this.currentMessage = message;
-    // پیام ذخیره می‌شود و در کلیک بعدی نمایش داده می‌شود
+    // پیام ذخیره میشود و در کلیک بعدی نمایش داده می‌شود
   }
 
   @Override

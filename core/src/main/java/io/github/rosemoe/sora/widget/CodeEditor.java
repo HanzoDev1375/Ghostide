@@ -385,6 +385,8 @@ public class CodeEditor extends View
   private int mRegexColor = 0xFF4CAF50;
   private IconSpanManager iconSpanManager;
   private List<String> patternCode = new ArrayList<>();
+  // در ابتدای کلاس CodeEditor
+  private SimpleMinimap minimaps;
 
   public void addLineIcon(int lineNumber, int iconRes) {
     LineIcon lineIcon = new LineIcon(iconRes, lineNumber);
@@ -907,6 +909,10 @@ public class CodeEditor extends View
     super.onScrollChanged(l, t, oldl, oldt);
     mText.setScrollX(l);
     mText.setScrollY(t);
+    if (minimaps != null && minimaps.isEnabled()) {
+      minimaps.update();
+      invalidate();
+    }
   }
 
   public File getCurrentFile() {
@@ -1565,6 +1571,9 @@ public class CodeEditor extends View
         (event, unsubscribe) -> {
           handleClickEvent(event);
         });
+
+    minimaps = new SimpleMinimap(this);
+    minimaps.setEnabled(true);
   }
 
   public IconSpanManager getIconSpanManager() {
@@ -2445,7 +2454,10 @@ public class CodeEditor extends View
 
     drawScrollBars(canvas);
     drawEdgeEffect(canvas);
-
+    if (minimaps != null && minimaps.isEnabled()) {
+      minimaps.update();
+      minimaps.draw(canvas, getWidth());
+    }
     rememberDisplayedLines();
   }
 
@@ -4441,10 +4453,18 @@ public class CodeEditor extends View
     if (!mEventHandler.shouldDrawScrollBar()) {
       return;
     }
-    if (isVerticalScrollBarEnabled() && getScrollMaxY() > getHeight() / 2) {
-      drawScrollBarTrackVertical(canvas);
-      drawScrollBarVertical(canvas);
+
+    boolean minimapEnabled = minimaps != null && minimaps.isEnabled();
+
+    if (isVerticalScrollBarEnabled() && getScrollMaxY() > getHeight() / 2 && !minimapEnabled) {
+      if (minimap != null && minimap.isVisible()) {
+
+      } else {
+        drawScrollBarTrackVertical(canvas);
+        drawScrollBarVertical(canvas);
+      }
     }
+
     if (isHorizontalScrollBarEnabled() && !isWordwrap() && getScrollMaxX() > getWidth() * 3 / 4) {
       drawScrollBarTrackHorizontal(canvas);
       drawScrollBarHorizontal(canvas);
@@ -4520,7 +4540,9 @@ public class CodeEditor extends View
     drawColor(
         canvas,
         mColors.getColor(
-            mEventHandler.holdVerticalScrollBar() ? getRandomColor() : getRandomColor()),
+            mEventHandler.holdVerticalScrollBar()
+                ? mColors.getColor(EditorColorScheme.SCROLL_BAR_TRACK)
+                : mColors.getColor(EditorColorScheme.SCROLL_BAR_THUMB_PRESSED)),
         mRect);
   }
 
@@ -6633,6 +6655,9 @@ public class CodeEditor extends View
           }
           invalidate();
         });
+    if (minimaps != null && minimaps.isEnabled()) {
+      minimaps.update();
+    }
   }
 
   /**
@@ -7025,10 +7050,6 @@ public class CodeEditor extends View
     if (!isEnabled()) {
       return false;
     }
-    if (minimap.onTouchEvent(event)) {
-      return true;
-    }
-
     boolean handlingBefore = mEventHandler.handlingMotions();
     boolean res = mEventHandler.onTouchEvent(event);
     boolean handling = mEventHandler.handlingMotions();
@@ -7347,6 +7368,9 @@ public class CodeEditor extends View
     if (minimap != null && minimap.isVisible()) {
       minimap.initialize();
     }
+    if (minimaps != null) {
+      minimaps.update();
+    }
     if (isWordwrap() && w != oldWidth) {
       createLayout();
     } else {
@@ -7411,6 +7435,9 @@ public class CodeEditor extends View
     updateHintVisibility();
     if (mPowerModeEffectManager != null && insertedContent.length() > 0) {
       mPowerModeEffectManager.spawnEffectAtCursor();
+    }
+    if (minimaps != null && minimaps.isEnabled()) {
+      minimaps.update();
     }
     for (int i = startLine; i <= endLine && i < getLineCount(); i++) {
       mText.getLine(i).widthCache = null;
@@ -7518,6 +7545,9 @@ public class CodeEditor extends View
       } catch (Exception e) {
         Log.e("CodeEditor", "Error creating ghost text", e);
       }
+    }
+    if (minimaps != null && minimaps.isEnabled()) {
+      minimaps.update();
     }
     for (int i = startLine; i <= startLine + 1 && i < getLineCount(); i++) {
       mText.getLine(i).widthCache = null;

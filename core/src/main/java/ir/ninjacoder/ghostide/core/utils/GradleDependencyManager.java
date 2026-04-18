@@ -44,7 +44,7 @@ public class GradleDependencyManager {
 
   private List<Dependency> extractDependencies(String content) {
     List<Dependency> deps = new ArrayList<>();
-    // الگوی بهبود یافته برای پوشش همه حالات:
+   
     Pattern pattern =
         Pattern.compile(
             "(implementation|api|compile)\\s*(?:\\(?['\"]([^:]+):([^:]+):([^)'\"]+)['\"]\\)?)");
@@ -78,7 +78,6 @@ public class GradleDependencyManager {
                   synchronized (availableUpdates) {
                     availableUpdates.add(new DependencyUpdate(dep, latestVersion));
                     if (availableUpdates.size() == 1) {
-                      // اولین بهیوزرسانی پیدا شده، تایمر را شروع کن
                       new Handler(Looper.getMainLooper())
                           .postDelayed(this::showBulkUpdateDialog, 500);
                     }
@@ -100,8 +99,6 @@ public class GradleDependencyManager {
       if (availableUpdates.isEmpty()) {
         return;
       }
-
-      // آماده‌سازی آرایه‌های مورد نیاز
       CharSequence[] items = new CharSequence[availableUpdates.size()];
       boolean[] checkedItems = new boolean[availableUpdates.size()];
       boolean[] isUpToDate = new boolean[availableUpdates.size()];
@@ -121,7 +118,7 @@ public class GradleDependencyManager {
               () -> {
                 MaterialAlertDialogBuilder dialogBuilder =
                     new MaterialAlertDialogBuilder(context)
-                        .setTitle("به‌روزرسانی کتابخانه‌ها (" + availableUpdates.size() + ")")
+                        .setTitle("Libraries have been updated (" + availableUpdates.size() + ")")
                         .setMultiChoiceItems(
                             items,
                             checkedItems,
@@ -131,23 +128,21 @@ public class GradleDependencyManager {
                               }
                             })
                         .setPositiveButton(
-                            "به‌روزرسانی انتخاب‌شده‌ها",
+                            "Updated selected",
                             (d, which) -> {
                               applySelectedUpdates(checkedItems);
                             })
-                        .setNegativeButton("لغو", null)
+                        .setNegativeButton("no", null)
                         .setNeutralButton(
-                            "انتخاب همه",
+                            "Select all",
                             (d, which) -> {
-                              // اعمال انتخاب همه و بستن دیالوگ
+                             
                               Arrays.fill(checkedItems, true);
                               applySelectedUpdates(checkedItems);
                             });
 
                 var dialog = dialogBuilder.create();
                 dialog.show();
-
-                // غیرفعال کردن آیتم‌هایی که به‌روز هستند
                 var listView = dialog.getListView();
                 if (listView != null) {
                   for (int i = 0; i < isUpToDate.length; i++) {
@@ -207,17 +202,17 @@ public class GradleDependencyManager {
                       .setTitle("به‌روزرسانی موجود")
                       .setMessage(
                           String.format(
-                              "%s:%s\nنسخه فعلی: %s\nنسخه جدید: %s",
+                              "%s:%s\n Current version: %s\n New Version: %s",
                               update.dep.group,
                               update.dep.artifact,
                               update.dep.version,
                               update.newVersion))
                       .setPositiveButton(
-                          "به‌روزرسانی",
+                          "Update to ",
                           (d, which) -> {
                             updateDependency(update.dep, update.newVersion);
                           })
-                      .setNegativeButton("رد", null)
+                      .setNegativeButton("no", null)
                       .create();
               dialog.show();
             });

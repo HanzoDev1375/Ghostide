@@ -79,7 +79,7 @@ public class ToolItem {
         new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int which) {
             String start =
-                "public "
+                "pub "
                     + ed1.getText().toString()
                     + " : "
                     + ed2.getText().toString()

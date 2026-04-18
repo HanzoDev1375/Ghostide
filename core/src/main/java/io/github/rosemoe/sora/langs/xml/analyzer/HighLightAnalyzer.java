@@ -2,17 +2,14 @@ package io.github.rosemoe.sora.langs.xml.analyzer;
 
 import android.graphics.Color;
 import android.os.Handler;
-
 import androidx.core.graphics.ColorUtils;
-
+import ir.ninjacoder.ghostide.core.marco.RegexUtilCompat;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
 import org.antlr.v4.runtime.Token;
-
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.Stack;
-
 import io.github.rosemoe.sora.data.BlockLine;
 import io.github.rosemoe.sora.data.Span;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
@@ -73,35 +70,44 @@ public class HighLightAnalyzer implements CodeAnalyzer {
             // <?xml
           case XMLLexer.XMLDeclOpen:
             // <?
-            colors.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
+            colors.addIfNeeded(line, column, EditorColorScheme.htmltag);
             // xml
-            colors.addIfNeeded(line, column + 2, EditorColorScheme.HTML_TAG);
+            colors.addIfNeeded(line, column + 2, EditorColorScheme.htmlattr);
             break;
           case XMLLexer.EQUALS:
-            // colors.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
-            // break;
+            colors.addIfNeeded(line, column, EditorColorScheme.htmlblocknormal);
+            break;
           case XMLLexer.STRING:
           case XMLLexer.CharRef:
             {
-              String text = token.getText();
-              if (text.startsWith("\"#")) {
+              if (RegexUtilCompat.RegexSelect(
+                  "(\\#[a-zA-F0-9]{8})|(\\#[a-zA-F0-9]{6})|(\\#[a-zA-F0-9]{3})", token.getText())) {
+
+                String colorString = token.getText();
+                if (colorString.length() == 4) {
+                  String red = colorString.substring(1, 2);
+                  String green = colorString.substring(2, 3);
+                  String blue = colorString.substring(3, 4);
+                  colorString = "#" + red + red + green + green + blue + blue;
+                }
+
                 try {
-                  int color = Color.parseColor(text.substring(1, text.length() - 1));
+                  int color = Color.parseColor(colorString);
                   colors.addIfNeeded(line, column, EditorColorScheme.LITERAL);
                   if (ColorUtils.calculateLuminance(color) > 0.5) {
                     Span span =
                         Span.obtain(
-                            column + 1,
+                            column,
                             TextStyle.makeStyle(
                                 EditorColorScheme.black, 0, false, false, false, false, true));
                     if (span != null) {
                       span.setBackgroundColorMy(color);
                       colors.add(line, span);
                     }
-                  } else if (ColorUtils.calculateLuminance(color) <= 0.5) {
+                  } else {
                     Span span =
                         Span.obtain(
-                            column + 1,
+                            column,
                             TextStyle.makeStyle(
                                 EditorColorScheme.TEXT_NORMAL,
                                 0,
@@ -116,13 +122,13 @@ public class HighLightAnalyzer implements CodeAnalyzer {
                     }
                   }
 
-                  Span middle = Span.obtain(column + text.length() - 1, EditorColorScheme.LITERAL);
+                  Span middle = Span.obtain(column + colorString.length(), EditorColorScheme.LITERAL);
                   middle.setBackgroundColorMy(Color.TRANSPARENT);
                   colors.add(line, middle);
 
                   Span end =
                       Span.obtain(
-                          column + text.length(),
+                          column + colorString.length(),
                           TextStyle.makeStyle(EditorColorScheme.TEXT_NORMAL));
                   end.setBackgroundColorMy(Color.TRANSPARENT);
                   colors.add(line, end);
@@ -130,7 +136,10 @@ public class HighLightAnalyzer implements CodeAnalyzer {
                 } catch (Exception ignore) {
                   ignore.printStackTrace();
                 }
+              } else {
+                colors.addIfNeeded(line, column, forString());
               }
+
               colors.addIfNeeded(line, column, EditorColorScheme.LITERAL);
               break;
             }
@@ -138,7 +147,7 @@ public class HighLightAnalyzer implements CodeAnalyzer {
             // />
           case XMLLexer.SLASH_CLOSE:
           case XMLLexer.OPEN_SLASH:
-            colors.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
+            colors.addIfNeeded(line, column, EditorColorScheme.htmlblockhash);
             // set block line end position
             if (!stack.isEmpty()) {
               BlockLine block = stack.pop();
@@ -152,7 +161,7 @@ public class HighLightAnalyzer implements CodeAnalyzer {
             break;
             // /
           case XMLLexer.SLASH:
-            colors.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
+            colors.addIfNeeded(line, column, EditorColorScheme.htmlblockhash);
             // When we get "/", check the previous token.
             // If we get '<',set block line end position
             if (preToken != null && preToken.getType() == XMLLexer.OPEN) {
@@ -171,12 +180,12 @@ public class HighLightAnalyzer implements CodeAnalyzer {
             String text = token.getText();
             // for name in </name>
             if (preToken != null && preToken.getType() == XMLLexer.SLASH) {
-              colors.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
+              colors.addIfNeeded(line, column, EditorColorScheme.htmlblockhash);
             }
             // for name in <name...
             // code block start
             else if (preToken != null && preToken.getType() == XMLLexer.OPEN) {
-              colors.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
+              colors.addIfNeeded(line, column, EditorColorScheme.htmlblockhash);
               BlockLine block = new BlockLine();
               block.startLine = preToken.getLine() - 1;
               block.startColumn = preToken.getCharPositionInLine(); // -1 for '<'
@@ -184,10 +193,9 @@ public class HighLightAnalyzer implements CodeAnalyzer {
             }
             // android studio style
             else if (text.startsWith("xmlns:")) {
-              colors.addIfNeeded(line, column, EditorColorScheme.HTML_TAG);
+              colors.addIfNeeded(line, column, EditorColorScheme.htmlstr);
               if (text.length() > "xmlns:".length()) {
-                colors.addIfNeeded(
-                    line, column + "xmlns:".length(), EditorColorScheme.IDENTIFIER_NAME);
+                colors.addIfNeeded(line, column + "xmlns:".length(), EditorColorScheme.htmlstr);
               }
             } else {
               // for 'a:b:c' style,we high light all before the last ':' as namespace
@@ -195,16 +203,16 @@ public class HighLightAnalyzer implements CodeAnalyzer {
               // Color scheme name may be strange.
               if (text.contains(":")) {
                 int index = text.lastIndexOf(':');
-                colors.addIfNeeded(line, column, EditorColorScheme.BLOCK_LINE_CURRENT);
+                colors.addIfNeeded(line, column, EditorColorScheme.jsfun);
                 if (index != text.length() - 1)
-                  colors.addIfNeeded(line, column + index + 1, EditorColorScheme.ATTRIBUTE_NAME);
+                  colors.addIfNeeded(line, column + index + 1, EditorColorScheme.jsattr);
               }
             }
             if (preToken != null
                 && preToken.getType() == XMLLexer.SLASH_CLOSE
                 && preToken != null
                 && preToken.getType() == XMLLexer.OPEN_SLASH) {
-              colors.addIfNeeded(line, column, EditorColorScheme.OPERATOR);
+              colors.addIfNeeded(line, column, EditorColorScheme.htmltag);
             }
             break;
           case XMLLexer.COMMENT:
@@ -212,11 +220,11 @@ public class HighLightAnalyzer implements CodeAnalyzer {
             break;
           case XMLLexer.OPEN:
             {
-              colors.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
+              colors.addIfNeeded(line, column, EditorColorScheme.htmltag);
               break;
             }
           case XMLLexer.CLOSE:
-            colors.addIfNeeded(line, column, EditorColorScheme.KEYWORD);
+            colors.addIfNeeded(line, column, EditorColorScheme.htmltag);
             break;
           default:
             colors.addIfNeeded(line, column, EditorColorScheme.TEXT_NORMAL);
@@ -264,5 +272,9 @@ public class HighLightAnalyzer implements CodeAnalyzer {
         return;
       }
     }
+  }
+
+  long forString() {
+    return TextStyle.makeStyle(EditorColorScheme.htmlstr, 0, true, false, false);
   }
 }

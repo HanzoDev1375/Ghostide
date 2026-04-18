@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 import androidx.annotation.ColorRes;
@@ -69,6 +70,7 @@ public class FileModelImpl implements TextWatcher {
   public void setContext(Context c) {
     this.context = c;
   }
+
   public void setBindPopWindows(String path, View v, FileHandlerModel event) {
     bind = LayoutPopwindowsFileBinding.inflate(LayoutInflater.from(v.getContext()));
     windows = new BottomSheetDialog(v.getContext());
@@ -204,35 +206,34 @@ public class FileModelImpl implements TextWatcher {
 
   private void performPaste(String destinationPath) {
     if (clipboardFiles.isEmpty()) return;
-          File destDir = new File(destinationPath);
-          if (!destDir.exists()) destDir.mkdirs();
+    File destDir = new File(destinationPath);
+    if (!destDir.exists()) destDir.mkdirs();
 
-          for (FileModel model : clipboardFiles) {
-            File sourceFile = new File(model.getPath());
-            File destFile = new File(destDir, sourceFile.getName());
-            PathUtils.moveFileOrDirByGhostide(
-                sourceFile.toString(),
-                destFile.toString(),
-                new PathUtils.OnFileChangeCall() {
+    for (FileModel model : clipboardFiles) {
+      File sourceFile = new File(model.getPath());
+      File destFile = new File(destDir, sourceFile.getName());
+      PathUtils.moveFileOrDirByGhostide(
+          sourceFile.toString(),
+          destFile.toString(),
+          new PathUtils.OnFileChangeCall() {
 
-                  @Override
-                  public void onFileDone() {
-                    update();
-                  }
+            @Override
+            public void onFileDone() {
+              update();
+            }
 
-                  @Override
-                  public void onFileError(String error) {}
-                },
-                isCutOperation,
-                context);
-          }
+            @Override
+            public void onFileError(String error) {}
+          },
+          isCutOperation,
+          context);
+    }
 
-          if (isCutOperation) {
-            clipboardFiles.clear();
-          }
+    if (isCutOperation) {
+      clipboardFiles.clear();
+    }
 
-          refreshList();
-        
+    refreshList();
   }
 
   private void refreshList() {
@@ -315,8 +316,19 @@ public class FileModelImpl implements TextWatcher {
   }
 
   public void setLayoutBack(@NonNull View.OnClickListener c) {
-    if (call) bind.layoutBack.setOnClickListener(c);
-    else new IllegalArgumentException("You not call setBindPopWindows");
+
+    if (call) {
+      bind.layoutBack.setOnClickListener(c);
+      bind.layoutBack.setOnTouchListener(
+          (v, mo) -> {
+            if (mo.getAction() == MotionEvent.ACTION_UP) {
+              v.animate().scaleX(1.0f).scaleY(1.0f).setDuration(100).start();
+            } else if (mo.getAction() == MotionEvent.ACTION_DOWN) {
+              v.animate().scaleX(1.3f).scaleY(1.3f).setDuration(100).start();
+            }
+            return false;
+          });
+    } else new IllegalArgumentException("You not call setBindPopWindows");
   }
 
   public void setIcon(@IdRes int id) {

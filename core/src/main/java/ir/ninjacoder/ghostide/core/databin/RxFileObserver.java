@@ -22,11 +22,11 @@ import io.reactivex.rxjava3.core.Observable;
 
 public class RxFileObserver {
 
-    public static Observable<FileEvent> create(String pathToWatch) {
-        return Observable.create(new FileObservable(pathToWatch));
-    }
+  public static Observable<FileEvent> create(String pathToWatch) {
+    return Observable.create(new FileObservable(pathToWatch));
+  }
 
-    public static Observable<FileEvent> create(File fileToWatch) {
-        return Observable.create(new FileObservable(fileToWatch.getAbsolutePath()));
-    }
+  public static Observable<FileEvent> create(File fileToWatch) {
+    return Observable.create(new FileObservable(fileToWatch.getAbsolutePath()));
+  }
 }

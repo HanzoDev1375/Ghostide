@@ -1,6 +1,7 @@
 package ir.ninjacoder.prograsssheet.filemanagerwindows;
 
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.BackgroundColorSpan;
@@ -180,6 +181,15 @@ public class FileModelAdapter extends RecyclerView.Adapter<FileModelAdapter.VH> 
     void bind(FileModel file, String query) {
       File files = new File(file.getPath());
       String fileName = files.getName();
+      var filechecker = new FileChecker();
+      
+      if(filechecker.hasFileBlocking(file.getPath(),".ghost")) {
+        icon.setColorFilter(Color.parseColor("#ff4018"),PorterDuff.Mode.SRC_IN);
+      }else if(filechecker.hasFileBlocking(file.getPath(),".java")){
+        icon.setColorFilter(Color.parseColor("#fff800"),PorterDuff.Mode.SRC_IN);
+      }else{
+        icon.clearColorFilter();
+      }
 
       if (query != null && !query.isEmpty()) {
         String fileNameLower = fileName.toLowerCase();

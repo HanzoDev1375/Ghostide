@@ -103,6 +103,7 @@ public class IdeEditor extends CodeEditor implements IEditor {
     setBracketHighlightEnabled(true);
     setBracketHighlightColor(0xFFFF0000);
     EditorUtil.setClick(this);
+    detectRegex();
     return this;
   }
 
@@ -371,7 +372,6 @@ public class IdeEditor extends CodeEditor implements IEditor {
           try {
             CharPosition startPos = getText().getIndexer().getCharPosition(start);
             CharPosition endPos = getText().getIndexer().getCharPosition(end - 1);
-
             if (startPos.line == endPos.line) {
               RegexSpan span =
                   new RegexSpan(
@@ -397,13 +397,13 @@ public class IdeEditor extends CodeEditor implements IEditor {
   }
 
   private void handleContentChange(@NonNull ContentChangeEvent event) {
-
+    post(() -> detectRegex());
     if (event.getAction() == ContentChangeEvent.ACTION_INSERT) {
       final var editor = event.getEditor();
       final var content = event.getChangedText();
       final var endLine = event.getChangeEnd().line;
       final var endColumn = event.getChangeEnd().column;
-      post(() -> detectRegex());
+
       if (getEditorLanguage() instanceof XMLLanguage) {
         boolean isOpen = false;
         try {
