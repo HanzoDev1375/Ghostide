@@ -4,10 +4,19 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.view.MotionEvent;
+
+import io.github.rosemoe.sora.event.EditorTouchEvents;
+import io.github.rosemoe.sora.event.ScrollEvent;
+import io.github.rosemoe.sora.event.ContentChangeEvent;
+import io.github.rosemoe.sora.event.SelectionChangeEvent;
 import java.util.List;
+
 import io.github.rosemoe.sora.data.Span;
+import io.github.rosemoe.sora.graphics.BubbleHelper;
 import io.github.rosemoe.sora.widget.layout.Row;
 import io.github.rosemoe.sora.widget.layout.RowIterator;
 
@@ -21,8 +30,11 @@ public class SimpleMinimap {
   private final Paint bgPaint = new Paint();
   private final Paint viewPaint = new Paint();
   private final Paint borderPaint = new Paint();
+  private final Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
   private final RectF rect = new RectF();
   private final RectF viewRect = new RectF();
+  private final Path bubblePath = new Path();
+  private final RectF bubbleRect = new RectF();
 
   private Bitmap bitmap;
   private int[] pixelBuffer;
@@ -32,6 +44,12 @@ public class SimpleMinimap {
   private boolean dirty = true;
   private boolean enabled = false;
   private float dp;
+  private boolean showingLineInfo = false;
+  private int currentLineNumber = 0;
+  private float infoX = 0, infoY = 0;
+  private long hideInfoTime = 0;
+  private static final long INFO_DURATION = 800; // 800 میلی‌ثانیه
+
   private CharRenderer charRenderer;
 
   public SimpleMinimap(CodeEditor editor) {
@@ -50,11 +68,15 @@ public class SimpleMinimap {
     borderPaint.setColor(Color.parseColor("#80FFFFFF"));
     borderPaint.setStyle(Paint.Style.STROKE);
     borderPaint.setStrokeWidth(dp * 1.5f);
+    textPaint.setTextSize(dp * 12);
+    textPaint.setColor(Color.WHITE);
+    textPaint.setTextAlign(Paint.Align.CENTER);
+    textPaint.setFakeBoldText(true);
   }
 
   private void setupListeners() {
     editor.subscribeEvent(
-        io.github.rosemoe.sora.event.ScrollEvent.class,
+        ScrollEvent.class,
         (event, unsubscribe) -> {
           if (enabled) {
             dirty = true;
@@ -62,7 +84,7 @@ public class SimpleMinimap {
           }
         });
     editor.subscribeEvent(
-        io.github.rosemoe.sora.event.ContentChangeEvent.class,
+        ContentChangeEvent.class,
         (event, unsubscribe) -> {
           if (enabled) {
             dirty = true;
@@ -70,11 +92,22 @@ public class SimpleMinimap {
           }
         });
     editor.subscribeEvent(
-        io.github.rosemoe.sora.event.SelectionChangeEvent.class,
+        SelectionChangeEvent.class,
         (event, unsubscribe) -> {
           if (enabled) {
             dirty = true;
             editor.postInvalidate();
+          }
+        });
+    editor.subscribeEvent(
+        EditorTouchEvents.class,
+        (e, un) -> {
+          var event = e.getEvent();
+          float x = event.getX();
+          float y = event.getY();
+
+          if (event.getAction() == MotionEvent.ACTION_DOWN && this.contains(x, y)) {
+            this.handleTouch(x, y);
           }
         });
   }
@@ -96,6 +129,41 @@ public class SimpleMinimap {
       dirty = true;
       editor.invalidate();
     }
+  }
+
+  public boolean contains(float x, float y) {
+    return enabled && rect.contains(x, y);
+  }
+
+  public void handleTouch(float x, float y) {
+    if (!enabled) return;
+
+    // محاسبه لاین بر اساس موقعیت کلیک
+    float totalHeight = editor.getLayout().getLayoutHeight();
+    if (totalHeight <= 0) return;
+
+    float percent = (y - rect.top) / rect.height();
+    percent = Math.max(0f, Math.min(1f, percent));
+
+    int line = (int) (percent * editor.getLineCount());
+    line = Math.max(0, Math.min(editor.getLineCount() - 1, line));
+
+    // نمایش اطلاعات
+    currentLineNumber = line + 1; // +1 چون خطوط از 1 شروع میشن
+    infoX = x;
+    infoY = y - dp * 20;
+    showingLineInfo = true;
+    hideInfoTime = System.currentTimeMillis() + INFO_DURATION;
+    // editor.jumpToLine(line);
+    editor.postInvalidate();
+    editor.postDelayed(
+        () -> {
+          if (showingLineInfo && System.currentTimeMillis() >= hideInfoTime) {
+            showingLineInfo = false;
+            editor.invalidate();
+          }
+        },
+        INFO_DURATION);
   }
 
   public void draw(Canvas canvas, int rightEdge) {
@@ -120,6 +188,50 @@ public class SimpleMinimap {
       drawViewport(canvas);
       canvas.restore();
     }
+    if (showingLineInfo) {
+      drawLineInfoBubble(canvas);
+    }
+  }
+
+  private void drawLineInfoBubble(Canvas canvas) {
+    String text = "Line " + currentLineNumber;
+    float textWidth = textPaint.measureText(text);
+    float padding = dp * 8;
+    float bubbleWidth = textWidth + padding * 2;
+    float bubbleHeight = dp * 24;
+
+    bubbleRect.set(infoX - bubbleWidth / 2, infoY - bubbleHeight, infoX + bubbleWidth / 2, infoY);
+
+    // اطمینان از اینکه داخل صفحه باشه
+    if (bubbleRect.left < 0) {
+      bubbleRect.offset(-bubbleRect.left, 0);
+    }
+    if (bubbleRect.right > editor.getWidth()) {
+      bubbleRect.offset(editor.getWidth() - bubbleRect.right, 0);
+    }
+    if (bubbleRect.top < 0) {
+      bubbleRect.offset(0, -bubbleRect.top);
+    }
+
+    // رسم بالون با استفاده از BubbleHelper
+    BubbleHelper.buildBubblePath(bubblePath, bubbleRect);
+
+    Paint bubblePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    bubblePaint.setColor(0xCC333333);
+    bubblePaint.setStyle(Paint.Style.FILL);
+    canvas.drawPath(bubblePath, bubblePaint);
+
+    // حاشیه بالون
+    Paint borderPaint2 = new Paint(Paint.ANTI_ALIAS_FLAG);
+    borderPaint2.setColor(0xFFFFFFFF);
+    borderPaint2.setStyle(Paint.Style.STROKE);
+    borderPaint2.setStrokeWidth(dp);
+    canvas.drawPath(bubblePath, borderPaint2);
+
+    // رسم متن
+    float textX = bubbleRect.centerX();
+    float textY = bubbleRect.centerY() + (textPaint.getTextSize() / 3);
+    canvas.drawText(text, textX, textY, textPaint);
   }
 
   private void updateBitmapIfNeeded() {
@@ -191,7 +303,6 @@ public class SimpleMinimap {
     int col = 0;
 
     while (col < lineText.length() && x < bitmapWidth) {
-      // پیدا کردن اسپن مناسب
       while (spanIndex + 1 < spans.size() && spans.get(spanIndex + 1).column <= col) {
         spanIndex++;
       }

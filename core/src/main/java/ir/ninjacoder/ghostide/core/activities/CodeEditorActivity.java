@@ -65,6 +65,7 @@ import ir.ninjacoder.ghostide.core.tasks.app.SassForAndroid;
 import ir.ninjacoder.ghostide.core.utils.ScalePageTransformer;
 import ir.ninjacoder.ghostide.core.widget.ImageViewAnimation;
 import ir.ninjacoder.ghostide.core.widget.component.RegexComponent;
+import ir.ninjacoder.prograsssheet.fileinfo.FileInfoState;
 import ir.ninjacoder.prograsssheet.listchild.ChildAdapter;
 import com.mcal.uidesigner.XmlLayoutDesignActivity;
 import java.io.FileOutputStream;
@@ -505,7 +506,8 @@ public class CodeEditorActivity extends BaseCompat
               togglePinTab(position);
               break;
             case 4:
-              GhostToast.showSuccess(this, "### Soon..");
+              var info = new FileInfoState();
+              info.logFileInfo(model.getPath(), this);
               break;
           }
         });
@@ -1010,7 +1012,13 @@ public class CodeEditorActivity extends BaseCompat
   }
 
   private void runXmlFile(String path) {
-    XmlLayoutDesignActivity.show(this, "xml", path, false, false);
+    Intent intent = new Intent(CodeEditorActivity.this, XmlLayoutDesignActivity.class);
+    intent.putExtra(XmlLayoutDesignActivity.EXTRA_FILE, path);
+    intent.putExtra(XmlLayoutDesignActivity.EXTRA_LANGUAGE, "xml");
+    intent.putExtra(XmlLayoutDesignActivity.EXTRA_DEMO, false);
+    intent.putExtra(XmlLayoutDesignActivity.EXTRA_STANDALONE, false);
+    intent.putExtra(XmlLayoutDesignActivity.EXTRA_TRAINER, false);
+    loadAnim(intent);
   }
 
   void setAntlr4Compiler(String path) {

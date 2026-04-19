@@ -135,7 +135,6 @@ import io.github.rosemoe.sora.widget.layout.LineBreakLayout;
 import io.github.rosemoe.sora.widget.layout.Row;
 import io.github.rosemoe.sora.widget.layout.RowIterator;
 import io.github.rosemoe.sora.widget.layout.WordwrapLayout;
-import io.github.rosemoe.sora.widget.map.MiniMap;
 import io.github.rosemoe.sora.widget.power.PowerModeEffectManager;
 import io.github.rosemoe.sora.widget.style.SelectionHandleStyle;
 import io.github.rosemoe.sora.widget.style.builtin.HandleStyleSideDrop;
@@ -296,6 +295,7 @@ public class CodeEditor extends View
   private boolean mLastCursorState;
   private boolean mMagnifierEnabled;
   private RectF mRect;
+  private RectF mRectInfo = new RectF();
   private boolean released;
   private SelectionHandleStyle.HandleDescriptor mLeftHandle;
   private SelectionHandleStyle.HandleDescriptor mRightHandle;
@@ -355,7 +355,6 @@ public class CodeEditor extends View
   private Canvas canvas;
   private String minidraw;
   private List<LineIcon> lineIcons = new ArrayList<>();
-  private MiniMap minimap;
   private PairedBracket currentPairedBracket;
   private int bracketHighlightColor = 0xFFFF0000;
   private boolean highlightBrackets = true;
@@ -385,7 +384,6 @@ public class CodeEditor extends View
   private int mRegexColor = 0xFF4CAF50;
   private IconSpanManager iconSpanManager;
   private List<String> patternCode = new ArrayList<>();
-  // در ابتدای کلاس CodeEditor
   private SimpleMinimap minimaps;
 
   public void addLineIcon(int lineNumber, int iconRes) {
@@ -931,16 +929,16 @@ public class CodeEditor extends View
     analyze(true);
   }
 
-  public MiniMap getMiniMap() {
-    return minimap;
+  public SimpleMinimap getMiniMap() {
+    return minimaps;
   }
 
   public void setMiniMapEnabled(boolean enabled) {
-    if (minimap != null) minimap.setVisible(enabled);
+    if (minimaps != null) minimaps.setEnabled(enabled);
   }
 
   public boolean isMiniMapEnabled() {
-    return minimap.isVisible();
+    return minimaps.isEnabled();
   }
 
   public void analyze(boolean runBgAnalyzer) {
@@ -1519,8 +1517,7 @@ public class CodeEditor extends View
     mHorizontalGlow = new MaterialEdgeEffect();
     mTextActionWindow = new EditorTextActionWindow(this);
     mOverrideSymbolPairs = new SymbolPairMatch();
-    minimap = new MiniMap(this);
-    minimap.update();
+    minimaps = new SimpleMinimap(this);
     setEditorLanguage(null);
     setText(null);
     setTabWidth(2);
@@ -1572,8 +1569,8 @@ public class CodeEditor extends View
           handleClickEvent(event);
         });
 
-    minimaps = new SimpleMinimap(this);
-    minimaps.setEnabled(true);
+    
+    
   }
 
   public IconSpanManager getIconSpanManager() {
@@ -4457,12 +4454,8 @@ public class CodeEditor extends View
     boolean minimapEnabled = minimaps != null && minimaps.isEnabled();
 
     if (isVerticalScrollBarEnabled() && getScrollMaxY() > getHeight() / 2 && !minimapEnabled) {
-      if (minimap != null && minimap.isVisible()) {
-
-      } else {
-        drawScrollBarTrackVertical(canvas);
-        drawScrollBarVertical(canvas);
-      }
+      drawScrollBarTrackVertical(canvas);
+      //drawScrollBarVertical(canvas);
     }
 
     if (isHorizontalScrollBarEnabled() && !isWordwrap() && getScrollMaxX() > getWidth() * 3 / 4) {
@@ -4482,7 +4475,7 @@ public class CodeEditor extends View
   }
 
   /**
-   * Draw vertical scroll bar track
+   * Draw vertical scroll bar drawScrollBarVertical
    *
    * @param canvas Canvas to draw
    */
@@ -4494,56 +4487,55 @@ public class CodeEditor extends View
       mRect.bottom = getHeight();
 
       float radius = 10f;
-
       Path path = new Path();
       path.addRoundRect(new RectF(mRect), radius, radius, Path.Direction.CW);
-
       canvas.clipPath(path);
-
       drawColor(canvas, mColors.getColor(EditorColorScheme.SCROLL_BAR_TRACK), mRect);
+      drawScrollBarLineInfoPanel(canvas);
     }
   }
 
-  /**
-   * Draw vertical scroll bar drawScrollBarVertical
-   *
-   * @param canvas Canvas to draw
-   */
-  protected void drawScrollBarVertical(Canvas canvas) {
-    int page = getHeight();
-    float all = mLayout.getLayoutHeight() + getHeight() / 2f;
-    float length = page / all * getHeight();
-    float topY;
-    if (length < mDpUnit * 30) {
-      length = mDpUnit * 30;
-      topY = (getOffsetY() + page / 2f) / all * (getHeight() - length);
-    } else {
-      topY = getOffsetY() / all * getHeight();
-    }
+  protected void drawScrollBarLineInfoPanel(Canvas canvas) {
+    if (!mDisplayLnPanel) return;
+    int currentLine = getFirstVisibleLine() + 1;
+    String text = mLnTip + currentLine;
 
-    if (mEventHandler.holdVerticalScrollBar()) {
-      float centerY = topY + length / 2f;
-      drawLineInfoPanel(canvas, centerY, mRect.left - mDpUnit * 5);
-    }
+    float backupSize = mPaint.getTextSize();
+    Paint.Align backupAlign = mPaint.getTextAlign();
+    boolean backupFakeBold = mPaint.isFakeBoldText();
 
-    mRect.right = getWidth();
-    mRect.left = getWidth() - mDpUnit * 15;
-    mRect.top = topY;
-    mRect.bottom = topY + length;
+    mPaint.setTextSize(getLineInfoTextSize());
+    mPaint.setFakeBoldText(true);
 
-    float cornerRadius = 10f;
-    Path path = new Path();
-    path.addRoundRect(new RectF(mRect), cornerRadius, cornerRadius, Path.Direction.CW);
-    canvas.clipPath(path);
+    Paint.FontMetricsInt backupMetrics = mTextMetrics;
+    mTextMetrics = mPaint.getFontMetricsInt();
 
-    mVerticalScrollBar.set(mRect);
-    drawColor(
-        canvas,
-        mColors.getColor(
-            mEventHandler.holdVerticalScrollBar()
-                ? mColors.getColor(EditorColorScheme.SCROLL_BAR_TRACK)
-                : mColors.getColor(EditorColorScheme.SCROLL_BAR_THUMB_PRESSED)),
-        mRect);
+    float expand = mDpUnit * 8;
+    float textWidth = mPaint.measureText(text);
+    float rightX = getWidth() - mDpUnit * 15 - mDpUnit * 5;
+    float centerY = (mRect.top + mRect.bottom) / 2;
+
+    mRectInfo.top = centerY - getRowHeight() / 2f - expand;
+    mRectInfo.bottom = centerY + getRowHeight() / 2f + expand;
+    mRectInfo.right = rightX;
+    mRectInfo.left = rightX - expand * 2 - textWidth;
+
+    BubbleHelper.buildBubblePath(mPath, mRectInfo);
+    drawColor(canvas, mColors.getColor(EditorColorScheme.LINE_NUMBER_PANEL), mRectInfo);
+
+    float baseline = centerY - getRowHeight() / 2f + getRowBaseline(0);
+    float centerX = (mRectInfo.left + mRectInfo.right) / 2;
+
+    mPaint.setColor(mColors.getColor(EditorColorScheme.LINE_NUMBER_PANEL_TEXT));
+    mPaint.setTextAlign(Paint.Align.CENTER);
+    canvas.drawText(text, centerX, baseline, mPaint);
+    canvas.drawPath(mPath, mPaint);
+
+    // بازیابی تنظیمات
+    mPaint.setTextSize(backupSize);
+    mPaint.setTextAlign(backupAlign);
+    mPaint.setFakeBoldText(backupFakeBold);
+    mTextMetrics = backupMetrics;
   }
 
   /**
@@ -7365,9 +7357,7 @@ public class CodeEditor extends View
     getHorizontalEdgeEffect().setSize(h, w);
     getVerticalEdgeEffect().finish();
     getHorizontalEdgeEffect().finish();
-    if (minimap != null && minimap.isVisible()) {
-      minimap.initialize();
-    }
+    
     if (minimaps != null) {
       minimaps.update();
     }

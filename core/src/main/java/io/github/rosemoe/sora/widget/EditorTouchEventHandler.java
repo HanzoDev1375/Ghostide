@@ -33,6 +33,7 @@ import android.widget.OverScroller;
 
 import io.github.rosemoe.sora.event.ClickEvent;
 import io.github.rosemoe.sora.event.DoubleClickEvent;
+import io.github.rosemoe.sora.event.EditorTouchEvents;
 import io.github.rosemoe.sora.event.HandleStateChangeEvent;
 import io.github.rosemoe.sora.event.IconLineNumberEvent;
 import io.github.rosemoe.sora.event.LongPressEvent;
@@ -294,6 +295,7 @@ public class EditorTouchEventHandler
     if (edgeFieldSize == 0) {
       edgeFieldSize = mEditor.getDpUnit() * 18;
     }
+    mEditor.dispatchEvent(new EditorTouchEvents(mEditor, e));
     mMotionY = e.getY();
     mMotionX = e.getX();
     switch (e.getAction()) {
@@ -548,7 +550,7 @@ public class EditorTouchEventHandler
         new ClickEvent(mEditor, mEditor.getText().getIndexer().getCharPosition(line, column), e));
     mEditor.showSoftInput();
     notifyLater();
-    mEditor.setSelection(line, column, true,SelectionChangeEvent.CAUSE_TAP);
+    mEditor.setSelection(line, column, true, SelectionChangeEvent.CAUSE_TAP);
     mEditor.hideAutoCompleteWindow();
     return true;
   }

@@ -46,54 +46,58 @@ public class UpadteAppView {
     UpdateCheck =
         new RequestNetwork.RequestListener() {
 
-          @Override
-          public void onResponse(String _param1, String response, HashMap<String, Object> _param3) {
+            @Override
+            public void onResponse(String _param1, String response, HashMap<String, Object> _param3) {
 
-            try {
-              model = new Gson().fromJson(response, AppUpdateModel.class);
-            } catch (Exception err) {
-              Log.e(TAG, err.getMessage());
-            }
+                try {
+                    model = new Gson().fromJson(response, AppUpdateModel.class);
+                } catch (Exception err) {
+                    Log.e(TAG, err.getMessage());
+                }
 
-            if (!model.getVersion().equals(AppUtils.getAppVersionName())) {
-              var di = new MaterialAlertDialogBuilder(context);
-              di.setTitle(getMarkDownText(model.getTitle()));
-              di.setMessage(getMarkDownText(model.getMassges()));
-              di.setCancelable(false);
+                if (!model.getVersion().equals(AppUtils.getAppVersionName())) {
+                    var di = new MaterialAlertDialogBuilder(context);
+                    di.setTitle(getMarkDownText(model.getTitle()));
+                    di.setMessage(getMarkDownText(model.getMassges()));
+                    di.setCancelable(false);
 
-              di.setNeutralButton(
-                  "Update",
-                  (p, d) -> {
-                    downloder.setTitle(model.getTitle());
-                    downloder.setSizeTitle(
-                        ObjectUtils.hasCpuArm64() ? model.getSizearm64() : model.getSizearm32());
-                    downloder.setVisibility(View.VISIBLE);
-                    fabAdd.setVisibility(View.GONE);
-                    downloder.setOnClick(
-                        v -> {
-                          downloder.setDownload(
-                              ObjectUtils.hasCpuArm64()
-                                  ? model.getLinkarm64()
-                                  : model.getLinkarm32(),
-                              model.getAppname());
-                          call.call();
+                    di.setNeutralButton(
+                        "Update",
+                        (p, d) -> {
+                          
+                            downloder.setTitle(model.getTitle());
+                            downloder.setSizeTitle(
+                                ObjectUtils.hasCpuArm64() ? model.getSizearm64() : model.getSizearm32());
+                            downloder.setVisibility(View.VISIBLE);
+                            fabAdd.setVisibility(View.GONE);
+                            
+                            
+                            downloder.setDownload(
+                                ObjectUtils.hasCpuArm64()
+                                    ? model.getLinkarm64()
+                                    : model.getLinkarm32(),
+                                model.getAppname());
+                            
+                            if (call != null) {
+                                call.call();
+                            }
                         });
-                  });
-              di.setPositiveButton("Ask Later", null);
-              di.show();
-            } else {
-              //TODO:Empty not adding code....
+                    di.setPositiveButton("Ask Later", null);
+                    di.show();
+                } else {
+                    // نسخه به روز است
+                }
             }
-          }
 
-          @Override
-          public void onErrorResponse(String _param1, String _param2) {
-            Log.d(TAG, "You Offline! Whyyyyyyy?");
-          }
+            @Override
+            public void onErrorResponse(String _param1, String _param2) {
+                Log.d(TAG, "You Offline! Whyyyyyyy?");
+                DataUtil.showMessage(context, "خطا در بررسی آپدیت: " + _param2);
+            }
         };
     CheckNewVersion.startRequestNetwork(
         RequestNetworkController.GET, constLinkGithub, "", UpdateCheck);
-  }
+}
 
   private CharSequence getMarkDownText(String code) {
     var markdown = Markwon.builder(context).usePlugin(HtmlPlugin.create()).build();
