@@ -123,26 +123,24 @@ public class FactoryModelProject implements ProjectManagerAdapter.OnProjectClick
   protected void makeJavaProject() {
     AlertDialog dialog =
         new MaterialAlertDialogBuilder(baseCompat)
-            .setTitle("Make java Project")
+            .setTitle("Make Java Project")
             .setView(R.layout.project_layout_factory)
             .setPositiveButton(android.R.string.ok, null)
             .create();
+
     dialog.setOnShowListener(
         __ -> {
           TextInputLayout projectName = dialog.findViewById(R.id.input_projectName);
           TextInputLayout packageName = dialog.findViewById(R.id.input_packagename);
-          projectName.setHint("project name");
-          packageName.setHint("set package name");
+
+          projectName.setHint("Project name");
+          packageName.setHint("Package name (e.g., com.example.app)");
           var btn = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-          var shap = new ShapeAppearanceModel.Builder();
-          shap.setAllCorners(CornerFamily.ROUNDED, 20f);
-          packageName.setShapeAppearanceModel(shap.build());
-          projectName.setShapeAppearanceModel(shap.build());
+          btn.setEnabled(false);
           packageName
               .getEditText()
               .addTextChangedListener(
                   new TextWatcher() {
-
                     @Override
                     public void afterTextChanged(Editable arg0) {}
 
@@ -152,26 +150,151 @@ public class FactoryModelProject implements ProjectManagerAdapter.OnProjectClick
 
                     @Override
                     public void onTextChanged(CharSequence s, int arg1, int arg2, int arg3) {
-                      var regex = "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$";
-                      btn.setEnabled(!s.toString().matches(regex) ? false : true);
+
+                      String regex = "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$";
+                      boolean isValid = s.toString().matches(regex);
+                      btn.setEnabled(isValid);
+
+                      if (!isValid && s.length() > 0) {
+                        packageName.setError("Invalid package name format");
+                      } else {
+                        packageName.setError(null);
+                      }
                     }
                   });
+          projectName
+              .getEditText()
+              .addTextChangedListener(
+                  new TextWatcher() {
+                    @Override
+                    public void afterTextChanged(Editable arg0) {}
+
+                    @Override
+                    public void beforeTextChanged(
+                        CharSequence arg0, int arg1, int arg2, int arg3) {}
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int arg1, int arg2, int arg3) {
+                      if (s.toString().trim().isEmpty()) {
+                        projectName.setError("Project name cannot be empty");
+                      } else {
+                        projectName.setError(null);
+                      }
+                    }
+                  });
+
           btn.setOnClickListener(
               c -> {
-                FileUtil.makeDir(folder + projectName.getEditText().getText().toString());
-                javaModule.makeModuleClass(
-                    "Main", packageName.getEditText().getText().toString(), folder);
+                String projectNameStr = projectName.getEditText().getText().toString().trim();
+                String packageNameStr = packageName.getEditText().getText().toString().trim();
+
+                if (projectNameStr.isEmpty()) {
+                  projectName.setError("Project name cannot be empty");
+                  return;
+                }
+
+                if (packageNameStr.isEmpty()) {
+                  packageName.setError("Package name cannot be empty");
+                  return;
+                }
+                String projectDir = folder + "/" + projectNameStr;
+                FileUtil.makeDir(projectDir);
+                String srcMainJava = projectDir + "/src/main/java";
+                String srcTestJava = projectDir + "/src/test/java";
+                String srcMainResources = projectDir + "/src/main/resources";
+
+                FileUtil.makeDir(srcMainJava);
+                FileUtil.makeDir(srcTestJava);
+                FileUtil.makeDir(srcMainResources);
+                javaModule.makeModuleClass("Main", packageNameStr, srcMainJava);
+                String readmeContent =
+                    "# "
+                        + projectNameStr
+                        + "\n\n"
+                        + "This is a Java project created with Ghost IDE.\n\n"
+                        + "## Project Structure\n\n"
+                        + "```\n"
+                        + projectNameStr
+                        + "\n"
+                        + "├── src\n"
+                        + "│   ├── main\n"
+                        + "│   │   ├── java\n"
+                        + "│   │   │   └── "
+                        + packageNameStr.replace(".", "/")
+                        + "\n"
+                        + "│   │   │       └── Main.java\n"
+                        + "│   │   └── resources\n"
+                        + "│   └── test\n"
+                        + "│       └── java\n"
+                        + "└── README.md\n"
+                        + "```\n\n"
+                        + "## How to Compile and Run\n\n"
+                        + "```bash\n"
+                        + "# Compile\n"
+                        + "javac -d out src/main/java/"
+                        + packageNameStr.replace(".", "/")
+                        + "/Main.java\n\n"
+                        + "# Run\n"
+                        + "java -cp out "
+                        + packageNameStr
+                        + ".Main\n"
+                        + "```\n";
+
+                FileUtil.writeFile(projectDir + "/README.md", readmeContent);
+
+                String gitignoreContent =
+                    "*.class\n"
+                        + "out/\n"
+                        + "target/\n"
+                        + ".idea/\n"
+                        + "*.iml\n"
+                        + ".gradle/\n"
+                        + "build/\n";
+
+                FileUtil.writeFile(projectDir + "/.gitignore", gitignoreContent);
+
+                String buildGradleContent =
+                    "plugins {\n"
+                        + "    id 'java'\n"
+                        + "}\n\n"
+                        + "group = '"
+                        + packageNameStr
+                        + "'\n"
+                        + "version = '1.0.0'\n\n"
+                        + "repositories {\n"
+                        + "    mavenCentral()\n"
+                        + "}\n\n"
+                        + "dependencies {\n"
+                        + "    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'\n"
+                        + "}\n\n"
+                        + "java {\n"
+                        + "    sourceCompatibility = JavaVersion.VERSION_17\n"
+                        + "    targetCompatibility = JavaVersion.VERSION_17\n"
+                        + "}\n\n"
+                        + "test {\n"
+                        + "    useJUnitPlatform()\n"
+                        + "}\n";
+
+                FileUtil.writeFile(projectDir + "/build.gradle", buildGradleContent);
+
+                DataUtil.showMessage(baseCompat, "Java project created successfully!");
+
                 dialog.dismiss();
                 call.refrash();
               });
         });
+
     dialog.show();
   }
 
   public void makeHtmlProject() {
-    var maker = new ProjectMaker(folder,baseCompat,() ->{
-      call.refrash();
-    });
+    var maker =
+        new ProjectMaker(
+            folder,
+            baseCompat,
+            () -> {
+              call.refrash();
+            });
     maker.setMakeHtmlProject();
   }
 

@@ -148,6 +148,8 @@ public class EditorFragment extends Fragment {
     setfont = getActivity().getSharedPreferences("setfont", Context.MODE_PRIVATE);
     isAutoSaveEnabled = svePref.getString("getAutoSave", "").equals("true");
     svePref.registerOnSharedPreferenceChangeListener(autoSavePrefListener);
+    editor.setStickyScrollEnabled(setfont.contains("seek"));
+    editor.setMiniMapEnabled(setfont.contains("minimap"));
   }
 
   private SharedPreferences.OnSharedPreferenceChangeListener autoSavePrefListener =

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string name="chat_welcome_message">Olá! Sou o assistente de IA DeepSeek. Como posso ajudá-lo? </string>
+  <string name="chat_api_key_missing">Por favor, insira a chave API nas configurações </string>
+  <string name="chat_model_fast_active">Modelo rápido ativado </string>
+  <string name="chat_model_expert_active">Modelo especialista ativado </string>
+  <string name="chat_set_api_key_first">Por favor, configure a chave API primeiro </string>
+  <string name="chat_error_prefix">Erro: </string>
+  <string name="settings_api_key_required">Chave API é obrigatória </string>
+  <string name="settings_saved">Configurações salvas </string>
+  <string name="settings_model_expert">DeepSeek-Reasoner (Especialista) </string>
+  <string name="settings_model_fast">DeepSeek-Chat (Rápido) </string>
+  <string name="settings_current_model">Modelo atual: </string>
+
+</resources>

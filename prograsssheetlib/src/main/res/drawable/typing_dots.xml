@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="false">
+    <item android:duration="300">
+        <shape>
+            <solid android:color="?attr/colorPrimary" />
+            <corners android:radius="10dp" />
+            <size android:width="8dp" android:height="8dp" />
+        </shape>
+    </item>
+    <item android:duration="300">
+        <shape>
+            <solid android:color="?attr/colorPrimary" />
+            <corners android:radius="10dp" />
+            <size android:width="12dp" android:height="12dp" />
+        </shape>
+    </item>
+    <item android:duration="300">
+        <shape>
+            <solid android:color="?attr/colorPrimary" />
+            <corners android:radius="10dp" />
+            <size android:width="16dp" android:height="16dp" />
+        </shape>
+    </item>
+    <item android:duration="300">
+        <shape>
+            <solid android:color="?attr/colorPrimary" />
+            <corners android:radius="10dp" />
+            <size android:width="12dp" android:height="12dp" />
+        </shape>
+    </item>
+</animation-list>

@@ -85,6 +85,7 @@ public class ThemeUtils {
     getColor(imap, editor, "breaklevel7", EditorColorScheme.breaklevel7, "#3347ff");
     getColor(imap, editor, "javakeywordoprator", EditorColorScheme.javakeywordoprator, "#ff3371");
     getColor(imap, editor, "breaklevel8", EditorColorScheme.breaklevel8, "#ec33ff");
+    
 
     getColor(imap, editor, "auto_comp_panel_bg", EditorColorScheme.AUTO_COMP_PANEL_BG, "#ff000000");
     getColor(
@@ -99,7 +100,7 @@ public class ThemeUtils {
         "line_number_background",
         EditorColorScheme.LINE_NUMBER_BACKGROUND,
         "#fff00000");
-    //  getColor(imap, editor, "whole_background", EditorColorScheme.WHOLE_BACKGROUND, "#02FFFFFF");
+    getColor(imap, editor, "whole_background", EditorColorScheme.WHOLE_BACKGROUND, "#02FFFFFF");
     getColor(imap, editor, "html_tag", EditorColorScheme.HTML_TAG, "#ffc84100");
     getColor(imap, editor, "literal", EditorColorScheme.LITERAL, "#ff2017");
 
@@ -193,10 +194,6 @@ public class ThemeUtils {
     editor.getColorScheme().setColor(EditorColorScheme.searchcolor5, Color.parseColor("#ACB4DA43"));
     editor.getColorScheme().setColor(EditorColorScheme.searchcolor6, Color.parseColor("#ACAA6CFB"));
     editor.getColorScheme().setColor(EditorColorScheme.LINE_NUMBER_PANEL_TEXT, Color.WHITE);
-    // برای افکت ها حتما باید ترنس پرنت باشه مگر نه افکت نمایش داده نمیشه
-    editor.getColorScheme().setColor(EditorColorScheme.WHOLE_BACKGROUND, Color.TRANSPARENT);
-    // برای اخطار ها و متتودهای منسوخ شده
-    // رنگ غیرقابل ادیت کردن است و به راحتی در کد ادیتور نشون میده
     editor.getColorScheme().setColor(EditorColorScheme.wars, Color.parseColor("#79F9CB80"));
     editor
         .getColorScheme()

@@ -1,4 +1,6 @@
 package ir.ninjacoder.prograsssheet.fileinfo;
+import kotlinx.coroutines.BuildersKt;
+import kotlinx.coroutines.Dispatchers;
 
 public class FileInfoModel {
   private final String fileName;
@@ -7,6 +9,8 @@ public class FileInfoModel {
   public FileInfoModel(String fileName, String fileHint) {
     this.fileName = fileName;
     this.fileHint = fileHint;
+    
+    
   }
 
   public String getFileName() {
@@ -16,4 +20,5 @@ public class FileInfoModel {
   public String getFileHint() {
     return this.fileHint;
   }
+  
 }

@@ -96,8 +96,6 @@ public class JavaCompilerBeta {
           ecjArgs.add("-proc:none");
           ecjArgs.add("-sourcepath");
           ecjArgs.add("ignore");
-
-          // اضافه کردن همه فایل‌های جاوا
           for (File f : javaFiles) {
             ecjArgs.add(binPath + f.getName());
           }

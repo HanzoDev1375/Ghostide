@@ -1,0 +1,35 @@
+{
+  "allFiles": [
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Ghostide33/prograsssheetlib/src/main/res/layout/item_message_assistant.xml",
+      "selection": {
+        "end": {
+          "column": 17,
+          "index": 3184,
+          "line": 79
+        },
+        "start": {
+          "column": 17,
+          "index": 3184,
+          "line": 79
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Ghostide33/prograsssheetlib/src/main/res/drawable/typing_dots.xml",
+      "selection": {
+        "end": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        },
+        "start": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        }
+      }
+    }
+  ],
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/Ghostide33/prograsssheetlib/src/main/res/drawable/typing_dots.xml"
+}

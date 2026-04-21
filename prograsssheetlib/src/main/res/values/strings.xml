@@ -1,12 +1,19 @@
 <resources>
-  <string
-    name="app_name">prograsssheet</string>
-  <string
-    name="play_icon_upper_path_data">M 44 32 L 44 64 L 100 64 L 100 64 Z</string>
-  <string
-    name="play_icon_bottom_path_data">M 44 96 L 44 63 L 100 63 L 100 63 Z</string>
-  <string
-    name="pause_icon_upper_path_data">M 32 40 L 32 56  L 96 56 L 96 40 Z</string>
-  <string
-    name="pause_icon_bottom_path_data">M 32 88 L 32 72 L 96 72 L 96 88 Z</string>
+    <string name="app_name">prograsssheet</string>
+    <string name="play_icon_upper_path_data">M 44 32 L 44 64 L 100 64 L 100 64 Z</string>
+    <string name="play_icon_bottom_path_data">M 44 96 L 44 63 L 100 63 L 100 63 Z</string>
+    <string name="pause_icon_upper_path_data">M 32 40 L 32 56  L 96 56 L 96 40 Z</string>
+    <string name="pause_icon_bottom_path_data">M 32 88 L 32 72 L 96 72 L 96 88 Z</string>
+    <string name="chat_welcome_message">Hello! I am DeepSeek AI assistant. How can I help you?</string>
+    <string name="chat_api_key_missing">Please enter API Key in settings</string>
+    <string name="chat_model_fast_active">Fast model activated</string>
+    <string name="chat_model_expert_active">Expert model activated</string>
+    <string name="chat_set_api_key_first">Please set API Key first</string>
+    <string name="chat_error_prefix">Error:</string>
+    <string name="settings_api_key_required">API Key is required</string>
+    <string name="settings_saved">Settings saved</string>
+    <string name="settings_model_expert">DeepSeek-Reasoner (Expert)</string>
+    <string name="settings_model_fast">DeepSeek-Chat (Fast)</string>
+    <string name="settings_current_model">Current model:</string>
+
 </resources>

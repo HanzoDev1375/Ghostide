@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+
+  <string name="chat_welcome_message">नमस्ते! मैं DeepSeek AI सहायक हूँ। मैं आपकी कैसे मदद कर सकता हूँ? </string>
+  <string name="chat_api_key_missing">कृपया सेटिंग्स में API Key दर्ज करें </string>
+  <string name="chat_model_fast_active">फास्ट मॉडल सक्रिय हुआ </string>
+  <string name="chat_model_expert_active">विशेषज्ञ मॉडल सक्रिय हुआ </string>
+  <string name="chat_set_api_key_first">कृपया पहले API Key सेट करें </string>
+  <string name="chat_error_prefix">त्रुटि: </string>
+  <string name="settings_api_key_required">API Key आवश्यक है </string>
+  <string name="settings_saved">सेटिंग्स सहेजी गईं </string>
+  <string name="settings_model_expert">DeepSeek-Reasoner (विशेषज्ञ) </string>
+  <string name="settings_model_fast">DeepSeek-Chat (तेज़) </string>
+  <string name="settings_current_model">वर्तमान मॉडल: </string>
+
+</resources>

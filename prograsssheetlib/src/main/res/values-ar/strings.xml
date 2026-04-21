@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string name="settings_api_key_required">مطلوب API Key </string>
+  <string name="settings_saved">تم حفظ الإعدادات </string>
+  <string name="settings_model_expert">DeepSeek-Reasoner (خبير) </string>
+  <string name="settings_model_fast">DeepSeek-Chat (سريع) </string>
+  <string name="settings_current_model">النموذج الحالي: </string>
+  <string name="chat_welcome_message">مرحباً! أنا مساعد DeepSeek AI. كيف يمكنني مساعدتك؟ </string>
+  <string name="chat_api_key_missing">يرجى إدخال مفتاح API في الإعدادات </string>
+  <string name="chat_model_fast_active">تم تفعيل النموذج السريع </string>
+  <string name="chat_model_expert_active">تم تفعيل النموذج الخبير </string>
+  <string name="chat_set_api_key_first">يرجى إعداد مفتاح API أولاً </string>
+  <string name="chat_error_prefix">خطأ: </string>
+</resources>

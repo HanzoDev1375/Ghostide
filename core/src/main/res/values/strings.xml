@@ -148,5 +148,10 @@
   <string name="search_regex_case">Regex + Case Sensitive</string>
   <string name="search_regex_multiline">Regex + Multiline</string>
   <string name="search_regex_dotall">Regex + Dot All</string>
-  <string name="selected_items">اSelect Item</string>
+  <string name="selected_items">Select Item</string>
+  <string name="file_created_title">File Created</string>
+  <string name="file_created_message">Do you want to open this file in the editor?\n%s</string>
+  <string name="open_button">Open</string>
+  <string name="later_button">Later</string>
+
 </resources>

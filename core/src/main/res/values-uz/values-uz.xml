@@ -154,5 +154,6 @@
   <string name="search_regex_case">Regex + Katta-kichik harf</string>
   <string name="search_regex_multiline">Regex + Ko‘p qatorli</string>
   <string name="search_regex_dotall">Regex + Nuqta hamma joyda</string>
+  <string name="later_button">Keyinroq</string>
 
 </resources>

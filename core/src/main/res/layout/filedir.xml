@@ -89,6 +89,8 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:padding="4dp"
+        android:minHeight="40dp"
+        android:visibility="visible"
         android:id="@+id/treerv" />
 
       <LinearLayout
@@ -132,6 +134,14 @@
 
     </LinearLayout>
 
+    <ninja.coder.appuploader.main.ViewDownloder
+      android:layout_height="wrap_content"
+      android:layout_width="match_parent"
+      android:visibility="gone"
+      android:id="@+id/downloder"
+      android:layout_gravity="bottom|right"
+      android:layout_marginBottom="16dp" />
+
     <ir.ninjacoder.ghostide.core.widget.ExrtaFab
       android:layout_height="80dp"
       android:layout_width="80dp"
@@ -142,7 +152,6 @@
       app:fabSize="normal"
       android:id="@+id/fabAdd"
       android:layout_gravity="bottom|right" />
-
     <LinearLayout
       android:layout_height="wrap_content"
       android:layout_width="match_parent"
@@ -189,14 +198,6 @@
       android:layout_marginStart="10dp"
       android:id="@+id/multiSelectionActions"
       android:layout_gravity="right|bottom" />
-
-    <ninja.coder.appuploader.main.ViewDownloder
-      android:layout_height="wrap_content"
-      android:layout_width="match_parent"
-      android:visibility="gone"
-      android:id="@+id/downloder"
-      android:layout_gravity="right|bottom" />
-
   </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
   <ir.ninjacoder.ghostide.core.layoutmanager.NavigationViewCompnet

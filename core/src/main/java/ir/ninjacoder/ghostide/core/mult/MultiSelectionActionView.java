@@ -57,6 +57,7 @@ public class MultiSelectionActionView extends MaterialCardView {
         if (actionClickListener != null) {
             actionClickListener.onCloseClick();
         }
+        hide();
     });
 
     bind.checkboxSelectAll.setOnCheckedChangeListener((buttonView, isChecked) -> {

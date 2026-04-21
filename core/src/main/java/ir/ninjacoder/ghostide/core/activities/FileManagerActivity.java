@@ -238,10 +238,9 @@ public class FileManagerActivity extends BaseCompat
   private NetworkChangeReceiver networkChangeReceiver;
   private MultiSelectionActionView multiSelectionView;
   private View.OnClickListener fabOriginalClickListener;
-  private List<String> copyPaths = new ArrayList<>();
   private boolean isExitingSelection = false;
   private SelectionTracker<Long> selectionTracker;
-
+  private List<String> breadcrumbRealPaths = new ArrayList<>();
   private int currentPosition = 0;
 
   @Override
@@ -400,7 +399,6 @@ public class FileManagerActivity extends BaseCompat
             () -> {
               reLoadFile();
             });
-    // setDistreeView();
 
     List<Child> pluginChildren = PluginChildRegistry.getFileManagerChildren();
     for (Child child : pluginChildren) {
@@ -424,6 +422,7 @@ public class FileManagerActivity extends BaseCompat
             .build();
 
     fileListItem.setSelectionTracker(selectionTracker);
+
     selectionTracker.addObserver(
         new SelectionTracker.SelectionObserver<Long>() {
           @Override
@@ -438,13 +437,18 @@ public class FileManagerActivity extends BaseCompat
               }
               if (multiSelectionView != null) {
                 multiSelectionView.setSelectedCount(selectedCount);
+                boolean allSelected = selectedCount == fileListItem.getItemCount();
+                multiSelectionView.setSelectAllChecked(allSelected);
+
                 if (!multiSelectionView.isShowing()) {
                   multiSelectionView.show();
                 }
               }
             } else {
-              if (isMultiSelectionMode && !isExitingSelection) {
-                exitMultiSelectionMode();
+
+              if (multiSelectionView != null) {
+                multiSelectionView.setSelectedCount(0);
+                multiSelectionView.setSelectAllChecked(false);
               }
             }
           }
@@ -454,11 +458,23 @@ public class FileManagerActivity extends BaseCompat
             super.onSelectionRestored();
             int selectedCount = selectionTracker.getSelection().size();
             if (selectedCount > 0) {
-              isMultiSelectionMode = true;
-              enterMultiSelectionMode(selectedCount);
+              if (!isMultiSelectionMode) {
+                isMultiSelectionMode = true;
+                enterMultiSelectionMode(selectedCount);
+              }
+              if (multiSelectionView != null) {
+                multiSelectionView.setSelectedCount(selectedCount);
+                boolean allSelected = selectedCount == fileListItem.getItemCount();
+                multiSelectionView.setSelectAllChecked(allSelected);
+
+                if (!multiSelectionView.isShowing()) {
+                  multiSelectionView.show();
+                }
+              }
             } else {
-              if (isMultiSelectionMode && !isExitingSelection) {
-                exitMultiSelectionMode();
+              if (multiSelectionView != null) {
+                multiSelectionView.setSelectedCount(0);
+                multiSelectionView.setSelectAllChecked(false);
               }
             }
           }
@@ -468,18 +484,21 @@ public class FileManagerActivity extends BaseCompat
   public void exitMultiSelectionMode() {
     if (isExitingSelection) return;
     isExitingSelection = true;
-
     isMultiSelectionMode = false;
-
     if (selectionTracker != null && selectionTracker.hasSelection()) {
       selectionTracker.clearSelection();
     }
-
     if (multiSelectionView != null && multiSelectionView.isShowing()) {
       multiSelectionView.hide();
+      multiSelectionView.setSelectAllChecked(false);
     }
 
-    new Handler().postDelayed(() -> isExitingSelection = false, 100);
+    new Handler(Looper.getMainLooper())
+        .postDelayed(
+            () -> {
+              isExitingSelection = false;
+            },
+            50);
   }
 
   public void clearSelection() {
@@ -529,11 +548,7 @@ public class FileManagerActivity extends BaseCompat
 
           @Override
           public void onSelectAllClick(boolean isChecked) {
-            if (isChecked) {
-              selectAllFiles();
-            } else {
-              clearSelection();
-            }
+            selectAllFiles();
           }
         });
   }
@@ -555,140 +570,151 @@ public class FileManagerActivity extends BaseCompat
   }
 
   public void selectAllFiles() {
-    if (selectionTracker != null) {
-      for (int i = 0; i < fileListItem.getItemCount(); i++) {
-        FileManagerModel item = fileListItem.getItem(i);
-        if (item != null) {
-          selectionTracker.select((long) i);
-        }
+    if (selectionTracker == null) return;
+
+    int itemCount = fileListItem.getItemCount();
+    boolean allCurrentlySelected = selectionTracker.getSelection().size() == itemCount;
+
+    if (allCurrentlySelected) {
+      // همه انتخاب شدن، حالا همه رو لغو انتخاب کن
+      selectionTracker.clearSelection();
+      if (multiSelectionView != null) {
+        multiSelectionView.setSelectedCount(0);
+        multiSelectionView.setSelectAllChecked(false);
+        // توجه: اینجا exitMultiSelectionMode() صدا زده نمیشه
+      }
+    } else {
+      // همه رو انتخاب کن
+      for (int i = 0; i < itemCount; i++) {
+        selectionTracker.select((long) i);
+      }
+      if (multiSelectionView != null) {
+        multiSelectionView.setSelectedCount(itemCount);
+        multiSelectionView.setSelectAllChecked(true);
       }
     }
   }
 
   private void performMultiSelectionAction(MultiSelectionAction action) {
     List<String> selectedPaths = fileListItem.getSelectedPaths();
-
     if (selectedPaths.isEmpty()) {
       exitMultiSelectionMode();
       return;
     }
 
-    if (action == MultiSelectionAction.COPY) {
-      clearSelection();
-      isMultiSelectionMode = true;
-      copySelectedFiles(selectedPaths);
-      return;
-    } else if (action == MultiSelectionAction.MOVE) {
-      clearSelection();
-      isMultiSelectionMode = true;
-      moveSelectedFiles(selectedPaths);
-      return;
-    } else {
-      exitMultiSelectionMode();
-    }
+    final List<String> pathsToProcess = new ArrayList<>(selectedPaths);
 
     switch (action) {
+      case COPY:
+        copySelectedFiles(pathsToProcess);
+        break;
+      case MOVE:
+        moveSelectedFiles(pathsToProcess);
+        break;
       case DELETE:
-        deleteSelectedFiles(selectedPaths);
+        deleteSelectedFiles(pathsToProcess);
         break;
       case SHARE:
-        shareSelectedFiles(selectedPaths);
+        shareSelectedFiles(pathsToProcess);
+        clearSelectionAndExit();
         break;
       case RENAME:
-        if (selectedPaths.size() == 1) {
-          //  setRenameFile(selectedPaths.get(0));
+        if (pathsToProcess.size() == 1) {
         } else {
           Toast.makeText(this, "فقط یک فایل میتونه تغییر نام بده", Toast.LENGTH_SHORT).show();
         }
+        clearSelectionAndExit();
         break;
     }
   }
 
   private void copySelectedFiles(List<String> paths) {
-    copyPaths.clear();
-    copyPaths.addAll(paths);
-
-    Toast.makeText(this, paths.size() + " فایل برای انتقال ذخیره شد", Toast.LENGTH_SHORT).show();
+    if (paths.isEmpty()) {
+      Toast.makeText(this, "هیچ فایلی انتخاب نشده است", Toast.LENGTH_SHORT).show();
+      return;
+    }
+    Toast.makeText(this, paths.size() + " فایل برای کپی ذخیره شد", Toast.LENGTH_SHORT).show();
     multiSelectionView.setActionCopyLayout(
-        "past",
+        "paste",
         R.drawable.paste_white,
         it -> {
           if (Folder == null || Folder.isEmpty()) {
             Toast.makeText(it.getContext(), "مسیر مقصد نامعتبر است", Toast.LENGTH_SHORT).show();
             return;
           }
-          if (copyPaths.isEmpty()) {
-            Toast.makeText(it.getContext(), "هیچ فایلی انتخاب نشده است", Toast.LENGTH_SHORT).show();
-            return;
-          }
-          for (String path : copyPaths) {
-            FileUtil.moveFileOrDirByGhostide(
-                path,
-                Folder,
-                new FileUtil.OnFileChangeCall() {
-                  @Override
-                  public void onFileDone() {
-                    reLoadFile();
-                    multiSelectionView.setResetActionCopyLayout();
-                    exitMultiSelectionMode();
-                  }
+          FileUtil.moveFilesOrDirsByGhostideByList(
+              paths,
+              Folder,
+              new FileUtil.OnFileChangeCall() {
+                @Override
+                public void onFileDone() {
+                  reLoadFile();
+                  multiSelectionView.setResetActionCopyLayout();
+                  clearSelectionAndExit();
+                }
 
-                  @Override
-                  public void onFileError(String error) {
-                    multiSelectionView.setResetActionCopyLayout();
-                    exitMultiSelectionMode();
-                  }
-                },
-                true,
-                it.getContext());
-          }
-          copyPaths.clear();
-          isMultiSelectionMode = false;
+                @Override
+                public void onFileError(String error) {
+                  multiSelectionView.setResetActionCopyLayout();
+                  Toast.makeText(it.getContext(), "خطا: " + error, Toast.LENGTH_SHORT).show();
+                  clearSelectionAndExit();
+                }
+              },
+              true,
+              it.getContext());
         });
   }
 
+  private void clearSelectionAndExit() {
+    if (selectionTracker != null) {
+      selectionTracker.clearSelection();
+    }
+    if (multiSelectionView != null) {
+      multiSelectionView.hide();
+      multiSelectionView.setSelectAllChecked(false);
+    }
+    isMultiSelectionMode = false;
+    if (fileListItem != null) {
+      fileListItem.clearHighlights();
+      fileListItem.notifyDataSetChanged();
+    }
+    reLoadFile();
+  }
+
   private void moveSelectedFiles(List<String> paths) {
-    copyPaths.clear();
-    copyPaths.addAll(paths);
+    if (paths.isEmpty()) {
+      Toast.makeText(this, "هیچ فایلی انتخاب نشده است", Toast.LENGTH_SHORT).show();
+      return;
+    }
     Toast.makeText(this, paths.size() + " فایل برای انتقال ذخیره شد", Toast.LENGTH_SHORT).show();
     multiSelectionView.setActionMoveLayout(
-        "past",
+        "paste",
         R.drawable.paste_white,
         it -> {
           if (Folder == null || Folder.isEmpty()) {
             Toast.makeText(it.getContext(), "مسیر مقصد نامعتبر است", Toast.LENGTH_SHORT).show();
             return;
           }
+          FileUtil.moveFilesOrDirsByGhostideByList(
+              paths,
+              Folder,
+              new FileUtil.OnFileChangeCall() {
+                @Override
+                public void onFileDone() {
+                  reLoadFile();
+                  multiSelectionView.setResetActionMoveLayout();
+                  clearSelectionAndExit();
+                }
 
-          if (copyPaths.isEmpty()) {
-            Toast.makeText(it.getContext(), "هیچ فایلی انتخاب نشده است", Toast.LENGTH_SHORT).show();
-            return;
-          }
-
-          for (String path : copyPaths) {
-            FileUtil.moveFileOrDirByGhostide(
-                path,
-                Folder,
-                new FileUtil.OnFileChangeCall() {
-                  @Override
-                  public void onFileDone() {
-                    reLoadFile();
-                    multiSelectionView.setResetActionMoveLayout();
-                    exitMultiSelectionMode();
-                  }
-
-                  @Override
-                  public void onFileError(String error) {
-                    multiSelectionView.setResetActionMoveLayout();
-                    exitMultiSelectionMode();
-                  }
-                },
-                false,
-                it.getContext());
-          }
-
-          copyPaths.clear();
-          isMultiSelectionMode = false;
+                @Override
+                public void onFileError(String error) {
+                  multiSelectionView.setResetActionMoveLayout();
+                  Toast.makeText(it.getContext(), "خطا: " + error, Toast.LENGTH_SHORT).show();
+                  clearSelectionAndExit();
+                }
+              },
+              false,
+              it.getContext());
         });
   }
 
@@ -962,21 +988,22 @@ public class FileManagerActivity extends BaseCompat
 
   void savePath() {
     if (save_path.contains("path")) {
-      if (FileUtil.isExistFile(save_path.getString("path", ""))) {
-        Folder = save_path.getString("path", "");
+      String savedPath = save_path.getString("path", "");
+      if (!isRootOrInaccessiblePath(savedPath) && FileUtil.isExistFile(savedPath)) {
+        Folder = savedPath;
         reLoadFile();
       } else {
         Folder = FileUtil.getExternalStorageDir();
+        save_path.edit().putString("path", Folder).apply();
         reLoadFile();
       }
     } else {
       Folder = FileUtil.getExternalStorageDir();
+      save_path.edit().putString("path", Folder).apply();
       reLoadFile();
     }
-
     IntentHelper.getFilePath = Folder;
-    bindFileWatcherService(new File(save_path.getString("path", "")));
-    Log.w("FilePath", save_path.getString("path", ""));
+    bindFileWatcherService(new File(Folder));
   }
 
   void setViewType(ViewType viewType) {
@@ -1253,8 +1280,11 @@ public class FileManagerActivity extends BaseCompat
                 bind.recyclerview2.setVisibility(View.VISIBLE);
                 bind.filedirBar.setVisibility(View.GONE);
                 fileListItem.clearFilter();
-                // setDistreeView();
+
                 fileListItem.submitList(new ArrayList<>(fileModels));
+                if (Folder != null && !Folder.isEmpty()) {
+                  updateBreadcrumb(Folder);
+                }
                 if (fileModels.isEmpty()) {
                   bind.emptyview.show();
                 } else {
@@ -1410,37 +1440,214 @@ public class FileManagerActivity extends BaseCompat
   }
 
   void setDistreeView(int pos) {
-    // var model = fileListItem.getItem(pos);
-    // if (model == null) return;
-    // String path = model.getFilePath();
-    // List<String> items = spiltIntoBreadcrumbItems(path);
+    var model = fileListItem.getItem(pos);
+    if (model == null) return;
 
-    // ToolbarListFileAdapter adapter =
-    // new ToolbarListFileAdapter(
-    // items,
-    // this,
-    // new ToolbarListFileAdapter.CallBack() {
-    // @Override
-    // public void GoToDir(View view, int pos, String dirs) {
-    // if ("/storage/emulated/".equals(dirs)) {
-    // return;
-    // }
-    // if (FileUtil.isDirectory(dirs)) {
-    // setFolder(dirs);
-    // reLoadFile();
-    // } else {
-    // GhostToast.showWarning(FileManagerActivity.this, "This not Directory");
-    // }
-    // }
+    String path = model.getFilePath();
+    List<String> items = spiltIntoBreadcrumbItems(path);
+    if (bind.treerv.getLayoutManager() == null) {
+      bind.treerv.setLayoutManager(
+          new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+    }
 
-    // @Override
-    // public void GoToTreeFile(View view, int pos, String dir) {}
-    // });
+    ToolbarListFileAdapter adapter =
+        new ToolbarListFileAdapter(
+            items,
+            this,
+            new ToolbarListFileAdapter.CallBack() {
+              @Override
+              public void GoToDir(View view, int pos, String dirs) {
+                String externalRoot = FileUtil.getExternalStorageDir();
+                if (dirs == null || dirs.equals(externalRoot) || dirs.equals(externalRoot + "/")) {
+                  return;
+                }
+                if (FileUtil.isDirectory(dirs)) {
+                  setFolder(dirs);
+                  reLoadFile();
+                  updateBreadcrumb(dirs);
+                } else {
+                  GhostToast.showWarning(FileManagerActivity.this, "This is not a Directory");
+                }
+              }
 
-    // bind.treerv.setAdapter(adapter);
-    // bind.treerv.setLayoutManager(
-    // new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-    // bind.treerv.smoothScrollToPosition(items.size());
+              @Override
+              public void GoToTreeFile(View view, int pos, String dir) {
+                String externalRoot = FileUtil.getExternalStorageDir();
+                if (dir == null || dir.equals(externalRoot) || dir.equals(externalRoot + "/")) {
+                  return;
+                }
+                if (FileUtil.isDirectory(dir)) {
+                  setFolder(dir);
+                  reLoadFile();
+                  updateBreadcrumb(dir);
+                } else {
+                  staticstring = dir;
+                  int filePos = findFilePositionByPath(dir);
+                  if (filePos != -1) {
+                    _dataOnClickItemList(filePos);
+                  }
+                }
+              }
+            });
+
+    bind.treerv.setAdapter(adapter);
+    bind.treerv.setVisibility(View.VISIBLE);
+
+    if (items.size() > 0) {
+      bind.treerv.smoothScrollToPosition(items.size() - 1);
+    }
+  }
+
+  private void updateBreadcrumb(String path) {
+    String externalRoot = FileUtil.getExternalStorageDir();
+    String deviceName = getDeviceName();
+
+    if (path == null || path.isEmpty()) {
+      bind.treerv.setVisibility(View.GONE);
+      return;
+    }
+
+    List<String> displayItems = new ArrayList<>();
+    breadcrumbRealPaths.clear();
+
+    if (path.equals(externalRoot) || path.equals(externalRoot + "/")) {
+      displayItems.add(deviceName);
+      breadcrumbRealPaths.add(externalRoot);
+    } else {
+      List<String> fullPaths = spiltIntoBreadcrumbItems(path);
+      for (int i = 0; i < fullPaths.size(); i++) {
+        String full = fullPaths.get(i);
+        if (i == 0 && full.equals("storage")) {
+          displayItems.add(deviceName);
+          breadcrumbRealPaths.add(externalRoot);
+        } else {
+          displayItems.add(full);
+          breadcrumbRealPaths.add(full);
+        }
+      }
+    }
+
+    if (bind.treerv.getLayoutManager() == null) {
+      bind.treerv.setLayoutManager(
+          new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+    }
+
+    ToolbarListFileAdapter adapter =
+        new ToolbarListFileAdapter(
+            displayItems,
+            this,
+            new ToolbarListFileAdapter.CallBack() {
+              @Override
+              public void GoToDir(View view, int pos, String dirs) {
+
+                String realPath = breadcrumbRealPaths.get(pos);
+                String extRoot = FileUtil.getExternalStorageDir();
+                if (realPath == null
+                    || realPath.equals(extRoot)
+                    || realPath.equals(extRoot + "/")) {
+                  return;
+                }
+                if (FileUtil.isDirectory(realPath)) {
+                  setFolder(realPath);
+                  reLoadFile();
+                  updateBreadcrumb(realPath);
+                } else {
+                  GhostToast.showWarning(FileManagerActivity.this, "This is not a Directory");
+                }
+              }
+
+              @Override
+              public void GoToTreeFile(View view, int pos, String dir) {
+                String realPath = breadcrumbRealPaths.get(pos);
+                String extRoot = FileUtil.getExternalStorageDir();
+                if (realPath == null
+                    || realPath.equals(extRoot)
+                    || realPath.equals(extRoot + "/")) {
+                  return;
+                }
+                if (FileUtil.isDirectory(realPath)) {
+                  setFolder(realPath);
+                  reLoadFile();
+                  updateBreadcrumb(realPath);
+                } else {
+                  staticstring = realPath;
+                  int filePos = findFilePositionByPath(realPath);
+                  if (filePos != -1) {
+                    _dataOnClickItemList(filePos);
+                  }
+                }
+              }
+            });
+
+    bind.treerv.setAdapter(adapter);
+    bind.treerv.setVisibility(View.VISIBLE);
+
+    if (displayItems.size() > 0) {
+      bind.treerv.smoothScrollToPosition(displayItems.size() - 1);
+    }
+  }
+
+  private ToolbarListFileAdapter.CallBack createBreadcrumbCallBack() {
+    return new ToolbarListFileAdapter.CallBack() {
+      @Override
+      public void GoToDir(View view, int pos, String dirs) {
+        String extRoot = FileUtil.getExternalStorageDir();
+        String deviceName = getDeviceName();
+
+        if (dirs.equals(deviceName)) {
+          return;
+        }
+
+        if (dirs == null || dirs.equals(extRoot) || dirs.equals(extRoot + "/")) {
+          return;
+        }
+
+        if (FileUtil.isDirectory(dirs)) {
+          setFolder(dirs);
+          reLoadFile();
+          updateBreadcrumb(dirs);
+        }
+      }
+
+      @Override
+      public void GoToTreeFile(View view, int pos, String dir) {
+        String extRoot = FileUtil.getExternalStorageDir();
+        String deviceName = getDeviceName();
+
+        if (dir.equals(deviceName)) {
+          return;
+        }
+
+        if (dir == null || dir.equals(extRoot) || dir.equals(extRoot + "/")) {
+          return;
+        }
+
+        if (FileUtil.isDirectory(dir)) {
+          setFolder(dir);
+          reLoadFile();
+          updateBreadcrumb(dir);
+        } else {
+          staticstring = dir;
+          int filePos = findFilePositionByPath(dir);
+          if (filePos != -1) {
+            _dataOnClickItemList(filePos);
+          }
+        }
+      }
+    };
+  }
+
+  private String getDeviceName() {
+    String manufacturer = Build.MANUFACTURER;
+    String model = Build.MODEL;
+
+    if (manufacturer != null && !manufacturer.isEmpty()) {
+      String formattedManufacturer =
+          manufacturer.substring(0, 1).toUpperCase() + manufacturer.substring(1);
+      return formattedManufacturer + " " + model;
+    }
+
+    return model;
   }
 
   List<String> spiltIntoBreadcrumbItems(String filePath) {
@@ -1462,31 +1669,59 @@ public class FileManagerActivity extends BaseCompat
     return fullPaths;
   }
 
+  private boolean isRootOrInaccessiblePath(String path) {
+    String externalRoot = FileUtil.getExternalStorageDir();
+    if (path == null) return true;
+
+    File parent = new File(externalRoot).getParentFile();
+    if (parent == null) return true;
+
+    String parentPath = parent.getAbsolutePath();
+    return path.equals(parentPath)
+        || path.equals(parentPath + "/")
+        || path.equals("/storage/emulated/0/")
+        || path.equals("/")
+        || !path.startsWith(externalRoot)
+        || !FileUtil.isExistFile(path)
+        || !FileUtil.isDirectory(path);
+  }
+
   @Override
   public void onChildFile(int pos) {
-    // TODO: Implement this method
+    FileManagerModel item = fileListItem.getItem(pos);
+    if (item == null) return;
+    String path = item.getFilePath();
+    if (isRootOrInaccessiblePath(path)) {
+      GhostToast.showWarning(this, "Cannot access this directory");
+      return;
+    }
     setDistreeView(pos);
   }
 
   @Override
   public void onClick(View view, int pos) {
-
     FileManagerModel item = fileListItem.getItem(pos);
     if (item == null) return;
     currentPosition = pos;
-
     String path = item.getFilePath();
     staticstring = path;
+
+    if (isRootOrInaccessiblePath(path) && FileUtil.isDirectory(path)) {
+      GhostToast.showWarning(this, "Cannot access this directory");
+      return;
+    }
 
     fileListItem.clearFilter();
     bind.searchbar.setText("");
 
     if (FileUtil.isDirectory(path)) {
       Folder = path;
+      save_path.edit().putString("path", path).apply(); // ✅ ذخیره فقط مسیرهای معتبر
       setDistreeView(pos);
       reLoadFile();
       return;
     }
+
     int realPos = findFilePositionByPath(path);
     if (realPos != -1) {
       _dataOnClickItemList(realPos);
@@ -1610,6 +1845,8 @@ public class FileManagerActivity extends BaseCompat
                   if (newPosition != -1) {
                     bind.recyclerview2.smoothScrollToPosition(newPosition);
                   }
+
+              //   if (false) showOpenInEditorDialog(filePath);
                 });
           }
 
@@ -1618,6 +1855,24 @@ public class FileManagerActivity extends BaseCompat
             DataUtil.showMessage(FileManagerActivity.this, "Error: " + error);
           }
         });
+  }
+
+  private void showOpenInEditorDialog(String filePath) {
+    String fileName = new File(filePath).getName();
+    new MaterialAlertDialogBuilder(this)
+        .setTitle(R.string.file_created_title)
+        .setMessage(getString(R.string.file_created_message, fileName))
+        .setPositiveButton(
+            R.string.open_button,
+            (dialog, which) -> {
+              int pos = findFilePositionByPath(filePath);
+              if (pos != -1) {
+                staticstring = filePath;
+                _dataOnClickItemList(pos);
+              }
+            })
+        .setNegativeButton(R.string.later_button, null)
+        .show();
   }
 
   void RefreshTabs() {

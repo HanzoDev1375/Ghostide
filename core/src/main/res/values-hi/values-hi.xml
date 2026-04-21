@@ -154,5 +154,10 @@
   <string name="search_regex_case">रेगेक्स + केस संवेदी</string>
   <string name="search_regex_multiline">रेगेक्स + बहु पंक्ति</string>
   <string name="search_regex_dotall">रेगेक्स + डॉट ऑल</string>
+  <string name="file_created_title">फ़ाइल बनाई गई</string>
+  <string name="file_created_message">क्या आप इस फ़ाइल को एडिटर में खोलना चाहते हैं?\n%s</string>
+  <string name="open_button">खोलें</string>
+  <string name="later_button">बाद में</string>
+
 
 </resources>

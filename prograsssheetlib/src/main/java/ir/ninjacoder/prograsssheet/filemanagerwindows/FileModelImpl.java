@@ -15,36 +15,27 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.selection.StorageStrategy;
-import com.blankj.utilcode.util.ThreadUtils;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import ir.ninjacoder.prograsssheet.R;
 import ir.ninjacoder.prograsssheet.databinding.LayoutPopwindowsFileBinding;
+import ir.ninjacoder.prograsssheet.fileinfo.CoroutineManager;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class FileModelImpl implements TextWatcher {
 
   private boolean call = false;
   private List<FileModel> fileModel = new ArrayList<>();
   private BottomSheetDialog windows;
-  private ExecutorService executor = Executors.newFixedThreadPool(4);
   private int color;
   private LayoutPopwindowsFileBinding bind;
   private static FileModelImpl impl;
   private FileModelAdapter adapter;
   private String currentPath;
   private Context context;
-
   private MultiSelectionPanel selectionPanel;
-
   private List<FileModel> clipboardFiles = new ArrayList<>();
   private boolean isCutOperation = false;
 
@@ -84,6 +75,7 @@ public class FileModelImpl implements TextWatcher {
     bind.rvroot.setLayoutManager(
         new LinearLayoutManager(v.getContext(), RecyclerView.VERTICAL, false));
     bind.rvroot.setAdapter(adapter);
+
     SelectionTracker.Builder<Long> builder =
         new SelectionTracker.Builder<>(
             "file-selection-unique-id",
@@ -97,92 +89,118 @@ public class FileModelImpl implements TextWatcher {
 
     View panelView = bind.getRoot().findViewById(R.id.selectionPanel);
     if (panelView != null) {
-      selectionPanel =
-          new MultiSelectionPanel(
-              panelView,
-              adapter,
-              new MultiSelectionPanel.PanelActionListener() {
-                @Override
-                public void onCopyClicked(List<FileModel> selectedFiles) {
-                  clipboardFiles = new ArrayList<>(selectedFiles);
-                  isCutOperation = false;
-                  adapter.clearSelection();
-                  selectionPanel.getIconCopy().setEnabled(false);
-                  selectionPanel.getIconCut().setEnabled(false);
-                  selectionPanel.getIconPaste().setColorFilter(Color.GREEN);
-                  Toast.makeText(v.getContext(), "کپی شد", Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void onCutClicked(List<FileModel> selectedFiles) {
-                  clipboardFiles = new ArrayList<>(selectedFiles);
-                  isCutOperation = true;
-                  adapter.clearSelection();
-                  selectionPanel.getIconCopy().setEnabled(false);
-                  selectionPanel.getIconCut().setEnabled(false);
-                  selectionPanel.getIconPaste().setColorFilter(Color.GREEN);
-                  Toast.makeText(v.getContext(), "برش شد", Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void onDeleteClicked(List<FileModel> selectedFiles) {
-                  performDelete(selectedFiles);
-                  adapter.clearSelection();
-                  selectionPanel.getIconCopy().setEnabled(true);
-                  selectionPanel.getIconPaste().setEnabled(false);
-                  selectionPanel.getIconCut().setEnabled(true);
-                  selectionPanel.getIconPaste().clearColorFilter();
-                }
-
-                @Override
-                public void onPasteClicked() {
-                  selectionPanel.getIconCopy().setEnabled(true);
-                  selectionPanel.getIconPaste().setEnabled(false);
-                  selectionPanel.getIconCut().setEnabled(true);
-                  selectionPanel.getIconPaste().clearColorFilter();
-                  performPaste(currentPath);
-                }
-
-                @Override
-                public void onCloseClicked() {
-                  adapter.clearSelection();
-                  selectionPanel.getIconCopy().setEnabled(true);
-                  selectionPanel.getIconPaste().setEnabled(true);
-                  selectionPanel.getIconCut().setEnabled(true);
-                  selectionPanel.getIconPaste().clearColorFilter();
-                }
-              });
+      selectionPanel = createSelectionPanel(panelView, v);
     }
-
-    executor.execute(
+    CoroutineManager.runOnIO(
         () -> {
-          fileModel.clear();
-          listDir(path, fileModel);
+          loadDirectoryContent(path);
+        },
+        new CoroutineManager.ErrorCallback() {
+          @Override
+          public void onSuccess() {
+            updateUI();
+          }
 
-          Collections.sort(
-              fileModel,
-              (f1, f2) -> {
-                if (f1 == f2) return 0;
-                if (PathUtils.isDirectory(f1.getPath()) && PathUtils.isFile(f2.getPath()))
-                  return -1;
-                if (PathUtils.isFile(f1.getPath()) && PathUtils.isDirectory(f2.getPath())) return 1;
-                return f1.getPath().compareToIgnoreCase(f2.getPath());
-              });
-          ThreadUtils.runOnUiThread(
-              () -> {
-                adapter.submitList(new ArrayList<>(fileModel));
-                if (!fileModel.isEmpty()) {
-                  bind.emptyviews.hide();
-                } else {
-                  bind.emptyviews.show();
-                }
-              });
+          @Override
+          public void onError(Exception e) {
+            e.printStackTrace();
+            CoroutineManager.runOnMain(
+                () -> {
+                  Toast.makeText(
+                          v.getContext(), "خطا در بارگذاری: " + e.getMessage(), Toast.LENGTH_SHORT)
+                      .show();
+                });
+          }
         });
+
     bind.filterItem.addTextChangedListener(this);
   }
 
+  private void loadDirectoryContent(String path) throws Exception {
+    fileModel.clear();
+    listDir(path, fileModel);
+
+    Collections.sort(
+        fileModel,
+        (f1, f2) -> {
+          if (f1 == f2) return 0;
+          if (PathUtils.isDirectory(f1.getPath()) && PathUtils.isFile(f2.getPath())) return -1;
+          if (PathUtils.isFile(f1.getPath()) && PathUtils.isDirectory(f2.getPath())) return 1;
+          return f1.getPath().compareToIgnoreCase(f2.getPath());
+        });
+  }
+
+  private void updateUI() {
+    CoroutineManager.runOnMain(
+        () -> {
+          adapter.submitList(new ArrayList<>(fileModel));
+          if (!fileModel.isEmpty()) {
+            bind.emptyviews.hide();
+          } else {
+            bind.emptyviews.show();
+          }
+        });
+  }
+
+  private MultiSelectionPanel createSelectionPanel(View panelView, View v) {
+    return new MultiSelectionPanel(
+        panelView,
+        adapter,
+        new MultiSelectionPanel.PanelActionListener() {
+          @Override
+          public void onCopyClicked(List<FileModel> selectedFiles) {
+            clipboardFiles = new ArrayList<>(selectedFiles);
+            isCutOperation = false;
+            adapter.clearSelection();
+            selectionPanel.getIconCopy().setEnabled(false);
+            selectionPanel.getIconCut().setEnabled(false);
+            selectionPanel.getIconPaste().setColorFilter(Color.GREEN);
+            Toast.makeText(v.getContext(), "کپی شد", Toast.LENGTH_SHORT).show();
+          }
+
+          @Override
+          public void onCutClicked(List<FileModel> selectedFiles) {
+            clipboardFiles = new ArrayList<>(selectedFiles);
+            isCutOperation = true;
+            adapter.clearSelection();
+            selectionPanel.getIconCopy().setEnabled(false);
+            selectionPanel.getIconCut().setEnabled(false);
+            selectionPanel.getIconPaste().setColorFilter(Color.GREEN);
+            Toast.makeText(v.getContext(), "برش شد", Toast.LENGTH_SHORT).show();
+          }
+
+          @Override
+          public void onDeleteClicked(List<FileModel> selectedFiles) {
+            performDelete(selectedFiles);
+            adapter.clearSelection();
+            selectionPanel.getIconCopy().setEnabled(true);
+            selectionPanel.getIconPaste().setEnabled(false);
+            selectionPanel.getIconCut().setEnabled(true);
+            selectionPanel.getIconPaste().clearColorFilter();
+          }
+
+          @Override
+          public void onPasteClicked() {
+            selectionPanel.getIconCopy().setEnabled(true);
+            selectionPanel.getIconPaste().setEnabled(false);
+            selectionPanel.getIconCut().setEnabled(true);
+            selectionPanel.getIconPaste().clearColorFilter();
+            performPaste(currentPath);
+          }
+
+          @Override
+          public void onCloseClicked() {
+            adapter.clearSelection();
+            selectionPanel.getIconCopy().setEnabled(true);
+            selectionPanel.getIconPaste().setEnabled(true);
+            selectionPanel.getIconCut().setEnabled(true);
+            selectionPanel.getIconPaste().clearColorFilter();
+          }
+        });
+  }
+
   private void performDelete(List<FileModel> filesToDelete) {
-    executor.execute(
+    CoroutineManager.runOnIO(
         () -> {
           for (FileModel model : filesToDelete) {
             File file = new File(model.getPath());
@@ -206,34 +224,37 @@ public class FileModelImpl implements TextWatcher {
 
   private void performPaste(String destinationPath) {
     if (clipboardFiles.isEmpty()) return;
-    File destDir = new File(destinationPath);
-    if (!destDir.exists()) destDir.mkdirs();
 
-    for (FileModel model : clipboardFiles) {
-      File sourceFile = new File(model.getPath());
-      File destFile = new File(destDir, sourceFile.getName());
-      PathUtils.moveFileOrDirByGhostide(
-          sourceFile.toString(),
-          destFile.toString(),
-          new PathUtils.OnFileChangeCall() {
+    CoroutineManager.runOnIO(
+        () -> {
+          File destDir = new File(destinationPath);
+          if (!destDir.exists()) destDir.mkdirs();
 
-            @Override
-            public void onFileDone() {
-              update();
-            }
+          for (FileModel model : clipboardFiles) {
+            File sourceFile = new File(model.getPath());
+            File destFile = new File(destDir, sourceFile.getName());
+            PathUtils.moveFileOrDirByGhostide(
+                sourceFile.toString(),
+                destFile.toString(),
+                new PathUtils.OnFileChangeCall() {
+                  @Override
+                  public void onFileDone() {
+                    update();
+                  }
 
-            @Override
-            public void onFileError(String error) {}
-          },
-          isCutOperation,
-          context);
-    }
+                  @Override
+                  public void onFileError(String error) {}
+                },
+                isCutOperation,
+                context);
+          }
 
-    if (isCutOperation) {
-      clipboardFiles.clear();
-    }
+          if (isCutOperation) {
+            clipboardFiles.clear();
+          }
 
-    refreshList();
+          refreshList();
+        });
   }
 
   private void refreshList() {
@@ -241,13 +262,19 @@ public class FileModelImpl implements TextWatcher {
       bind.getRoot()
           .post(
               () -> {
-                listDir(currentPath, fileModel);
-                adapter.submitList(new ArrayList<>(fileModel));
-                if (!fileModel.isEmpty()) {
-                  bind.emptyviews.hide();
-                } else {
-                  bind.emptyviews.show();
-                }
+                CoroutineManager.runOnIO(
+                    () -> {
+                      loadDirectoryContent(currentPath);
+                      CoroutineManager.runOnMain(
+                          () -> {
+                            adapter.submitList(new ArrayList<>(fileModel));
+                            if (!fileModel.isEmpty()) {
+                              bind.emptyviews.hide();
+                            } else {
+                              bind.emptyviews.show();
+                            }
+                          });
+                    });
               });
     }
   }
@@ -255,21 +282,10 @@ public class FileModelImpl implements TextWatcher {
   public void setPath(String path) {
     this.currentPath = path;
     if (call && bind != null) {
-      executor.execute(
+      CoroutineManager.runOnIO(
           () -> {
-            fileModel.clear();
-            Collections.sort(
-                fileModel,
-                (f1, f2) -> {
-                  if (f1 == f2) return 0;
-                  if (PathUtils.isDirectory(f1.getPath()) && PathUtils.isFile(f2.getPath()))
-                    return -1;
-                  if (PathUtils.isFile(f1.getPath()) && PathUtils.isDirectory(f2.getPath()))
-                    return 1;
-                  return f1.getPath().compareToIgnoreCase(f2.getPath());
-                });
-            listDir(path, fileModel);
-            ThreadUtils.runOnUiThread(
+            loadDirectoryContent(path);
+            CoroutineManager.runOnMain(
                 () -> {
                   adapter.submitList(new ArrayList<>(fileModel));
                   if (!fileModel.isEmpty()) {
@@ -297,13 +313,7 @@ public class FileModelImpl implements TextWatcher {
   }
 
   public void stopThread() {
-    executor.shutdown();
-  }
-
-  @Override
-  protected void finalize() throws Throwable {
-    super.finalize();
-    stopThread();
+    CoroutineManager.cancelAll();
   }
 
   @NonNull
@@ -316,7 +326,6 @@ public class FileModelImpl implements TextWatcher {
   }
 
   public void setLayoutBack(@NonNull View.OnClickListener c) {
-
     if (call) {
       bind.layoutBack.setOnClickListener(c);
       bind.layoutBack.setOnTouchListener(
@@ -337,8 +346,9 @@ public class FileModelImpl implements TextWatcher {
   }
 
   public void update() {
-    if (call) adapter.submitList(new ArrayList<>(fileModel));
-    else new IllegalArgumentException("You not call setBindPopWindows");
+    if (call) {
+      CoroutineManager.runOnMain(() -> adapter.submitList(new ArrayList<>(fileModel)));
+    } else new IllegalArgumentException("You not call setBindPopWindows");
   }
 
   @Override

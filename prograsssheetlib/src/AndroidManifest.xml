@@ -9,7 +9,6 @@
             android:name="ir.ninjacoder.prograsssheet.plugin.api.ObjectBroadcastReceiver"
             android:enabled="true"
             android:exported="false" />
-
     </application>
 
 </manifest>

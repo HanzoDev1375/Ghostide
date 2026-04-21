@@ -65,6 +65,7 @@ import ir.ninjacoder.ghostide.core.tasks.app.SassForAndroid;
 import ir.ninjacoder.ghostide.core.utils.ScalePageTransformer;
 import ir.ninjacoder.ghostide.core.widget.ImageViewAnimation;
 import ir.ninjacoder.ghostide.core.widget.component.RegexComponent;
+import ir.ninjacoder.prograsssheet.deepseek.ui.DeepSeekActivity;
 import ir.ninjacoder.prograsssheet.fileinfo.FileInfoState;
 import ir.ninjacoder.prograsssheet.listchild.ChildAdapter;
 import com.mcal.uidesigner.XmlLayoutDesignActivity;
@@ -132,7 +133,7 @@ public class CodeEditorActivity extends BaseCompat
   private RecyclerView dir, rvmenueditor;
   private TextView titleauthor;
   private ImageView image, redo, undo, menupopnew;
-  private ImageViewAnimation codesnapimg, setting;
+  private ImageViewAnimation codesnapimg, setting, deepseekai;
   private LinearLayout linear3, getColorPass;
   private LinearLayout barSymoble;
   private ImageView imageview1, avatargithubuser;
@@ -194,6 +195,7 @@ public class CodeEditorActivity extends BaseCompat
     ghost_searchs = findViewById(R.id.editor_ser);
     rvmenueditor = findViewById(R.id.rvmenueditor);
     viewPager = findViewById(R.id.viewPager);
+    deepseekai = findViewById(R.id.deepseekai);
     syspiar = findViewById(R.id.syspiar);
     mvideo = findViewById(R.id.videoback);
     ghostIcon = findViewById(R.id.icon_backgroundghost);
@@ -272,6 +274,10 @@ public class CodeEditorActivity extends BaseCompat
     AnimUtils.ClickAnimation(redo);
     AnimUtils.ClickAnimation(image);
     AnimUtils.Worker(_fab);
+    deepseekai.setOnClickByAnim(
+        v -> {
+          loadAnim(new Intent(this, DeepSeekActivity.class));
+        });
 
     setupKeyboardListener();
     setupVideoBackground();

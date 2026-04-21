@@ -73,6 +73,11 @@ public class ToolbarListFileAdapter extends RecyclerView.Adapter<ToolbarListFile
     return data.size();
   }
 
+  public void updateItems(List<String> newItems) {
+    this.data = new ArrayList<>(newItems);
+    notifyDataSetChanged();
+  }
+
   public void bindColor(
       int normalColor, int normalBackground, int lastitemColor, int lastitemBackground) {
     this.normalColor = normalColor;

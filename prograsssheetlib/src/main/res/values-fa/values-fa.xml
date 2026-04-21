@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+
+  <string name="chat_welcome_message">سلام! من دستیار هوش مصنوعی DeepSeek هستم. چطور می‌تونم کمکتون کنم؟ </string>
+  <string name="chat_api_key_missing">لطفاً API Key را در تنظیمات وارد کنید </string>
+  <string name="chat_model_fast_active">مدل سریع فعال شد </string>
+  <string name="chat_model_expert_active">مدل متخصص فعال شد </string>
+  <string name="chat_set_api_key_first">لطفاً ابتدا API Key را تنظیم کنید </string>
+  <string name="chat_error_prefix">خطا: </string>
+  <string name="settings_api_key_required">API Key الزامی است </string>
+  <string name="settings_saved">تنظیمات ذخیره شد </string>
+  <string name="settings_model_expert">DeepSeek-Reasoner (متخصص) </string>
+  <string name="settings_model_fast">DeepSeek-Chat (سریع) </string>
+  <string name="settings_current_model">مدل فعلی: </string>
+
+</resources>

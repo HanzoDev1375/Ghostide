@@ -148,4 +148,9 @@
   <string name="search_regex_multiline">Regex + چندخطی</string>
   <string name="search_regex_dotall">Regex + نقطه روی همه</string>
   <string name="fontsize">سایز فونت را انتخاب کنید </string>
+  <string name="file_created_title">فایل ایجاد شد</string>
+  <string name="file_created_message">آیا میخواهید این فایل را در ادیتور باز کنید؟\n%s</string>
+  <string name="open_button">باز کردن</string>
+  <string name="later_button">بعداً</string>
+
 </resources>

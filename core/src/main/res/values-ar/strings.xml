@@ -147,4 +147,9 @@
   <string name="search_regex_case">تعبير نمطي + حساس للحالة</string>
   <string name="search_regex_multiline">تعبير نمطي + متعدد الأسطر</string>
   <string name="search_regex_dotall">تعبير نمطي + نقطة للكل</string>
+  <string name="file_created_title">تم إنشاء الملف</string>
+  <string name="file_created_message">هل تريد فتح هذا الملف في المحرر؟\n%s</string>
+  <string name="open_button">فتح</string>
+  <string name="later_button">لاحقاً</string>
+
 </resources>

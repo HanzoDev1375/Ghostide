@@ -154,5 +154,8 @@
   <string name="search_regex_case">正则 + 区分大小写</string>
   <string name="search_regex_multiline">正则 + 多行模式</string>
   <string name="search_regex_dotall">正则 + 点匹配所有</string>
-
+  <string name="file_created_title">文件已创建</string>
+  <string name="file_created_message">是否要在编辑器中打开此文件？\n%s</string>
+  <string name="open_button">打开</string>
+  <string name="later_button">稍后</string>
 </resources>

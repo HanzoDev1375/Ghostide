@@ -184,5 +184,9 @@
   <string name="search_regex_case">Regex + Sensível a Maiúsculas</string>
   <string name="search_regex_multiline">Regex + Multilinha</string>
   <string name="search_regex_dotall">Regex + Ponto em Tudo</string>
+  <string name="file_created_title">Arquivo criado</string>
+  <string name="file_created_message">Deseja abrir este arquivo no editor?\n%s</string>
+  <string name="open_button">Abrir</string>
+  <string name="later_button">Depois</string>
 
 </resources>

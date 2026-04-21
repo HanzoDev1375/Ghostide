@@ -68,25 +68,29 @@ public class TextLayoutHelper {
   }
 
   public int getCurPosLeft(int offset, CharSequence s) {
-    // برای متن فارسی
-    if (isRtlText(s)) {
-      if (offset > 0) {
-        int codePoint = Character.codePointBefore(s, offset);
-        return offset - Character.charCount(codePoint);
-      }
-      return offset;
-    } else {
-      // منطق عادی برای انگلیسی
-      int left = Math.max(0, offset - 20);
-      int index = offset - left;
-      text.append(s, left, Math.min(s.length(), offset + 20));
-      Selection.setSelection(text, index);
-      Selection.moveLeft(text, layout);
-      index = Selection.getSelectionStart(text);
-      text.clear();
-      Selection.removeSelection(text);
-      return left + index;
+    if (offset <= 0) return 0;
+
+    char prevChar = s.charAt(offset - 1);
+
+    // اگه فارسی/عربی بود، فقط یک کاراکتر برگردون عقب
+    if ((prevChar >= '\u0600' && prevChar <= '\u06FF')
+        || (prevChar >= '\u0750' && prevChar <= '\u077F')
+        || (prevChar >= '\u08A0' && prevChar <= '\u08FF')
+        || (prevChar >= '\uFB50' && prevChar <= '\uFDFF')
+        || (prevChar >= '\uFE70' && prevChar <= '\uFEFF')) {
+      return offset - 1;
     }
+
+    // برای انگلیسی، همون منطق DynamicLayout (Ctrl+Backspace)
+    int left = Math.max(0, offset - 20);
+    int index = offset - left;
+    text.append(s, left, Math.min(s.length(), offset + 20));
+    Selection.setSelection(text, index);
+    Selection.moveLeft(text, layout);
+    index = Selection.getSelectionStart(text);
+    text.clear();
+    Selection.removeSelection(text);
+    return left + index;
   }
 
   public int getCurPosRight(int offset, CharSequence s) {

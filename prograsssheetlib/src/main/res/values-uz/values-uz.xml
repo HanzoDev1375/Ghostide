@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+
+  <string name="chat_welcome_message">Salom! Men DeepSeek suniy intellekt yordamchisiman. Qanday yordam bera olaman? </string>
+  <string name="chat_api_key_missing">Iltimos, sozlamalarda API Keyni kiriting </string>
+  <string name="chat_model_fast_active">Tez model faollashtirildi </string>
+  <string name="chat_model_expert_active">Ekspert model faollashtirildi </string>
+  <string name="chat_set_api_key_first">Iltimos, avval API Keyni sozlang </string>
+  <string name="chat_error_prefix">Xato: </string>
+  <string name="settings_api_key_required">API Key talab qilinadi </string>
+  <string name="settings_saved">Sozlamalar saqlandi </string>
+  <string name="settings_model_expert">DeepSeek-Reasoner (Ekspert) </string>
+  <string name="settings_model_fast">DeepSeek-Chat (Tez) </string>
+  <string name="settings_current_model">Joriy model: </string>
+</resources>

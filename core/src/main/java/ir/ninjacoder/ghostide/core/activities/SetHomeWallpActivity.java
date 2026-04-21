@@ -1,139 +1,273 @@
 package ir.ninjacoder.ghostide.core.activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.WallpaperManager;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowInsets;
+import android.view.WindowInsetsController;
 import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import androidx.core.graphics.ColorUtils;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.palette.graphics.Palette;
 import androidx.viewpager2.widget.ViewPager2;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.MultiTransformation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import ir.ninjacoder.ghostide.core.glidecompat.BlurTransformation;
 import ir.ninjacoder.ghostide.core.databinding.ActivitySetWallpaperBinding;
 import ir.ninjacoder.ghostide.core.marco.FileShareManager;
 import ir.ninjacoder.ghostide.core.utils.DataUtil;
+
 import ir.ninjacoder.prograsssheet.util.ColorPaletteUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import ir.ninjacoder.ghostide.core.marco.wallpapers.WallpaperPagerAdapter;
 import java.util.Map;
+import ir.ninjacoder.ghostide.core.marco.wallpapers.WallpaperPagerAdapter;
 
 public class SetHomeWallpActivity extends BaseCompat {
 
   private List<String> images;
-  private WallpaperPagerAdapter ad;
-  private ActivitySetWallpaperBinding bind;
+  private WallpaperPagerAdapter adapter;
+  private ActivitySetWallpaperBinding binding;
   private boolean isFabMenuVisible = false;
+  private boolean isSystemUiVisible = true;
   private Integer primaryColor, surfaceColor;
+  private WindowInsetsControllerCompat insetsController;
+  private Animator currentToolbarAnimator;
+
+  private static final int ANIMATION_DURATION = 300;
+  private static final int FAB_ANIMATION_DURATION = 250;
 
   @Override
-  protected void onCreate(Bundle b) {
-    super.onCreate(b);
-    bind = ActivitySetWallpaperBinding.inflate(getLayoutInflater());
-    setContentView(bind.getRoot());
-    setSupportActionBar(bind.toolbar);
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    binding = ActivitySetWallpaperBinding.inflate(getLayoutInflater());
+    setContentView(binding.getRoot());
+    setSupportActionBar(binding.toolbar);
+
+    setupTransparentSystemBars();
+
+    setupImmersiveController();
+
     String path = getIntent().getStringExtra("path");
     images = loadImages(path);
 
+    if (images.isEmpty()) {
+      DataUtil.showMessage(this, "No images found");
+      finish();
+      return;
+    }
+
     int startIndex = findStartIndex(images, path);
-    ad = new WallpaperPagerAdapter(this, images);
-    bind.viewPager.setAdapter(ad);
-    bind.viewPager.setCurrentItem(startIndex, false);
-    getWindow().setNavigationBarColor(Color.TRANSPARENT);
+    adapter = new WallpaperPagerAdapter(this, images);
+    binding.viewPager.setAdapter(adapter);
+    binding.viewPager.setCurrentItem(startIndex, false);
+
+    applySystemWindowInsets();
+
+    updateToolbarTitle(images.get(startIndex));
+
+    setupViewPagerListener();
+
+    setupFabListeners();
+
+    postGlide(images.get(startIndex));
+
+    hideFabMenuImmediate();
+
+    adapter.setOnItemClickListener((pos, view) -> toggleUiVisibility());
+  }
+
+  private void setupTransparentSystemBars() {
     getWindow().setStatusBarColor(Color.TRANSPARENT);
-    updateFabVisibility(images.get(startIndex));
-    setFitViewGroup(bind.getRoot());
-    bind.toolbar.setSubtitle(new File(images.get(startIndex)).getName());
-    bind.viewPager.registerOnPageChangeCallback(
+    getWindow().setNavigationBarColor(Color.TRANSPARENT);
+
+    WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+  }
+
+  private void setupImmersiveController() {
+    insetsController = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+    insetsController.setSystemBarsBehavior(
+        WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+  }
+
+  private void applySystemWindowInsets() {
+    ViewCompat.setOnApplyWindowInsetsListener(
+        binding.getRoot(),
+        (v, insets) -> {
+          int statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top;
+          int navigationBarHeight =
+              insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom;
+
+          ViewGroup.MarginLayoutParams toolbarParams =
+              (ViewGroup.MarginLayoutParams) binding.appBar.getLayoutParams();
+          toolbarParams.topMargin = statusBarHeight;
+          binding.appBar.setLayoutParams(toolbarParams);
+
+          binding.viewPager.setPadding(0, 0, 0, navigationBarHeight);
+
+          return insets;
+        });
+  }
+
+  private void setupViewPagerListener() {
+    binding.viewPager.registerOnPageChangeCallback(
         new ViewPager2.OnPageChangeCallback() {
-          @Override
-          public void onPageScrollStateChanged(int arg0) {
-            super.onPageScrollStateChanged(arg0);
-          }
-
-          @Override
-          public void onPageScrolled(int arg0, float arg1, int arg2) {
-            super.onPageScrolled(arg0, arg1, arg2);
-          }
-
           @Override
           public void onPageSelected(int position) {
             String currentPath = images.get(position);
-            bind.toolbar.setSubtitle(new File(currentPath).getName());
+            updateToolbarTitle(currentPath);
             postGlide(currentPath);
-            ad.resetCurrent(position);
+            adapter.resetCurrent(position);
+            updateFabVisibility(currentPath);
           }
         });
-
-    postGlide(images.get(startIndex));
-    ad.setOnItemClickListener(
-        (pos, view) -> {
-          toggleFabMenu();
-        });
-    bind.fabSetWallpaper.setOnClickListener(v -> setWallpaper());
-    bind.fabShare.setOnClickListener(v -> shareImage());
-    bind.fabAdjust.setOnClickListener(v -> adjustImageSize());
-    bind.fabMetadata.setOnClickListener(v -> showRotate());
-    hideFabMenu();
   }
 
-  private void updateFabVisibility(String currentPath) {
-    boolean canSetWallpaper = canSetWallpaper(currentPath);
+  private void setupFabListeners() {
+    binding.fabSetWallpaper.setOnClickListener(v -> setWallpaper());
+    binding.fabShare.setOnClickListener(v -> shareImage());
+    binding.fabAdjust.setOnClickListener(v -> adjustImageSize());
+    binding.fabMetadata.setOnClickListener(v -> showRotate());
+  }
 
-    if (canSetWallpaper) {
-      if (isFabMenuVisible) {
-        showFabMenu();
+  private void updateToolbarTitle(String path) {
+    if (path != null) {
+      File file = new File(path);
+      binding.toolbar.setTitle(file.getName());
+
+      int currentIndex = binding.viewPager.getCurrentItem() + 1;
+      int totalCount = images.size();
+      if (totalCount > 1) {
+        binding.toolbar.setSubtitle(currentIndex + " از " + totalCount);
       } else {
-
-        bind.fabSetWallpaper.setVisibility(View.VISIBLE);
-        bind.fabSetWallpaper.setAlpha(1f);
-        bind.fabSetWallpaper.setScaleX(1f);
-        bind.fabSetWallpaper.setScaleY(1f);
-
-        bind.toolbar.setVisibility(View.VISIBLE);
-        bind.toolbar.setAlpha(1f);
-        bind.toolbar.setScaleX(1f);
-        bind.toolbar.setScaleY(1f);
+        binding.toolbar.setSubtitle(null);
       }
-    } else {
-      hideAllFabs();
     }
   }
 
-  private void toggleFabMenu() {
-    if (isFabMenuVisible) {
+  private void toggleUiVisibility() {
+    String currentPath = images.get(binding.viewPager.getCurrentItem());
+    if (!canSetWallpaper(currentPath)) {
+      return;
+    }
+
+    if (isSystemUiVisible) {
+      hideSystemUi();
       hideFabMenu();
     } else {
+      showSystemUi();
       showFabMenu();
     }
   }
 
-  private void showFabMenu() {
-    String currentPath = images.get(bind.viewPager.getCurrentItem());
-    if (!canSetWallpaper(currentPath)) return;
-    isFabMenuVisible = true;
+  private void hideSystemUi() {
+    isSystemUiVisible = false;
+
+    insetsController.hide(WindowInsetsCompat.Type.systemBars());
+
     animateToolbarOut();
-    animateFabInHorizontal(bind.fabShare, 50);
-    animateFabInHorizontal(bind.fabAdjust, 100);
-    animateFabInHorizontal(bind.fabMetadata, 150);
-    animateFabInHorizontal(bind.fabSetWallpaper, 200);
   }
 
-  private void animateFabInHorizontal(View fab, long delay) {
+  private void showSystemUi() {
+    isSystemUiVisible = true;
+
+    insetsController.show(WindowInsetsCompat.Type.systemBars());
+
+    animateToolbarIn();
+  }
+
+  private void animateToolbarOut() {
+    if (currentToolbarAnimator != null) {
+      currentToolbarAnimator.cancel();
+    }
+
+    binding
+        .appBar
+        .animate()
+        .alpha(0f)
+        .translationY(-binding.appBar.getHeight())
+        .setDuration(ANIMATION_DURATION)
+        .setInterpolator(new FastOutSlowInInterpolator())
+        .setListener(
+            new AnimatorListenerAdapter() {
+              @Override
+              public void onAnimationEnd(Animator animation) {
+                binding.appBar.setVisibility(View.GONE);
+              }
+            })
+        .start();
+  }
+
+  private void animateToolbarIn() {
+    if (currentToolbarAnimator != null) {
+      currentToolbarAnimator.cancel();
+    }
+
+    binding.appBar.setVisibility(View.VISIBLE);
+    binding.appBar.setAlpha(0f);
+
+    binding.appBar.setTranslationY(-binding.appBar.getHeight());
+
+    binding
+        .appBar
+        .animate()
+        .alpha(1f)
+        .translationY(0f)
+        .setDuration(ANIMATION_DURATION)
+        .setInterpolator(new FastOutSlowInInterpolator())
+        .setListener(null)
+        .start();
+  }
+
+  private void showFabMenu() {
+    String currentPath = images.get(binding.viewPager.getCurrentItem());
+    if (!canSetWallpaper(currentPath)) return;
+
+    isFabMenuVisible = true;
+
+    animateFabIn(binding.fabShare, 50);
+    animateFabIn(binding.fabAdjust, 100);
+    animateFabIn(binding.fabMetadata, 150);
+    animateFabIn(binding.fabSetWallpaper, 200);
+  }
+
+  private void hideFabMenu() {
+    isFabMenuVisible = false;
+
+    animateFabOut(binding.fabMetadata, 0);
+    animateFabOut(binding.fabAdjust, 50);
+    animateFabOut(binding.fabShare, 100);
+
+    animateFabIn(binding.fabSetWallpaper, 150);
+  }
+
+  private void hideFabMenuImmediate() {
+    isFabMenuVisible = false;
+    binding.fabShare.setVisibility(View.GONE);
+    binding.fabAdjust.setVisibility(View.GONE);
+    binding.fabMetadata.setVisibility(View.GONE);
+    binding.fabSetWallpaper.setVisibility(View.GONE);
+  }
+
+  private void animateFabIn(FloatingActionButton fab, long delay) {
     fab.setVisibility(View.VISIBLE);
     fab.setScaleX(0f);
     fab.setScaleY(0f);
@@ -145,22 +279,13 @@ public class SetHomeWallpActivity extends BaseCompat {
         .scaleY(1f)
         .alpha(1f)
         .translationX(0f)
-        .setDuration(250)
+        .setDuration(FAB_ANIMATION_DURATION)
         .setInterpolator(new OvershootInterpolator(1.0f))
         .setStartDelay(delay)
         .start();
   }
 
-  private void hideFabMenu() {
-    isFabMenuVisible = false;
-    animateFabOutHorizontal(bind.fabMetadata, 0);
-    animateFabOutHorizontal(bind.fabAdjust, 50);
-    animateFabOutHorizontal(bind.fabShare, 100);
-    animateFabInHorizontal(bind.fabSetWallpaper, 150);
-    animateToolbarIn();
-  }
-
-  private void animateFabOutHorizontal(View fab, long delay) {
+  private void animateFabOut(FloatingActionButton fab, long delay) {
     fab.animate()
         .scaleX(0f)
         .scaleY(0f)
@@ -169,74 +294,116 @@ public class SetHomeWallpActivity extends BaseCompat {
         .setDuration(200)
         .setInterpolator(new AccelerateInterpolator())
         .setStartDelay(delay)
-        .withEndAction(
-            () -> {
-              fab.setVisibility(View.GONE);
-              fab.setTranslationX(0f);
-            })
+        .withEndAction(() -> fab.setVisibility(View.GONE))
         .start();
   }
 
-  private void animateToolbarOut() {
-    bind.toolbar
-        .animate()
-        .alpha(0f)
-        .setDuration(200)
-        .setInterpolator(new AccelerateInterpolator())
-        .withEndAction(() -> bind.toolbar.setVisibility(View.GONE))
-        .start();
-  }
+  private void updateFabVisibility(String currentPath) {
+    boolean canSet = canSetWallpaper(currentPath);
 
-  private void animateToolbarIn() {
-    bind.toolbar.setVisibility(View.VISIBLE);
-    bind.toolbar.setAlpha(0f);
-    bind.toolbar
-        .animate()
-        .alpha(1f)
-        .setDuration(250)
-        .setInterpolator(new OvershootInterpolator(1.0f))
-        .start();
-  }
-
-  private void hideAllFabs() {
-    bind.fabSetWallpaper.setVisibility(View.GONE);
-    bind.fabShare.setVisibility(View.GONE);
-    bind.fabAdjust.setVisibility(View.GONE);
-    bind.fabMetadata.setVisibility(View.GONE);
-    bind.toolbar.setVisibility(View.GONE);
-    isFabMenuVisible = false;
+    if (canSet) {
+      if (isSystemUiVisible) {
+        binding.fabSetWallpaper.setVisibility(View.VISIBLE);
+      }
+    } else {
+      hideFabMenuImmediate();
+    }
   }
 
   private void setWallpaper() {
     try {
-      int pos = bind.viewPager.getCurrentItem();
+      int pos = binding.viewPager.getCurrentItem();
       String imgPath = images.get(pos);
 
       if (!canSetWallpaper(imgPath)) {
-        DataUtil.showMessage(this, "Error");
+        DataUtil.showMessage(this, "این فایل قابل تنظیم به عنوان والپیپر نیست");
         return;
       }
 
       Bitmap bmp = BitmapFactory.decodeFile(imgPath);
       WallpaperManager.getInstance(this).setBitmap(bmp);
+      DataUtil.showMessage(this, "والپیپر با موفقیت تنظیم شد");
 
-      DataUtil.showMessage(this, "Wallpaper set");
+      if (!isSystemUiVisible) {
+        showSystemUi();
+        showFabMenu();
+      }
+
     } catch (Exception e) {
-      DataUtil.showMessage(this, "Failed to set wallpaper");
+      DataUtil.showMessage(this, "خطا در تنظیم والپیپر: " + e.getMessage());
     }
   }
 
   private void shareImage() {
-    var share = new FileShareManager(this);
-    share.shareFile(new File(images.get(bind.viewPager.getCurrentItem())));
+    FileShareManager share = new FileShareManager(this);
+    share.shareFile(new File(images.get(binding.viewPager.getCurrentItem())));
   }
 
   private void adjustImageSize() {
-    ad.changeCurrentScale(bind.viewPager.getCurrentItem());
+    adapter.changeCurrentScale(binding.viewPager.getCurrentItem());
   }
 
   private void showRotate() {
-    ad.rotateCurrent(bind.viewPager.getCurrentItem());
+    adapter.rotateCurrent(binding.viewPager.getCurrentItem());
+  }
+
+  private void postGlide(String path) {
+    if (!canSetWallpaper(path)) {
+
+      applyDefaultColors();
+      return;
+    }
+
+    Glide.with(this)
+        .asBitmap()
+        .load(path)
+        .into(
+            new SimpleTarget<Bitmap>() {
+              @Override
+              public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
+                ColorPaletteUtils.generateFromBitmap(
+                    bitmap,
+                    (li, dark) -> {
+                      Map<String, Integer> colorMap = dark;
+                      if (colorMap != null && !colorMap.isEmpty()) {
+                        primaryColor = colorMap.get("primary");
+                        surfaceColor = colorMap.get("surface");
+
+                        if (primaryColor == null) primaryColor = Color.parseColor("#330170");
+                        if (surfaceColor == null) surfaceColor = Color.parseColor("#3e1020");
+
+                        applyColorsToUi(surfaceColor, primaryColor);
+                      }
+                    });
+              }
+            });
+  }
+
+  private void applyDefaultColors() {
+    primaryColor = Color.parseColor("#330170");
+    surfaceColor = Color.parseColor("#3e1020");
+    applyColorsToUi(surfaceColor, primaryColor);
+  }
+
+  private void applyColorsToUi(int backgroundColor, int contentColor) {
+    runOnUiThread(
+        () -> {
+          int transparentBg = ColorUtils.setAlphaComponent(backgroundColor, 120);
+
+          tintFab(binding.fabSetWallpaper, transparentBg, contentColor);
+          tintFab(binding.fabAdjust, transparentBg, contentColor);
+          tintFab(binding.fabShare, transparentBg, contentColor);
+          tintFab(binding.fabMetadata, transparentBg, contentColor);
+
+          binding.toolbar.setBackground(new ColorDrawable(transparentBg));
+          binding.toolbar.setTitleTextColor(contentColor);
+          binding.toolbar.setSubtitleTextColor(ColorUtils.setAlphaComponent(contentColor, 200));
+        });
+  }
+
+  private void tintFab(FloatingActionButton fab, int bgColor, int iconColor) {
+    fab.setBackgroundTintList(ColorStateList.valueOf(bgColor));
+    fab.setImageTintList(ColorStateList.valueOf(iconColor));
   }
 
   private int findStartIndex(List<String> list, String path) {
@@ -251,67 +418,12 @@ public class SetHomeWallpActivity extends BaseCompat {
 
   private boolean canSetWallpaper(String path) {
     if (path == null) return false;
-    String p = path.toLowerCase();
-    return !(p.endsWith(".svg") || p.endsWith(".gif") || p.endsWith(".xml"));
-  }
-
-  private void postGlide(String path) {
-    if (canSetWallpaper(path)) {
-      // no blur
-      Glide.with(this)
-          .asBitmap()
-          .load(path)
-          .into(
-              new SimpleTarget<Bitmap>() {
-                @Override
-                public void onResourceReady(Bitmap map, Transition<? super Bitmap> arg1) {
-                  ColorPaletteUtils.generateFromBitmap(
-                      map,
-                      (li, dark) -> {
-                        Map<String, Integer> imap = dark;
-                        if (imap != null && !imap.isEmpty()) {
-                          primaryColor = imap.get("primary");
-                          surfaceColor = imap.get("surface");
-                          if (primaryColor == null) primaryColor = Color.parseColor("#330170");
-                          if (surfaceColor == null) surfaceColor = Color.parseColor("#3e1020");
-                          fabState(surfaceColor, primaryColor);
-                        }
-                      });
-                }
-              });
-//
-//      Glide.with(this)
-//          .asBitmap()
-//          .load(path)
-//          .transform(new MultiTransformation<>(new BlurTransformation(17)))
-//          .into(
-//              new SimpleTarget<Bitmap>() {
-//                @Override
-//                public void onResourceReady(Bitmap resource, Transition<? super Bitmap> t) {
-//                  getWindow()
-//                      .getDecorView()
-//                      .setBackground(new BitmapDrawable(getResources(), resource));
-//                }
-//              });
-    }
-  }
-
-  void fabState(int back, int imagecolor) {
-    runOnUiThread(
-        () -> {
-          int colorbackal = ColorUtils.setAlphaComponent(back, 120);
-          bind.fabSetWallpaper.setBackgroundTintList(ColorStateList.valueOf(colorbackal));
-          bind.fabSetWallpaper.setImageTintList(ColorStateList.valueOf(imagecolor));
-          bind.fabAdjust.setBackgroundTintList(ColorStateList.valueOf(colorbackal));
-          bind.fabAdjust.setImageTintList(ColorStateList.valueOf(imagecolor));
-          bind.fabShare.setBackgroundTintList(ColorStateList.valueOf(colorbackal));
-          bind.fabShare.setImageTintList(ColorStateList.valueOf(imagecolor));
-          bind.fabMetadata.setBackgroundTintList(ColorStateList.valueOf(colorbackal));
-          bind.toolbar.setBackground(new ColorDrawable(colorbackal));
-          bind.toolbar.setTitleTextColor(imagecolor);
-          bind.toolbar.setSubtitleTextColor(imagecolor);
-          bind.fabMetadata.setImageTintList(ColorStateList.valueOf(imagecolor));
-        });
+    String lower = path.toLowerCase();
+    return lower.endsWith(".jpg")
+        || lower.endsWith(".jpeg")
+        || lower.endsWith(".png")
+        || lower.endsWith(".webp")
+        || lower.endsWith(".bmp");
   }
 
   private List<String> loadImages(String path) {
@@ -331,15 +443,41 @@ public class SetHomeWallpActivity extends BaseCompat {
 
     for (File f : files) {
       String name = f.getName().toLowerCase();
-      if (name.endsWith(".jpg")
-          || name.endsWith(".png")
-          || name.endsWith(".webp")
-          || name.endsWith(".gif")
-          || name.endsWith(".svg")
-          || name.endsWith(".xml")) {
+      if (isImageFile(name)) {
         list.add(f.getAbsolutePath());
       }
     }
     return list;
+  }
+
+  private boolean isImageFile(String fileName) {
+    return fileName.endsWith(".jpg")
+        || fileName.endsWith(".jpeg")
+        || fileName.endsWith(".png")
+        || fileName.endsWith(".webp")
+        || fileName.endsWith(".gif")
+        || fileName.endsWith(".bmp")
+        || fileName.endsWith(".svg")
+        || fileName.endsWith(".xml");
+  }
+
+  @Override
+  public void onBackPressed() {
+    if (!isSystemUiVisible) {
+      showSystemUi();
+      showFabMenu();
+    } else if (isFabMenuVisible) {
+      hideFabMenu();
+    } else {
+      super.onBackPressed();
+    }
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    if (currentToolbarAnimator != null) {
+      currentToolbarAnimator.cancel();
+    }
   }
 }

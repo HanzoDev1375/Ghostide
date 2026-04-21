@@ -1,270 +1,278 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:layout_height="match_parent"
-  android:layout_width="match_parent"
-  android:fitsSystemWindows="true"
-  android:id="@+id/Coordinator">
-
-  <ImageView
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:scaleType="centerCrop"
-    android:id="@+id/icon_backgroundghost" />
+    android:fitsSystemWindows="true"
+    android:id="@+id/Coordinator">
 
-  <ir.ninjacoder.prograsssheet.VideoSurfaceView
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    android:visibility="gone"
-    android:id="@+id/videoback" />
-
-  <LinearLayout
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    android:orientation="vertical"
-    android:id="@+id/getColorPass">
-
-    <LinearLayout
-      android:layout_height="match_parent"
-      android:layout_width="match_parent"
-      android:orientation="vertical">
-
-      <ir.ninjacoder.ghostide.core.widget.PraramnetLayoutNinja
+    <ImageView
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:gravity="center_vertical"
+        android:scaleType="centerCrop"
+        android:id="@+id/icon_backgroundghost" />
+
+    <ir.ninjacoder.prograsssheet.VideoSurfaceView
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:id="@+id/videoback" />
+
+    <LinearLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:orientation="vertical"
-        android:id="@+id/Mainlinear">
-        <LinearLayout
-          android:layout_height="wrap_content"
-          android:layout_width="match_parent"
-          android:gravity="center_horizontal|center_vertical"
-          android:orientation="vertical"
-          android:id="@+id/multytab">
-          <LinearLayout
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:gravity="center_horizontal|center_vertical"
-            android:orientation="horizontal"
-            android:translationX="2.0dp"
-            android:id="@+id/CustomToolbar">
-
-            <LinearLayout
-              android:layout_height="wrap_content"
-              android:layout_width="match_parent"
-              android:gravity="center_vertical"
-              android:padding="4dp"
-              android:orientation="vertical">
-
-              <LinearLayout
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:gravity="center_vertical"
-                android:padding="8dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                  android:layout_height="50dp"
-                  android:layout_width="50dp"
-                  android:scaleType="centerInside"
-                  android:padding="5dp"
-                  android:id="@+id/avatargithubuser" />
-
-                <TextView
-                  android:layout_height="wrap_content"
-                  android:layout_width="0dp"
-                  android:visibility="invisible"
-                  android:ellipsize="end"
-                  android:padding="8dp"
-                  android:textSize="16sp"
-                  android:singleLine="true"
-                  android:layout_weight="2"
-                  android:id="@+id/titleauthor" />
-
-                <ir.ninjacoder.ghostide.core.widget.ImageViewAnimation
-                  android:layout_height="25dp"
-                  android:layout_width="25dp"
-                  android:scaleType="centerInside"
-                  android:src="@drawable/drawer_item15"
-                  android:layout_marginLeft="3dp"
-                  android:layout_marginRight="3dp"
-                  android:id="@+id/setting" />
-
-                <ir.ninjacoder.ghostide.core.widget.ImageViewAnimation
-                  android:layout_height="25dp"
-                  android:layout_width="25dp"
-                  android:scaleType="centerInside"
-                  android:src="@drawable/cameracode_24px"
-                  android:layout_marginLeft="3dp"
-                  android:layout_marginRight="3dp"
-                  android:id="@+id/codesnapimg" />
-
-                <ImageView
-                  android:layout_height="25dp"
-                  android:layout_width="25dp"
-                  android:scaleType="centerInside"
-                  android:src="@drawable/okeye"
-                  android:layout_marginLeft="3dp"
-                  android:layout_marginRight="3dp"
-                  android:id="@+id/image" />
-
-                <ImageView
-                  android:layout_height="25dp"
-                  android:layout_width="25dp"
-                  android:scaleType="fitCenter"
-                  android:src="@drawable/redo"
-                  android:layout_marginLeft="3dp"
-                  android:layout_marginRight="3dp"
-                  android:id="@+id/redo" />
-
-                <ImageView
-                  android:layout_height="25dp"
-                  android:layout_width="25dp"
-                  android:scaleType="fitCenter"
-                  android:src="@drawable/undos"
-                  android:layout_marginLeft="3dp"
-                  android:layout_marginRight="3dp"
-                  android:id="@+id/undo" />
-
-                <ImageView
-                  android:layout_height="25dp"
-                  android:layout_width="25dp"
-                  android:scaleType="fitCenter"
-                  android:src="@drawable/ic_more_vert_white"
-                  android:layout_marginRight="4dp"
-                  android:id="@+id/menupopnew" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                  android:layout_height="wrap_content"
-                  android:layout_width="wrap_content"
-                  android:layout_marginLeft="3dp"
-                  android:layout_marginRight="3dp"
-                  android:id="@+id/rvmenueditor" />
-
-              </LinearLayout>
-
-            </LinearLayout>
-
-          </LinearLayout>
-
-
-          <ProgressBar
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:indeterminate="true"
-            android:padding="8dp"
-            style="?android:progressBarStyleHorizontal"
-            android:id="@+id/progressbar1" />
-
-
-          <com.google.android.material.tabs.TabLayout
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:background="@android:color/transparent"
-            app:tabMode="scrollable"
-            app:tabGravity="fill"
-            style="@style/AppTheme.TabLayout"
-            app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
-            android:id="@+id/tablayouteditor" />
-
-
-          <androidx.recyclerview.widget.RecyclerView
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:padding="8dp"
-            android:id="@+id/dir" />
-
-        </LinearLayout>
-
-
-        <androidx.viewpager2.widget.ViewPager2
-          android:layout_height="0dp"
-          android:layout_width="match_parent"
-          android:layout_weight="1"
-          android:id="@+id/viewPager" />
-
+        android:id="@+id/getColorPass">
 
         <LinearLayout
-          android:layout_height="wrap_content"
-          android:layout_width="match_parent"
-          android:gravity="center_vertical"
-          android:padding="3dp"
-          android:orientation="horizontal"
-          android:id="@+id/newLayoutSymbolBar">
-
-          <LinearLayout
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
-              android:layout_height="wrap_content"
-              android:layout_width="match_parent"
-              android:visibility="visible"
-              android:background="@android:color/transparent"
-              android:gravity="right"
-              android:padding="2dp"
-              android:orientation="vertical"
-              android:id="@+id/barSymoble">
-
-              <ImageView
-                android:layout_height="25dp"
-                android:layout_width="25dp"
-                android:scaleType="centerInside"
-                android:src="@drawable/close"
-                android:padding="3dp"
-                android:visibility="gone"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="2dp"
-                android:id="@+id/imageview1" />
-
-              <LinearLayout
-                android:layout_height="wrap_content"
+            <ir.ninjacoder.ghostide.core.widget.PraramnetLayoutNinja
+                android:layout_height="match_parent"
                 android:layout_width="match_parent"
                 android:gravity="center_vertical"
-                android:padding="8dp"
-                android:orientation="horizontal" />
+                android:orientation="vertical"
+                android:id="@+id/Mainlinear">
+                <LinearLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="vertical"
+                    android:id="@+id/multytab">
+                    <LinearLayout
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:orientation="horizontal"
+                        android:translationX="2.0dp"
+                        android:id="@+id/CustomToolbar">
 
-            </LinearLayout>
+                        <LinearLayout
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:gravity="center_vertical"
+                            android:padding="4dp"
+                            android:orientation="vertical">
 
-            <LinearLayout
-              android:layout_height="match_parent"
-              android:layout_width="match_parent"
-              android:orientation="vertical">
+                            <LinearLayout
+                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:gravity="center_vertical"
+                                android:padding="8dp"
+                                android:orientation="horizontal">
 
-              <ir.ninjacoder.ghostide.core.marco.GhostWebEditorSearch
-                android:layout_height="match_parent"
-                android:layout_width="wrap_content"
-                android:padding="8dp"
-                android:id="@+id/editor_ser" />
+                                <ImageView
+                                    android:layout_height="50dp"
+                                    android:layout_width="50dp"
+                                    android:scaleType="centerInside"
+                                    android:padding="5dp"
+                                    android:id="@+id/avatargithubuser" />
 
-              <androidx.recyclerview.widget.RecyclerView
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:padding="8dp"
-                android:id="@+id/syspiar" />
+                                <TextView
+                                    android:layout_height="wrap_content"
+                                    android:layout_width="0dp"
+                                    android:visibility="invisible"
+                                    android:ellipsize="end"
+                                    android:padding="8dp"
+                                    android:textSize="16sp"
+                                    android:singleLine="true"
+                                    android:layout_weight="2"
+                                    android:id="@+id/titleauthor" />
 
-            </LinearLayout>
+                                <ir.ninjacoder.ghostide.core.widget.ImageViewAnimation
+                                    android:layout_height="25dp"
+                                    android:layout_width="25dp"
+                                    android:scaleType="centerInside"
+                                    android:src="@drawable/drawer_item15"
+                                    android:layout_marginLeft="3dp"
+                                    android:layout_marginRight="3dp"
+                                    android:id="@+id/setting" />
 
-          </LinearLayout>
+                                <ir.ninjacoder.ghostide.core.widget.ImageViewAnimation
+                                    android:layout_height="25dp"
+                                    android:layout_width="25dp"
+                                    android:scaleType="centerInside"
+                                    android:src="@drawable/cameracode_24px"
+                                    android:layout_marginLeft="3dp"
+                                    android:layout_marginRight="3dp"
+                                    android:id="@+id/codesnapimg" />
+                                <ir.ninjacoder.ghostide.core.widget.ImageViewAnimation
+                                    android:layout_height="25dp"
+                                    android:layout_width="25dp"
+                                    android:scaleType="centerInside"
+                                    android:src="@drawable/cameracode_24px"
+                                    android:layout_marginLeft="3dp"
+                                    android:layout_marginRight="3dp"
+                                    android:id="@+id/deepseekai" />
+                                <ImageView
+                                    android:layout_height="25dp"
+                                    android:layout_width="25dp"
+                                    android:scaleType="centerInside"
+                                    android:src="@drawable/okeye"
+                                    android:layout_marginLeft="3dp"
+                                    android:layout_marginRight="3dp"
+                                    android:id="@+id/image" />
+
+                                <ImageView
+                                    android:layout_height="25dp"
+                                    android:layout_width="25dp"
+                                    android:scaleType="fitCenter"
+                                    android:src="@drawable/redo"
+                                    android:layout_marginLeft="3dp"
+                                    android:layout_marginRight="3dp"
+                                    android:id="@+id/redo" />
+
+                                <ImageView
+                                    android:layout_height="25dp"
+                                    android:layout_width="25dp"
+                                    android:scaleType="fitCenter"
+                                    android:src="@drawable/undos"
+                                    android:layout_marginLeft="3dp"
+                                    android:layout_marginRight="3dp"
+                                    android:id="@+id/undo" />
+
+                                <ImageView
+                                    android:layout_height="25dp"
+                                    android:layout_width="25dp"
+                                    android:scaleType="fitCenter"
+                                    android:src="@drawable/ic_more_vert_white"
+                                    android:layout_marginRight="4dp"
+                                    android:id="@+id/menupopnew" />
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:layout_marginLeft="3dp"
+                                    android:layout_marginRight="3dp"
+                                    android:id="@+id/rvmenueditor" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                    <ProgressBar
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:indeterminate="true"
+                        android:padding="8dp"
+                        style="?android:progressBarStyleHorizontal"
+                        android:id="@+id/progressbar1" />
+
+
+                    <com.google.android.material.tabs.TabLayout
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:background="@android:color/transparent"
+                        app:tabMode="scrollable"
+                        app:tabGravity="fill"
+                        style="@style/AppTheme.TabLayout"
+                        app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
+                        android:id="@+id/tablayouteditor" />
+
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:padding="8dp"
+                        android:id="@+id/dir" />
+
+                </LinearLayout>
+
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:layout_height="0dp"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:id="@+id/viewPager" />
+
+
+                <LinearLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:gravity="center_vertical"
+                    android:padding="3dp"
+                    android:orientation="horizontal"
+                    android:id="@+id/newLayoutSymbolBar">
+
+                    <LinearLayout
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:visibility="visible"
+                            android:background="@android:color/transparent"
+                            android:gravity="right"
+                            android:padding="2dp"
+                            android:orientation="vertical"
+                            android:id="@+id/barSymoble">
+
+                            <ImageView
+                                android:layout_height="25dp"
+                                android:layout_width="25dp"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/close"
+                                android:padding="3dp"
+                                android:visibility="gone"
+                                android:layout_marginLeft="2dp"
+                                android:layout_marginRight="2dp"
+                                android:id="@+id/imageview1" />
+
+                            <LinearLayout
+                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:gravity="center_vertical"
+                                android:padding="8dp"
+                                android:orientation="horizontal" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_height="match_parent"
+                            android:layout_width="match_parent"
+                            android:orientation="vertical">
+
+                            <ir.ninjacoder.ghostide.core.marco.GhostWebEditorSearch
+                                android:layout_height="match_parent"
+                                android:layout_width="wrap_content"
+                                android:padding="8dp"
+                                android:id="@+id/editor_ser" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:padding="8dp"
+                                android:id="@+id/syspiar" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </ir.ninjacoder.ghostide.core.widget.PraramnetLayoutNinja>
 
         </LinearLayout>
 
-      </ir.ninjacoder.ghostide.core.widget.PraramnetLayoutNinja>
-
     </LinearLayout>
-
-  </LinearLayout>
-  <ir.ninjacoder.ghostide.core.widget.ExrtaFab
-    android:layout_height="wrap_content"
-    android:layout_width="wrap_content"
-    android:layout_gravity="bottom|end"
-    android:layout_margin="16dp"
-    app:backgroundTint="?colorPrimary"
-    android:padding="24dp"
-    app:fabSize="normal"
-    app:iconTint="?colorSurface"
-    android:id="@+id/_fab"
-    android:elevation="8dp" />
+    <ir.ninjacoder.ghostide.core.widget.ExrtaFab
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        app:backgroundTint="?colorPrimary"
+        android:padding="24dp"
+        app:fabSize="normal"
+        app:iconTint="?colorSurface"
+        android:id="@+id/_fab"
+        android:elevation="8dp" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

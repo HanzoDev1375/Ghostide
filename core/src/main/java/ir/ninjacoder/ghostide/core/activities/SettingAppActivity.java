@@ -92,7 +92,9 @@ public class SettingAppActivity extends BaseCompat {
       autoSaveText,
       codeAZ,
       livemodel,
-      breaklevelmodel;
+      breaklevelmodel,
+      seek,
+      minimap;
   private ObjectAnimator mdownObjectAnimator = new ObjectAnimator();
   private TimerTask timer;
   private SharedPreferences getvb,
@@ -129,6 +131,8 @@ public class SettingAppActivity extends BaseCompat {
     _toolbar = findViewById(R.id._toolbar);
     themecustom = findViewById(R.id.themecustom);
     blurmod = findViewById(R.id.blurmod);
+    seek = findViewById(R.id.seek);
+    minimap = findViewById(R.id.minimaps);
     windowsize = findViewById(R.id.windowsize);
     setSupportActionBar(_toolbar);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -205,6 +209,10 @@ public class SettingAppActivity extends BaseCompat {
     themecustom.setDescription(getString(R.string.customthemesub));
     blurmod.setTitle(getString(R.string.customblursizesubtitle));
     blurmod.setDescription(getString(R.string.customblursizetitle));
+    seek.setTitle("StickyScroll");
+    seek.setDescription("StickyScroll");
+    minimap.setTitle("MiniMap");
+    minimap.setDescription("Show minimap");
     themecustom.setOnClickListener(
         v -> {
           customDataRow(
@@ -376,6 +384,22 @@ public class SettingAppActivity extends BaseCompat {
             ru.edit().putBoolean("live", false).apply();
           }
         });
+    seek.setSwitchChangedListener(
+        (bin, is) -> {
+          if (is) {
+            setfont.edit().putBoolean("seek", true).apply();
+          } else {
+            setfont.edit().putBoolean("seek", false).apply();
+          }
+        });
+    minimap.setSwitchChangedListener(
+        (bin, is) -> {
+          if (is) {
+            setfont.edit().putBoolean("minimap", true).apply();
+          } else {
+            setfont.edit().putBoolean("minimap", false).apply();
+          }
+        });
     breaklevelmodel.setSwitchChangedListener(
         (bin, is) -> {
           if (is) GhostIdeAppLoader.getPrefManager().edit().putBoolean("breaks", true).apply();
@@ -491,6 +515,13 @@ public class SettingAppActivity extends BaseCompat {
     if (ru.getBoolean("live", false) == true) {
       livemodel.setValue(true);
     } else livemodel.setValue(false);
+    if(setfont.getBoolean("seek",false) == true){
+      seek.setValue(true);
+    }else seek.setValue(false);
+    if(setfont.getBoolean("minimap",false) == true){
+      minimap.setValue(true);
+    }else minimap.setValue(false);
+    
 
     if (GhostIdeAppLoader.getPrefManager().getBoolean("breaks", false) == true) {
       breaklevelmodel.setValue(true);

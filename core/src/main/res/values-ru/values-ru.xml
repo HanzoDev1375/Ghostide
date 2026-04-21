@@ -153,5 +153,9 @@
   <string name="search_regex_case">Regex + С учетом регистра</string>
   <string name="search_regex_multiline">Regex + Многострочный</string>
   <string name="search_regex_dotall">Regex + Точка везде</string>
+  <string name="file_created_title">Файл создан</string>
+  <string name="file_created_message">Хотите открыть этот файл в редакторе?\n%s</string>
+  <string name="open_button">Открыть</string>
+  <string name="later_button">Позже</string>
 
 </resources>

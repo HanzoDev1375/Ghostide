@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+
+  <string name="chat_welcome_message">你好！我是DeepSeek AI助手。我能帮你什么？ </string>
+  <string name="chat_api_key_missing">请在设置中输入API Key </string>
+  <string name="chat_model_fast_active">快速模式已激活 </string>
+  <string name="chat_model_expert_active">专家模式已激活 </string>
+  <string name="chat_set_api_key_first">请先设置API Key </string>
+  <string name="chat_error_prefix">错误： </string>
+  <string name="settings_api_key_required">需要API密钥 </string>
+  <string name="settings_saved">设置已保存 </string>
+  <string name="settings_model_expert">DeepSeek-Reasoner（专家模式） </string>
+  <string name="settings_model_fast">DeepSeek-Chat（快速模式） </string>
+  <string name="settings_current_model">当前模型： </string>
+</resources>

@@ -92,6 +92,7 @@
     <activity android:name=".activities.SettingAppActivity" />
     <activity android:name=".activities.ErrorManagerActivity" />
     <activity android:name=".activities.AboutActivity" />
+    <activity android:name="ir.ninjacoder.prograsssheet.deepseek.ui.DeepSeekActivity"/>
     <activity android:name="ir.ninjacoder.ghostide.core.store.StoreAcitvity" />
     <activity
       android:configChanges="orientation|screenSize|smallestScreenSize|density|screenLayout|keyboard|keyboardHidden|navigation"

@@ -2,6 +2,8 @@ package ir.ninjacoder.ghostide.core.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.SpannableString;
 import android.view.LayoutInflater;
 import ir.ninjacoder.ghostide.core.activities.FileManagerActivity;
@@ -34,7 +36,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.BackgroundColorSpan;
@@ -73,7 +76,20 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
   private String currentFilter = "";
   private Map<String, FileConentChange> fileContentStates = new HashMap<>();
   private OnFileOperationStateChangeListener stateChangeListener;
-
+  private boolean isAnimating = false;
+  private int animationStartOffset = 0;
+  private final Handler stopAnimationHandler = new Handler(Looper.getMainLooper());
+  private final Runnable stopAnimationRunnable = this::stopAnimation;
+  private RecyclerView recyclerView;
+  private final RecyclerView.OnScrollListener clearAnimationListener =
+      new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(@NonNull RecyclerView rv, int newState) {
+          if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+            clearAnimation();
+          }
+        }
+      };
   // SelectionTracker for multi-selection
   private SelectionTracker<Long> selectionTracker;
 
@@ -162,15 +178,70 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
   @Override
   public void onBindViewHolder(@NonNull VH holder, int position) {
     bind(holder, position);
+    bindViewHolderAnimation(holder);
   }
 
   @Override
   public void onBindViewHolder(@NonNull VH holder, int position, @NonNull List<Object> payloads) {
-    if (payloads != null && !payloads.isEmpty() && payloads.contains("IS_NEW_CHANGED")) {
-      FileManagerModel item = getItem(position);
+    if (payloads.isEmpty()) {
+      onBindViewHolder(holder, position);
     } else {
       bind(holder, position);
+      bindViewHolderAnimation(holder);
     }
+  }
+
+  @Override
+  public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+    super.onAttachedToRecyclerView(recyclerView);
+    this.recyclerView = recyclerView;
+    recyclerView.addOnScrollListener(clearAnimationListener);
+    resetAnimation();
+  }
+
+  @Override
+  public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
+    super.onDetachedFromRecyclerView(recyclerView);
+    recyclerView.removeOnScrollListener(clearAnimationListener);
+    this.recyclerView = null;
+    stopAnimation();
+  }
+
+  private void bindViewHolderAnimation(VH holder) {
+    holder.itemView.clearAnimation();
+    if (isAnimating) {
+      Animation animation =
+          AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.list_item);
+      animation.setStartOffset(animationStartOffset);
+      animationStartOffset += 20;
+      holder.itemView.startAnimation(animation);
+      postStopAnimation();
+    }
+  }
+
+  private void stopAnimation() {
+    stopAnimationHandler.removeCallbacks(stopAnimationRunnable);
+    isAnimating = false;
+    animationStartOffset = 0;
+  }
+
+  private void postStopAnimation() {
+    stopAnimationHandler.removeCallbacks(stopAnimationRunnable);
+    stopAnimationHandler.postDelayed(stopAnimationRunnable, 500);
+  }
+
+  private void clearAnimation() {
+    stopAnimation();
+    if (recyclerView != null) {
+      for (int i = 0; i < recyclerView.getChildCount(); i++) {
+        recyclerView.getChildAt(i).clearAnimation();
+      }
+    }
+  }
+
+  private void resetAnimation() {
+    clearAnimation();
+    isAnimating = true;
   }
 
   private void bind(VH holder, int position) {
@@ -183,11 +254,12 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
     if (item == null) {
       return;
     }
+
     boolean isSelected = selectionTracker != null && selectionTracker.isSelected((long) position);
 
     setSettingTextView(holder.folderName);
+
     if (selectionTracker != null) {
-      // holder.iconMoreOptions.setEnabled(isSelected);
       holder.roots.setItemSelect(isSelected);
     }
 
@@ -212,7 +284,6 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
       }
     }
 
-    holder.itemView.setClickable(true);
     if (item.getFilestate() != null) {
       switch (item.getFilestate()) {
         case RENAME:
@@ -268,6 +339,7 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
       holder.cardblur.cancelBlur();
       holder.cardblur.setContentPadding(0, 0, 0, 0);
       holder.roots.setBackground(holder.roots.get(filteredFiles, position));
+
       holder.cardblur.setClickable(false);
       holder.cardblur.setFocusable(false);
     } else if (viewType == ViewType.GRID) {
@@ -324,11 +396,22 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
 
   public void clearHighlights() {
     for (FileManagerModel item : allFiles) {
-      item.setFilestate(FileState.NORMAL);
+      if (item.getFilestate() == FileState.SELECTBELITEM
+          || item.getFilestate() == FileState.DELETED
+          || item.getFilestate() == FileState.ADD
+          || item.getFilestate() == FileState.RENAME) {
+        item.setFilestate(FileState.NORMAL);
+      }
     }
     for (FileManagerModel item : filteredFiles) {
-      item.setFilestate(FileState.NORMAL);
+      if (item.getFilestate() == FileState.SELECTBELITEM
+          || item.getFilestate() == FileState.DELETED
+          || item.getFilestate() == FileState.ADD
+          || item.getFilestate() == FileState.RENAME) {
+        item.setFilestate(FileState.NORMAL);
+      }
     }
+    fileContentStates.clear();
     notifyDataSetChanged();
   }
 
@@ -412,7 +495,6 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
 
   public void submitList(List<FileManagerModel> list) {
     currentFilter = "";
-
     if (list == null) {
       allFiles = new ArrayList<>();
       filteredFiles = new ArrayList<>();
@@ -420,7 +502,7 @@ public class FileManagerAd extends RecyclerView.Adapter<FileManagerAd.VH>
       allFiles = new ArrayList<>(list);
       filteredFiles = new ArrayList<>(list);
     }
-
+    resetAnimation();
     notifyDataSetChanged();
   }
 

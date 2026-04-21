@@ -384,7 +384,19 @@ public class CodeEditor extends View
   private int mRegexColor = 0xFF4CAF50;
   private IconSpanManager iconSpanManager;
   private List<String> patternCode = new ArrayList<>();
-  private SimpleMinimap minimaps;
+  private boolean stickyScrollEnabled = true;
+  private RectF stickyRect = new RectF();
+  private boolean miniMapEnabled = false;
+  private float miniMapWidth = 0f;
+  private RectF miniMapRect = new RectF();
+  private RectF miniMapViewport = new RectF();
+  private int miniMapLineHeight = 3;
+  private boolean miniMapDirty = true;
+  private boolean miniMapShowingLineInfo = false;
+  private long miniMapInfoHideTime = 0;
+  private int miniMapCurrentLine = 0;
+  private float miniMapInfoX = 0, miniMapInfoY = 0;
+  private boolean isHoldingMiniMap = false;
 
   public void addLineIcon(int lineNumber, int iconRes) {
     LineIcon lineIcon = new LineIcon(iconRes, lineNumber);
@@ -651,6 +663,128 @@ public class CodeEditor extends View
     }
   }
 
+  // فعال/غیرفعال کردن Sticky Scroll
+  public void setStickyScrollEnabled(boolean enabled) {
+    this.stickyScrollEnabled = enabled;
+    invalidate();
+  }
+
+  public boolean isStickyScrollEnabled() {
+    return stickyScrollEnabled;
+  }
+
+  private List<BlockLine> getStickyBlocks() {
+    if (!stickyScrollEnabled) {
+      return null;
+    }
+
+    List<BlockLine> blocks = mSpanner == null ? null : mSpanner.getResult().getBlocks();
+    if (blocks == null || blocks.isEmpty()) {
+      return null;
+    }
+
+    int firstVisibleLine = getFirstVisibleLine();
+    int offsetY = getOffsetY();
+    int rowHeight = getRowHeight();
+
+    List<BlockLine> result = new ArrayList<>();
+
+    for (BlockLine block : blocks) {
+      if (block.startLine < firstVisibleLine && block.endLine >= firstVisibleLine) {
+        result.add(block);
+      }
+    }
+
+    if (result.size() > 3) {
+      result = result.subList(result.size() - 3, result.size());
+    }
+
+    return result;
+  }
+
+  private void drawStickyLines(Canvas canvas, List<BlockLine> stickyBlocks, float offsetX) {
+    if (stickyBlocks == null || stickyBlocks.isEmpty()) {
+        return;
+    }
+    int currentLine = mCursor.isSelected() ? -1 : mCursor.getLeftLine();
+    int rowHeight = getRowHeight();
+    int size = stickyBlocks.size();
+    for (int i = size - 1; i >= 0; i--) {
+        BlockLine block = stickyBlocks.get(i);
+        int line = block.startLine;
+        int indexFromTop = size - 1 - i; 
+
+        float top = indexFromTop * rowHeight;
+        float bottom = (indexFromTop + 1) * rowHeight;
+
+        int bgColor = (line == currentLine && isHighlightCurrentLine())
+                ? mColors.getColor(EditorColorScheme.CURRENT_LINE)
+                : mColors.getColor(EditorColorScheme.WHOLE_BACKGROUND);
+
+        stickyRect.set(offsetX, top, getWidth(), bottom);
+        drawColor(canvas, bgColor, stickyRect);
+        drawStickyLineText(canvas, line, offsetX, top);
+    }
+
+    // خط جداکننده پایین نوار sticky
+    if (size > 0) {
+        float bottomLine = size * rowHeight;
+        stickyRect.set(0, bottomLine - getDpUnit(), getWidth(), bottomLine);
+        drawColor(canvas, mColors.getColor(EditorColorScheme.LINE_DIVIDER), stickyRect);
+    }
+}
+
+  private void drawStickyLineText(Canvas canvas, int line, float offsetX, float offsetY) {
+    ContentLine contentLine = mText.getLine(line);
+    contentLine.timestamp = 0;
+    prepareLine(line);
+    int columnCount = mText.getColumnCount(line);
+
+    List<Span> spans = getSpansForLine(line);
+    if (spans == null || spans.isEmpty()) {
+      spans = defSpans;
+    }
+
+    GraphicTextRow row = GraphicTextRow.obtain();
+    row.set(mBuffer, 0, columnCount, getTabWidth(), spans, mPaint);
+
+    canvas.save();
+    canvas.translate(offsetX, offsetY);
+
+    float paintingOffset = 0;
+    int spanOffset = 0;
+    Span span = spans.get(spanOffset);
+
+    mPaint.setFakeBoldText(true);
+
+    while (columnCount > span.column && spanOffset < spans.size()) {
+      int spanEnd = spanOffset + 1 >= spans.size() ? columnCount : spans.get(spanOffset + 1).column;
+      spanEnd = Math.min(columnCount, spanEnd);
+
+      float width = row.measureText(span.column, spanEnd);
+
+      mPaint.setColor(mColors.getColor(span.getForegroundColorId()));
+
+      canvas.drawText(
+          mBuffer.value,
+          span.column,
+          spanEnd - span.column,
+          paintingOffset,
+          getRowBaseline(0),
+          mPaint);
+
+      paintingOffset += width;
+      spanOffset++;
+      if (spanOffset < spans.size()) {
+        span = spans.get(spanOffset);
+      }
+    }
+
+    mPaint.setFakeBoldText(false);
+    canvas.restore();
+    GraphicTextRow.recycle(row);
+  }
+
   protected void drawGhostTexts(Canvas canvas) {
     if (currentGhostText == null || !currentGhostText.visible) {
       return;
@@ -907,8 +1041,8 @@ public class CodeEditor extends View
     super.onScrollChanged(l, t, oldl, oldt);
     mText.setScrollX(l);
     mText.setScrollY(t);
-    if (minimaps != null && minimaps.isEnabled()) {
-      minimaps.update();
+    if (isMiniMapEnabled()) {
+      updateMiniMap();
       invalidate();
     }
   }
@@ -929,22 +1063,254 @@ public class CodeEditor extends View
     analyze(true);
   }
 
-  public SimpleMinimap getMiniMap() {
-    return minimaps;
-  }
-
   public void setMiniMapEnabled(boolean enabled) {
-    if (minimaps != null) minimaps.setEnabled(enabled);
+    if (this.miniMapEnabled != enabled) {
+      this.miniMapEnabled = enabled;
+      miniMapDirty = true;
+      invalidate();
+    }
   }
 
   public boolean isMiniMapEnabled() {
-    return minimaps.isEnabled();
+    return miniMapEnabled;
+  }
+
+  public void updateMiniMap() {
+    miniMapDirty = true;
+    invalidate();
   }
 
   public void analyze(boolean runBgAnalyzer) {
     if (mSpanner != null) {
       mSpanner.analyze(mText, runBgAnalyzer);
     }
+  }
+
+  private void drawMiniMap(Canvas canvas) {
+    if (!miniMapEnabled || getLineCount() == 0) return;
+    
+    float margin = mDpUnit * 8;
+    miniMapWidth = getWidth() * 0.12f;
+    float left = getWidth() - miniMapWidth - margin;
+    float top = margin;
+    float right = left + miniMapWidth;
+    float bottom = getHeight() - margin;
+    miniMapRect.set(left, top, right, bottom);
+    mPaint.setColor(mColors.getColor(EditorColorScheme.WHOLE_BACKGROUND));
+    mPaint.setAlpha(200);
+    canvas.drawRoundRect(miniMapRect, mDpUnit * 6, mDpUnit * 6, mPaint);
+    
+    mPaint.setColor(mColors.getColor(EditorColorScheme.LINE_DIVIDER));
+    mPaint.setStyle(Paint.Style.STROKE);
+    mPaint.setStrokeWidth(mDpUnit);
+    canvas.drawRoundRect(miniMapRect, mDpUnit * 6, mDpUnit * 6, mPaint);
+    mPaint.setStyle(Paint.Style.FILL);
+    
+    float totalHeight = mLayout.getLayoutHeight();
+    if (totalHeight <= 0) return;
+    
+    float scale = miniMapRect.height() / totalHeight;
+    canvas.save();
+    canvas.clipRect(miniMapRect);
+    
+    float originalTextSize = mPaint.getTextSize();
+    int originalColor = mPaint.getColor();
+    Typeface originalTypeface = mPaint.getTypeface();
+    float originalSkewX = mPaint.getTextSkewX();
+    boolean originalFakeBold = mPaint.isFakeBoldText();
+    float miniTextSize = Math.min(mDpUnit * 8, getTextSizePx() * 0.6f);
+    miniTextSize = Math.max(mDpUnit * 4, miniTextSize);
+    mPaint.setTextSize(miniTextSize);
+    mPaint.setFakeBoldText(false);
+    mPaint.setTextSkewX(0);
+    int firstVisibleMiniMapLine = (int) ((getOffsetY() - getRowHeight()) / totalHeight * getLineCount());
+    int lastVisibleMiniMapLine = (int) ((getOffsetY() + getHeight() + getRowHeight()) / totalHeight * getLineCount());
+    firstVisibleMiniMapLine = Math.max(0, firstVisibleMiniMapLine - 5);
+    lastVisibleMiniMapLine = Math.min(getLineCount() - 1, lastVisibleMiniMapLine + 5);
+    
+    int lineCount = getLineCount();
+    for (int line = firstVisibleMiniMapLine; line <= lastVisibleMiniMapLine; line++) {
+        float lineTop = getRowTopForLine(line);
+        if (lineTop < 0) continue;
+        float y = miniMapRect.top + (lineTop * scale);
+        if (y > miniMapRect.bottom + miniTextSize) break;
+        if (y + miniTextSize < miniMapRect.top) continue;
+        
+        String lineText = mText.getLineString(line);
+        if (lineText == null || lineText.isEmpty()) continue;
+        
+        int color = getMiniMapLineColor(line);
+        mPaint.setColor(color);
+        float x = miniMapRect.left + mDpUnit * 2;
+        float baseline = y + miniTextSize;
+        canvas.drawText(lineText, x, baseline, mPaint);
+    }
+    mPaint.setTextSize(originalTextSize);
+    mPaint.setColor(originalColor);
+    mPaint.setTypeface(originalTypeface);
+    mPaint.setTextSkewX(originalSkewX);
+    mPaint.setFakeBoldText(originalFakeBold);
+    
+    drawMiniMapViewport(canvas);
+    canvas.restore();
+    
+    if (miniMapShowingLineInfo && System.currentTimeMillis() < miniMapInfoHideTime) {
+        drawMiniMapLineInfo(canvas);
+    }
+}
+  private void handleMiniMapTouch(float x, float y) {
+    if (!miniMapEnabled || !miniMapRect.contains(x, y)) return;
+
+    isHoldingMiniMap = true;
+
+    float percent = (y - miniMapRect.top) / miniMapRect.height();
+    percent = Math.max(0f, Math.min(1f, percent));
+
+    float totalHeight = mLayout.getLayoutHeight();
+    float targetY = percent * totalHeight;
+
+    targetY = Math.max(0, Math.min(getScrollMaxY(), targetY - getHeight() / 2f));
+
+    getScroller().forceFinished(true);
+    getScroller().startScroll(getOffsetX(), getOffsetY(), 0, (int) (targetY - getOffsetY()));
+
+    int targetLine = (int) (percent * getLineCount());
+    targetLine = Math.max(0, Math.min(getLineCount() - 1, targetLine));
+
+    miniMapCurrentLine = targetLine + 1;
+    miniMapInfoX = x;
+    miniMapInfoY = y - mDpUnit * 20;
+    miniMapShowingLineInfo = true;
+    miniMapInfoHideTime = System.currentTimeMillis() + 800;
+
+    setSelection(targetLine, 0);
+    hideCompletionWindow();
+
+    postDelayed(
+        () -> {
+          if (miniMapShowingLineInfo && System.currentTimeMillis() >= miniMapInfoHideTime) {
+            miniMapShowingLineInfo = false;
+            invalidate();
+          }
+        },
+        800);
+
+    invalidate();
+  }
+
+  private void drawMiniMapLineInfo(Canvas canvas) {
+    String text = "Line " + miniMapCurrentLine;
+
+    float oldSize = mPaint.getTextSize();
+    int oldColor = mPaint.getColor();
+    Paint.Align oldAlign = mPaint.getTextAlign();
+
+    mPaint.setTextSize(mDpUnit * 12);
+    mPaint.setFakeBoldText(true);
+    float textWidth = mPaint.measureText(text);
+    float padding = mDpUnit * 8;
+    float bubbleWidth = textWidth + padding * 2;
+    float bubbleHeight = mDpUnit * 24;
+
+    RectF bubbleRect = new RectF();
+    bubbleRect.set(
+        miniMapInfoX - bubbleWidth / 2,
+        miniMapInfoY - bubbleHeight,
+        miniMapInfoX + bubbleWidth / 2,
+        miniMapInfoY);
+
+    if (bubbleRect.left < 0) bubbleRect.offset(-bubbleRect.left, 0);
+    if (bubbleRect.right > getWidth()) bubbleRect.offset(getWidth() - bubbleRect.right, 0);
+    if (bubbleRect.top < 0) bubbleRect.offset(0, -bubbleRect.top);
+
+    Path bubblePath = new Path();
+    BubbleHelper.buildBubblePath(bubblePath, bubbleRect);
+
+    mPaint.setColor(0xCC333333);
+    mPaint.setStyle(Paint.Style.FILL);
+    canvas.drawPath(bubblePath, mPaint);
+
+    mPaint.setColor(0xFFFFFFFF);
+    mPaint.setStyle(Paint.Style.STROKE);
+    mPaint.setStrokeWidth(mDpUnit);
+    canvas.drawPath(bubblePath, mPaint);
+
+    mPaint.setStyle(Paint.Style.FILL);
+    mPaint.setColor(0xFFFFFFFF);
+    mPaint.setTextAlign(Paint.Align.CENTER);
+    float textY = bubbleRect.centerY() + (mPaint.getTextSize() / 3);
+    canvas.drawText(text, bubbleRect.centerX(), textY, mPaint);
+
+    mPaint.setTextSize(oldSize);
+    mPaint.setColor(oldColor);
+    mPaint.setTextAlign(oldAlign);
+    mPaint.setFakeBoldText(false);
+    mPaint.setStyle(Paint.Style.FILL);
+  }
+
+  private float getRowTopForLine(int line) {
+    RowIterator iterator = mLayout.obtainRowIterator(0);
+    int currentRow = 0;
+    float lastTop = 0;
+
+    while (iterator.hasNext()) {
+      Row row = iterator.next();
+      if (row.lineIndex == line) {
+        iterator.reset();
+        return getRowTop(currentRow);
+      }
+      currentRow++;
+      lastTop = getRowTop(currentRow);
+    }
+    iterator.reset();
+    return lastTop;
+  }
+
+  private void resetMiniMapHold() {
+    isHoldingMiniMap = false;
+  }
+
+  private int getMiniMapLineColor(int line) {
+    List<Span> spans = getSpansForLine(line);
+    if (spans != null && !spans.isEmpty()) {
+      for (Span span : spans) {
+        int colorId = span.getForegroundColorId();
+        if (colorId != 0 && colorId != EditorColorScheme.TEXT_NORMAL) {
+          return mColors.getColor(colorId);
+        }
+      }
+    }
+
+    if (mText.getColumnCount(line) == 0) {
+      return mColors.getColor(EditorColorScheme.LINE_NUMBER);
+    }
+
+    return mColors.getColor(EditorColorScheme.TEXT_NORMAL);
+  }
+
+  private void drawMiniMapViewport(Canvas canvas) {
+    float totalHeight = mLayout.getLayoutHeight();
+    if (totalHeight <= 0) return;
+
+    float viewportTop = miniMapRect.top + (getOffsetY() / totalHeight) * miniMapRect.height();
+    float viewportHeight = (getHeight() / totalHeight) * miniMapRect.height();
+
+    viewportTop =
+        Math.max(miniMapRect.top, Math.min(miniMapRect.bottom - viewportHeight, viewportTop));
+
+    miniMapViewport.set(
+        miniMapRect.left, viewportTop, miniMapRect.right, viewportTop + viewportHeight);
+
+    int viewportColor = isHoldingMiniMap ? 0x80FFFFFF : 0x40FFFFFF;
+    mPaint.setColor(viewportColor);
+    canvas.drawRoundRect(miniMapViewport, mDpUnit * 4, mDpUnit * 4, mPaint);
+
+    int borderColor = isHoldingMiniMap ? 0xFFFFFFFF : 0xCCFFFFFF;
+    mPaint.setColor(borderColor);
+    mPaint.setStyle(Paint.Style.STROKE);
+    mPaint.setStrokeWidth(mDpUnit);
+    canvas.drawRoundRect(miniMapViewport, mDpUnit * 4, mDpUnit * 4, mPaint);
+    mPaint.setStyle(Paint.Style.FILL);
   }
 
   public void notifyIMEExternalCursorChange() {
@@ -1517,7 +1883,6 @@ public class CodeEditor extends View
     mHorizontalGlow = new MaterialEdgeEffect();
     mTextActionWindow = new EditorTextActionWindow(this);
     mOverrideSymbolPairs = new SymbolPairMatch();
-    minimaps = new SimpleMinimap(this);
     setEditorLanguage(null);
     setText(null);
     setTabWidth(2);
@@ -1568,9 +1933,6 @@ public class CodeEditor extends View
         (event, unsubscribe) -> {
           handleClickEvent(event);
         });
-
-    
-    
   }
 
   public IconSpanManager getIconSpanManager() {
@@ -2402,6 +2764,13 @@ public class CodeEditor extends View
     if (!isWordwrap() && isBlockLineEnabled()) {
       drawBlockLines(canvas, textOffset);
     }
+    if (stickyScrollEnabled && !isWordwrap()) {
+      List<BlockLine> stickyBlocks = getStickyBlocks();
+      if (stickyBlocks != null && !stickyBlocks.isEmpty()) {
+        float offsetX1 = measureTextRegionOffset() - getOffsetX();
+        drawStickyLines(canvas, stickyBlocks, offsetX1);
+      }
+    }
 
     if (!mCursorAnimator.isRunning()) {
       for (var action : postDrawCursor) {
@@ -2411,7 +2780,7 @@ public class CodeEditor extends View
     } else {
       drawSelectionOnAnimation(canvas);
     }
-
+    drawMiniMap(canvas);
     if (isLineNumberEnabled() && !lineNumberNotPinned) {
       drawLineNumberBackground(
           canvas,
@@ -2451,9 +2820,8 @@ public class CodeEditor extends View
 
     drawScrollBars(canvas);
     drawEdgeEffect(canvas);
-    if (minimaps != null && minimaps.isEnabled()) {
-      minimaps.update();
-      minimaps.draw(canvas, getWidth());
+    if (isMiniMapEnabled()) {
+      updateMiniMap();
     }
     rememberDisplayedLines();
   }
@@ -4379,32 +4747,42 @@ public class CodeEditor extends View
           }
 
           drawColor(canvas, mColors.getColor(blockColor), mRect);
-          Paint paint = new Paint();
+
           if (curr == cursorIdx) {
+
+            boolean oldFakeBold = mPaint.isFakeBoldText();
+            float oldStrokeWidth = mPaint.getStrokeWidth();
+            mPaint.setFakeBoldText(true);
+            mPaint.setStrokeWidth(3f);
             int color = mColors.getColor(EditorColorScheme.BLOCK_LINE_SELECTOR);
-            paint.setColor(color);
-            paint.setFakeBoldText(true);
+            mPaint.setColor(color);
             float radius = 8f;
+
             ContentLine startLine = mText.getLine(block.startLine);
             float startLeft =
                 measureText(startLine, 0, block.startColumn, block.startLine) + offsetX;
             float startRight =
                 measureText(startLine, 0, block.startColumn + 1, block.startLine) + offsetX;
+
             mRect.top = getRowTop(block.startLine) - getOffsetY();
             mRect.bottom = getRowBottom(block.startLine) - getOffsetY();
             mRect.left = startLeft;
             mRect.right = startRight;
-            canvas.drawRoundRect(mRect, radius, radius, paint);
+            canvas.drawRoundRect(mRect, radius, radius, mPaint);
+
             ContentLine endLine = mText.getLine(block.endLine);
             float endLeft = measureText(endLine, 0, block.endColumn, block.endLine) + offsetX;
             float endRight = measureText(endLine, 0, block.endColumn + 1, block.endLine) + offsetX;
+
             mRect.top = getRowTop(block.endLine) - getOffsetY();
             mRect.bottom = getRowBottom(block.endLine) - getOffsetY();
             mRect.left = endLeft;
             mRect.right = endRight;
-            canvas.drawRoundRect(mRect, radius, radius, paint);
+            canvas.drawRoundRect(mRect, radius, radius, mPaint);
+            mPaint.setFakeBoldText(oldFakeBold);
+            mPaint.setStrokeWidth(oldStrokeWidth);
           } else {
-            paint.setFakeBoldText(false);
+
           }
 
         } catch (IndexOutOfBoundsException e) {
@@ -4451,17 +4829,54 @@ public class CodeEditor extends View
       return;
     }
 
-    boolean minimapEnabled = minimaps != null && minimaps.isEnabled();
-
-    if (isVerticalScrollBarEnabled() && getScrollMaxY() > getHeight() / 2 && !minimapEnabled) {
-      drawScrollBarTrackVertical(canvas);
-      //drawScrollBarVertical(canvas);
+    if (isVerticalScrollBarEnabled() && getScrollMaxY() > getHeight() / 2) {
+      if (!isMiniMapEnabled()) {
+        drawScrollBarTrackVertical(canvas);
+        drawScrollBarVertical(canvas);
+      }
     }
 
     if (isHorizontalScrollBarEnabled() && !isWordwrap() && getScrollMaxX() > getWidth() * 3 / 4) {
       drawScrollBarTrackHorizontal(canvas);
       drawScrollBarHorizontal(canvas);
     }
+  }
+
+  protected void drawScrollBarVertical(Canvas canvas) {
+    int page = getHeight();
+    float all = mLayout.getLayoutHeight() + getHeight() / 2f;
+    float length = page / all * getHeight();
+    float topY;
+    if (length < mDpUnit * 30) {
+      length = mDpUnit * 30;
+      topY = (getOffsetY() + page / 2f) / all * (getHeight() - length);
+    } else {
+      topY = getOffsetY() / all * getHeight();
+    }
+
+    if (mEventHandler.holdVerticalScrollBar() && mDisplayLnPanel) {
+      float centerY = topY + length / 2f;
+      drawLineInfoPanel(canvas, centerY, getWidth() - mDpUnit * 20);
+    }
+
+    mRect.right = getWidth();
+    mRect.left = getWidth() - mDpUnit * 15;
+    mRect.top = topY;
+    mRect.bottom = topY + length;
+
+    float cornerRadius = 10f;
+    Path path = new Path();
+    path.addRoundRect(new RectF(mRect), cornerRadius, cornerRadius, Path.Direction.CW);
+    canvas.clipPath(path);
+
+    mVerticalScrollBar.set(mRect);
+
+    int thumbColor =
+        mEventHandler.holdVerticalScrollBar()
+            ? mColors.getColor(EditorColorScheme.SCROLL_BAR_THUMB_PRESSED)
+            : mColors.getColor(EditorColorScheme.SCROLL_BAR_THUMB);
+
+    drawColor(canvas, thumbColor, mRect);
   }
 
   protected void drawScrollBarTrackHorizontal(Canvas canvas) {
@@ -4491,51 +4906,7 @@ public class CodeEditor extends View
       path.addRoundRect(new RectF(mRect), radius, radius, Path.Direction.CW);
       canvas.clipPath(path);
       drawColor(canvas, mColors.getColor(EditorColorScheme.SCROLL_BAR_TRACK), mRect);
-      drawScrollBarLineInfoPanel(canvas);
     }
-  }
-
-  protected void drawScrollBarLineInfoPanel(Canvas canvas) {
-    if (!mDisplayLnPanel) return;
-    int currentLine = getFirstVisibleLine() + 1;
-    String text = mLnTip + currentLine;
-
-    float backupSize = mPaint.getTextSize();
-    Paint.Align backupAlign = mPaint.getTextAlign();
-    boolean backupFakeBold = mPaint.isFakeBoldText();
-
-    mPaint.setTextSize(getLineInfoTextSize());
-    mPaint.setFakeBoldText(true);
-
-    Paint.FontMetricsInt backupMetrics = mTextMetrics;
-    mTextMetrics = mPaint.getFontMetricsInt();
-
-    float expand = mDpUnit * 8;
-    float textWidth = mPaint.measureText(text);
-    float rightX = getWidth() - mDpUnit * 15 - mDpUnit * 5;
-    float centerY = (mRect.top + mRect.bottom) / 2;
-
-    mRectInfo.top = centerY - getRowHeight() / 2f - expand;
-    mRectInfo.bottom = centerY + getRowHeight() / 2f + expand;
-    mRectInfo.right = rightX;
-    mRectInfo.left = rightX - expand * 2 - textWidth;
-
-    BubbleHelper.buildBubblePath(mPath, mRectInfo);
-    drawColor(canvas, mColors.getColor(EditorColorScheme.LINE_NUMBER_PANEL), mRectInfo);
-
-    float baseline = centerY - getRowHeight() / 2f + getRowBaseline(0);
-    float centerX = (mRectInfo.left + mRectInfo.right) / 2;
-
-    mPaint.setColor(mColors.getColor(EditorColorScheme.LINE_NUMBER_PANEL_TEXT));
-    mPaint.setTextAlign(Paint.Align.CENTER);
-    canvas.drawText(text, centerX, baseline, mPaint);
-    canvas.drawPath(mPath, mPaint);
-
-    // بازیابی تنظیمات
-    mPaint.setTextSize(backupSize);
-    mPaint.setTextAlign(backupAlign);
-    mPaint.setFakeBoldText(backupFakeBold);
-    mTextMetrics = backupMetrics;
   }
 
   /**
@@ -6647,8 +7018,8 @@ public class CodeEditor extends View
           }
           invalidate();
         });
-    if (minimaps != null && minimaps.isEnabled()) {
-      minimaps.update();
+    if (isMiniMapEnabled()) {
+      updateMiniMap();
     }
   }
 
@@ -7054,6 +7425,10 @@ public class CodeEditor extends View
     if (event.getAction() == MotionEvent.ACTION_UP) {
       mVerticalEdgeGlow.onRelease();
       mHorizontalGlow.onRelease();
+      resetMiniMapHold();
+    }
+    if (miniMapEnabled && event.getAction() == MotionEvent.ACTION_DOWN) {
+      handleMiniMapTouch(event.getX(), event.getY());
     }
     return (res3 || res2 || res);
   }
@@ -7357,10 +7732,7 @@ public class CodeEditor extends View
     getHorizontalEdgeEffect().setSize(h, w);
     getVerticalEdgeEffect().finish();
     getHorizontalEdgeEffect().finish();
-    
-    if (minimaps != null) {
-      minimaps.update();
-    }
+    updateMiniMap();
     if (isWordwrap() && w != oldWidth) {
       createLayout();
     } else {
@@ -7426,8 +7798,8 @@ public class CodeEditor extends View
     if (mPowerModeEffectManager != null && insertedContent.length() > 0) {
       mPowerModeEffectManager.spawnEffectAtCursor();
     }
-    if (minimaps != null && minimaps.isEnabled()) {
-      minimaps.update();
+    if (isMiniMapEnabled()) {
+      updateMiniMap();
     }
     for (int i = startLine; i <= endLine && i < getLineCount(); i++) {
       mText.getLine(i).widthCache = null;
@@ -7536,8 +7908,8 @@ public class CodeEditor extends View
         Log.e("CodeEditor", "Error creating ghost text", e);
       }
     }
-    if (minimaps != null && minimaps.isEnabled()) {
-      minimaps.update();
+    if (isMiniMapEnabled()) {
+      updateMiniMap();
     }
     for (int i = startLine; i <= startLine + 1 && i < getLineCount(); i++) {
       mText.getLine(i).widthCache = null;

@@ -202,7 +202,7 @@ public class FileUtil {
     void onFileError(String error);
   }
 
-  static long totalSize, currentSize,processedSize;
+  static long totalSize, currentSize, processedSize;
   static String currentFileName;
 
   public static void copyAuto(
@@ -252,8 +252,8 @@ public class FileUtil {
       newFile.mkdirs();
     }
 
-     totalSize = calculateSize(oldFile);
-     processedSize = 0;
+    totalSize = calculateSize(oldFile);
+    processedSize = 0;
 
     for (File file : files) {
       String destPath = newPath + "/" + file.getName();
@@ -367,6 +367,118 @@ public class FileUtil {
         });
   }
 
+  public static void moveFilesOrDirsByGhostideByList(
+      List<String> sourcePaths,
+      String destPath,
+      OnFileChangeCall call,
+      boolean copymod,
+      Context context) {
+
+    var sheet = new PrograssSheet(context);
+    sheet.setMode(StateMod.PROGRASSV);
+    sheet.setTitle((copymod ? "Copy " : "Move ") + sourcePaths.size() + " items");
+    sheet.setCancelable(false);
+    sheet.showBottonLayout(true);
+    sheet.show();
+
+    var thread =
+        new Thread(
+            () -> {
+              try {
+
+                totalSize = 0L;
+                for (String path : sourcePaths) {
+                  File file = new File(path);
+                  if (file.exists()) {
+                    totalSize += calculateSize(file);
+                  }
+                }
+
+                processedSize = 0L;
+                int successCount = 0;
+                int failCount = 0;
+                int totalCount = sourcePaths.size();
+
+                for (int i = 0; i < sourcePaths.size(); i++) {
+                  String sourcePath = sourcePaths.get(i);
+                  final int currentIndex = i + 1;
+
+                  try {
+                    File sourceFile = new File(sourcePath);
+                    if (!sourceFile.exists()) {
+                      failCount++;
+                      continue;
+                    }
+
+                    copyAuto(
+                        sourcePath,
+                        destPath,
+                        (count, name) -> {
+                          processedSize += count;
+                          currentFileName = name;
+
+                          ThreadUtils.runOnUiThread(
+                              () -> {
+                                int progress = (int) ((double) processedSize / totalSize * 100);
+                                sheet.setPrograss(progress, true);
+
+                                String status =
+                                    String.format(
+                                        "(%d/%d) %s: %s",
+                                        currentIndex,
+                                        totalCount,
+                                        (copymod ? "Copying" : "Moving"),
+                                        currentFileName);
+                                sheet.setSubTitle(status);
+                              });
+                        },
+                        !copymod);
+
+                    successCount++;
+                  } catch (Exception e) {
+                    failCount++;
+                    e.printStackTrace();
+                  }
+                }
+
+                final int finalSuccess = successCount;
+                final int finalFail = failCount;
+
+                ThreadUtils.runOnUiThread(
+                    () -> {
+                      sheet.dismiss();
+                      if (call != null) {
+                        if (finalFail == 0) {
+                          call.onFileDone();
+                        } else {
+                          call.onFileError(finalSuccess + " succeeded, " + finalFail + " failed");
+                        }
+                      }
+                    });
+
+              } catch (Exception err) {
+                err.printStackTrace();
+                ThreadUtils.runOnUiThread(
+                    () -> {
+                      sheet.dismiss();
+                      if (call != null) {
+                        call.onFileError(
+                            err.getMessage() != null ? err.getMessage() : "Unknown error");
+                      }
+                    });
+              }
+            });
+    thread.start();
+
+    sheet.clickButton(
+        v -> {
+          if (thread != null && thread.isAlive()) {
+            thread.interrupt();
+            ThreadUtils.runOnUiThread(() -> sheet.dismiss());
+          }
+        });
+  }
+
   public static long calculateSize(File file) {
     if (file.isFile()) {
       return file.length();
@@ -408,14 +520,13 @@ public class FileUtil {
         + units[digitGroups];
   }
 
-  public static void deleteFile(String path) {
+  public static boolean deleteFile(String path) {
     File file = new File(path);
 
-    if (!file.exists()) return;
+    if (!file.exists()) return false;
 
     if (file.isFile()) {
-      file.delete();
-      return;
+      return file.delete();
     }
 
     File[] fileArr = file.listFiles();
@@ -432,7 +543,7 @@ public class FileUtil {
       }
     }
 
-    file.delete();
+    return file.delete();
   }
 
   public static boolean isExistFile(String path) {

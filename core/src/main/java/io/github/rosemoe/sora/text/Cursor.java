@@ -294,20 +294,20 @@ public class Cursor {
 
         if (col > 0) {
           String lineText = mContent.getLineString(line);
+          char prevChar = lineText.charAt(col - 1);
 
-          // اگر متن فارسی است یا فاصله بین کلمات فارسی داره
-          if (isRtlText(lineText) || isRtlContext(lineText, col)) {
-            if (col <= lineText.length()) {
-              // محاسبه صحیح طول کاراکتر قبلی
-              int codePoint = Character.codePointBefore(lineText, col);
-              int charCount = Character.charCount(codePoint);
-              mContent.delete(line, col - charCount, line, col);
-            } else {
-              mContent.delete(line, col - 1, line, col);
-            }
+          // چک کردن فارسی/عربی یا کاراکترهای خاص
+          if (isRtlChar(prevChar)
+              || Character.isHighSurrogate(prevChar)
+              || prevChar == 0x200C
+              || prevChar == 0x200D) {
+            // فقط یک کاراکتر کامل پاک کن
+            int codePoint = Character.codePointBefore(lineText, col);
+            int charCount = Character.charCount(codePoint);
+            mContent.delete(line, col - charCount, line, col);
           } else {
             // منطق اصلی برای متن انگلیسی
-            int left = TextLayoutHelper.get().getCurPosLeft(col, lineText);
+            int left = TextLayoutHelper.get().getCurPosLeft(col, mContent.getLine(line));
             mContent.delete(line, left, line, col);
           }
         } else if (line > 0) {
@@ -321,28 +321,12 @@ public class Cursor {
     }
   }
 
-  private boolean isRtlText(String text) {
-    if (text == null || text.length() == 0) return false;
-
-    int rtlCount = 0;
-    int totalCount = 0;
-
-    for (int i = 0; i < Math.min(text.length(), 20); i++) {
-      char c = text.charAt(i);
-      if (Character.isLetter(c)) {
-        totalCount++;
-        // محدوده کاراکترهای فارسی، عربی و سایر زبان‌های RTL
-        if ((c >= '\u0600' && c <= '\u06FF')
-            || (c >= '\u0750' && c <= '\u077F')
-            || (c >= '\u08A0' && c <= '\u08FF')
-            || (c >= '\uFB50' && c <= '\uFDFF')
-            || (c >= '\uFE70' && c <= '\uFEFF')) {
-          rtlCount++;
-        }
-      }
-    }
-
-    return totalCount > 0 && rtlCount > totalCount * 0.6;
+  private boolean isRtlChar(char c) {
+    return (c >= '\u0600' && c <= '\u06FF') // Arabic
+        || (c >= '\u0750' && c <= '\u077F') // Arabic Supplement
+        || (c >= '\u08A0' && c <= '\u08FF') // Arabic Extended-A
+        || (c >= '\uFB50' && c <= '\uFDFF') // Arabic Presentation Forms-A
+        || (c >= '\uFE70' && c <= '\uFEFF'); // Arabic Presentation Forms-B
   }
 
   private boolean isRtlContext(String text, int cursorPosition) {
@@ -367,16 +351,6 @@ public class Cursor {
     }
 
     return false;
-  }
-
-  private boolean isRtlChar(char c) {
-    return (c >= '\u0600' && c <= '\u06FF')
-        || (c >= '\u0750' && c <= '\u077F')
-        || (c >= '\u08A0' && c <= '\u08FF')
-        || (c >= '\uFB50' && c <= '\uFDFF')
-        || (c >= '\uFE70' && c <= '\uFEFF')
-        || c == ' '
-        || c == '\t'; // فاصله و تب هم در نظر بگیر
   }
 
   /**

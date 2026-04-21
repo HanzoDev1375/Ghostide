@@ -41,7 +41,7 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
-   
+
     <androidx.core.widget.NestedScrollView
         android:layout_height="match_parent"
         android:layout_width="match_parent"
@@ -130,6 +130,22 @@
                     android:layout_marginTop="4dp"
                     android:layout_marginStart="8dp"
                     android:id="@+id/liveModel" />
+                <ir.ninjacoder.prograsssheet.perfence.PreferenceSwitchGroup
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_marginEnd="8dp"
+                    app:modBackground="middle"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="8dp"
+                    android:id="@+id/seek" />
+                <ir.ninjacoder.prograsssheet.perfence.PreferenceSwitchGroup
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_marginEnd="8dp"
+                    app:modBackground="middle"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="8dp"
+                    android:id="@+id/minimaps" />
 
                 <ir.ninjacoder.prograsssheet.perfence.PreferenceSwitchGroup
                     android:layout_height="wrap_content"
