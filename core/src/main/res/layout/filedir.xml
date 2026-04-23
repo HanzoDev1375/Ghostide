@@ -75,8 +75,6 @@
         android:visibility="gone"
         android:id="@+id/searchbar" />
 
-
-
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
@@ -85,6 +83,7 @@
       app:layout_behavior="@string/appbar_scrolling_view_behavior"
       android:orientation="vertical"
       android:fitsSystemWindows="true">
+      
       <androidx.recyclerview.widget.RecyclerView
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
@@ -142,6 +141,19 @@
       android:layout_gravity="bottom|right"
       android:layout_marginBottom="16dp" />
 
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+      android:layout_height="wrap_content"
+      android:layout_width="wrap_content"
+      android:layout_gravity="bottom|right"
+      android:layout_marginBottom="120dp"
+      android:layout_marginRight="20dp"
+      android:clickable="true"
+      android:src="@drawable/ic_deepseek_logo"
+      app:fabSize="mini"
+      app:backgroundTint="?attr/colorOnPrimary"
+      android:id="@+id/fabDeepSeek" />
+
     <ir.ninjacoder.ghostide.core.widget.ExrtaFab
       android:layout_height="80dp"
       android:layout_width="80dp"
@@ -152,6 +164,7 @@
       app:fabSize="normal"
       android:id="@+id/fabAdd"
       android:layout_gravity="bottom|right" />
+
     <LinearLayout
       android:layout_height="wrap_content"
       android:layout_width="match_parent"
@@ -198,6 +211,7 @@
       android:layout_marginStart="10dp"
       android:id="@+id/multiSelectionActions"
       android:layout_gravity="right|bottom" />
+      
   </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
   <ir.ninjacoder.ghostide.core.layoutmanager.NavigationViewCompnet

@@ -1,22 +1,22 @@
 {
   "allFiles": [
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/Ghostide33/prograsssheetlib/src/main/res/layout/item_message_assistant.xml",
+      "file": "/storage/emulated/0/AndroidIDEProjects/Ghostide33/core/src/main/java/io/github/rosemoe/sora/widget/commentRule/BetterCommentHelper.java",
       "selection": {
         "end": {
-          "column": 17,
-          "index": 3184,
-          "line": 79
+          "column": 0,
+          "index": 0,
+          "line": 0
         },
         "start": {
-          "column": 17,
-          "index": 3184,
-          "line": 79
+          "column": 0,
+          "index": 0,
+          "line": 0
         }
       }
     },
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/Ghostide33/prograsssheetlib/src/main/res/drawable/typing_dots.xml",
+      "file": "/storage/emulated/0/AndroidIDEProjects/Ghostide33/core/src/main/java/io/github/rosemoe/sora/langs/java/JavaCodeAnalyzer.java",
       "selection": {
         "end": {
           "column": 0,
@@ -31,5 +31,5 @@
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/Ghostide33/prograsssheetlib/src/main/res/drawable/typing_dots.xml"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/Ghostide33/core/src/main/java/io/github/rosemoe/sora/langs/java/JavaCodeAnalyzer.java"
 }

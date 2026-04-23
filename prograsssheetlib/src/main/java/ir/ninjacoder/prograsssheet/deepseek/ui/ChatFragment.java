@@ -14,7 +14,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -25,6 +24,7 @@ import ir.ninjacoder.prograsssheet.deepseek.adapter.ChatAdapter;
 import ir.ninjacoder.prograsssheet.deepseek.model.Message;
 import ir.ninjacoder.prograsssheet.deepseek.api.DeepSeekApiService;
 import ir.ninjacoder.prograsssheet.deepseek.setting.PrefManager;
+import ir.ninjacoder.prograsssheet.deepseek.manager.ChatHistoryManager;
 import android.view.inputmethod.EditorInfo;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -37,12 +37,20 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class ChatFragment extends Fragment {
 
+  public interface ChatFragmentListener {
+    void onChatSaved();
+
+    void onChatLoaded(String chatId, String title);
+
+    void onNewChatStarted();
+  }
+
   private RecyclerView chatRecyclerView;
   private EditText messageInput;
   private ImageButton sendButton;
-  private MaterialButton clearButton;
-  private MaterialButton attachFileButton;
-  private MaterialButton searchToggleButton;
+  private Button clearButton;
+  private Button attachFileButton;
+  private Button searchToggleButton;
   private FloatingActionButton settingsFab;
   private ProgressBar loadingIndicator;
   private TextView statusText;
@@ -52,10 +60,16 @@ public class ChatFragment extends Fragment {
   private List<Message> messages = new ArrayList<>();
   private DeepSeekApiService apiService;
   private PrefManager prefManager;
+  private ChatHistoryManager historyManager;
   private FragmentChatBinding binding;
   private boolean isSearchEnabled = false;
   private List<UploadedFile> uploadedFiles = new ArrayList<>();
   private Map<String, File> tempFileMap = new HashMap<>();
+  private ChatFragmentListener listener;
+
+  public void setChatFragmentListener(ChatFragmentListener listener) {
+    this.listener = listener;
+  }
 
   @Nullable
   @Override
@@ -69,7 +83,11 @@ public class ChatFragment extends Fragment {
     setupRecyclerView();
     setupListeners();
     checkApiKey();
-    addWelcomeMessage();
+
+    if (savedInstanceState == null) {
+      addWelcomeMessage();
+    }
+
     return binding.getRoot();
   }
 
@@ -94,6 +112,7 @@ public class ChatFragment extends Fragment {
     if (!TextUtils.isEmpty(savedApiKey)) {
       apiService.setApiKey(savedApiKey);
     }
+    historyManager = ChatHistoryManager.getInstance(requireContext());
   }
 
   private void setupRecyclerView() {
@@ -120,10 +139,12 @@ public class ChatFragment extends Fragment {
 
     clearButton.setOnClickListener(
         v -> {
-          messages.clear();
-          clearUploadedFiles();
-          addWelcomeMessage();
-          chatAdapter.notifyDataSetChanged();
+          new MaterialAlertDialogBuilder(requireContext())
+              .setTitle("پاک کردن چت")
+              .setMessage("آیا از پاک کردن تمام پیام‌ها اطمینان دارید؟")
+              .setPositiveButton("بله", (dialog, which) -> clearChat())
+              .setNegativeButton("خیر", null)
+              .show();
         });
 
     settingsFab.setOnClickListener(v -> showSettings());
@@ -151,20 +172,81 @@ public class ChatFragment extends Fragment {
         });
   }
 
+  private void clearChat() {
+    messages.clear();
+    clearUploadedFiles();
+    addWelcomeMessage();
+    chatAdapter.notifyDataSetChanged();
+    historyManager.startNewChat();
+    if (listener != null) {
+      listener.onNewChatStarted();
+    }
+  }
+
+  public void startNewChat() {
+    if (hasMessages()) {
+      new MaterialAlertDialogBuilder(requireContext())
+          .setTitle("چت جدید")
+          .setMessage("چت فعلی ذخیره شود؟")
+          .setPositiveButton(
+              "ذخیره",
+              (dialog, which) -> {
+                saveChatToHistory();
+                clearChat();
+              })
+          .setNegativeButton("ذخیره نشود", (dialog, which) -> clearChat())
+          .setNeutralButton("لغو", null)
+          .show();
+    } else {
+      clearChat();
+    }
+  }
+
+  public void loadChat(String chatId) {
+    List<Message> loadedMessages = historyManager.loadChat(chatId);
+    if (loadedMessages != null && !loadedMessages.isEmpty()) {
+      messages.clear();
+      messages.addAll(loadedMessages);
+      chatAdapter.notifyDataSetChanged();
+      chatRecyclerView.scrollToPosition(messages.size() - 1);
+
+      String title = historyManager.getCurrentChatTitle();
+      if (listener != null) {
+        listener.onChatLoaded(chatId, title);
+      }
+
+      Toast.makeText(getContext(), "چت بارگذاری شد", Toast.LENGTH_SHORT).show();
+    }
+  }
+
   private void showMultiFilePicker() {
     Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
     intent.setType("*/*");
     intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
     intent.addCategory(Intent.CATEGORY_OPENABLE);
     String[] mimeTypes = {
-      "text/plain",
-      "application/pdf",
-      "application/msword",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      "application/vnd.ms-powerpoint",
-      "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-      "application/vnd.ms-excel",
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      "text/x-java-source",
+      "text/x-kotlin",
+      "text/x-python",
+      "application/javascript",
+      "application/typescript",
+      "application/dart",
+      "text/x-go",
+      "text/x-rust",
+      "text/x-c",
+      "text/x-c++",
+      "text/x-csharp",
+      "application/x-httpd-php",
+      "text/x-ruby",
+      "text/x-lua",
+      "text/html",
+      "text/css",
+      "text/x-markdown",
+      "text/x-yaml",
+      "application/json",
+      "text/xml",
+      "text/x-sh",
+      "text/csv"
     };
     intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
     startActivityForResult(intent, 1001);
@@ -175,17 +257,14 @@ public class ChatFragment extends Fragment {
     super.onActivityResult(requestCode, resultCode, data);
     if (requestCode == 1001 && resultCode == Activity.RESULT_OK && data != null) {
       List<Uri> uris = new ArrayList<>();
-
       if (data.getClipData() != null) {
         int count = data.getClipData().getItemCount();
         for (int i = 0; i < count; i++) {
-          Uri uri = data.getClipData().getItemAt(i).getUri();
-          uris.add(uri);
+          uris.add(data.getClipData().getItemAt(i).getUri());
         }
       } else if (data.getData() != null) {
         uris.add(data.getData());
       }
-
       if (!uris.isEmpty()) {
         uploadMultipleFiles(uris);
       }
@@ -197,10 +276,7 @@ public class ChatFragment extends Fragment {
     filePreviewContainer.setVisibility(View.VISIBLE);
     fileChipGroup.removeAllViews();
     uploadedFiles.clear();
-
-    for (File file : tempFileMap.values()) {
-      file.delete();
-    }
+    tempFileMap.values().forEach(File::delete);
     tempFileMap.clear();
 
     AtomicInteger pendingUploads = new AtomicInteger(uris.size());
@@ -216,10 +292,7 @@ public class ChatFragment extends Fragment {
       chip.setText(fileName);
       chip.setCloseIconVisible(true);
       chip.setTag("pending_" + index);
-      chip.setOnCloseIconClickListener(
-          v -> {
-            fileChipGroup.removeView(chip);
-          });
+      chip.setOnCloseIconClickListener(v -> fileChipGroup.removeView(chip));
       fileChipGroup.addView(chip);
 
       uploadSingleFile(
@@ -230,13 +303,10 @@ public class ChatFragment extends Fragment {
               requireActivity()
                   .runOnUiThread(
                       () -> {
-                        UploadedFile uploadedFile = new UploadedFile(fileId, fileName);
-                        uploadedFiles.add(uploadedFile);
-
+                        uploadedFiles.add(new UploadedFile(fileId, fileName));
                         chip.setTag(fileId);
                         chip.setChipBackgroundColorResource(R.color.chip_success);
                         successCount.incrementAndGet();
-
                         if (pendingUploads.decrementAndGet() == 0) {
                           finishUploads(successCount.get(), uris.size(), errors);
                         }
@@ -249,13 +319,7 @@ public class ChatFragment extends Fragment {
                   .runOnUiThread(
                       () -> {
                         chip.setChipBackgroundColorResource(R.color.chip_error);
-                        chip.setCloseIconVisible(true);
-                        chip.setOnCloseIconClickListener(
-                            v -> {
-                              fileChipGroup.removeView(chip);
-                            });
                         errors.add(fileName + ": " + error);
-
                         if (pendingUploads.decrementAndGet() == 0) {
                           finishUploads(successCount.get(), uris.size(), errors);
                         }
@@ -267,7 +331,6 @@ public class ChatFragment extends Fragment {
 
   private void finishUploads(int successCount, int totalCount, List<String> errors) {
     setLoading(false);
-
     if (successCount > 0) {
       Toast.makeText(
               getContext(),
@@ -275,7 +338,6 @@ public class ChatFragment extends Fragment {
               Toast.LENGTH_SHORT)
           .show();
     }
-
     if (!errors.isEmpty()) {
       new MaterialAlertDialogBuilder(requireContext())
           .setTitle("خطا در آپلود")
@@ -283,7 +345,6 @@ public class ChatFragment extends Fragment {
           .setPositiveButton("باشه", null)
           .show();
     }
-
     if (uploadedFiles.isEmpty()) {
       filePreviewContainer.setVisibility(View.GONE);
     }
@@ -333,8 +394,7 @@ public class ChatFragment extends Fragment {
 
   private String getFileName(Uri uri) {
     String fileName = "file";
-    Cursor cursor =
-        requireContext().getContentResolver().query(uri, null, null, null, null);
+    Cursor cursor = requireContext().getContentResolver().query(uri, null, null, null, null);
     if (cursor != null && cursor.moveToFirst()) {
       int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
       if (nameIndex != -1) {
@@ -349,9 +409,7 @@ public class ChatFragment extends Fragment {
     uploadedFiles.clear();
     fileChipGroup.removeAllViews();
     filePreviewContainer.setVisibility(View.GONE);
-    for (File file : tempFileMap.values()) {
-      file.delete();
-    }
+    tempFileMap.values().forEach(File::delete);
     tempFileMap.clear();
   }
 
@@ -377,7 +435,7 @@ public class ChatFragment extends Fragment {
     messages.add(welcomeMessage);
   }
 
-  private void showSettings() {
+  public void showSettings() {
     SettingsBottomSheet bottomSheet = new SettingsBottomSheet();
     bottomSheet.setOnSettingsChangedListener(
         () -> {
@@ -486,6 +544,7 @@ public class ChatFragment extends Fragment {
                         chatAdapter.notifyItemChanged(assistantPosition);
                         setLoading(false);
                         onRegenerateFinished(assistantPosition);
+                        saveChatToHistory();
                       });
             }
 
@@ -526,6 +585,7 @@ public class ChatFragment extends Fragment {
                         chatRecyclerView.scrollToPosition(assistantPosition);
                         onRegenerateFinished(assistantPosition);
                         setLoading(false);
+                        saveChatToHistory();
                       });
             }
 
@@ -555,6 +615,24 @@ public class ChatFragment extends Fragment {
     }
   }
 
+  private void saveChatToHistory() {
+    List<Message> messagesToSave = new ArrayList<>();
+    for (Message msg : messages) {
+      if (!(messages.indexOf(msg) == 0
+          && "assistant".equals(msg.getRole())
+          && msg.getContent().equals(getString(R.string.chat_welcome_message)))) {
+        messagesToSave.add(msg);
+      }
+    }
+
+    if (!messagesToSave.isEmpty()) {
+      historyManager.saveCurrentChat(messagesToSave);
+      if (listener != null) {
+        listener.onChatSaved();
+      }
+    }
+  }
+
   private void setLoading(boolean loading) {
     loadingIndicator.setVisibility(loading ? View.VISIBLE : View.GONE);
     sendButton.setEnabled(!loading);
@@ -563,19 +641,16 @@ public class ChatFragment extends Fragment {
     searchToggleButton.setEnabled(!loading);
   }
 
-  public void openSettings() {
-    showSettings();
-  }
-
-  public void clearConversation() {
-    messages.clear();
-    clearUploadedFiles();
-    addWelcomeMessage();
-    chatAdapter.notifyDataSetChanged();
-  }
-
   public boolean hasMessages() {
     return messages.size() > 1;
+  }
+
+  public void deleteAllChats() {
+    historyManager.deleteAllChats();
+    clearChat();
+  }
+  public void setMassges(CharSequence text){
+    messageInput.setText(text);
   }
 
   private static class UploadedFile {

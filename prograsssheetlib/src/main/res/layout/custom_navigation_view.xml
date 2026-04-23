@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  android:background="?attr/colorSurface">
+
+  
+  <include layout="@layout/nav_header" />
+
+  
+  <TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Chat history"
+    android:textSize="14sp"
+    android:textStyle="bold"
+    android:textColor="?android:attr/textColorPrimary"
+    android:paddingStart="16dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="8dp" />
+
+  
+  <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/drawerChatsRecyclerView"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:clipToPadding="false"
+    android:paddingBottom="8dp" />
+
+  
+  <TextView
+    android:id="@+id/drawerEmptyText"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="there is no chat"
+    android:textSize="14sp"
+    android:textColor="?android:attr/textColorSecondary"
+    android:gravity="center"
+    android:padding="16dp"
+    android:visibility="gone" />
+
+  
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="?android:attr/listDivider" />
+
+  
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <com.google.android.material.button.MaterialButton
+      android:id="@+id/navNewChatButton"
+      style="@style/Widget.MaterialComponents.Button.TextButton"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="new Chat"
+      android:textAlignment="viewStart"
+      android:gravity="start|center_vertical"
+      android:paddingStart="16dp"
+      app:icon="@drawable/ic_new_chat"
+      app:iconGravity="start"
+      app:iconPadding="16dp"
+      app:iconTint="?android:attr/textColorPrimary" />
+
+    <com.google.android.material.button.MaterialButton
+      android:id="@+id/navSettingsButton"
+      style="@style/Widget.MaterialComponents.Button.TextButton"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="setting"
+      android:textAlignment="viewStart"
+      android:gravity="start|center_vertical"
+      android:paddingStart="16dp"
+      app:icon="@drawable/ic_settings"
+      app:iconGravity="start"
+      app:iconPadding="16dp"
+      app:iconTint="?android:attr/textColorPrimary" />
+
+  </LinearLayout>
+
+</LinearLayout>

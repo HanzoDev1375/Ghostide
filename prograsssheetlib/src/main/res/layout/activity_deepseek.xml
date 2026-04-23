@@ -1,24 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:orientation="vertical">
+<androidx.drawerlayout.widget.DrawerLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     android:fitsSystemWindows="true"
+     android:id="@+id/drawerLayout">
 
-  <com.google.android.material.appbar.AppBarLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    <LinearLayout
+         android:layout_height="match_parent"
+         android:layout_width="match_parent"
+         android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
-      android:id="@+id/toolbar"
-      android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize"
-      app:title="DeepSeek Chat" />
+        <com.google.android.material.appbar.AppBarLayout
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:fitsSystemWindows="true">
 
-  </com.google.android.material.appbar.AppBarLayout>
+            <androidx.appcompat.widget.Toolbar
+                 android:layout_height="?attr/actionBarSize"
+                 android:layout_width="match_parent"
+                 android:background="?attr/colorSurface"
+                 app:title="DeepSeek Chat"
+                 app:titleTextColor="?attr/colorOnSurface"
+                 app:navigationIcon="@drawable/ic_menu"
+                 android:id="@+id/toolbar" />
 
-  <FrameLayout
-    android:id="@+id/fragmentContainer"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
-</LinearLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <FrameLayout
+             android:layout_height="match_parent"
+             android:layout_width="match_parent"
+             android:id="@+id/fragmentContainer">
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <com.google.android.material.card.MaterialCardView
+         android:layout_height="match_parent"
+         android:layout_width="300dp"
+         app:cardElevation="0dp"
+         app:cardCornerRadius="0dp"
+         android:layout_gravity="start">
+
+        <LinearLayout
+             android:layout_height="match_parent"
+             android:layout_width="match_parent"
+             android:background="?attr/colorSurface"
+             android:orientation="vertical">
+
+            <LinearLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:background="?attr/colorPrimary"
+                 android:padding="16dp"
+                 android:orientation="vertical">
+
+                <ImageView
+                     android:layout_height="48dp"
+                     android:layout_width="48dp"
+                     android:layout_marginBottom="8dp"
+                     android:src="@drawable/ic_deepseek_logo"
+                     android:background="@drawable/circle_background"
+                     android:padding="10dp" />
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                     android:textColor="@android:color/white"
+                     android:text="DeepSeek Chat" />
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:alpha="0.8"
+                     android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                     android:textColor="@android:color/white"
+                     android:text="AI Assistant" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:background="?attr/colorSurface"
+                 android:padding="8dp"
+                 android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                     android:layout_height="wrap_content"
+                     android:layout_width="0dp"
+                     app:icon="@drawable/ic_new_chat"
+                     android:layout_marginEnd="4dp"
+                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                     android:layout_weight="1"
+                     android:id="@+id/navNewChatButton"
+                     android:text="چت جدید" />
+
+                <com.google.android.material.button.MaterialButton
+                     android:layout_height="wrap_content"
+                     android:layout_width="0dp"
+                     app:icon="@drawable/ic_settings"
+                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                     android:layout_marginStart="4dp"
+                     android:layout_weight="1"
+                     android:id="@+id/navSettingsButton"
+                     android:text="تنظیمات" />
+
+            </LinearLayout>
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+                 android:paddingBottom="4dp"
+                 android:textColor="?attr/colorPrimary"
+                 android:paddingStart="16dp"
+                 android:text="تاریخچه چت‌ها"
+                 android:paddingTop="8dp" />
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:visibility="gone"
+                 android:gravity="center"
+                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                 android:padding="16dp"
+                 android:textColor="?android:attr/textColorSecondary"
+                 android:id="@+id/drawerEmptyText"
+                 android:text="هیچ چتی وجود ندارد" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                 android:layout_height="0dp"
+                 android:layout_width="match_parent"
+                 android:padding="8dp"
+                 android:clipToPadding="false"
+                 android:layout_weight="1"
+                 android:id="@+id/drawerChatsRecyclerView" />
+
+            <com.google.android.material.button.MaterialButton
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 app:icon="@drawable/ic_delete_sweep"
+                 android:layout_margin="8dp"
+                 app:iconTint="?attr/colorError"
+                 android:textColor="?attr/colorError"
+                 style="@style/Widget.MaterialComponents.Button.TextButton"
+                 android:id="@+id/navClearAllButton"
+                 android:text="حذف همه چت‌ها" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.drawerlayout.widget.DrawerLayout>

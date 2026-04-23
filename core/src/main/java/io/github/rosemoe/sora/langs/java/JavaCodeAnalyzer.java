@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.core.graphics.ColorUtils;
 import io.github.rosemoe.sora.diagnostics.Diagnostic;
 import io.github.rosemoe.sora.widget.CodeEditor;
+import io.github.rosemoe.sora.widget.commentRule.BetterCommentHelper;
 import ir.ninjacoder.ghostide.core.GhostIdeAppLoader;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
@@ -48,6 +49,8 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
       return;
     }
   }
+
+  private BetterCommentHelper betterCommentHelper = new BetterCommentHelper();
 
   @Override
   public void analyze(
@@ -288,12 +291,21 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
               for (int i = 0; i < lines.length; i++) {
                 String lineText = lines[i];
                 int lineStartColumn = (i == 0) ? currentColumn : 0;
+                betterCommentHelper.processComment(
+                    result, currentLine + i, lineStartColumn, lineText);
+                // ===== NEW: Apply Better Comments =====
+                if (betterCommentHelper.isEnabled()) {
 
-                for (int j = 0; j < lineText.length(); j++) {
-                  result.addIfNeeded(
-                      currentLine + i, lineStartColumn + j, EditorColorScheme.COMMENT);
+                } else {
+                  // روش قبلی
+                  for (int j = 0; j < lineText.length(); j++) {
+                    result.addIfNeeded(
+                        currentLine + i, lineStartColumn + j, EditorColorScheme.COMMENT);
+                  }
                 }
+                // ======================================
 
+                // پردازش Annotation ها مثل @param
                 var pattern = Pattern.compile("@\\w+");
                 var matcher = pattern.matcher(lineText);
 
@@ -302,7 +314,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                   int end = matcher.end();
                   for (int j = start; j < end; j++) {
                     result.addIfNeeded(
-                        currentLine + i, lineStartColumn + j, EditorColorScheme.javastring);
+                        currentLine + i, lineStartColumn + j, EditorColorScheme.ANNOTATION);
                   }
                 }
               }

@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-  <item
-    android:id="@+id/action_clear_all"
-    android:title="clear chat"
-    android:icon="@drawable/ic_delete_sweep"
-    app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_new_chat"
+        android:title="new chat"
+        android:icon="@drawable/ic_new_chat"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_setting"
+        android:title="Setting"
+        android:icon="@drawable/ic_settings"
+        app:showAsAction="ifRoom" />
 
 </menu>

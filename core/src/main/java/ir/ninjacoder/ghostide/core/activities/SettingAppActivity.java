@@ -323,7 +323,7 @@ public class SettingAppActivity extends BaseCompat {
           if (is) {
             thememanagersoft.edit().putString("thememanagersoft", "ok").apply();
           } else {
-            thememanagersoft.edit().putString("thememanagersoft", "no").apply();
+            thememanagersoft.edit().remove("thememanagersoft", "no").apply();
           }
         });
     codeAZ.setSwitchChangedListener(
@@ -381,7 +381,7 @@ public class SettingAppActivity extends BaseCompat {
           if (is) {
             ru.edit().putBoolean("live", true).apply();
           } else {
-            ru.edit().putBoolean("live", false).apply();
+            ru.edit().remove("live", false).apply();
           }
         });
     seek.setSwitchChangedListener(
@@ -389,7 +389,7 @@ public class SettingAppActivity extends BaseCompat {
           if (is) {
             setfont.edit().putBoolean("seek", true).apply();
           } else {
-            setfont.edit().putBoolean("seek", false).apply();
+            setfont.edit().remove("seek", false).apply();
           }
         });
     minimap.setSwitchChangedListener(
@@ -397,7 +397,7 @@ public class SettingAppActivity extends BaseCompat {
           if (is) {
             setfont.edit().putBoolean("minimap", true).apply();
           } else {
-            setfont.edit().putBoolean("minimap", false).apply();
+            setfont.edit().remove("minimap", false).apply();
           }
         });
     breaklevelmodel.setSwitchChangedListener(

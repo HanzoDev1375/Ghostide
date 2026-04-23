@@ -27,7 +27,7 @@ public class CursorAnimator implements ValueAnimator.AnimatorUpdateListener {
   protected float startX, startY, startSize, startBottom;
   protected long lastAnimateTime;
   protected float currentScale = 1f;
-  protected AnimationMode animationMode = AnimationMode.SPRING;
+  protected AnimationMode animationMode = AnimationMode.SMOOTH;
 
   public CursorAnimator(CodeEditor editor) {
     this.editor = editor;

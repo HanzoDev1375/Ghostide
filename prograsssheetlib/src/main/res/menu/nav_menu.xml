@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <item
+    android:id="@+id/nav_new_chat"
+    android:icon="@drawable/ic_new_chat"
+    android:title="new Chat" />
+
+  <item
+    android:id="@+id/nav_settings"
+    android:icon="@drawable/ic_settings"
+    android:title="setting" />
+
+  <item
+    android:id="@+id/nav_clear_all"
+    android:icon="@drawable/ic_delete_sweep"
+    android:title="delete all chat" />
+
+</menu>

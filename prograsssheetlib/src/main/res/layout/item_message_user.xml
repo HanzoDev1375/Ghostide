@@ -1,98 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="8dp">
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:layout_height="wrap_content"
+     android:layout_width="match_parent"
+     android:padding="8dp"
+     android:orientation="vertical">
 
     <com.google.android.material.card.MaterialCardView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        app:cardBackgroundColor="?attr/colorPrimaryContainer"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="0dp"
-        app:contentPadding="12dp">
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         app:cardElevation="0dp"
+         app:cardBackgroundColor="?attr/colorSurfaceContainerLow"
+         app:cardCornerRadius="0dp"
+         app:contentPadding="12dp"
+         android:layout_gravity="end">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:minWidth="200dp">
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:orientation="vertical"
+             android:minWidth="200dp">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="4dp">
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:layout_marginBottom="4dp"
+                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/searchIndicator"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="جستجو"
-                    android:textSize="10sp"
-                    android:textColor="?attr/colorOnTertiaryContainer"
-                    android:background="@drawable/bg_search_indicator"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="2dp"
-                    android:visibility="gone" />
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:visibility="gone"
+                     android:background="@drawable/bg_search_indicator"
+                     android:paddingVertical="2dp"
+                     android:textSize="10sp"
+                     android:textColor="?attr/colorOnTertiaryContainer"
+                     android:paddingHorizontal="8dp"
+                     android:id="@+id/searchIndicator"
+                     android:text="جستجو" />
 
                 <TextView
-                    android:id="@+id/fileIndicator"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="10sp"
-                    android:textColor="?attr/colorOnSecondaryContainer"
-                    android:background="@drawable/bg_file_indicator"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="2dp"
-                    android:layout_marginStart="4dp"
-                    android:visibility="gone" />
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:visibility="gone"
+                     android:background="@drawable/bg_file_indicator"
+                     android:paddingVertical="2dp"
+                     android:textSize="10sp"
+                     android:textColor="?attr/colorOnSecondaryContainer"
+                     android:layout_marginStart="4dp"
+                     android:paddingHorizontal="8dp"
+                     android:id="@+id/fileIndicator" />
 
             </LinearLayout>
 
             <com.google.android.material.chip.ChipGroup
-                android:id="@+id/fileChipGroup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                app:singleLine="false"
-                app:chipSpacingHorizontal="4dp"
-                app:chipSpacingVertical="2dp"
-                android:visibility="gone" />
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:layout_marginBottom="4dp"
+                 android:visibility="gone"
+                 app:chipSpacingVertical="2dp"
+                 app:singleLine="false"
+                 app:chipSpacingHorizontal="4dp"
+                 android:id="@+id/fileChipGroup" />
 
             <TextView
-                android:id="@+id/messageText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="?attr/colorOnPrimaryContainer"
-                android:lineSpacingExtra="4dp" />
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:textSize="14sp"
+                 android:textColor="?attr/colorOnPrimaryContainer"
+                 android:lineSpacingExtra="4dp"
+                 android:id="@+id/messageText" />
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="end"
-                android:layout_marginTop="8dp">
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:gravity="end"
+                 android:orientation="horizontal"
+                 android:layout_marginTop="8dp">
 
                 <TextView
-                    android:id="@+id/timeText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="11sp"
-                    android:textColor="?attr/colorOnSurfaceVariant" />
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:textSize="11sp"
+                     android:textColor="?attr/colorOnSurfaceVariant"
+                     android:id="@+id/timeText" />
 
                 <ImageView
-                    android:id="@+id/copyButton"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginStart="8dp"
-                    android:src="@drawable/ic_copy"
-                    android:background="?attr/selectableItemBackgroundBorderless" />
+                     android:layout_height="24dp"
+                     android:layout_width="24dp"
+                     android:src="@drawable/ic_copy"
+                     android:background="?attr/selectableItemBackgroundBorderless"
+                     android:tint="?attr/colorOnSurface"
+                     android:layout_marginStart="8dp"
+                     android:id="@+id/copyButton" />
 
             </LinearLayout>
 

@@ -18,6 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.color.MaterialColors;
+import com.skydoves.powermenu.MenuAnimation;
+import com.skydoves.powermenu.PowerMenu;
+import com.skydoves.powermenu.PowerMenuItem;
 import ir.ninjacoder.codesnap.LangType;
 import ir.ninjacoder.codesnap.Utils.CodeImpl;
 import ir.ninjacoder.codesnap.colorhelper.ColorHelper;
@@ -133,7 +137,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     void bind(Message message) {
-      messageText.setText(message.getContent());
+      CharSequence displayText = highlightCodeIfNeeded(message.getContent());
+      messageText.setText(displayText);
       timeText.setText(DateFormat.format("HH:mm", message.getTimestamp()));
 
       if (message.isSearchEnabled()) {
@@ -162,6 +167,134 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             copyToClipboard(v.getContext(), message.getContent());
             animateButton(copyButton);
           });
+      itemView.setOnClickListener(
+          c -> {
+            bindOfPowerMenu(message, c);
+          });
+    }
+  }
+
+  void bindOfPowerMenu(Message msg, View v) {
+    var menu =
+        new PowerMenu.Builder(v.getContext())
+            .setIsMaterial(true)
+            .setShowBackground(false)
+            .setMenuColor(MaterialColors.getColor(v.getContext(), R.attr.colorSurface, 0))
+            .setTextColor(MaterialColors.getColor(v.getContext(), R.attr.colorOnSurface, 0))
+            .setAutoDismiss(true)
+            .setAnimation(MenuAnimation.FADE)
+            .build();
+    menu.addItem(new PowerMenuItem("copy", false, R.drawable.ic_copy));
+    menu.setOnMenuItemClickListener(
+        (pos, men2u) -> {
+          switch (pos) {
+            case 0 -> copyToClipboard(v.getContext(), msg.getContent());
+          }
+        });
+    menu.showAsDropDown(v);
+  }
+
+  private CharSequence highlightCodeIfNeeded(String text) {
+    if (!text.contains("```")) {
+      return text;
+    }
+    try {
+      SpannableStringBuilder result = new SpannableStringBuilder();
+      Matcher matcher = CODE_BLOCK_PATTERN.matcher(text);
+      int lastEnd = 0;
+      while (matcher.find()) {
+        if (matcher.start() > lastEnd) {
+          result.append(text.substring(lastEnd, matcher.start()));
+        }
+        String language = matcher.group(1);
+        String code = matcher.group(2);
+        LangType langType = getLangTypeFromString(language);
+        if (codeImpl != null && colorHelper != null) {
+          try {
+            SpannableStringBuilder highlighted = codeImpl.highlight(langType, code, colorHelper);
+            if (highlighted != null) {
+              result.append(highlighted);
+            } else {
+              result.append(code);
+            }
+          } catch (Exception e) {
+            result.append(code);
+          }
+        } else {
+          result.append(code);
+        }
+        lastEnd = matcher.end();
+      }
+      if (lastEnd < text.length()) {
+        result.append(text.substring(lastEnd));
+      }
+      return result;
+    } catch (Exception e) {
+      return text;
+    }
+  }
+
+  private LangType getLangTypeFromString(String lang) {
+    if (lang == null || lang.isEmpty()) return LangType.NONE;
+    String l = lang.toLowerCase().trim();
+    switch (l) {
+      case "java":
+        return LangType.JAVA;
+      case "python":
+      case "py":
+        return LangType.PYTHON;
+      case "javascript":
+      case "js":
+      case "jsx":
+        return LangType.JAVASCRIPT;
+      case "typescript":
+      case "ts":
+      case "tsx":
+        return LangType.TYPESCRIPT;
+      case "kotlin":
+      case "kt":
+        return LangType.KOTLIN;
+      case "dart":
+        return LangType.DART;
+      case "go":
+        return LangType.GO;
+      case "rust":
+        return LangType.RUST;
+      case "c":
+        return LangType.C;
+      case "cpp":
+      case "c++":
+        return LangType.CPP;
+      case "csharp":
+      case "cs":
+        return LangType.CSHARP;
+      case "html":
+        return LangType.HTML;
+      case "css":
+        return LangType.CSS;
+      case "php":
+        return LangType.PHP;
+      case "json":
+        return LangType.JSON;
+      case "xml":
+        return LangType.XML;
+      case "yaml":
+      case "yml":
+        return LangType.YAML;
+      case "ruby":
+      case "rb":
+        return LangType.RUBY;
+      case "gradle":
+        return LangType.GRADLE;
+      case "lua":
+        return LangType.LUA;
+      case "zig":
+        return LangType.ZIG;
+      case "md":
+      case "markdown":
+        return LangType.MARKDOWN;
+      default:
+        return LangType.NONE;
     }
   }
 
@@ -224,7 +357,10 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         CharSequence displayText = highlightCodeIfNeeded(message.getContent());
         messageText.setText(displayText);
       }
-
+      itemView.setOnClickListener(
+          c -> {
+            bindOfPowerMenu(message, c);
+          });
       copyButton.setOnClickListener(
           v -> {
             copyToClipboard(v.getContext(), message.getContent());
@@ -238,108 +374,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
               listener.onRegenerate(position);
             }
           });
-    }
-
-    private CharSequence highlightCodeIfNeeded(String text) {
-      if (!text.contains("```")) {
-        return text;
-      }
-      try {
-        SpannableStringBuilder result = new SpannableStringBuilder();
-        Matcher matcher = CODE_BLOCK_PATTERN.matcher(text);
-        int lastEnd = 0;
-        while (matcher.find()) {
-          if (matcher.start() > lastEnd) {
-            result.append(text.substring(lastEnd, matcher.start()));
-          }
-          String language = matcher.group(1);
-          String code = matcher.group(2);
-          LangType langType = getLangTypeFromString(language);
-          if (codeImpl != null && colorHelper != null) {
-            try {
-              SpannableStringBuilder highlighted = codeImpl.highlight(langType, code, colorHelper);
-              if (highlighted != null) {
-                result.append(highlighted);
-              } else {
-                result.append(code);
-              }
-            } catch (Exception e) {
-              result.append(code);
-            }
-          } else {
-            result.append(code);
-          }
-          lastEnd = matcher.end();
-        }
-        if (lastEnd < text.length()) {
-          result.append(text.substring(lastEnd));
-        }
-        return result;
-      } catch (Exception e) {
-        return text;
-      }
-    }
-
-    private LangType getLangTypeFromString(String lang) {
-      if (lang == null || lang.isEmpty()) return LangType.NONE;
-      String l = lang.toLowerCase().trim();
-      switch (l) {
-        case "java":
-          return LangType.JAVA;
-        case "python":
-        case "py":
-          return LangType.PYTHON;
-        case "javascript":
-        case "js":
-          return LangType.JAVASCRIPT;
-        case "typescript":
-        case "ts":
-          return LangType.TYPESCRIPT;
-        case "kotlin":
-        case "kt":
-          return LangType.KOTLIN;
-        case "dart":
-          return LangType.DART;
-        case "go":
-          return LangType.GO;
-        case "rust":
-          return LangType.RUST;
-        case "c":
-          return LangType.C;
-        case "cpp":
-        case "c++":
-          return LangType.CPP;
-        case "csharp":
-        case "cs":
-          return LangType.CSHARP;
-        case "html":
-          return LangType.HTML;
-        case "css":
-          return LangType.CSS;
-        case "php":
-          return LangType.PHP;
-        case "json":
-          return LangType.JSON;
-        case "xml":
-          return LangType.XML;
-        case "yaml":
-        case "yml":
-          return LangType.YAML;
-        case "ruby":
-        case "rb":
-          return LangType.RUBY;
-        case "gradle":
-          return LangType.GRADLE;
-        case "lua":
-          return LangType.LUA;
-        case "zig":
-          return LangType.ZIG;
-        case "md":
-        case "markdown":
-          return LangType.MARKDOWN;
-        default:
-          return LangType.NONE;
-      }
     }
 
     private void startRegenerateAnimation() {

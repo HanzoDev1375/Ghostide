@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace "com.downloader"
-    compileSdk 34
+    compileSdk 35
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 34

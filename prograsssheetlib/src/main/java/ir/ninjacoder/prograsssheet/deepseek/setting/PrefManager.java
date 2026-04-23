@@ -27,7 +27,6 @@ public class PrefManager {
               EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
               EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
     } catch (GeneralSecurityException | IOException e) {
-      // Fallback to regular SharedPreferences if encryption fails
       sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
   }

@@ -43,4 +43,5 @@ dependencies {
         exclude group: "org.jetbrains", module: "annotations"
         exclude group: "org.jetbrains", module: "annotations-java5"
     }
+    implementation("com.github.skydoves:powermenu:2.2.4")
 }
