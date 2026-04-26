@@ -6,6 +6,10 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ColorDrawable;
+import com.blankj.utilcode.util.ClipboardUtils;
+import io.github.rosemoe.sora.widget.icon.IconSpan;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,7 +20,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import ir.ninjacoder.ghostide.core.editor.EditorUtil;
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.shape.CornerFamily;
 import com.google.android.material.shape.MaterialShapeDrawable;
@@ -102,7 +106,6 @@ public class IdeEditor extends CodeEditor implements IEditor {
     getPowerModeEffectManager().setEffect(ef);
     setBracketHighlightEnabled(true);
     setBracketHighlightColor(0xFFFF0000);
-    EditorUtil.setClick(this);
     detectRegex();
     return this;
   }
@@ -147,10 +150,9 @@ public class IdeEditor extends CodeEditor implements IEditor {
       }
     }
   }
-
+  
   void handleDoubleClick(DoubleClickEvent db) {
     try {
-
       int clickIndex = db.getIndex();
       String fullText = getTextAsString();
       Pattern URL_PATTERN =

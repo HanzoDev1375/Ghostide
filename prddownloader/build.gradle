@@ -6,7 +6,7 @@ android {
     namespace "com.downloader"
     compileSdk 35
     defaultConfig {
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 34
     }
     buildTypes {

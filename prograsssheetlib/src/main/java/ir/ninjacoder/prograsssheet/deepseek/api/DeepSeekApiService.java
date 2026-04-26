@@ -17,10 +17,11 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class DeepSeekApiService {
-  private static final String BASE_URL = "https://api.deepseek.com/v1/chat/completions";
+  private static final String BASE_URL = "https://api.deepseek.com/chat/completions";
   private static final String FILE_UPLOAD_URL = "https://api.deepseek.com/v1/files";
   public static final String MODEL_FAST = "deepseek-chat";
   public static final String MODEL_EXPERT = "deepseek-reasoner";
+  public static final String MODEL_V4_PRO = "deepseek-v4-pro";
 
   private final OkHttpClient client;
   private final Gson gson;
@@ -48,7 +49,6 @@ public class DeepSeekApiService {
   public DeepSeekApiService() {
     this.gson = new GsonBuilder().create();
     this.mainHandler = new Handler(Looper.getMainLooper());
-
     this.client =
         new OkHttpClient.Builder()
             .connectTimeout(30, TimeUnit.SECONDS)
@@ -67,7 +67,7 @@ public class DeepSeekApiService {
 
   public void uploadFile(File file, FileUploadCallback callback) {
     if (!hasApiKey()) {
-      mainHandler.post(() -> callback.onError("API Key تنظیم نشده است"));
+      mainHandler.post(() -> callback.onError("API Key not set"));
       return;
     }
 
@@ -92,7 +92,7 @@ public class DeepSeekApiService {
             new Callback() {
               @Override
               public void onFailure(Call call, IOException e) {
-                mainHandler.post(() -> callback.onError("خطای آپلود: " + e.getMessage()));
+                mainHandler.post(() -> callback.onError("Upload error: " + e.getMessage()));
               }
 
               @Override
@@ -100,7 +100,8 @@ public class DeepSeekApiService {
                 if (!response.isSuccessful()) {
                   String errorBody = response.body() != null ? response.body().string() : "";
                   mainHandler.post(
-                      () -> callback.onError("خطای آپلود (" + response.code() + "): " + errorBody));
+                      () ->
+                          callback.onError("Upload error (" + response.code() + "): " + errorBody));
                   return;
                 }
 
@@ -110,7 +111,7 @@ public class DeepSeekApiService {
                       gson.fromJson(responseBody, FileUploadResponse.class);
                   mainHandler.post(() -> callback.onSuccess(uploadResponse.id));
                 } catch (Exception e) {
-                  mainHandler.post(() -> callback.onError("خطای پردازش پاسخ: " + e.getMessage()));
+                  mainHandler.post(() -> callback.onError("Parse error: " + e.getMessage()));
                 }
               }
             });
@@ -124,7 +125,7 @@ public class DeepSeekApiService {
       List<String> fileIds,
       ChatCallback callback) {
     if (!hasApiKey()) {
-      mainHandler.post(() -> callback.onError("API Key تنظیم نشده است"));
+      mainHandler.post(() -> callback.onError("API Key not set"));
       return;
     }
 
@@ -138,17 +139,26 @@ public class DeepSeekApiService {
     double temperature = MODEL_EXPERT.equals(model) ? 0.3 : 0.7;
     int maxTokens = MODEL_EXPERT.equals(model) ? 4096 : 2048;
 
+    ChatRequest.ThinkingConfig thinkingConfig = null;
+    String reasoningEffort = null;
+
+    if (MODEL_EXPERT.equals(model) || MODEL_V4_PRO.equals(model)) {
+      thinkingConfig = new ChatRequest.ThinkingConfig("enabled");
+      reasoningEffort = "high";
+    }
+
     ChatRequest request =
         new ChatRequest.Builder()
             .model(model).messages(messages).stream(stream)
                 .temperature(temperature)
                 .maxTokens(maxTokens)
+                .thinking(thinkingConfig)
+                .reasoningEffort(reasoningEffort)
                 .enableSearch(enableSearch ? true : null)
                 .fileIds(fileIds != null && !fileIds.isEmpty() ? fileIds : null)
                 .build();
 
     String jsonBody = gson.toJson(request);
-
     RequestBody body =
         RequestBody.create(jsonBody, MediaType.parse("application/json; charset=utf-8"));
 
@@ -174,7 +184,7 @@ public class DeepSeekApiService {
             new Callback() {
               @Override
               public void onFailure(Call call, IOException e) {
-                mainHandler.post(() -> callback.onError("خطای شبکه: " + e.getMessage()));
+                mainHandler.post(() -> callback.onError("Network error: " + e.getMessage()));
               }
 
               @Override
@@ -182,7 +192,7 @@ public class DeepSeekApiService {
                 if (!response.isSuccessful()) {
                   String errorBody = response.body() != null ? response.body().string() : "";
                   mainHandler.post(
-                      () -> callback.onError("خطای API (" + response.code() + "): " + errorBody));
+                      () -> callback.onError("API error (" + response.code() + "): " + errorBody));
                   return;
                 }
 
@@ -192,10 +202,9 @@ public class DeepSeekApiService {
                   String content = chatResponse.getContent();
                   String reasoningContent = chatResponse.getReasoningContent();
                   int tokens = chatResponse.usage != null ? chatResponse.usage.getTotalTokens() : 0;
-
                   mainHandler.post(() -> callback.onSuccess(content, reasoningContent, tokens));
                 } catch (Exception e) {
-                  mainHandler.post(() -> callback.onError("خطای پردازش پاسخ: " + e.getMessage()));
+                  mainHandler.post(() -> callback.onError("Parse error: " + e.getMessage()));
                 }
               }
             });
@@ -208,7 +217,7 @@ public class DeepSeekApiService {
             new Callback() {
               @Override
               public void onFailure(Call call, IOException e) {
-                mainHandler.post(() -> callback.onError("خطای استریم: " + e.getMessage()));
+                mainHandler.post(() -> callback.onError("Stream error: " + e.getMessage()));
               }
 
               @Override
@@ -216,13 +225,13 @@ public class DeepSeekApiService {
                 if (!response.isSuccessful()) {
                   String errorBody = response.body() != null ? response.body().string() : "";
                   mainHandler.post(
-                      () -> callback.onError("خطای API (" + response.code() + "): " + errorBody));
+                      () -> callback.onError("API error (" + response.code() + "): " + errorBody));
                   return;
                 }
 
                 ResponseBody responseBody = response.body();
                 if (responseBody == null) {
-                  mainHandler.post(() -> callback.onError("پاسخ خالی است"));
+                  mainHandler.post(() -> callback.onError("Empty response"));
                   return;
                 }
 
@@ -237,7 +246,6 @@ public class DeepSeekApiService {
                           ChatResponse chunk = gson.fromJson(jsonData, ChatResponse.class);
                           String content = chunk.getStreamContent();
                           String reasoningContent = chunk.getStreamReasoningContent();
-
                           if (content != null && !content.isEmpty()) {
                             mainHandler.post(() -> callback.onStreamChunk(content));
                           }

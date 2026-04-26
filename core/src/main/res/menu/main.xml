@@ -1,10 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto">
+
   <item
     android:id="@+id/action_search"
-    android:icon="@android:drawable/ic_menu_search"
-    android:title="search app"
+    android:icon="@string/search_file"
+    android:title="Search apps"
     app:actionViewClass="androidx.appcompat.widget.SearchView"
     app:showAsAction="always|collapseActionView" />
+
+  <item
+    android:id="@+id/action_sort"
+    android:icon="@drawable/ic_sort_black_24px"
+    android:title="Sort"
+    app:showAsAction="ifRoom">
+    <menu>
+      <group android:checkableBehavior="single">
+        <item
+          android:id="@+id/sort_by_name"
+          android:title="By Name" />
+        <item
+          android:id="@+id/sort_by_date"
+          android:title="By Install Date" />
+        <item
+          android:id="@+id/sort_by_size"
+          android:title="By Size" />
+      </group>
+    </menu>
+  </item>
+
+  <item
+    android:id="@+id/action_share_all"
+    android:icon="@drawable/share"
+    android:title="Share All"
+    app:showAsAction="ifRoom" />
+
 </menu>

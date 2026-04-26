@@ -49,9 +49,10 @@ import com.google.android.material.shape.MaterialShapeDrawable;
 import com.google.android.material.shape.ShapeAppearanceModel;
 
 import com.google.android.material.transition.platform.MaterialSharedAxis;
+import com.quickersilver.themeengine.ThemeEngine;
 import ir.ninjacoder.ghostide.core.pl.PluginLoaderImpl;
 import java.io.File;
-
+import com.quickersilver.themeengine.ThemeEngine;
 import ir.ninjacoder.ghostide.core.GhostIdeAppLoader;
 import ir.ninjacoder.ghostide.core.marco.WallpaperParallaxEffect;
 import ir.ninjacoder.ghostide.core.utils.FileUtil;
@@ -71,13 +72,14 @@ public class BaseCompat extends AppCompatActivity {
   protected GradientDrawable gb = new GradientDrawable();
   private SharedPreferences thememanagersoft, themechange;
   private WallpaperParallaxEffect effect;
-
+  protected ThemeEngine themeEngine;
   private static String ThemePath = "/storage/emulated/0/GhostWebIDE/theme/GhostThemeapp.ghost";
 
   @Nullable
   @Override
   protected void onCreate(@Nullable Bundle saveInStatous) {
     EdgeToEdge.enable(this);
+    themeEngine = ThemeEngine.getInstance(this);
     super.onCreate(saveInStatous);
     initErrorDialogpackageAPP();
     thememanagersoft = getSharedPreferences("thememanagersoft", MODE_PRIVATE);
@@ -85,6 +87,8 @@ public class BaseCompat extends AppCompatActivity {
     getWindow().setNavigationBarColor(Color.TRANSPARENT);
     getWindow().setStatusBarColor(Color.TRANSPARENT);
     initParseWallpapaer();
+    ThemeEngine.applyToActivity(this);
+
     try {
       if (themechange.contains("themechange")) {
         if (themechange.getBoolean("themechange", false) == true) {
@@ -94,6 +98,7 @@ public class BaseCompat extends AppCompatActivity {
     } catch (Exception err) {
       Log.e("THEME", err.getLocalizedMessage());
     }
+
     setBackGroundIsMobile();
     new PluginLoaderImpl().loadBaseCompat(this);
   }
@@ -354,8 +359,7 @@ public class BaseCompat extends AppCompatActivity {
     }
   }
 
-  public void setBackGroundIsMobile() {
-  }
+  public void setBackGroundIsMobile() {}
 
   public int colors() {
     return MaterialColors.getColor(getWindow().getDecorView(), ObjectUtils.Back, 0);

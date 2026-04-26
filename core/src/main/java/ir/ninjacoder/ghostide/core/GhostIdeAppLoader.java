@@ -16,6 +16,8 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceManager;
 
+import com.google.android.material.color.DynamicColors;
+import com.google.android.material.color.DynamicColorsOptions;
 import com.quickersilver.themeengine.ThemeEngine;
 import com.quickersilver.themeengine.ThemeMode;
 
@@ -26,13 +28,10 @@ import de.larsgrefer.sass.embedded.android.AndroidSassCompilerFactory;
 import ir.ninjacoder.codesnap.colorhelper.ThemeLoader;
 import ir.ninjacoder.ghostide.core.activities.ErrorManagerActivity;
 import ir.ninjacoder.ghostide.core.utils.AssetsSoft;
-import ir.ninjacoder.ghostide.core.utils.DataUtil;
 import ir.ninjacoder.ghostide.core.utils.FileUtil;
 import ir.ninjacoder.ghostide.core.utils.MobileInfo;
 
 public class GhostIdeAppLoader extends Application {
-  // from terminal
-  // recreate()
   private static SharedPreferences prfns;
   protected static SharedPreferences materialYou,
       getvb,
@@ -89,6 +88,9 @@ public class GhostIdeAppLoader extends Application {
 
   @Override
   public void onCreate() {
+    super.onCreate();
+
+    // Initialize SharedPreferences
     materialYou = getSharedPreferences("materialYou", MODE_PRIVATE);
     getvb = getSharedPreferences("getvb", MODE_PRIVATE);
     setfont = getSharedPreferences("setfont", MODE_PRIVATE);
@@ -99,22 +101,29 @@ public class GhostIdeAppLoader extends Application {
     shp = getSharedPreferences("shp", MODE_PRIVATE);
     prfns = PreferenceManager.getDefaultSharedPreferences(this);
 
+    // Initialize ThemeEngine first
+    themeEngine = ThemeEngine.getInstance(this);
+
+    // Set default theme mode
+    themeEngine.setThemeMode(ThemeMode.DARK);
+    // Apply dynamic colors if enabled
+    applyDynamicColorsIfNeeded();
+
     AssetsSoft soft = new AssetsSoft();
     var iconPath = getFilesDir().getAbsoluteFile() + "/icon.png";
     if (!FileUtil.isExistFile(iconPath)) {
       soft.copyOneFileFromAssets("icon.png", getFilesDir().getAbsolutePath() + "/", this);
     }
+
     try (SassCompiler compiler = AndroidSassCompilerFactory.bundled(this)) {
-      ///  DataUtil.showMessage(getApplicationContext(), compiler.getVersion().toString());
+      // DataUtil.showMessage(getApplicationContext(), compiler.getVersion().toString());
     } catch (Exception err) {
       err.printStackTrace();
     }
 
     ThemeLoader.init(this);
-    themeEngine = ThemeEngine.getInstance(this);
-    themeEngine.setThemeMode(ThemeMode.DARK);
     mApplicationContext = getApplicationContext();
-    themeEngine.applyToActivities(this);
+
     softwareInfo
         .append("SDK: ")
         .append(Build.VERSION.SDK_INT)
@@ -125,6 +134,7 @@ public class GhostIdeAppLoader extends Application {
         .append("Model: ")
         .append(Build.VERSION.INCREMENTAL)
         .append("\n");
+
     Thread.setDefaultUncaughtExceptionHandler(
         new Thread.UncaughtExceptionHandler() {
           @Override
@@ -148,14 +158,58 @@ public class GhostIdeAppLoader extends Application {
             uncaughtExceptionHandler.uncaughtException(thread, throwable);
           }
         });
+
+    // Initialize dynamic theme based on saved preference
+    initDynamicTheme();
+  }
+
+  /** Initialize dynamic theme based on saved preference */
+  private void initDynamicTheme() {
     if (isSdkS()) {
-      if (materialYou.getString("materialYou", "").equals("true")) {
-        themeEngine.setDynamicTheme(true);
+      boolean isDynamicEnabled = materialYou.getString("materialYou", "").equals("true");
+      themeEngine.setDynamicTheme(isDynamicEnabled);
+      if (isDynamicEnabled) {
+        applyDynamicColorsGlobally();
+      }
+    } else {
+      themeEngine.setDynamicTheme(false);
+    }
+  }
+
+  /** Apply dynamic colors to all activities if conditions are met */
+  private void applyDynamicColorsIfNeeded() {
+    if (themeEngine.isDynamicTheme()) {
+      applyDynamicColorsGlobally();
+    }
+  }
+
+  /** Apply dynamic colors globally to all activities */
+  private void applyDynamicColorsGlobally() {
+    DynamicColors.applyToActivitiesIfAvailable(
+        this,
+        new DynamicColorsOptions.Builder()
+            .setPrecondition(
+                (activity, theme) -> themeEngine != null && themeEngine.isDynamicTheme())
+            .build());
+  }
+
+  /** Toggle dynamic theme on/off and apply changes */
+  public void toggleDynamicTheme(boolean enabled) {
+    if (isSdkS()) {
+      themeEngine.setDynamicTheme(enabled);
+
+      // Save preference
+      if (enabled) {
+        materialYou.edit().putString("materialYou", "true").apply();
       } else {
-        themeEngine.setDynamicTheme(false);
+        materialYou.edit().remove("materialYou").apply();
+      }
+
+      // Apply changes
+      if (enabled) {
+        applyDynamicColorsGlobally();
       }
     }
-    super.onCreate();
   }
 
   public boolean isSdkS() {
@@ -202,7 +256,9 @@ public class GhostIdeAppLoader extends Application {
   }
 
   public void onThemeChange() {
+    // Re-apply theme settings
     themeEngine.setThemeMode(ThemeMode.DARK);
     themeEngine.applyToActivities(this);
+    applyDynamicColorsIfNeeded();
   }
 }

@@ -42,7 +42,7 @@ public class CursorBlink implements Runnable, EventReceiver<SelectionChangeEvent
   boolean visibility;
   boolean valid;
   private float[] buffer;
-  private CursorAnimationModel model = CursorAnimationModel.EXPAND;
+  private CursorAnimationModel model = CursorAnimationModel.BLINK;
   private float animationValue = 1.0f;
   private boolean increasing = false;
 

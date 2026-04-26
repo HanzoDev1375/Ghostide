@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,6 +37,17 @@ public class DeepSeekActivity extends AppCompatActivity
   private ChatHistoryManager historyManager;
   private ActionBarDrawerToggle drawerToggle;
   private ChatFragment chatFragment;
+  private OnBackPressedCallback onBackPress =
+      new OnBackPressedCallback(true) {
+
+        @Override
+        public void handleOnBackPressed() {
+          var fr = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
+          if (fr instanceof ChatFragment) {
+            ((ChatFragment) fr).startNewChat();
+          }
+        }
+      };
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +75,7 @@ public class DeepSeekActivity extends AppCompatActivity
     navNewChatButton = findViewById(R.id.navNewChatButton);
     navSettingsButton = findViewById(R.id.navSettingsButton);
     navClearAllButton = findViewById(R.id.navClearAllButton);
+    getOnBackPressedDispatcher().addCallback(onBackPress);
   }
 
   private void setupToolbar() {
@@ -263,21 +276,5 @@ public class DeepSeekActivity extends AppCompatActivity
     }
     updateToolbarTitle("DeepSeek Chat");
     loadChatHistory();
-  }
-
-  @Override
-  public void onBackPressed() {
-    if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-      drawerLayout.closeDrawer(GravityCompat.START);
-    } else if (chatFragment != null && chatFragment.hasMessages()) {
-      new MaterialAlertDialogBuilder(this)
-          .setTitle("خروج از برنامه")
-          .setMessage("آیا مطمئن هستید میخواهید خارج شوید؟")
-          .setPositiveButton("بله", (dialog, which) -> finish())
-          .setNegativeButton("خیر", null)
-          .show();
-    } else {
-      super.onBackPressed();
-    }
   }
 }

@@ -1,49 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:fitsSystemWindows="true"
->
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:id="@+id/app_bar_apkview"
-    >
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:theme="@style/AppTheme.AppBarOverlay"
+         android:id="@+id/app_bar_apkview">
 
         <androidx.appcompat.widget.Toolbar
-                android:layout_height="?attr/actionBarSize"
-                android:layout_width="match_parent"
-                android:id="@+id/toolbar_apkview_main"
-        />
+             android:layout_height="?attr/actionBarSize"
+             android:layout_width="match_parent"
+             app:layout_collapseMode="pin"
+             app:navigationIcon="?attr/homeAsUpIndicator"
+             android:id="@+id/toolbar_apkview_main" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:orientation="vertical"
-    >
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+         android:layout_height="match_parent"
+         android:layout_width="match_parent"
+         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+         android:id="@+id/swipe_refresh">
 
-        <LinearLayout
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:orientation="vertical"
-        >
+        <FrameLayout
+             android:layout_height="match_parent"
+             android:layout_width="match_parent"
+             >
 
             <androidx.recyclerview.widget.RecyclerView
-                    android:layout_height="match_parent"
-                    android:layout_width="match_parent"
-                    android:background="@android:color/transparent"
-                    android:choiceMode="none"
-                    android:id="@+id/rv"
-            />
+                 android:layout_height="match_parent"
+                 android:layout_width="match_parent"
+                 android:scrollbars="vertical"
+                 android:paddingBottom="8dp"
+                 android:clipToPadding="false"
+                 android:id="@+id/rv"
+                 android:paddingTop="8dp" />
 
-        </LinearLayout>
+            <ProgressBar
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:visibility="gone"
+                 style="?android:attr/progressBarStyleLarge"
+                 android:id="@+id/progress_bar"
+                 android:layout_gravity="center" />
 
-    </LinearLayout>
+        </FrameLayout>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:contentDescription="Filter apps"
+         android:layout_margin="19dp"
+         app:srcCompat="@drawable/ic_sort_black_24px"
+         android:id="@+id/fab_filter"
+         android:layout_gravity="bottom|end" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

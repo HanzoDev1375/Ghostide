@@ -37,35 +37,77 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
   private Map<String, Boolean> mapStyle;
   private RainbowBracketHelper ha;
   private BasicSyntaxJavaAnalyzer codeax;
+  private BetterCommentHelper betterCommentHelper;
 
   public JavaCodeAnalyzer(IdeEditor editor) {
     mEditorReference = new WeakReference<>(editor);
+    betterCommentHelper = new BetterCommentHelper();
+    configureBetterComments();
+  }
+
+  private void configureBetterComments() {
+    betterCommentHelper.addRule(
+        new BetterCommentHelper.BetterCommentRule.Builder("@\\w+")
+            .color(EditorColorScheme.ANNOTATION)
+            .asRegex(true)
+            .bold(true)
+            .italic(false)
+            .priority(12)
+            .build());
+    
+    betterCommentHelper.addRule(
+        new BetterCommentHelper.BetterCommentRule.Builder("\\{@\\w+[^}]*\\}")
+            .color(EditorColorScheme.KEYWORD)
+            .asRegex(true)
+            .italic(true)
+            .priority(13)
+            .build());
+    
+    betterCommentHelper.addRule(
+        new BetterCommentHelper.BetterCommentRule.Builder("<\\w+>.*?</\\w+>")
+            .color(EditorColorScheme.LITERAL)
+            .asRegex(true)
+            .priority(11)
+            .build());
+    
+    betterCommentHelper.addRule(
+        new BetterCommentHelper.BetterCommentRule.Builder("`.*?`")
+            .color(EditorColorScheme.LITERAL)
+            .asRegex(true)
+            .bold(false)
+            .italic(true)
+            .priority(10)
+            .build());
+    
+    betterCommentHelper.addRule(
+        new BetterCommentHelper.BetterCommentRule.Builder("\\b(v\\d+\\.\\d+\\.\\d+)\\b")
+            .color(EditorColorScheme.KEYWORD)
+            .asRegex(true)
+            .bold(true)
+            .priority(9)
+            .build());
+    
+    
+    betterCommentHelper.addRegexRule("\\b[A-Z][a-z]+Exception\\b", EditorColorScheme.COLOR_ERROR, 8);
+    betterCommentHelper.addRegexRule("\\b[A-Z][a-z]+Error\\b", EditorColorScheme.COLOR_ERROR, 8);
+    betterCommentHelper.addRegexRule("@[a-zA-Z0-9_]+", EditorColorScheme.ATTRIBUTE_NAME, 7);
+    betterCommentHelper.addRegexRule("#[a-zA-Z0-9_]+", EditorColorScheme.HTML_TAG, 6);
   }
 
   @Override
   public void analyzeInBackground(CharSequence content) {
     IdeEditor editor = mEditorReference.get();
-    if (editor == null) {
-      return;
-    }
+    if (editor == null) return;
   }
 
-  private BetterCommentHelper betterCommentHelper = new BetterCommentHelper();
-
   @Override
-  public void analyze(
-      CharSequence content,
-      TextAnalyzeResult result,
-      TextAnalyzer.AnalyzeThread.Delegate delegate) {
+  public void analyze(CharSequence content, TextAnalyzeResult result, TextAnalyzer.AnalyzeThread.Delegate delegate) {
     try {
-
       ha = new RainbowBracketHelper(content);
       IdeEditor editor = mEditorReference.get();
-      if (editor == null) {
-        return;
-      }
+      if (editor == null) return;
+      
       codeax = new BasicSyntaxJavaAnalyzer(editor);
-
       CodePointCharStream stream = CharStreams.fromReader(new StringReader(content.toString()));
       JavaLexer lexer = new JavaLexer(stream);
 
@@ -82,6 +124,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
       int previous = 0;
       int lastLine = 1;
       int line, column;
+      
       while (delegate.shouldAnalyze()) {
         token = lexer.nextToken();
         if (token == null) break;
@@ -92,8 +135,8 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
         line = token.getLine() - 1;
         type = token.getType();
         String text1 = token.getText();
-
         column = token.getCharPositionInLine();
+        
         if (type == JavaLexer.EOF) {
           lastLine = line;
           break;
@@ -101,10 +144,9 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
 
         switch (type) {
           case JavaLexer.WS:
-            if (first) {
-              result.addNormalIfNull();
-            }
+            if (first) result.addNormalIfNull();
             break;
+            
           case JavaLexer.ABSTRACT:
           case JavaLexer.ASSERT:
           case JavaLexer.BREAK:
@@ -147,9 +189,10 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           case JavaLexer.VOLATILE:
           case JavaLexer.WHILE:
           case JavaLexer.VAR:
-            get(EditorColorScheme.javakeyword, line, column, result);
+            result.addIfNeeded(line, column, EditorColorScheme.javakeyword);
             classNamePrevious = true;
             break;
+            
           case JavaLexer.DECIMAL_LITERAL:
           case JavaLexer.OCT_LITERAL:
           case JavaLexer.BINARY_LITERAL:
@@ -160,6 +203,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           case JavaLexer.NULL_LITERAL:
             result.addIfNeeded(line, column, EditorColorScheme.LITERAL);
             break;
+            
           case JavaLexer.STRING_LITERAL:
             {
               if (text1.startsWith("\"#")) {
@@ -168,41 +212,28 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                   int color = Color.parseColor(text1.substring(1, text1.length() - 1));
                   colors.addIfNeeded(line, column, EditorColorScheme.javastring);
                   if (ColorUtils.calculateLuminance(color) > 0.5) {
-                    Span span =
-                        Span.obtain(
-                            column + 1,
-                            TextStyle.makeStyle(
-                                EditorColorScheme.black, 0, true, false, false, false, true));
+                    Span span = Span.obtain(column + 1, TextStyle.makeStyle(EditorColorScheme.black, 0, true, false, false, false, true));
                     if (span != null) {
                       span.setBackgroundColorMy(color);
                       colors.add(line, span);
                     }
                   } else if (ColorUtils.calculateLuminance(color) <= 0.5) {
-                    Span span =
-                        Span.obtain(
-                            column + 1,
-                            TextStyle.makeStyle(
-                                EditorColorScheme.white, 0, true, false, false, false, true));
+                    Span span = Span.obtain(column + 1, TextStyle.makeStyle(EditorColorScheme.white, 0, true, false, false, false, true));
                     if (span != null) {
                       span.setBackgroundColorMy(color);
                       colors.add(line, span);
                     }
                   }
 
-                  Span middle =
-                      Span.obtain(column + text1.length() - 1, EditorColorScheme.javastring);
+                  Span middle = Span.obtain(column + text1.length() - 1, EditorColorScheme.javastring);
                   middle.setBackgroundColorMy(Color.TRANSPARENT);
                   colors.add(line, middle);
 
-                  Span end =
-                      Span.obtain(
-                          column + text1.length(), TextStyle.makeStyle(EditorColorScheme.white));
+                  Span end = Span.obtain(column + text1.length(), TextStyle.makeStyle(EditorColorScheme.white));
                   end.setBackgroundColorMy(Color.TRANSPARENT);
                   colors.add(line, end);
                   break;
-                } catch (Exception ignore) {
-                  ignore.printStackTrace();
-                }
+                } catch (Exception ignore) {}
               }
               result.addIfNeeded(line, column, EditorColorScheme.javastring);
               break;
@@ -212,18 +243,22 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           case JavaLexer.LT:
             ha.handleOpenBracket(result, line, column, false);
             break;
+            
           case JavaLexer.LBRACE:
           case JavaLexer.LBRACK:
             ha.handleOpenBracket(result, line, column, true);
             break;
+            
           case JavaLexer.RPAREN:
           case JavaLexer.GT:
             ha.handleCloseBracket(result, line, column, false);
             break;
+            
           case JavaLexer.RBRACK:
           case JavaLexer.RBRACE:
             ha.handleCloseBracket(result, line, column, true);
             break;
+            
           case JavaLexer.SEMI:
           case JavaLexer.COMMA:
           case JavaLexer.ASSIGN:
@@ -263,10 +298,11 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           case JavaLexer.ELLIPSIS:
           case JavaLexer.DOT:
             if (previous == JavaLexer.IDENTIFIER) {
-              get(EditorColorScheme.red, line, column, result);
+              result.addIfNeeded(line, column, EditorColorScheme.red);
             }
             ha.handleCustom(result, line, column, EditorColorScheme.javaoprator);
             break;
+            
           case JavaLexer.BOOLEAN:
           case JavaLexer.BYTE:
           case JavaLexer.CHAR:
@@ -276,58 +312,27 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
           case JavaLexer.INT:
           case JavaLexer.LONG:
           case JavaLexer.SHORT:
-            get(EditorColorScheme.javakeywordoprator, line, column, result);
+            result.addIfNeeded(line, column, EditorColorScheme.javakeywordoprator);
             classNamePrevious = true;
             break;
+            
           case JavaLexer.BLOCK_COMMENT:
           case JavaLexer.LINE_COMMENT:
             {
-              String commentText = token.getText();
-              int currentLine = line;
-              int currentColumn = column;
-
-              String[] lines = commentText.split("\n", -1);
-
-              for (int i = 0; i < lines.length; i++) {
-                String lineText = lines[i];
-                int lineStartColumn = (i == 0) ? currentColumn : 0;
-                betterCommentHelper.processComment(
-                    result, currentLine + i, lineStartColumn, lineText);
-                // ===== NEW: Apply Better Comments =====
-                if (betterCommentHelper.isEnabled()) {
-
-                } else {
-                  // روش قبلی
-                  for (int j = 0; j < lineText.length(); j++) {
-                    result.addIfNeeded(
-                        currentLine + i, lineStartColumn + j, EditorColorScheme.COMMENT);
-                  }
-                }
-                // ======================================
-
-                // پردازش Annotation ها مثل @param
-                var pattern = Pattern.compile("@\\w+");
-                var matcher = pattern.matcher(lineText);
-
-                while (matcher.find()) {
-                  int start = matcher.start();
-                  int end = matcher.end();
-                  for (int j = start; j < end; j++) {
-                    result.addIfNeeded(
-                        currentLine + i, lineStartColumn + j, EditorColorScheme.ANNOTATION);
-                  }
-                }
-              }
+              betterCommentHelper.processCommentBlock(result, line, column, token.getText());
               break;
             }
+            
           case JavaLexer.AT:
             result.addIfNeeded(line, column, EditorColorScheme.javaoprator);
             break;
+            
           case JavaLexer.IDENTIFIER:
             {
               info.addIdentifier(token.getText());
               int colorNormal = EditorColorScheme.TEXT_NORMAL;
-              boolean isClassName = false, isSh = false;
+              boolean isClassName = false;
+              
               if (previous == JavaLexer.CLASS
                   || previous == JavaLexer.IMPORT
                   || previous == JavaLexer.INTERFACE
@@ -336,7 +341,6 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                   || previous == JavaLexer.IMPLEMENTS) {
                 colorNormal = EditorColorScheme.jsfun;
                 isClassName = true;
-                isSh = true;
               } else if (previous == JavaLexer.VOID
                   || previous == JavaLexer.BOOLEAN
                   || previous == JavaLexer.BYTE
@@ -348,10 +352,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                   || previous == JavaLexer.SHORT
                   || previous == JavaLexer.IDENTIFIER) {
                 colorNormal = EditorColorScheme.javaparament;
-
-              } else if (previous == JavaLexer.THROW) {
-                colorNormal = EditorColorScheme.javaoprator;
-              } else if (previous == JavaLexer.CASE) {
+              } else if (previous == JavaLexer.THROW || previous == JavaLexer.CASE) {
                 colorNormal = EditorColorScheme.javaoprator;
               } else if (lexer._input.LA(1) == '.') {
                 colorNormal = EditorColorScheme.javatype;
@@ -369,10 +370,7 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
                 }
               }
 
-              result.addIfNeeded(
-                  line,
-                  column,
-                  TextStyle.makeStyleSh(colorNormal, 0, false, false, false, false, true, 0));
+              result.addIfNeeded(line, column, TextStyle.makeStyleSh(colorNormal, 0, false, false, false, false, true, 0));
               break;
             }
 
@@ -385,20 +383,18 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
             break;
         }
 
-        if (type != JavaLexer.WS) {
-          previous = type;
-        }
+        if (type != JavaLexer.WS) previous = type;
         first = false;
       }
+      
       info.finish();
 
-      if (isCodeAnalyze()) {
+      if (GhostIdeAppLoader.getPrefManager().getBoolean("codeanalyzer", true)) {
         List<CodeLine> code123 = JavaAnalyzer.analyze(content.toString());
-        code123.forEach(
-            item -> {
-              if (item.haserror) Utils.setErrorSpan(result, item.line, item.column);
-              if (item.haswar) Utils.setWaringSpan(result, item.line, item.column);
-            });
+        code123.forEach(item -> {
+          if (item.haserror) Utils.setErrorSpan(result, item.line, item.column);
+          if (item.haswar) Utils.setWaringSpan(result, item.line, item.column);
+        });
         codeax.analyze(content, result, delegate);
       }
 
@@ -406,12 +402,11 @@ public class JavaCodeAnalyzer implements CodeAnalyzer {
       result.setExtra(info);
 
     } catch (IOException e) {
-      e.printStackTrace();
-      Log.e("TAG", e.getMessage());
+      Log.e("JavaCodeAnalyzer", e.getMessage());
     }
   }
-
-  private void get(int color, int line, int col, TextAnalyzeResult result) {
-    result.addIfNeeded(line, col, color);
+  
+  public BetterCommentHelper getBetterCommentHelper() {
+    return betterCommentHelper;
   }
 }

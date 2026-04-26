@@ -10,7 +10,6 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -21,8 +20,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import ir.ninjacoder.prograsssheet.perfence.ListItemView;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,55 +35,76 @@ import ir.ninjacoder.ghostide.core.R;
 import ir.ninjacoder.ghostide.core.activities.ApkViewActivity;
 
 public class ApkListAdapter extends RecyclerView.Adapter<ApkListAdapter.ViewHolder> {
-  public ApkViewActivity mActivity;
-  public PackageManager packageManager;
-  int names_to_load = 0;
+
+  private ApkViewActivity mActivity;
+  private PackageManager packageManager;
+
   private ThreadFactory tFactory =
-      new ThreadFactory() {
-        @Override
-        public Thread newThread(Runnable r) {
-          Thread t = new Thread(r);
-          t.setDaemon(true);
-          return t;
-        }
+      r -> {
+        Thread t = new Thread(r);
+        t.setDaemon(true);
+        return t;
       };
-  private ArrayList<PackageInfo> list = new ArrayList<PackageInfo>();
-  private ArrayList<PackageInfo> list_original = new ArrayList<PackageInfo>();
+
+  private ArrayList<PackageInfo> list = new ArrayList<>();
+  private ArrayList<PackageInfo> listOriginal = new ArrayList<>();
   private ExecutorService executorServiceNames = Executors.newFixedThreadPool(3, tFactory);
   private ExecutorService executorServiceIcons = Executors.newFixedThreadPool(3, tFactory);
   private Handler handler = new Handler(Looper.getMainLooper());
-  private Map<String, String> cache_appName =
-      Collections.synchronizedMap(new LinkedHashMap<String, String>(10, 1.5f, true));
-  private Map<String, Drawable> cache_appIcon =
-      Collections.synchronizedMap(new LinkedHashMap<String, Drawable>(10, 1.5f, true));
 
-  private String search_pattern;
+  private Map<String, String> cacheAppName =
+      Collections.synchronizedMap(
+          new LinkedHashMap<String, String>(10, 1.5f, true) {
+            @Override
+            protected boolean removeEldestEntry(Map.Entry<String, String> eldest) {
+              return size() > 100;
+            }
+          });
+
+  private Map<String, Drawable> cacheAppIcon =
+      Collections.synchronizedMap(
+          new LinkedHashMap<String, Drawable>(10, 1.5f, true) {
+            @Override
+            protected boolean removeEldestEntry(Map.Entry<String, Drawable> eldest) {
+              return size() > 50;
+            }
+          });
+
+  private String searchPattern;
+  private int namesToLoad = 0;
 
   public ApkListAdapter(ApkViewActivity activity) {
     this.packageManager = activity.getPackageManager();
     mActivity = activity;
+    setHasStableIds(true);
   }
 
   @Override
   public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-    return new ViewHolder(
-        LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item, viewGroup, false),
-        this);
+    View view =
+        LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item, viewGroup, false);
+    return new ViewHolder(view, this);
   }
 
   @Override
   public void onBindViewHolder(ViewHolder holder, int i) {
-    var item = list.get(i);
-    holder.setPackageName(item.packageName, search_pattern);
-    if (cache_appIcon.containsKey(item.packageName)
-        && cache_appName.containsKey(item.packageName)) {
-      holder.setAppName(cache_appName.get(item.packageName), search_pattern);
-      holder.imgIcon.setImageDrawable(cache_appIcon.get(item.packageName));
+    PackageInfo item = list.get(i);
+    holder.setPackageName(item.packageName, searchPattern);
+
+    if (cacheAppIcon.containsKey(item.packageName) && cacheAppName.containsKey(item.packageName)) {
+      holder.setAppName(cacheAppName.get(item.packageName), searchPattern);
+      holder.imgIcon.setImageDrawable(cacheAppIcon.get(item.packageName));
     } else {
-      holder.setAppName(item.packageName, search_pattern);
+      holder.setAppName(item.packageName, searchPattern);
       holder.imgIcon.setImageDrawable(null);
       executorServiceIcons.submit(new GuiLoader(holder, item));
     }
+    holder.listitemview.setBackground(holder.listitemview.get(list,i));
+  }
+
+  @Override
+  public long getItemId(int position) {
+    return list.get(position).packageName.hashCode();
   }
 
   public PackageInfo getItem(int pos) {
@@ -95,129 +117,161 @@ public class ApkListAdapter extends RecyclerView.Adapter<ApkListAdapter.ViewHold
   }
 
   public void addItem(PackageInfo item) {
-    names_to_load++;
+    namesToLoad++;
     executorServiceNames.submit(new AppNameLoader(item));
-    list_original.add(item);
+    listOriginal.add(item);
     filterListByPattern();
+    notifyItemInserted(list.size() - 1);
+  }
+
+  public void clearItems() {
+    list.clear();
+    listOriginal.clear();
     notifyDataSetChanged();
   }
 
   public void setSearchPattern(String pattern) {
-    search_pattern = pattern.toLowerCase();
+    searchPattern = pattern != null ? pattern.toLowerCase() : null;
     filterListByPattern();
-    this.notifyDataSetChanged();
+    notifyDataSetChanged();
   }
 
   private void filterListByPattern() {
     list.clear();
-    for (var info : list_original) {
+
+    for (PackageInfo info : listOriginal) {
       boolean add = true;
-      do {
-        if (search_pattern == null || search_pattern.isEmpty()) {
-          break; // empty search pattern: add everything
+
+      if (searchPattern != null && !searchPattern.isEmpty()) {
+        if (!info.packageName.toLowerCase().contains(searchPattern)) {
+          if (!cacheAppName.containsKey(info.packageName)
+              || !cacheAppName.get(info.packageName).toLowerCase().contains(searchPattern)) {
+            add = false;
+          }
         }
-        if (info.packageName.toLowerCase().contains(search_pattern)) {
-          break; // search in package name
-        }
-        if (cache_appName.containsKey(info.packageName)
-            && cache_appName.get(info.packageName).toLowerCase().contains(search_pattern)) {
-          break; // search in application name
-        }
-        add = false;
-      } while (false);
+      }
 
       if (add) list.add(info);
     }
   }
 
-  class ViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
-    public ImageView imgIcon;
+  public void sortByName() {
+    Collections.sort(
+        listOriginal,
+        (p1, p2) -> {
+          String name1 =
+              cacheAppName.containsKey(p1.packageName)
+                  ? cacheAppName.get(p1.packageName)
+                  : p1.packageName;
+          String name2 =
+              cacheAppName.containsKey(p2.packageName)
+                  ? cacheAppName.get(p2.packageName)
+                  : p2.packageName;
+          return name1.compareToIgnoreCase(name2);
+        });
+    filterListByPattern();
+    notifyDataSetChanged();
+  }
+
+  public void sortByDate() {
+    Collections.sort(listOriginal, (p1, p2) -> Long.compare(p2.lastUpdateTime, p1.lastUpdateTime));
+    filterListByPattern();
+    notifyDataSetChanged();
+  }
+
+  public void sortBySize() {
+    filterListByPattern();
+    notifyDataSetChanged();
+  }
+
+  class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    ImageView imgIcon;
     private ApkListAdapter adapter;
     private TextView txtPackageName;
     private TextView txtAppName;
+    private ListItemView listitemview;
+    
 
     public ViewHolder(View v, ApkListAdapter adapter) {
       super(v);
       this.adapter = adapter;
-      txtPackageName = (TextView) v.findViewById(R.id.txtPackageName);
-      imgIcon = (ImageView) v.findViewById(R.id.imgIcon);
-      txtAppName = (TextView) v.findViewById(R.id.txtAppName);
+      txtPackageName = v.findViewById(R.id.txtPackageName);
+      imgIcon = v.findViewById(R.id.imgIcon);
+      txtAppName = v.findViewById(R.id.txtAppName);
+      listitemview = v.findViewById(R.id.listitemview);
       v.setOnClickListener(this);
+
+      // انیمیشن کلیک
+      v.setOnTouchListener(
+          (view, event) -> {
+            switch (event.getAction()) {
+              case android.view.MotionEvent.ACTION_DOWN:
+                view.animate().scaleX(0.97f).scaleY(0.97f).setDuration(100).start();
+                break;
+              case android.view.MotionEvent.ACTION_UP:
+              case android.view.MotionEvent.ACTION_CANCEL:
+                view.animate().scaleX(1f).scaleY(1f).setDuration(100).start();
+                break;
+            }
+            return false;
+          });
     }
 
     @Override
     public void onClick(View v) {
-      var info = adapter.getItem(getAdapterPosition());
-      List<String> items = new ArrayList<>();
+      PackageInfo info = adapter.getItem(getAdapterPosition());
+      if (info == null) return;
 
-      items.add("Save Apk");
-      items.add("Share Apk");
-      items.add("Info Apk");
+      List<String> items = new ArrayList<>();
+      items.add("Save APK");
+      items.add("Share APK");
+      items.add("App Info");
+
       try {
-        var icon = info.applicationInfo.loadIcon(v.getContext().getPackageManager());
+        Drawable icon = info.applicationInfo.loadIcon(v.getContext().getPackageManager());
+        String appName = info.applicationInfo.loadLabel(packageManager).toString();
+
         new MaterialAlertDialogBuilder(v.getContext())
-            .setTitle(" " + info.applicationInfo.name)
-            .setPositiveButton(android.R.string.cancel, null)
+            .setTitle(appName)
             .setIcon(icon)
             .setAdapter(
                 new ArrayAdapter<>(v.getContext(), android.R.layout.simple_list_item_1, items),
                 (dialog, which) -> {
                   switch (which) {
                     case 0:
-                      adapter.mActivity.doExctract(info);
+                      adapter.mActivity.doExtract(info);
                       break;
                     case 1:
-                      {
-                        adapter.mActivity.ExctractAndShare(info);
-                        break;
-                      }
+                      adapter.mActivity.extractAndShare(info);
+                      break;
                     case 2:
-                      {
-                        var builder = new StringBuilder();
-                        builder
-                            .append("Version Code: ")
-                            .append(info.versionCode)
-                            .append("\n")
-                            .append("Version Name: ")
-                            .append(info.versionName)
-                            .append("\n")
-                            .append("Compile SDK: ")
-                            .append(info.applicationInfo.compileSdkVersion)
-                            .append("\n")
-                            .append("Compile SDK Name: ")
-                            .append(info.applicationInfo.compileSdkVersionCodename)
-                            .append("\n")
-                            .append("Package Name: ")
-                            .append(info.applicationInfo.packageName)
-                            .append("\n")
-                            .append("Data Dir: ")
-                            .append(info.applicationInfo.dataDir)
-                            .append("\n")
-                            .append("Target SDK: ")
-                            .append(info.applicationInfo.targetSdkVersion)
-                            .append("\n")
-                            .append("Min Sdk: ")
-                            .append(info.applicationInfo.minSdkVersion)
-                            .append("\n")
-                            .append("So File: ")
-                            .append(info.applicationInfo.nativeLibraryDir)
-                            .append("\n");
-
-                        String allInfo = builder.toString();
-                        new MaterialAlertDialogBuilder(v.getContext())
-                            .setTitle("info apk " + info.applicationInfo.name)
-                            .setMessage(allInfo)
-                            .setPositiveButton(android.R.string.ok, null)
-                            .show();
-                      }
-                    default:
+                      showAppInfo(v, info);
                       break;
                   }
                 })
+            .setPositiveButton(android.R.string.cancel, null)
             .show();
       } catch (Exception e) {
         e.printStackTrace();
+        mActivity.showMessage("Error: " + e.getMessage());
       }
+    }
+
+    private void showAppInfo(View v, PackageInfo info) {
+      StringBuilder builder = new StringBuilder();
+      builder.append("Version Code: ").append(info.versionCode).append("\n\n");
+      builder.append("Version Name: ").append(info.versionName).append("\n\n");
+      builder.append("Target SDK: ").append(info.applicationInfo.targetSdkVersion).append("\n\n");
+      builder.append("Min SDK: ").append(info.applicationInfo.minSdkVersion).append("\n\n");
+      builder.append("Package: ").append(info.applicationInfo.packageName).append("\n\n");
+      builder.append("Data Dir: ").append(info.applicationInfo.dataDir).append("\n\n");
+      builder.append("Native Lib: ").append(info.applicationInfo.nativeLibraryDir);
+
+      new MaterialAlertDialogBuilder(v.getContext())
+          .setTitle("App Information")
+          .setMessage(builder.toString())
+          .setPositiveButton(android.R.string.ok, null)
+          .show();
     }
 
     public void setAppName(String name, String highlight) {
@@ -229,13 +283,17 @@ public class ApkListAdapter extends RecyclerView.Adapter<ApkListAdapter.ViewHold
     }
 
     private void setAndHighlight(TextView view, String value, String pattern) {
-      view.setText(value);
-      if (pattern == null || pattern.isEmpty()) return; // nothing to highlight
-      value = value.toLowerCase();
-      for (int offset = 0, index = value.indexOf(pattern, offset);
-          index >= 0 && offset < value.length();
-          index = value.indexOf(pattern, offset)) {
-        Spannable span = new SpannableString(view.getText());
+      if (pattern == null || pattern.isEmpty() || value == null) {
+        view.setText(value);
+        return;
+      }
+
+      String lowerValue = value.toLowerCase();
+      String lowerPattern = pattern.toLowerCase();
+      int index = lowerValue.indexOf(lowerPattern);
+
+      if (index >= 0) {
+        Spannable span = new SpannableString(value);
         span.setSpan(
             new ForegroundColorSpan(
                 MaterialColors.getColor(
@@ -244,77 +302,74 @@ public class ApkListAdapter extends RecyclerView.Adapter<ApkListAdapter.ViewHold
             index + pattern.length(),
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         view.setText(span);
-        offset += index + pattern.length();
+      } else {
+        view.setText(value);
       }
     }
   }
 
   class AppNameLoader implements Runnable {
-    private PackageInfo package_info;
+    private PackageInfo packageInfo;
 
     public AppNameLoader(PackageInfo info) {
-      package_info = info;
+      packageInfo = info;
     }
 
     @Override
     public void run() {
-      cache_appName.put(
-          package_info.packageName,
-          (String) package_info.applicationInfo.loadLabel(packageManager));
-      handler.post(
-          new Runnable() {
-            @Override
-            public void run() {
-              names_to_load--;
-              if (names_to_load == 0) {
-                // mActivity.hideProgressBar();
+      try {
+        String appName = packageInfo.applicationInfo.loadLabel(packageManager).toString();
+        cacheAppName.put(packageInfo.packageName, appName);
+
+        handler.post(
+            () -> {
+              namesToLoad--;
+              if (namesToLoad == 0) {
                 executorServiceNames.shutdown();
               }
-            }
-          });
+            });
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     }
   }
 
   class GuiLoader implements Runnable {
     private ViewHolder viewHolder;
-    private PackageInfo package_info;
+    private PackageInfo packageInfo;
 
     public GuiLoader(ViewHolder h, PackageInfo info) {
       viewHolder = h;
-      package_info = info;
+      packageInfo = info;
     }
 
     @Override
     public void run() {
-      boolean first = true;
-      do {
-        try {
-          final String appName =
-              cache_appName.containsKey(package_info.packageName)
-                  ? cache_appName.get(package_info.packageName)
-                  : (String) package_info.applicationInfo.loadLabel(packageManager);
-          var icon = package_info.applicationInfo.loadIcon(packageManager);
-          cache_appName.put(package_info.packageName, appName);
-          cache_appIcon.put(package_info.packageName, icon);
-          handler.post(
-              new Runnable() {
-                @Override
-                public void run() {
-                  viewHolder.setAppName(appName, search_pattern);
-                  viewHolder.imgIcon.setImageDrawable(icon);
-                }
-              });
+      try {
+        String appName =
+            cacheAppName.containsKey(packageInfo.packageName)
+                ? cacheAppName.get(packageInfo.packageName)
+                : packageInfo.applicationInfo.loadLabel(packageManager).toString();
 
-        } catch (OutOfMemoryError ex) {
-          cache_appIcon.clear();
-          cache_appName.clear();
-          if (first) {
-            first = false;
-            continue;
-          }
-        }
-        break;
-      } while (true);
+        Drawable icon = packageInfo.applicationInfo.loadIcon(packageManager);
+
+        cacheAppName.put(packageInfo.packageName, appName);
+        cacheAppIcon.put(packageInfo.packageName, icon);
+
+        handler.post(
+            () -> {
+              if (viewHolder.getAdapterPosition() != RecyclerView.NO_POSITION) {
+                viewHolder.setAppName(appName, searchPattern);
+                viewHolder.imgIcon.setImageDrawable(icon);
+              }
+            });
+      } catch (OutOfMemoryError ex) {
+        cacheAppIcon.clear();
+        cacheAppName.clear();
+        System.gc();
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     }
   }
 }

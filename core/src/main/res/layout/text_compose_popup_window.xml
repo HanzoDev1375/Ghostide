@@ -1,34 +1,34 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-     xmlns:android="http://schemas.android.com/apk/res/android"
-     android:layout_height="wrap_content"
-     android:layout_width="wrap_content"
-     android:orientation="vertical">
-
-    <LinearLayout
-         android:layout_height="wrap_content"
-         android:layout_width="wrap_content"
-         android:orientation="vertical">
-
-        <androidx.recyclerview.widget.RecyclerView
-             android:layout_height="match_parent"
-             android:layout_width="wrap_content"
-             android:padding="8dp"
-             android:id="@+id/rvEditor" />
-
-    </LinearLayout>
-
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="vertical">
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
     <TextView
-         android:layout_height="wrap_content"
-         android:layout_width="match_parent"
-         android:visibility="invisible"
-         android:gravity="center_vertical"
-         android:padding="3dp"
-         android:ellipsize="end"
-         android:textSize="16dp"
-         android:singleLine="true"
-         android:textColor="?colorOnPrimary"
-         android:text="Hello"
-         android:id="@+id/tooltiem" />
-
+      android:id="@+id/text_actiontitle"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:padding="8dp"
+      android:text="TextAction"
+      android:textSize="16sp"
+      android:textStyle="bold"
+      android:layout_weight="1" />
+    <ImageView
+      android:id="@+id/iconmore"
+      android:layout_width="40dp"
+      android:layout_height="40dp"
+      android:src="@drawable/icon_arrow_right_round"
+      android:scaleType="centerInside" />
+  </LinearLayout>
+  <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/rvEditor"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp" />
 </LinearLayout>

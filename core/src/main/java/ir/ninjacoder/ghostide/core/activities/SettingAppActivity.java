@@ -323,7 +323,7 @@ public class SettingAppActivity extends BaseCompat {
           if (is) {
             thememanagersoft.edit().putString("thememanagersoft", "ok").apply();
           } else {
-            thememanagersoft.edit().remove("thememanagersoft", "no").apply();
+            thememanagersoft.edit().remove("thememanagersoft").apply();
           }
         });
     codeAZ.setSwitchChangedListener(
@@ -358,30 +358,29 @@ public class SettingAppActivity extends BaseCompat {
     autoSaveText.setSwitchChangedListener(
         (vv, cc) -> {
           if (cc) {
-            sve.edit().putString("getAutoSave", "true").commit();
+            sve.edit().putString("getAutoSave", "true").apply();
           } else {
-            sve.edit().remove("getAutoSave").commit();
+            sve.edit().remove("getAutoSave").apply();
           }
         });
 
     materialYous.setSwitchChangedListener(
-        (bin, is) -> {
-          if (is) {
+    (bin, is) -> {
+        themeEngine.setDynamicTheme(is);
+        if (is) {
             materialYou.edit().putString("materialYou", "true").apply();
-            themeEngine.setDynamicTheme(true);
-
-          } else {
+        } else {
             materialYou.edit().remove("materialYou").apply();
-            themeEngine.setDynamicTheme(false);
-          }
-        });
+        }
+    }
+);
 
     livemodel.setSwitchChangedListener(
         (bin, is) -> {
           if (is) {
             ru.edit().putBoolean("live", true).apply();
           } else {
-            ru.edit().remove("live", false).apply();
+            ru.edit().remove("live").apply();
           }
         });
     seek.setSwitchChangedListener(
@@ -389,7 +388,7 @@ public class SettingAppActivity extends BaseCompat {
           if (is) {
             setfont.edit().putBoolean("seek", true).apply();
           } else {
-            setfont.edit().remove("seek", false).apply();
+            setfont.edit().remove("seek").apply();
           }
         });
     minimap.setSwitchChangedListener(
@@ -397,13 +396,13 @@ public class SettingAppActivity extends BaseCompat {
           if (is) {
             setfont.edit().putBoolean("minimap", true).apply();
           } else {
-            setfont.edit().remove("minimap", false).apply();
+            setfont.edit().remove("minimap").apply();
           }
         });
     breaklevelmodel.setSwitchChangedListener(
         (bin, is) -> {
           if (is) GhostIdeAppLoader.getPrefManager().edit().putBoolean("breaks", true).apply();
-          else GhostIdeAppLoader.getPrefManager().edit().putBoolean("breaks", false).apply();
+          else GhostIdeAppLoader.getPrefManager().edit().remove("breaks").apply();
         });
     jointogithub.setOnClickListener(
         v -> {

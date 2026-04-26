@@ -62,11 +62,14 @@
 - [x] Fast type
 - [x] Less Compiler
 - [x] JavaCc Compiler
-- [x] Git manager (30%) (Need help)
-- [x] CodeFormatter (80%)
+- [x] Git manager (50%) (Need help)
+- [x] CodeFormatter (90%)
 - [ ] Ninja Compiler (my lang)
 - [x] Physical keyboard support
+- [x] Better comment(10%)
 
+## Note 
+- There are a number of special features that are not created by the plugin and we implement in the program by default
 ---
 
 ### Supported Languages

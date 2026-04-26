@@ -1,20 +1,15 @@
-package ir.ninjacoder.prograsssheet.deepseek.adapter;
+package ir.ninjacoder.prograssheet.deepseek.adapter;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
-import android.text.SpannableStringBuilder;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.blankj.utilcode.util.ClipboardUtils;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -22,17 +17,14 @@ import com.google.android.material.color.MaterialColors;
 import com.skydoves.powermenu.MenuAnimation;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
-import ir.ninjacoder.codesnap.LangType;
-import ir.ninjacoder.codesnap.Utils.CodeImpl;
-import ir.ninjacoder.codesnap.colorhelper.ColorHelper;
-import ir.ninjacoder.codesnap.colorhelper.ThemeManager;
 import ir.ninjacoder.prograsssheet.R;
 import ir.ninjacoder.prograsssheet.deepseek.model.Message;
+import ir.ninjacoder.prograssheet.deepseek.widget.TypewriterTextView;
+import ir.ninjacoder.codesnap.markdownpreview.MarkDownTextHelper;
+import android.widget.LinearLayout;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -41,9 +33,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
   private List<Message> messages;
   private OnRegenerateListener regenerateListener;
-  private CodeImpl codeImpl;
-  private ColorHelper colorHelper;
-  private static final Pattern CODE_BLOCK_PATTERN = Pattern.compile("```(\\w*)\\n([\\s\\S]*?)```");
   private Map<Integer, AssistantMessageViewHolder> viewHolderMap = new HashMap<>();
 
   public interface OnRegenerateListener {
@@ -56,13 +45,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
   public ChatAdapter(List<Message> messages) {
     this.messages = messages;
-    initCodeHighlighter();
-  }
-
-  private void initCodeHighlighter() {
-    codeImpl = new CodeImpl();
-    colorHelper = new ColorHelper();
-    colorHelper.setThememanager(ThemeManager.PROGRAMTHRME);
   }
 
   @Override
@@ -121,24 +103,27 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
   }
 
   class UserMessageViewHolder extends RecyclerView.ViewHolder {
-    TextView messageText;
     TextView timeText;
     ImageView copyButton;
     TextView searchIndicator;
     ChipGroup fileChipGroup;
+    TypewriterTextView contentText;
 
     UserMessageViewHolder(@NonNull View itemView) {
       super(itemView);
-      messageText = itemView.findViewById(R.id.messageText);
       timeText = itemView.findViewById(R.id.timeText);
       copyButton = itemView.findViewById(R.id.copyButton);
       searchIndicator = itemView.findViewById(R.id.searchIndicator);
       fileChipGroup = itemView.findViewById(R.id.fileChipGroup);
+      contentText = itemView.findViewById(R.id.contentText);
     }
 
     void bind(Message message) {
-      CharSequence displayText = highlightCodeIfNeeded(message.getContent());
-      messageText.setText(displayText);
+      String content = message.getContent();
+
+      // کاربر همیشه متن کامل رو داره، تایپ افکت نیاز نیست
+      MarkDownTextHelper.handleMarkDown(contentText, content);
+
       timeText.setText(DateFormat.format("HH:mm", message.getTimestamp()));
 
       if (message.isSearchEnabled()) {
@@ -162,15 +147,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         fileChipGroup.setVisibility(View.GONE);
       }
 
-      copyButton.setOnClickListener(
-          v -> {
-            copyToClipboard(v.getContext(), message.getContent());
-            animateButton(copyButton);
-          });
-      itemView.setOnClickListener(
-          c -> {
-            bindOfPowerMenu(message, c);
-          });
+      copyButton.setOnClickListener(v -> ClipboardUtils.copyText(content));
+      itemView.setOnClickListener(c -> bindOfPowerMenu(message, c));
     }
   }
 
@@ -188,120 +166,15 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     menu.setOnMenuItemClickListener(
         (pos, men2u) -> {
           switch (pos) {
-            case 0 -> copyToClipboard(v.getContext(), msg.getContent());
+            case 0 -> ClipboardUtils.copyText(msg.getContent());
           }
         });
     menu.showAsDropDown(v);
   }
 
-  private CharSequence highlightCodeIfNeeded(String text) {
-    if (!text.contains("```")) {
-      return text;
-    }
-    try {
-      SpannableStringBuilder result = new SpannableStringBuilder();
-      Matcher matcher = CODE_BLOCK_PATTERN.matcher(text);
-      int lastEnd = 0;
-      while (matcher.find()) {
-        if (matcher.start() > lastEnd) {
-          result.append(text.substring(lastEnd, matcher.start()));
-        }
-        String language = matcher.group(1);
-        String code = matcher.group(2);
-        LangType langType = getLangTypeFromString(language);
-        if (codeImpl != null && colorHelper != null) {
-          try {
-            SpannableStringBuilder highlighted = codeImpl.highlight(langType, code, colorHelper);
-            if (highlighted != null) {
-              result.append(highlighted);
-            } else {
-              result.append(code);
-            }
-          } catch (Exception e) {
-            result.append(code);
-          }
-        } else {
-          result.append(code);
-        }
-        lastEnd = matcher.end();
-      }
-      if (lastEnd < text.length()) {
-        result.append(text.substring(lastEnd));
-      }
-      return result;
-    } catch (Exception e) {
-      return text;
-    }
-  }
-
-  private LangType getLangTypeFromString(String lang) {
-    if (lang == null || lang.isEmpty()) return LangType.NONE;
-    String l = lang.toLowerCase().trim();
-    switch (l) {
-      case "java":
-        return LangType.JAVA;
-      case "python":
-      case "py":
-        return LangType.PYTHON;
-      case "javascript":
-      case "js":
-      case "jsx":
-        return LangType.JAVASCRIPT;
-      case "typescript":
-      case "ts":
-      case "tsx":
-        return LangType.TYPESCRIPT;
-      case "kotlin":
-      case "kt":
-        return LangType.KOTLIN;
-      case "dart":
-        return LangType.DART;
-      case "go":
-        return LangType.GO;
-      case "rust":
-        return LangType.RUST;
-      case "c":
-        return LangType.C;
-      case "cpp":
-      case "c++":
-        return LangType.CPP;
-      case "csharp":
-      case "cs":
-        return LangType.CSHARP;
-      case "html":
-        return LangType.HTML;
-      case "css":
-        return LangType.CSS;
-      case "php":
-        return LangType.PHP;
-      case "json":
-        return LangType.JSON;
-      case "xml":
-        return LangType.XML;
-      case "yaml":
-      case "yml":
-        return LangType.YAML;
-      case "ruby":
-      case "rb":
-        return LangType.RUBY;
-      case "gradle":
-        return LangType.GRADLE;
-      case "lua":
-        return LangType.LUA;
-      case "zig":
-        return LangType.ZIG;
-      case "md":
-      case "markdown":
-        return LangType.MARKDOWN;
-      default:
-        return LangType.NONE;
-    }
-  }
-
   class AssistantMessageViewHolder extends RecyclerView.ViewHolder {
-    TextView messageText;
     TextView timeText;
-    View typingIndicator;
+    ProgressBar typingIndicator;
     ImageView copyButton;
     ImageView regenerateButton;
     ProgressBar regenerateProgress;
@@ -309,10 +182,10 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     LinearLayout reasoningContainer;
     TextView reasoningText;
     ImageView toggleReasoningButton;
+    TypewriterTextView contentText;
 
     AssistantMessageViewHolder(@NonNull View itemView) {
       super(itemView);
-      messageText = itemView.findViewById(R.id.messageText);
       timeText = itemView.findViewById(R.id.timeText);
       typingIndicator = itemView.findViewById(R.id.typingIndicator);
       copyButton = itemView.findViewById(R.id.copyButton);
@@ -322,6 +195,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
       reasoningContainer = itemView.findViewById(R.id.reasoningContainer);
       reasoningText = itemView.findViewById(R.id.reasoningText);
       toggleReasoningButton = itemView.findViewById(R.id.toggleReasoningButton);
+      contentText = itemView.findViewById(R.id.contentText);
     }
 
     void bind(Message message, int position, OnRegenerateListener listener) {
@@ -344,29 +218,22 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         reasoningContainer.setVisibility(View.GONE);
       }
 
+      String content = message.getContent();
+
       if (message.isStreaming()) {
+        MarkDownTextHelper.handleMarkDown(contentText, content);
         typingIndicator.setVisibility(View.VISIBLE);
         copyButton.setVisibility(View.GONE);
         regenerateButton.setVisibility(View.GONE);
-        CharSequence displayText = highlightCodeIfNeeded(message.getContent());
-        messageText.setText(displayText);
       } else {
+        contentText.typeText(content);
         typingIndicator.setVisibility(View.GONE);
         copyButton.setVisibility(View.VISIBLE);
         regenerateButton.setVisibility(View.VISIBLE);
-        CharSequence displayText = highlightCodeIfNeeded(message.getContent());
-        messageText.setText(displayText);
       }
-      itemView.setOnClickListener(
-          c -> {
-            bindOfPowerMenu(message, c);
-          });
-      copyButton.setOnClickListener(
-          v -> {
-            copyToClipboard(v.getContext(), message.getContent());
-            animateButton(copyButton);
-          });
 
+      itemView.setOnClickListener(c -> bindOfPowerMenu(message, c));
+      copyButton.setOnClickListener(v -> ClipboardUtils.copyText(content));
       regenerateButton.setOnClickListener(
           v -> {
             if (listener != null && !message.isStreaming()) {
@@ -387,24 +254,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
   }
 
-  private void copyToClipboard(Context context, String text) {
-    ClipboardManager clipboard =
-        (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-    ClipData clip = ClipData.newPlainText("code", text);
-    clipboard.setPrimaryClip(clip);
-    Toast.makeText(context, "done", Toast.LENGTH_SHORT).show();
-  }
-
-  private void animateButton(ImageView button) {
-    button
-        .animate()
-        .scaleX(0.7f)
-        .scaleY(0.7f)
-        .setDuration(100)
-        .withEndAction(
-            () -> {
-              button.animate().scaleX(1f).scaleY(1f).setDuration(100).start();
-            })
-        .start();
+  public void finalizeStreamingAt(int position) {
+    // Markwon همه چیز رو هندل میکنه
   }
 }

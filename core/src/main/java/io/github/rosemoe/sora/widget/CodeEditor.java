@@ -706,9 +706,11 @@ public class CodeEditor extends View
     if (stickyBlocks == null || stickyBlocks.isEmpty()) {
       return;
     }
+
     int currentLine = mCursor.isSelected() ? -1 : mCursor.getLeftLine();
-    int rowHeight = getRowHeight();
+    int rowHeight = mTextMetrics.descent - mTextMetrics.ascent;
     int size = stickyBlocks.size();
+
     for (int i = size - 1; i >= 0; i--) {
       BlockLine block = stickyBlocks.get(i);
       int line = block.startLine;
@@ -726,6 +728,7 @@ public class CodeEditor extends View
       drawColor(canvas, bgColor, stickyRect);
       drawStickyLineText(canvas, line, offsetX, top);
     }
+
     if (size > 0) {
       float bottomLine = size * rowHeight;
       stickyRect.set(0, bottomLine - getDpUnit(), getWidth(), bottomLine);
@@ -756,6 +759,10 @@ public class CodeEditor extends View
 
     mPaint.setFakeBoldText(true);
 
+    int textDescent = mTextMetrics.descent;
+    int textAscent = mTextMetrics.ascent;
+    float baseline = (textDescent - textAscent) - textDescent;
+
     while (columnCount > span.column && spanOffset < spans.size()) {
       int spanEnd = spanOffset + 1 >= spans.size() ? columnCount : spans.get(spanOffset + 1).column;
       spanEnd = Math.min(columnCount, spanEnd);
@@ -765,12 +772,7 @@ public class CodeEditor extends View
       mPaint.setColor(mColors.getColor(span.getForegroundColorId()));
 
       canvas.drawText(
-          mBuffer.value,
-          span.column,
-          spanEnd - span.column,
-          paintingOffset,
-          getRowBaseline(0),
-          mPaint);
+          mBuffer.value, span.column, spanEnd - span.column, paintingOffset, baseline, mPaint);
 
       paintingOffset += width;
       spanOffset++;

@@ -7,8 +7,17 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.text.TextUtils;
-import android.view.*;
-import android.widget.*;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -18,14 +27,13 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import ir.ninjacoder.prograssheet.deepseek.adapter.ChatAdapter;
 import ir.ninjacoder.prograsssheet.R;
 import ir.ninjacoder.prograsssheet.databinding.FragmentChatBinding;
-import ir.ninjacoder.prograsssheet.deepseek.adapter.ChatAdapter;
 import ir.ninjacoder.prograsssheet.deepseek.model.Message;
 import ir.ninjacoder.prograsssheet.deepseek.api.DeepSeekApiService;
 import ir.ninjacoder.prograsssheet.deepseek.setting.PrefManager;
 import ir.ninjacoder.prograsssheet.deepseek.manager.ChatHistoryManager;
-import android.view.inputmethod.EditorInfo;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -34,6 +42,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class ChatFragment extends Fragment {
 
@@ -83,11 +92,9 @@ public class ChatFragment extends Fragment {
     setupRecyclerView();
     setupListeners();
     checkApiKey();
-
     if (savedInstanceState == null) {
       addWelcomeMessage();
     }
-
     return binding.getRoot();
   }
 
@@ -140,10 +147,10 @@ public class ChatFragment extends Fragment {
     clearButton.setOnClickListener(
         v -> {
           new MaterialAlertDialogBuilder(requireContext())
-              .setTitle("پاک کردن چت")
-              .setMessage("آیا از پاک کردن تمام پیام‌ها اطمینان دارید؟")
-              .setPositiveButton("بله", (dialog, which) -> clearChat())
-              .setNegativeButton("خیر", null)
+              .setTitle("Clear chat")
+              .setMessage("Are you sure you want to clear all messages?")
+              .setPositiveButton("Yes", (dialog, which) -> clearChat())
+              .setNegativeButton("No", null)
               .show();
         });
 
@@ -155,7 +162,7 @@ public class ChatFragment extends Fragment {
           searchToggleButton.setSelected(isSearchEnabled);
           Toast.makeText(
                   getContext(),
-                  isSearchEnabled ? "جستجو فعال شد" : "جستجو غیرفعال شد",
+                  isSearchEnabled ? "Search enabled" : "Search disabled",
                   Toast.LENGTH_SHORT)
               .show();
         });
@@ -186,16 +193,20 @@ public class ChatFragment extends Fragment {
   public void startNewChat() {
     if (hasMessages()) {
       new MaterialAlertDialogBuilder(requireContext())
-          .setTitle("چت جدید")
-          .setMessage("چت فعلی ذخیره شود؟")
+          .setTitle("New chat")
+          .setMessage("Save current chat?")
           .setPositiveButton(
-              "ذخیره",
+              "Save",
               (dialog, which) -> {
                 saveChatToHistory();
                 clearChat();
               })
-          .setNegativeButton("ذخیره نشود", (dialog, which) -> clearChat())
-          .setNeutralButton("لغو", null)
+          .setNegativeButton("Don't save", (dialog, which) -> clearChat())
+          .setNeutralButton(
+              "exit",
+              (c, t) -> {
+                requireActivity().finish();
+              })
           .show();
     } else {
       clearChat();
@@ -209,13 +220,11 @@ public class ChatFragment extends Fragment {
       messages.addAll(loadedMessages);
       chatAdapter.notifyDataSetChanged();
       chatRecyclerView.scrollToPosition(messages.size() - 1);
-
       String title = historyManager.getCurrentChatTitle();
       if (listener != null) {
         listener.onChatLoaded(chatId, title);
       }
-
-      Toast.makeText(getContext(), "چت بارگذاری شد", Toast.LENGTH_SHORT).show();
+      Toast.makeText(getContext(), "Chat loaded", Toast.LENGTH_SHORT).show();
     }
   }
 
@@ -246,7 +255,8 @@ public class ChatFragment extends Fragment {
       "application/json",
       "text/xml",
       "text/x-sh",
-      "text/csv"
+      "text/csv",
+      "text/*"
     };
     intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
     startActivityForResult(intent, 1001);
@@ -334,15 +344,15 @@ public class ChatFragment extends Fragment {
     if (successCount > 0) {
       Toast.makeText(
               getContext(),
-              successCount + " از " + totalCount + " فایل با موفقیت آپلود شد",
+              successCount + " of " + totalCount + " files uploaded",
               Toast.LENGTH_SHORT)
           .show();
     }
     if (!errors.isEmpty()) {
       new MaterialAlertDialogBuilder(requireContext())
-          .setTitle("خطا در آپلود")
+          .setTitle("Upload error")
           .setMessage(TextUtils.join("\n", errors))
-          .setPositiveButton("باشه", null)
+          .setPositiveButton("OK", null)
           .show();
     }
     if (uploadedFiles.isEmpty()) {
@@ -359,7 +369,6 @@ public class ChatFragment extends Fragment {
               requireContext().getCacheDir(),
               "upload_" + System.currentTimeMillis() + "_" + fileName);
       FileOutputStream outputStream = new FileOutputStream(tempFile);
-
       byte[] buffer = new byte[4096];
       int bytesRead;
       while ((bytesRead = inputStream.read(buffer)) != -1) {
@@ -367,9 +376,7 @@ public class ChatFragment extends Fragment {
       }
       outputStream.close();
       inputStream.close();
-
       tempFileMap.put(tempFile.getAbsolutePath(), tempFile);
-
       apiService.uploadFile(
           tempFile,
           new DeepSeekApiService.FileUploadCallback() {
@@ -499,7 +506,7 @@ public class ChatFragment extends Fragment {
     List<String> fileIdsToSend =
         uploadedFiles.isEmpty()
             ? null
-            : uploadedFiles.stream().map(f -> f.id).collect(java.util.stream.Collectors.toList());
+            : uploadedFiles.stream().map(f -> f.id).collect(Collectors.toList());
 
     clearUploadedFiles();
 
@@ -541,6 +548,7 @@ public class ChatFragment extends Fragment {
                   .runOnUiThread(
                       () -> {
                         assistantMessage.setStreaming(false);
+                        chatAdapter.finalizeStreamingAt(assistantPosition);
                         chatAdapter.notifyItemChanged(assistantPosition);
                         setLoading(false);
                         onRegenerateFinished(assistantPosition);
@@ -615,7 +623,7 @@ public class ChatFragment extends Fragment {
     }
   }
 
-  private void saveChatToHistory() {
+  public void saveChatToHistory() {
     List<Message> messagesToSave = new ArrayList<>();
     for (Message msg : messages) {
       if (!(messages.indexOf(msg) == 0
@@ -624,7 +632,6 @@ public class ChatFragment extends Fragment {
         messagesToSave.add(msg);
       }
     }
-
     if (!messagesToSave.isEmpty()) {
       historyManager.saveCurrentChat(messagesToSave);
       if (listener != null) {
@@ -649,7 +656,8 @@ public class ChatFragment extends Fragment {
     historyManager.deleteAllChats();
     clearChat();
   }
-  public void setMassges(CharSequence text){
+
+  public void setMassges(CharSequence text) {
     messageInput.setText(text);
   }
 

@@ -7,131 +7,91 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.channels.FileChannel;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class Extractor {
-  private String get_out_filename(PackageInfo info) {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
-      return "/GhostWeb/apk/" + info.packageName + "_v" + info.versionCode + ".apk";
+
+  private String getOutFilename(PackageInfo info) {
+    String basePath;
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+      basePath = Environment.DIRECTORY_DOWNLOADS + "/APKs/";
     } else {
-      return "/apk/" + info.packageName + "_v" + info.versionCode + ".apk";
+      basePath = Environment.getExternalStorageDirectory() + "/APKs/";
     }
+
+    return basePath + info.packageName + "_v" + info.versionName + ".apk";
   }
 
   public String extractWithoutRoot(PackageInfo info) throws Exception {
     File src = new File(info.applicationInfo.sourceDir);
     File dst;
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
-      dst = new File(Environment.getExternalStorageDirectory(), get_out_filename(info));
-    } else {
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
       dst =
           new File(
               Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-              get_out_filename(info));
+              "APKs/" + info.packageName + "_v" + info.versionName + ".apk");
+    } else {
+      dst = new File(Environment.getExternalStorageDirectory(), getOutFilename(info));
     }
+
     dst = buildDstPath(dst);
+
     try {
-      copy(src, dst);
+      copyWithProgress(src, dst);
     } catch (IOException ex) {
-      throw new Exception(ex.getMessage());
-    }
-    if (!dst.exists()) {
-      throw new Exception("cannot extract file [no root]");
-    }
-    return dst.toString();
-  }
-
-  public String extractWithRoot(PackageInfo info) throws Exception {
-    File src = new File(info.applicationInfo.sourceDir);
-    String path = System.getenv("EXTERNAL_STORAGE") + get_out_filename(info);
-    File dst = buildDstPath(new File(path));
-
-    Process p = null;
-    StringBuilder err = new StringBuilder();
-    try {
-      p =
-          Runtime.getRuntime()
-              .exec("su -c cat " + src.getAbsolutePath() + " > " + dst.getAbsolutePath());
-      p.waitFor();
-
-      if (p.exitValue() != 0) {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-        String line = "";
-        while ((line = reader.readLine()) != null) {
-          err.append(line);
-          err.append("\n");
-        }
-
-        throw new Exception(err.toString());
-      }
-    } catch (IOException e) {
-      throw new Exception(e.getMessage());
-    } catch (InterruptedException e) {
-      throw new Exception(e.getMessage());
-    } finally {
-      if (p != null) {
-        try {
-          p.destroy();
-        } catch (Exception e) {
-        }
-      }
+      throw new Exception("Copy failed: " + ex.getMessage());
     }
 
     if (!dst.exists()) {
-      throw new Exception("cannot exctract file [root]");
+      throw new Exception("Cannot extract file [no root]");
     }
 
     return dst.getAbsolutePath();
   }
 
-  private void copy(File src, File dst) throws IOException {
-    FileInputStream inStream = new FileInputStream(src);
-    FileOutputStream outStream = new FileOutputStream(dst);
-    FileChannel inChannel = inStream.getChannel();
-    FileChannel outChannel = outStream.getChannel();
-    inChannel.transferTo(0, inChannel.size(), outChannel);
-    inStream.close();
-    outStream.close();
+  private void copyWithProgress(File src, File dst) throws IOException {
+    try (FileInputStream inStream = new FileInputStream(src);
+        FileOutputStream outStream = new FileOutputStream(dst)) {
+
+      FileChannel inChannel = inStream.getChannel();
+      FileChannel outChannel = outStream.getChannel();
+
+      long totalSize = inChannel.size();
+      long transferred = 0;
+
+      while (transferred < totalSize) {
+        transferred +=
+            inChannel.transferTo(transferred, Math.min(8192, totalSize - transferred), outChannel);
+      }
+    }
   }
 
   private File buildDstPath(File path) throws IOException {
-    if ((!path.getParentFile().exists() && !path.getParentFile().mkdirs())
-        || !path.getParentFile().isDirectory()) {
-      throw new IOException("Cannot create directory: " + path.getParentFile().getAbsolutePath());
+    File parent = path.getParentFile();
+    if (parent != null && !parent.exists()) {
+      if (!parent.mkdirs()) {
+        throw new IOException("Cannot create directory: " + parent.getAbsolutePath());
+      }
     }
+
     if (!path.exists()) return path;
 
-    File dst = path;
     String fname = path.getName();
     int index = fname.lastIndexOf(".");
-    String ext = fname.substring(index);
-    String name = fname.substring(0, index);
+    String ext = index > 0 ? fname.substring(index) : "";
+    String name = index > 0 ? fname.substring(0, index) : fname;
+    String timestamp =
+        new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
 
-    for (int i = 0; dst.exists(); i++) {
-      dst = new File(path.getParentFile(), name + "-" + String.valueOf(i) + ext);
-    }
-
-    return dst;
-  }
-
-  public void shareExtractedFile(Context context, PackageInfo info) throws Exception {
-    String extractedFilePath =
-        extractWithoutRoot(info);
-    File file = new File(extractedFilePath);
-
-    if (file.exists()) {
-      Intent intent = new Intent(Intent.ACTION_SEND);
-      intent.setType("application/vnd.android.package-archive");
-      intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-      context.startActivity(Intent.createChooser(intent, "Share APK File"));
-    } else {
-      throw new Exception("Extracted file not found or could not be extracted.");
-    }
+    File newPath = new File(path.getParentFile(), name + "_" + timestamp + ext);
+    return newPath;
   }
 }

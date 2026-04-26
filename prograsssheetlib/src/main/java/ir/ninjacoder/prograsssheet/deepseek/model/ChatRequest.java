@@ -24,6 +24,12 @@ public class ChatRequest {
   @SerializedName("presence_penalty")
   private double presencePenalty = 0.0;
 
+  @SerializedName("thinking")
+  private ThinkingConfig thinking;
+
+  @SerializedName("reasoning_effort")
+  private String reasoningEffort;
+
   @SerializedName("enable_search")
   private Boolean enableSearch;
 
@@ -31,11 +37,13 @@ public class ChatRequest {
   private List<String> fileIds;
 
   public ChatRequest(
-      String model, 
-      List<MessageDTO> messages, 
-      boolean stream, 
-      double temperature, 
+      String model,
+      List<MessageDTO> messages,
+      boolean stream,
+      double temperature,
       int maxTokens,
+      ThinkingConfig thinking,
+      String reasoningEffort,
       Boolean enableSearch,
       List<String> fileIds) {
     this.model = model;
@@ -43,8 +51,22 @@ public class ChatRequest {
     this.stream = stream;
     this.temperature = temperature;
     this.maxTokens = maxTokens;
+    this.thinking = thinking;
+    this.reasoningEffort = reasoningEffort;
     this.enableSearch = enableSearch;
     this.fileIds = fileIds;
+  }
+
+  public static class ThinkingConfig {
+    private String type;
+
+    public ThinkingConfig(String type) {
+      this.type = type;
+    }
+
+    public String getType() {
+      return type;
+    }
   }
 
   public static class MessageDTO {
@@ -74,6 +96,8 @@ public class ChatRequest {
     private double topP = 1.0;
     private double frequencyPenalty = 0.0;
     private double presencePenalty = 0.0;
+    private ThinkingConfig thinking;
+    private String reasoningEffort;
     private Boolean enableSearch;
     private List<String> fileIds;
 
@@ -122,6 +146,16 @@ public class ChatRequest {
       return this;
     }
 
+    public Builder thinking(ThinkingConfig thinking) {
+      this.thinking = thinking;
+      return this;
+    }
+
+    public Builder reasoningEffort(String reasoningEffort) {
+      this.reasoningEffort = reasoningEffort;
+      return this;
+    }
+
     public Builder enableSearch(Boolean enableSearch) {
       this.enableSearch = enableSearch;
       return this;
@@ -133,8 +167,17 @@ public class ChatRequest {
     }
 
     public ChatRequest build() {
-      ChatRequest request = new ChatRequest(
-          model, messages, stream, temperature, maxTokens, enableSearch, fileIds);
+      ChatRequest request =
+          new ChatRequest(
+              model,
+              messages,
+              stream,
+              temperature,
+              maxTokens,
+              thinking,
+              reasoningEffort,
+              enableSearch,
+              fileIds);
       request.topP = this.topP;
       request.frequencyPenalty = this.frequencyPenalty;
       request.presencePenalty = this.presencePenalty;

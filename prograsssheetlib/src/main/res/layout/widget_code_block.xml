@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:layout_height="wrap_content"
+     android:layout_width="match_parent"
+     android:layout_margin="8dp"
+     app:cardCornerRadius="1dp">
+
+    <LinearLayout
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:orientation="vertical">
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:gravity="end"
+             android:padding="4dp"
+             android:orientation="horizontal">
+
+            <ImageView
+                 android:layout_height="24dp"
+                 android:layout_width="24dp"
+                 android:visibility="gone"
+                 android:src="@drawable/ic_copy"
+                 android:background="?attr/selectableItemBackgroundBorderless"
+                 android:padding="4dp"
+                 android:id="@+id/copyButton" />
+
+        </LinearLayout>
+
+        <ir.ninjacoder.prograssheet.deepseek.widget.TypewriterTextView
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:padding="12dp"
+             android:textSize="14sp"
+             android:textIsSelectable="true"
+             android:id="@+id/codeText" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
