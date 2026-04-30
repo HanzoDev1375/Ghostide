@@ -2,21 +2,21 @@ pluginManagement {
   repositories {
    gradlePluginPortal()
    google()
-    mavenCentral() 
+   mavenCentral() 
    gradlePluginPortal()
-    maven { url 'https://maven.myket.ir' }
+   // maven { url 'https://maven.myket.ir' }
   }
 }
 
 dependencyResolutionManagement {
   repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
   repositories {
-    google()
-    mavenCentral()
-    gradlePluginPortal()
-    maven { url 'https://jitpack.io' }
-    maven { url 'https://oss.jfrog.org/artifactory/oss-snapshot-local' }
-    maven { url 'https://maven.myket.ir' }
+   google()
+   mavenCentral()
+   gradlePluginPortal()
+   maven { url 'https://jitpack.io' }
+   maven { url 'https://oss.jfrog.org/artifactory/oss-snapshot-local' }
+    //maven { url 'https://maven.myket.ir' }
    
   }
 } 

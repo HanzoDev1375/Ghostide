@@ -14,7 +14,7 @@
     android:visibility="gone"
     app:singleSelection="false" />
 
-  <ir.ninjacoder.prograssheet.deepseek.widget.TypewriterTextView
+  <ir.ninjacoder.prograsssheet.deepseek.widget.TypewriterTextView
     android:id="@+id/contentText"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"

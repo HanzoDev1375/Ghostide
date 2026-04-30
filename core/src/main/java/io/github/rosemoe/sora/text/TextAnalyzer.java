@@ -1,61 +1,43 @@
-/*
- *    sora-editor - the awesome code editor for Android
- *    https://github.com/Rosemoe/sora-editor
- *    Copyright (C) 2020-2022  Rosemoe
- *
- *     This library is free software; you can redistribute it and/or
- *     modify it under the terms of the GNU Lesser General Public
- *     License as published by the Free Software Foundation; either
- *     version 2.1 of the License, or (at your option) any later version.
- *
- *     This library is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *     Lesser General Public License for more details.
- *
- *     You should have received a copy of the GNU Lesser General Public
- *     License along with this library; if not, write to the Free Software
- *     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
- *     USA
- *
- *     Please contact Rosemoe by email 2073412493@qq.com if you need
- *     additional information or have any questions
- */
 package io.github.rosemoe.sora.text;
 
 import android.util.Log;
-
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import io.github.rosemoe.sora.data.BlockLine;
 import io.github.rosemoe.sora.data.ObjectAllocator;
 import io.github.rosemoe.sora.data.Span;
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer;
 
-/**
- * This is a manager of analyzing text
- *
- * @author Rose
- */
 public class TextAnalyzer {
 
-  private static int sThreadId = 0;
+  private static final String TAG = "TextAnalyzer";
+  private static final int MAX_LINES_FOR_FULL_ANALYSIS = 3000;
+  private static final int MAX_BUFFER_SIZE = 100_000;
+
+  private static final AtomicInteger sThreadId = new AtomicInteger(0);
+
   public final RecycleObjContainer mObjContainer = new RecycleObjContainer();
   private final Object mLock = new Object();
   private final CodeAnalyzer mCodeAnalyzer;
 
-  /** Debug:Start time */
   public long mOpStartTime;
 
-  private TextAnalyzeResult mResult;
+  private volatile TextAnalyzeResult mResult;
   private Callback mCallback;
   private AnalyzeThread mThread;
+  private ExecutorService mBackgroundExecutor;
+  private Future<?> mBackgroundTask;
 
-  /**
-   * Create a new manager for the given codeAnalyzer
-   *
-   * @param codeAnalyzer0 Target codeAnalyzer
-   */
+  private Content mLastContent;
+  private int mLastAnalyzedLineCount;
+  private final AtomicBoolean mIsAnalyzing = new AtomicBoolean(false);
+
   public TextAnalyzer(CodeAnalyzer codeAnalyzer0) {
     if (codeAnalyzer0 == null) {
       throw new IllegalArgumentException();
@@ -63,94 +45,220 @@ public class TextAnalyzer {
     mResult = new TextAnalyzeResult();
     mResult.addNormalIfNull();
     mCodeAnalyzer = codeAnalyzer0;
+    mBackgroundExecutor =
+        Executors.newSingleThreadExecutor(
+            r -> {
+              Thread t = new Thread(r, "TextAnalyzer-Background");
+              t.setDaemon(true);
+              t.setPriority(Thread.MIN_PRIORITY);
+              return t;
+            });
   }
 
-  private static synchronized int nextThreadId() {
-    sThreadId++;
-    return sThreadId;
+  private static int nextThreadId() {
+    return sThreadId.incrementAndGet();
   }
 
-  /**
-   * Set callback of analysis
-   *
-   * @param cb New callback
-   */
+  private AnalyzeThread.Delegate createDelegate() {
+    if (mThread != null && mThread.isAlive()) {
+      return mThread.new Delegate();
+    }
+    return new AnalyzeThread(mLock, mCodeAnalyzer).new Delegate();
+  }
+
   public void setCallback(Callback cb) {
     mCallback = cb;
   }
 
-  /** Stop the text analyzer */
   public void shutdown() {
     final AnalyzeThread thread = mThread;
     if (thread != null && thread.isAlive()) {
       thread.interrupt();
       mThread = null;
     }
+    if (mBackgroundExecutor != null && !mBackgroundExecutor.isShutdown()) {
+      mBackgroundExecutor.shutdown();
+    }
+    if (mBackgroundTask != null && !mBackgroundTask.isDone()) {
+      mBackgroundTask.cancel(true);
+    }
   }
 
-  /** Called from painting process to recycle outdated objects for reusing */
   public void notifyRecycle() {
     mObjContainer.recycle();
   }
 
-  /**
-   * Analyze the given text
-   *
-   * @param origin The source text
-   */
-  public synchronized void analyze(Content origin,boolean bg ) {
-    AnalyzeThread thread = this.mThread;
-    if (thread == null || !thread.isAlive()) {
-      Log.d("TextAnalyzer", "Starting a new thread for analyzing");
-      thread = this.mThread = new AnalyzeThread(mLock, mCodeAnalyzer, origin);
-      thread.setName("TextAnalyzeDaemon-" + nextThreadId());
-      thread.setDaemon(true);
-      thread.start();
+  public synchronized void analyze(Content origin, boolean bg) {
+    if (origin == null) return;
+
+    if (mIsAnalyzing.get()) {
+      AnalyzeThread thread = mThread;
+      if (thread != null && thread.isAlive()) {
+        thread.requestRestart(origin);
+        synchronized (mLock) {
+          mLock.notify();
+        }
+      }
+      return;
+    }
+
+    boolean isLargeFile = origin.length() > 1_000_000;
+    boolean canIncremental = mLastContent != null && !isLargeFile;
+
+    if (bg) {
+      scheduleBackgroundAnalysis(origin, canIncremental);
     } else {
-      thread.restartWith(origin,bg);
-      synchronized (mLock) {
-        mLock.notify();
+      performImmediateAnalysis(origin, canIncremental);
+    }
+
+    mLastContent = origin;
+    mLastAnalyzedLineCount = origin.getLineCount();
+  }
+
+  public synchronized void analyze(Content content) {
+    analyze(content, shouldBackgroundAnalyze(content));
+  }
+
+  private boolean shouldBackgroundAnalyze(Content content) {
+    if (content.length() > 500_000) {
+      return true;
+    }
+    if (content.length() < 50_000) {
+      return false;
+    }
+    return mIsAnalyzing.get();
+  }
+
+  private void performImmediateAnalysis(Content origin, boolean incremental) {
+    mIsAnalyzing.set(true);
+
+    AnalyzeThread thread = mThread;
+    if (thread == null || !thread.isAlive()) {
+      thread = mThread = new AnalyzeThread(mLock, mCodeAnalyzer);
+      thread.setName("TextAnalyze-" + nextThreadId());
+      thread.setDaemon(true);
+      thread.setPriority(Thread.MAX_PRIORITY);
+      thread.start();
+    }
+
+    thread.setContent(origin, !incremental);
+    synchronized (mLock) {
+      mLock.notify();
+    }
+  }
+
+  private void scheduleBackgroundAnalysis(Content origin, boolean incremental) {
+    if (mBackgroundTask != null && !mBackgroundTask.isDone()) {
+      mBackgroundTask.cancel(true);
+    }
+
+    mBackgroundTask =
+        mBackgroundExecutor.submit(
+            () -> {
+              try {
+                performBackgroundAnalysis(origin, incremental);
+              } catch (Exception e) {
+                Log.e(TAG, "Background analysis failed", e);
+              }
+            });
+  }
+
+  private void performBackgroundAnalysis(Content origin, boolean incremental) {
+    mIsAnalyzing.set(true);
+    mOpStartTime = System.currentTimeMillis();
+
+    try {
+      TextAnalyzeResult result = new TextAnalyzeResult();
+      var delegate = createDelegate();
+      int lineCount = origin.getLineCount();
+      if (lineCount > MAX_LINES_FOR_FULL_ANALYSIS) {
+        analyzeInChunks(origin, result, delegate, lineCount);
+      } else {
+        StringBuilder buffer = new StringBuilder(Math.min(origin.length(), MAX_BUFFER_SIZE));
+        origin.appendToStringBuilder(buffer);
+        mCodeAnalyzer.analyze(buffer, result, delegate);
+      }
+
+      result.addNormalIfNull();
+      result.runBeforePublish();
+
+      updateResult(result);
+
+    } catch (Exception e) {
+      Log.e(TAG, "Analysis error", e);
+    } finally {
+      mIsAnalyzing.set(false);
+    }
+  }
+
+  private void analyzeInChunks(
+      Content content, TextAnalyzeResult result, AnalyzeThread.Delegate delegate, int totalLines) {
+    int chunkSize = 500;
+    StringBuilder chunkBuffer = new StringBuilder();
+
+    for (int i = 0; i < totalLines; i += chunkSize) {
+      if (delegate.shouldAnalyze()) return;
+
+      chunkBuffer.setLength(0);
+      int endLine = Math.min(i + chunkSize, totalLines);
+
+      for (int j = i; j < endLine; j++) {
+        if (j > i) chunkBuffer.append('\n');
+        chunkBuffer.append(content.getLineString(j));
+      }
+
+      TextAnalyzeResult chunkResult = new TextAnalyzeResult();
+      mCodeAnalyzer.analyze(chunkBuffer, chunkResult, delegate);
+
+      mergeResults(result, chunkResult, i);
+    }
+
+    result.determine(totalLines - 1);
+  }
+
+  private void mergeResults(TextAnalyzeResult target, TextAnalyzeResult source, int startLine) {
+    List<List<Span>> sourceSpans = source.getSpanMap();
+    List<List<Span>> targetSpans = target.getSpanMap();
+
+    for (int i = 0; i < sourceSpans.size(); i++) {
+      int targetLine = startLine + i;
+      while (targetSpans.size() <= targetLine) {
+        targetSpans.add(new ArrayList<>());
+      }
+      targetSpans.get(targetLine).addAll(sourceSpans.get(i));
+    }
+
+    for (BlockLine block : source.getBlocks()) {
+      block.startLine += startLine;
+      block.endLine += startLine;
+      target.addBlockLine(block);
+    }
+  }
+
+  private void updateResult(TextAnalyzeResult newResult) {
+    mObjContainer.blockLines = mResult.mBlocks;
+    mObjContainer.spanMap = mResult.mSpanMap;
+    mResult = newResult;
+
+    if (mCallback != null) {
+      try {
+        mCallback.onAnalyzeDone(TextAnalyzer.this);
+      } catch (Exception e) {
+        Log.e(TAG, "Callback error", e);
       }
     }
   }
-  public synchronized void analyze(Content content){
-    analyze(content,true);
-  }
 
-  /**
-   * Get analysis result
-   *
-   * @return Result of analysis
-   */
   public TextAnalyzeResult getResult() {
     return mResult;
   }
 
-  /**
-   * Callback for text analyzing
-   *
-   * @author Rose
-   */
   public interface Callback {
-
-    /**
-     * Called when analyze result is available Count of calling this method is not always equal to
-     * the count you call {@link TextAnalyzer#analyze(Content)}
-     *
-     * @param analyzer Host TextAnalyzer
-     */
     void onAnalyzeDone(TextAnalyzer analyzer);
   }
 
-  /**
-   * Container for objects that is going to be recycled
-   *
-   * @author Rose
-   */
   public static class RecycleObjContainer {
-
     public List<List<Span>> spanMap;
-
     public List<BlockLine> blockLines;
 
     void recycle() {
@@ -165,95 +273,131 @@ public class TextAnalyzer {
     }
   }
 
-  /** AnalyzeThread to control */
   public class AnalyzeThread extends Thread {
 
     private final CodeAnalyzer codeAnalyzer;
     private final Object lock;
     private volatile boolean waiting = false;
     private Content content;
-    private boolean bg;
+    private boolean forceFullAnalysis = false;
 
-    /**
-     * Create a new thread
-     *
-     * @param a The CodeAnalyzer to call
-     * @param content The Content to analyze
-     */
-    public AnalyzeThread(Object lock, CodeAnalyzer a, Content content) {
+    public AnalyzeThread(Object lock, CodeAnalyzer a) {
       this.lock = lock;
-      codeAnalyzer = a;
+      this.codeAnalyzer = a;
+    }
+
+    public void setContent(Content content, boolean forceFull) {
       this.content = content;
+      this.forceFullAnalysis = forceFull;
+      this.waiting = false;
+    }
+
+    public void requestRestart(Content newContent) {
+      this.content = newContent;
+      this.waiting = true;
     }
 
     @Override
     public void run() {
       try {
-        // Use a cached object to cut down StringBuilder and char array allocations
         StringBuilder buffer = new StringBuilder();
-        while (true) {
+
+        while (!isInterrupted()) {
+          if (content == null) {
+            waitForContent();
+            continue;
+          }
+
           TextAnalyzeResult result = new TextAnalyzeResult();
           Delegate d = new Delegate();
           mOpStartTime = System.currentTimeMillis();
+
           do {
             waiting = false;
-            buffer.setLength(0);
-            content.appendToStringBuilder(buffer);
-            codeAnalyzer.analyze(buffer, result, d);
-            if (waiting) {
-              result.reset();
-            }
-          } while (waiting);
 
-          mObjContainer.blockLines = mResult.mBlocks;
-          mObjContainer.spanMap = mResult.mSpanMap;
-          mResult = result;
-          result.addNormalIfNull();
-          result.runBeforePublish();
-          try {
-            final var callback = mCallback;
-            if (callback != null) {
-              callback.onAnalyzeDone(TextAnalyzer.this);
+            if (forceFullAnalysis) {
+              buffer.setLength(0);
+              int maxLen = Math.min(content.length(), MAX_BUFFER_SIZE);
+              buildLimitedBuffer(content, buffer, maxLen);
+              codeAnalyzer.analyze(buffer, result, d);
+            } else {
+              analyzeLinesQuick(content, result, d);
             }
-          } catch (NullPointerException e) {
-            e.printStackTrace();
+
+          } while (waiting && !isInterrupted());
+
+          if (!waiting) {
+            mObjContainer.blockLines = mResult.mBlocks;
+            mObjContainer.spanMap = mResult.mSpanMap;
+            mResult = result;
+            result.addNormalIfNull();
+            result.runBeforePublish();
+
+            notifyCallback();
           }
 
-          try {
-            synchronized (lock) {
-              lock.wait();
-            }
-          } catch (InterruptedException e) {
-            Log.d("AnalyzeThread", "Analyze daemon is being interrupted. Exiting...");
-            break;
+          if (!waiting) {
+            waitForContent();
           }
         }
+      } catch (InterruptedException e) {
+        Log.d(TAG, "Analyze thread interrupted");
       } catch (Exception ex) {
-        Log.i("AnalyzeThread", "Analyze daemon got an exception. Exiting...", ex);
+        Log.e(TAG, "Analyze thread error", ex);
+      } finally {
+        mIsAnalyzing.set(false);
       }
     }
 
-    /**
-     * New content has been sent Notify us to restart
-     *
-     * @param content New source
-     */
-    public synchronized void restartWith(Content content, boolean bg) {
-      waiting = true;
-      this.bg = bg;
-      this.content = content;
+    private void waitForContent() throws InterruptedException {
+      synchronized (lock) {
+        lock.wait();
+      }
     }
 
-    /** A delegate for token stream loop To make it stop in time */
-    public class Delegate {
+    private void notifyCallback() {
+      if (mCallback != null) {
+        try {
+          mCallback.onAnalyzeDone(TextAnalyzer.this);
+        } catch (Exception e) {
+          Log.e(TAG, "Callback error", e);
+        }
+      }
+    }
 
-      /**
-       * Whether new input is set If it returns true,you should stop your tokenizing at once
-       *
-       * @return Whether re-analyze required
-       */
+    private void analyzeLinesQuick(Content content, TextAnalyzeResult result, Delegate d) {
+      int lineCount = content.getLineCount();
+      int maxLines = Math.min(lineCount, 2000);
+
+      for (int i = 0; i < maxLines; i++) {
+        if (d.shouldAnalyze() || isInterrupted()) return;
+
+        String line = content.getLineString(i);
+
+        TextAnalyzeResult lineResult = new TextAnalyzeResult();
+        codeAnalyzer.analyze(line, lineResult, d);
+      }
+
+      result.determine(maxLines - 1);
+    }
+
+    private void buildLimitedBuffer(Content content, StringBuilder sb, int maxLen) {
+      boolean first = true;
+      final int lines = content.getLineCount();
+
+      for (int i = 0; i < lines && sb.length() < maxLen; i++) {
+        if (!first) {
+          sb.append('\n');
+        } else {
+          first = false;
+        }
+        content.getLine(i).appendTo(sb);
+      }
+    }
+
+    public class Delegate {
       public boolean shouldAnalyze() {
-        return !waiting;
+        return !waiting && !isInterrupted();
       }
     }
   }

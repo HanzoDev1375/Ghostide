@@ -187,6 +187,7 @@ public class FileIconHelper {
     else if (is("dart")) fileIconRes = R.drawable.ic_material_dart;
     else if (is("diff")) fileIconRes = R.drawable.ic_material_diff;
     else if (is("go")) fileIconRes = R.drawable.ic_material_go;
+    else if (is("rs")) fileIconRes = R.drawable.rust;
     else if (is("groovy") || is("gvy") || is("gy") || is("gsh"))
       fileIconRes = R.drawable.ic_material_groovy;
     else if (is("htm") || is("html")) {

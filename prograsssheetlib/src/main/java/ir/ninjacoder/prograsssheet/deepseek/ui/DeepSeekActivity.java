@@ -37,9 +37,9 @@ public class DeepSeekActivity extends AppCompatActivity
   private ChatHistoryManager historyManager;
   private ActionBarDrawerToggle drawerToggle;
   private ChatFragment chatFragment;
+  private String pendingChatText = null; 
   private OnBackPressedCallback onBackPress =
       new OnBackPressedCallback(true) {
-
         @Override
         public void handleOnBackPressed() {
           var fr = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
@@ -59,6 +59,13 @@ public class DeepSeekActivity extends AppCompatActivity
     setupDrawer();
 
     historyManager = ChatHistoryManager.getInstance(this);
+
+    
+    if (getIntent().hasExtra(EXSTRAKEYCHAT)) {
+      pendingChatText = getIntent().getStringExtra(EXSTRAKEYCHAT);
+      
+      getIntent().removeExtra(EXSTRAKEYCHAT);
+    }
 
     if (savedInstanceState == null) {
       loadChatFragment();
@@ -93,7 +100,7 @@ public class DeepSeekActivity extends AppCompatActivity
     drawerLayout.addDrawerListener(drawerToggle);
     drawerToggle.syncState();
 
-    // Load chat history when drawer opens
+    
     drawerLayout.addDrawerListener(
         new DrawerLayout.SimpleDrawerListener() {
           @Override
@@ -102,7 +109,7 @@ public class DeepSeekActivity extends AppCompatActivity
           }
         });
 
-    // Setup RecyclerView
+    
     drawerChatsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     drawerAdapter = new ChatHistoryDrawerAdapter();
     drawerAdapter.setOnChatClickListener(
@@ -124,7 +131,7 @@ public class DeepSeekActivity extends AppCompatActivity
         });
     drawerChatsRecyclerView.setAdapter(drawerAdapter);
 
-    // Setup buttons
+    
     navNewChatButton.setOnClickListener(
         v -> {
           drawerLayout.closeDrawer(GravityCompat.START);
@@ -196,20 +203,17 @@ public class DeepSeekActivity extends AppCompatActivity
   private void loadChatFragment() {
     chatFragment = new ChatFragment();
     chatFragment.setChatFragmentListener(this);
+    
+    
+    if (pendingChatText != null && !pendingChatText.isEmpty()) {
+      chatFragment.setPendingMessage(pendingChatText);
+      pendingChatText = null;
+    }
+    
     getSupportFragmentManager()
         .beginTransaction()
         .replace(R.id.fragmentContainer, chatFragment)
         .commit();
-    loadChatByIntent();
-  }
-
-  void loadChatByIntent() {
-    var fr = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
-    if (fr instanceof ChatFragment) {
-      if (getIntent().hasExtra(EXSTRAKEYCHAT)) {
-        ((ChatFragment) fr).setMassges(EXSTRAKEYCHAT);
-      }
-    }
   }
 
   private void loadChatHistory() {

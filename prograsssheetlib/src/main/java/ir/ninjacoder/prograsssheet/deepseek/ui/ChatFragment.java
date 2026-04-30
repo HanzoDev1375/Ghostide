@@ -23,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -59,7 +60,7 @@ public class ChatFragment extends Fragment {
   private ImageButton sendButton;
   private Button clearButton;
   private Button attachFileButton;
-  private Button searchToggleButton;
+  private MaterialButton searchToggleButton;
   private FloatingActionButton settingsFab;
   private ProgressBar loadingIndicator;
   private TextView statusText;
@@ -75,9 +76,14 @@ public class ChatFragment extends Fragment {
   private List<UploadedFile> uploadedFiles = new ArrayList<>();
   private Map<String, File> tempFileMap = new HashMap<>();
   private ChatFragmentListener listener;
+  private String pendingMessage = null;
 
   public void setChatFragmentListener(ChatFragmentListener listener) {
     this.listener = listener;
+  }
+
+  public void setPendingMessage(String text) {
+    this.pendingMessage = text;
   }
 
   @Nullable
@@ -98,6 +104,16 @@ public class ChatFragment extends Fragment {
     return binding.getRoot();
   }
 
+  @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+
+    if (pendingMessage != null && !pendingMessage.isEmpty()) {
+      messageInput.setText(pendingMessage);
+      pendingMessage = null;
+    }
+  }
+
   private void initViews() {
     chatRecyclerView = binding.chatRecyclerView;
     messageInput = binding.messageInput;
@@ -110,6 +126,7 @@ public class ChatFragment extends Fragment {
     statusText = binding.statusText;
     fileChipGroup = binding.fileChipGroup;
     filePreviewContainer = binding.filePreviewContainer;
+    binding.searchToggleButton.setOpticalCenterEnabled(true);
   }
 
   private void initServices() {
@@ -209,7 +226,7 @@ public class ChatFragment extends Fragment {
               })
           .show();
     } else {
-      clearChat();
+      getActivity().finish();
     }
   }
 
@@ -256,6 +273,7 @@ public class ChatFragment extends Fragment {
       "text/xml",
       "text/x-sh",
       "text/csv",
+      "text/xml",
       "text/*"
     };
     intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
@@ -657,8 +675,17 @@ public class ChatFragment extends Fragment {
     clearChat();
   }
 
-  public void setMassges(CharSequence text) {
-    messageInput.setText(text);
+  public void setMessages(CharSequence text) {
+    if (messageInput != null && text != null) {
+      messageInput.setText(text);
+
+      messageInput.requestFocus();
+
+      messageInput.setSelection(text.length());
+    } else {
+
+      pendingMessage = text != null ? text.toString() : null;
+    }
   }
 
   private static class UploadedFile {

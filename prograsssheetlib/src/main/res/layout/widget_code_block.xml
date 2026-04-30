@@ -30,7 +30,7 @@
 
         </LinearLayout>
 
-        <ir.ninjacoder.prograssheet.deepseek.widget.TypewriterTextView
+        <ir.ninjacoder.prograsssheet.deepseek.widget.TypewriterTextView
              android:layout_height="wrap_content"
              android:layout_width="match_parent"
              android:padding="12dp"

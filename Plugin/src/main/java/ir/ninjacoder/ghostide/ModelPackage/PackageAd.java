@@ -76,7 +76,7 @@ public class PackageAd extends RecyclerView.Adapter<PackageAd.VH> {
             Uri packageURI = Uri.parse("package:".concat(get.getPackageName()));
             Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, packageURI);
             context.startActivity(uninstallIntent);
-            notifyItemRemoved(holder.getAdapterPosition());
+            notifyItemRemoved(holder.getBindingAdapterPosition());
           });
     }
 

@@ -27,6 +27,7 @@ public class FileInfoAdapter extends RecyclerView.Adapter<FileInfoAdapter.VH> {
     public void bindOf(FileInfoModel model){
       input.setHint(model.getFileHint());
       input.getEditText().setText(model.getFileName());
+      input.setEnabled(false);
     }
   }
 

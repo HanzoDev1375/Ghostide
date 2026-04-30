@@ -58,6 +58,7 @@ import com.skydoves.powermenu.MenuAnimation;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
 import ir.ninjacoder.ghostide.core.enums.CompilerModel;
+import ir.ninjacoder.ghostide.core.folder.FileIconHelper;
 import ir.ninjacoder.ghostide.core.marco.binder.bindchilder.GhostToast;
 import ir.ninjacoder.ghostide.core.navigator.EditorRoaderFile;
 import ir.ninjacoder.ghostide.core.tasks.TaskItemCodeEditor;
@@ -307,7 +308,9 @@ public class CodeEditorActivity extends BaseCompat
               if (position < tabsList.size()) {
                 CodeEditorModel model = tabsList.get(position);
                 String tabText = new File(model.getPath()).getName();
-                TabLayout.Tab customTab = createAnimatedTab(tabText, model.getPinmod());
+
+                TabLayout.Tab customTab =
+                    createAnimatedTab(tabText, model.getPinmod(), model.getPath());
                 tab.setCustomView(customTab.getCustomView());
               }
             });
@@ -368,10 +371,14 @@ public class CodeEditorActivity extends BaseCompat
     themeForJson2.addImageColor(
         codesnapimg, this, KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
     themeForJson2.addImageColor(
+        deepseekai, this, KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
+    themeForJson2.addImageColor(
         image, this, KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
     themeForJson2.setStatusNavColor(this, imap, KeySet.navstatusbar, Coordinator, getColorPass);
     themeForJson2.addImageColor(
         menupopnew, this, KeySet.imagecolor, imap, Color.parseColor("#ff94e7ff"));
+    // if (imap.containsKey(KeySet.toolbarcolor))
+      // CustomToolbar.setBackgroundColor(Color.parseColor(imap.get(KeySet.toolbarcolor).toString()));
     themeForJson2.setFabBackground(_fab, imap);
 
     tablayouteditor.setSelectedTabIndicatorColor(
@@ -397,10 +404,20 @@ public class CodeEditorActivity extends BaseCompat
     }
   }
 
-  private TabLayout.Tab createAnimatedTab(String tabText, boolean isPinned) {
+  private TabLayout.Tab createAnimatedTab(String tabText, boolean isPinned, String filePath) {
     View tabView = getLayoutInflater().inflate(R.layout.tab_custom_layout, null);
     LottieAnimationView animationView = tabView.findViewById(R.id.animation_view);
     TextView textView = tabView.findViewById(R.id.text_view);
+    ImageView iconTab = tabView.findViewById(R.id.icontab);
+
+    if (filePath != null && !filePath.isEmpty()) {
+      var iconPatchHelper = new FileIconHelper(filePath);
+      if (iconPatchHelper != null) {
+        iconPatchHelper.setDynamicFolderEnabled(false);
+        iconPatchHelper.bindIcon(iconTab);
+      }
+    }
+
     textView.setText(tabText);
     int textColor =
         imap.containsKey(KeySet.tabtextcolor)

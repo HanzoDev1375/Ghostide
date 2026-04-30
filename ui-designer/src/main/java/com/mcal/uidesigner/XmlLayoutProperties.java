@@ -592,6 +592,8 @@ public class XmlLayoutProperties {
         "android.widget.ListView", "dividerHeight", "setDividerHeight()", PropertyType.Size),
     new PropertySpec(
         "com.mcal.uidesigner.view.IncludeLayout", "layout", "setLayout()", PropertyType.Text),
+
+    // ====== MaterialCardView Properties ======
     new PropertySpec(
         "com.google.android.material.card.MaterialCardView",
         "cardBackgroundColor",
@@ -614,13 +616,19 @@ public class XmlLayoutProperties {
         "com.google.android.material.card.MaterialCardView",
         "strokeWidth",
         "setStrokeWidth()",
-        PropertyType.Int,
+        PropertyType.Size,
         "app:"),
     new PropertySpec(
         "com.google.android.material.card.MaterialCardView",
         "cardElevation",
         "setCardElevation()",
-        PropertyType.Int,
+        PropertyType.Size,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.card.MaterialCardView",
+        "cardMaxElevation",
+        "setMaxCardElevation()",
+        PropertyType.Size,
         "app:"),
     new PropertySpec(
         "com.google.android.material.card.MaterialCardView",
@@ -628,6 +636,32 @@ public class XmlLayoutProperties {
         "setRippleColor()",
         PropertyType.Color,
         "app:"),
+    new PropertySpec(
+        "com.google.android.material.card.MaterialCardView",
+        "checkedIcon",
+        "setCheckedIcon()",
+        PropertyType.DrawableResource,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.card.MaterialCardView",
+        "checkedIconTint",
+        "setCheckedIconTint()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.card.MaterialCardView",
+        "checkedIconMargin",
+        "setCheckedIconMargin()",
+        PropertyType.Size,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.card.MaterialCardView",
+        "checkedIconSize",
+        "setCheckedIconSize()",
+        PropertyType.Size,
+        "app:"),
+
+    // ====== Chip Properties ======
     new PropertySpec(
         "com.google.android.material.chip.Chip",
         "chipBackgroundColor",
@@ -643,13 +677,13 @@ public class XmlLayoutProperties {
     new PropertySpec(
         "com.google.android.material.chip.Chip",
         "chipStrokeWidth",
-        "setChipStrokeWidthResource()",
-        PropertyType.Int,
+        "setChipStrokeWidth()",
+        PropertyType.Size,
         "app:"),
     new PropertySpec(
         "com.google.android.material.chip.Chip",
         "chipStrokeColor",
-        "setStrokeColor()",
+        "setChipStrokeColor()",
         PropertyType.Color,
         "app:"),
     new PropertySpec(
@@ -660,10 +694,22 @@ public class XmlLayoutProperties {
         "app:"),
     new PropertySpec(
         "com.google.android.material.chip.Chip",
+        "chipMinTouchTargetSize",
+        "setChipMinTouchTargetSize()",
+        PropertyType.Size,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.chip.Chip",
         "checkable",
         "setCheckable()",
         PropertyType.Bool,
         "android:"),
+    new PropertySpec(
+        "com.google.android.material.chip.Chip",
+        "checkedIcon",
+        "setCheckedIcon()",
+        PropertyType.DrawableResource,
+        "app:"),
     new PropertySpec(
         "com.google.android.material.chip.Chip",
         "chipIcon",
@@ -679,8 +725,50 @@ public class XmlLayoutProperties {
     new PropertySpec(
         "com.google.android.material.chip.Chip",
         "chipIconTint",
-        "setChipIconTintResource()",
+        "setChipIconTint()",
         PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.chip.Chip",
+        "chipIconSize",
+        "setChipIconSize()",
+        PropertyType.Size,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.chip.Chip",
+        "closeIcon",
+        "setCloseIcon()",
+        PropertyType.DrawableResource,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.chip.Chip",
+        "closeIconVisible",
+        "setCloseIconVisible()",
+        PropertyType.Bool,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.chip.Chip",
+        "closeIconTint",
+        "setCloseIconTint()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.chip.Chip",
+        "closeIconSize",
+        "setCloseIconSize()",
+        PropertyType.Size,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.chip.Chip",
+        "textStartPadding",
+        "setTextStartPadding()",
+        PropertyType.Size,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.chip.Chip",
+        "textEndPadding",
+        "setTextEndPadding()",
+        PropertyType.Size,
         "app:"),
     new PropertySpec(
         "com.google.android.material.chip.ChipGroup",
@@ -689,32 +777,36 @@ public class XmlLayoutProperties {
         PropertyType.Bool,
         "app:"),
     new PropertySpec(
+        "com.google.android.material.chip.ChipGroup",
+        "singleSelection",
+        "setSingleSelection()",
+        PropertyType.Bool,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.chip.ChipGroup",
+        "checkedChip",
+        "setCheckedChip()",
+        PropertyType.Int,
+        "app:"),
+
+    // ====== TextInputLayout Properties ======
+    new PropertySpec(
         "com.google.android.material.textfield.TextInputLayout",
         "boxBackgroundColor",
         "setBoxBackgroundColor()",
-        PropertyType.Color,"app:"),
-    new PropertySpec(
-        "com.google.android.material.textfield.TextInputLayout",
-        "elevation",
-        "setElevation()",
-        PropertyType.Size,"app:"),
-    new PropertySpec(
-        "com.google.android.material.textfield.TextInputLayout",
-        "boxCornerRadiusTopStart",
-        "setBoxCornerRadiusTopStart()",
-        PropertyType.Size,
+        PropertyType.Color,
         "app:"),
     new PropertySpec(
         "com.google.android.material.textfield.TextInputLayout",
-        "boxCornerRadiusTopEnd",
-        "setBoxCornerRadiusTopEnd()",
-        PropertyType.Size,
+        "boxBackgroundMode",
+        "setBoxBackgroundMode()",
+        PropertyType.IntConstant,
         "app:"),
     new PropertySpec(
         "com.google.android.material.textfield.TextInputLayout",
-        "boxCornerRadiusBottomEnd",
-        "setBoxCornerRadiusBottomEnd()",
-        PropertyType.Size,
+        "boxStrokeColor",
+        "setBoxStrokeColor()",
+        PropertyType.Color,
         "app:"),
     new PropertySpec(
         "com.google.android.material.textfield.TextInputLayout",
@@ -726,17 +818,66 @@ public class XmlLayoutProperties {
         "com.google.android.material.textfield.TextInputLayout",
         "boxStrokeWidthFocused",
         "setBoxStrokeWidthFocused()",
-        PropertyType.Size,"app:"),
-    new PropertySpec(
-        "com.google.android.material.textfield.TextInputLayout",
-        "boxStrokeColor",
-        "setBoxStrokeColor()",
-        PropertyType.Color,
+        PropertyType.Size,
         "app:"),
     new PropertySpec(
         "com.google.android.material.textfield.TextInputLayout",
         "boxStrokeErrorColor",
         "setBoxStrokeErrorColor()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.textfield.TextInputLayout",
+        "hintTextColor",
+        "setHintTextColor()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.textfield.TextInputLayout",
+        "defaultHintTextColor",
+        "setDefaultHintTextColor()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.textfield.TextInputLayout",
+        "errorTextColor",
+        "setErrorTextColor()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.textfield.TextInputLayout",
+        "helperTextTextColor",
+        "setHelperTextColor()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.textfield.TextInputLayout",
+        "counterTextColor",
+        "setCounterTextColor()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.textfield.TextInputLayout",
+        "counterOverflowTextColor",
+        "setCounterOverflowTextColor()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.textfield.TextInputLayout",
+        "placeholderTextColor",
+        "setPlaceholderTextColor()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.textfield.TextInputLayout",
+        "prefixTextColor",
+        "setPrefixTextColor()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.textfield.TextInputLayout",
+        "suffixTextColor",
+        "setSuffixTextColor()",
         PropertyType.Color,
         "app:"),
     new PropertySpec(
@@ -749,19 +890,43 @@ public class XmlLayoutProperties {
         "com.google.android.material.textfield.TextInputLayout",
         "counterMaxLength",
         "setCounterMaxLength()",
-        PropertyType.Text,
+        PropertyType.Int,
         "app:"),
     new PropertySpec(
         "com.google.android.material.textfield.TextInputLayout",
-        "counterTextColor",
-        "setCounterTextColor()",
+        "helperTextEnabled",
+        "setHelperTextEnabled()",
+        PropertyType.Bool,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.textfield.TextInputLayout",
+        "errorEnabled",
+        "setErrorEnabled()",
+        PropertyType.Bool,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.textfield.TextInputLayout",
+        "passwordToggleEnabled",
+        "setPasswordVisibilityToggleEnabled()",
+        PropertyType.Bool,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.textfield.TextInputLayout",
+        "passwordToggleTint",
+        "setPasswordVisibilityToggleTintList()",
         PropertyType.Color,
         "app:"),
     new PropertySpec(
         "com.google.android.material.textfield.TextInputLayout",
-        "counterTextAppearance",
-        "setCounterTextAppearance()",
-        PropertyType.TextAppearance,
+        "endIconTint",
+        "setEndIconTintList()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.textfield.TextInputLayout",
+        "startIconTint",
+        "setStartIconTintList()",
+        PropertyType.Color,
         "app:"),
     new PropertySpec(
         "com.google.android.material.textfield.TextInputLayout",
@@ -773,6 +938,18 @@ public class XmlLayoutProperties {
         "com.google.android.material.textfield.TextInputLayout",
         "errorTextAppearance",
         "setErrorTextAppearance()",
+        PropertyType.TextAppearance,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.textfield.TextInputLayout",
+        "helperTextTextAppearance",
+        "setHelperTextTextAppearance()",
+        PropertyType.TextAppearance,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.textfield.TextInputLayout",
+        "counterTextAppearance",
+        "setCounterTextAppearance()",
         PropertyType.TextAppearance,
         "app:"),
     new PropertySpec(
@@ -789,15 +966,512 @@ public class XmlLayoutProperties {
         "app:"),
     new PropertySpec(
         "com.google.android.material.textfield.TextInputLayout",
-        "helperTextTextAppearance",
-        "setHelperTextTextAppearance()",
+        "shapeAppearance",
+        "setShapeAppearanceModel()",
+        PropertyType.TextAppearance,
+        "app:"),
+
+    // ====== FAB Properties ======
+    new PropertySpec(
+        "com.google.android.material.floatingactionbutton.FloatingActionButton",
+        "backgroundTint",
+        "setBackgroundTintList()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.floatingactionbutton.FloatingActionButton",
+        "tint",
+        "setImageTintList()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.floatingactionbutton.FloatingActionButton",
+        "fabSize",
+        "setSize()",
+        PropertyType.IntConstant,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.floatingactionbutton.FloatingActionButton",
+        "fabCustomSize",
+        "setCustomSize()",
+        PropertyType.Size,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.floatingactionbutton.FloatingActionButton",
+        "elevation",
+        "setCompatElevation()",
+        PropertyType.Size,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.floatingactionbutton.FloatingActionButton",
+        "hoveredFocusedTranslationZ",
+        "setHoveredFocusedTranslationZ()",
+        PropertyType.Size,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.floatingactionbutton.FloatingActionButton",
+        "pressedTranslationZ",
+        "setPressedTranslationZ()",
+        PropertyType.Size,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.floatingactionbutton.FloatingActionButton",
+        "rippleColor",
+        "setRippleColor()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.floatingactionbutton.FloatingActionButton",
+        "borderWidth",
+        "setBorderWidth()",
+        PropertyType.Size,
+        "app:"),
+
+    // ====== ExtendedFAB Properties ======
+    new PropertySpec(
+        "com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton",
+        "backgroundTint",
+        "setBackgroundTintList()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton",
+        "iconTint",
+        "setIconTint()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton",
+        "elevation",
+        "setCompatElevation()",
+        PropertyType.Size,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton",
+        "rippleColor",
+        "setRippleColor()",
+        PropertyType.Color,
+        "app:"),
+
+    // ====== Slider Properties ======
+    new PropertySpec(
+        "com.google.android.material.slider.Slider",
+        "sliderColor",
+        "setSliderColor()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.slider.Slider",
+        "sliderStrokeColor",
+        "setSliderStrokeColor()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.slider.Slider",
+        "haloColor",
+        "setHaloColor()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.slider.Slider",
+        "haloRadius",
+        "setHaloRadius()",
+        PropertyType.Size,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.slider.Slider",
+        "labelStyle",
+        "setLabelStyle()",
         PropertyType.TextAppearance,
         "app:"),
     new PropertySpec(
-        "TextInputLayout",
-        "textColorHint",
-        "setDefaultHintTextColor()",
-        PropertyType.Color,"android:")
+        "com.google.android.material.slider.Slider",
+        "labelBehavior",
+        "setLabelBehavior()",
+        PropertyType.IntConstant,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.slider.Slider",
+        "thumbColor",
+        "setThumbColor()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.slider.Slider",
+        "thumbRadius",
+        "setThumbRadius()",
+        PropertyType.Size,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.slider.Slider",
+        "thumbStrokeColor",
+        "setThumbStrokeColor()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.slider.Slider",
+        "thumbStrokeWidth",
+        "setThumbStrokeWidth()",
+        PropertyType.Size,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.slider.Slider",
+        "tickColor",
+        "setTickColor()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.slider.Slider",
+        "tickColorActive",
+        "setTickColorActive()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.slider.Slider",
+        "tickColorInactive",
+        "setTickColorInactive()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.slider.Slider",
+        "trackColor",
+        "setTrackColor()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.slider.Slider",
+        "trackColorActive",
+        "setTrackColorActive()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.slider.Slider",
+        "trackColorInactive",
+        "setTrackColorInactive()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.slider.Slider",
+        "trackHeight",
+        "setTrackHeight()",
+        PropertyType.Size,
+        "app:"),
+
+    // ====== TabLayout Properties ======
+    new PropertySpec(
+        "com.google.android.material.tabs.TabLayout",
+        "tabIndicatorColor",
+        "setSelectedTabIndicatorColor()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.tabs.TabLayout",
+        "tabIndicatorHeight",
+        "setSelectedTabIndicatorHeight()",
+        PropertyType.Size,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.tabs.TabLayout",
+        "tabTextColor",
+        "setTabTextColors()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.tabs.TabLayout",
+        "tabSelectedTextColor",
+        "setTabTextColors()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.tabs.TabLayout",
+        "tabMode",
+        "setTabMode()",
+        PropertyType.IntConstant,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.tabs.TabLayout",
+        "tabGravity",
+        "setTabGravity()",
+        PropertyType.IntConstant,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.tabs.TabLayout",
+        "tabBackground",
+        "setBackground()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.tabs.TabLayout",
+        "tabRippleColor",
+        "setTabRippleColor()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.tabs.TabLayout",
+        "tabIndicatorAnimationMode",
+        "setTabIndicatorAnimationMode()",
+        PropertyType.IntConstant,
+        "app:"),
+
+    // ====== BottomAppBar Properties ======
+    new PropertySpec(
+        "com.google.android.material.bottomappbar.BottomAppBar",
+        "backgroundTint",
+        "setBackgroundTint()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.bottomappbar.BottomAppBar",
+        "fabAlignmentMode",
+        "setFabAlignmentMode()",
+        PropertyType.IntConstant,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.bottomappbar.BottomAppBar",
+        "fabCradleMargin",
+        "setFabCradleMargin()",
+        PropertyType.Size,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.bottomappbar.BottomAppBar",
+        "fabCradleRoundedCornerRadius",
+        "setFabCradleRoundedCornerRadius()",
+        PropertyType.Size,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.bottomappbar.BottomAppBar",
+        "fabCradleVerticalOffset",
+        "setCradleVerticalOffset()",
+        PropertyType.Size,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.bottomappbar.BottomAppBar",
+        "navigationIconTint",
+        "setNavigationIconTint()",
+        PropertyType.Color,
+        "app:"),
+
+    // ====== NavigationView Properties ======
+    new PropertySpec(
+        "com.google.android.material.navigation.NavigationView",
+        "itemTextColor",
+        "setItemTextColor()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.navigation.NavigationView",
+        "itemIconTint",
+        "setItemIconTintList()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.navigation.NavigationView",
+        "itemBackground",
+        "setItemBackground()",
+        PropertyType.DrawableResource,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.navigation.NavigationView",
+        "itemTextAppearance",
+        "setItemTextAppearance()",
+        PropertyType.TextAppearance,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.navigation.NavigationView",
+        "headerLayout",
+        "setHeaderLayout()",
+        PropertyType.TextAppearance,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.navigation.NavigationView",
+        "menu",
+        "setMenu()",
+        PropertyType.TextAppearance,
+        "app:"),
+
+    // ====== BottomNavigationView Properties ======
+    new PropertySpec(
+        "com.google.android.material.bottomnavigation.BottomNavigationView",
+        "itemTextColor",
+        "setItemTextColor()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.bottomnavigation.BottomNavigationView",
+        "itemIconTint",
+        "setItemIconTintList()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.bottomnavigation.BottomNavigationView",
+        "itemBackground",
+        "setItemBackground()",
+        PropertyType.DrawableResource,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.bottomnavigation.BottomNavigationView",
+        "itemRippleColor",
+        "setItemRippleColor()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.bottomnavigation.BottomNavigationView",
+        "labelVisibilityMode",
+        "setLabelVisibilityMode()",
+        PropertyType.IntConstant,
+        "app:"),
+
+    // ====== MaterialToolbar Properties ======
+    new PropertySpec(
+        "com.google.android.material.appbar.MaterialToolbar",
+        "title",
+        "setTitle()",
+        PropertyType.Text,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.appbar.MaterialToolbar",
+        "titleTextColor",
+        "setTitleTextColor()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.appbar.MaterialToolbar",
+        "subtitle",
+        "setSubtitle()",
+        PropertyType.Text,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.appbar.MaterialToolbar",
+        "subtitleTextColor",
+        "setSubtitleTextColor()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.appbar.MaterialToolbar",
+        "navigationIconTint",
+        "setNavigationIconTint()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.appbar.MaterialToolbar",
+        "logo",
+        "setLogo()",
+        PropertyType.DrawableResource,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.appbar.MaterialToolbar",
+        "overFlowIcon",
+        "setOverflowIcon()",
+        PropertyType.DrawableResource,
+        "app:"),
+
+    // ====== ProgressIndicator Properties ======
+    new PropertySpec(
+        "com.google.android.material.progressindicator.LinearProgressIndicator",
+        "indicatorColor",
+        "setIndicatorColor()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.progressindicator.LinearProgressIndicator",
+        "trackColor",
+        "setTrackColor()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.progressindicator.LinearProgressIndicator",
+        "trackThickness",
+        "setTrackThickness()",
+        PropertyType.Size,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.progressindicator.CircularProgressIndicator",
+        "indicatorColor",
+        "setIndicatorColor()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.progressindicator.CircularProgressIndicator",
+        "trackColor",
+        "setTrackColor()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.progressindicator.CircularProgressIndicator",
+        "trackThickness",
+        "setTrackThickness()",
+        PropertyType.Size,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.progressindicator.CircularProgressIndicator",
+        "indicatorSize",
+        "setIndicatorSize()",
+        PropertyType.Size,
+        "app:"),
+
+    // ====== MaterialButton Properties ======
+    new PropertySpec(
+        "com.google.android.material.button.MaterialButton",
+        "backgroundTint",
+        "setBackgroundTintList()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.button.MaterialButton",
+        "iconTint",
+        "setIconTint()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.button.MaterialButton",
+        "icon",
+        "setIcon()",
+        PropertyType.DrawableResource,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.button.MaterialButton",
+        "iconSize",
+        "setIconSize()",
+        PropertyType.Size,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.button.MaterialButton",
+        "cornerRadius",
+        "setCornerRadius()",
+        PropertyType.Size,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.button.MaterialButton",
+        "strokeColor",
+        "setStrokeColor()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.button.MaterialButton",
+        "strokeWidth",
+        "setStrokeWidth()",
+        PropertyType.Size,
+        "app:"),
+
+    // ====== ShapeableImageView Properties ======
+    new PropertySpec(
+        "com.google.android.material.imageview.ShapeableImageView",
+        "shapeAppearance",
+        "setShapeAppearanceModel()",
+        PropertyType.TextAppearance,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.imageview.ShapeableImageView",
+        "strokeColor",
+        "setStrokeColor()",
+        PropertyType.Color,
+        "app:"),
+    new PropertySpec(
+        "com.google.android.material.imageview.ShapeableImageView",
+        "strokeWidth",
+        "setStrokeWidth()",
+        PropertyType.Size,
+        "app:"),
   };
 
   static {
@@ -813,10 +1487,10 @@ public class XmlLayoutProperties {
     EnumConstant(Enum.class),
     LayoutSize(Integer.TYPE),
     Size(Integer.TYPE),
-    FloatSize(Integer.TYPE), // Float.TYPE
-    TextSize(Integer.TYPE), // Float.TYPE
+    FloatSize(Integer.TYPE),
+    TextSize(Integer.TYPE),
     Text(CharSequence.class),
-    Float(Integer.TYPE), // Float.TYPE
+    Float(Integer.TYPE),
     Int(Integer.TYPE),
     Bool(Boolean.TYPE),
     ID(Integer.TYPE),
@@ -907,8 +1581,6 @@ public class XmlLayoutProperties {
       this.isLayoutProperty = name.startsWith("layout_");
       createDisplayName(typeSpace);
     }
-
-
 
     @Nullable
     private Class<?> resolveType(@NonNull String className) {

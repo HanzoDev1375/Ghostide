@@ -80,10 +80,7 @@ public class ToolbarListFileAdapter extends RecyclerView.Adapter<ToolbarListFile
 
   public void bindColor(
       int normalColor, int normalBackground, int lastitemColor, int lastitemBackground) {
-    this.normalColor = normalColor;
-    this.normalBackground = normalBackground;
-    this.lastitemColor = lastitemColor;
-    this.lastitemBackground = lastitemBackground;
+    // Empty dont impl
   }
 
   public interface CallBack {

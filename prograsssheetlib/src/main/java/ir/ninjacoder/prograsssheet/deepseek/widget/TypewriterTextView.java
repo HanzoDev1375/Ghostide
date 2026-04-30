@@ -1,5 +1,6 @@
-package ir.ninjacoder.prograssheet.deepseek.widget;
+package ir.ninjacoder.prograsssheet.deepseek.widget;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
@@ -41,7 +42,7 @@ public class TypewriterTextView extends AppCompatTextView {
 
   private void init() {
     handler = new Handler(Looper.getMainLooper());
-    delayMillis = 30; // سریع‌تر برای مارک‌داون
+    delayMillis = 30;
   }
 
   public void setOnTypeCompleteListener(OnTypeCompleteListener listener) {
@@ -50,6 +51,15 @@ public class TypewriterTextView extends AppCompatTextView {
 
   public void setTypingDelay(long millis) {
     this.delayMillis = millis;
+  }
+
+  private boolean isContextValid() {
+    Context context = getContext();
+    if (context instanceof Activity) {
+      Activity activity = (Activity) context;
+      return !activity.isDestroyed() && !activity.isFinishing();
+    }
+    return true;
   }
 
   public void typeText(CharSequence text) {
@@ -64,15 +74,17 @@ public class TypewriterTextView extends AppCompatTextView {
         new Runnable() {
           @Override
           public void run() {
+            if (!isContextValid()) {
+              isTyping = false;
+              return;
+            }
             if (currentIndex < rawMarkdown.length() && isTyping) {
               currentIndex++;
-              
               String partial = rawMarkdown.substring(0, currentIndex);
               MarkDownTextHelper.handleMarkDown(TypewriterTextView.this, partial);
               handler.postDelayed(this, delayMillis);
             } else if (currentIndex >= rawMarkdown.length()) {
               isTyping = false;
-              // رندر نهایی کامل
               MarkDownTextHelper.handleMarkDown(TypewriterTextView.this, rawMarkdown);
               if (listener != null) {
                 listener.onComplete();
@@ -84,7 +96,6 @@ public class TypewriterTextView extends AppCompatTextView {
     handler.post(typeRunnable);
   }
 
-  // برای متن ساده بدون مارک‌داون
   public void typePlainText(CharSequence text) {
     this.fullText = text;
     this.useMarkdown = false;
@@ -96,6 +107,10 @@ public class TypewriterTextView extends AppCompatTextView {
         new Runnable() {
           @Override
           public void run() {
+            if (!isContextValid()) {
+              isTyping = false;
+              return;
+            }
             if (currentIndex < fullText.length() && isTyping) {
               append(String.valueOf(fullText.charAt(currentIndex)));
               currentIndex++;
@@ -116,6 +131,9 @@ public class TypewriterTextView extends AppCompatTextView {
     isTyping = false;
     if (typeRunnable != null) {
       handler.removeCallbacks(typeRunnable);
+    }
+    if (!isContextValid()) {
+      return;
     }
     if (fullText != null) {
       if (useMarkdown && rawMarkdown != null) {

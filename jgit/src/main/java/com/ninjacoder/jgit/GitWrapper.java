@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
+import com.ninjacoder.jgit.diffviews.GitDiffViewer;
 import java.nio.charset.StandardCharsets;
 import org.eclipse.jgit.revwalk.RevTree;
 import org.eclipse.jgit.revwalk.RevWalk;
@@ -639,8 +640,6 @@ public class GitWrapper {
         DiffFormatter formatter = new DiffFormatter(out)) {
 
       formatter.setRepository(git.getRepository());
-
-      // اگر یکی از کامیت‌ها null باشد، با working tree مقایسه می‌شود
       List<DiffEntry> diffs;
       if (newCommit == null) {
         diffs = git.diff().setOldTree(prepareTreeParser(git, oldCommit)).call();
@@ -659,7 +658,7 @@ public class GitWrapper {
         out.reset();
       }
     } catch (Exception e) {
-      Log.e(TAG, "خطا در محاسبه تفاوت‌ها", e);
+      Log.e(TAG, "خطا در محاسبه تفاوت ها", e);
     }
 
     return builder;
@@ -722,8 +721,16 @@ public class GitWrapper {
         Toast.makeText(c, "commit not found", Toast.LENGTH_SHORT).show();
         return;
       }
+
       var diffText = diff(file, commit1, commit2);
-      new MaterialAlertDialogBuilder(c).setMessage(diffText).show();
+
+      GitDiffViewer diffViewer = new GitDiffViewer(c);
+      diffViewer.parseDiffOutput(diffText.toString());
+      diffViewer.applyMaterial3();
+      diffViewer.setPadding(9,9,9,9);
+
+      new MaterialAlertDialogBuilder(c).setTitle("DiffView").setView(diffViewer).setPositiveButton("close", null).show();
+
     } catch (Exception err) {
       Toast.makeText(c, err.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
     }

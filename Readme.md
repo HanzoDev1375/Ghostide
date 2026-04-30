@@ -67,6 +67,7 @@
 - [ ] Ninja Compiler (my lang)
 - [x] Physical keyboard support
 - [x] Better comment(10%)
+- [x] Android Layout Editor and preview (90%)
 
 ## Note 
 - There are a number of special features that are not created by the plugin and we implement in the program by default

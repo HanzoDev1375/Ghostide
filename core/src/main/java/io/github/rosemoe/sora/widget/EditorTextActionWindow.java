@@ -1,7 +1,30 @@
+/*
+ *    sora-editor - the awesome code editor for Android
+ *    https://github.com/Rosemoe/sora-editor
+ *    Copyright (C) 2020-2022  Rosemoe
+ *
+ *     This library is free software; you can redistribute it and/or
+ *     modify it under the terms of the GNU Lesser General Public
+ *     License as published by the Free Software Foundation; either
+ *     version 2.1 of the License, or (at your option) any later version.
+ *
+ *     This library is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *     Lesser General Public License for more details.
+ *
+ *     You should have received a copy of the GNU Lesser General Public
+ *     License along with this library; if not, write to the Free Software
+ *     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
+ *     USA
+ *
+ *     Please contact Rosemoe by email 2073412493@qq.com if you need
+ *     additional information or have any questions
+ */
 package io.github.rosemoe.sora.widget;
 
-import android.animation.LayoutTransition;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.RectF;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
@@ -18,7 +41,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import ir.ninjacoder.ghostide.core.editor.DeepSeekCodePost;
+import ir.ninjacoder.prograsssheet.deepseek.ui.DeepSeekActivity;
 import io.github.rosemoe.sora.event.EventReceiver;
 import io.github.rosemoe.sora.event.HandleStateChangeEvent;
 import io.github.rosemoe.sora.event.ScrollEvent;
@@ -52,6 +76,11 @@ import ir.ninjacoder.ghostide.core.adapter.TextActionAd;
 import ir.ninjacoder.ghostide.core.databinding.TextComposePopupWindowBinding;
 import ir.ninjacoder.ghostide.core.model.TextActionModel;
 
+/**
+ * This will show when selecting text
+ *
+ * @author Rosemoe
+ */
 public class EditorTextActionWindow extends EditorPopupWindow
     implements EventReceiver<SelectionChangeEvent> {
   private static final long DELAY = 200;
@@ -65,8 +94,12 @@ public class EditorTextActionWindow extends EditorPopupWindow
   private TextComposePopupWindowBinding bin;
   private boolean isShow = true;
   private boolean showItems = false;
-  private boolean isRvVisible = false;
 
+  /**
+   * Create a panel for the given editor
+   *
+   * @param editor Target editor
+   */
   public EditorTextActionWindow(CodeEditor editor) {
     super(editor, FEATURE_SHOW_OUTSIDE_VIEW_ALLOWED);
     mEditor = editor;
@@ -74,6 +107,7 @@ public class EditorTextActionWindow extends EditorPopupWindow
     setShowItems(true);
     if (showItems) {
 
+      // Since popup window does provide decor view, we have to pass null to this method
       model.add(new TextActionModel("Format Code", R.drawable.codeformat));
       model.add(new TextActionModel("SetAll", R.drawable.dkplayer_ic_action_fullscreen));
       model.add(new TextActionModel("copy", R.mipmap.mpcopy));
@@ -82,30 +116,36 @@ public class EditorTextActionWindow extends EditorPopupWindow
       model.add(new TextActionModel("Duplicate", R.drawable.dkplayer_ic_action_autorenew));
       model.add(new TextActionModel("delete", R.drawable.delete));
       model.add(new TextActionModel("tools", R.drawable.cog));
-
+      model.add(new TextActionModel("Ask the Ai", R.drawable.ic_deepseek_logo));
       bin = TextComposePopupWindowBinding.inflate(LayoutInflater.from(editor.getContext()));
-
       adptor =
           new TextActionAd(
               model,
               new TextActionAd.OnItemClick() {
+
                 @Override
                 public void onItemClickChange(int posNow, View myview, ImageView img) {
                   View v = myview;
                   switch (posNow) {
                     case 0:
-                      editor.formatCodeAsync();
-                      dismiss();
-                      break;
+                      {
+                        editor.formatCodeAsync();
+                        dismiss();
+                        break;
+                      }
                     case 1:
-                      editor.selectAll();
-                      show();
-                      break;
+                      {
+                        editor.selectAll();
+                        show();
+                        break;
+                      }
                     case 2:
-                      editor.copyText();
-                      img.setEnabled(editor.hasClip() && editor.isEditable());
-                      dismiss();
-                      break;
+                      {
+                        editor.copyText();
+                        img.setEnabled(editor.hasClip() && editor.isEditable());
+                        dismiss();
+                        break;
+                      }
                     case 3:
                       editor.cutText();
                       dismiss();
@@ -123,74 +163,70 @@ public class EditorTextActionWindow extends EditorPopupWindow
                       dismiss();
                       break;
                     case 7:
-                      if (editor.getEditorLanguage() instanceof NinjaLang) {
-                        ToolItem item = new ToolItem();
-                        item.BindViewsNinja(v.getContext(), v, editor);
-                      } else if (editor.getEditorLanguage() instanceof HTMLLanguage) {
-                        HtmlTool tool = new HtmlTool();
-                        tool.Tool(v.getContext(), v, editor);
-                      } else if (editor.getEditorLanguage() instanceof JavaLanguage) {
-                        JavaTools toolss = new JavaTools();
-                        var l = "java";
-                        toolss.runs(v.getContext(), v, editor, l);
-                      } else if (editor.getEditorLanguage() instanceof PythonLang) {
-                        PythonTools toolpy = new PythonTools();
-                        toolpy.Tool(v.getContext(), v, editor);
-                      } else if (editor.getEditorLanguage() instanceof JavaScriptLanguage) {
-                        JavaTools toolss = new JavaTools();
-                        var l = "js";
-                        toolss.runs(v.getContext(), v, editor, l);
-                      } else if (editor.getEditorLanguage() instanceof CSS3Language) {
-                        OtherLangs toolss = new OtherLangs();
-                        toolss.run(v.getContext(), editor, v);
-                      } else if (editor.getEditorLanguage() instanceof DartLang) {
-                        OtherLangs toolss = new OtherLangs();
-                        toolss.run(v.getContext(), editor, v);
-                      } else if (editor.getEditorLanguage() instanceof KotlinLanguage) {
-                        KotlinTools tools = new KotlinTools();
-                        tools.run(v.getContext(), editor, v);
-                      } else if (editor.getEditorLanguage() instanceof SMLang) {
-                        new ToolItem().bindSmail(v.getContext(), editor, v);
-                      } else if (editor.getEditorLanguage() instanceof JsonLanguage) {
-                        JsonTools.run((IdeEditor) editor, v, v.getContext());
-                      } else if (editor.getEditorLanguage() instanceof XMLLanguage) {
-                        new ToolItem().bindXml(v.getContext(), editor, v);
-                      } else if (editor.getEditorLanguage() instanceof GroovyLanguage) {
-                        var gr = new GradleTools(v.getContext(), (IdeEditor) editor, v);
-                        gr.get();
+                      {
+                        if (editor.getEditorLanguage() instanceof NinjaLang) {
+                          ToolItem item = new ToolItem();
+                          item.BindViewsNinja(v.getContext(), v, editor);
+                        } else if (editor.getEditorLanguage() instanceof HTMLLanguage) {
+                          HtmlTool tool = new HtmlTool();
+                          tool.Tool(v.getContext(), v, editor);
+                        } else if (editor.getEditorLanguage() instanceof JavaLanguage) {
+                          JavaTools toolss = new JavaTools();
+                          var l = "java";
+                          toolss.runs(v.getContext(), v, editor, l);
+                        } else if (editor.getEditorLanguage() instanceof PythonLang) {
+                          PythonTools toolpy = new PythonTools();
+                          toolpy.Tool(v.getContext(), v, editor);
+                        } else if (editor.getEditorLanguage() instanceof JavaScriptLanguage) {
+                          JavaTools toolss = new JavaTools();
+                          var l = "js";
+                          toolss.runs(v.getContext(), v, editor, l);
+                        } else if (editor.getEditorLanguage() instanceof CSS3Language) {
+                          OtherLangs toolss = new OtherLangs();
+                          toolss.run(v.getContext(), editor, v);
+                        } else if (editor.getEditorLanguage() instanceof DartLang) {
+                          OtherLangs toolss = new OtherLangs();
+                          toolss.run(v.getContext(), editor, v);
+                        } else if (editor.getEditorLanguage() instanceof KotlinLanguage) {
+                          KotlinTools tools = new KotlinTools();
+                          tools.run(v.getContext(), editor, v);
+                        } else if (editor.getEditorLanguage() instanceof SMLang) {
+                          new ToolItem().bindSmail(v.getContext(), editor, v);
+                        } else if (editor.getEditorLanguage() instanceof JsonLanguage) {
+                          JsonTools.run((IdeEditor) editor, v, v.getContext());
+                        } else if (editor.getEditorLanguage() instanceof XMLLanguage) {
+                          new ToolItem().bindXml(v.getContext(), editor, v);
+                        } else if (editor.getEditorLanguage() instanceof GroovyLanguage) {
+                          var gr = new GradleTools(v.getContext(), (IdeEditor) editor, v);
+                          gr.get();
+                        } else {
+                          Toast.makeText(editor.getContext(), "Tools your lang not found", 2)
+                              .show();
+                        }
+                      }
+                      break;
+                    case 8:
+                      Intent i = new Intent();
+                      i.setClass(editor.getContext(), DeepSeekActivity.class);
+                      String selectedCode = getKeyApiCode();
+                      if (selectedCode != null && !selectedCode.isEmpty()) {
+                        i.putExtra(DeepSeekActivity.EXSTRAKEYCHAT, selectedCode);
+                        editor.getContext().startActivity(i);
+                        dismiss();
                       } else {
-                        Toast.makeText(editor.getContext(), "Tools your lang not found", 2).show();
+                        Toast.makeText(editor.getContext(), "No text selected", Toast.LENGTH_SHORT)
+                            .show();
                       }
                       break;
                   }
                 }
               },
               editor);
-
       bin.rvEditor.setAdapter(adptor);
-      bin.rvEditor.setLayoutManager(new LinearLayoutManager(editor.getContext()));
-      bin.rvEditor.setVisibility(View.GONE);
-
-      setContentView(bin.getRoot());
-
-      bin.iconmore.setOnClickListener(v -> {
-    if (!isRvVisible) {
-        bin.rvEditor.setVisibility(View.VISIBLE);
-        bin.iconmore.animate().rotation(90).setDuration(300).start();
-        isRvVisible = true;
-    } else {
-        bin.rvEditor.setVisibility(View.GONE);
-        bin.iconmore.animate().rotation(0).setDuration(300).start();
-        isRvVisible = false;
-    }
-    bin.getRoot().post(() -> updateWindowSize());
-});
-            LayoutTransition lt = new LayoutTransition();
-            lt.enableTransitionType(LayoutTransition.CHANGING);
-            bin.getRoot().setLayoutTransition(lt);
-          });
-
+      bin.rvEditor.setLayoutManager(
+          new LinearLayoutManager(editor.getContext(), RecyclerView.HORIZONTAL, false));
       helpers = new helper(editor);
+      setContentView(bin.getRoot());
     }
     setSize(0, (int) (mEditor.getDpUnit() * 50));
     apply();
@@ -211,17 +247,6 @@ public class EditorTextActionWindow extends EditorPopupWindow
             postDisplay();
           }
         }));
-  }
-
-  private void updateWindowSize() {
-    bin.getRoot()
-        .measure(
-            View.MeasureSpec.makeMeasureSpec(
-                (int) (mEditor.getDpUnit() * 260), View.MeasureSpec.AT_MOST),
-            View.MeasureSpec.makeMeasureSpec(100000, View.MeasureSpec.AT_MOST));
-    int width = Math.min(bin.getRoot().getMeasuredWidth(), (int) (mEditor.getDpUnit() * 260));
-    int height = bin.getRoot().getMeasuredHeight();
-    setSize(width, height);
   }
 
   private void postDisplay() {
@@ -254,7 +279,10 @@ public class EditorTextActionWindow extends EditorPopupWindow
       return;
     }
     if (event.isSelected()) {
+
+      // if (!isShowing()) {
       mEditor.post(this::displayWindow);
+      // }
       mLastPosition = -1;
     } else {
       var show = false;
@@ -267,11 +295,6 @@ public class EditorTextActionWindow extends EditorPopupWindow
         show = true;
       } else {
         dismiss();
-        if (isRvVisible) {
-          bin.rvEditor.setVisibility(View.GONE);
-          bin.iconmore.setRotation(0);
-          isRvVisible = false;
-        }
       }
       if (event.getCause() == SelectionChangeEvent.CAUSE_TAP && !show) {
         mLastPosition = event.getLeft().index;
@@ -312,6 +335,7 @@ public class EditorTextActionWindow extends EditorPopupWindow
     show();
   }
 
+  /** Update the state of paste button */
   private void updateBtnState() {
     bin.getRoot()
         .measure(
@@ -323,21 +347,10 @@ public class EditorTextActionWindow extends EditorPopupWindow
 
   @Override
   public void show() {
-      updateBtnState();
-      super.show();
-      bin.rvEditor.setVisibility(View.GONE);
-      bin.iconmore.setRotation(0);
-      isRvVisible = false;
+    updateBtnState();
+    super.show();
   }
 
-  @Override
-  public void dismiss() {
-      super.dismiss();
-      bin.rvEditor.setVisibility(View.GONE);
-      bin.iconmore.setRotation(0);
-      isRvVisible = false;
-  }
-  
   private void KeyBoardUtil() {
     try {
       if (isShow()) {
@@ -440,7 +453,12 @@ public class EditorTextActionWindow extends EditorPopupWindow
         .toString();
   }
 
-  public void setText(String text) {}
+  public void setText(String text) {
+    bin.tooltiem.setVisibility(View.VISIBLE);
+    bin.rvEditor.setVisibility(View.GONE);
+    bin.tooltiem.setText(text);
+    postDisplay();
+  }
 
   public void showMassges(String text) {
     TextView txt = new TextView(mEditor.getContext());
@@ -454,5 +472,10 @@ public class EditorTextActionWindow extends EditorPopupWindow
 
   public void apply() {
     getPopup().setBackgroundDrawable(post());
+  }
+
+  String getKeyApiCode() {
+    DeepSeekCodePost postcode = new DeepSeekCodePost(mEditor);
+    return postcode.putCode();
   }
 }
