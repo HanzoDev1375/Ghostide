@@ -149,31 +149,6 @@ public class TextAnalyzeResult {
     determined = true;
   }
 
-  public void mergeLine(
-      TextAnalyzeResult mainResult, int line, TextAnalyzeResult lineResult) {
-    // دسترسی مستقیم به mSpanMap چون private هست
-    List<List<Span>> mainSpans = mainResult.mSpanMap;
-    List<List<Span>> lineSpans = lineResult.mSpanMap;
-
-    if (lineSpans == null || lineSpans.isEmpty()) return;
-
-    // اطمینان از وجود خط
-    while (mainSpans.size() <= line) {
-      mainSpans.add(new ArrayList<>());
-    }
-
-    // ادغام
-    List<Span> source = lineSpans.get(0);
-    if (source != null) {
-      mainSpans.get(line).addAll(source);
-    }
-  }
-
-  private boolean isResultEmpty(TextAnalyzeResult result) {
-    return result.mSpanMap.isEmpty()
-        || (result.mSpanMap.size() == 1 && result.mSpanMap.get(0).isEmpty());
-  }
-
   /**
    * Get a new BlockLine object
    *
